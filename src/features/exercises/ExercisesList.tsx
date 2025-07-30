@@ -1,16 +1,8 @@
+"use client";
+
 import { useState } from "react";
-import {
-  Search,
-  Grid,
-  List,
-  Heart,
-  Star,
-  Plus,
-  Filter,
-  X,
-  ChevronLeft,
-  ChevronRight,
-} from "lucide-react";
+import { useRouter } from "next/navigation";
+import { Search, Grid, List, Heart, Star, Plus, Filter } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -30,16 +22,7 @@ import {
   Carousel,
   CarouselContent,
   CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
 } from "@/components/ui/carousel";
-import { ImageWithFallback } from "@/components/figma/ImageWithFallback";
-
-import { Page } from "@/types/app";
-
-interface ExercisesListProps {
-  onNavigate: (page: Page, exerciseId?: string) => void;
-}
 
 interface Exercise {
   id: string;
@@ -63,7 +46,8 @@ interface FilterState {
   equipment: string[];
 }
 
-export default function ExercisesList({ onNavigate }: ExercisesListProps) {
+export default function ExercisesList() {
+  const router = useRouter();
   const [searchQuery, setSearchQuery] = useState("");
   const [activeCategory, setActiveCategory] = useState("All Exercises");
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
@@ -335,7 +319,7 @@ export default function ExercisesList({ onNavigate }: ExercisesListProps) {
   const ExerciseCard = ({ exercise }: { exercise: Exercise }) => (
     <Card
       className="cursor-pointer hover:shadow-md transition-shadow w-full max-w-md mx-auto"
-      onClick={() => onNavigate("exercise-detail", exercise.id)}
+      onClick={() => router.push(`/exercises/${exercise.id}`)}
     >
       {/* Exercise Image/Icon */}
       <div className="bg-gray-100 h-40 relative">
@@ -416,7 +400,7 @@ export default function ExercisesList({ onNavigate }: ExercisesListProps) {
   const CarouselExerciseCard = ({ exercise }: { exercise: Exercise }) => (
     <Card
       className="cursor-pointer hover:shadow-md transition-shadow w-64 flex-shrink-0"
-      onClick={() => onNavigate("exercise-detail", exercise.id)}
+      onClick={() => router.push(`/exercises/${exercise.id}`)}
     >
       {/* Exercise Image/Icon */}
       <div className="bg-gray-100 h-32 relative">
@@ -479,7 +463,7 @@ export default function ExercisesList({ onNavigate }: ExercisesListProps) {
         </div>
 
         <Button
-          onClick={() => onNavigate("suggest-exercise")}
+          onClick={() => router.push("/suggest-exercise")}
           className="flex items-center gap-2 bg-primary text-primary-foreground hover:bg-primary/90"
         >
           <Plus className="w-4 h-4" />

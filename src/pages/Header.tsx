@@ -1,4 +1,7 @@
+"use client";
+
 import { useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
 import {
   Home,
   Dumbbell,
@@ -34,47 +37,72 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { useNotifications } from "@/contexts/NotificationsContext";
+import { useAppContext } from "@/contexts/AppContext";
+import { useAuth } from "@/contexts/AuthContext";
 
-import { Page } from "@/types/app";
-
-interface HeaderProps {
-  currentPage: Page;
-  onNavigate: (page: Page) => void;
-  hasTrainer: boolean;
-  onToggleTrainer: () => void;
-  isClubMember: boolean;
-  onToggleClubMembership: () => void;
-}
-
-export default function Header({ currentPage, onNavigate }: HeaderProps) {
+export default function Header() {
+  const router = useRouter();
+  const pathname = usePathname();
+  const { logout } = useAuth();
+  const { toggleTrainer, toggleClubMembership } = useAppContext();
   const [userDropdownOpen, setUserDropdownOpen] = useState(false);
   const [notificationsOpen, setNotificationsOpen] = useState(false);
   const { unreadCount } = useNotifications();
 
   const navigationItems = [
-    { id: "dashboard", label: "Dashboard", icon: Home },
-    { id: "routines", label: "Routines", icon: BookOpen },
-    { id: "exercises", label: "Exercises", icon: Dumbbell },
-    { id: "calendar", label: "Calendar", icon: Calendar },
-    { id: "performance", label: "Performance", icon: BarChart3 },
-    { id: "health", label: "Health", icon: Heart },
+    { id: "dashboard", label: "Dashboard", icon: Home, path: "/dashboard" },
+    { id: "routines", label: "Routines", icon: BookOpen, path: "/routines" },
+    { id: "exercises", label: "Exercises", icon: Dumbbell, path: "/exercises" },
+    { id: "calendar", label: "Calendar", icon: Calendar, path: "/calendar" },
+    {
+      id: "performance",
+      label: "Performance",
+      icon: BarChart3,
+      path: "/performance",
+    },
+    { id: "health", label: "Health", icon: Heart, path: "/health" },
   ];
 
   const userMenuItems = [
-    { id: "profile", label: "Profile", icon: User },
-    { id: "trainer-and-clubs", label: "Trainer & Clubs", icon: Users },
-    { id: "gyms", label: "Gyms", icon: MapPin },
-    { id: "equipment", label: "Equipment", icon: Wrench },
-    { id: "suggestions", label: "Suggestions", icon: MessageSquare },
+    { id: "profile", label: "Profile", icon: User, path: "/profile" },
+    {
+      id: "trainer-and-clubs",
+      label: "Trainer & Clubs",
+      icon: Users,
+      path: "/trainer-and-clubs",
+    },
+    { id: "gyms", label: "Gyms", icon: MapPin, path: "/gyms" },
+    { id: "equipment", label: "Equipment", icon: Wrench, path: "/equipment" },
+    {
+      id: "suggestions",
+      label: "Suggestions",
+      icon: MessageSquare,
+      path: "/suggestions",
+    },
   ];
 
   const settingsMenuItems = [
-    { id: "account-settings", label: "Account Settings", icon: Settings },
-    { id: "app-settings", label: "App Settings", icon: Settings },
+    {
+      id: "account-settings",
+      label: "Account Settings",
+      icon: Settings,
+      path: "/account-settings",
+    },
+    {
+      id: "app-settings",
+      label: "App Settings",
+      icon: Settings,
+      path: "/app-settings",
+    },
   ];
 
   const supportMenuItems = [
-    { id: "help-support", label: "Help & Support", icon: HelpCircle },
+    {
+      id: "help-support",
+      label: "Help & Support",
+      icon: HelpCircle,
+      path: "/help-support",
+    },
   ];
 
   // Mock user data - in a real app, this would come from authentication context
@@ -98,13 +126,12 @@ export default function Header({ currentPage, onNavigate }: HeaderProps) {
           <nav className="hidden md:flex space-x-1">
             {navigationItems.map((item) => {
               const Icon = item.icon;
-              const isActive = currentPage === item.id;
-
+              const isActive = pathname === item.path;
               return (
                 <Button
                   key={item.id}
                   variant={isActive ? "default" : "ghost"}
-                  onClick={() => onNavigate(item.id as Page)}
+                  onClick={() => router.push(item.path)}
                   className="flex items-center gap-2 px-4 py-2"
                 >
                   <Icon className="w-4 h-4" />
@@ -203,7 +230,7 @@ export default function Header({ currentPage, onNavigate }: HeaderProps) {
                     <DropdownMenuItem
                       key={item.id}
                       onClick={() => {
-                        onNavigate(item.id as Page);
+                        router.push(item.path);
                         setUserDropdownOpen(false);
                       }}
                       className="flex items-center gap-2"
@@ -222,7 +249,7 @@ export default function Header({ currentPage, onNavigate }: HeaderProps) {
                     <DropdownMenuItem
                       key={item.id}
                       onClick={() => {
-                        onNavigate(item.id as Page);
+                        router.push(item.path);
                         setUserDropdownOpen(false);
                       }}
                       className="flex items-center gap-2"
@@ -241,9 +268,7 @@ export default function Header({ currentPage, onNavigate }: HeaderProps) {
                     <DropdownMenuItem
                       key={item.id}
                       onClick={() => {
-                        // For help & support, we might want to open a modal or external link
-                        // For now, just log it
-                        console.log("Opening help & support...");
+                        router.push(item.path);
                         setUserDropdownOpen(false);
                       }}
                       className="flex items-center gap-2"
@@ -258,8 +283,7 @@ export default function Header({ currentPage, onNavigate }: HeaderProps) {
 
                 <DropdownMenuItem
                   onClick={() => {
-                    // Handle logout
-                    console.log("Logging out...");
+                    logout();
                     setUserDropdownOpen(false);
                   }}
                   className="flex items-center gap-2 text-red-600 focus:text-red-600"
@@ -278,13 +302,12 @@ export default function Header({ currentPage, onNavigate }: HeaderProps) {
         <div className="flex overflow-x-auto py-2 px-4 space-x-1">
           {navigationItems.map((item) => {
             const Icon = item.icon;
-            const isActive = currentPage === item.id;
-
+            const isActive = pathname === item.path;
             return (
               <Button
                 key={item.id}
                 variant={isActive ? "default" : "ghost"}
-                onClick={() => onNavigate(item.id as Page)}
+                onClick={() => router.push(item.path)}
                 className="flex-shrink-0 flex flex-col items-center gap-1 px-3 py-2 min-w-16"
                 size="sm"
               >

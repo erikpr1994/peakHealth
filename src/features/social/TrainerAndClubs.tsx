@@ -1,4 +1,7 @@
+"use client";
+
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import {
   ArrowLeft,
   Mail,
@@ -23,12 +26,6 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-
-import { Page } from "@/types/app";
-
-interface TrainerAndClubsProps {
-  onNavigate: (page: Page) => void;
-}
 
 interface Trainer {
   id: string;
@@ -74,7 +71,8 @@ interface Club {
   level: "Beginner" | "Intermediate" | "Advanced" | "All Levels";
 }
 
-export default function TrainerAndClubs({ onNavigate }: TrainerAndClubsProps) {
+export default function TrainerAndClubs() {
+  const router = useRouter();
   const [activeTab, setActiveTab] = useState("overview");
 
   // Mock data - in a real app, this would come from a user context or API
@@ -180,7 +178,7 @@ export default function TrainerAndClubs({ onNavigate }: TrainerAndClubsProps) {
         <Button
           variant="ghost"
           size="sm"
-          onClick={() => onNavigate("dashboard")}
+          onClick={() => router.push("/dashboard")}
           className="flex items-center gap-2"
         >
           <ArrowLeft className="w-4 h-4" />

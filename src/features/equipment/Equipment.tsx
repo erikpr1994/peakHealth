@@ -1,4 +1,7 @@
+"use client";
+
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import {
   Search,
   Plus,
@@ -36,12 +39,6 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 
-import { Page } from "@/types/app";
-
-interface EquipmentProps {
-  onNavigate: (page: Page, id?: string) => void;
-}
-
 interface EquipmentSpecs {
   weightRange?: { min: number; max: number; increment: number };
   resistanceType?:
@@ -78,7 +75,8 @@ interface Equipment {
   usageCount?: number; // how many gyms use this equipment
 }
 
-export default function Equipment({ onNavigate }: EquipmentProps) {
+export default function EquipmentPage() {
+  const router = useRouter();
   const [searchQuery, setSearchQuery] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("all");
   const [typeFilter, setTypeFilter] = useState("all");
@@ -285,7 +283,7 @@ export default function Equipment({ onNavigate }: EquipmentProps) {
             <Button
               variant="ghost"
               size="sm"
-              onClick={() => onNavigate("equipment-detail", item.id)}
+              onClick={() => router.push(`/equipment/${item.id}`)}
               className="h-8 w-8 p-0"
             >
               <Eye className="w-4 h-4" />
@@ -293,7 +291,7 @@ export default function Equipment({ onNavigate }: EquipmentProps) {
             <Button
               variant="ghost"
               size="sm"
-              onClick={() => onNavigate("edit-equipment", item.id)}
+              onClick={() => router.push(`/equipment/${item.id}/edit`)}
               className="h-8 w-8 p-0"
             >
               <Edit2 className="w-4 h-4" />
@@ -415,7 +413,7 @@ export default function Equipment({ onNavigate }: EquipmentProps) {
         </div>
 
         <Button
-          onClick={() => onNavigate("suggest-equipment")}
+          onClick={() => router.push("/equipment/suggest")}
           className="flex items-center gap-2"
         >
           <Plus className="w-4 h-4" />
@@ -482,7 +480,7 @@ export default function Equipment({ onNavigate }: EquipmentProps) {
               : "Create your first piece of equipment to get started."}
           </p>
           {!searchQuery && categoryFilter === "all" && typeFilter === "all" && (
-            <Button onClick={() => onNavigate("suggest-equipment")}>
+            <Button onClick={() => router.push("/equipment/suggest")}>
               <Plus className="w-4 h-4 mr-2" />
               Suggest Your First Equipment
             </Button>

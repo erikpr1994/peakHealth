@@ -1,3 +1,5 @@
+"use client";
+
 import { useState } from "react";
 import {
   Activity,
@@ -53,13 +55,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-import { Page } from "@/types/app";
-
-interface PerformanceProps {
-  onNavigate: (page: Page) => void;
-}
-
-export default function Performance({ onNavigate }: PerformanceProps) {
+export default function Performance() {
   const [timeFilter, setTimeFilter] = useState("monthly");
   const [activeTab, setActiveTab] = useState("overview");
 
@@ -641,7 +637,7 @@ export default function Performance({ onNavigate }: PerformanceProps) {
                 <Button
                   variant="ghost"
                   size="sm"
-                  onClick={() => onNavigate("calendar")}
+                  onClick={() => router.push("/calendar")}
                 >
                   View All
                 </Button>

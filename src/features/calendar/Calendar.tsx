@@ -1,4 +1,7 @@
+"use client";
+
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import {
   ChevronLeft,
   ChevronRight,
@@ -15,12 +18,6 @@ import {
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-
-import { Page } from "@/types/app";
-
-interface CalendarProps {
-  onNavigate: (page: Page, id?: string) => void;
-}
 
 interface WorkoutEvent {
   id: string;
@@ -44,7 +41,8 @@ interface CalendarDay {
   workouts: WorkoutEvent[];
 }
 
-export default function Calendar({ onNavigate }: CalendarProps) {
+export default function Calendar() {
+  const router = useRouter();
   const [currentDate, setCurrentDate] = useState(new Date(2025, 6, 22)); // July 22, 2025
   const [selectedDate, setSelectedDate] = useState(new Date(2025, 6, 22)); // July 22, 2025
   const [viewMode, setViewMode] = useState<"Month" | "Week" | "Day">("Month");
@@ -803,7 +801,7 @@ export default function Calendar({ onNavigate }: CalendarProps) {
               <Button
                 variant="ghost"
                 size="sm"
-                onClick={() => onNavigate("routines")}
+                onClick={() => router.push("/routines")}
                 className="text-indigo-600 hover:text-indigo-700"
               >
                 View All
@@ -907,7 +905,7 @@ export default function Calendar({ onNavigate }: CalendarProps) {
                             <Button
                               className="w-full mt-2"
                               size="sm"
-                              onClick={() => onNavigate("workout-tracker")}
+                              onClick={() => router.push("/workout-tracker")}
                             >
                               <Play className="w-3 h-3 mr-2" />
                               Start {timeOfDay.period} Workout
@@ -939,7 +937,7 @@ export default function Calendar({ onNavigate }: CalendarProps) {
               <Button
                 variant="outline"
                 className="w-full justify-start"
-                onClick={() => onNavigate("create-routine")}
+                onClick={() => router.push("/routines/create")}
               >
                 <Plus className="w-4 h-4 mr-3" />
                 Schedule Workout
@@ -947,7 +945,7 @@ export default function Calendar({ onNavigate }: CalendarProps) {
               <Button
                 variant="outline"
                 className="w-full justify-start"
-                onClick={() => onNavigate("routines")}
+                onClick={() => router.push("/routines")}
               >
                 <CalendarIcon className="w-4 h-4 mr-3" />
                 View Routines
@@ -955,7 +953,7 @@ export default function Calendar({ onNavigate }: CalendarProps) {
               <Button
                 variant="outline"
                 className="w-full justify-start"
-                onClick={() => onNavigate("statistics")}
+                onClick={() => router.push("/statistics")}
               >
                 <TrendingUp className="w-4 h-4 mr-3" />
                 View Progress

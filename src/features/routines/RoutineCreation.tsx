@@ -1,4 +1,7 @@
+"use client";
+
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import {
   ArrowLeft,
   Save,
@@ -49,8 +52,6 @@ import TrailRunningWorkout, {
   TrailRunningWorkoutData,
 } from "@/features/routines/TrailRunningWorkout";
 
-import { Page } from "@/types/app";
-
 export type WorkoutType =
   | "strength"
   | "running"
@@ -67,7 +68,6 @@ export type ProgressionMethod =
   | "amrap";
 
 interface RoutineCreationProps {
-  onNavigate: (page: Page, routineId?: string) => void;
   editRoutineId?: string;
   mode?: "create" | "edit";
 }
@@ -127,10 +127,10 @@ interface RunningWorkout {
 }
 
 export default function RoutineCreation({
-  onNavigate,
   editRoutineId,
   mode = "create",
 }: RoutineCreationProps) {
+  const router = useRouter();
   const [routineName, setRoutineName] = useState("");
   const [duration, setDuration] = useState("4");
   const [difficulty, setDifficulty] = useState("Beginner");
@@ -2517,7 +2517,7 @@ export default function RoutineCreation({
             <Button
               variant="ghost"
               size="sm"
-              onClick={() => onNavigate("routines")}
+              onClick={() => router.push("/routines")}
               className="flex items-center space-x-2"
             >
               <ArrowLeft className="h-4 w-4" />
@@ -2529,11 +2529,11 @@ export default function RoutineCreation({
             </h1>
           </div>
           <div className="flex items-center space-x-3">
-            <Button variant="outline" onClick={() => onNavigate("routines")}>
+            <Button variant="outline" onClick={() => router.push("/routines")}>
               Cancel
             </Button>
             <Button
-              onClick={() => onNavigate("routines")}
+              onClick={() => router.push("/routines")}
               disabled={!canSave}
               className="flex items-center space-x-2"
             >

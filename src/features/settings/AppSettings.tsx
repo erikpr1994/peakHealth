@@ -1,4 +1,7 @@
+"use client";
+
 import React, { useState } from "react";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
@@ -27,10 +30,7 @@ import {
   Sparkles,
 } from "lucide-react";
 
-import { Page } from "@/types/app";
-
 interface AppSettingsProps {
-  onNavigate: (page: Page) => void;
   hasTrainer: boolean;
   onToggleTrainer: () => void;
   isClubMember: boolean;
@@ -40,7 +40,6 @@ interface AppSettingsProps {
 }
 
 export default function AppSettings({
-  onNavigate,
   hasTrainer,
   onToggleTrainer,
   isClubMember,
@@ -48,6 +47,7 @@ export default function AppSettings({
   showWelcomeScreen,
   onToggleWelcomeScreen,
 }: AppSettingsProps) {
+  const router = useRouter();
   // Mock settings state
   const [settings, setSettings] = useState({
     notifications: true,

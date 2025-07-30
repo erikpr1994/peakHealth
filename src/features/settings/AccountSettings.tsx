@@ -1,4 +1,7 @@
+"use client";
+
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import {
   ArrowLeft,
   Key,
@@ -28,18 +31,16 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-
-import { Page, OnboardingData } from "@/types/app";
+import { OnboardingData } from "@/types/app";
 
 interface AccountSettingsProps {
-  onNavigate: (page: Page) => void;
   onboardingData?: OnboardingData | null;
 }
 
 export default function AccountSettings({
-  onNavigate,
   onboardingData,
 }: AccountSettingsProps) {
+  const router = useRouter();
   const [showCurrentPassword, setShowCurrentPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -106,7 +107,7 @@ export default function AccountSettings({
     <div className="w-full px-4 sm:px-6 lg:px-8 py-6">
       {/* Header */}
       <div className="flex items-center gap-4 mb-8">
-        <Button variant="ghost" onClick={() => onNavigate("profile")}>
+        <Button variant="ghost" onClick={() => router.push("/profile")}>
           <ArrowLeft className="w-4 h-4" />
         </Button>
         <div>
