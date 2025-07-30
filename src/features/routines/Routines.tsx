@@ -1,10 +1,12 @@
+"use client";
+
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import {
   Search,
   Grid,
   List,
   Play,
-  MoreVertical,
   Plus,
   Heart,
   Activity,
@@ -16,9 +18,6 @@ import {
   Trophy,
   Zap,
   Dumbbell,
-  AlertCircle,
-  Users,
-  User,
 } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -30,16 +29,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Progress } from "@/components/ui/progress";
-import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Badge } from "@/components/ui/badge";
-
-import { Page } from "@/types/app";
-
-interface RoutinesProps {
-  onNavigate: (page: Page, routineId?: string) => void;
-  hasTrainer: boolean;
-}
 
 interface Routine {
   id: string;
@@ -62,7 +51,8 @@ interface Routine {
   estimatedDuration?: string;
 }
 
-export default function Routines({ onNavigate, hasTrainer }: RoutinesProps) {
+export default function Routines() {
+  const router = useRouter();
   const trainerName = "Sarah Johnson";
 
   const [searchQuery, setSearchQuery] = useState("");
@@ -203,35 +193,12 @@ export default function Routines({ onNavigate, hasTrainer }: RoutinesProps) {
 
   return (
     <div className="w-full px-4 sm:px-6 lg:px-8 py-6">
-      {/* Header with Compact Trainer Banner */}
-      {hasTrainer && (
-        <div className="flex items-center justify-between mb-8">
-          <div className="flex-1">
-            <h1 className="text-3xl font-bold text-gray-800">My Routines</h1>
-            <p className="text-gray-500 mt-2">
-              Manage and organize your workout programs
-            </p>
-          </div>
-          <div className="bg-blue-50 border border-blue-200 rounded-lg px-4 py-2 ml-6 min-w-fit">
-            <div className="flex items-center gap-2">
-              <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-              <span className="text-sm font-medium text-blue-700">
-                Trainer: {trainerName}
-              </span>
-            </div>
-            <p className="text-xs text-blue-600 mt-1">Managing your routines</p>
-          </div>
-        </div>
-      )}
-
-      {!hasTrainer && (
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-800">My Routines</h1>
-          <p className="text-gray-500 mt-2">
-            Manage and organize your workout programs
-          </p>
-        </div>
-      )}
+      <div className="mb-8">
+        <h1 className="text-3xl font-bold text-gray-800">My Routines</h1>
+        <p className="text-gray-500 mt-2">
+          Manage and organize your workout programs
+        </p>
+      </div>
 
       {/* Active Routine Featured Section */}
       {activeRoutine && (
@@ -397,7 +364,7 @@ export default function Routines({ onNavigate, hasTrainer }: RoutinesProps) {
                   size="lg"
                   className="bg-white text-indigo-600 hover:bg-gray-50 shadow-lg"
                   onClick={() =>
-                    onNavigate("workout-tracker", activeRoutine.id)
+                    router.push(`/workout-tracker/${activeRoutine.id}`)
                   }
                 >
                   <Play className="w-5 h-5 mr-2" />
@@ -406,39 +373,23 @@ export default function Routines({ onNavigate, hasTrainer }: RoutinesProps) {
                 <Button
                   variant="secondary"
                   size="lg"
-                  onClick={() => onNavigate("routine-detail", activeRoutine.id)}
+                  onClick={() => router.push(`/routines/${activeRoutine.id}`)}
                   className="bg-white/10 backdrop-blur-sm border-white/20 text-white hover:bg-white/20 shadow-lg"
                 >
                   <Eye className="w-5 h-5 mr-2" />
                   View Details
                 </Button>
-                {hasTrainer ? (
-                  <Button
-                    disabled
-                    variant="secondary"
-                    size="lg"
-                    className="bg-white/5 backdrop-blur-sm border-white/10 text-white/50 cursor-not-allowed shadow-lg"
-                  >
-                    <Edit className="w-5 h-5 mr-2" />
-                    Edit Routine
-                    <Badge
-                      variant="secondary"
-                      className="ml-2 text-xs bg-amber-100 text-amber-800"
-                    >
-                      Trainer Only
-                    </Badge>
-                  </Button>
-                ) : (
-                  <Button
-                    variant="secondary"
-                    size="lg"
-                    onClick={() => onNavigate("edit-routine", activeRoutine.id)}
-                    className="bg-white/10 backdrop-blur-sm border-white/20 text-white hover:bg-white/20 shadow-lg"
-                  >
-                    <Edit className="w-5 h-5 mr-2" />
-                    Edit Routine
-                  </Button>
-                )}
+                <Button
+                  variant="secondary"
+                  size="lg"
+                  onClick={() =>
+                    router.push(`/routines/${activeRoutine.id}/edit`)
+                  }
+                  className="bg-white/10 backdrop-blur-sm border-white/20 text-white hover:bg-white/20 shadow-lg"
+                >
+                  <Edit className="w-5 h-5 mr-2" />
+                  Edit Routine
+                </Button>
               </div>
             </div>
           </Card>
@@ -449,31 +400,13 @@ export default function Routines({ onNavigate, hasTrainer }: RoutinesProps) {
       <div className="mb-6">
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-2xl font-bold text-gray-800">My Routines</h2>
-          {hasTrainer ? (
-            <div className="relative">
-              <Button
-                disabled
-                className="bg-gray-300 text-gray-500 cursor-not-allowed"
-              >
-                <Plus className="w-4 h-4 mr-2" />
-                Create Routine
-              </Button>
-              <Badge
-                variant="secondary"
-                className="absolute -top-2 -right-2 text-xs bg-amber-100 text-amber-800"
-              >
-                Trainer Managed
-              </Badge>
-            </div>
-          ) : (
-            <Button
-              onClick={() => onNavigate("create-routine")}
-              className="bg-primary text-primary-foreground hover:bg-primary/90"
-            >
-              <Plus className="w-4 h-4 mr-2" />
-              Create Routine
-            </Button>
-          )}
+          <Button
+            onClick={() => router.push("/routines/create")}
+            className="bg-primary text-primary-foreground hover:bg-primary/90"
+          >
+            <Plus className="w-4 h-4 mr-2" />
+            Create Routine
+          </Button>
         </div>
 
         {/* Search and Filters */}
@@ -584,7 +517,7 @@ export default function Routines({ onNavigate, hasTrainer }: RoutinesProps) {
                 <div className="flex items-center gap-3 mb-2">
                   <h3
                     className="text-xl font-bold text-gray-800 cursor-pointer hover:text-indigo-600 transition-colors"
-                    onClick={() => onNavigate("routine-detail", routine.id)}
+                    onClick={() => router.push(`/routines/${routine.id}`)}
                   >
                     {routine.name}
                   </h3>
@@ -621,7 +554,7 @@ export default function Routines({ onNavigate, hasTrainer }: RoutinesProps) {
                 <Button
                   variant="ghost"
                   size="sm"
-                  onClick={() => onNavigate("routine-detail", routine.id)}
+                  onClick={() => router.push(`/routines/${routine.id}`)}
                   title="View Details"
                 >
                   <Eye className="w-4 h-4" />
@@ -629,7 +562,7 @@ export default function Routines({ onNavigate, hasTrainer }: RoutinesProps) {
                 <Button
                   variant="ghost"
                   size="sm"
-                  onClick={() => onNavigate("edit-routine", routine.id)}
+                  onClick={() => router.push(`/routines/${routine.id}/edit`)}
                   title="Edit Routine"
                 >
                   <Edit className="w-4 h-4" />
@@ -683,7 +616,7 @@ export default function Routines({ onNavigate, hasTrainer }: RoutinesProps) {
               <Button
                 variant="outline"
                 size="sm"
-                onClick={() => onNavigate("routine-detail", routine.id)}
+                onClick={() => router.push(`/routines/${routine.id}`)}
               >
                 View Details
               </Button>

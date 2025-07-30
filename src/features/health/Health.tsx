@@ -1,4 +1,7 @@
+"use client";
+
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import {
   Plus,
   TrendingUp,
@@ -62,12 +65,6 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-import { Page } from "@/types/app";
-
-interface HealthProps {
-  onNavigate: (page: Page) => void;
-}
-
 interface HealthEntry {
   id: string;
   date: Date;
@@ -106,7 +103,8 @@ interface Goal {
   unit: string;
 }
 
-export default function Health({ onNavigate }: HealthProps) {
+export default function Health() {
+  const router = useRouter();
   const [activeTab, setActiveTab] = useState("overview");
   const [isAddEntryOpen, setIsAddEntryOpen] = useState(false);
   const [isAddGoalOpen, setIsAddGoalOpen] = useState(false);

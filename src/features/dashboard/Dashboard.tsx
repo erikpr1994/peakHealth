@@ -1,8 +1,10 @@
+"use client";
+
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import { Badge } from "@/components/ui/badge";
 import {
   Calendar,
   Clock,
@@ -26,21 +28,8 @@ import {
 } from "recharts";
 import ClubEventConflictModal from "@/features/social/ClubEventConflictModal";
 
-import { Page, OnboardingData } from "@/types/app";
-
-interface DashboardProps {
-  onNavigate: (page: Page) => void;
-  hasTrainer: boolean;
-  isClubMember: boolean;
-  onboardingData?: OnboardingData | null;
-}
-
-export default function Dashboard({
-  onNavigate,
-  hasTrainer,
-  isClubMember,
-  onboardingData,
-}: DashboardProps) {
+export default function Dashboard() {
+  const router = useRouter();
   const [showConflictModal, setShowConflictModal] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState<any>(null);
 
@@ -177,7 +166,7 @@ export default function Dashboard({
   };
 
   const handleStartWorkout = (routineId: string) => {
-    onNavigate("workout-tracker");
+    router.push(`/workout-tracker/${routineId}`);
   };
 
   // Get personalized greeting based on onboarding data
@@ -187,61 +176,23 @@ export default function Dashboard({
     if (hour >= 12 && hour < 17) timeGreeting = "Good afternoon";
     if (hour >= 17) timeGreeting = "Good evening";
 
-    const name = onboardingData?.name || "there";
+    const name = "there";
     return `${timeGreeting}, ${name}!`;
   };
 
   // Get personalized motivation message
   const getMotivationMessage = () => {
-    if (!onboardingData) return "Ready to crush your fitness goals today?";
-
-    const primaryGoal = onboardingData.goals?.[0];
-    const timeAvailable = onboardingData.timeAvailable;
-
-    if (primaryGoal === "Lose weight") {
-      return "Every workout gets you closer to your weight loss goal!";
-    } else if (primaryGoal === "Build muscle") {
-      return "Time to build that strength and muscle mass!";
-    } else if (primaryGoal === "Improve endurance") {
-      return "Let's boost that endurance and stamina today!";
-    } else if (timeAvailable === "15-30 minutes") {
-      return "Even 15 minutes can make a difference - let's do this!";
-    }
-
     return "Ready to take your fitness to the next level?";
   };
 
   return (
     <div className="w-full px-4 sm:px-6 lg:px-8 py-6 space-y-6">
-      {/* Compact Trainer Status Banner */}
-      {hasTrainer && (
-        <div className="flex items-center justify-between">
-          <div className="flex-1">
-            <h1 className="text-3xl font-bold text-gray-800">
-              {getPersonalizedGreeting()}
-            </h1>
-            <p className="text-gray-500 mt-2">{getMotivationMessage()}</p>
-          </div>
-          <div className="bg-blue-50 border border-blue-200 rounded-lg px-4 py-2 ml-6 min-w-fit">
-            <div className="flex items-center gap-2">
-              <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-              <span className="text-sm font-medium text-blue-700">
-                Trainer: Sarah Johnson
-              </span>
-            </div>
-            <p className="text-xs text-blue-600 mt-1">Managing your routines</p>
-          </div>
-        </div>
-      )}
-
-      {!hasTrainer && (
-        <div>
-          <h1 className="text-3xl font-bold text-gray-800">
-            {getPersonalizedGreeting()}
-          </h1>
-          <p className="text-gray-500 mt-2">{getMotivationMessage()}</p>
-        </div>
-      )}
+      <div>
+        <h1 className="text-3xl font-bold text-gray-800">
+          {getPersonalizedGreeting()}
+        </h1>
+        <p className="text-gray-500 mt-2">{getMotivationMessage()}</p>
+      </div>
 
       {/* This Week's Progress Stats */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -381,34 +332,32 @@ export default function Dashboard({
       </Card>
 
       {/* Find a Trainer Banner - Only show if user doesn't have trainer */}
-      {!hasTrainer && (
-        <Card className="bg-gradient-to-r from-blue-50 to-indigo-50 border-blue-200">
-          <CardContent className="p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <h3 className="font-semibold text-gray-900 mb-2">
-                  Ready for personalized guidance?
-                </h3>
-                <p className="text-gray-600 mb-3">
-                  Connect with certified trainers who can create custom workout
-                  plans and provide expert guidance tailored to your goals.
-                </p>
-                <div className="flex items-center gap-4 text-sm text-gray-600">
-                  <span>✓ Personalized workout plans</span>
-                  <span>✓ Expert guidance</span>
-                  <span>✓ Progress tracking</span>
-                </div>
+      <Card className="bg-gradient-to-r from-blue-50 to-indigo-50 border-blue-200">
+        <CardContent className="p-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <h3 className="font-semibold text-gray-900 mb-2">
+                Ready for personalized guidance?
+              </h3>
+              <p className="text-gray-600 mb-3">
+                Connect with certified trainers who can create custom workout
+                plans and provide expert guidance tailored to your goals.
+              </p>
+              <div className="flex items-center gap-4 text-sm text-gray-600">
+                <span>✓ Personalized workout plans</span>
+                <span>✓ Expert guidance</span>
+                <span>✓ Progress tracking</span>
               </div>
-              <Button
-                onClick={() => onNavigate("trainer-and-clubs")}
-                className="ml-6"
-              >
-                Find a Trainer
-              </Button>
             </div>
-          </CardContent>
-        </Card>
-      )}
+            <Button
+              onClick={() => router.push("/trainer-and-clubs")}
+              className="ml-6"
+            >
+              Find a Trainer
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Weekly Progress Chart */}
@@ -467,52 +416,6 @@ export default function Dashboard({
         </Card>
       </div>
 
-      {/* Club Events - Only show if user is a club member */}
-      {isClubMember && (
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Users className="w-5 h-5" />
-              Upcoming Club Events
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {clubEvents.map((event) => (
-                <div
-                  key={event.id}
-                  className="p-4 border border-gray-200 rounded-lg hover:shadow-md transition-shadow"
-                >
-                  <div className="flex items-center justify-between mb-2">
-                    <Badge variant="outline" className="text-xs">
-                      {event.difficulty}
-                    </Badge>
-                    <span className="text-xs text-gray-500">
-                      {event.participants} attending
-                    </span>
-                  </div>
-                  <h4 className="font-semibold mb-1">{event.name}</h4>
-                  <p className="text-sm text-gray-600 mb-2">{event.club}</p>
-                  <div className="flex items-center justify-between text-sm text-gray-600 mb-3">
-                    <span>
-                      {event.date} at {event.time}
-                    </span>
-                    <span>{event.duration}</span>
-                  </div>
-                  <Button
-                    size="sm"
-                    className="w-full"
-                    onClick={() => handleJoinEvent(event)}
-                  >
-                    Join Event
-                  </Button>
-                </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
-      )}
-
       {/* Clubs Around You */}
       <Card>
         <CardHeader>
@@ -556,7 +459,7 @@ export default function Dashboard({
         isOpen={showConflictModal}
         onClose={() => setShowConflictModal(false)}
         event={selectedEvent}
-        hasTrainer={hasTrainer}
+        hasTrainer={false}
         onConfirm={(action, message) => {
           console.log(
             "Event joined:",

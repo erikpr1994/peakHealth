@@ -1,4 +1,7 @@
+"use client";
+
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import {
   ArrowLeft,
   Play,
@@ -9,7 +12,6 @@ import {
   Activity,
   Clock,
   Target,
-  MoreVertical,
   Copy,
   Trash,
 } from "lucide-react";
@@ -17,10 +19,7 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 
-import { Page } from "@/types/app";
-
 interface RoutineDetailProps {
-  onNavigate: (page: Page, routineId?: string) => void;
   routineId: string;
 }
 
@@ -67,10 +66,8 @@ interface RoutineData {
   lastModified: string;
 }
 
-export default function RoutineDetail({
-  onNavigate,
-  routineId,
-}: RoutineDetailProps) {
+export default function RoutineDetail({ routineId }: RoutineDetailProps) {
+  const router = useRouter();
   const [showAllExercises, setShowAllExercises] = useState(false);
 
   // Mock data - in a real app, this would come from an API based on routineId
@@ -211,7 +208,7 @@ export default function RoutineDetail({
       {/* Header */}
       <div className="flex items-center justify-between mb-8">
         <div className="flex items-center gap-4">
-          <Button variant="ghost" onClick={() => onNavigate("routines")}>
+          <Button variant="ghost" onClick={() => router.push("/routines")}>
             <ArrowLeft className="w-4 h-4 mr-2" />
             Back to Routines
           </Button>
@@ -245,14 +242,14 @@ export default function RoutineDetail({
           </Button>
           <Button
             variant="outline"
-            onClick={() => onNavigate("edit-routine", routineId)}
+            onClick={() => router.push(`/routines/${routineId}/edit`)}
           >
             <Edit className="w-4 h-4 mr-2" />
             Edit
           </Button>
           <Button
             className="bg-indigo-600 hover:bg-indigo-700"
-            onClick={() => onNavigate("workout-tracker", routineId)}
+            onClick={() => router.push(`/workout-tracker/${routineId}`)}
           >
             <Play className="w-4 h-4 mr-2" />
             Start Workout
@@ -467,7 +464,7 @@ export default function RoutineDetail({
                 <Button
                   variant="outline"
                   size="sm"
-                  onClick={() => onNavigate("workout-tracker", routineId)}
+                  onClick={() => router.push(`/workout-tracker/${routineId}`)}
                 >
                   <Play className="w-4 h-4 mr-2" />
                   Start

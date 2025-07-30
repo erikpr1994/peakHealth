@@ -1,9 +1,19 @@
-import React, { createContext, useContext, useState, ReactNode } from "react";
+"use client";
+
+import React, {
+  createContext,
+  useContext,
+  useState,
+  ReactNode,
+  useEffect,
+} from "react";
+import { useRouter } from "next/navigation";
 
 interface AuthContextType {
   isAuthenticated: boolean;
-  setIsAuthenticated: (isAuthenticated: boolean) => void;
   isLoading: boolean;
+  login: () => void;
+  logout: () => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -11,9 +21,9 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const router = useRouter();
 
-  // In a real app, you'd check for a token here
-  React.useEffect(() => {
+  useEffect(() => {
     const user = localStorage.getItem("peak-health-user");
     if (user) {
       setIsAuthenticated(true);
@@ -21,10 +31,20 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setIsLoading(false);
   }, []);
 
+  const login = () => {
+    localStorage.setItem("peak-health-user", "true");
+    setIsAuthenticated(true);
+    router.push("/dashboard");
+  };
+
+  const logout = () => {
+    localStorage.removeItem("peak-health-user");
+    setIsAuthenticated(false);
+    router.push("/");
+  };
+
   return (
-    <AuthContext.Provider
-      value={{ isAuthenticated, setIsAuthenticated, isLoading }}
-    >
+    <AuthContext.Provider value={{ isAuthenticated, isLoading, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

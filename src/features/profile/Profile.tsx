@@ -1,4 +1,7 @@
+"use client";
+
 import React, { useState } from "react";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -23,15 +26,14 @@ import {
   RefreshCw,
   Sparkles,
 } from "lucide-react";
-
-import { Page, OnboardingData } from "@/types/app";
+import { OnboardingData } from "@/types/app";
 
 interface ProfileProps {
-  onNavigate: (page: Page) => void;
   onboardingData?: OnboardingData | null;
 }
 
-export default function Profile({ onNavigate, onboardingData }: ProfileProps) {
+export default function Profile({ onboardingData }: ProfileProps) {
+  const router = useRouter();
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState({
     name: onboardingData?.name || "Alex Johnson",
