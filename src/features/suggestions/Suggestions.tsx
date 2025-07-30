@@ -1,4 +1,7 @@
+"use client";
+
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import {
   FileCheck,
   Plus,
@@ -25,12 +28,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-import { Page } from "@/types/app";
-
-interface SuggestionsProps {
-  onNavigate: (page: Page, id?: string) => void;
-}
-
 type SuggestionStatus = "pending" | "approved" | "rejected" | "under_review";
 type SuggestionType = "gym" | "equipment" | "exercise";
 
@@ -51,7 +48,8 @@ interface Suggestion {
   tags?: string[];
 }
 
-export default function Suggestions({ onNavigate }: SuggestionsProps) {
+export default function Suggestions() {
+  const router = useRouter();
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const [typeFilter, setTypeFilter] = useState("all");
@@ -297,19 +295,19 @@ export default function Suggestions({ onNavigate }: SuggestionsProps) {
         <div className="flex gap-2">
           <Button
             variant="outline"
-            onClick={() => onNavigate("suggest-exercise")}
+            onClick={() => router.push("/suggestions/exercise")}
           >
             <Plus className="w-4 h-4 mr-2" />
             Suggest Exercise
           </Button>
           <Button
             variant="outline"
-            onClick={() => onNavigate("suggest-equipment")}
+            onClick={() => router.push("/suggestions/equipment")}
           >
             <Plus className="w-4 h-4 mr-2" />
             Suggest Equipment
           </Button>
-          <Button onClick={() => onNavigate("suggest-gym")}>
+          <Button onClick={() => router.push("/suggestions/gym")}>
             <Plus className="w-4 h-4 mr-2" />
             Suggest Gym
           </Button>
@@ -424,13 +422,13 @@ export default function Suggestions({ onNavigate }: SuggestionsProps) {
                 typeFilter === "all" && (
                   <div className="flex gap-2 justify-center">
                     <Button
-                      onClick={() => onNavigate("suggest-exercise")}
+                      onClick={() => router.push("/suggestions/exercise")}
                       variant="outline"
                     >
                       <Plus className="w-4 h-4 mr-2" />
                       Suggest Exercise
                     </Button>
-                    <Button onClick={() => onNavigate("suggest-gym")}>
+                    <Button onClick={() => router.push("/suggestions/gym")}>
                       <Plus className="w-4 h-4 mr-2" />
                       Suggest Gym
                     </Button>

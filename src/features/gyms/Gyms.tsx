@@ -1,4 +1,7 @@
+"use client";
+
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import {
   MapPin,
   Plus,
@@ -40,12 +43,6 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 
-import { Page } from "@/types/app";
-
-interface GymsProps {
-  onNavigate: (page: Page, id?: string) => void;
-}
-
 interface Equipment {
   id: string;
   name: string;
@@ -77,7 +74,8 @@ interface Gym {
   distance?: string; // Distance from user location
 }
 
-export default function Gyms({ onNavigate }: GymsProps) {
+export default function Gyms() {
+  const router = useRouter();
   const [searchQuery, setSearchQuery] = useState("");
   const [locationFilter, setLocationFilter] = useState("all");
 
@@ -333,7 +331,7 @@ export default function Gyms({ onNavigate }: GymsProps) {
             <Button
               variant="ghost"
               size="sm"
-              onClick={() => onNavigate("gym-detail", gym.id)}
+              onClick={() => router.push(`/gyms/${gym.id}`)}
               className="h-8 w-8 p-0"
             >
               <Eye className="w-4 h-4" />
@@ -344,7 +342,7 @@ export default function Gyms({ onNavigate }: GymsProps) {
                 <Button
                   variant="ghost"
                   size="sm"
-                  onClick={() => onNavigate("edit-gym", gym.id)}
+                  onClick={() => router.push(`/gyms/${gym.id}/edit`)}
                   className="h-8 w-8 p-0"
                 >
                   <Edit2 className="w-4 h-4" />
@@ -500,7 +498,7 @@ export default function Gyms({ onNavigate }: GymsProps) {
 
         <div className="flex gap-3">
           <Button
-            onClick={() => onNavigate("create-gym")}
+            onClick={() => router.push("/gyms/create")}
             variant="outline"
             className="flex items-center gap-2"
           >
@@ -508,7 +506,7 @@ export default function Gyms({ onNavigate }: GymsProps) {
             Create Private Gym
           </Button>
           <Button
-            onClick={() => onNavigate("suggest-gym")}
+            onClick={() => router.push("/gyms/suggest")}
             className="flex items-center gap-2 bg-primary text-primary-foreground hover:bg-primary/90"
           >
             <Plus className="w-4 h-4" />
@@ -624,13 +622,13 @@ export default function Gyms({ onNavigate }: GymsProps) {
               </p>
               <div className="flex items-center justify-center gap-4">
                 <Button
-                  onClick={() => onNavigate("create-gym")}
+                  onClick={() => router.push("/gyms/create")}
                   variant="outline"
                 >
                   <Home className="w-4 h-4 mr-2" />
                   Create Private Gym
                 </Button>
-                <Button onClick={() => onNavigate("suggest-gym")}>
+                <Button onClick={() => router.push("/gyms/suggest")}>
                   <Plus className="w-4 h-4 mr-2" />
                   Suggest Public Gym
                 </Button>

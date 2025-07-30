@@ -1,4 +1,7 @@
+"use client";
+
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import {
   ArrowLeft,
   Play,
@@ -8,17 +11,12 @@ import {
   Printer,
   CheckCircle,
   XCircle,
-  Plus,
 } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import { ImageWithFallback } from "@/components/figma/ImageWithFallback";
-
-import { Page } from "@/types/app";
 
 interface ExerciseDetailProps {
-  onNavigate: (page: Page, exerciseId?: string) => void;
   exerciseId: string;
 }
 
@@ -62,10 +60,8 @@ interface ExerciseData {
   videoDuration?: string;
 }
 
-export default function ExerciseDetail({
-  onNavigate,
-  exerciseId,
-}: ExerciseDetailProps) {
+export default function ExerciseDetail({ exerciseId }: ExerciseDetailProps) {
+  const router = useRouter();
   const [selectedRoutines, setSelectedRoutines] = useState<string[]>([]);
 
   // Mock exercise data - in a real app, this would come from an API
@@ -201,7 +197,7 @@ export default function ExerciseDetail({
         <span>Exercise Details</span>
         <ChevronRight className="w-4 h-4 mx-2" />
         <button
-          onClick={() => onNavigate("exercises")}
+          onClick={() => router.push("/exercises")}
           className="hover:text-gray-700"
         >
           Exercises
@@ -447,7 +443,7 @@ export default function ExerciseDetail({
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-xl font-bold text-gray-800">Add to Routine</h2>
           <Button
-            onClick={() => onNavigate("create-routine")}
+            onClick={() => router.push("/routines/create")}
             className="bg-indigo-600 hover:bg-indigo-700"
           >
             Create New Routine
@@ -466,7 +462,7 @@ export default function ExerciseDetail({
                   checked={
                     routine.isSelected || selectedRoutines.includes(routine.id)
                   }
-                  readOnly
+                  disabled
                 />
               </div>
               <p className="text-sm text-gray-600">{routine.schedule}</p>
