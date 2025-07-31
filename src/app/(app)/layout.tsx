@@ -1,4 +1,4 @@
-import Header from "@/pages/Header";
+import Header from "@/components/layout/Header";
 import { NotificationsProvider } from "@/contexts/NotificationsContext";
 import { AppProvider } from "@/contexts/AppContext";
 

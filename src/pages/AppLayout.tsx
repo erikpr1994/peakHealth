@@ -1,5 +1,5 @@
 import { Outlet, useLocation, useNavigate } from "@tanstack/react-router";
-import Header from "./Header";
+import Header from "../components/layout/Header";
 import { useTrainerAndClub } from "../hooks/useTrainerAndClub";
 import { useAuth } from "@/features/auth/context/AuthContext";
 import { NotificationsProvider } from "@/contexts/NotificationsContext";
