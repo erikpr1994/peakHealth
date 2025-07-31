@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import type { User } from "@supabase/supabase-js";
 import {
@@ -34,20 +34,6 @@ export const UserMenu = ({ user, onLogout }: UserMenuProps) => {
   const router = useRouter();
   const [userDropdownOpen, setUserDropdownOpen] = useState(false);
 
-  useEffect(() => {
-    const handleScroll = () => {
-      setUserDropdownOpen(false);
-    };
-
-    if (userDropdownOpen) {
-      window.addEventListener("scroll", handleScroll, true);
-    }
-
-    return () => {
-      window.removeEventListener("scroll", handleScroll, true);
-    };
-  }, [userDropdownOpen]);
-
   const handleNavigate = (path: string) => {
     router.push(path);
     setUserDropdownOpen(false);
@@ -56,11 +42,7 @@ export const UserMenu = ({ user, onLogout }: UserMenuProps) => {
   const menuSections = [userMenuItems, settingsMenuItems, supportMenuItems];
 
   return (
-    <DropdownMenu
-      open={userDropdownOpen}
-      onOpenChange={setUserDropdownOpen}
-      modal={false}
-    >
+    <DropdownMenu open={userDropdownOpen} onOpenChange={setUserDropdownOpen}>
       <DropdownMenuTrigger asChild>
         <Button
           variant="ghost"
