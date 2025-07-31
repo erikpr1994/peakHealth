@@ -3,12 +3,11 @@
 import { useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { useAuth } from "@/features/auth/context/AuthContext";
-import { useNotifications } from "@/contexts/NotificationsContext";
+import { useNotifications, NotificationsBell } from "@/features/notifications";
 import { FEATURE_FLAGS, useFeatureFlag } from "@/features/feature-flags";
 import { navigationItems } from "./menuItems";
 import { DesktopNavigation } from "./DesktopNavigation";
 import { SideNav } from "./SideNav";
-import { NotificationsBell } from "./NotificationsBell";
 import { UserMenu } from "./UserMenu";
 import styles from "./Header.module.css";
 
