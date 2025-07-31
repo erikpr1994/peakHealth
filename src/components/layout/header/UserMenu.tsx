@@ -59,7 +59,9 @@ export const UserMenu = ({ user, onLogout }: UserMenuProps) => {
           </Avatar>
           <div className="hidden sm:flex flex-col text-left">
             <span className="text-sm font-medium text-gray-700 truncate max-w-[150px]">
-              {user?.user_metadata.display_name ?? user?.email}
+              {user?.user_metadata.display_name ??
+                user?.user_metadata.full_name ??
+                user?.email}
             </span>
             <span className="text-xs text-gray-500 truncate max-w-[150px]">
               {user?.user_metadata.email}
