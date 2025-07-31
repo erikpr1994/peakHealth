@@ -25,7 +25,10 @@ export default function Header() {
 
   return (
     <header className={styles.header}>
-      <div className="container px-4 sm:px-6 lg:px-8">
+      <div
+        className="w-full px-4 sm:px-6 lg:px-8"
+        style={{ maxWidth: "100vw", boxSizing: "border-box" }}
+      >
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center gap-2">
             <SideNav

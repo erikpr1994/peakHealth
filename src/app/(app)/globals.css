@@ -54,9 +54,15 @@
     @apply border-border;
   }
   html {
-    overflow-y: scroll;
+    overflow-y: auto;
   }
   body {
     @apply bg-background text-foreground;
+  }
+
+  /* Prevent layout shift when scroll locking is active */
+  html body[data-scroll-locked] {
+    margin-right: 0 !important;
+    padding-right: 0 !important;
   }
 }
