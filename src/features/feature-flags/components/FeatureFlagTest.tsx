@@ -176,6 +176,28 @@ export function FeatureFlagTest() {
             </p>
           </div>
         </FeatureFlag>
+
+        {/* Notification System */}
+        <FeatureFlag
+          name={FEATURE_FLAGS.NOTIFICATION_SYSTEM_FEATURE}
+          fallback={
+            <div className="p-3 bg-gray-50 border border-gray-200 rounded">
+              <h4 className="font-medium text-gray-800">Notification System</h4>
+              <p className="text-sm text-gray-600">
+                The notification system is currently disabled.
+              </p>
+            </div>
+          }
+        >
+          <div className="p-3 bg-emerald-50 border border-emerald-200 rounded">
+            <h4 className="font-medium text-emerald-800">
+              Notification System
+            </h4>
+            <p className="text-sm text-emerald-700">
+              Real-time notifications are enabled! 🔔
+            </p>
+          </div>
+        </FeatureFlag>
       </div>
 
       {/* User Type Checks */}

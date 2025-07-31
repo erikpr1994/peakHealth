@@ -4,6 +4,7 @@ import { useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { useAuth } from "@/features/auth/context/AuthContext";
 import { useNotifications } from "@/contexts/NotificationsContext";
+import { FeatureFlag, FEATURE_FLAGS } from "@/features/feature-flags";
 import { navigationItems } from "./menuItems";
 import { DesktopNavigation } from "./DesktopNavigation";
 import { SideNav } from "./SideNav";
@@ -50,7 +51,9 @@ export default function Header() {
           />
 
           <div className="flex items-center gap-3">
-            <NotificationsBell unreadCount={unreadCount} />
+            <FeatureFlag name={FEATURE_FLAGS.NOTIFICATION_SYSTEM_FEATURE}>
+              <NotificationsBell unreadCount={unreadCount} />
+            </FeatureFlag>
             <UserMenu user={user} onLogout={logout} />
           </div>
         </div>
