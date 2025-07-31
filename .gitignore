@@ -113,9 +113,6 @@ dist-ssr/
 # Private keys
 *.key
 
-# Supabase
-supabase/
-
 # IDE files
 .idea/
 *.suo

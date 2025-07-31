@@ -1,9 +1,7 @@
 "use client";
 
-import AuthPage from "@/features/auth/AuthPage";
-import { useAuth } from "@/contexts/AuthContext";
+import LoginPage from "@/features/auth/LoginPage";
 
-export default function LoginPage() {
-  const { login } = useAuth();
-  return <AuthPage onAuthenticated={login} />;
+export default function LoginPageContainer() {
+  return <LoginPage />;
 }
