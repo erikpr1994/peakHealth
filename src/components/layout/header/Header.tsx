@@ -4,6 +4,7 @@ import { useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { useAuth } from "@/features/auth/context/AuthContext";
 import { useNotifications } from "@/contexts/NotificationsContext";
+import { FEATURE_FLAGS, useFeatureFlag } from "@/features/feature-flags";
 import { navigationItems } from "./menuItems";
 import { DesktopNavigation } from "./DesktopNavigation";
 import { SideNav } from "./SideNav";
@@ -17,6 +18,10 @@ export default function Header() {
   const { logout, user } = useAuth();
   const { unreadCount } = useNotifications();
   const [isSideNavOpen, setIsSideNavOpen] = useState(false);
+  const { flags } = useFeatureFlag([FEATURE_FLAGS.NOTIFICATION_SYSTEM_FEATURE]);
+
+  const isNotificationSystemEnabled =
+    flags[FEATURE_FLAGS.NOTIFICATION_SYSTEM_FEATURE];
 
   const handleNavigate = (path: string) => {
     router.push(path);
@@ -50,7 +55,9 @@ export default function Header() {
           />
 
           <div className="flex items-center gap-3">
-            <NotificationsBell unreadCount={unreadCount} />
+            {isNotificationSystemEnabled && (
+              <NotificationsBell unreadCount={unreadCount} />
+            )}
             <UserMenu user={user} onLogout={logout} />
           </div>
         </div>
