@@ -1,5 +1,5 @@
 import Header from "@/components/layout/header/Header";
-import { NotificationsProvider } from "@/contexts/NotificationsContext";
+import { NotificationsProvider } from "@/features/notifications";
 import { AppProvider } from "@/contexts/AppContext";
 import { FeatureFlagProvider } from "@/features/feature-flags";
 
