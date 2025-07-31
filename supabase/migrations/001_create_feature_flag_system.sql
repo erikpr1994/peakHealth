@@ -269,37 +269,10 @@ INSERT INTO user_groups (name, display_name, description) VALUES
 
 -- Insert sample feature flags
 INSERT INTO feature_flags (name, display_name, description) VALUES
-('advanced_analytics_dashboard', 'Advanced Analytics Dashboard', 'Enhanced analytics with predictive insights and custom reports for trainers and administrators'),
-('beta_features', 'Beta Features', 'Access to experimental features for beta users'),
-('premium_workouts', 'Premium Workouts', 'Exclusive workout routines for premium users'),
-('trainer_tools', 'Trainer Tools', 'Advanced tools and features for trainers'),
 ('notification_system_feature', 'Notification System', 'Real-time notifications and alerts system');
 
 -- Insert environment configurations
 INSERT INTO feature_flag_environments (feature_flag_id, environment, is_enabled, rollout_percentage) VALUES
-((SELECT id FROM feature_flags WHERE name = 'advanced_analytics_dashboard'), 'development', true, 100),
-((SELECT id FROM feature_flags WHERE name = 'advanced_analytics_dashboard'), 'staging', true, 100),
-((SELECT id FROM feature_flags WHERE name = 'advanced_analytics_dashboard'), 'production', true, 100),
-((SELECT id FROM feature_flags WHERE name = 'beta_features'), 'development', true, 100),
-((SELECT id FROM feature_flags WHERE name = 'beta_features'), 'staging', true, 50),
-((SELECT id FROM feature_flags WHERE name = 'beta_features'), 'production', false, 0),
-((SELECT id FROM feature_flags WHERE name = 'premium_workouts'), 'development', true, 100),
-((SELECT id FROM feature_flags WHERE name = 'premium_workouts'), 'staging', true, 100),
-((SELECT id FROM feature_flags WHERE name = 'premium_workouts'), 'production', true, 100),
-((SELECT id FROM feature_flags WHERE name = 'trainer_tools'), 'development', true, 100),
-((SELECT id FROM feature_flags WHERE name = 'trainer_tools'), 'staging', true, 100),
-((SELECT id FROM feature_flags WHERE name = 'trainer_tools'), 'production', true, 100),
 ((SELECT id FROM feature_flags WHERE name = 'notification_system_feature'), 'development', true, 100),
 ((SELECT id FROM feature_flags WHERE name = 'notification_system_feature'), 'staging', true, 100),
-((SELECT id FROM feature_flags WHERE name = 'notification_system_feature'), 'production', true, 100);
-
--- Insert targeting configurations
-INSERT INTO feature_flag_user_types (feature_flag_id, environment, user_type_id, is_enabled) VALUES
-((SELECT id FROM feature_flags WHERE name = 'advanced_analytics_dashboard'), 'production', (SELECT id FROM user_types WHERE name = 'trainer'), true),
-((SELECT id FROM feature_flags WHERE name = 'advanced_analytics_dashboard'), 'production', (SELECT id FROM user_types WHERE name = 'admin'), true),
-((SELECT id FROM feature_flags WHERE name = 'trainer_tools'), 'production', (SELECT id FROM user_types WHERE name = 'trainer'), true),
-((SELECT id FROM feature_flags WHERE name = 'trainer_tools'), 'production', (SELECT id FROM user_types WHERE name = 'physio'), true);
-
-INSERT INTO feature_flag_user_groups (feature_flag_id, environment, group_id, is_enabled) VALUES
-((SELECT id FROM feature_flags WHERE name = 'beta_features'), 'staging', (SELECT id FROM user_groups WHERE name = 'beta'), true),
-((SELECT id FROM feature_flags WHERE name = 'premium_workouts'), 'production', (SELECT id FROM user_groups WHERE name = 'premium'), true); 
+((SELECT id FROM feature_flags WHERE name = 'notification_system_feature'), 'production', true, 100); 

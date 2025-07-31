@@ -84,15 +84,8 @@ function Dashboard() {
     <div>
       <h1>Dashboard</h1>
 
-      <FeatureFlag name={FEATURE_FLAGS.ADVANCED_ANALYTICS_DASHBOARD}>
-        <AdvancedAnalyticsComponent />
-      </FeatureFlag>
-
-      <FeatureFlag
-        name={FEATURE_FLAGS.BETA_FEATURES}
-        fallback={<UpgradePrompt />}
-      >
-        <BetaFeaturesComponent />
+      <FeatureFlag name={FEATURE_FLAGS.NOTIFICATION_SYSTEM_FEATURE}>
+        <NotificationsComponent />
       </FeatureFlag>
     </div>
   );
@@ -106,14 +99,14 @@ import { useFeatureFlag, FEATURE_FLAGS } from "@/features/feature-flags";
 
 function MyComponent() {
   const { isEnabled, isLoading } = useFeatureFlag(
-    FEATURE_FLAGS.PREMIUM_WORKOUTS
+    FEATURE_FLAGS.NOTIFICATION_SYSTEM_FEATURE
   );
 
   if (isLoading) return <div>Loading...</div>;
 
   return (
     <div>
-      {isEnabled ? <PremiumWorkoutsComponent /> : <UpgradeToPremiumPrompt />}
+      {isEnabled ? <NotificationsComponent /> : <NoNotificationsMessage />}
     </div>
   );
 }
@@ -122,7 +115,11 @@ function MyComponent() {
 ### Using the useFeatureFlags Hook
 
 ```tsx
-import { useFeatureFlags, USER_TYPES, USER_GROUPS } from "@/features/feature-flags";
+import {
+  useFeatureFlags,
+  USER_TYPES,
+  USER_GROUPS,
+} from "@/features/feature-flags";
 
 function MyComponent() {
   const { hasUserType, isInGroup, isEnabled } = useFeatureFlags();
@@ -136,13 +133,13 @@ function MyComponent() {
   const isPremiumUser = isInGroup(USER_GROUPS.PREMIUM);
 
   // Check feature flags
-  const hasAdvancedAnalytics = isEnabled("advanced_analytics_dashboard");
+  const hasNotifications = isEnabled("notification_system_feature");
 
   return (
     <div>
       {isTrainer && <TrainerDashboard />}
       {isPremiumUser && <PremiumFeatures />}
-      {hasAdvancedAnalytics && <AdvancedAnalytics />}
+      {hasNotifications && <NotificationsComponent />}
     </div>
   );
 }
@@ -172,10 +169,7 @@ import {
 } from "@/features/feature-flags";
 
 // Available feature flags
-FEATURE_FLAGS.ADVANCED_ANALYTICS_DASHBOARD;
-FEATURE_FLAGS.BETA_FEATURES;
-FEATURE_FLAGS.PREMIUM_WORKOUTS;
-FEATURE_FLAGS.TRAINER_TOOLS;
+FEATURE_FLAGS.NOTIFICATION_SYSTEM_FEATURE;
 
 // Available user types
 USER_TYPES.REGULAR;

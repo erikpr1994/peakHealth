@@ -42,10 +42,6 @@ export const getCurrentEnvironment = (): 'development' | 'staging' | 'production
 
 // Feature flag names constants
 export const FEATURE_FLAGS = {
-  ADVANCED_ANALYTICS_DASHBOARD: 'advanced_analytics_dashboard',
-  BETA_FEATURES: 'beta_features',
-  PREMIUM_WORKOUTS: 'premium_workouts',
-  TRAINER_TOOLS: 'trainer_tools',
   NOTIFICATION_SYSTEM_FEATURE: 'notification_system_feature',
 } as const;
 
