@@ -220,7 +220,7 @@ export default function GymDetail({ onNavigate, gymId }: GymDetailProps) {
       {/* Header */}
       <div className="flex items-center justify-between mb-8">
         <div className="flex items-center gap-4">
-          <Button variant="ghost" onClick={() => onNavigate("my-gyms")}>
+          <Button variant="ghost" onClick={() => onNavigate("gyms")}>
             <ArrowLeft className="w-4 h-4" />
           </Button>
           <div>

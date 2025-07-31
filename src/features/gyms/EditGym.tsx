@@ -443,7 +443,7 @@ export default function EditGym({ onNavigate, gymId }: EditGymProps) {
   const handleDelete = () => {
     // In a real app, this would delete from database
     console.log("Deleting gym:", gymId);
-    onNavigate("my-gyms");
+    onNavigate("gyms");
   };
 
   const getCategoryIcon = (categoryName: string) => {

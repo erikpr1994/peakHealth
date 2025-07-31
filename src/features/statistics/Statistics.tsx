@@ -27,18 +27,18 @@ import {
   MoreHorizontal,
   Play,
 } from "lucide-react";
-import { Card } from "./ui/card";
-import { Button } from "./ui/button";
-import { Badge } from "./ui/badge";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
+import { Card } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "./ui/select";
-import { Progress } from "./ui/progress";
+} from "@/components/ui/select";
+import { Progress } from "@/components/ui/progress";
 import {
   LineChart,
   Line,
@@ -61,7 +61,7 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "./ui/dropdown-menu";
+} from "@/components/ui/dropdown-menu";
 
 import { Page } from "@/types/app";
 
@@ -755,7 +755,7 @@ export default function Statistics({ onNavigate }: StatisticsProps) {
                         outerRadius={100}
                         paddingAngle={5}
                         label={({ name, percent }) =>
-                          `${name} ${(percent * 100).toFixed(0)}%`
+                          `${name} ${((percent ?? 0) * 100).toFixed(0)}%`
                         }
                       >
                         {workoutDistribution.map((entry, index) => (

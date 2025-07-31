@@ -57,7 +57,7 @@ import {
   AreaChart,
   Area,
 } from "recharts";
-import { ImageWithFallback } from "@/components/shared/ImageWithFallback";
+
 import {
   DropdownMenu,
   DropdownMenuContent,

@@ -1100,11 +1100,19 @@ export default function TrailRunningWorkout({
           const mappedInterval: Partial<TrailRunningInterval> = {
             ...interval,
             id: `${Date.now()}-${index}`,
+            type: (interval.type as IntervalType) || "run",
+            intensityTarget: interval.intensityTarget
+              ? {
+                  ...interval.intensityTarget,
+                  type: interval.intensityTarget.type as
+                    | "heart-rate"
+                    | "speed"
+                    | "power"
+                    | "cadence"
+                    | "rpe",
+                }
+              : undefined,
           };
-
-          if (!interval.type) {
-            mappedInterval.type = "run";
-          }
 
           if (mappedInterval.type === "rest") {
             delete mappedInterval.intensityTarget;
@@ -1237,11 +1245,19 @@ export default function TrailRunningWorkout({
           const mappedInterval: Partial<TrailRunningInterval> = {
             ...interval,
             id: `${Date.now()}-${index}`,
+            type: (interval.type as IntervalType) || "run",
+            intensityTarget: interval.intensityTarget
+              ? {
+                  ...interval.intensityTarget,
+                  type: interval.intensityTarget.type as
+                    | "heart-rate"
+                    | "speed"
+                    | "power"
+                    | "cadence"
+                    | "rpe",
+                }
+              : undefined,
           };
-
-          if (!interval.type) {
-            mappedInterval.type = "run";
-          }
 
           if (mappedInterval.type === "rest") {
             delete mappedInterval.intensityTarget;
@@ -1469,11 +1485,19 @@ export default function TrailRunningWorkout({
                               {
                                 ...interval,
                                 id: `${Date.now()}-${index}`,
+                                type: (interval.type as IntervalType) || "run",
+                                intensityTarget: interval.intensityTarget
+                                  ? {
+                                      ...interval.intensityTarget,
+                                      type: interval.intensityTarget.type as
+                                        | "heart-rate"
+                                        | "speed"
+                                        | "power"
+                                        | "cadence"
+                                        | "rpe",
+                                    }
+                                  : undefined,
                               };
-
-                            if (!interval.type) {
-                              mappedInterval.type = "run";
-                            }
 
                             if (mappedInterval.type === "rest") {
                               delete mappedInterval.intensityTarget;
@@ -1644,7 +1668,6 @@ export default function TrailRunningWorkout({
                         }));
                         if (!checked) {
                           setRepeatIntervals([]);
-                          setIsAddingRepeatInterval(false);
                         } else {
                           // Auto-populate smart defaults when manually enabling
                           const smartDefaults = getSmartDefaults(
@@ -1661,11 +1684,21 @@ export default function TrailRunningWorkout({
                                   {
                                     ...interval,
                                     id: `${Date.now()}-${index}`,
+                                    type:
+                                      (interval.type as IntervalType) || "run",
+                                    intensityTarget: interval.intensityTarget
+                                      ? {
+                                          ...interval.intensityTarget,
+                                          type: interval.intensityTarget
+                                            .type as
+                                            | "heart-rate"
+                                            | "speed"
+                                            | "power"
+                                            | "cadence"
+                                            | "rpe",
+                                        }
+                                      : undefined,
                                   };
-
-                                if (!interval.type) {
-                                  mappedInterval.type = "run";
-                                }
 
                                 if (mappedInterval.type === "rest") {
                                   delete mappedInterval.intensityTarget;
@@ -1774,11 +1807,24 @@ export default function TrailRunningWorkout({
                                             {
                                               ...interval,
                                               id: `${Date.now()}-${index}`,
+                                              type:
+                                                (interval.type as IntervalType) ||
+                                                "run",
+                                              intensityTarget:
+                                                interval.intensityTarget
+                                                  ? {
+                                                      ...interval.intensityTarget,
+                                                      type: interval
+                                                        .intensityTarget
+                                                        .type as
+                                                        | "heart-rate"
+                                                        | "speed"
+                                                        | "power"
+                                                        | "cadence"
+                                                        | "rpe",
+                                                    }
+                                                  : undefined,
                                             };
-
-                                          if (!interval.type) {
-                                            mappedInterval.type = "run";
-                                          }
 
                                           if (mappedInterval.type === "rest") {
                                             delete mappedInterval.intensityTarget;
