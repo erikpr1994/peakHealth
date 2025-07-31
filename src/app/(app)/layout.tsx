@@ -1,4 +1,4 @@
-import Header from "@/pages/Header";
+import Header from "@/components/layout/header/Header";
 import { NotificationsProvider } from "@/contexts/NotificationsContext";
 import { AppProvider } from "@/contexts/AppContext";
 
@@ -11,7 +11,7 @@ export default function AppLayout({
     <AppProvider>
       <NotificationsProvider hasTrainer={false} isClubMember={false}>
         <Header />
-        {children}
+        <main style={{ paddingTop: "64px" }}>{children}</main>
       </NotificationsProvider>
     </AppProvider>
   );
