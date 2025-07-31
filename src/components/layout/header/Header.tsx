@@ -9,6 +9,7 @@ import { DesktopNavigation } from "./DesktopNavigation";
 import { SideNav } from "./SideNav";
 import { NotificationsBell } from "./NotificationsBell";
 import { UserMenu } from "./UserMenu";
+import styles from "./Header.module.css";
 
 export default function Header() {
   const router = useRouter();
@@ -23,7 +24,7 @@ export default function Header() {
   };
 
   return (
-    <header className="bg-white border-b border-gray-200 sticky top-0 z-50">
+    <header className={styles.header}>
       <div className="container px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center gap-2">

@@ -11,7 +11,7 @@ export default function AppLayout({
     <AppProvider>
       <NotificationsProvider hasTrainer={false} isClubMember={false}>
         <Header />
-        {children}
+        <main style={{ paddingTop: "64px" }}>{children}</main>
       </NotificationsProvider>
     </AppProvider>
   );
