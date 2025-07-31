@@ -1,4 +1,4 @@
-import { FeatureFlagConfig } from '@/types/feature-flags';
+import { FeatureFlagConfig } from '../types';
 
 export const DEFAULT_FEATURE_FLAG_CONFIG: FeatureFlagConfig = {
   monitoring: {

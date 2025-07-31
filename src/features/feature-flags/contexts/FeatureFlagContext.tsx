@@ -9,15 +9,15 @@ import React, {
 } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { useAuth } from "@/features/auth/context/AuthContext";
-import { featureFlagCache } from "@/lib/feature-flags/cache";
-import { featureFlagMonitor } from "@/lib/feature-flags/monitoring";
-import { getCurrentEnvironment } from "@/lib/feature-flags/config";
+import { featureFlagCache } from "../lib/cache";
+import { featureFlagMonitor } from "../lib/monitoring";
+import { getCurrentEnvironment } from "../lib/config";
 import {
   FeatureFlagContextType,
   UserFeatureFlag,
   UserTypeInfo,
   UserGroupInfo,
-} from "@/types/feature-flags";
+} from "../types";
 
 const FeatureFlagContext = createContext<FeatureFlagContextType | undefined>(
   undefined

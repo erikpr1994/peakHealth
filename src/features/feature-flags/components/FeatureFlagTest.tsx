@@ -1,11 +1,7 @@
 import React from "react";
-import { useFeatureFlags } from "@/contexts/FeatureFlagContext";
+import { useFeatureFlags } from "../contexts/FeatureFlagContext";
 import { FeatureFlag } from "./FeatureFlag";
-import {
-  FEATURE_FLAGS,
-  USER_TYPES,
-  USER_GROUPS,
-} from "@/lib/feature-flags/config";
+import { FEATURE_FLAGS, USER_TYPES, USER_GROUPS } from "../lib/config";
 
 export function FeatureFlagTest() {
   const {

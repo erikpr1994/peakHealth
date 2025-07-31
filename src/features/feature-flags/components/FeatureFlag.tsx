@@ -1,6 +1,6 @@
 import React from "react";
-import { useFeatureFlag } from "@/hooks/useFeatureFlag";
-import { FeatureFlagProps } from "@/types/feature-flags";
+import { useFeatureFlag } from "../hooks/useFeatureFlag";
+import { FeatureFlagProps } from "../types";
 
 export function FeatureFlag({
   name,

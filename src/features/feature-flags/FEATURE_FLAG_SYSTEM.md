@@ -12,6 +12,28 @@ A comprehensive feature flag system for the Peak Health app that supports user t
 - **Audit Trail**: Track changes to feature flags
 - **TypeScript Support**: Full type safety throughout the system
 
+## Project Structure
+
+The feature flag system is organized within the `src/features/feature-flags/` directory:
+
+```
+src/features/feature-flags/
+├── types/
+│   └── index.ts                 # All TypeScript interfaces and types
+├── lib/
+│   ├── config.ts               # Configuration and constants
+│   ├── cache.ts                # Caching layer
+│   └── monitoring.ts           # Monitoring infrastructure
+├── contexts/
+│   └── FeatureFlagContext.tsx  # Main context provider
+├── hooks/
+│   └── useFeatureFlag.ts       # Individual feature flag hook
+├── components/
+│   ├── FeatureFlag.tsx         # Conditional rendering component
+│   └── FeatureFlagTest.tsx     # Test component
+└── index.ts                    # Main export file
+```
+
 ## Database Schema
 
 The system uses the following tables:
@@ -39,14 +61,12 @@ supabase db push
 
 ```tsx
 // In your main layout or app component
-import { FeatureFlagProvider } from '@/contexts/FeatureFlagContext';
+import { FeatureFlagProvider } from "@/features/feature-flags";
 
 function App() {
   return (
     <AuthProvider>
-      <FeatureFlagProvider>
-        {/* Your app components */}
-      </FeatureFlagProvider>
+      <FeatureFlagProvider>{/* Your app components */}</FeatureFlagProvider>
     </AuthProvider>
   );
 }
@@ -57,19 +77,18 @@ function App() {
 ### Using the FeatureFlag Component
 
 ```tsx
-import { FeatureFlag } from '@/components/FeatureFlag';
-import { FEATURE_FLAGS } from '@/lib/feature-flags/config';
+import { FeatureFlag, FEATURE_FLAGS } from "@/features/feature-flags";
 
 function Dashboard() {
   return (
     <div>
       <h1>Dashboard</h1>
-      
+
       <FeatureFlag name={FEATURE_FLAGS.ADVANCED_ANALYTICS_DASHBOARD}>
         <AdvancedAnalyticsComponent />
       </FeatureFlag>
-      
-      <FeatureFlag 
+
+      <FeatureFlag
         name={FEATURE_FLAGS.BETA_FEATURES}
         fallback={<UpgradePrompt />}
       >
@@ -83,21 +102,18 @@ function Dashboard() {
 ### Using the useFeatureFlag Hook
 
 ```tsx
-import { useFeatureFlag } from '@/hooks/useFeatureFlag';
-import { FEATURE_FLAGS } from '@/lib/feature-flags/config';
+import { useFeatureFlag, FEATURE_FLAGS } from "@/features/feature-flags";
 
 function MyComponent() {
-  const { isEnabled, isLoading } = useFeatureFlag(FEATURE_FLAGS.PREMIUM_WORKOUTS);
-  
+  const { isEnabled, isLoading } = useFeatureFlag(
+    FEATURE_FLAGS.PREMIUM_WORKOUTS
+  );
+
   if (isLoading) return <div>Loading...</div>;
-  
+
   return (
     <div>
-      {isEnabled ? (
-        <PremiumWorkoutsComponent />
-      ) : (
-        <UpgradeToPremiumPrompt />
-      )}
+      {isEnabled ? <PremiumWorkoutsComponent /> : <UpgradeToPremiumPrompt />}
     </div>
   );
 }
@@ -106,23 +122,22 @@ function MyComponent() {
 ### Using the useFeatureFlags Hook
 
 ```tsx
-import { useFeatureFlags } from '@/contexts/FeatureFlagContext';
-import { USER_TYPES, USER_GROUPS } from '@/lib/feature-flags/config';
+import { useFeatureFlags, USER_TYPES, USER_GROUPS } from "@/features/feature-flags";
 
 function MyComponent() {
   const { hasUserType, isInGroup, isEnabled } = useFeatureFlags();
-  
+
   // Check user types
   const isTrainer = hasUserType(USER_TYPES.TRAINER);
   const isPhysio = hasUserType(USER_TYPES.PHYSIO);
-  
+
   // Check user groups
   const isBetaUser = isInGroup(USER_GROUPS.BETA);
   const isPremiumUser = isInGroup(USER_GROUPS.PREMIUM);
-  
+
   // Check feature flags
-  const hasAdvancedAnalytics = isEnabled('advanced_analytics_dashboard');
-  
+  const hasAdvancedAnalytics = isEnabled("advanced_analytics_dashboard");
+
   return (
     <div>
       {isTrainer && <TrainerDashboard />}
@@ -150,24 +165,28 @@ NEXT_PUBLIC_ENVIRONMENT=development
 ### Feature Flag Constants
 
 ```tsx
-import { FEATURE_FLAGS, USER_TYPES, USER_GROUPS } from '@/lib/feature-flags/config';
+import {
+  FEATURE_FLAGS,
+  USER_TYPES,
+  USER_GROUPS,
+} from "@/features/feature-flags";
 
 // Available feature flags
-FEATURE_FLAGS.ADVANCED_ANALYTICS_DASHBOARD
-FEATURE_FLAGS.BETA_FEATURES
-FEATURE_FLAGS.PREMIUM_WORKOUTS
-FEATURE_FLAGS.TRAINER_TOOLS
+FEATURE_FLAGS.ADVANCED_ANALYTICS_DASHBOARD;
+FEATURE_FLAGS.BETA_FEATURES;
+FEATURE_FLAGS.PREMIUM_WORKOUTS;
+FEATURE_FLAGS.TRAINER_TOOLS;
 
 // Available user types
-USER_TYPES.REGULAR
-USER_TYPES.TRAINER
-USER_TYPES.PHYSIO
-USER_TYPES.ADMIN
+USER_TYPES.REGULAR;
+USER_TYPES.TRAINER;
+USER_TYPES.PHYSIO;
+USER_TYPES.ADMIN;
 
 // Available user groups
-USER_GROUPS.BETA
-USER_GROUPS.PREMIUM
-USER_GROUPS.EARLY_ACCESS
+USER_GROUPS.BETA;
+USER_GROUPS.PREMIUM;
+USER_GROUPS.EARLY_ACCESS;
 ```
 
 ## Testing
@@ -177,7 +196,7 @@ USER_GROUPS.EARLY_ACCESS
 Use the `FeatureFlagTest` component to verify the system is working:
 
 ```tsx
-import { FeatureFlagTest } from '@/components/FeatureFlagTest';
+import { FeatureFlagTest } from "@/features/feature-flags";
 
 function TestPage() {
   return (
@@ -235,8 +254,8 @@ SELECT id, 'production', true, 100 FROM feature_flags WHERE name = 'new_feature'
 
 -- Target specific user types
 INSERT INTO feature_flag_user_types (feature_flag_id, environment, user_type_id, is_enabled)
-SELECT ff.id, 'production', ut.id, true 
-FROM feature_flags ff, user_types ut 
+SELECT ff.id, 'production', ut.id, true
+FROM feature_flags ff, user_types ut
 WHERE ff.name = 'new_feature' AND ut.name = 'trainer';
 ```
 
@@ -269,4 +288,4 @@ The system is designed to support monitoring integration:
 2. **Testing**: Use the test component to verify functionality
 3. **User Assignment**: Assign users to types and groups
 4. **Feature Flags**: Create and configure feature flags for your features
-5. **Monitoring**: Enable monitoring when ready 
+5. **Monitoring**: Enable monitoring when ready
