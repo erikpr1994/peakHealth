@@ -51,25 +51,25 @@ export const UserMenu = ({ user, onLogout }: UserMenuProps) => {
           <Avatar className="w-8 h-8">
             <AvatarImage
               src={user?.user_metadata.avatar_url}
-              alt={user?.email}
+              alt={user?.email ?? ""}
             />
             <AvatarFallback className="text-xs">
               {getInitials(user?.email)}
             </AvatarFallback>
           </Avatar>
-          <div className="hidden sm:block text-left">
-            <div className="text-sm font-medium text-gray-700">
-              {user?.user_metadata.display_name}
-            </div>
-            <div className="text-xs text-gray-500">
+          <div className="hidden sm:flex flex-col text-left">
+            <span className="text-sm font-medium text-gray-700 truncate max-w-[150px]">
+              {user?.user_metadata.display_name ?? user?.email}
+            </span>
+            <span className="text-xs text-gray-500 truncate max-w-[150px]">
               {user?.user_metadata.email}
-            </div>
+            </span>
           </div>
           <ChevronDown className="w-4 h-4 text-gray-500" />
         </Button>
       </DropdownMenuTrigger>
 
-      <DropdownMenuContent align="end" className="w-56">
+      <DropdownMenuContent align="end" className="w-56" sideOffset={8}>
         {menuSections.map((section, index) => (
           <div key={index}>
             {section.map((item) => {
