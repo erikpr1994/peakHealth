@@ -554,6 +554,31 @@ export default function RoutineCreation({
     );
   };
 
+  // Wrapper functions for renderWorkoutCard compatibility
+  const updateStrengthWorkoutScheduleWrapper = (
+    workoutId: string,
+    field: string,
+    value: string
+  ) => {
+    updateStrengthWorkoutSchedule(
+      workoutId,
+      field as keyof StrengthWorkout["schedule"],
+      value
+    );
+  };
+
+  const updateRunningWorkoutScheduleWrapper = (
+    workoutId: string,
+    field: string,
+    value: string
+  ) => {
+    updateRunningWorkoutSchedule(
+      workoutId,
+      field as keyof RunningWorkout["schedule"],
+      value
+    );
+  };
+
   // Calculate estimated duration based on workout content
   const calculateWorkoutDuration = (
     workout: StrengthWorkout | RunningWorkout
@@ -577,6 +602,7 @@ export default function RoutineCreation({
         running: "45 min",
         swimming: "45 min",
         cycling: "60 min",
+        "trail-running": "45 min",
       };
       return baseEstimates[workout.type] || "45 min";
     }
@@ -2640,7 +2666,7 @@ export default function RoutineCreation({
               removeStrengthWorkout,
               updateStrengthWorkoutName,
               updateStrengthWorkoutObjective,
-              updateStrengthWorkoutSchedule,
+              updateStrengthWorkoutScheduleWrapper,
               addStrengthSection,
               removeStrengthSection,
               updateStrengthSectionName,
@@ -2728,7 +2754,7 @@ export default function RoutineCreation({
               removeRunningWorkout,
               updateRunningWorkoutName,
               updateRunningWorkoutObjective,
-              updateRunningWorkoutSchedule,
+              updateRunningWorkoutScheduleWrapper,
               addRunningSection,
               removeRunningSection,
               updateRunningSectionName,

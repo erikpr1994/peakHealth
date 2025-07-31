@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import {
   Activity,
   Clock,
@@ -56,6 +57,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 export default function Performance() {
+  const router = useRouter();
   const [timeFilter, setTimeFilter] = useState("monthly");
   const [activeTab, setActiveTab] = useState("overview");
 

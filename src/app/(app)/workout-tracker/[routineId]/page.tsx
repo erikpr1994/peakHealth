@@ -1,7 +1,16 @@
+"use client";
+
 import WorkoutTracker from "@/features/workout/WorkoutTracker";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 
 export default function WorkoutTrackerPage() {
   const { routineId } = useParams();
-  return <WorkoutTracker onNavigate={() => {}} routineId={routineId} />;
+  const router = useRouter();
+
+  if (typeof routineId !== "string") {
+    // Or a loading spinner
+    return <div>Invalid routine</div>;
+  }
+
+  return <WorkoutTracker onNavigate={router.push} routineId={routineId} />;
 }
