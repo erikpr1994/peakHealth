@@ -13,25 +13,32 @@ import {
   Camera,
   Check,
 } from "lucide-react";
-import { Card } from "@/components/card";
-import { Button } from "@/components/button";
-import { Input } from "@/components/input";
-import { Label } from "@/components/label";
+import { Card } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/select";
-import { Switch } from "@/components/switch";
-import { Checkbox } from "@/components/checkbox";
-import { ImageWithFallback } from "@/components/figma/ImageWithFallback";
+} from "@/components/ui/select";
+import { Switch } from "@/components/ui/switch";
+import { Checkbox } from "@/components/ui/checkbox";
 
 import { Page } from "@/types/app";
 
 interface SettingsProps {
   onNavigate: (page: Page, exerciseId?: string) => void;
+}
+
+interface SidebarItem {
+  id: string;
+  name: string;
+  icon: React.ComponentType<any>;
+  active?: boolean;
+  badge?: string;
 }
 
 export default function Settings({ onNavigate }: SettingsProps) {
@@ -42,7 +49,7 @@ export default function Settings({ onNavigate }: SettingsProps) {
     "Improve Endurance",
   ]);
 
-  const sidebarSections = [
+  const sidebarSections: { title: string; items: SidebarItem[] }[] = [
     {
       title: "PERSONAL",
       items: [
@@ -174,7 +181,7 @@ export default function Settings({ onNavigate }: SettingsProps) {
             <div className="flex items-center gap-6 mb-8">
               <div className="relative">
                 <div className="w-24 h-24 rounded-full bg-gray-200 overflow-hidden">
-                  <ImageWithFallback
+                  <img
                     src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=96&h=96&fit=crop&crop=face"
                     alt="Profile"
                     className="w-full h-full object-cover"

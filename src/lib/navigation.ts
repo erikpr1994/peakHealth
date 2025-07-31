@@ -47,7 +47,8 @@ export function getPageDisplayName(page: Page): string {
     'account-settings': 'Account Settings',
     'app-settings': 'App Settings',
     'workout-tracker': 'Workout Tracker',
-    'trainer-and-clubs': 'Trainer & Clubs'
+    'trainer-and-clubs': 'Trainer & Clubs',
+    'statistics': 'Statistics',
   };
 
   return pageNames[page] || page;
