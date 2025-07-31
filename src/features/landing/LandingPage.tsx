@@ -1,11 +1,7 @@
 import React from "react";
-import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
-interface LandingPageProps {
-  onGetStarted: () => void;
-}
-
-export default function LandingPage({ onGetStarted }: LandingPageProps) {
+export default function LandingPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-500 to-purple-600 text-white flex flex-col items-center justify-center p-8">
       <div className="text-center max-w-2xl">
@@ -14,13 +10,12 @@ export default function LandingPage({ onGetStarted }: LandingPageProps) {
           Your ultimate companion for tracking workouts, monitoring progress,
           and achieving your fitness goals.
         </p>
-        <Button
-          onClick={onGetStarted}
-          size="lg"
+        <Link
+          href="/login"
           className="bg-white text-indigo-600 hover:bg-gray-100"
         >
           Get Started
-        </Button>
+        </Link>
       </div>
     </div>
   );
