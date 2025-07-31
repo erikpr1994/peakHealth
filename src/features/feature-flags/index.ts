@@ -7,7 +7,7 @@ export * from './types';
 export * from './lib/config';
 
 // Context and Hooks
-export { FeatureFlagProvider, useFeatureFlags } from './contexts/FeatureFlagContext';
+export { FeatureFlagProvider, useFeatureFlags } from './context/FeatureFlagContext';
 export { useFeatureFlag } from './hooks/useFeatureFlag';
 
 // Components

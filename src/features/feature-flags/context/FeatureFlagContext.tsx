@@ -116,10 +116,18 @@ export function FeatureFlagProvider({ children }: { children: ReactNode }) {
 
       // Track performance metric
       const loadTime = Date.now() - startTime;
-      await featureFlagMonitor.trackPerformance("feature_flags_load", loadTime);
+      featureFlagMonitor.trackFeatureFlagPerformance(
+        "feature_flags_load",
+        loadTime,
+        user.id
+      );
     } catch (error) {
       console.error("Error loading feature flag data:", error);
-      await featureFlagMonitor.trackError("feature_flags_load", error as Error);
+      featureFlagMonitor.trackFeatureFlagError(
+        "feature_flags_load",
+        error as Error,
+        user.id
+      );
 
       setFlags({});
       setUserTypes([]);
@@ -141,7 +149,7 @@ export function FeatureFlagProvider({ children }: { children: ReactNode }) {
 
     // Track usage metric
     if (user) {
-      featureFlagMonitor.trackUsage(featureName, user.id, enabled);
+      featureFlagMonitor.trackFeatureFlagUsage(featureName, enabled, user.id);
     }
 
     return enabled;

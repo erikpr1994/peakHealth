@@ -1,86 +1,105 @@
 import { FEATURE_FLAG_CONFIG } from './config';
 
-export interface MonitoringConfig {
-  enabled: boolean;
-  endpoint?: string;
-  apiKey?: string;
+interface Metrics {
+  usage: Record<string, number>;
+  errors: Record<string, number>;
+  performance: Record<string, number>;
+  cache: { hits: number; misses: number };
+  userAssignments: { types: Record<string, number>; groups: Record<string, number> };
 }
 
-export class FeatureFlagMonitor {
-  private config: MonitoringConfig;
+class FeatureFlagMonitor {
+  private metrics: Metrics = {
+    usage: {},
+    errors: {},
+    performance: {},
+    cache: { hits: 0, misses: 0 },
+    userAssignments: { types: {}, groups: {} }
+  };
 
-  constructor(config: MonitoringConfig) {
-    this.config = config;
-  }
-
-  async trackMetric(featureName: string, metric: string, value: number): Promise<void> {
-    if (!this.config.enabled) return;
-
-    try {
-      // Will be implemented when monitoring is added
-      console.log(`[MONITORING] ${featureName}: ${metric} = ${value}`);
-      
-      // Future implementation:
-      // await fetch(this.config.endpoint, {
-      //   method: 'POST',
-      //   headers: {
-      //     'Content-Type': 'application/json',
-      //     'Authorization': `Bearer ${this.config.apiKey}`
-      //   },
-      //   body: JSON.stringify({
-      //     featureName,
-      //     metric,
-      //     value,
-      //     timestamp: new Date().toISOString()
-      //   })
-      // });
-    } catch (error) {
-      console.error('Failed to track metric:', error);
+  trackFeatureFlagUsage(featureName: string, isEnabled: boolean, userId?: string): void {
+    if (process.env.NODE_ENV === 'development') {
+      console.log(
+        '[Feature Flag Usage]',
+        featureName,
+        isEnabled ? 'enabled' : 'disabled',
+        userId
+      );
     }
+
+    this.metrics.usage[featureName] = (this.metrics.usage[featureName] || 0) + 1;
   }
 
-  async trackError(featureName: string, error: Error): Promise<void> {
-    if (!this.config.enabled) return;
+  trackFeatureFlagError(featureName: string, error: Error, userId?: string): void {
+    console.error(
+      '[Feature Flag Error]',
+      featureName,
+      error,
+      userId
+    );
 
-    try {
-      // Will be implemented when monitoring is added
-      console.error(`[MONITORING] Feature flag error for ${featureName}:`, error);
-      
-      // Future implementation:
-      // await fetch(this.config.endpoint, {
-      //   method: 'POST',
-      //   headers: {
-      //     'Content-Type': 'application/json',
-      //     'Authorization': `Bearer ${this.config.apiKey}`
-      //   },
-      //   body: JSON.stringify({
-      //     featureName,
-      //     error: error.message,
-      //     stack: error.stack,
-      //     timestamp: new Date().toISOString()
-      //   })
-      // });
-    } catch (monitoringError) {
-      console.error('Failed to track error:', monitoringError);
+    this.metrics.errors[featureName] = (this.metrics.errors[featureName] || 0) + 1;
+  }
+
+  trackFeatureFlagPerformance(featureName: string, duration: number, userId?: string): void {
+    if (process.env.NODE_ENV === 'development') {
+      if (duration > 1000) {
+        console.warn(
+          '[Feature Flag Performance Warning]',
+          featureName,
+          `${duration}ms (slow)`,
+          userId
+        );
+      } else {
+        console.log(
+          '[Feature Flag Performance]',
+          featureName,
+          `${duration}ms`,
+          userId
+        );
+      }
     }
+
+    this.metrics.performance[featureName] = duration;
   }
 
-  async trackUsage(featureName: string, userId: string, isEnabled: boolean): Promise<void> {
-    if (!this.config.enabled || !FEATURE_FLAG_CONFIG.analytics.trackUsage) return;
-
-    await this.trackMetric(featureName, 'usage', isEnabled ? 1 : 0);
+  trackCacheHit(key: string): void {
+    if (process.env.NODE_ENV === 'development') {
+      console.log('[Feature Flag Cache Hit]', key);
+    }
+    this.metrics.cache.hits++;
   }
 
-  async trackPerformance(featureName: string, duration: number): Promise<void> {
-    if (!this.config.enabled || !FEATURE_FLAG_CONFIG.analytics.trackPerformance) return;
+  trackCacheMiss(key: string): void {
+    if (process.env.NODE_ENV === 'development') {
+      console.log('[Feature Flag Cache Miss]', key);
+    }
+    this.metrics.cache.misses++;
+  }
 
-    await this.trackMetric(featureName, 'performance', duration);
+  trackUserTypeAssignment(userId: string, userType: string): void {
+    console.log('[User Type Assignment]', userId, userType);
+    this.metrics.userAssignments.types[userType] = (this.metrics.userAssignments.types[userType] || 0) + 1;
+  }
+
+  trackUserGroupAssignment(userId: string, userGroup: string): void {
+    console.log('[User Group Assignment]', userId, userGroup);
+    this.metrics.userAssignments.groups[userGroup] = (this.metrics.userAssignments.groups[userGroup] || 0) + 1;
+  }
+
+  getMetrics(): Metrics {
+    return { ...this.metrics };
+  }
+
+  resetMetrics(): void {
+    this.metrics = {
+      usage: {},
+      errors: {},
+      performance: {},
+      cache: { hits: 0, misses: 0 },
+      userAssignments: { types: {}, groups: {} }
+    };
   }
 }
 
-// Global monitoring instance
-export const featureFlagMonitor = new FeatureFlagMonitor({
-  enabled: FEATURE_FLAG_CONFIG.monitoring.enabled,
-  endpoint: FEATURE_FLAG_CONFIG.monitoring.endpoint,
-  apiKey: FEATURE_FLAG_CONFIG.monitoring.apiKey,
-}); 
+export const featureFlagMonitor = new FeatureFlagMonitor(); 

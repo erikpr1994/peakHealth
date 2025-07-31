@@ -40,11 +40,11 @@ class FeatureFlagCache {
   }
 
   invalidateUser(userId: string): void {
-    this.invalidate(`user_${userId}`);
+    this.invalidate(`user-${userId}`);
   }
 
   invalidateFeatureFlag(featureName: string): void {
-    this.invalidate(`feature_${featureName}`);
+    this.invalidate(`feature-${featureName}`);
   }
 
   clear(): void {

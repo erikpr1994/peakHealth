@@ -139,7 +139,7 @@ export type Environment = 'development' | 'staging' | 'production';
 
 // Hook Return Types
 export interface UseFeatureFlagReturn {
-  isEnabled: boolean;
+  flags: Record<string, boolean>;
   isLoading: boolean;
 }
 
@@ -199,4 +199,4 @@ export interface DatabaseFunctions {
     };
     Returns: boolean;
   };
-} 
+}
