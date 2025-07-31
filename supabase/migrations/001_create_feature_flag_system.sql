@@ -111,7 +111,7 @@ CREATE INDEX idx_user_group_assignments_user ON user_group_assignments(user_id);
 -- Stored procedure to get user's feature flags
 CREATE OR REPLACE FUNCTION get_user_feature_flags(user_id UUID, environment_param TEXT)
 RETURNS TABLE (
-  name TEXT,
+  name VARCHAR(100),
   is_enabled BOOLEAN,
   rollout_percentage INTEGER
 ) AS $$
@@ -162,8 +162,8 @@ $$ LANGUAGE plpgsql SECURITY DEFINER;
 -- Helper functions for user management
 CREATE OR REPLACE FUNCTION get_user_types(user_id UUID)
 RETURNS TABLE (
-  type_name TEXT,
-  display_name TEXT,
+  type_name VARCHAR(50),
+  display_name VARCHAR(100),
   description TEXT
 ) AS $$
 BEGIN
@@ -181,8 +181,8 @@ $$ LANGUAGE plpgsql SECURITY DEFINER;
 -- Function to get all user groups for a user
 CREATE OR REPLACE FUNCTION get_user_groups(user_id UUID)
 RETURNS TABLE (
-  group_name TEXT,
-  display_name TEXT,
+  group_name VARCHAR(50),
+  display_name VARCHAR(100),
   description TEXT
 ) AS $$
 BEGIN
@@ -273,6 +273,6 @@ INSERT INTO feature_flags (name, display_name, description) VALUES
 
 -- Insert environment configurations
 INSERT INTO feature_flag_environments (feature_flag_id, environment, is_enabled, rollout_percentage) VALUES
-((SELECT id FROM feature_flags WHERE name = 'notification_system_feature'), 'development', true, 100),
-((SELECT id FROM feature_flags WHERE name = 'notification_system_feature'), 'staging', true, 100),
-((SELECT id FROM feature_flags WHERE name = 'notification_system_feature'), 'production', true, 100); 
+((SELECT id FROM feature_flags WHERE name = 'notification_system_feature'), 'development', false, 0),
+((SELECT id FROM feature_flags WHERE name = 'notification_system_feature'), 'staging', false, 0),
+((SELECT id FROM feature_flags WHERE name = 'notification_system_feature'), 'production', false, 0); 
