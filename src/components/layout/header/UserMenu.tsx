@@ -42,7 +42,11 @@ export const UserMenu = ({ user, onLogout }: UserMenuProps) => {
   const menuSections = [userMenuItems, settingsMenuItems, supportMenuItems];
 
   return (
-    <DropdownMenu open={userDropdownOpen} onOpenChange={setUserDropdownOpen}>
+    <DropdownMenu
+      open={userDropdownOpen}
+      onOpenChange={setUserDropdownOpen}
+      modal={false}
+    >
       <DropdownMenuTrigger asChild>
         <Button
           variant="ghost"
