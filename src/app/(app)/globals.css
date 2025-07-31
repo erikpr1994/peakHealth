@@ -53,8 +53,11 @@
   * {
     @apply border-border;
   }
-  html {
-    overflow-y: scroll;
+  body[data-scroll-locked] {
+    margin-right: 0 !important;
+  }
+  header.sticky {
+    transform: none !important;
   }
   body {
     @apply bg-background text-foreground;
