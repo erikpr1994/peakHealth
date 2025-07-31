@@ -41,24 +41,14 @@ export function FeatureFlagProvider({ children }: { children: ReactNode }) {
     }
 
     const startTime = Date.now();
-    const environment = getCurrentEnvironment();
-
     try {
-      // Load feature flags with caching
-      const flagsData = await featureFlagCache.get(
-        `user_${user.id}_flags_${environment}`,
-        async () => {
-          const { data, error } = await supabase.rpc("get_user_feature_flags", {
-            user_id: user.id,
-            environment_param: environment,
-          });
+      const response = await fetch("/api/feature-flags");
+      if (!response.ok) {
+        throw new Error("Failed to fetch feature flags");
+      }
+      const { flags, userTypes, userGroups } = await response.json();
 
-          if (error) throw error;
-          return data || [];
-        }
-      );
-
-      const flagsMap = flagsData.reduce(
+      const flagsMap = flags.reduce(
         (acc: Record<string, UserFeatureFlag>, flag: any) => {
           acc[flag.name] = {
             name: flag.name,
@@ -71,50 +61,9 @@ export function FeatureFlagProvider({ children }: { children: ReactNode }) {
       );
 
       setFlags(flagsMap);
+      setUserTypes(userTypes || []);
+      setUserGroups(userGroups || []);
 
-      // Load user types with caching
-      const typesData = await featureFlagCache.get(
-        `user_${user.id}_types`,
-        async () => {
-          const { data, error } = await supabase.rpc("get_user_types", {
-            user_id: user.id,
-          });
-
-          if (error) throw error;
-          return data || [];
-        }
-      );
-
-      const types = typesData.map((type: any) => ({
-        typeName: type.type_name,
-        displayName: type.display_name,
-        description: type.description,
-      }));
-
-      setUserTypes(types);
-
-      // Load user groups with caching
-      const groupsData = await featureFlagCache.get(
-        `user_${user.id}_groups`,
-        async () => {
-          const { data, error } = await supabase.rpc("get_user_groups", {
-            user_id: user.id,
-          });
-
-          if (error) throw error;
-          return data || [];
-        }
-      );
-
-      const groups = groupsData.map((group: any) => ({
-        groupName: group.group_name,
-        displayName: group.display_name,
-        description: group.description,
-      }));
-
-      setUserGroups(groups);
-
-      // Track performance metric
       const loadTime = Date.now() - startTime;
       featureFlagMonitor.trackFeatureFlagPerformance(
         "feature_flags_load",
@@ -128,7 +77,6 @@ export function FeatureFlagProvider({ children }: { children: ReactNode }) {
         error as Error,
         user.id
       );
-
       setFlags({});
       setUserTypes([]);
       setUserGroups([]);

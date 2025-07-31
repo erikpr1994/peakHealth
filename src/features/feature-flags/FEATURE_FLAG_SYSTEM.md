@@ -2,6 +2,45 @@
 
 A comprehensive feature flag system for the Peak Health app that supports user types, user groups, and environment-based targeting.
 
+## System Workflow
+
+This diagram provides a visual representation of the data flow within the feature flag system, from a component request to the database and back.
+
+```mermaid
+graph TD
+    subgraph "React Application"
+        A[Component] -- "Calls useFeatureFlag(['my-feature'])" --> B(useFeatureFlag Hook)
+        B -- "Accesses context" --> C(FeatureFlagProvider)
+    end
+
+    subgraph "Feature Flag Logic"
+        C -- "Is data cached?" --> D{featureFlagCache}
+        D -- "Yes (Cache Hit)" --> C
+        D -- "No (Cache Miss)" --> E(Supabase RPC Call)
+        E -- "Calls get_user_feature_flags()" --> F[Postgres Database]
+        F -- "Returns flag data" --> E
+        E -- "Returns data to provider" --> C
+        C -- "Stores result in cache" --> D
+        C -- "Provides state (flags, isLoading)" --> B
+    end
+
+    B -- "Returns { flags, isLoading }" --> A
+    A -- "Renders conditional UI" --> G[Final UI]
+```
+
+### Explanation of the Flow
+
+1.  **Component Request**: A React component initiates the process by calling the `useFeatureFlag` hook with an array of feature names it needs to check.
+2.  **Context Access**: The `useFeatureFlag` hook accesses the `FeatureFlagProvider` to get the current state and the `isEnabled` function.
+3.  **Cache Check**: The `FeatureFlagProvider` first checks the `featureFlagCache` to see if the requested data is already available and not expired. If it is, the provider immediately uses the cached data (Cache Hit).
+4.  **Cache Miss & RPC Call**: If the data is not in the cache (a "cache miss"), the provider makes an RPC call to the Supabase backend.
+5.  **Database Query**: The `get_user_feature_flags` function in the database is executed. It queries the relevant tables to determine which flags are active for the current user and environment.
+6.  **Data Return**: The database function returns the flag data to the `FeatureFlagProvider`.
+7.  **Cache Update**: The provider updates the `featureFlagCache` with the newly fetched data for future requests.
+8.  **State Provision**: The `FeatureFlagProvider` makes the latest state (flags and `isLoading` status) available to the hook.
+9.  **Hook Return**: The `useFeatureFlag` hook returns the final state to the calling component.
+10. **UI Render**: The component uses the flag's status to render the appropriate UI.
+
 ## Features
 
 - **User Type Targeting**: Target features based on user types (regular, trainer, physio, admin)
@@ -24,12 +63,10 @@ src/features/feature-flags/
 │   ├── config.ts               # Configuration and constants
 │   ├── cache.ts                # Caching layer
 │   └── monitoring.ts           # Monitoring infrastructure
-├── contexts/
+├── context/
 │   └── FeatureFlagContext.tsx  # Main context provider
 ├── hooks/
-│   └── useFeatureFlag.ts       # Individual feature flag hook
-├── components/
-│   └── FeatureFlag.tsx         # Conditional rendering component
+│   └── useFeatureFlag.ts       # Main feature flag hook
 └── index.ts                    # Main export file
 ```
 
@@ -73,45 +110,33 @@ function App() {
 
 ## Usage
 
-### Using the FeatureFlag Component
-
-```tsx
-import { FeatureFlag, FEATURE_FLAGS } from "@/features/feature-flags";
-
-function Dashboard() {
-  return (
-    <div>
-      <h1>Dashboard</h1>
-
-      <FeatureFlag name={FEATURE_FLAGS.NOTIFICATION_SYSTEM_FEATURE}>
-        <NotificationsComponent />
-      </FeatureFlag>
-    </div>
-  );
-}
-```
-
 ### Using the useFeatureFlag Hook
 
 ```tsx
 import { useFeatureFlag, FEATURE_FLAGS } from "@/features/feature-flags";
 
 function MyComponent() {
-  const { isEnabled, isLoading } = useFeatureFlag(
-    FEATURE_FLAGS.NOTIFICATION_SYSTEM_FEATURE
-  );
+  const { flags, isLoading } = useFeatureFlag([
+    FEATURE_FLAGS.NOTIFICATION_SYSTEM_FEATURE,
+  ]);
 
   if (isLoading) return <div>Loading...</div>;
 
   return (
     <div>
-      {isEnabled ? <NotificationsComponent /> : <NoNotificationsMessage />}
+      {flags[FEATURE_FLAGS.NOTIFICATION_SYSTEM_FEATURE] ? (
+        <NotificationsComponent />
+      ) : (
+        <NoNotificationsMessage />
+      )}
     </div>
   );
 }
 ```
 
-### Using the useFeatureFlags Hook
+### Using the useFeatureFlags Hook for More Control
+
+The `useFeatureFlags` hook gives you direct access to the context, which is useful for more complex scenarios, such as checking user types or groups.
 
 ```tsx
 import {

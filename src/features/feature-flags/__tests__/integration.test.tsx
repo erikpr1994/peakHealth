@@ -1,29 +1,19 @@
 import { describe, it, expect, vi, beforeEach, Mock } from "vitest";
-import { render, screen, waitFor, act } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import { FeatureFlagProvider } from "../context/FeatureFlagContext";
 import { useFeatureFlag } from "../hooks/useFeatureFlag";
 import { useAuth } from "@/features/auth/context/AuthContext";
 import React from "react";
 
 // Mock external dependencies
-const mockRpc = vi.fn();
-vi.mock("@/lib/supabase/client", () => ({
-  createClient: vi.fn(() => ({
-    rpc: mockRpc,
-  })),
-}));
 vi.mock("@/features/auth/context/AuthContext");
-vi.mock("../lib/cache", () => ({
-  featureFlagCache: {
-    get: vi.fn((_, fetcher) => fetcher()),
-    set: vi.fn(),
-    clear: vi.fn(),
-    invalidateUser: vi.fn(),
-  },
-}));
-vi.mock("../lib/monitoring");
+vi.mock("@/lib/supabase/client"); // Prevent real client from being created
 
 const mockedUseAuth = useAuth as Mock;
+
+// Mock the fetch call to our API route
+const mockFetch = vi.fn();
+global.fetch = mockFetch;
 
 const TestComponent = ({ featureNames }: { featureNames: string[] }) => {
   const { flags, isLoading } = useFeatureFlag(featureNames);
@@ -50,13 +40,12 @@ const TestComponent = ({ featureNames }: { featureNames: string[] }) => {
 
 const renderWithFlags = (
   ui: React.ReactElement,
-  flags: {
-    name: string;
-    is_enabled: boolean;
-    rollout_percentage: number;
-  }[] = []
+  apiResponse: { flags: any[]; userTypes: any[]; userGroups: any[] }
 ) => {
-  mockRpc.mockResolvedValue({ data: flags, error: null });
+  mockFetch.mockResolvedValue({
+    ok: true,
+    json: () => Promise.resolve(apiResponse),
+  });
   return render(<FeatureFlagProvider>{ui}</FeatureFlagProvider>);
 };
 
@@ -73,10 +62,14 @@ describe("Feature Flag System Integration", () => {
   it("should render correctly based on feature flag states", async () => {
     renderWithFlags(
       <TestComponent featureNames={["feature-a", "feature-b", "feature-c"]} />,
-      [
-        { name: "feature-a", is_enabled: true, rollout_percentage: 100 },
-        { name: "feature-b", is_enabled: false, rollout_percentage: 0 },
-      ]
+      {
+        flags: [
+          { name: "feature-a", is_enabled: true, rollout_percentage: 100 },
+          { name: "feature-b", is_enabled: false, rollout_percentage: 0 },
+        ],
+        userTypes: [],
+        userGroups: [],
+      }
     );
 
     await waitFor(() => {
@@ -87,8 +80,12 @@ describe("Feature Flag System Integration", () => {
   });
 
   it("should show a loading state initially", async () => {
-    mockRpc.mockReturnValue(new Promise(() => {})); // Never resolves
-    renderWithFlags(<TestComponent featureNames={["any-feature"]} />);
+    mockFetch.mockReturnValue(new Promise(() => {})); // Never resolves
+    render(
+      <FeatureFlagProvider>
+        <TestComponent featureNames={["any-feature"]} />
+      </FeatureFlagProvider>
+    );
     expect(await screen.findByText("Loading flags...")).toBeInTheDocument();
   });
 
@@ -99,12 +96,14 @@ describe("Feature Flag System Integration", () => {
       isLoading: false,
     });
 
-    renderWithFlags(
-      <TestComponent featureNames={["feature-a", "feature-b"]} />
+    render(
+      <FeatureFlagProvider>
+        <TestComponent featureNames={["feature-a", "feature-b"]} />
+      </FeatureFlagProvider>
     );
 
     await waitFor(() => {
-      expect(mockRpc).not.toHaveBeenCalled();
+      expect(mockFetch).not.toHaveBeenCalled();
       expect(screen.getByTestId("feature-a-disabled")).toBeInTheDocument();
       expect(screen.getByTestId("feature-b-disabled")).toBeInTheDocument();
     });

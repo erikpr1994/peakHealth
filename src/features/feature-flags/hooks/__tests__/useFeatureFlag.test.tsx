@@ -5,25 +5,14 @@ import { FeatureFlagProvider } from "../../context/FeatureFlagContext";
 import { useAuth } from "@/features/auth/context/AuthContext";
 
 // Mock dependencies
-const mockRpc = vi.fn();
-vi.mock("@/lib/supabase/client", () => ({
-  createClient: vi.fn(() => ({
-    rpc: mockRpc,
-  })),
-}));
-
 vi.mock("@/features/auth/context/AuthContext");
+vi.mock("@/lib/supabase/client"); // Prevent real client from being created
 
-vi.mock("../../lib/cache", () => ({
-  featureFlagCache: {
-    get: vi.fn((_, fetcher) => fetcher()),
-    set: vi.fn(),
-    clear: vi.fn(),
-    invalidateUser: vi.fn(),
-  },
-}));
+const mockedUseAuth = useAuth as Mock;
 
-vi.mock("../../lib/monitoring");
+// Mock the fetch call to our API route
+const mockFetch = vi.fn();
+global.fetch = mockFetch;
 
 const wrapper = ({ children }: { children: React.ReactNode }) => (
   <FeatureFlagProvider>{children}</FeatureFlagProvider>
@@ -32,7 +21,7 @@ const wrapper = ({ children }: { children: React.ReactNode }) => (
 describe("useFeatureFlag Hook", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    (useAuth as Mock).mockReturnValue({
+    mockedUseAuth.mockReturnValue({
       user: { id: "test-user-id" },
       isAuthenticated: true,
       isLoading: false,
@@ -40,15 +29,20 @@ describe("useFeatureFlag Hook", () => {
   });
 
   const setupHook = (
-    flags: { name: string; is_enabled: boolean; rollout_percentage: number }[],
+    apiResponse: { flags: any[]; userTypes: any[]; userGroups: any[] },
     hookArg: string[]
   ) => {
-    mockRpc.mockResolvedValue({ data: flags, error: null });
+    mockFetch.mockResolvedValue({
+      ok: true,
+      json: () => Promise.resolve(apiResponse),
+    });
     return renderHook(() => useFeatureFlag(hookArg), { wrapper });
   };
 
   it("should return isLoading as true initially, then false", async () => {
-    const { result } = setupHook([], ["any-feature"]);
+    const { result } = setupHook({ flags: [], userTypes: [], userGroups: [] }, [
+      "any-feature",
+    ]);
     expect(result.current.isLoading).toBe(true);
     await waitFor(() => {
       expect(result.current.isLoading).toBe(false);
@@ -57,10 +51,14 @@ describe("useFeatureFlag Hook", () => {
 
   it("should return a map of flags with their correct statuses", async () => {
     const { result } = setupHook(
-      [
-        { name: "feature-a", is_enabled: true, rollout_percentage: 100 },
-        { name: "feature-b", is_enabled: false, rollout_percentage: 0 },
-      ],
+      {
+        flags: [
+          { name: "feature-a", is_enabled: true, rollout_percentage: 100 },
+          { name: "feature-b", is_enabled: false, rollout_percentage: 0 },
+        ],
+        userTypes: [],
+        userGroups: [],
+      },
       ["feature-a", "feature-b", "feature-c"]
     );
 
@@ -69,14 +67,20 @@ describe("useFeatureFlag Hook", () => {
       expect(result.current.flags).toEqual({
         "feature-a": true,
         "feature-b": false,
-        "feature-c": false, // Not returned from RPC, so it's false
+        "feature-c": false,
       });
     });
   });
 
   it("should return an empty map if no flags are requested", async () => {
     const { result } = setupHook(
-      [{ name: "any-feature", is_enabled: true, rollout_percentage: 100 }],
+      {
+        flags: [
+          { name: "any-feature", is_enabled: true, rollout_percentage: 100 },
+        ],
+        userTypes: [],
+        userGroups: [],
+      },
       []
     );
 
@@ -87,7 +91,7 @@ describe("useFeatureFlag Hook", () => {
 
   describe("when unauthenticated", () => {
     beforeEach(() => {
-      (useAuth as Mock).mockReturnValue({
+      mockedUseAuth.mockReturnValue({
         user: null,
         isAuthenticated: false,
         isLoading: false,
@@ -95,11 +99,14 @@ describe("useFeatureFlag Hook", () => {
     });
 
     it("should not fetch flags and return a map of false values", async () => {
-      const { result } = setupHook([], ["a-feature", "b-feature"]);
+      const { result } = renderHook(
+        () => useFeatureFlag(["a-feature", "b-feature"]),
+        { wrapper }
+      );
 
       await waitFor(() => {
         expect(result.current.isLoading).toBe(false);
-        expect(mockRpc).not.toHaveBeenCalled();
+        expect(mockFetch).not.toHaveBeenCalled();
         expect(result.current.flags).toEqual({
           "a-feature": false,
           "b-feature": false,

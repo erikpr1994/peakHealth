@@ -1,79 +1,19 @@
-import { describe, it, expect, beforeEach, vi } from "vitest";
+import { describe, it, expect, beforeEach, Mock, vi } from "vitest";
 import { render, screen, waitFor } from "@testing-library/react";
 import { FeatureFlagProvider, useFeatureFlags } from "../FeatureFlagContext";
+import { useAuth } from "@/features/auth/context/AuthContext";
 
 // Mock all external dependencies
-vi.mock("@/lib/supabase/client", () => ({
-  createClient: vi.fn(() => ({
-    rpc: vi.fn(() => Promise.resolve({ data: [], error: null })),
-  })),
-}));
+vi.mock("@/lib/supabase/client");
+vi.mock("@/features/auth/context/AuthContext");
 
-vi.mock("@/features/auth/context/AuthContext", () => ({
-  useAuth: vi.fn(() => ({
-    user: { id: "test-user-id" },
-    isLoading: false,
-    isAuthenticated: true,
-    login: vi.fn(),
-    logout: vi.fn(),
-    signUp: vi.fn(),
-  })),
-}));
+const mockedUseAuth = useAuth as Mock;
 
-vi.mock("../../lib/cache", () => ({
-  featureFlagCache: {
-    get: vi.fn((key, fetcher) => fetcher()),
-    set: vi.fn(),
-    clear: vi.fn(),
-  },
-}));
+// Mock the fetch call
+const mockFetch = vi.fn();
+global.fetch = mockFetch;
 
-vi.mock("../../lib/monitoring", () => ({
-  featureFlagMonitor: {
-    trackFeatureFlagUsage: vi.fn(),
-    trackFeatureFlagError: vi.fn(),
-    trackFeatureFlagPerformance: vi.fn(),
-    trackCacheHit: vi.fn(),
-    trackCacheMiss: vi.fn(),
-    getMetrics: vi.fn(),
-    resetMetrics: vi.fn(),
-    trackError: vi.fn(),
-  },
-}));
-
-describe("FeatureFlagContext Integration", () => {
-  const mockFeatureFlags = [
-    {
-      id: 1,
-      name: "test-feature",
-      is_enabled: true,
-      rollout_percentage: 100,
-      created_at: "2024-01-01T00:00:00Z",
-      updated_at: "2024-01-01T00:00:00Z",
-    },
-  ];
-
-  const mockUserTypes = [
-    {
-      id: 1,
-      name: "premium",
-      created_at: "2024-01-01T00:00:00Z",
-    },
-  ];
-
-  const mockUserGroups = [
-    {
-      id: 1,
-      name: "beta-testers",
-      created_at: "2024-01-01T00:00:00Z",
-    },
-  ];
-
-  const mockError = {
-    message: "Database error",
-    code: "DB_ERROR",
-  };
-
+describe("FeatureFlagContext", () => {
   const TestComponent = () => {
     const { flags, isLoading, isEnabled } = useFeatureFlags();
 
@@ -91,179 +31,83 @@ describe("FeatureFlagContext Integration", () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
-  });
-
-  describe("successful data loading", () => {
-    it("should load and provide feature flags data", async () => {
-      render(
-        <FeatureFlagProvider>
-          <TestComponent />
-        </FeatureFlagProvider>
-      );
-
-      // Initially should show loading
-      expect(screen.getByText("Loading...")).toBeInTheDocument();
-
-      // Eventually should load data
-      await waitFor(() => {
-        expect(screen.queryByText("Loading...")).not.toBeInTheDocument();
-      });
-
-      // Should have loaded some data (even if empty)
-      expect(screen.getByTestId("flag-count")).toBeInTheDocument();
-      expect(screen.getByTestId("test-feature-enabled")).toBeInTheDocument();
+    mockedUseAuth.mockReturnValue({
+      user: { id: "test-user-id" },
+      isAuthenticated: true,
+      isLoading: false,
     });
-
-    it("should handle empty data arrays", async () => {
-      render(
-        <FeatureFlagProvider>
-          <TestComponent />
-        </FeatureFlagProvider>
-      );
-
-      await waitFor(() => {
-        expect(screen.queryByText("Loading...")).not.toBeInTheDocument();
-      });
-
-      // Should handle empty data gracefully
-      expect(screen.getByTestId("flag-count")).toBeInTheDocument();
-      expect(screen.getByTestId("test-feature-enabled")).toBeInTheDocument();
+    mockFetch.mockResolvedValue({
+      ok: true,
+      json: () => Promise.resolve({ flags: [], userTypes: [], userGroups: [] }),
     });
   });
 
-  describe("error handling", () => {
-    it("should handle database errors gracefully", async () => {
-      render(
-        <FeatureFlagProvider>
-          <TestComponent />
-        </FeatureFlagProvider>
-      );
-
-      await waitFor(() => {
-        expect(screen.queryByText("Loading...")).not.toBeInTheDocument();
-      });
-
-      // Should handle errors gracefully
-      expect(screen.getByTestId("flag-count")).toBeInTheDocument();
-      expect(screen.getByTestId("test-feature-enabled")).toBeInTheDocument();
+  it("should load and provide feature flags data", async () => {
+    mockFetch.mockResolvedValue({
+      ok: true,
+      json: () =>
+        Promise.resolve({
+          flags: [
+            { name: "test-feature", is_enabled: true, rollout_percentage: 100 },
+          ],
+          userTypes: [],
+          userGroups: [],
+        }),
     });
 
-    it("should handle partial errors", async () => {
-      render(
-        <FeatureFlagProvider>
-          <TestComponent />
-        </FeatureFlagProvider>
+    render(
+      <FeatureFlagProvider>
+        <TestComponent />
+      </FeatureFlagProvider>
+    );
+
+    expect(screen.getByText("Loading...")).toBeInTheDocument();
+
+    await waitFor(() => {
+      expect(screen.queryByText("Loading...")).not.toBeInTheDocument();
+      expect(screen.getByTestId("flag-count")).toHaveTextContent("1");
+      expect(screen.getByTestId("test-feature-enabled")).toHaveTextContent(
+        "true"
       );
-
-      await waitFor(() => {
-        expect(screen.queryByText("Loading...")).not.toBeInTheDocument();
-      });
-
-      // Should handle partial errors gracefully
-      expect(screen.getByTestId("flag-count")).toBeInTheDocument();
-      expect(screen.getByTestId("test-feature-enabled")).toBeInTheDocument();
     });
   });
 
-  describe("caching behavior", () => {
-    it("should use cache when available", async () => {
-      render(
-        <FeatureFlagProvider>
-          <TestComponent />
-        </FeatureFlagProvider>
-      );
-
-      await waitFor(() => {
-        expect(screen.queryByText("Loading...")).not.toBeInTheDocument();
-      });
-
-      // Should load data (with or without cache)
-      expect(screen.getByTestId("flag-count")).toBeInTheDocument();
-      expect(screen.getByTestId("test-feature-enabled")).toBeInTheDocument();
+  it("should handle API errors gracefully", async () => {
+    mockFetch.mockResolvedValue({
+      ok: false,
     });
 
-    it("should fallback to database when cache misses", async () => {
-      render(
-        <FeatureFlagProvider>
-          <TestComponent />
-        </FeatureFlagProvider>
-      );
+    render(
+      <FeatureFlagProvider>
+        <TestComponent />
+      </FeatureFlagProvider>
+    );
 
-      await waitFor(() => {
-        expect(screen.queryByText("Loading...")).not.toBeInTheDocument();
-      });
-
-      // Should load data (with or without cache)
-      expect(screen.getByTestId("flag-count")).toBeInTheDocument();
-      expect(screen.getByTestId("test-feature-enabled")).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.queryByText("Loading...")).not.toBeInTheDocument();
+      // Should default to no flags on error
+      expect(screen.getByTestId("flag-count")).toHaveTextContent("0");
     });
   });
 
-  describe("user authentication states", () => {
-    it("should handle unauthenticated users", async () => {
-      render(
-        <FeatureFlagProvider>
-          <TestComponent />
-        </FeatureFlagProvider>
-      );
-
-      await waitFor(() => {
-        expect(screen.queryByText("Loading...")).not.toBeInTheDocument();
-      });
-
-      // Should handle unauthenticated users gracefully
-      expect(screen.getByTestId("flag-count")).toBeInTheDocument();
-      expect(screen.getByTestId("test-feature-enabled")).toBeInTheDocument();
+  it("should not fetch data for unauthenticated users", async () => {
+    mockedUseAuth.mockReturnValue({
+      user: null,
+      isAuthenticated: false,
+      isLoading: false,
     });
 
-    it("should handle auth loading state", async () => {
-      render(
-        <FeatureFlagProvider>
-          <TestComponent />
-        </FeatureFlagProvider>
-      );
+    render(
+      <FeatureFlagProvider>
+        <TestComponent />
+      </FeatureFlagProvider>
+    );
 
-      await waitFor(() => {
-        expect(screen.queryByText("Loading...")).not.toBeInTheDocument();
-      });
-
-      // Should handle auth loading state gracefully
-      expect(screen.getByTestId("flag-count")).toBeInTheDocument();
-      expect(screen.getByTestId("test-feature-enabled")).toBeInTheDocument();
-    });
-  });
-
-  describe("performance monitoring", () => {
-    it("should track performance metrics", async () => {
-      render(
-        <FeatureFlagProvider>
-          <TestComponent />
-        </FeatureFlagProvider>
-      );
-
-      await waitFor(() => {
-        expect(screen.queryByText("Loading...")).not.toBeInTheDocument();
-      });
-
-      // Should load data and track metrics
-      expect(screen.getByTestId("flag-count")).toBeInTheDocument();
-      expect(screen.getByTestId("test-feature-enabled")).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.queryByText("Loading...")).not.toBeInTheDocument();
     });
 
-    it("should track errors when they occur", async () => {
-      render(
-        <FeatureFlagProvider>
-          <TestComponent />
-        </FeatureFlagProvider>
-      );
-
-      await waitFor(() => {
-        expect(screen.queryByText("Loading...")).not.toBeInTheDocument();
-      });
-
-      // Should handle errors and track them
-      expect(screen.getByTestId("flag-count")).toBeInTheDocument();
-      expect(screen.getByTestId("test-feature-enabled")).toBeInTheDocument();
-    });
+    expect(mockFetch).not.toHaveBeenCalled();
+    expect(screen.getByTestId("flag-count")).toHaveTextContent("0");
   });
 });
