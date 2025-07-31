@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
+import { describe, it, expect, vi, beforeEach, Mock } from "vitest";
 import { renderHook, waitFor } from "@testing-library/react";
 import { useFeatureFlag } from "../useFeatureFlag";
 import { FeatureFlagProvider } from "../../context/FeatureFlagContext";
@@ -32,7 +32,7 @@ const wrapper = ({ children }: { children: React.ReactNode }) => (
 describe("useFeatureFlag Hook", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    (useAuth as vi.Mock).mockReturnValue({
+    (useAuth as Mock).mockReturnValue({
       user: { id: "test-user-id" },
       isAuthenticated: true,
       isLoading: false,
@@ -87,7 +87,7 @@ describe("useFeatureFlag Hook", () => {
 
   describe("when unauthenticated", () => {
     beforeEach(() => {
-      (useAuth as vi.Mock).mockReturnValue({
+      (useAuth as Mock).mockReturnValue({
         user: null,
         isAuthenticated: false,
         isLoading: false,
