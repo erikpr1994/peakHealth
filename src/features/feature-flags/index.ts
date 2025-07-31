@@ -12,7 +12,6 @@ export { useFeatureFlag } from './hooks/useFeatureFlag';
 
 // Components
 export { FeatureFlag } from './components/FeatureFlag';
-export { FeatureFlagTest } from './components/FeatureFlagTest';
 
 // Constants
 export { FEATURE_FLAGS, USER_TYPES, USER_GROUPS } from './lib/config'; 
