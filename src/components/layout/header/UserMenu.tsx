@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import type { User } from "@supabase/supabase-js";
 import {
@@ -33,6 +33,20 @@ const getInitials = (email: string | undefined) => {
 export const UserMenu = ({ user, onLogout }: UserMenuProps) => {
   const router = useRouter();
   const [userDropdownOpen, setUserDropdownOpen] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setUserDropdownOpen(false);
+    };
+
+    if (userDropdownOpen) {
+      window.addEventListener("scroll", handleScroll, true);
+    }
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll, true);
+    };
+  }, [userDropdownOpen]);
 
   const handleNavigate = (path: string) => {
     router.push(path);
