@@ -28,7 +28,14 @@ interface RestViewProps {
   nextExercise?: {
     id: string;
     name: string;
-    sets: any[];
+    sets: Array<{
+      id: string;
+      type: "reps" | "time";
+      reps?: string;
+      weight?: string;
+      duration?: string;
+      restTime: string;
+    }>;
   };
   nextSetNumber: number;
   restTime: number; // in seconds

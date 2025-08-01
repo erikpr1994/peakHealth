@@ -284,7 +284,7 @@ export default function Routines() {
                 {/* Progress Overview */}
                 <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6">
                   <h3 className="text-lg font-semibold mb-6">
-                    This Week's Progress
+                    This Week&apos;s Progress
                   </h3>
 
                   <div className="space-y-6">

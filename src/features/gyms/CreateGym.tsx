@@ -274,7 +274,7 @@ export default function CreateGym({ onNavigate }: CreateGymProps) {
               <Label htmlFor="type">Gym Type *</Label>
               <Select
                 value={gymData.type}
-                onValueChange={(value: any) =>
+                onValueChange={(value: PrivateGym["type"]) =>
                   setGymData({ ...gymData, type: value })
                 }
               >

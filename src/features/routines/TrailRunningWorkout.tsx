@@ -457,7 +457,7 @@ function IntensityTargetConfiguration({
     const targetType = intensityTargetTypes.find((t) => t.value === newType);
     if (!targetType) return;
 
-    let newTarget: IntensityTarget = {
+    const newTarget: IntensityTarget = {
       type: newType as IntensityTarget["type"],
       unit: targetType.unit,
     };
@@ -1020,7 +1020,7 @@ export default function TrailRunningWorkout({
 
       // Store the skipLastRest setting in a custom property for editing later
       if (currentSection.isRepeated) {
-        (updatedSection as any).skipLastRest = skipLastRest;
+        (updatedSection as TrailRunningSection & { skipLastRest?: boolean }).skipLastRest = skipLastRest;
       }
 
       setWorkoutData((prev) => ({
@@ -1071,7 +1071,7 @@ export default function TrailRunningWorkout({
 
       // Store the skipLastRest setting in a custom property for editing later
       if (currentSection.isRepeated) {
-        (section as any).skipLastRest = skipLastRest;
+        (section as TrailRunningSection & { skipLastRest?: boolean }).skipLastRest = skipLastRest;
       }
 
       setWorkoutData((prev) => ({
@@ -1172,7 +1172,7 @@ export default function TrailRunningWorkout({
     });
   };
 
-  const updateRepeatInterval = (index: number, field: string, value: any) => {
+  const updateRepeatInterval = (index: number, field: string, value: string | number | boolean) => {
     setRepeatIntervals((prev) =>
       prev.map((interval, i) => {
         if (i === index) {
@@ -1729,7 +1729,7 @@ export default function TrailRunningWorkout({
                           Template Applied
                         </p>
                         <p className="text-xs text-blue-700 leading-relaxed">
-                          We've automatically configured this{" "}
+                          We&apos;ve automatically configured this{" "}
                           {sectionTypes
                             .find((t) => t.value === currentSection.type)
                             ?.label.toLowerCase()}{" "}
@@ -1781,7 +1781,7 @@ export default function TrailRunningWorkout({
                         </div>
                       </div>
                       <p className="text-xs text-muted-foreground leading-relaxed">
-                        When enabled, the last interval will be removed if it's
+                        When enabled, the last interval will be removed if it&apos;s
                         a rest or recovery type
                       </p>
                     </div>

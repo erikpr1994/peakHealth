@@ -714,7 +714,7 @@ export default function WorkoutTracker({
             </DialogTitle>
             <DialogDescription>
               Are you sure you want to end this workout? Your progress will be
-              saved, but you won't be able to resume this session.
+              saved, but you won&apos;t be able to resume this session.
             </DialogDescription>
           </DialogHeader>
           <div className="flex gap-3 mt-6">

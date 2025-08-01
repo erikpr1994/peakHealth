@@ -480,7 +480,7 @@ export default function SetManagement({
             <Target className="w-12 h-12 mx-auto text-gray-300" />
           </div>
           <p>No sets added yet</p>
-          <p className="text-sm">Click "Add Set" to get started</p>
+          <p className="text-sm">Click &quot;Add Set&quot; to get started</p>
         </div>
       )}
     </div>

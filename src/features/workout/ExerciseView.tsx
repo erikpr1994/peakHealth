@@ -65,7 +65,12 @@ interface ExerciseViewProps {
   };
   setNumber: number;
   totalSets: number;
-  onSetCompleted: (data: any) => void;
+  onSetCompleted: (data: {
+    weight?: string;
+    reps?: string;
+    duration?: string;
+    notes?: string;
+  }) => void;
 }
 
 export default function ExerciseView({
