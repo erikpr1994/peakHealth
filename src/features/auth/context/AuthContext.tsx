@@ -52,13 +52,18 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setIsLoading(true);
 
     try {
-      const { data, error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
+      const response = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
       });
 
-      if (error) {
-        throw new Error(error.message || "Login failed");
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Login failed");
       }
 
       setUser(data.user);
@@ -76,18 +81,18 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setIsLoading(true);
 
     try {
-      const { data, error } = await supabase.auth.signUp({
-        email,
-        password,
-        options: {
-          data: {
-            name,
-          },
+      const response = await fetch("/api/auth/signup", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
         },
+        body: JSON.stringify({ email, password, name }),
       });
 
-      if (error) {
-        throw new Error(error.message || "Sign up failed");
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Sign up failed");
       }
 
       // Check if user is immediately confirmed (no email confirmation required)
@@ -111,10 +116,16 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setIsLoading(true);
 
     try {
-      const { error } = await supabase.auth.signOut();
+      const response = await fetch("/api/auth/logout", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
 
-      if (error) {
-        throw new Error(error.message || "Logout failed");
+      if (!response.ok) {
+        const data = await response.json();
+        throw new Error(data.error || "Logout failed");
       }
 
       setUser(null);

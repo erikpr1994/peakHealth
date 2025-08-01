@@ -20,7 +20,7 @@ export async function POST(request: NextRequest) {
       password,
       options: {
         data: {
-          display_name: name,
+          name,
         },
       },
     });
