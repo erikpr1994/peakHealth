@@ -9,7 +9,6 @@ import {
 import { ExerciseLibrary } from "./components/ExerciseSelectionModal/ExerciseLibrary";
 import { ExercisePreview } from "./components/ExerciseSelectionModal/ExercisePreview";
 import { mockExercises } from "./data/mockExercises";
-import { useExerciseSearch } from "./hooks/useExerciseSearch";
 import { useExerciseSelection } from "./hooks/useExerciseSelection";
 import { createVariantExercise } from "./utils/exerciseUtils";
 
@@ -26,7 +25,7 @@ export default function ExerciseSelectionModal({
   onClose,
   onSelectExercise,
 }: ExerciseSelectionModalProps) {
-  const { searchTerm, handleSearchChange } = useExerciseSearch();
+  const [searchTerm, setSearchTerm] = useState("");
   const {
     selectedExercise,
     selectedVariant,
@@ -35,6 +34,10 @@ export default function ExerciseSelectionModal({
     clearSelection,
   } = useExerciseSelection();
   const [selectedCategory, setSelectedCategory] = useState("All");
+
+  const handleSearchChange = (value: string) => {
+    setSearchTerm(value);
+  };
 
   const handleSelectExercise = (
     exercise: Exercise,
