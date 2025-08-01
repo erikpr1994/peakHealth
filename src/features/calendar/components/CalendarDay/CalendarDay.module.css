@@ -1,0 +1,144 @@
+.day {
+  position: relative;
+  min-height: 5rem;
+  padding: 0.5rem;
+  border: 1px solid hsl(var(--border));
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.day.currentMonth {
+  background-color: hsl(var(--background));
+}
+
+.day.currentMonth:hover {
+  background-color: hsl(var(--muted));
+}
+
+.day.otherMonth {
+  background-color: hsl(var(--muted));
+  color: hsl(var(--muted-foreground));
+}
+
+.day.today {
+  background-color: hsl(var(--accent));
+  border-color: hsl(var(--ring));
+}
+
+.day.selected {
+  ring: 2px;
+  ring-color: hsl(var(--ring));
+}
+
+.dateNumber {
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.currentMonthText {
+  color: hsl(var(--foreground));
+}
+
+.otherMonthText {
+  color: hsl(var(--muted-foreground));
+}
+
+.todayText {
+  color: hsl(var(--primary));
+}
+
+.workoutIndicators {
+  position: absolute;
+  bottom: 0.25rem;
+  left: 0.25rem;
+  right: 0.25rem;
+}
+
+.singleWorkout {
+  display: flex;
+  gap: 0.25rem;
+}
+
+.indicator {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+}
+
+.smallIndicator {
+  width: 0.375rem;
+  height: 0.375rem;
+  border-radius: 50%;
+}
+
+.multipleWorkouts {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+}
+
+.indicatorRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.indicators {
+  display: flex;
+  gap: 0.125rem;
+}
+
+.moreIndicator {
+  font-size: 0.625rem;
+  color: hsl(var(--muted-foreground));
+}
+
+.sessionCount {
+  font-size: 0.625rem;
+  color: hsl(var(--muted-foreground));
+  background-color: hsl(var(--background) / 0.8);
+  padding: 0.125rem 0.25rem;
+  border-radius: 0.25rem;
+}
+
+/* Workout type colors using CSS variables */
+.workout-strength {
+  background-color: hsl(var(--workout-strength));
+}
+
+.workout-cardio {
+  background-color: hsl(var(--workout-cardio));
+}
+
+.workout-hiit {
+  background-color: hsl(var(--workout-hiit));
+}
+
+.workout-flexibility {
+  background-color: hsl(var(--workout-flexibility));
+}
+
+.workout-recovery {
+  background-color: hsl(var(--workout-recovery));
+}
+
+/* Status colors using CSS variables */
+.status-completed {
+  background-color: hsl(var(--status-completed));
+}
+
+.status-scheduled {
+  background-color: hsl(var(--status-scheduled));
+}
+
+.status-missed {
+  background-color: hsl(var(--status-missed));
+}
+
+.status-active {
+  background-color: hsl(var(--status-active));
+}
+
+.status-unknown {
+  background-color: hsl(var(--status-unknown));
+}

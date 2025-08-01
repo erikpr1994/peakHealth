@@ -1,0 +1,258 @@
+.card {
+  padding: 0.75rem;
+  border-radius: 0.5rem;
+  border: 1px solid hsl(var(--border));
+  transition: border-color 0.2s;
+}
+
+.card.default {
+  background-color: hsl(var(--background));
+}
+
+.card.default:hover {
+  border-color: hsl(var(--border));
+}
+
+.card.today {
+  background-color: hsl(var(--accent));
+  border-color: hsl(var(--ring));
+}
+
+.header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+
+.content {
+  flex: 1;
+}
+
+.titleSection {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.25rem;
+}
+
+.title {
+  font-weight: 500;
+  color: hsl(var(--foreground));
+}
+
+.timeBadge {
+  border: 0;
+}
+
+.badges {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.typeBadge {
+  border: 0;
+}
+
+.difficultyBadge {
+  font-size: 0.75rem;
+}
+
+.actions {
+  display: flex;
+  gap: 0.25rem;
+}
+
+.actionButton {
+  width: 1.75rem;
+  height: 1.75rem;
+  padding: 0;
+}
+
+.actionIcon {
+  width: 0.75rem;
+  height: 0.75rem;
+  color: hsl(var(--muted-foreground));
+}
+
+.deleteIcon {
+  width: 0.75rem;
+  height: 0.75rem;
+  color: hsl(var(--destructive));
+}
+
+.details {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0.5rem;
+  font-size: 0.75rem;
+  color: hsl(var(--muted-foreground));
+  margin-bottom: 0.5rem;
+}
+
+.detailItem {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.detailItem:last-child {
+  justify-content: flex-end;
+}
+
+.detailIcon {
+  width: 0.75rem;
+  height: 0.75rem;
+}
+
+.detailText {
+  font-size: 0.75rem;
+}
+
+.calories {
+  font-size: 0.75rem;
+  color: hsl(var(--muted-foreground));
+  margin-bottom: 0.5rem;
+}
+
+.startButton {
+  width: 100%;
+  margin-top: 0.5rem;
+}
+
+.startIcon {
+  width: 0.75rem;
+  height: 0.75rem;
+  margin-right: 0.5rem;
+}
+
+/* Workout type colors using CSS variables */
+.workout-strength {
+  background-color: hsl(var(--workout-strength));
+}
+
+.workout-strength-text {
+  color: hsl(var(--workout-strength-text));
+}
+
+.workout-strength-bg {
+  background-color: hsl(var(--workout-strength-bg));
+}
+
+.workout-cardio {
+  background-color: hsl(var(--workout-cardio));
+}
+
+.workout-cardio-text {
+  color: hsl(var(--workout-cardio-text));
+}
+
+.workout-cardio-bg {
+  background-color: hsl(var(--workout-cardio-bg));
+}
+
+.workout-hiit {
+  background-color: hsl(var(--workout-hiit));
+}
+
+.workout-hiit-text {
+  color: hsl(var(--workout-hiit-text));
+}
+
+.workout-hiit-bg {
+  background-color: hsl(var(--workout-hiit-bg));
+}
+
+.workout-flexibility {
+  background-color: hsl(var(--workout-flexibility));
+}
+
+.workout-flexibility-text {
+  color: hsl(var(--workout-flexibility-text));
+}
+
+.workout-flexibility-bg {
+  background-color: hsl(var(--workout-flexibility-bg));
+}
+
+.workout-recovery {
+  background-color: hsl(var(--workout-recovery));
+}
+
+.workout-recovery-text {
+  color: hsl(var(--workout-recovery-text));
+}
+
+.workout-recovery-bg {
+  background-color: hsl(var(--workout-recovery-bg));
+}
+
+/* Status colors using CSS variables */
+.status-completed {
+  background-color: hsl(var(--status-completed));
+}
+
+.status-completed-text {
+  color: hsl(var(--status-completed-text));
+}
+
+.status-scheduled {
+  background-color: hsl(var(--status-scheduled));
+}
+
+.status-scheduled-text {
+  color: hsl(var(--status-scheduled-text));
+}
+
+.status-missed {
+  background-color: hsl(var(--status-missed));
+}
+
+.status-missed-text {
+  color: hsl(var(--status-missed-text));
+}
+
+.status-active {
+  background-color: hsl(var(--status-active));
+}
+
+.status-active-text {
+  color: hsl(var(--status-active-text));
+}
+
+.status-unknown {
+  background-color: hsl(var(--status-unknown));
+}
+
+.status-unknown-text {
+  color: hsl(var(--status-unknown-text));
+}
+
+/* Time of day colors using CSS variables */
+.time-morning-text {
+  color: hsl(var(--time-morning-text));
+}
+
+.time-morning-bg {
+  background-color: hsl(var(--time-morning-bg));
+  border: 1px solid hsl(var(--time-morning-border));
+}
+
+.time-afternoon-text {
+  color: hsl(var(--time-afternoon-text));
+}
+
+.time-afternoon-bg {
+  background-color: hsl(var(--time-afternoon-bg));
+  border: 1px solid hsl(var(--time-afternoon-border));
+}
+
+.time-evening-text {
+  color: hsl(var(--time-evening-text));
+}
+
+.time-evening-bg {
+  background-color: hsl(var(--time-evening-bg));
+  border: 1px solid hsl(var(--time-evening-border));
+}
