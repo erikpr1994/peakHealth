@@ -21,10 +21,31 @@ const LoginPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [validationErrors, setValidationErrors] = useState<{
+    email?: string;
+    password?: string;
+  }>({});
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
+    setValidationErrors({});
+
+    // Validate required fields
+    const errors: { email?: string; password?: string } = {};
+    if (!email.trim()) {
+      errors.email = 'Email is required';
+    } else if (!/\S+@\S+\.\S+/.test(email)) {
+      errors.email = 'Please enter a valid email address';
+    }
+    if (!password.trim()) {
+      errors.password = 'Password is required';
+    }
+
+    if (Object.keys(errors).length > 0) {
+      setValidationErrors(errors);
+      return;
+    }
 
     try {
       await login(email, password);
@@ -49,7 +70,7 @@ const LoginPage = () => {
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
             {error && (
-              <Alert variant="destructive">
+              <Alert variant="destructive" data-testid="login-error">
                 <AlertDescription>{error}</AlertDescription>
               </Alert>
             )}
@@ -63,7 +84,13 @@ const LoginPage = () => {
                 onChange={e => setEmail(e.target.value)}
                 placeholder="Enter your email"
                 required
+                data-testid="email-input"
               />
+              {validationErrors.email && (
+                <div className="text-sm text-red-600" data-testid="email-error">
+                  {validationErrors.email}
+                </div>
+              )}
             </div>
 
             <div className="space-y-2">
@@ -75,13 +102,23 @@ const LoginPage = () => {
                 onChange={e => setPassword(e.target.value)}
                 placeholder="Enter your password"
                 required
+                data-testid="password-input"
               />
+              {validationErrors.password && (
+                <div
+                  className="text-sm text-red-600"
+                  data-testid="password-error"
+                >
+                  {validationErrors.password}
+                </div>
+              )}
             </div>
 
             <Button
               type="submit"
               className="w-full"
               disabled={isAuthOperationLoading}
+              data-testid="login-button"
             >
               {isAuthOperationLoading ? 'Loading...' : 'Sign In'}
             </Button>
