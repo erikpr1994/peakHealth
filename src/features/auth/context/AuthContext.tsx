@@ -49,7 +49,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   } = useSWR<User | null>("/api/auth/user", userFetcher, {
     revalidateOnFocus: false,
     shouldRetryOnError: false,
-    onError: error => {
+    onError: (error: any) => {
       console.error("Error fetching user:", error);
     },
   });
@@ -65,16 +65,16 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         // Update SWR cache with new user data
         await mutateUser(session.user);
         router.push("/dashboard");
-      } else if (event === "SIGNED_OUT" || event === "TOKEN_REFRESHED") {
-        // Clear user from SWR cache
+      } else if (event === "SIGNED_OUT") {
+        // Clear user from SWR cache and redirect
         await mutateUser(null);
-        if (event === "SIGNED_OUT") {
-          router.push("/");
-        }
+        router.push("/");
       } else if (event === "USER_UPDATED" && session?.user) {
         // Update user data in cache
         await mutateUser(session.user);
       }
+      // Note: TOKEN_REFRESHED events are handled automatically by Supabase
+      // and don't require any manual intervention
     });
 
     return () => {
@@ -100,9 +100,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         throw new Error(data.error || "Login failed");
       }
 
-      // Update SWR cache with new user data
-      await mutateUser(data.user);
-      router.push("/dashboard");
+      // The auth state change handler will handle the redirect
+      // No need to manually redirect here
     } catch (error) {
       console.error("Error logging in:", error);
       throw error;
@@ -132,9 +131,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         // Email confirmation required
         await mutateUser(null);
       } else if (data.user) {
-        // User is immediately signed in
+        // User is immediately signed in - auth state change will handle redirect
         await mutateUser(data.user);
-        router.push("/dashboard");
       }
     } catch (error) {
       console.error("Error signing up:", error);
@@ -156,9 +154,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         throw new Error(data.error || "Logout failed");
       }
 
-      // Clear user from SWR cache
-      await mutateUser(null);
-      router.push("/");
+      // The auth state change handler will handle clearing user and redirect
+      // No need to manually clear user or redirect here
     } catch (error) {
       console.error("Error logging out:", error);
       throw error;
