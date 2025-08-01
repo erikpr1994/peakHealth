@@ -1,4 +1,15 @@
-import { useState } from "react";
+import { useState } from 'react';
+
+import { ExerciseLibrary } from './components/ExerciseSelectionModal/ExerciseLibrary';
+import { ExercisePreview } from './components/ExerciseSelectionModal/ExercisePreview';
+import { mockExercises } from './data/mockExercises';
+import { useExerciseSelection } from './hooks/useExerciseSelection';
+import {
+  Exercise,
+  ExerciseVariant,
+  ExerciseSelectionModalProps,
+} from './types';
+import { createVariantExercise } from './utils/exerciseUtils';
 
 import {
   Dialog,
@@ -6,27 +17,16 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
-
-import { ExerciseLibrary } from "./components/ExerciseSelectionModal/ExerciseLibrary";
-import { ExercisePreview } from "./components/ExerciseSelectionModal/ExercisePreview";
-import { mockExercises } from "./data/mockExercises";
-import { useExerciseSelection } from "./hooks/useExerciseSelection";
-import {
-  Exercise,
-  ExerciseVariant,
-  ExerciseSelectionModalProps,
-} from "./types";
-import { createVariantExercise } from "./utils/exerciseUtils";
+} from '@/components/ui/dialog';
 
 const exercises = mockExercises;
 
-export default function ExerciseSelectionModal({
+const ExerciseSelectionModal = ({
   isOpen,
   onClose,
   onSelectExercise,
-}: ExerciseSelectionModalProps) {
-  const [searchTerm, setSearchTerm] = useState("");
+}: ExerciseSelectionModalProps) => {
+  const [searchTerm, setSearchTerm] = useState('');
   const {
     selectedExercise,
     selectedVariant,
@@ -34,7 +34,7 @@ export default function ExerciseSelectionModal({
     selectVariant,
     clearSelection,
   } = useExerciseSelection();
-  const [selectedCategory, setSelectedCategory] = useState("All");
+  const [selectedCategory, setSelectedCategory] = useState('All');
 
   const handleSearchChange = (value: string) => {
     setSearchTerm(value);
@@ -100,4 +100,6 @@ export default function ExerciseSelectionModal({
       </DialogContent>
     </Dialog>
   );
-}
+};
+
+export default ExerciseSelectionModal;

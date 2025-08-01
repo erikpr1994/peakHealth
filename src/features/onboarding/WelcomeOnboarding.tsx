@@ -6,20 +6,20 @@ import {
   Dumbbell,
   ArrowRight,
   X,
-} from "lucide-react";
-import React, { useState, useRef, useEffect } from "react";
+} from 'lucide-react';
+import React, { useState, useRef, useEffect } from 'react';
 
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Progress } from "@/components/ui/progress";
-import { Textarea } from "@/components/ui/textarea";
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Progress } from '@/components/ui/progress';
+import { Textarea } from '@/components/ui/textarea';
 
 interface Message {
   id: string;
-  type: "ai" | "user";
+  type: 'ai' | 'user';
   content: string;
   timestamp: Date;
   options?: string[];
@@ -48,108 +48,108 @@ interface WelcomeOnboardingProps {
 
 const ONBOARDING_FLOW = [
   {
-    id: "welcome",
+    id: 'welcome',
     message:
       "Welcome to Peak Health! 🎉 I'm your AI fitness assistant, and I'm here to help create the perfect fitness experience for you. What's your name?",
     requiresInput: true,
-    inputType: "text",
+    inputType: 'text',
   },
   {
-    id: "intro",
+    id: 'intro',
     message:
       "Nice to meet you, {name}! I'd love to learn about your fitness journey so I can personalize Peak Health just for you. This will only take about 2-3 minutes. Ready to get started?",
     options: ["Let's do this!", "I'm ready", "Yes, let's go!"],
   },
   {
-    id: "fitness-level",
-    message: "First, how would you describe your current fitness level?",
+    id: 'fitness-level',
+    message: 'First, how would you describe your current fitness level?',
     options: [
-      "Complete beginner",
-      "Some experience",
-      "Intermediate",
-      "Advanced",
-      "Athlete/Very advanced",
+      'Complete beginner',
+      'Some experience',
+      'Intermediate',
+      'Advanced',
+      'Athlete/Very advanced',
     ],
   },
   {
-    id: "goals",
-    message: "What are your main fitness goals? (You can select multiple)",
+    id: 'goals',
+    message: 'What are your main fitness goals? (You can select multiple)',
     options: [
-      "Lose weight",
-      "Build muscle",
-      "Improve endurance",
-      "Increase strength",
-      "Stay healthy",
-      "Improve flexibility",
-      "Sport-specific training",
-      "Rehabilitation",
+      'Lose weight',
+      'Build muscle',
+      'Improve endurance',
+      'Increase strength',
+      'Stay healthy',
+      'Improve flexibility',
+      'Sport-specific training',
+      'Rehabilitation',
     ],
   },
   {
-    id: "time-availability",
-    message: "How much time do you typically have for workouts?",
+    id: 'time-availability',
+    message: 'How much time do you typically have for workouts?',
     options: [
-      "15-30 minutes",
-      "30-45 minutes",
-      "45-60 minutes",
-      "60+ minutes",
-      "It varies",
+      '15-30 minutes',
+      '30-45 minutes',
+      '45-60 minutes',
+      '60+ minutes',
+      'It varies',
     ],
   },
   {
-    id: "equipment",
-    message: "What equipment do you have access to?",
+    id: 'equipment',
+    message: 'What equipment do you have access to?',
     options: [
-      "Just bodyweight",
-      "Basic equipment at home",
-      "Full home gym",
-      "Commercial gym",
-      "Multiple gym locations",
-      "It depends where I am",
+      'Just bodyweight',
+      'Basic equipment at home',
+      'Full home gym',
+      'Commercial gym',
+      'Multiple gym locations',
+      'It depends where I am',
     ],
   },
   {
-    id: "workout-types",
+    id: 'workout-types',
     message:
-      "What types of workouts do you enjoy or want to try? (Select all that apply)",
+      'What types of workouts do you enjoy or want to try? (Select all that apply)',
     options: [
-      "Cardio",
-      "Strength training",
-      "HIIT",
-      "Yoga/Stretching",
-      "Functional fitness",
-      "Group classes",
-      "Outdoor activities",
-      "Sports",
+      'Cardio',
+      'Strength training',
+      'HIIT',
+      'Yoga/Stretching',
+      'Functional fitness',
+      'Group classes',
+      'Outdoor activities',
+      'Sports',
     ],
   },
   {
-    id: "experience",
-    message: "Have you used fitness apps or worked with trainers before?",
+    id: 'experience',
+    message: 'Have you used fitness apps or worked with trainers before?',
     options: [
-      "This is my first fitness app",
+      'This is my first fitness app',
       "I've tried a few apps",
-      "I use fitness apps regularly",
+      'I use fitness apps regularly',
       "I've worked with trainers",
       "I'm a fitness professional",
     ],
   },
   {
-    id: "limitations",
+    id: 'limitations',
     message:
-      "Do you have any injuries, physical limitations, or specific considerations I should know about? (Optional - this helps me suggest safer exercises)",
+      'Do you have any injuries, physical limitations, or specific considerations I should know about? (Optional - this helps me suggest safer exercises)',
     requiresInput: true,
-    inputType: "textarea",
+    inputType: 'textarea',
     optional: true,
   },
   {
-    id: "motivation",
-    message: "Finally, what motivates you most to stay active and healthy?",
+    id: 'motivation',
+    message: 'Finally, what motivates you most to stay active and healthy?',
     requiresInput: true,
-    inputType: "textarea",
+    inputType: 'textarea',
   },
   {
-    id: "completion",
+    id: 'completion',
     message:
       "Perfect! 🎉 I now have everything I need to personalize your Peak Health experience. Based on your responses, I'll customize your dashboard, suggest relevant routines, and help you reach your goals. Welcome to your fitness journey!",
     isCompletion: true,
@@ -162,7 +162,7 @@ export default function WelcomeOnboarding({
 }: WelcomeOnboardingProps) {
   const [messages, setMessages] = useState<Message[]>([]);
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
-  const [inputValue, setInputValue] = useState("");
+  const [inputValue, setInputValue] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const [onboardingData, setOnboardingData] = useState<Partial<OnboardingData>>(
     {
@@ -173,7 +173,7 @@ export default function WelcomeOnboarding({
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
   useEffect(() => {
@@ -196,13 +196,13 @@ export default function WelcomeOnboarding({
     setTimeout(
       () => {
         const processedContent = content.replace(
-          "{name}",
-          onboardingData.name || ""
+          '{name}',
+          onboardingData.name || ''
         );
 
         const newMessage: Message = {
           id: Date.now().toString(),
-          type: "ai",
+          type: 'ai',
           content: processedContent,
           timestamp: new Date(),
           options,
@@ -220,13 +220,13 @@ export default function WelcomeOnboarding({
   const addUserMessage = (content: string) => {
     const newMessage: Message = {
       id: Date.now().toString(),
-      type: "user",
+      type: 'user',
       content,
       timestamp: new Date(),
     };
 
     setMessages(prev => [...prev, newMessage]);
-    setInputValue("");
+    setInputValue('');
   };
 
   const handleOptionClick = (option: string) => {
@@ -249,37 +249,37 @@ export default function WelcomeOnboarding({
     const updatedData = { ...onboardingData };
 
     switch (currentStep.id) {
-      case "welcome":
+      case 'welcome':
         updatedData.name = response;
         break;
-      case "fitness-level":
+      case 'fitness-level':
         updatedData.fitnessLevel = response;
         break;
-      case "goals":
+      case 'goals':
         if (!updatedData.goals) updatedData.goals = [];
         if (!updatedData.goals.includes(response)) {
           updatedData.goals.push(response);
         }
         break;
-      case "time-availability":
+      case 'time-availability':
         updatedData.timeAvailable = response;
         break;
-      case "equipment":
+      case 'equipment':
         updatedData.equipmentAccess = response;
         break;
-      case "workout-types":
+      case 'workout-types':
         if (!updatedData.workoutTypes) updatedData.workoutTypes = [];
         if (!updatedData.workoutTypes.includes(response)) {
           updatedData.workoutTypes.push(response);
         }
         break;
-      case "experience":
+      case 'experience':
         updatedData.experience = response;
         break;
-      case "limitations":
+      case 'limitations':
         updatedData.limitations = response;
         break;
-      case "motivation":
+      case 'motivation':
         updatedData.motivation = response;
         break;
     }
@@ -365,24 +365,24 @@ export default function WelcomeOnboarding({
               <div
                 key={message.id}
                 className={`flex ${
-                  message.type === "user" ? "justify-end" : "justify-start"
+                  message.type === 'user' ? 'justify-end' : 'justify-start'
                 }`}
               >
                 <div
                   className={`flex gap-3 max-w-[80%] ${
-                    message.type === "user" ? "flex-row-reverse" : ""
+                    message.type === 'user' ? 'flex-row-reverse' : ''
                   }`}
                 >
                   {/* Avatar */}
                   <Avatar className="w-8 h-8 flex-shrink-0">
                     <AvatarFallback
                       className={
-                        message.type === "ai"
-                          ? "bg-primary text-white"
-                          : "bg-gray-200"
+                        message.type === 'ai'
+                          ? 'bg-primary text-white'
+                          : 'bg-gray-200'
                       }
                     >
-                      {message.type === "ai" ? (
+                      {message.type === 'ai' ? (
                         <Sparkles className="w-4 h-4" />
                       ) : (
                         <User className="w-4 h-4" />
@@ -394,16 +394,16 @@ export default function WelcomeOnboarding({
                   <div>
                     <div
                       className={`rounded-2xl px-4 py-3 ${
-                        message.type === "user"
-                          ? "bg-primary text-white"
-                          : "bg-gray-100 text-gray-900"
+                        message.type === 'user'
+                          ? 'bg-primary text-white'
+                          : 'bg-gray-100 text-gray-900'
                       }`}
                     >
                       <p className="text-sm">{message.content}</p>
                     </div>
 
                     {/* Options */}
-                    {message.options && message.type === "ai" && (
+                    {message.options && message.type === 'ai' && (
                       <div className="mt-3 space-y-2">
                         <div className="grid grid-cols-1 gap-2">
                           {message.options.map((option, index) => (
@@ -420,9 +420,9 @@ export default function WelcomeOnboarding({
                         </div>
 
                         {/* Multi-select hint for certain steps */}
-                        {(ONBOARDING_FLOW[currentStepIndex]?.id === "goals" ||
+                        {(ONBOARDING_FLOW[currentStepIndex]?.id === 'goals' ||
                           ONBOARDING_FLOW[currentStepIndex]?.id ===
-                            "workout-types") && (
+                            'workout-types') && (
                           <p className="text-xs text-gray-500 mt-2">
                             💡 You can select multiple options. Click
                             &quot;Continue&quot; when done.
@@ -449,11 +449,11 @@ export default function WelcomeOnboarding({
                       <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" />
                       <div
                         className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
-                        style={{ animationDelay: "0.1s" }}
+                        style={{ animationDelay: '0.1s' }}
                       />
                       <div
                         className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
-                        style={{ animationDelay: "0.2s" }}
+                        style={{ animationDelay: '0.2s' }}
                       />
                     </div>
                   </div>
@@ -467,8 +467,8 @@ export default function WelcomeOnboarding({
           {/* Input Area */}
           <div className="border-t p-4">
             {/* Show Continue button for multi-select questions */}
-            {(ONBOARDING_FLOW[currentStepIndex]?.id === "goals" ||
-              ONBOARDING_FLOW[currentStepIndex]?.id === "workout-types") &&
+            {(ONBOARDING_FLOW[currentStepIndex]?.id === 'goals' ||
+              ONBOARDING_FLOW[currentStepIndex]?.id === 'workout-types') &&
               currentStepIndex < ONBOARDING_FLOW.length - 1 && (
                 <div className="mb-3">
                   <Button
@@ -484,11 +484,11 @@ export default function WelcomeOnboarding({
                     }}
                     className="w-full"
                     disabled={
-                      (ONBOARDING_FLOW[currentStepIndex]?.id === "goals" &&
+                      (ONBOARDING_FLOW[currentStepIndex]?.id === 'goals' &&
                         (!onboardingData.goals ||
                           onboardingData.goals.length === 0)) ||
                       (ONBOARDING_FLOW[currentStepIndex]?.id ===
-                        "workout-types" &&
+                        'workout-types' &&
                         (!onboardingData.workoutTypes ||
                           onboardingData.workoutTypes.length === 0))
                     }
@@ -504,14 +504,14 @@ export default function WelcomeOnboarding({
               currentStepIndex < ONBOARDING_FLOW.length - 1 && (
                 <form onSubmit={handleSubmit} className="flex gap-2">
                   {ONBOARDING_FLOW[currentStepIndex]?.inputType ===
-                  "textarea" ? (
+                  'textarea' ? (
                     <Textarea
                       value={inputValue}
                       onChange={e => setInputValue(e.target.value)}
                       placeholder={
                         ONBOARDING_FLOW[currentStepIndex]?.optional
-                          ? "Type your response (optional)..."
-                          : "Type your response..."
+                          ? 'Type your response (optional)...'
+                          : 'Type your response...'
                       }
                       className="flex-1 min-h-[60px] resize-none"
                     />

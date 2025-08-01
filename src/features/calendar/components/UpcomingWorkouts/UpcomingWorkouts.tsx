@@ -1,15 +1,15 @@
-import { Calendar as CalendarIcon } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { Calendar as CalendarIcon } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
+import { WorkoutEvent } from '../../types';
+import { formatDate } from '../../utils/calendarUtils';
+import { WorkoutEventCard } from '../WorkoutEventCard';
 
-import { WorkoutEvent } from "../../types";
-import { formatDate } from "../../utils/calendarUtils";
-import { WorkoutEventCard } from "../WorkoutEventCard";
+import styles from './UpcomingWorkouts.module.css';
 
-import styles from "./UpcomingWorkouts.module.css";
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
 
 interface UpcomingWorkoutsProps {
   groupedUpcoming: Record<string, WorkoutEvent[]>;
@@ -33,7 +33,7 @@ export const UpcomingWorkouts = ({
         <Button
           variant="ghost"
           size="sm"
-          onClick={() => router.push("/routines")}
+          onClick={() => router.push('/routines')}
           className={styles.viewAllButton}
         >
           View All

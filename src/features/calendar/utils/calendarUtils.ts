@@ -1,4 +1,4 @@
-import { CalendarDay, WorkoutEvent } from "../types";
+import { CalendarDay, WorkoutEvent } from '../types';
 
 export const isSameDay = (date1: Date, date2: Date): boolean => {
   return (
@@ -75,14 +75,14 @@ export const formatDate = (date: Date): string => {
   tomorrow.setDate(tomorrow.getDate() + 1);
 
   if (isSameDay(date, today)) {
-    return "Today";
+    return 'Today';
   } else if (isSameDay(date, tomorrow)) {
-    return "Tomorrow";
+    return 'Tomorrow';
   } else {
-    return date.toLocaleDateString("en-US", {
-      month: "short",
-      day: "numeric",
-      weekday: "short",
+    return date.toLocaleDateString('en-US', {
+      month: 'short',
+      day: 'numeric',
+      weekday: 'short',
     });
   }
 };

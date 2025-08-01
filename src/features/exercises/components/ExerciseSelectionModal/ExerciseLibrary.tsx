@@ -1,12 +1,12 @@
-import { Star, Info, ChevronRight } from "lucide-react";
+import { Star, Info, ChevronRight } from 'lucide-react';
 
-import { ScrollArea } from "@/components/ui/scroll-area";
+import { useExerciseFilters } from '../../hooks/useExerciseFilters';
+import { Exercise } from '../../types';
+import { filterExercises } from '../../utils/filterUtils';
 
-import { useExerciseFilters } from "../../hooks/useExerciseFilters";
-import { Exercise } from "../../types";
-import { filterExercises } from "../../utils/filterUtils";
+import { SearchAndFilters } from './SearchAndFilters';
 
-import { SearchAndFilters } from "./SearchAndFilters";
+import { ScrollArea } from '@/components/ui/scroll-area';
 
 interface ExerciseLibraryProps {
   exercises: Exercise[];
@@ -18,7 +18,7 @@ interface ExerciseLibraryProps {
   onCategoryChange: (category: string) => void;
 }
 
-export function ExerciseLibrary({
+export const ExerciseLibrary = ({
   exercises,
   searchTerm,
   selectedCategory,
@@ -26,7 +26,7 @@ export function ExerciseLibrary({
   onExerciseSelect,
   onSearchChange,
   onCategoryChange,
-}: ExerciseLibraryProps) {
+}: ExerciseLibraryProps) => {
   const { filters } = useExerciseFilters();
 
   const filteredExercises = filterExercises(
@@ -56,8 +56,8 @@ export function ExerciseLibrary({
                   key={exercise.id}
                   className={`group bg-white rounded-xl border-2 cursor-pointer transition-all duration-200 hover:shadow-lg hover:-translate-y-1 ${
                     selectedExercise?.id === exercise.id
-                      ? "border-primary shadow-lg ring-1 ring-primary/20"
-                      : "border-gray-200 hover:border-gray-300"
+                      ? 'border-primary shadow-lg ring-1 ring-primary/20'
+                      : 'border-gray-200 hover:border-gray-300'
                   }`}
                   onClick={() => onExerciseSelect(exercise)}
                 >
@@ -104,8 +104,8 @@ export function ExerciseLibrary({
                       <ChevronRight
                         className={`w-4 h-4 text-gray-400 group-hover:text-primary transition-all ${
                           selectedExercise?.id === exercise.id
-                            ? "rotate-90"
-                            : ""
+                            ? 'rotate-90'
+                            : ''
                         }`}
                       />
                     </div>
@@ -113,7 +113,7 @@ export function ExerciseLibrary({
                     <p className="text-sm text-gray-600 mb-3 line-clamp-2">
                       {exercise.description ||
                         `A ${exercise.category.toLowerCase()} exercise targeting ${exercise.muscleGroups
-                          .join(", ")
+                          .join(', ')
                           .toLowerCase()}.`}
                     </p>
 
@@ -162,4 +162,4 @@ export function ExerciseLibrary({
       </div>
     </div>
   );
-}
+};

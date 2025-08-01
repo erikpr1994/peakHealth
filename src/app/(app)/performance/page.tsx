@@ -1,7 +1,9 @@
-"use client";
+'use client';
 
-import Performance from "@/features/performance/Performance";
+import Performance from '@/features/performance/Performance';
 
-export default function PerformancePage() {
+const PerformancePage = () => {
   return <Performance />;
-}
+};
+
+export default PerformancePage;

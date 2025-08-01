@@ -6,7 +6,7 @@ export interface ExerciseVariant {
   image?: string;
   muscleGroups?: string[];
   equipment?: string[];
-  difficulty?: "Beginner" | "Intermediate" | "Advanced";
+  difficulty?: 'Beginner' | 'Intermediate' | 'Advanced';
   instructions?: string[];
 }
 
@@ -14,8 +14,8 @@ export interface Exercise {
   id: string;
   name: string;
   muscleGroups: string[];
-  category: "Strength" | "Cardio" | "Flexibility" | "Balance";
-  difficulty: "Beginner" | "Intermediate" | "Advanced";
+  category: 'Strength' | 'Cardio' | 'Flexibility' | 'Balance';
+  difficulty: 'Beginner' | 'Intermediate' | 'Advanced';
   equipment?: string[];
   isFavorite: boolean;
   isPopular?: boolean;

@@ -1,17 +1,17 @@
-import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { Checkbox } from "@/components/ui/checkbox";
+import { Routine } from '../../types';
 
-import { Routine } from "../../types";
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
+import { Checkbox } from '@/components/ui/checkbox';
 
 interface AddToRoutineProps {
   routines: Routine[];
 }
 
-export function AddToRoutine({ routines }: AddToRoutineProps) {
+export const AddToRoutine = ({ routines }: AddToRoutineProps) => {
   const router = useRouter();
   const [selectedRoutines, setSelectedRoutines] = useState<string[]>([]);
 
@@ -28,7 +28,7 @@ export function AddToRoutine({ routines }: AddToRoutineProps) {
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-xl font-bold text-gray-800">Add to Routine</h2>
         <Button
-          onClick={() => router.push("/routines/create")}
+          onClick={() => router.push('/routines/create')}
           className="bg-indigo-600 hover:bg-indigo-700"
         >
           Create New Routine
@@ -56,4 +56,4 @@ export function AddToRoutine({ routines }: AddToRoutineProps) {
       </div>
     </Card>
   );
-}
+};

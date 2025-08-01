@@ -1,18 +1,8 @@
-"use client";
+'use client';
 
-import type { User } from "@supabase/supabase-js";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
-
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import type { User } from '@supabase/supabase-js';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 
 import {
   userMenuItems,
@@ -20,7 +10,17 @@ import {
   supportMenuItems,
   LogOut,
   ChevronDown,
-} from "./menuItems";
+} from './menuItems';
+
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Button } from '@/components/ui/button';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 
 interface UserMenuProps {
   user: User | null;
@@ -28,7 +28,7 @@ interface UserMenuProps {
 }
 
 const getInitials = (email: string | undefined) => {
-  if (!email) return "";
+  if (!email) return '';
   return email.substring(0, 2).toUpperCase();
 };
 
@@ -53,7 +53,7 @@ export const UserMenu = ({ user, onLogout }: UserMenuProps) => {
           <Avatar className="w-8 h-8">
             <AvatarImage
               src={user?.user_metadata.avatar_url}
-              alt={user?.email ?? ""}
+              alt={user?.email ?? ''}
             />
             <AvatarFallback className="text-xs">
               {getInitials(user?.email)}

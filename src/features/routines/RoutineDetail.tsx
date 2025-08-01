@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import {
   ArrowLeft,
@@ -12,13 +12,13 @@ import {
   Target,
   Copy,
   Trash,
-} from "lucide-react";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
+} from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { Progress } from "@/components/ui/progress";
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
+import { Progress } from '@/components/ui/progress';
 
 interface RoutineDetailProps {
   routineId: string;
@@ -42,7 +42,7 @@ interface WorkoutDay {
   name: string;
   exercises: Exercise[];
   estimatedTime: string;
-  difficulty: "Beginner" | "Intermediate" | "Advanced";
+  difficulty: 'Beginner' | 'Intermediate' | 'Advanced';
 }
 
 interface RoutineData {
@@ -51,8 +51,8 @@ interface RoutineData {
   description: string;
   duration: number; // weeks
   daysPerWeek: number;
-  difficulty: "Beginner" | "Intermediate" | "Advanced";
-  goal: "Strength" | "Hypertrophy" | "Endurance" | "Weight Loss";
+  difficulty: 'Beginner' | 'Intermediate' | 'Advanced';
+  goal: 'Strength' | 'Hypertrophy' | 'Endurance' | 'Weight Loss';
   isActive: boolean;
   isFavorite: boolean;
   progress: {
@@ -74,13 +74,13 @@ export default function RoutineDetail({ routineId }: RoutineDetailProps) {
   // Mock data - in a real app, this would come from an API based on routineId
   const routineData: RoutineData = {
     id: routineId,
-    name: "Full Body Split",
+    name: 'Full Body Split',
     description:
-      "A comprehensive full-body workout targeting all major muscle groups with compound movements. Perfect for intermediate lifters looking to build strength and muscle mass.",
+      'A comprehensive full-body workout targeting all major muscle groups with compound movements. Perfect for intermediate lifters looking to build strength and muscle mass.',
     duration: 8,
     daysPerWeek: 3,
-    difficulty: "Intermediate",
-    goal: "Hypertrophy",
+    difficulty: 'Intermediate',
+    goal: 'Hypertrophy',
     isActive: true,
     isFavorite: false,
     progress: {
@@ -92,108 +92,108 @@ export default function RoutineDetail({ routineId }: RoutineDetailProps) {
     schedule: [true, false, true, false, true, false, false], // M W F
     workoutDays: [
       {
-        id: "workout-a",
-        name: "Workout A - Upper Focus",
-        estimatedTime: "45-60 min",
-        difficulty: "Intermediate",
+        id: 'workout-a',
+        name: 'Workout A - Upper Focus',
+        estimatedTime: '45-60 min',
+        difficulty: 'Intermediate',
         exercises: [
           {
-            id: "bench-press",
-            name: "Barbell Bench Press",
-            muscleGroups: ["Chest", "Triceps", "Shoulders"],
+            id: 'bench-press',
+            name: 'Barbell Bench Press',
+            muscleGroups: ['Chest', 'Triceps', 'Shoulders'],
             sets: [
-              { reps: "10", weight: "Warm-up", restTime: "60s" },
-              { reps: "8", weight: "135 lbs", restTime: "90s" },
-              { reps: "6", weight: "155 lbs", restTime: "90s" },
-              { reps: "6", weight: "155 lbs", restTime: "90s" },
+              { reps: '10', weight: 'Warm-up', restTime: '60s' },
+              { reps: '8', weight: '135 lbs', restTime: '90s' },
+              { reps: '6', weight: '155 lbs', restTime: '90s' },
+              { reps: '6', weight: '155 lbs', restTime: '90s' },
             ],
           },
           {
-            id: "bent-over-row",
-            name: "Bent-Over Barbell Row",
-            muscleGroups: ["Back", "Biceps"],
+            id: 'bent-over-row',
+            name: 'Bent-Over Barbell Row',
+            muscleGroups: ['Back', 'Biceps'],
             sets: [
-              { reps: "8", weight: "115 lbs", restTime: "90s" },
-              { reps: "8", weight: "125 lbs", restTime: "90s" },
-              { reps: "6", weight: "135 lbs", restTime: "90s" },
+              { reps: '8', weight: '115 lbs', restTime: '90s' },
+              { reps: '8', weight: '125 lbs', restTime: '90s' },
+              { reps: '6', weight: '135 lbs', restTime: '90s' },
             ],
           },
           {
-            id: "shoulder-press",
-            name: "Overhead Press",
-            muscleGroups: ["Shoulders", "Triceps"],
+            id: 'shoulder-press',
+            name: 'Overhead Press',
+            muscleGroups: ['Shoulders', 'Triceps'],
             sets: [
-              { reps: "8", weight: "85 lbs", restTime: "90s" },
-              { reps: "6", weight: "95 lbs", restTime: "90s" },
-              { reps: "6", weight: "95 lbs", restTime: "90s" },
+              { reps: '8', weight: '85 lbs', restTime: '90s' },
+              { reps: '6', weight: '95 lbs', restTime: '90s' },
+              { reps: '6', weight: '95 lbs', restTime: '90s' },
             ],
           },
           {
-            id: "pull-ups",
-            name: "Pull-ups",
-            muscleGroups: ["Back", "Biceps"],
+            id: 'pull-ups',
+            name: 'Pull-ups',
+            muscleGroups: ['Back', 'Biceps'],
             sets: [
-              { reps: "8", weight: "Bodyweight", restTime: "90s" },
-              { reps: "6", weight: "Bodyweight", restTime: "90s" },
-              { reps: "5", weight: "Bodyweight", restTime: "90s" },
+              { reps: '8', weight: 'Bodyweight', restTime: '90s' },
+              { reps: '6', weight: 'Bodyweight', restTime: '90s' },
+              { reps: '5', weight: 'Bodyweight', restTime: '90s' },
             ],
           },
         ],
       },
       {
-        id: "workout-b",
-        name: "Workout B - Lower Focus",
-        estimatedTime: "50-65 min",
-        difficulty: "Intermediate",
+        id: 'workout-b',
+        name: 'Workout B - Lower Focus',
+        estimatedTime: '50-65 min',
+        difficulty: 'Intermediate',
         exercises: [
           {
-            id: "squats",
-            name: "Barbell Back Squat",
-            muscleGroups: ["Quadriceps", "Glutes", "Core"],
+            id: 'squats',
+            name: 'Barbell Back Squat',
+            muscleGroups: ['Quadriceps', 'Glutes', 'Core'],
             sets: [
-              { reps: "10", weight: "Warm-up", restTime: "60s" },
-              { reps: "8", weight: "155 lbs", restTime: "2 min" },
-              { reps: "6", weight: "185 lbs", restTime: "2 min" },
-              { reps: "6", weight: "185 lbs", restTime: "2 min" },
+              { reps: '10', weight: 'Warm-up', restTime: '60s' },
+              { reps: '8', weight: '155 lbs', restTime: '2 min' },
+              { reps: '6', weight: '185 lbs', restTime: '2 min' },
+              { reps: '6', weight: '185 lbs', restTime: '2 min' },
             ],
           },
           {
-            id: "deadlift",
-            name: "Romanian Deadlift",
-            muscleGroups: ["Hamstrings", "Glutes", "Back"],
+            id: 'deadlift',
+            name: 'Romanian Deadlift',
+            muscleGroups: ['Hamstrings', 'Glutes', 'Back'],
             sets: [
-              { reps: "8", weight: "135 lbs", restTime: "90s" },
-              { reps: "6", weight: "155 lbs", restTime: "90s" },
-              { reps: "6", weight: "165 lbs", restTime: "90s" },
+              { reps: '8', weight: '135 lbs', restTime: '90s' },
+              { reps: '6', weight: '155 lbs', restTime: '90s' },
+              { reps: '6', weight: '165 lbs', restTime: '90s' },
             ],
           },
         ],
       },
     ],
-    createdDate: "June 15, 2024",
-    lastModified: "July 10, 2024",
+    createdDate: 'June 15, 2024',
+    lastModified: 'July 10, 2024',
   };
 
   const getDifficultyColor = (difficulty: string) => {
     const colors = {
-      Beginner: "bg-green-100 text-green-700",
-      Intermediate: "bg-yellow-100 text-yellow-700",
-      Advanced: "bg-red-100 text-red-700",
+      Beginner: 'bg-green-100 text-green-700',
+      Intermediate: 'bg-yellow-100 text-yellow-700',
+      Advanced: 'bg-red-100 text-red-700',
     };
     return colors[difficulty as keyof typeof colors] || colors.Intermediate;
   };
 
   const getGoalColor = (goal: string) => {
     const colors = {
-      Strength: "bg-blue-100 text-blue-700",
-      Hypertrophy: "bg-purple-100 text-purple-700",
-      Endurance: "bg-green-100 text-green-700",
-      "Weight Loss": "bg-orange-100 text-orange-700",
+      Strength: 'bg-blue-100 text-blue-700',
+      Hypertrophy: 'bg-purple-100 text-purple-700',
+      Endurance: 'bg-green-100 text-green-700',
+      'Weight Loss': 'bg-orange-100 text-orange-700',
     };
     return colors[goal as keyof typeof colors] || colors.Strength;
   };
 
-  const dayLabels = ["M", "T", "W", "T", "F", "S", "S"];
+  const dayLabels = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
 
   const progressPercentage =
     (routineData.progress.completedWorkouts /
@@ -209,7 +209,7 @@ export default function RoutineDetail({ routineId }: RoutineDetailProps) {
       {/* Header */}
       <div className="flex items-center justify-between mb-8">
         <div className="flex items-center gap-4">
-          <Button variant="ghost" onClick={() => router.push("/routines")}>
+          <Button variant="ghost" onClick={() => router.push('/routines')}>
             <ArrowLeft className="w-4 h-4 mr-2" />
             Back to Routines
           </Button>
@@ -233,8 +233,8 @@ export default function RoutineDetail({ routineId }: RoutineDetailProps) {
             <Heart
               className={`w-4 h-4 ${
                 routineData.isFavorite
-                  ? "text-red-500 fill-red-500"
-                  : "text-gray-400"
+                  ? 'text-red-500 fill-red-500'
+                  : 'text-gray-400'
               }`}
             />
           </Button>
@@ -318,7 +318,7 @@ export default function RoutineDetail({ routineId }: RoutineDetailProps) {
                     Overall Progress
                   </span>
                   <span className="text-sm font-medium text-gray-800">
-                    Week {routineData.progress.currentWeek} of{" "}
+                    Week {routineData.progress.currentWeek} of{' '}
                     {routineData.progress.totalWeeks}
                   </span>
                 </div>
@@ -338,7 +338,7 @@ export default function RoutineDetail({ routineId }: RoutineDetailProps) {
                     Workouts Completed
                   </span>
                   <span className="text-sm font-medium text-gray-800">
-                    {routineData.progress.completedWorkouts} of{" "}
+                    {routineData.progress.completedWorkouts} of{' '}
                     {routineData.progress.totalWorkouts}
                   </span>
                 </div>
@@ -358,8 +358,8 @@ export default function RoutineDetail({ routineId }: RoutineDetailProps) {
                   key={index}
                   className={`flex-1 h-16 rounded-lg flex flex-col items-center justify-center ${
                     isActive
-                      ? "bg-indigo-100 text-indigo-700 border-2 border-indigo-300"
-                      : "bg-gray-100 text-gray-500"
+                      ? 'bg-indigo-100 text-indigo-700 border-2 border-indigo-300'
+                      : 'bg-gray-100 text-gray-500'
                   }`}
                 >
                   <div className="text-xs font-medium">{dayLabels[index]}</div>
@@ -491,8 +491,8 @@ export default function RoutineDetail({ routineId }: RoutineDetailProps) {
                       </div>
                     </div>
                     <div className="text-sm text-gray-600">
-                      {exercise.sets.length} sets •{" "}
-                      {exercise.sets.map(set => set.reps).join(", ")} reps
+                      {exercise.sets.length} sets •{' '}
+                      {exercise.sets.map(set => set.reps).join(', ')} reps
                     </div>
                   </div>
                 ))}
@@ -511,7 +511,7 @@ export default function RoutineDetail({ routineId }: RoutineDetailProps) {
             onClick={() => setShowAllExercises(!showAllExercises)}
             className="text-indigo-600"
           >
-            {showAllExercises ? "Show Less" : "View All"}
+            {showAllExercises ? 'Show Less' : 'View All'}
           </Button>
         </div>
 

@@ -1,10 +1,10 @@
-import { CalendarDay as CalendarDayType } from "../../types";
+import { CalendarDay as CalendarDayType } from '../../types';
 import {
   getStatusConfig,
   getWorkoutTypeConfig,
-} from "../../utils/workoutUtils";
+} from '../../utils/workoutUtils';
 
-import styles from "./CalendarDay.module.css";
+import styles from './CalendarDay.module.css';
 
 interface CalendarDayProps {
   day: CalendarDayType;
@@ -20,12 +20,12 @@ export const CalendarDay = ({ day, onSelect }: CalendarDayProps) => {
     <div
       className={`${styles.day} ${
         day.isCurrentMonth ? styles.currentMonth : styles.otherMonth
-      } ${day.isToday ? styles.today : ""} ${
-        day.isSelected ? styles.selected : ""
+      } ${day.isToday ? styles.today : ''} ${
+        day.isSelected ? styles.selected : ''
       }`}
       onClick={handleClick}
       onKeyDown={e => {
-        if (e.key === "Enter" || e.key === " ") {
+        if (e.key === 'Enter' || e.key === ' ') {
           handleClick();
         }
       }}
@@ -57,7 +57,7 @@ export const CalendarDay = ({ day, onSelect }: CalendarDayProps) => {
                   <div
                     key={workout.id}
                     className={`${styles.indicator} ${
-                      workout.status === "completed"
+                      workout.status === 'completed'
                         ? styles[statusConfig.color]
                         : styles[typeConfig.color]
                     }`}
@@ -78,7 +78,7 @@ export const CalendarDay = ({ day, onSelect }: CalendarDayProps) => {
                       <div
                         key={workout.id}
                         className={`${styles.smallIndicator} ${
-                          workout.status === "completed"
+                          workout.status === 'completed'
                             ? styles[statusConfig.color]
                             : styles[typeConfig.color]
                         }`}

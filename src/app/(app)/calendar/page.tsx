@@ -1,7 +1,9 @@
-"use client";
+'use client';
 
-import Calendar from "@/features/calendar/Calendar";
+import Calendar from '@/features/calendar/Calendar';
 
-export default function CalendarPage() {
+const CalendarPage = () => {
   return <Calendar />;
-}
+};
+
+export default CalendarPage;

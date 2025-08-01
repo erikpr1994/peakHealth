@@ -1,22 +1,22 @@
-import { X, Play, Pause, Square, AlertTriangle, MapPin } from "lucide-react";
-import { useState, useEffect } from "react";
+import { X, Play, Pause, Square, AlertTriangle, MapPin } from 'lucide-react';
+import { useState, useEffect } from 'react';
 
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
+import ExerciseView from './ExerciseView';
+import { RestType } from './RestTimer';
+import RestView from './RestView';
+import WorkoutSummary from './WorkoutSummary';
+
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
   DialogDescription,
-} from "@/components/ui/dialog";
-import { Textarea } from "@/components/ui/textarea";
-import { Page } from "@/types/app";
-
-import ExerciseView from "./ExerciseView";
-import { RestType } from "./RestTimer";
-import RestView from "./RestView";
-import WorkoutSummary from "./WorkoutSummary";
+} from '@/components/ui/dialog';
+import { Textarea } from '@/components/ui/textarea';
+import { Page } from '@/types/app';
 
 interface WorkoutTrackerProps {
   onNavigate: (page: Page) => void;
@@ -24,12 +24,12 @@ interface WorkoutTrackerProps {
 }
 
 type WorkoutState =
-  | "exercise"
-  | "rest"
-  | "section-rest"
-  | "workout-rest"
-  | "paused"
-  | "completed";
+  | 'exercise'
+  | 'rest'
+  | 'section-rest'
+  | 'workout-rest'
+  | 'paused'
+  | 'completed';
 
 interface SetData {
   id: string;
@@ -46,7 +46,7 @@ interface SetData {
   completed: boolean;
   media?: Array<{
     id: string;
-    type: "photo" | "video";
+    type: 'photo' | 'video';
     url: string;
   }>;
 }
@@ -54,7 +54,7 @@ interface SetData {
 interface WorkoutSection {
   id: string;
   name: string;
-  type: "warmup" | "main" | "cooldown";
+  type: 'warmup' | 'main' | 'cooldown';
   exercises: Exercise[];
   restTime: number; // rest time after this section
 }
@@ -66,7 +66,7 @@ interface Exercise {
   muscleGroups: string[];
   sets: Array<{
     id: string;
-    type: "reps" | "time";
+    type: 'reps' | 'time';
     reps?: string;
     weight?: string;
     duration?: string;
@@ -101,53 +101,50 @@ interface WorkoutSession {
   totalPauseTime: number; // in seconds
 }
 
-export default function WorkoutTracker({
-  onNavigate,
-  routineId,
-}: WorkoutTrackerProps) {
-  const [workoutState, setWorkoutState] = useState<WorkoutState>("exercise");
+const WorkoutTracker = ({ onNavigate, routineId }: WorkoutTrackerProps) => {
+  const [workoutState, setWorkoutState] = useState<WorkoutState>('exercise');
   const [showExitDialog, setShowExitDialog] = useState(false);
   const [showPauseDialog, setShowPauseDialog] = useState(false);
-  const [pauseReason, setPauseReason] = useState("");
+  const [pauseReason, setPauseReason] = useState('');
   const [workoutDuration, setWorkoutDuration] = useState(0);
-  const [restType, setRestType] = useState<RestType>("set");
+  const [restType, setRestType] = useState<RestType>('set');
   const [customRestTime, setCustomRestTime] = useState(60);
 
   // Mock workout session data - in real app, this would come from the routine
   // For trail running workouts, show a placeholder for now
-  const isTrailRunning = routineId.includes("trail-running") || false; // In real app, check actual routine type
+  const isTrailRunning = routineId.includes('trail-running') || false; // In real app, check actual routine type
 
   const [workoutSession, setWorkoutSession] = useState<WorkoutSession>({
     routineId,
-    routineName: isTrailRunning ? "Trail Running Adventure" : "Full Body Split",
+    routineName: isTrailRunning ? 'Trail Running Adventure' : 'Full Body Split',
     startTime: new Date(),
     totalDuration: 0,
     workouts: isTrailRunning
       ? []
       : [
           {
-            id: "workout-1",
-            name: "Upper Body Workout",
+            id: 'workout-1',
+            name: 'Upper Body Workout',
             restTimeAfter: 300, // 5 minutes rest after workout
             sections: [
               {
-                id: "warmup",
-                name: "Warm-up",
-                type: "warmup",
+                id: 'warmup',
+                name: 'Warm-up',
+                type: 'warmup',
                 restTime: 120, // 2 minutes rest after warmup
                 exercises: [
                   {
-                    id: "arm-circles",
-                    name: "Arm Circles",
+                    id: 'arm-circles',
+                    name: 'Arm Circles',
                     instructions:
-                      "Extend arms out to sides and make small circles, gradually increasing size.",
-                    muscleGroups: ["Shoulders"],
+                      'Extend arms out to sides and make small circles, gradually increasing size.',
+                    muscleGroups: ['Shoulders'],
                     sets: [
                       {
-                        id: "set1",
-                        type: "time",
-                        duration: "30s",
-                        restTime: "30",
+                        id: 'set1',
+                        type: 'time',
+                        duration: '30s',
+                        restTime: '30',
                       },
                     ],
                     restTimeAfter: 60,
@@ -155,76 +152,76 @@ export default function WorkoutTracker({
                 ],
               },
               {
-                id: "main",
-                name: "Main Workout",
-                type: "main",
+                id: 'main',
+                name: 'Main Workout',
+                type: 'main',
                 restTime: 180, // 3 minutes rest after main workout
                 exercises: [
                   {
-                    id: "bench-press",
-                    name: "Barbell Bench Press",
+                    id: 'bench-press',
+                    name: 'Barbell Bench Press',
                     instructions:
-                      "Lie on a flat bench with your eyes under the bar. Grip the bar with hands slightly wider than shoulder-width. Lower the bar to your chest, then press up to full arm extension.",
-                    muscleGroups: ["Chest", "Triceps", "Shoulders"],
+                      'Lie on a flat bench with your eyes under the bar. Grip the bar with hands slightly wider than shoulder-width. Lower the bar to your chest, then press up to full arm extension.',
+                    muscleGroups: ['Chest', 'Triceps', 'Shoulders'],
                     sets: [
                       {
-                        id: "set1",
-                        type: "reps",
-                        reps: "10",
-                        weight: "Warm-up",
-                        restTime: "60",
+                        id: 'set1',
+                        type: 'reps',
+                        reps: '10',
+                        weight: 'Warm-up',
+                        restTime: '60',
                       },
                       {
-                        id: "set2",
-                        type: "reps",
-                        reps: "8",
-                        weight: "135 lbs",
-                        restTime: "90",
+                        id: 'set2',
+                        type: 'reps',
+                        reps: '8',
+                        weight: '135 lbs',
+                        restTime: '90',
                       },
                       {
-                        id: "set3",
-                        type: "reps",
-                        reps: "6",
-                        weight: "155 lbs",
-                        restTime: "90",
+                        id: 'set3',
+                        type: 'reps',
+                        reps: '6',
+                        weight: '155 lbs',
+                        restTime: '90',
                       },
                       {
-                        id: "set4",
-                        type: "reps",
-                        reps: "6",
-                        weight: "155 lbs",
-                        restTime: "90",
+                        id: 'set4',
+                        type: 'reps',
+                        reps: '6',
+                        weight: '155 lbs',
+                        restTime: '90',
                       },
                     ],
                     restTimeAfter: 120,
                   },
                   {
-                    id: "bent-over-row",
-                    name: "Bent-Over Barbell Row",
+                    id: 'bent-over-row',
+                    name: 'Bent-Over Barbell Row',
                     instructions:
-                      "Stand with feet hip-width apart, hinge at the hips to lean forward. Keep your back straight and pull the bar to your lower chest, squeezing your shoulder blades together.",
-                    muscleGroups: ["Back", "Biceps"],
+                      'Stand with feet hip-width apart, hinge at the hips to lean forward. Keep your back straight and pull the bar to your lower chest, squeezing your shoulder blades together.',
+                    muscleGroups: ['Back', 'Biceps'],
                     sets: [
                       {
-                        id: "set1",
-                        type: "reps",
-                        reps: "8",
-                        weight: "115 lbs",
-                        restTime: "90",
+                        id: 'set1',
+                        type: 'reps',
+                        reps: '8',
+                        weight: '115 lbs',
+                        restTime: '90',
                       },
                       {
-                        id: "set2",
-                        type: "reps",
-                        reps: "8",
-                        weight: "125 lbs",
-                        restTime: "90",
+                        id: 'set2',
+                        type: 'reps',
+                        reps: '8',
+                        weight: '125 lbs',
+                        restTime: '90',
                       },
                       {
-                        id: "set3",
-                        type: "reps",
-                        reps: "6",
-                        weight: "135 lbs",
-                        restTime: "90",
+                        id: 'set3',
+                        type: 'reps',
+                        reps: '6',
+                        weight: '135 lbs',
+                        restTime: '90',
                       },
                     ],
                     restTimeAfter: 120,
@@ -232,23 +229,23 @@ export default function WorkoutTracker({
                 ],
               },
               {
-                id: "cooldown",
-                name: "Cool-down",
-                type: "cooldown",
+                id: 'cooldown',
+                name: 'Cool-down',
+                type: 'cooldown',
                 restTime: 0, // No rest after cooldown
                 exercises: [
                   {
-                    id: "stretching",
-                    name: "Upper Body Stretching",
+                    id: 'stretching',
+                    name: 'Upper Body Stretching',
                     instructions:
-                      "Perform gentle stretches for chest, shoulders, and back.",
-                    muscleGroups: ["Full Body"],
+                      'Perform gentle stretches for chest, shoulders, and back.',
+                    muscleGroups: ['Full Body'],
                     sets: [
                       {
-                        id: "set1",
-                        type: "time",
-                        duration: "5min",
-                        restTime: "0",
+                        id: 'set1',
+                        type: 'time',
+                        duration: '5min',
+                        restTime: '0',
                       },
                     ],
                   },
@@ -262,7 +259,7 @@ export default function WorkoutTracker({
     currentExerciseIndex: 0,
     currentSetIndex: 0,
     setData: [],
-    workoutNotes: "",
+    workoutNotes: '',
     isPaused: false,
     totalPauseTime: 0,
   });
@@ -271,7 +268,7 @@ export default function WorkoutTracker({
   useEffect(() => {
     let interval: NodeJS.Timeout;
 
-    if (!workoutSession.isPaused && workoutState !== "completed") {
+    if (!workoutSession.isPaused && workoutState !== 'completed') {
       interval = setInterval(() => {
         const now = new Date();
         const elapsed =
@@ -313,14 +310,14 @@ export default function WorkoutTracker({
           </p>
           <div className="space-y-3">
             <Button
-              onClick={() => onNavigate("routines")}
+              onClick={() => onNavigate('routines')}
               className="w-full bg-orange-600 hover:bg-orange-700"
             >
               Back to Routines
             </Button>
             <Button
               variant="outline"
-              onClick={() => onNavigate("dashboard")}
+              onClick={() => onNavigate('dashboard')}
               className="w-full"
             >
               Go to Dashboard
@@ -361,11 +358,11 @@ export default function WorkoutTracker({
     const secs = seconds % 60;
 
     if (hours > 0) {
-      return `${hours}:${minutes.toString().padStart(2, "0")}:${secs
+      return `${hours}:${minutes.toString().padStart(2, '0')}:${secs
         .toString()
-        .padStart(2, "0")}`;
+        .padStart(2, '0')}`;
     }
-    return `${minutes}:${secs.toString().padStart(2, "0")}`;
+    return `${minutes}:${secs.toString().padStart(2, '0')}`;
   };
 
   const handlePauseWorkout = () => {
@@ -384,7 +381,7 @@ export default function WorkoutTracker({
         pauseStartTime: undefined,
         totalPauseTime: prev.totalPauseTime + pauseDuration,
       }));
-      setWorkoutState("exercise");
+      setWorkoutState('exercise');
     } else {
       // Pause workout
       setShowPauseDialog(true);
@@ -398,9 +395,9 @@ export default function WorkoutTracker({
       pauseReason,
       pauseStartTime: new Date(),
     }));
-    setWorkoutState("paused");
+    setWorkoutState('paused');
     setShowPauseDialog(false);
-    setPauseReason("");
+    setPauseReason('');
   };
 
   const handleEndWorkout = () => {
@@ -413,7 +410,7 @@ export default function WorkoutTracker({
       endTime: new Date(),
       totalDuration: workoutDuration,
     }));
-    setWorkoutState("completed");
+    setWorkoutState('completed');
     setShowExitDialog(false);
   };
 
@@ -425,7 +422,7 @@ export default function WorkoutTracker({
       targetReps: currentSet?.reps,
       targetWeight: currentSet?.weight,
       targetDuration: currentSet?.duration,
-      restTime: parseInt(currentSet?.restTime || "60"),
+      restTime: parseInt(currentSet?.restTime || '60'),
       completed: true,
       ...setData,
     };
@@ -454,9 +451,9 @@ export default function WorkoutTracker({
         ...prev,
         currentSetIndex: prev.currentSetIndex + 1,
       }));
-      setRestType("set");
-      setCustomRestTime(parseInt(currentSet?.restTime || "60"));
-      setWorkoutState("rest");
+      setRestType('set');
+      setCustomRestTime(parseInt(currentSet?.restTime || '60'));
+      setWorkoutState('rest');
     } else if (hasMoreExercises) {
       // Rest between exercises
       setWorkoutSession(prev => ({
@@ -464,9 +461,9 @@ export default function WorkoutTracker({
         currentExerciseIndex: prev.currentExerciseIndex + 1,
         currentSetIndex: 0,
       }));
-      setRestType("exercise");
+      setRestType('exercise');
       setCustomRestTime(currentExercise.restTimeAfter || 120);
-      setWorkoutState("rest");
+      setWorkoutState('rest');
     } else if (hasMoreSections) {
       // Rest between sections
       setWorkoutSession(prev => ({
@@ -475,9 +472,9 @@ export default function WorkoutTracker({
         currentExerciseIndex: 0,
         currentSetIndex: 0,
       }));
-      setRestType("section");
+      setRestType('section');
       setCustomRestTime(currentSection.restTime || 180);
-      setWorkoutState("section-rest");
+      setWorkoutState('section-rest');
     } else if (hasMoreWorkouts) {
       // Rest between workouts
       setWorkoutSession(prev => ({
@@ -487,26 +484,26 @@ export default function WorkoutTracker({
         currentExerciseIndex: 0,
         currentSetIndex: 0,
       }));
-      setRestType("workout");
+      setRestType('workout');
       setCustomRestTime(currentWorkout.restTimeAfter || 300);
-      setWorkoutState("workout-rest");
+      setWorkoutState('workout-rest');
     } else {
       // Workout completed
-      setWorkoutState("completed");
+      setWorkoutState('completed');
     }
   };
 
   const handleRestCompleted = () => {
-    setWorkoutState("exercise");
+    setWorkoutState('exercise');
   };
 
   const handleWorkoutCompleted = () => {
     // Save workout data and navigate back
-    console.log("Workout completed:", workoutSession);
-    onNavigate("routines");
+    console.log('Workout completed:', workoutSession);
+    onNavigate('routines');
   };
 
-  if (workoutState === "completed") {
+  if (workoutState === 'completed') {
     return (
       <WorkoutSummary
         workoutSession={workoutSession}
@@ -518,44 +515,44 @@ export default function WorkoutTracker({
 
   const getRestTitle = () => {
     switch (restType) {
-      case "set":
-        return "Set Rest";
-      case "exercise":
-        return "Exercise Rest";
-      case "section":
+      case 'set':
+        return 'Set Rest';
+      case 'exercise':
+        return 'Exercise Rest';
+      case 'section':
         return `${currentSection?.name} Complete`;
-      case "workout":
+      case 'workout':
         return `${currentWorkout?.name} Complete`;
       default:
-        return "Rest";
+        return 'Rest';
     }
   };
 
   const getRestSubtitle = () => {
     switch (restType) {
-      case "set":
-        return "Rest between sets";
-      case "exercise":
-        return "Rest between exercises";
-      case "section":
-        return "Rest between sections";
-      case "workout":
-        return "Rest between workouts";
+      case 'set':
+        return 'Rest between sets';
+      case 'exercise':
+        return 'Rest between exercises';
+      case 'section':
+        return 'Rest between sections';
+      case 'workout':
+        return 'Rest between workouts';
       default:
-        return "";
+        return '';
     }
   };
 
   const getNextExercise = () => {
-    if (restType === "set") {
+    if (restType === 'set') {
       return currentExercise;
-    } else if (restType === "exercise") {
+    } else if (restType === 'exercise') {
       return currentSection?.exercises[workoutSession.currentExerciseIndex];
-    } else if (restType === "section") {
+    } else if (restType === 'section') {
       const nextSection =
         currentWorkout?.sections[workoutSession.currentSectionIndex];
       return nextSection?.exercises[0];
-    } else if (restType === "workout") {
+    } else if (restType === 'workout') {
       const nextWorkout =
         workoutSession.workouts[workoutSession.currentWorkoutIndex];
       return nextWorkout?.sections[0]?.exercises[0];
@@ -607,8 +604,8 @@ export default function WorkoutTracker({
               onClick={handlePauseWorkout}
               className={
                 workoutSession.isPaused
-                  ? "bg-green-50 text-green-700 border-green-300"
-                  : ""
+                  ? 'bg-green-50 text-green-700 border-green-300'
+                  : ''
               }
             >
               {workoutSession.isPaused ? (
@@ -636,8 +633,8 @@ export default function WorkoutTracker({
           </div>
           <div className="flex justify-between text-xs text-gray-500 mt-1">
             <span>
-              {currentWorkout?.name} - {currentSection?.name} - Exercise{" "}
-              {workoutSession.currentExerciseIndex + 1} of{" "}
+              {currentWorkout?.name} - {currentSection?.name} - Exercise{' '}
+              {workoutSession.currentExerciseIndex + 1} of{' '}
               {currentSection?.exercises.length || 0}
             </span>
             <span>{Math.round(progressPercentage)}% Complete</span>
@@ -647,7 +644,7 @@ export default function WorkoutTracker({
 
       {/* Main Content */}
       <div className="flex-1">
-        {workoutState === "paused" && (
+        {workoutState === 'paused' && (
           <div className="h-full flex items-center justify-center">
             <Card className="p-8 text-center max-w-md">
               <div className="w-16 h-16 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -667,7 +664,7 @@ export default function WorkoutTracker({
           </div>
         )}
 
-        {workoutState === "exercise" && currentExercise && currentSet && (
+        {workoutState === 'exercise' && currentExercise && currentSet && (
           <ExerciseView
             exercise={currentExercise}
             currentSet={currentSet}
@@ -677,12 +674,12 @@ export default function WorkoutTracker({
           />
         )}
 
-        {(workoutState === "rest" ||
-          workoutState === "section-rest" ||
-          workoutState === "workout-rest") && (
+        {(workoutState === 'rest' ||
+          workoutState === 'section-rest' ||
+          workoutState === 'workout-rest') && (
           <RestView
             setData={
-              restType === "set"
+              restType === 'set'
                 ? workoutSession.setData.find(
                     s =>
                       s.id ===
@@ -694,7 +691,7 @@ export default function WorkoutTracker({
             }
             nextExercise={getNextExercise()}
             nextSetNumber={
-              restType === "set" ? workoutSession.currentSetIndex + 1 : 1
+              restType === 'set' ? workoutSession.currentSetIndex + 1 : 1
             }
             restTime={customRestTime}
             restType={restType}
@@ -770,4 +767,6 @@ export default function WorkoutTracker({
       </Dialog>
     </div>
   );
-}
+};
+
+export default WorkoutTracker;

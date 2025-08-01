@@ -1,8 +1,8 @@
-import { AlertTriangle, Users, Clock, Calendar } from "lucide-react";
-import { useState } from "react";
+import { AlertTriangle, Users, Clock, Calendar } from 'lucide-react';
+import { useState } from 'react';
 
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
 import {
   Dialog,
   DialogContent,
@@ -10,9 +10,9 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
+} from '@/components/ui/dialog';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
 
 interface ClubEvent {
   id: string;
@@ -39,7 +39,7 @@ interface ClubEventConflictModalProps {
   event: ClubEvent | null;
   hasTrainer: boolean;
   onConfirm: (
-    action: "notify-trainer" | "cancel-workout" | "reschedule-workout",
+    action: 'notify-trainer' | 'cancel-workout' | 'reschedule-workout',
     message?: string
   ) => void;
 }
@@ -52,17 +52,17 @@ export default function ClubEventConflictModal({
   onConfirm,
 }: ClubEventConflictModalProps) {
   const [selectedAction, setSelectedAction] = useState<
-    "notify-trainer" | "cancel-workout" | "reschedule-workout" | null
+    'notify-trainer' | 'cancel-workout' | 'reschedule-workout' | null
   >(null);
-  const [message, setMessage] = useState("");
+  const [message, setMessage] = useState('');
 
   // Mock conflicting workout - in a real app, this would be determined by checking the user's schedule
   const conflictingWorkout: ConflictingWorkout = {
-    id: "workout-1",
-    name: "Upper Body Strength",
-    time: "7:30 AM",
-    duration: "45 min",
-    type: "Strength Training",
+    id: 'workout-1',
+    name: 'Upper Body Strength',
+    time: '7:30 AM',
+    duration: '45 min',
+    type: 'Strength Training',
   };
 
   const handleConfirm = () => {
@@ -74,7 +74,7 @@ export default function ClubEventConflictModal({
 
   const handleClose = () => {
     setSelectedAction(null);
-    setMessage("");
+    setMessage('');
     onClose();
   };
 
@@ -161,11 +161,11 @@ export default function ClubEventConflictModal({
               {hasTrainer && (
                 <Card
                   className={`p-4 cursor-pointer transition-colors ${
-                    selectedAction === "notify-trainer"
-                      ? "ring-2 ring-primary bg-primary/5"
-                      : "hover:bg-gray-50"
+                    selectedAction === 'notify-trainer'
+                      ? 'ring-2 ring-primary bg-primary/5'
+                      : 'hover:bg-gray-50'
                   }`}
-                  onClick={() => setSelectedAction("notify-trainer")}
+                  onClick={() => setSelectedAction('notify-trainer')}
                 >
                   <div className="flex items-start gap-3">
                     <Users className="w-5 h-5 text-blue-600 mt-0.5" />
@@ -184,11 +184,11 @@ export default function ClubEventConflictModal({
 
               <Card
                 className={`p-4 cursor-pointer transition-colors ${
-                  selectedAction === "cancel-workout"
-                    ? "ring-2 ring-primary bg-primary/5"
-                    : "hover:bg-gray-50"
+                  selectedAction === 'cancel-workout'
+                    ? 'ring-2 ring-primary bg-primary/5'
+                    : 'hover:bg-gray-50'
                 }`}
-                onClick={() => setSelectedAction("cancel-workout")}
+                onClick={() => setSelectedAction('cancel-workout')}
               >
                 <div className="flex items-start gap-3">
                   <AlertTriangle className="w-5 h-5 text-red-600 mt-0.5" />
@@ -206,11 +206,11 @@ export default function ClubEventConflictModal({
 
               <Card
                 className={`p-4 cursor-pointer transition-colors ${
-                  selectedAction === "reschedule-workout"
-                    ? "ring-2 ring-primary bg-primary/5"
-                    : "hover:bg-gray-50"
+                  selectedAction === 'reschedule-workout'
+                    ? 'ring-2 ring-primary bg-primary/5'
+                    : 'hover:bg-gray-50'
                 }`}
-                onClick={() => setSelectedAction("reschedule-workout")}
+                onClick={() => setSelectedAction('reschedule-workout')}
               >
                 <div className="flex items-start gap-3">
                   <Clock className="w-5 h-5 text-blue-600 mt-0.5" />
@@ -230,16 +230,16 @@ export default function ClubEventConflictModal({
             {selectedAction && (
               <div className="space-y-2">
                 <Label htmlFor="message">
-                  {selectedAction === "notify-trainer"
-                    ? "Message to Trainer (Optional)"
-                    : "Additional Notes (Optional)"}
+                  {selectedAction === 'notify-trainer'
+                    ? 'Message to Trainer (Optional)'
+                    : 'Additional Notes (Optional)'}
                 </Label>
                 <Textarea
                   id="message"
                   placeholder={
-                    selectedAction === "notify-trainer"
-                      ? "Let your trainer know why you want to join this club event..."
-                      : "Add any notes about this change..."
+                    selectedAction === 'notify-trainer'
+                      ? 'Let your trainer know why you want to join this club event...'
+                      : 'Add any notes about this change...'
                   }
                   value={message}
                   onChange={e => setMessage(e.target.value)}

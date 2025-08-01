@@ -1,29 +1,29 @@
-import { workoutTypes } from "../config/workoutTypes";
+import { workoutTypes } from '../config/workoutTypes';
 import {
   CalendarStats,
   StatusConfig,
   TimeOfDayConfig,
   WorkoutEvent,
   WorkoutTypeConfig,
-} from "../types";
+} from '../types';
 
 export const convertTo24Hour = (time: string): string => {
-  const [timePart, period] = time.split(" ");
-  const [hours, minutes] = timePart.split(":");
+  const [timePart, period] = time.split(' ');
+  const [hours, minutes] = timePart.split(':');
   let hour = parseInt(hours);
 
-  if (period === "PM" && hour !== 12) {
+  if (period === 'PM' && hour !== 12) {
     hour += 12;
-  } else if (period === "AM" && hour === 12) {
+  } else if (period === 'AM' && hour === 12) {
     hour = 0;
   }
 
-  return `${hour.toString().padStart(2, "0")}:${minutes}`;
+  return `${hour.toString().padStart(2, '0')}:${minutes}`;
 };
 
 export const getUpcomingWorkouts = (workouts: WorkoutEvent[], today: Date) => {
   return workouts
-    .filter(w => w.status === "scheduled" && w.date >= today)
+    .filter(w => w.status === 'scheduled' && w.date >= today)
     .sort((a, b) => {
       // First sort by date, then by time
       if (a.date.getTime() !== b.date.getTime()) {
@@ -63,68 +63,68 @@ export const groupWorkoutsByDay = (workoutList: WorkoutEvent[]) => {
 };
 
 export const getTimeOfDay = (time: string): TimeOfDayConfig => {
-  const hour24 = parseInt(convertTo24Hour(time).split(":")[0]);
+  const hour24 = parseInt(convertTo24Hour(time).split(':')[0]);
 
   if (hour24 >= 5 && hour24 < 12) {
     return {
-      period: "Morning",
-      color: "time-morning-text",
-      bgColor: "time-morning-bg",
+      period: 'Morning',
+      color: 'time-morning-text',
+      bgColor: 'time-morning-bg',
     };
   } else if (hour24 >= 12 && hour24 < 17) {
     return {
-      period: "Afternoon",
-      color: "time-afternoon-text",
-      bgColor: "time-afternoon-bg",
+      period: 'Afternoon',
+      color: 'time-afternoon-text',
+      bgColor: 'time-afternoon-bg',
     };
   } else {
     return {
-      period: "Evening",
-      color: "time-evening-text",
-      bgColor: "time-evening-bg",
+      period: 'Evening',
+      color: 'time-evening-text',
+      bgColor: 'time-evening-bg',
     };
   }
 };
 
 export const getWorkoutTypeConfig = (
-  type: WorkoutEvent["type"]
+  type: WorkoutEvent['type']
 ): WorkoutTypeConfig => {
   return workoutTypes.find(wt => wt.name === type) || workoutTypes[0];
 };
 
 export const getStatusConfig = (
-  status: WorkoutEvent["status"]
+  status: WorkoutEvent['status']
 ): StatusConfig => {
   switch (status) {
-    case "completed":
+    case 'completed':
       return {
-        color: "status-completed",
-        text: "Completed",
-        textColor: "status-completed-text",
+        color: 'status-completed',
+        text: 'Completed',
+        textColor: 'status-completed-text',
       };
-    case "scheduled":
+    case 'scheduled':
       return {
-        color: "status-scheduled",
-        text: "Scheduled",
-        textColor: "status-scheduled-text",
+        color: 'status-scheduled',
+        text: 'Scheduled',
+        textColor: 'status-scheduled-text',
       };
-    case "missed":
+    case 'missed':
       return {
-        color: "status-missed",
-        text: "Missed",
-        textColor: "status-missed-text",
+        color: 'status-missed',
+        text: 'Missed',
+        textColor: 'status-missed-text',
       };
-    case "active":
+    case 'active':
       return {
-        color: "status-active",
-        text: "In Progress",
-        textColor: "status-active-text",
+        color: 'status-active',
+        text: 'In Progress',
+        textColor: 'status-active-text',
       };
     default:
       return {
-        color: "status-unknown",
-        text: "Unknown",
-        textColor: "status-unknown-text",
+        color: 'status-unknown',
+        text: 'Unknown',
+        textColor: 'status-unknown-text',
       };
   }
 };
@@ -135,7 +135,7 @@ export const calculateCalendarStats = (
 ): CalendarStats => {
   const completedThisMonth = workouts.filter(
     w =>
-      w.status === "completed" &&
+      w.status === 'completed' &&
       w.date.getMonth() === today.getMonth() &&
       w.date.getFullYear() === today.getFullYear()
   ).length;
@@ -147,7 +147,7 @@ export const calculateCalendarStats = (
   ).length;
 
   const totalCaloriesBurned = workouts
-    .filter(w => w.status === "completed" && w.actualCalories)
+    .filter(w => w.status === 'completed' && w.actualCalories)
     .reduce((sum, w) => sum + (w.actualCalories || 0), 0);
 
   // Calculate days with multiple sessions this month
@@ -172,9 +172,9 @@ export const calculateCalendarStats = (
   ).filter(count => count > 1).length;
 
   // Calculate average workout duration
-  const completedWorkouts = workouts.filter(w => w.status === "completed");
+  const completedWorkouts = workouts.filter(w => w.status === 'completed');
   const totalMinutes = completedWorkouts.reduce((sum, w) => {
-    const minutes = parseInt(w.duration.split(" ")[0]);
+    const minutes = parseInt(w.duration.split(' ')[0]);
     return sum + minutes;
   }, 0);
   const avgDuration =

@@ -1,26 +1,26 @@
-import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
+import { difficulties } from '../../data/difficulties';
+import { equipment } from '../../data/equipment';
+import { muscleGroups } from '../../data/muscleGroups';
+import { useExerciseFilters } from '../../hooks/useExerciseFilters';
+
+import { Button } from '@/components/ui/button';
+import { Checkbox } from '@/components/ui/checkbox';
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
-import { Label } from "@/components/ui/label";
-import { Separator } from "@/components/ui/separator";
-
-import { difficulties } from "../../data/difficulties";
-import { equipment } from "../../data/equipment";
-import { muscleGroups } from "../../data/muscleGroups";
-import { useExerciseFilters } from "../../hooks/useExerciseFilters";
+} from '@/components/ui/dialog';
+import { Label } from '@/components/ui/label';
+import { Separator } from '@/components/ui/separator';
 
 interface FilterDialogProps {
   isOpen: boolean;
   onClose: () => void;
 }
 
-export function FilterDialog({ isOpen, onClose }: FilterDialogProps) {
+export const FilterDialog = ({ isOpen, onClose }: FilterDialogProps) => {
   const { filters, handleFilterChange, clearFilters } = useExerciseFilters();
 
   return (
@@ -44,7 +44,7 @@ export function FilterDialog({ isOpen, onClose }: FilterDialogProps) {
                     id={`difficulty-${difficulty}`}
                     checked={filters.difficulties.includes(difficulty)}
                     onCheckedChange={() =>
-                      handleFilterChange("difficulties", difficulty)
+                      handleFilterChange('difficulties', difficulty)
                     }
                   />
                   <Label htmlFor={`difficulty-${difficulty}`}>
@@ -67,7 +67,7 @@ export function FilterDialog({ isOpen, onClose }: FilterDialogProps) {
                     id={`muscle-${group}`}
                     checked={filters.muscleGroups.includes(group)}
                     onCheckedChange={() =>
-                      handleFilterChange("muscleGroups", group)
+                      handleFilterChange('muscleGroups', group)
                     }
                   />
                   <Label htmlFor={`muscle-${group}`} className="text-sm">
@@ -93,7 +93,7 @@ export function FilterDialog({ isOpen, onClose }: FilterDialogProps) {
                     id={`equipment-${equipmentItem}`}
                     checked={filters.equipment.includes(equipmentItem)}
                     onCheckedChange={() =>
-                      handleFilterChange("equipment", equipmentItem)
+                      handleFilterChange('equipment', equipmentItem)
                     }
                   />
                   <Label htmlFor={`equipment-${equipmentItem}`}>
@@ -116,4 +116,4 @@ export function FilterDialog({ isOpen, onClose }: FilterDialogProps) {
       </DialogContent>
     </Dialog>
   );
-}
+};

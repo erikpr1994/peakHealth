@@ -1,7 +1,9 @@
-"use client";
+'use client';
 
-import Dashboard from "@/features/dashboard/Dashboard";
+import Dashboard from '@/features/dashboard/Dashboard';
 
-export default function DashboardPage() {
+const DashboardPage = () => {
   return <Dashboard />;
-}
+};
+
+export default DashboardPage;

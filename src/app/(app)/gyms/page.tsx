@@ -1,7 +1,9 @@
-"use client";
+'use client';
 
-import Gyms from "@/features/gyms/Gyms";
+import Gyms from '@/features/gyms/Gyms';
 
-export default function GymsPage() {
+const GymsPage = () => {
   return <Gyms />;
-}
+};
+
+export default GymsPage;

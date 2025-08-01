@@ -1,45 +1,45 @@
-import { ArrowLeft, Send, MapPin, Clock, AlertCircle } from "lucide-react";
-import { useState } from "react";
+import { ArrowLeft, Send, MapPin, Clock, AlertCircle } from 'lucide-react';
+import { useState } from 'react';
 
-import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Textarea } from "@/components/ui/textarea";
+} from '@/components/ui/select';
+import { Textarea } from '@/components/ui/textarea';
 
 type Page =
-  | "dashboard"
-  | "exercises"
-  | "exercise-detail"
-  | "routines"
-  | "routine-detail"
-  | "edit-routine"
-  | "create-routine"
-  | "calendar"
-  | "statistics"
-  | "profile"
-  | "gyms"
-  | "suggest-gym"
-  | "edit-gym"
-  | "gym-detail"
-  | "equipment"
-  | "suggest-equipment"
-  | "edit-equipment"
-  | "equipment-detail"
-  | "suggestions"
-  | "suggest-exercise"
-  | "account-settings"
-  | "app-settings"
-  | "workout-tracker";
+  | 'dashboard'
+  | 'exercises'
+  | 'exercise-detail'
+  | 'routines'
+  | 'routine-detail'
+  | 'edit-routine'
+  | 'create-routine'
+  | 'calendar'
+  | 'statistics'
+  | 'profile'
+  | 'gyms'
+  | 'suggest-gym'
+  | 'edit-gym'
+  | 'gym-detail'
+  | 'equipment'
+  | 'suggest-equipment'
+  | 'edit-equipment'
+  | 'equipment-detail'
+  | 'suggestions'
+  | 'suggest-exercise'
+  | 'account-settings'
+  | 'app-settings'
+  | 'workout-tracker';
 
 interface SuggestGymProps {
   onNavigate: (page: Page, id?: string) => void;
@@ -48,12 +48,12 @@ interface SuggestGymProps {
 interface GymSuggestion {
   name: string;
   type:
-    | "commercial"
-    | "boutique"
-    | "home"
-    | "outdoor"
-    | "university"
-    | "community";
+    | 'commercial'
+    | 'boutique'
+    | 'home'
+    | 'outdoor'
+    | 'university'
+    | 'community';
   address: string;
   city: string;
   state: string;
@@ -67,7 +67,7 @@ interface GymSuggestion {
     [key: string]: { open: string; close: string; closed: boolean };
   };
   membershipTypes: string[];
-  priceRange: "budget" | "mid-range" | "premium" | "luxury";
+  priceRange: 'budget' | 'mid-range' | 'premium' | 'luxury';
   equipment: string[];
   specialties: string[];
   reasonForSuggestion: string;
@@ -75,144 +75,144 @@ interface GymSuggestion {
 
 export default function SuggestGym({ onNavigate }: SuggestGymProps) {
   const [gymData, setGymData] = useState<GymSuggestion>({
-    name: "",
-    type: "commercial",
-    address: "",
-    city: "",
-    state: "",
-    zipCode: "",
-    phone: "",
-    website: "",
-    email: "",
-    description: "",
+    name: '',
+    type: 'commercial',
+    address: '',
+    city: '',
+    state: '',
+    zipCode: '',
+    phone: '',
+    website: '',
+    email: '',
+    description: '',
     amenities: [],
     operatingHours: {
-      monday: { open: "06:00", close: "22:00", closed: false },
-      tuesday: { open: "06:00", close: "22:00", closed: false },
-      wednesday: { open: "06:00", close: "22:00", closed: false },
-      thursday: { open: "06:00", close: "22:00", closed: false },
-      friday: { open: "06:00", close: "22:00", closed: false },
-      saturday: { open: "08:00", close: "20:00", closed: false },
-      sunday: { open: "08:00", close: "20:00", closed: false },
+      monday: { open: '06:00', close: '22:00', closed: false },
+      tuesday: { open: '06:00', close: '22:00', closed: false },
+      wednesday: { open: '06:00', close: '22:00', closed: false },
+      thursday: { open: '06:00', close: '22:00', closed: false },
+      friday: { open: '06:00', close: '22:00', closed: false },
+      saturday: { open: '08:00', close: '20:00', closed: false },
+      sunday: { open: '08:00', close: '20:00', closed: false },
     },
     membershipTypes: [],
-    priceRange: "mid-range",
+    priceRange: 'mid-range',
     equipment: [],
     specialties: [],
-    reasonForSuggestion: "",
+    reasonForSuggestion: '',
   });
 
   const gymTypes = [
     {
-      id: "commercial",
-      name: "Commercial Gym",
-      description: "Large chain or franchise gym",
+      id: 'commercial',
+      name: 'Commercial Gym',
+      description: 'Large chain or franchise gym',
     },
     {
-      id: "boutique",
-      name: "Boutique Studio",
-      description: "Specialized fitness studio",
+      id: 'boutique',
+      name: 'Boutique Studio',
+      description: 'Specialized fitness studio',
     },
-    { id: "home", name: "Home Gym", description: "Private home setup" },
+    { id: 'home', name: 'Home Gym', description: 'Private home setup' },
     {
-      id: "outdoor",
-      name: "Outdoor Facility",
-      description: "Parks, trails, outdoor equipment",
-    },
-    {
-      id: "university",
-      name: "University Gym",
-      description: "College or university facility",
+      id: 'outdoor',
+      name: 'Outdoor Facility',
+      description: 'Parks, trails, outdoor equipment',
     },
     {
-      id: "community",
-      name: "Community Center",
-      description: "Public recreation center",
+      id: 'university',
+      name: 'University Gym',
+      description: 'College or university facility',
+    },
+    {
+      id: 'community',
+      name: 'Community Center',
+      description: 'Public recreation center',
     },
   ];
 
   const priceRanges = [
     {
-      id: "budget",
-      name: "Budget ($10-30/month)",
-      description: "Basic facilities, good value",
+      id: 'budget',
+      name: 'Budget ($10-30/month)',
+      description: 'Basic facilities, good value',
     },
     {
-      id: "mid-range",
-      name: "Mid-Range ($30-80/month)",
-      description: "Good facilities and amenities",
+      id: 'mid-range',
+      name: 'Mid-Range ($30-80/month)',
+      description: 'Good facilities and amenities',
     },
     {
-      id: "premium",
-      name: "Premium ($80-150/month)",
-      description: "High-end facilities and services",
+      id: 'premium',
+      name: 'Premium ($80-150/month)',
+      description: 'High-end facilities and services',
     },
     {
-      id: "luxury",
-      name: "Luxury ($150+/month)",
-      description: "Luxury amenities and exclusive services",
+      id: 'luxury',
+      name: 'Luxury ($150+/month)',
+      description: 'Luxury amenities and exclusive services',
     },
   ];
 
   const commonAmenities = [
-    "Parking",
-    "Locker Rooms",
-    "Showers",
-    "Towel Service",
-    "WiFi",
-    "Personal Training",
-    "Group Classes",
-    "Sauna",
-    "Steam Room",
-    "Pool",
-    "Hot Tub",
-    "Massage Therapy",
-    "Nutrition Counseling",
-    "Childcare",
-    "Café/Smoothie Bar",
-    "24/7 Access",
-    "Guest Passes",
-    "Multiple Locations",
+    'Parking',
+    'Locker Rooms',
+    'Showers',
+    'Towel Service',
+    'WiFi',
+    'Personal Training',
+    'Group Classes',
+    'Sauna',
+    'Steam Room',
+    'Pool',
+    'Hot Tub',
+    'Massage Therapy',
+    'Nutrition Counseling',
+    'Childcare',
+    'Café/Smoothie Bar',
+    '24/7 Access',
+    'Guest Passes',
+    'Multiple Locations',
   ];
 
   const membershipOptions = [
-    "Monthly",
-    "Annual",
-    "Day Pass",
-    "Punch Card",
-    "Student Discount",
-    "Senior Discount",
-    "Family Plans",
-    "Corporate Rates",
-    "Trial Membership",
+    'Monthly',
+    'Annual',
+    'Day Pass',
+    'Punch Card',
+    'Student Discount',
+    'Senior Discount',
+    'Family Plans',
+    'Corporate Rates',
+    'Trial Membership',
   ];
 
   const specialtyAreas = [
-    "CrossFit",
-    "Yoga",
-    "Pilates",
-    "Martial Arts",
-    "Boxing",
-    "Rock Climbing",
-    "Swimming",
-    "Basketball",
-    "Racquet Sports",
-    "Group Fitness",
-    "Powerlifting",
-    "Olympic Lifting",
-    "Functional Training",
-    "Rehabilitation",
-    "Sports Performance",
+    'CrossFit',
+    'Yoga',
+    'Pilates',
+    'Martial Arts',
+    'Boxing',
+    'Rock Climbing',
+    'Swimming',
+    'Basketball',
+    'Racquet Sports',
+    'Group Fitness',
+    'Powerlifting',
+    'Olympic Lifting',
+    'Functional Training',
+    'Rehabilitation',
+    'Sports Performance',
   ];
 
   const days = [
-    "monday",
-    "tuesday",
-    "wednesday",
-    "thursday",
-    "friday",
-    "saturday",
-    "sunday",
+    'monday',
+    'tuesday',
+    'wednesday',
+    'thursday',
+    'friday',
+    'saturday',
+    'sunday',
   ];
 
   const handleAmenityToggle = (amenity: string) => {
@@ -244,13 +244,13 @@ export default function SuggestGym({ onNavigate }: SuggestGymProps) {
 
   const handleSubmitSuggestion = () => {
     // In a real app, this would submit to an API for professional review
-    console.log("Submitting gym suggestion:", gymData);
-    onNavigate("suggestions");
+    console.log('Submitting gym suggestion:', gymData);
+    onNavigate('suggestions');
   };
 
   const updateOperatingHours = (
     day: string,
-    field: "open" | "close" | "closed",
+    field: 'open' | 'close' | 'closed',
     value: string | boolean
   ) => {
     setGymData(prev => ({
@@ -270,7 +270,7 @@ export default function SuggestGym({ onNavigate }: SuggestGymProps) {
       {/* Header */}
       <div className="flex items-center justify-between mb-8">
         <div className="flex items-center gap-4">
-          <Button variant="ghost" onClick={() => onNavigate("gyms")}>
+          <Button variant="ghost" onClick={() => onNavigate('gyms')}>
             <ArrowLeft className="w-4 h-4" />
           </Button>
           <div>
@@ -282,7 +282,7 @@ export default function SuggestGym({ onNavigate }: SuggestGymProps) {
         </div>
 
         <div className="flex gap-3">
-          <Button variant="outline" onClick={() => onNavigate("gyms")}>
+          <Button variant="outline" onClick={() => onNavigate('gyms')}>
             Cancel
           </Button>
           <Button
@@ -326,7 +326,7 @@ export default function SuggestGym({ onNavigate }: SuggestGymProps) {
               <Label htmlFor="type">Gym Type *</Label>
               <Select
                 value={gymData.type}
-                onValueChange={(value: GymSuggestion["type"]) =>
+                onValueChange={(value: GymSuggestion['type']) =>
                   setGymData({ ...gymData, type: value })
                 }
               >
@@ -352,7 +352,7 @@ export default function SuggestGym({ onNavigate }: SuggestGymProps) {
               <Label htmlFor="priceRange">Price Range</Label>
               <Select
                 value={gymData.priceRange}
-                onValueChange={(value: GymSuggestion["priceRange"]) =>
+                onValueChange={(value: GymSuggestion['priceRange']) =>
                   setGymData({ ...gymData, priceRange: value })
                 }
               >
@@ -511,7 +511,7 @@ export default function SuggestGym({ onNavigate }: SuggestGymProps) {
                 <Checkbox
                   checked={!gymData.operatingHours[day].closed}
                   onCheckedChange={checked =>
-                    updateOperatingHours(day, "closed", !checked)
+                    updateOperatingHours(day, 'closed', !checked)
                   }
                 />
                 {!gymData.operatingHours[day].closed ? (
@@ -520,7 +520,7 @@ export default function SuggestGym({ onNavigate }: SuggestGymProps) {
                       type="time"
                       value={gymData.operatingHours[day].open}
                       onChange={e =>
-                        updateOperatingHours(day, "open", e.target.value)
+                        updateOperatingHours(day, 'open', e.target.value)
                       }
                       className="w-24"
                     />
@@ -529,7 +529,7 @@ export default function SuggestGym({ onNavigate }: SuggestGymProps) {
                       type="time"
                       value={gymData.operatingHours[day].close}
                       onChange={e =>
-                        updateOperatingHours(day, "close", e.target.value)
+                        updateOperatingHours(day, 'close', e.target.value)
                       }
                       className="w-24"
                     />

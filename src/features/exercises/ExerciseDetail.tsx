@@ -1,26 +1,24 @@
-"use client";
+'use client';
 
-import { ArrowLeft, ChevronRight } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { ArrowLeft, ChevronRight } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 
-import { Card } from "@/components/ui/card";
+import { AddToRoutine } from './components/ExerciseDetail/AddToRoutine';
+import { ExerciseHeader } from './components/ExerciseDetail/ExerciseHeader';
+import { ExerciseInfo } from './components/ExerciseDetail/ExerciseInfo';
+import { ExerciseSteps } from './components/ExerciseDetail/ExerciseSteps';
+import { ExerciseTips } from './components/ExerciseDetail/ExerciseTips';
+import { ExerciseVariants } from './components/ExerciseDetail/ExerciseVariants';
+import { ExerciseVideo } from './components/ExerciseDetail/ExerciseVideo';
+import { mockExerciseData, mockRoutines } from './data/mockExercises';
 
-import { AddToRoutine } from "./components/ExerciseDetail/AddToRoutine";
-import { ExerciseHeader } from "./components/ExerciseDetail/ExerciseHeader";
-import { ExerciseInfo } from "./components/ExerciseDetail/ExerciseInfo";
-import { ExerciseSteps } from "./components/ExerciseDetail/ExerciseSteps";
-import { ExerciseTips } from "./components/ExerciseDetail/ExerciseTips";
-import { ExerciseVariants } from "./components/ExerciseDetail/ExerciseVariants";
-import { ExerciseVideo } from "./components/ExerciseDetail/ExerciseVideo";
-import { mockExerciseData, mockRoutines } from "./data/mockExercises";
+import { Card } from '@/components/ui/card';
 
 interface ExerciseDetailProps {
   exerciseId: string;
 }
 
-export default function ExerciseDetail({
-  exerciseId: _exerciseId,
-}: ExerciseDetailProps) {
+const ExerciseDetail = ({ exerciseId: _exerciseId }: ExerciseDetailProps) => {
   const router = useRouter();
 
   // Mock exercise data - in a real app, this would come from an API
@@ -35,7 +33,7 @@ export default function ExerciseDetail({
         <span>Exercise Details</span>
         <ChevronRight className="w-4 h-4 mx-2" />
         <button
-          onClick={() => router.push("/exercises")}
+          onClick={() => router.push('/exercises')}
           className="hover:text-gray-700"
         >
           Exercises
@@ -72,4 +70,6 @@ export default function ExerciseDetail({
       <AddToRoutine routines={routines} />
     </div>
   );
-}
+};
+
+export default ExerciseDetail;

@@ -1,35 +1,35 @@
-"use client";
+'use client';
 
-import NextLink from "next/link";
-import React, { useState } from "react";
+import NextLink from 'next/link';
+import React, { useState } from 'react';
 
-import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Button } from "@/components/ui/button";
+import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Button } from '@/components/ui/button';
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { useAuth } from "@/features/auth/context/AuthContext";
+} from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { useAuth } from '@/features/auth/context/AuthContext';
 
-export default function SignUpPage() {
+const SignUpPage = () => {
   const { signUp, isAuthOperationLoading } = useAuth();
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [error, setError] = useState("");
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [error, setError] = useState('');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError("");
+    setError('');
 
     if (password !== confirmPassword) {
-      setError("Passwords do not match");
+      setError('Passwords do not match');
       return;
     }
 
@@ -37,7 +37,7 @@ export default function SignUpPage() {
       await signUp(email, password, name);
     } catch (err: unknown) {
       const errorMessage =
-        err instanceof Error ? err.message : "An unexpected error occurred.";
+        err instanceof Error ? err.message : 'An unexpected error occurred.';
       setError(errorMessage);
     }
   };
@@ -112,7 +112,7 @@ export default function SignUpPage() {
               className="w-full"
               disabled={isAuthOperationLoading}
             >
-              {isAuthOperationLoading ? "Loading..." : "Sign Up"}
+              {isAuthOperationLoading ? 'Loading...' : 'Sign Up'}
             </Button>
           </form>
 
@@ -128,4 +128,6 @@ export default function SignUpPage() {
       </Card>
     </div>
   );
-}
+};
+
+export default SignUpPage;

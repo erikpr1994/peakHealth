@@ -11,17 +11,17 @@ import {
   Star,
   AlertTriangle,
   Lightbulb,
-} from "lucide-react";
-import { useState } from "react";
+} from 'lucide-react';
+import { useState } from 'react';
 
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
-} from "@/components/ui/collapsible";
+} from '@/components/ui/collapsible';
 
 interface Exercise {
   id: string;
@@ -30,7 +30,7 @@ interface Exercise {
   muscleGroups: string[];
   sets: Array<{
     id: string;
-    type: "reps" | "time";
+    type: 'reps' | 'time';
     reps?: string;
     weight?: string;
     duration?: string;
@@ -40,7 +40,7 @@ interface Exercise {
   description?: string;
   type?: string;
   equipment?: string[];
-  difficulty?: "Beginner" | "Intermediate" | "Advanced";
+  difficulty?: 'Beginner' | 'Intermediate' | 'Advanced';
   mechanics?: string;
   rating?: number;
   totalRatings?: number;
@@ -58,7 +58,7 @@ interface ExerciseViewProps {
   exercise: Exercise;
   currentSet: {
     id: string;
-    type: "reps" | "time";
+    type: 'reps' | 'time';
     reps?: string;
     weight?: string;
     duration?: string;
@@ -91,55 +91,55 @@ export default function ExerciseView({
     ...exercise,
     description:
       "The bench press is a compound exercise that targets the chest, shoulders, and triceps. It's one of the most popular strength training exercises and is essential for building upper body strength.",
-    type: "Strength",
-    equipment: ["Barbell", "Bench"],
-    difficulty: "Intermediate",
-    mechanics: "Compound",
+    type: 'Strength',
+    equipment: ['Barbell', 'Bench'],
+    difficulty: 'Intermediate',
+    mechanics: 'Compound',
     rating: 4.8,
     totalRatings: 124,
     steps: [
       {
-        title: "Starting Position",
+        title: 'Starting Position',
         description:
-          "Lie flat on the bench with your feet planted firmly on the floor. Your eyes should be directly under the barbell.",
+          'Lie flat on the bench with your feet planted firmly on the floor. Your eyes should be directly under the barbell.',
       },
       {
-        title: "Grip",
+        title: 'Grip',
         description:
-          "Grip the barbell with hands slightly wider than shoulder-width apart. Wrap your thumbs around the bar for safety.",
+          'Grip the barbell with hands slightly wider than shoulder-width apart. Wrap your thumbs around the bar for safety.',
       },
       {
-        title: "Lowering Phase",
+        title: 'Lowering Phase',
         description:
-          "Lower the bar slowly and under control to your mid-chest. Keep your elbows at approximately a 45-75 degree angle.",
+          'Lower the bar slowly and under control to your mid-chest. Keep your elbows at approximately a 45-75 degree angle.',
       },
       {
-        title: "Pressing Phase",
+        title: 'Pressing Phase',
         description:
-          "Push the bar back up to the starting position by extending your arms. Focus on pushing through your chest muscles.",
+          'Push the bar back up to the starting position by extending your arms. Focus on pushing through your chest muscles.',
       },
       {
-        title: "Breathing",
+        title: 'Breathing',
         description:
-          "Inhale during the lowering phase and exhale during the pressing phase.",
+          'Inhale during the lowering phase and exhale during the pressing phase.',
       },
     ],
     proTips: [
-      "Keep your wrists straight and directly above your elbows.",
-      "Maintain a slight arch in your lower back, but keep your butt on the bench.",
-      "Drive through your feet for stability and added power.",
+      'Keep your wrists straight and directly above your elbows.',
+      'Maintain a slight arch in your lower back, but keep your butt on the bench.',
+      'Drive through your feet for stability and added power.',
       'Keep your shoulder blades retracted and "tucked" throughout the movement.',
-      "Focus on pushing yourself away from the bar, rather than pushing the bar away from you.",
+      'Focus on pushing yourself away from the bar, rather than pushing the bar away from you.',
     ],
     commonMistakes: [
-      "Bouncing the bar off your chest, which can lead to injury.",
-      "Lifting your butt off the bench, which reduces stability.",
-      "Flaring your elbows out too wide, which can strain your shoulders.",
-      "Not lowering the bar to chest level, which reduces the effectiveness.",
-      "Using too much weight and sacrificing proper form.",
+      'Bouncing the bar off your chest, which can lead to injury.',
+      'Lifting your butt off the bench, which reduces stability.',
+      'Flaring your elbows out too wide, which can strain your shoulders.',
+      'Not lowering the bar to chest level, which reduces the effectiveness.',
+      'Using too much weight and sacrificing proper form.',
     ],
-    videoUrl: "/videos/bench-press-demo.mp4",
-    videoDuration: "3:45 min",
+    videoUrl: '/videos/bench-press-demo.mp4',
+    videoDuration: '3:45 min',
   };
 
   const handleStartSet = () => {
@@ -148,9 +148,9 @@ export default function ExerciseView({
 
   const getSetTypeIcon = (type: string) => {
     switch (type) {
-      case "reps":
+      case 'reps':
         return <RotateCcw className="w-5 h-5" />;
-      case "time":
+      case 'time':
         return <Clock className="w-5 h-5" />;
       default:
         return <Target className="w-5 h-5" />;
@@ -159,27 +159,27 @@ export default function ExerciseView({
 
   const getDifficultyColor = (difficulty: string) => {
     const colors = {
-      Beginner: "bg-green-100 text-green-700",
-      Intermediate: "bg-yellow-100 text-yellow-700",
-      Advanced: "bg-red-100 text-red-700",
+      Beginner: 'bg-green-100 text-green-700',
+      Intermediate: 'bg-yellow-100 text-yellow-700',
+      Advanced: 'bg-red-100 text-red-700',
     };
     return colors[difficulty as keyof typeof colors] || colors.Intermediate;
   };
 
   const formatSetTarget = () => {
-    if (currentSet.type === "reps") {
+    if (currentSet.type === 'reps') {
       return {
-        primary: currentSet.reps || "8-12",
-        secondary: currentSet.weight || "Bodyweight",
-        primaryLabel: "Target Reps",
-        secondaryLabel: "Weight",
+        primary: currentSet.reps || '8-12',
+        secondary: currentSet.weight || 'Bodyweight',
+        primaryLabel: 'Target Reps',
+        secondaryLabel: 'Weight',
       };
     } else {
       return {
-        primary: currentSet.duration || "30s",
-        secondary: currentSet.weight || "Bodyweight",
-        primaryLabel: "Duration",
-        secondaryLabel: "Weight",
+        primary: currentSet.duration || '30s',
+        secondary: currentSet.weight || 'Bodyweight',
+        primaryLabel: 'Duration',
+        secondaryLabel: 'Weight',
       };
     }
   };
@@ -209,7 +209,7 @@ export default function ExerciseView({
                   <div className="flex items-center gap-1">
                     <Star className="w-4 h-4 text-yellow-500 fill-yellow-500" />
                     <span className="text-sm text-gray-600">
-                      {enhancedExercise.rating} ({enhancedExercise.totalRatings}{" "}
+                      {enhancedExercise.rating} ({enhancedExercise.totalRatings}{' '}
                       ratings)
                     </span>
                   </div>
@@ -232,7 +232,7 @@ export default function ExerciseView({
               <div className="bg-white/80 backdrop-blur-sm p-3 rounded-lg text-center">
                 <div className="text-xs text-gray-500 mb-1">Equipment</div>
                 <div className="font-medium text-gray-800">
-                  {enhancedExercise.equipment.join(", ")}
+                  {enhancedExercise.equipment.join(', ')}
                 </div>
               </div>
             )}
@@ -517,10 +517,10 @@ export default function ExerciseView({
                 key={set.id}
                 className={`p-3 rounded-lg border-2 transition-all ${
                   index + 1 === setNumber
-                    ? "border-indigo-500 bg-indigo-50"
+                    ? 'border-indigo-500 bg-indigo-50'
                     : index + 1 < setNumber
-                      ? "border-green-500 bg-green-50"
-                      : "border-gray-200 bg-gray-50"
+                      ? 'border-green-500 bg-green-50'
+                      : 'border-gray-200 bg-gray-50'
                 }`}
               >
                 <div className="text-center">
@@ -528,7 +528,7 @@ export default function ExerciseView({
                     Set {index + 1}
                   </div>
                   <div className="font-semibold">
-                    {set.type === "reps" ? set.reps : set.duration}
+                    {set.type === 'reps' ? set.reps : set.duration}
                   </div>
                   <div className="text-xs text-gray-500">{set.weight}</div>
                   {index + 1 < setNumber && (

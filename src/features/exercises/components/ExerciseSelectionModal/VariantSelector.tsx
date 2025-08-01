@@ -1,6 +1,6 @@
-import { Badge } from "@/components/ui/badge";
+import { Exercise, ExerciseVariant } from '../../types';
 
-import { Exercise, ExerciseVariant } from "../../types";
+import { Badge } from '@/components/ui/badge';
 
 interface VariantSelectorProps {
   exercise: Exercise;
@@ -8,11 +8,11 @@ interface VariantSelectorProps {
   onVariantSelect: (variant: ExerciseVariant | null) => void;
 }
 
-export function VariantSelector({
+export const VariantSelector = ({
   exercise,
   selectedVariant,
   onVariantSelect,
-}: VariantSelectorProps) {
+}: VariantSelectorProps) => {
   if (!exercise.variants || exercise.variants.length === 0) {
     return null;
   }
@@ -26,8 +26,8 @@ export function VariantSelector({
             key={variant.id}
             className={`p-3 border rounded-lg cursor-pointer transition-colors hover:bg-gray-50 ${
               selectedVariant?.id === variant.id
-                ? "border-primary bg-primary/5"
-                : "border-gray-200"
+                ? 'border-primary bg-primary/5'
+                : 'border-gray-200'
             }`}
             onClick={() =>
               onVariantSelect(
@@ -49,4 +49,4 @@ export function VariantSelector({
       </div>
     </div>
   );
-}
+};

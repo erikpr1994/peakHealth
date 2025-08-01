@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import {
   MapPin,
@@ -17,9 +17,9 @@ import {
   Navigation,
   Filter,
   Home,
-} from "lucide-react";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
+} from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 
 import {
   AlertDialog,
@@ -31,28 +31,28 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
+} from '@/components/ui/alert-dialog';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
+} from '@/components/ui/select';
 
 interface Equipment {
   id: string;
   name: string;
   category:
-    | "Cardio"
-    | "Strength"
-    | "Free Weights"
-    | "Functional"
-    | "Accessories";
+    | 'Cardio'
+    | 'Strength'
+    | 'Free Weights'
+    | 'Functional'
+    | 'Accessories';
   brand?: string;
   notes?: string;
 }
@@ -61,7 +61,7 @@ interface Gym {
   id: string;
   name: string;
   address: string;
-  type: "public" | "private";
+  type: 'public' | 'private';
   isJoined: boolean;
   isOwner?: boolean;
   isFavorited?: boolean;
@@ -77,90 +77,90 @@ interface Gym {
 
 export default function Gyms() {
   const router = useRouter();
-  const [searchQuery, setSearchQuery] = useState("");
-  const [locationFilter, setLocationFilter] = useState("all");
+  const [searchQuery, setSearchQuery] = useState('');
+  const [locationFilter, setLocationFilter] = useState('all');
 
   // Mock data for personal gyms (owned or private)
   const [personalGyms, setPersonalGyms] = useState<Gym[]>([
     {
-      id: "1",
-      name: "My Home Gym",
-      address: "Home",
-      type: "private",
+      id: '1',
+      name: 'My Home Gym',
+      address: 'Home',
+      type: 'private',
       isJoined: true,
       isOwner: true,
       description:
-        "Personal home gym setup in garage with carefully selected equipment for strength training and cardio.",
+        'Personal home gym setup in garage with carefully selected equipment for strength training and cardio.',
       equipment: [
         {
-          id: "5",
-          name: "Adjustable Dumbbells",
-          category: "Free Weights",
-          brand: "PowerBlocks",
+          id: '5',
+          name: 'Adjustable Dumbbells',
+          category: 'Free Weights',
+          brand: 'PowerBlocks',
         },
-        { id: "6", name: "Pull-up Bar", category: "Functional" },
-        { id: "7", name: "Yoga Mat", category: "Accessories" },
+        { id: '6', name: 'Pull-up Bar', category: 'Functional' },
+        { id: '7', name: 'Yoga Mat', category: 'Accessories' },
       ],
-      amenities: ["Climate Control", "Music System"],
+      amenities: ['Climate Control', 'Music System'],
     },
     {
-      id: "2",
-      name: "Garage Workout Space",
-      address: "456 Oak Street, San Francisco, CA",
-      type: "private",
+      id: '2',
+      name: 'Garage Workout Space',
+      address: '456 Oak Street, San Francisco, CA',
+      type: 'private',
       isJoined: true,
       isOwner: true,
       description:
-        "Converted garage with essential equipment for daily workouts.",
+        'Converted garage with essential equipment for daily workouts.',
       equipment: [
         {
-          id: "8",
-          name: "Kettlebells",
-          category: "Free Weights",
-          brand: "Rogue",
+          id: '8',
+          name: 'Kettlebells',
+          category: 'Free Weights',
+          brand: 'Rogue',
         },
-        { id: "9", name: "Resistance Bands", category: "Functional" },
+        { id: '9', name: 'Resistance Bands', category: 'Functional' },
       ],
-      amenities: ["Ventilation", "Rubber Flooring"],
+      amenities: ['Ventilation', 'Rubber Flooring'],
     },
   ]);
 
   // Mock data for favorited gyms
   const [favoritedGyms, setFavoritedGyms] = useState<Gym[]>([
     {
-      id: "3",
-      name: "Downtown Fitness Center",
-      address: "123 Main St, San Francisco, CA",
-      type: "public",
+      id: '3',
+      name: 'Downtown Fitness Center',
+      address: '123 Main St, San Francisco, CA',
+      type: 'public',
       isJoined: true,
       isFavorited: true,
       members: 1250,
       rating: 4.6,
-      hours: "5:00 AM - 11:00 PM",
-      distance: "0.3 miles away",
-      description: "A fully equipped fitness center in the heart of downtown.",
+      hours: '5:00 AM - 11:00 PM',
+      distance: '0.3 miles away',
+      description: 'A fully equipped fitness center in the heart of downtown.',
       equipment: [
         {
-          id: "1",
-          name: "Bench Press",
-          category: "Strength",
-          brand: "Hammer Strength",
+          id: '1',
+          name: 'Bench Press',
+          category: 'Strength',
+          brand: 'Hammer Strength',
         },
         {
-          id: "2",
-          name: "Treadmill",
-          category: "Cardio",
-          brand: "Life Fitness",
+          id: '2',
+          name: 'Treadmill',
+          category: 'Cardio',
+          brand: 'Life Fitness',
         },
-        { id: "3", name: "Squat Rack", category: "Strength", brand: "Rogue" },
-        { id: "4", name: "Dumbbells (5-100 lbs)", category: "Free Weights" },
+        { id: '3', name: 'Squat Rack', category: 'Strength', brand: 'Rogue' },
+        { id: '4', name: 'Dumbbells (5-100 lbs)', category: 'Free Weights' },
       ],
       amenities: [
-        "Locker Rooms",
-        "Showers",
-        "WiFi",
-        "Parking",
-        "Personal Training",
+        'Locker Rooms',
+        'Showers',
+        'WiFi',
+        'Parking',
+        'Personal Training',
       ],
     },
   ]);
@@ -168,103 +168,103 @@ export default function Gyms() {
   // Mock data for nearby public gyms
   const [nearbyGyms] = useState<Gym[]>([
     {
-      id: "4",
-      name: "Iron Temple Gym",
-      address: "456 Oak Ave, San Francisco, CA",
-      type: "public",
+      id: '4',
+      name: 'Iron Temple Gym',
+      address: '456 Oak Ave, San Francisco, CA',
+      type: 'public',
       isJoined: false,
       isFavorited: false,
       members: 850,
       rating: 4.8,
-      hours: "24/7",
-      distance: "0.8 miles away",
-      description: "Hardcore powerlifting and bodybuilding gym.",
+      hours: '24/7',
+      distance: '0.8 miles away',
+      description: 'Hardcore powerlifting and bodybuilding gym.',
       equipment: [
         {
-          id: "10",
-          name: "Competition Bench",
-          category: "Strength",
-          brand: "Eleiko",
+          id: '10',
+          name: 'Competition Bench',
+          category: 'Strength',
+          brand: 'Eleiko',
         },
         {
-          id: "11",
-          name: "Olympic Bars",
-          category: "Free Weights",
-          brand: "Eleiko",
+          id: '11',
+          name: 'Olympic Bars',
+          category: 'Free Weights',
+          brand: 'Eleiko',
         },
         {
-          id: "12",
-          name: "Leg Press",
-          category: "Strength",
-          brand: "Hammer Strength",
+          id: '12',
+          name: 'Leg Press',
+          category: 'Strength',
+          brand: 'Hammer Strength',
         },
       ],
       amenities: [
-        "24/7 Access",
-        "Powerlifting Platform",
-        "Chalk",
-        "Lifting Belts",
+        '24/7 Access',
+        'Powerlifting Platform',
+        'Chalk',
+        'Lifting Belts',
       ],
     },
     {
-      id: "5",
-      name: "Sunset Wellness Club",
-      address: "789 Beach Blvd, San Francisco, CA",
-      type: "public",
+      id: '5',
+      name: 'Sunset Wellness Club',
+      address: '789 Beach Blvd, San Francisco, CA',
+      type: 'public',
       isJoined: false,
       isFavorited: false,
       members: 2100,
       rating: 4.4,
-      hours: "6:00 AM - 10:00 PM",
-      distance: "1.2 miles away",
-      description: "Premium wellness club with spa services.",
+      hours: '6:00 AM - 10:00 PM',
+      distance: '1.2 miles away',
+      description: 'Premium wellness club with spa services.',
       equipment: [
         {
-          id: "13",
-          name: "Elliptical Machines",
-          category: "Cardio",
-          brand: "Precor",
+          id: '13',
+          name: 'Elliptical Machines',
+          category: 'Cardio',
+          brand: 'Precor',
         },
         {
-          id: "14",
-          name: "Cable Machines",
-          category: "Strength",
-          brand: "Life Fitness",
+          id: '14',
+          name: 'Cable Machines',
+          category: 'Strength',
+          brand: 'Life Fitness',
         },
-        { id: "15", name: "Free Weight Area", category: "Free Weights" },
+        { id: '15', name: 'Free Weight Area', category: 'Free Weights' },
       ],
       amenities: [
-        "Pool",
-        "Spa",
-        "Sauna",
-        "Group Classes",
-        "Nutrition Counseling",
+        'Pool',
+        'Spa',
+        'Sauna',
+        'Group Classes',
+        'Nutrition Counseling',
       ],
     },
     {
-      id: "6",
-      name: "FitZone Express",
-      address: "321 Mission St, San Francisco, CA",
-      type: "public",
+      id: '6',
+      name: 'FitZone Express',
+      address: '321 Mission St, San Francisco, CA',
+      type: 'public',
       isJoined: false,
       isFavorited: false,
       members: 680,
       rating: 4.2,
-      hours: "5:30 AM - 11:00 PM",
-      distance: "1.5 miles away",
+      hours: '5:30 AM - 11:00 PM',
+      distance: '1.5 miles away',
       description:
-        "24/7 access gym with modern equipment and flexible membership options.",
+        '24/7 access gym with modern equipment and flexible membership options.',
       equipment: [
-        { id: "16", name: "Cardio Equipment", category: "Cardio" },
-        { id: "17", name: "Strength Machines", category: "Strength" },
+        { id: '16', name: 'Cardio Equipment', category: 'Cardio' },
+        { id: '17', name: 'Strength Machines', category: 'Strength' },
       ],
-      amenities: ["24/7 Access", "Mobile App", "Group Classes"],
+      amenities: ['24/7 Access', 'Mobile App', 'Group Classes'],
     },
   ]);
 
   const handleJoinGym = (gymId: string) => {
     // In a real app, this would make an API call
-    console.log("Joining gym:", gymId);
+    console.log('Joining gym:', gymId);
   };
 
   const handleFavoriteToggle = (gymId: string) => {
@@ -291,11 +291,11 @@ export default function Gyms() {
       gym.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       gym.address.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesLocation =
-      locationFilter === "all" ||
-      (locationFilter === "nearby" &&
+      locationFilter === 'all' ||
+      (locationFilter === 'nearby' &&
         gym.distance &&
         parseFloat(gym.distance) <= 2) ||
-      (locationFilter === "walking" &&
+      (locationFilter === 'walking' &&
         gym.distance &&
         parseFloat(gym.distance) <= 1);
     return (
@@ -379,20 +379,20 @@ export default function Gyms() {
                 </AlertDialog>
               </>
             ) : (
-              gym.type === "public" && (
+              gym.type === 'public' && (
                 <Button
                   variant="ghost"
                   size="sm"
                   onClick={() => handleFavoriteToggle(gym.id)}
                   className={`h-8 w-8 p-0 ${
                     gym.isFavorited
-                      ? "text-red-500 hover:text-red-600"
-                      : "text-gray-500 hover:text-red-500"
+                      ? 'text-red-500 hover:text-red-600'
+                      : 'text-gray-500 hover:text-red-500'
                   }`}
                 >
                   <Heart
                     className={`w-4 h-4 ${
-                      gym.isFavorited ? "fill-current" : ""
+                      gym.isFavorited ? 'fill-current' : ''
                     }`}
                   />
                 </Button>
@@ -406,7 +406,7 @@ export default function Gyms() {
       <div className="mb-2">
         <div className="flex items-center gap-2">
           <h3 className="text-lg font-semibold text-gray-900">{gym.name}</h3>
-          {gym.type === "public" ? (
+          {gym.type === 'public' ? (
             <Badge
               variant="secondary"
               className="text-xs bg-blue-50 text-blue-600 border-blue-200"
@@ -499,7 +499,7 @@ export default function Gyms() {
 
         <div className="flex gap-3">
           <Button
-            onClick={() => router.push("/gyms/create")}
+            onClick={() => router.push('/gyms/create')}
             variant="outline"
             className="flex items-center gap-2"
           >
@@ -507,7 +507,7 @@ export default function Gyms() {
             Create Private Gym
           </Button>
           <Button
-            onClick={() => router.push("/gyms/suggest")}
+            onClick={() => router.push('/gyms/suggest')}
             className="flex items-center gap-2 bg-primary text-primary-foreground hover:bg-primary/90"
           >
             <Plus className="w-4 h-4" />
@@ -601,8 +601,8 @@ export default function Gyms() {
               <h3 className="font-medium text-gray-900 mb-2">No gyms found</h3>
               <p className="text-gray-500 mb-4">
                 {searchQuery
-                  ? "Try adjusting your search criteria or location filter."
-                  : "No gyms available in your selected area."}
+                  ? 'Try adjusting your search criteria or location filter.'
+                  : 'No gyms available in your selected area.'}
               </p>
             </div>
           )}
@@ -623,13 +623,13 @@ export default function Gyms() {
               </p>
               <div className="flex items-center justify-center gap-4">
                 <Button
-                  onClick={() => router.push("/gyms/create")}
+                  onClick={() => router.push('/gyms/create')}
                   variant="outline"
                 >
                   <Home className="w-4 h-4 mr-2" />
                   Create Private Gym
                 </Button>
-                <Button onClick={() => router.push("/gyms/suggest")}>
+                <Button onClick={() => router.push('/gyms/suggest')}>
                   <Plus className="w-4 h-4 mr-2" />
                   Suggest Public Gym
                 </Button>

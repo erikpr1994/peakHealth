@@ -1,15 +1,15 @@
-import { render, screen, waitFor } from "@testing-library/react";
-import React from "react";
-import { describe, it, expect, vi, beforeEach, Mock } from "vitest";
+import { render, screen, waitFor } from '@testing-library/react';
+import React from 'react';
+import { describe, it, expect, vi, beforeEach, Mock } from 'vitest';
 
-import { useAuth } from "@/features/auth/context/AuthContext";
+import { FeatureFlagProvider } from '../context/FeatureFlagContext';
+import { useFeatureFlag } from '../hooks/useFeatureFlag';
 
-import { FeatureFlagProvider } from "../context/FeatureFlagContext";
-import { useFeatureFlag } from "../hooks/useFeatureFlag";
+import { useAuth } from '@/features/auth/context/AuthContext';
 
 // Mock external dependencies
-vi.mock("@/features/auth/context/AuthContext");
-vi.mock("@/lib/supabase/client"); // Prevent real client from being created
+vi.mock('@/features/auth/context/AuthContext');
+vi.mock('@/lib/supabase/client'); // Prevent real client from being created
 
 const mockedUseAuth = useAuth as Mock;
 
@@ -59,24 +59,24 @@ const renderWithFlags = (
   return render(<FeatureFlagProvider>{ui}</FeatureFlagProvider>);
 };
 
-describe("Feature Flag System Integration", () => {
+describe('Feature Flag System Integration', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     mockedUseAuth.mockReturnValue({
-      user: { id: "test-user-id" },
+      user: { id: 'test-user-id' },
       isAuthenticated: true,
       isLoading: false,
       isAuthOperationLoading: false,
     });
   });
 
-  it("should render correctly based on feature flag states", async () => {
+  it('should render correctly based on feature flag states', async () => {
     renderWithFlags(
-      <TestComponent featureNames={["feature-a", "feature-b", "feature-c"]} />,
+      <TestComponent featureNames={['feature-a', 'feature-b', 'feature-c']} />,
       {
         flags: [
-          { name: "feature-a", is_enabled: true, rollout_percentage: 100 },
-          { name: "feature-b", is_enabled: false, rollout_percentage: 0 },
+          { name: 'feature-a', is_enabled: true, rollout_percentage: 100 },
+          { name: 'feature-b', is_enabled: false, rollout_percentage: 0 },
         ],
         userTypes: [],
         userGroups: [],
@@ -84,23 +84,23 @@ describe("Feature Flag System Integration", () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByTestId("feature-a-enabled")).toBeInTheDocument();
-      expect(screen.getByTestId("feature-b-disabled")).toBeInTheDocument();
-      expect(screen.getByTestId("feature-c-disabled")).toBeInTheDocument();
+      expect(screen.getByTestId('feature-a-enabled')).toBeInTheDocument();
+      expect(screen.getByTestId('feature-b-disabled')).toBeInTheDocument();
+      expect(screen.getByTestId('feature-c-disabled')).toBeInTheDocument();
     });
   });
 
-  it("should show a loading state initially", async () => {
+  it('should show a loading state initially', async () => {
     mockFetch.mockReturnValue(new Promise(() => {})); // Never resolves
     render(
       <FeatureFlagProvider>
-        <TestComponent featureNames={["any-feature"]} />
+        <TestComponent featureNames={['any-feature']} />
       </FeatureFlagProvider>
     );
-    expect(await screen.findByText("Loading flags...")).toBeInTheDocument();
+    expect(await screen.findByText('Loading flags...')).toBeInTheDocument();
   });
 
-  it("should return all flags as disabled for an unauthenticated user", async () => {
+  it('should return all flags as disabled for an unauthenticated user', async () => {
     mockedUseAuth.mockReturnValue({
       user: null,
       isAuthenticated: false,
@@ -110,14 +110,14 @@ describe("Feature Flag System Integration", () => {
 
     render(
       <FeatureFlagProvider>
-        <TestComponent featureNames={["feature-a", "feature-b"]} />
+        <TestComponent featureNames={['feature-a', 'feature-b']} />
       </FeatureFlagProvider>
     );
 
     await waitFor(() => {
       expect(mockFetch).not.toHaveBeenCalled();
-      expect(screen.getByTestId("feature-a-disabled")).toBeInTheDocument();
-      expect(screen.getByTestId("feature-b-disabled")).toBeInTheDocument();
+      expect(screen.getByTestId('feature-a-disabled')).toBeInTheDocument();
+      expect(screen.getByTestId('feature-b-disabled')).toBeInTheDocument();
     });
   });
 });

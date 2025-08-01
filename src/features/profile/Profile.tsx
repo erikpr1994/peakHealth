@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import {
   User,
@@ -15,18 +15,18 @@ import {
   Award,
   RefreshCw,
   Sparkles,
-} from "lucide-react";
-import React, { useState } from "react";
+} from 'lucide-react';
+import React, { useState } from 'react';
 
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Separator } from "@/components/ui/separator";
-import { Textarea } from "@/components/ui/textarea";
-import { OnboardingData } from "@/types/app";
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Separator } from '@/components/ui/separator';
+import { Textarea } from '@/components/ui/textarea';
+import { OnboardingData } from '@/types/app';
 
 interface ProfileProps {
   onboardingData?: OnboardingData | null;
@@ -35,59 +35,59 @@ interface ProfileProps {
 export default function Profile({ onboardingData }: ProfileProps) {
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState({
-    name: onboardingData?.name || "Alex Johnson",
-    email: "alex.johnson@email.com",
-    phone: "+1 (555) 123-4567",
-    location: "San Francisco, CA",
+    name: onboardingData?.name || 'Alex Johnson',
+    email: 'alex.johnson@email.com',
+    phone: '+1 (555) 123-4567',
+    location: 'San Francisco, CA',
     bio:
       onboardingData?.motivation ||
-      "Passionate about fitness and helping others achieve their health goals.",
-    birthDate: "1990-05-15",
+      'Passionate about fitness and helping others achieve their health goals.',
+    birthDate: '1990-05-15',
   });
 
   const handleSave = () => {
     // In a real app, this would save to a backend
-    console.log("Saving profile:", formData);
+    console.log('Saving profile:', formData);
     setIsEditing(false);
   };
 
   const handleCancel = () => {
     // Reset form data
     setFormData({
-      name: onboardingData?.name || "Alex Johnson",
-      email: "alex.johnson@email.com",
-      phone: "+1 (555) 123-4567",
-      location: "San Francisco, CA",
+      name: onboardingData?.name || 'Alex Johnson',
+      email: 'alex.johnson@email.com',
+      phone: '+1 (555) 123-4567',
+      location: 'San Francisco, CA',
       bio:
         onboardingData?.motivation ||
-        "Passionate about fitness and helping others achieve their health goals.",
-      birthDate: "1990-05-15",
+        'Passionate about fitness and helping others achieve their health goals.',
+      birthDate: '1990-05-15',
     });
     setIsEditing(false);
   };
 
   const handleRetakeOnboarding = () => {
     // Clear onboarding data to trigger onboarding flow again
-    if (typeof window !== "undefined") {
-      localStorage.removeItem("peak-health-onboarding-complete");
-      localStorage.removeItem("peak-health-onboarding-data");
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem('peak-health-onboarding-complete');
+      localStorage.removeItem('peak-health-onboarding-data');
       window.location.reload(); // Reload to trigger onboarding
     }
   };
 
   // Mock stats
   const stats = [
-    { label: "Total Workouts", value: "142", icon: Dumbbell },
-    { label: "Days Active", value: "89", icon: Calendar },
-    { label: "Achievements", value: "23", icon: Award },
-    { label: "Hours Trained", value: "78", icon: Clock },
+    { label: 'Total Workouts', value: '142', icon: Dumbbell },
+    { label: 'Days Active', value: '89', icon: Calendar },
+    { label: 'Achievements', value: '23', icon: Award },
+    { label: 'Hours Trained', value: '78', icon: Clock },
   ];
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
+    return new Date(dateString).toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
     });
   };
 
@@ -97,7 +97,7 @@ export default function Profile({ onboardingData }: ProfileProps) {
         <h1 className="text-2xl font-bold text-gray-900">Profile</h1>
         <Button
           onClick={() => setIsEditing(!isEditing)}
-          variant={isEditing ? "outline" : "default"}
+          variant={isEditing ? 'outline' : 'default'}
           className="flex items-center gap-2"
         >
           {isEditing ? (
@@ -130,9 +130,9 @@ export default function Profile({ onboardingData }: ProfileProps) {
                   />
                   <AvatarFallback className="text-lg">
                     {formData.name
-                      .split(" ")
+                      .split(' ')
                       .map(n => n[0])
-                      .join("")}
+                      .join('')}
                   </AvatarFallback>
                 </Avatar>
                 <div className="flex-1">
@@ -386,7 +386,7 @@ export default function Profile({ onboardingData }: ProfileProps) {
                 </div>
 
                 <div className="text-xs text-gray-500">
-                  Profile created:{" "}
+                  Profile created:{' '}
                   {formatDate(onboardingData.completedAt.toString())}
                 </div>
               </CardContent>

@@ -1,7 +1,9 @@
-"use client";
+'use client';
 
-import TrainerAndClubs from "@/features/social/TrainerAndClubs";
+import TrainerAndClubs from '@/features/social/TrainerAndClubs';
 
-export default function TrainerAndClubsPage() {
+const TrainerAndClubsPage = () => {
   return <TrainerAndClubs />;
-}
+};
+
+export default TrainerAndClubsPage;
