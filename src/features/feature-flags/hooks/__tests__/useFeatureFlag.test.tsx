@@ -27,6 +27,7 @@ describe("useFeatureFlag Hook", () => {
       user: { id: "test-user-id" },
       isAuthenticated: true,
       isLoading: false,
+      isAuthOperationLoading: false,
     });
   });
 
@@ -105,6 +106,7 @@ describe("useFeatureFlag Hook", () => {
         user: null,
         isAuthenticated: false,
         isLoading: false,
+        isAuthOperationLoading: false,
       });
     });
 

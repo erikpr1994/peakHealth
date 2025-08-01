@@ -37,6 +37,7 @@ describe("FeatureFlagContext", () => {
       user: { id: "test-user-id" },
       isAuthenticated: true,
       isLoading: false,
+      isAuthOperationLoading: false,
     });
     mockFetch.mockResolvedValue({
       ok: true,
@@ -97,6 +98,7 @@ describe("FeatureFlagContext", () => {
       user: null,
       isAuthenticated: false,
       isLoading: false,
+      isAuthOperationLoading: false,
     });
 
     render(
