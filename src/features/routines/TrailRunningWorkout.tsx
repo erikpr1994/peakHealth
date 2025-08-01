@@ -1943,7 +1943,7 @@ export default function TrailRunningWorkout({
                                     updateRepeatInterval(
                                       index,
                                       "duration",
-                                      parseInt(e.target.value) || undefined
+                                      parseInt(e.target.value) || 0
                                     )
                                   }
                                 />
@@ -1966,7 +1966,7 @@ export default function TrailRunningWorkout({
                                       updateRepeatInterval(
                                         index,
                                         "distance",
-                                        parseFloat(e.target.value) || undefined
+                                        parseFloat(e.target.value) || 0
                                       )
                                     }
                                   />
@@ -1978,7 +1978,7 @@ export default function TrailRunningWorkout({
                                       updateRepeatInterval(
                                         index,
                                         "duration",
-                                        parseInt(e.target.value) || undefined
+                                        parseInt(e.target.value) || 0
                                       )
                                     }
                                   />
@@ -1990,7 +1990,7 @@ export default function TrailRunningWorkout({
                                       updateRepeatInterval(
                                         index,
                                         "elevationChange",
-                                        parseInt(e.target.value) || undefined
+                                        parseInt(e.target.value) || 0
                                       )
                                     }
                                   />
