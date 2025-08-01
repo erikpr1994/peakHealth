@@ -58,9 +58,9 @@ export const ExerciseCard = ({
   };
 
   const sizeClasses = {
-    sm: 'p-3',
-    md: 'p-4',
-    lg: 'p-4',
+    sm: 'w-full max-w-xs',
+    md: 'w-full max-w-sm',
+    lg: 'w-full max-w-md',
   };
 
   return (
