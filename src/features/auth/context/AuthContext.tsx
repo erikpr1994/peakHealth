@@ -29,30 +29,30 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
 
+  // Check initial session on mount
   useEffect(() => {
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange((event, session) => {
-      setUser(session?.user ?? null);
-      setIsLoading(false);
-      if (event === "SIGNED_IN") {
-        router.push("/dashboard");
-      } else if (event === "SIGNED_OUT") {
-        router.push("/");
+    const checkSession = async () => {
+      try {
+        const {
+          data: { session },
+        } = await supabase.auth.getSession();
+        setUser(session?.user ?? null);
+      } catch (error) {
+        console.error("Error checking session:", error);
+      } finally {
+        setIsLoading(false);
       }
-    });
-
-    return () => {
-      subscription.unsubscribe();
     };
-  }, [router, supabase]);
+
+    checkSession();
+  }, [supabase]);
 
   const login = async (email?: string, password?: string) => {
     if (!email || !password) return;
     setIsLoading(true);
 
     try {
-      const { error } = await supabase.auth.signInWithPassword({
+      const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password,
       });
@@ -61,12 +61,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         throw new Error(error.message || "Login failed");
       }
 
-      // User will be set by the onAuthStateChange listener
-      // isLoading will also be set to false by the listener
+      setUser(data.user);
+      router.push("/dashboard");
     } catch (error) {
       console.error("Error logging in:", error);
-      setIsLoading(false); // Only set loading to false on error
       throw error;
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -75,7 +76,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setIsLoading(true);
 
     try {
-      const { error } = await supabase.auth.signUp({
+      const { data, error } = await supabase.auth.signUp({
         email,
         password,
         options: {
@@ -89,12 +90,20 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         throw new Error(error.message || "Sign up failed");
       }
 
-      // User will be set by the onAuthStateChange listener
-      // isLoading will also be set to false by the listener
+      // Check if user is immediately confirmed (no email confirmation required)
+      if (data.user && !data.user.email_confirmed_at) {
+        // Email confirmation required
+        setUser(null);
+      } else if (data.user) {
+        // User is immediately signed in
+        setUser(data.user);
+        router.push("/dashboard");
+      }
     } catch (error) {
       console.error("Error signing up:", error);
-      setIsLoading(false); // Only set loading to false on error
       throw error;
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -108,12 +117,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         throw new Error(error.message || "Logout failed");
       }
 
-      // User will be cleared by the onAuthStateChange listener
-      // isLoading will also be set to false by the listener
+      setUser(null);
+      router.push("/");
     } catch (error) {
       console.error("Error logging out:", error);
-      setIsLoading(false); // Only set loading to false on error
       throw error;
+    } finally {
+      setIsLoading(false);
     }
   };
 
