@@ -4,6 +4,7 @@ import { Exercise } from "../../types";
 import { ExerciseCard } from "../shared/ExerciseCard";
 import { filterExercises } from "../../utils/filterUtils";
 import { SearchAndFilters } from "./SearchAndFilters";
+import { useExerciseFilters } from "../../hooks/useExerciseFilters";
 
 interface ExerciseLibraryProps {
   exercises: Exercise[];
@@ -24,11 +25,13 @@ export function ExerciseLibrary({
   onSearchChange,
   onCategoryChange,
 }: ExerciseLibraryProps) {
+  const { filters } = useExerciseFilters();
+
   const filteredExercises = filterExercises(
     exercises,
     searchTerm,
     selectedCategory,
-    { difficulties: [], muscleGroups: [], equipment: [] }
+    filters
   );
 
   return (
