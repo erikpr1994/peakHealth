@@ -29,10 +29,14 @@ describe("useFeatureFlag Hook", () => {
   });
 
   const setupHook = (
-    apiResponse: { 
-      flags: Array<{ name: string; is_enabled: boolean; rollout_percentage: number }>; 
-      userTypes: Array<{ typeName: string; displayName: string }>; 
-      userGroups: Array<{ groupName: string; displayName: string }> 
+    apiResponse: {
+      flags: Array<{
+        name: string;
+        is_enabled: boolean;
+        rollout_percentage: number;
+      }>;
+      userTypes: Array<{ typeName: string; displayName: string }>;
+      userGroups: Array<{ groupName: string; displayName: string }>;
     },
     hookArg: string[]
   ) => {

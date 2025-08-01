@@ -40,10 +40,14 @@ const TestComponent = ({ featureNames }: { featureNames: string[] }) => {
 
 const renderWithFlags = (
   ui: React.ReactElement,
-  apiResponse: { 
-    flags: Array<{ name: string; is_enabled: boolean; rollout_percentage: number }>; 
-    userTypes: Array<{ typeName: string; displayName: string }>; 
-    userGroups: Array<{ groupName: string; displayName: string }> 
+  apiResponse: {
+    flags: Array<{
+      name: string;
+      is_enabled: boolean;
+      rollout_percentage: number;
+    }>;
+    userTypes: Array<{ typeName: string; displayName: string }>;
+    userGroups: Array<{ groupName: string; displayName: string }>;
   }
 ) => {
   mockFetch.mockResolvedValue({
