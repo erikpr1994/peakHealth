@@ -6,11 +6,18 @@ export interface TestUser {
   name?: string;
 }
 
-export const generateTestUser = (): TestUser => ({
-  email: `test-${Date.now()}@example.com`,
-  password: 'TestPassword123!',
-  name: 'Test User',
-});
+export const generateTestUser = (): TestUser => {
+  // Generate a more unique identifier using timestamp + random number
+  const timestamp = Date.now();
+  const random = Math.floor(Math.random() * 10000);
+  const uniqueId = `${timestamp}-${random}`;
+  
+  return {
+    email: `test-${uniqueId}@example.com`,
+    password: 'TestPassword123!',
+    name: 'Test User',
+  };
+};
 
 export const signUpUser = async (page: Page, user: TestUser) => {
   await page.goto('/signup');
@@ -26,8 +33,8 @@ export const signUpUser = async (page: Page, user: TestUser) => {
   // Submit the form
   await page.click('[data-testid="signup-button"]');
 
-  // Wait a moment for any validation errors
-  await page.waitForTimeout(1000);
+  // Wait for response and check for errors
+  await page.waitForTimeout(2000);
 
   // Check if there are any validation errors
   const emailError = await page.locator('[data-testid="email-error"]').isVisible();
