@@ -6,10 +6,11 @@ export async function GET() {
 
   try {
     const {
-      data: { session },
-    } = await supabase.auth.getSession();
+      data: { user },
+      error: userError,
+    } = await supabase.auth.getUser();
 
-    if (!session?.user) {
+    if (userError || !user) {
       return NextResponse.json(
         {
           flags: {},
@@ -19,8 +20,6 @@ export async function GET() {
         { status: 200 }
       );
     }
-
-    const { user } = session;
     const environment = process.env.NEXT_PUBLIC_ENVIRONMENT || "development";
 
     const [flagsResponse, typesResponse, groupsResponse] = await Promise.all([
