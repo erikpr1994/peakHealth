@@ -1,38 +1,39 @@
-import { ExerciseData } from '../../types';
+import { Exercise, ExerciseVariant } from '../../types';
 import { getDifficultyColor } from '../../utils/exerciseUtils';
 
 interface ExerciseInfoProps {
-  exercise: ExerciseData;
+  exercise: Exercise;
+  variant: ExerciseVariant;
 }
 
-export const ExerciseInfo = ({ exercise }: ExerciseInfoProps) => {
+export const ExerciseInfo = ({ exercise, variant }: ExerciseInfoProps) => {
   return (
     <>
       {/* Exercise Details Grid */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
         <div className="bg-gray-50 p-4 rounded-lg">
-          <div className="text-sm text-gray-500 mb-1">Type</div>
-          <div className="font-medium text-gray-800">{exercise.type}</div>
+          <div className="text-sm text-gray-500 mb-1">Category</div>
+          <div className="font-medium text-gray-800">{exercise.category}</div>
         </div>
         <div className="bg-gray-50 p-4 rounded-lg">
           <div className="text-sm text-gray-500 mb-1">Equipment</div>
           <div className="font-medium text-gray-800">
-            {exercise.equipment?.join(', ') || 'None'}
+            {variant.equipment?.join(', ') || 'None'}
           </div>
         </div>
         <div className="bg-gray-50 p-4 rounded-lg">
           <div className="text-sm text-gray-500 mb-1">Difficulty</div>
           <span
             className={`px-2 py-1 rounded text-sm ${getDifficultyColor(
-              exercise.difficulty
+              variant.difficulty
             )}`}
           >
-            {exercise.difficulty}
+            {variant.difficulty}
           </span>
         </div>
         <div className="bg-gray-50 p-4 rounded-lg">
-          <div className="text-sm text-gray-500 mb-1">Mechanics</div>
-          <div className="font-medium text-gray-800">{exercise.mechanics}</div>
+          <div className="text-sm text-gray-500 mb-1">Focus</div>
+          <div className="font-medium text-gray-800">{variant.focus}</div>
         </div>
       </div>
 
@@ -41,7 +42,7 @@ export const ExerciseInfo = ({ exercise }: ExerciseInfoProps) => {
         <h3 className="text-lg font-semibold text-gray-800 mb-3">
           Description
         </h3>
-        <p className="text-gray-700 leading-relaxed">{exercise.description}</p>
+        <p className="text-gray-700 leading-relaxed">{variant.description}</p>
       </div>
 
       {/* Primary Muscles */}
@@ -50,7 +51,7 @@ export const ExerciseInfo = ({ exercise }: ExerciseInfoProps) => {
           Primary Muscles
         </h3>
         <div className="flex flex-wrap gap-2">
-          {exercise.primaryMuscles.map(muscle => (
+          {variant.muscleGroups.map(muscle => (
             <span
               key={muscle}
               className="px-3 py-1 bg-indigo-100 text-indigo-700 rounded-full text-sm"

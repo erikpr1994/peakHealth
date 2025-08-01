@@ -1,6 +1,6 @@
 import { Search } from 'lucide-react';
 
-import { exerciseCategories } from '../../data/exerciseCategories';
+import { exerciseCategories } from '../../types';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';

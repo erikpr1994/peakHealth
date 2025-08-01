@@ -35,32 +35,24 @@ export const getCategoryColor = (category: string) => {
 export const getEffectiveExercise = (
   exercise: Exercise,
   selectedVariant?: ExerciseVariant
-): Exercise => {
-  if (!selectedVariant) return exercise;
+): ExerciseVariant => {
+  if (!selectedVariant) {
+    // Return the main variant if no variant is selected
+    const mainVariant = exercise.variants.find(
+      v => v.id === exercise.mainVariantId
+    );
+    if (!mainVariant) {
+      throw new Error(`No main variant found for exercise ${exercise.id}`);
+    }
+    return mainVariant;
+  }
 
-  return {
-    ...exercise,
-    name: selectedVariant.name,
-    description: selectedVariant.description,
-    muscleGroups: selectedVariant.muscleGroups || exercise.muscleGroups,
-    equipment: selectedVariant.equipment || exercise.equipment,
-    difficulty: selectedVariant.difficulty || exercise.difficulty,
-    instructions: selectedVariant.instructions || exercise.instructions,
-  };
+  return selectedVariant;
 };
 
 export const createVariantExercise = (
   exercise: Exercise,
   variant: ExerciseVariant
-): Exercise => {
-  return {
-    ...exercise,
-    id: variant.id,
-    name: variant.name,
-    description: variant.description,
-    muscleGroups: variant.muscleGroups || exercise.muscleGroups,
-    equipment: variant.equipment || exercise.equipment,
-    difficulty: variant.difficulty || exercise.difficulty,
-    instructions: variant.instructions || exercise.instructions,
-  };
+): ExerciseVariant => {
+  return variant;
 };

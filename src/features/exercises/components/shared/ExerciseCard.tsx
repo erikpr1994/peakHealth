@@ -27,30 +27,37 @@ export const ExerciseCard = ({
   className = '',
   size = 'md',
 }: ExerciseCardProps) => {
+  // Helper function to get the main variant
+  const getMainVariant = () => {
+    return exercise.variants.find(v => v.id === exercise.mainVariantId);
+  };
+
+  const mainVariant = getMainVariant();
+
   const handleFavoriteClick = (e: React.MouseEvent) => {
     e.stopPropagation();
     onFavoriteToggle?.();
   };
 
-  const sizeClasses = {
-    sm: 'w-64',
-    md: 'w-full max-w-md',
-    lg: 'w-full',
+  const imageHeights = {
+    sm: 'h-24',
+    md: 'h-32',
+    lg: 'h-40',
   };
 
   const iconSizes = {
-    sm: 'text-4xl',
-    md: 'text-6xl',
-    lg: 'text-6xl',
-  };
-
-  const imageHeights = {
-    sm: 'h-32',
-    md: 'h-40',
-    lg: 'h-48',
+    sm: 'text-2xl',
+    md: 'text-3xl',
+    lg: 'text-4xl',
   };
 
   const paddingSizes = {
+    sm: 'p-3',
+    md: 'p-4',
+    lg: 'p-4',
+  };
+
+  const sizeClasses = {
     sm: 'p-3',
     md: 'p-4',
     lg: 'p-4',
@@ -76,7 +83,9 @@ export const ExerciseCard = ({
         {/* Overlay Info */}
         <div className="absolute bottom-3 left-3 right-3">
           <div className="flex items-center justify-between">
-            <DifficultyBadge difficulty={exercise.difficulty} />
+            <DifficultyBadge
+              difficulty={mainVariant?.difficulty || 'Unknown'}
+            />
             <div className="flex items-center gap-2">
               {exercise.isPopular && (
                 <div className="bg-white/90 backdrop-blur-sm rounded-full px-2 py-1 flex items-center gap-1">
@@ -110,7 +119,8 @@ export const ExerciseCard = ({
             </h3>
             <div className="flex items-center text-sm text-gray-600 mb-3">
               <span className="truncate">
-                {exercise.muscleGroups.join(', ')}
+                {mainVariant?.muscleGroups.join(', ') ||
+                  'Multiple muscle groups'}
               </span>
             </div>
           </div>
