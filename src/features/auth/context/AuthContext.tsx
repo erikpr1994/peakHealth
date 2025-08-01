@@ -2,7 +2,13 @@
 
 import { User } from "@supabase/supabase-js";
 import { useRouter } from "next/navigation";
-import React, { createContext, useContext, ReactNode, useEffect } from "react";
+import React, {
+  createContext,
+  useContext,
+  ReactNode,
+  useEffect,
+  useState,
+} from "react";
 import useSWR from "swr";
 
 import { createClient } from "@/lib/supabase/client";
@@ -10,6 +16,7 @@ import { createClient } from "@/lib/supabase/client";
 interface AuthContextType {
   isAuthenticated: boolean;
   isLoading: boolean;
+  isAuthOperationLoading: boolean;
   login: (email?: string, password?: string) => Promise<void>;
   logout: () => void;
   signUp: (email?: string, password?: string, name?: string) => Promise<void>;
@@ -40,6 +47,7 @@ const userFetcher = async (url: string): Promise<User | null> => {
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const supabase = createClient();
   const router = useRouter();
+  const [isAuthOperationLoading, setIsAuthOperationLoading] = useState(false);
 
   // Use SWR to manage user state with custom fetcher
   const {
@@ -85,6 +93,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const login = async (email?: string, password?: string) => {
     if (!email || !password) return;
 
+    setIsAuthOperationLoading(true);
     try {
       const response = await fetch("/api/auth/login", {
         method: "POST",
@@ -105,12 +114,15 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     } catch (error) {
       console.error("Error logging in:", error);
       throw error;
+    } finally {
+      setIsAuthOperationLoading(false);
     }
   };
 
   const signUp = async (email?: string, password?: string, name?: string) => {
     if (!email || !password || !name) return;
 
+    setIsAuthOperationLoading(true);
     try {
       const response = await fetch("/api/auth/signup", {
         method: "POST",
@@ -126,24 +138,19 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         throw new Error(data.error || "Sign up failed");
       }
 
-      // Check if user is immediately signed in by checking for session
-      if (data.session) {
-        // User is immediately signed in - auth state change will handle redirect
-        await mutateUser(data.user);
-      } else if (data.user) {
-        // User created but email confirmation required
-        await mutateUser(null);
-      } else {
-        // No user data returned, clear cache to be safe
-        await mutateUser(null);
-      }
+      // Don't manually call mutateUser here - let the auth state change handler
+      // manage the user state to avoid race conditions and duplicate updates
+      // The onAuthStateChange listener will handle SIGNED_IN events automatically
     } catch (error) {
       console.error("Error signing up:", error);
       throw error;
+    } finally {
+      setIsAuthOperationLoading(false);
     }
   };
 
   const logout = async () => {
+    setIsAuthOperationLoading(true);
     try {
       const response = await fetch("/api/auth/logout", {
         method: "POST",
@@ -162,6 +169,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     } catch (error) {
       console.error("Error logging out:", error);
       throw error;
+    } finally {
+      setIsAuthOperationLoading(false);
     }
   };
 
@@ -170,6 +179,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       value={{
         isAuthenticated: !!user,
         isLoading,
+        isAuthOperationLoading,
         login,
         logout,
         signUp,

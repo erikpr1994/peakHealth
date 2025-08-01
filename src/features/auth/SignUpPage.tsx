@@ -17,13 +17,12 @@ import { Label } from "@/components/ui/label";
 import { useAuth } from "@/features/auth/context/AuthContext";
 
 export default function SignUpPage() {
-  const { signUp } = useAuth();
+  const { signUp, isAuthOperationLoading } = useAuth();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -34,16 +33,12 @@ export default function SignUpPage() {
       return;
     }
 
-    setIsLoading(true);
-
     try {
       await signUp(email, password, name);
     } catch (err: unknown) {
       const errorMessage =
         err instanceof Error ? err.message : "An unexpected error occurred.";
       setError(errorMessage);
-    } finally {
-      setIsLoading(false);
     }
   };
 
@@ -112,8 +107,12 @@ export default function SignUpPage() {
               />
             </div>
 
-            <Button type="submit" className="w-full" disabled={isLoading}>
-              {isLoading ? "Loading..." : "Sign Up"}
+            <Button
+              type="submit"
+              className="w-full"
+              disabled={isAuthOperationLoading}
+            >
+              {isAuthOperationLoading ? "Loading..." : "Sign Up"}
             </Button>
           </form>
 

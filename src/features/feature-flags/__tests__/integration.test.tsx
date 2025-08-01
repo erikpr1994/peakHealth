@@ -66,6 +66,7 @@ describe("Feature Flag System Integration", () => {
       user: { id: "test-user-id" },
       isAuthenticated: true,
       isLoading: false,
+      isAuthOperationLoading: false,
     });
   });
 
@@ -104,6 +105,7 @@ describe("Feature Flag System Integration", () => {
       user: null,
       isAuthenticated: false,
       isLoading: false,
+      isAuthOperationLoading: false,
     });
 
     render(

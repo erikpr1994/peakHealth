@@ -17,16 +17,14 @@ import { Label } from "@/components/ui/label";
 import { useAuth } from "@/features/auth/context/AuthContext";
 
 export default function LoginPage() {
-  const { login } = useAuth();
+  const { login, isAuthOperationLoading } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
-    setIsLoading(true);
 
     try {
       await login(email, password);
@@ -34,8 +32,6 @@ export default function LoginPage() {
       const errorMessage =
         err instanceof Error ? err.message : "An unexpected error occurred.";
       setError(errorMessage);
-    } finally {
-      setIsLoading(false);
     }
   };
 
@@ -82,8 +78,12 @@ export default function LoginPage() {
               />
             </div>
 
-            <Button type="submit" className="w-full" disabled={isLoading}>
-              {isLoading ? "Loading..." : "Sign In"}
+            <Button
+              type="submit"
+              className="w-full"
+              disabled={isAuthOperationLoading}
+            >
+              {isAuthOperationLoading ? "Loading..." : "Sign In"}
             </Button>
           </form>
 
