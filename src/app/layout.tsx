@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 
 import "./(app)/globals.css";
+import { SWRProvider } from "@/components/providers/SWRProvider";
 import { AuthProvider } from "@/features/auth/context/AuthContext";
 
 export const metadata: Metadata = {
@@ -16,7 +17,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <AuthProvider>{children}</AuthProvider>
+        <SWRProvider>
+          <AuthProvider>{children}</AuthProvider>
+        </SWRProvider>
       </body>
     </html>
   );
