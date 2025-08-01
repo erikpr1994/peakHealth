@@ -49,6 +49,7 @@ export const UserMenu = ({ user, onLogout }: UserMenuProps) => {
         <Button
           variant="ghost"
           className="flex items-center gap-2 px-2 py-1 h-auto"
+          data-testid="user-menu-button"
         >
           <Avatar className="w-8 h-8">
             <AvatarImage
@@ -100,6 +101,7 @@ export const UserMenu = ({ user, onLogout }: UserMenuProps) => {
             setUserDropdownOpen(false);
           }}
           className="flex items-center gap-2 text-red-600 focus:text-red-600"
+          data-testid="logout-button"
         >
           <LogOut className="w-4 h-4" />
           Log out

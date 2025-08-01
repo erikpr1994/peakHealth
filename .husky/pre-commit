@@ -3,8 +3,17 @@
 echo "🔍 Running lint-staged..."
 pnpm lint-staged
 
-echo "🧪 Running tests..."
+echo "🧪 Running unit and integration tests..."
 pnpm test
+
+echo "🌐 Running e2e tests..."
+pnpm test:e2e
+E2E_EXIT_CODE=$?
+
+if [ $E2E_EXIT_CODE -ne 0 ]; then
+  echo '❌ E2E tests failed'
+  exit $E2E_EXIT_CODE
+fi
 
 echo "🏗️  Running build..."
 pnpm build

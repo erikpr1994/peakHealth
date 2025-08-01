@@ -37,11 +37,13 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: error.message }, { status: 400 });
     }
 
-    console.log('Signup successful');
-    return NextResponse.json({
-      user: data.user,
-      session: data.session,
-    });
+    return NextResponse.json(
+      {
+        message: 'User created successfully',
+        user: data.user,
+      },
+      { status: 201 }
+    );
   } catch (error) {
     console.error('Signup error:', error);
     return NextResponse.json(
