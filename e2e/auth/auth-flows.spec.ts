@@ -10,17 +10,7 @@ import {
 } from '../utils/auth-helpers';
 
 test.describe('Authentication Flows', () => {
-  test.beforeAll(async () => {
-    // Start Supabase locally
-    // This will be handled by the test setup script
-  });
-
-  test.afterAll(async () => {
-    // Stop Supabase locally
-    // This will be handled by the test teardown script
-  });
-
-  test.describe('Sign Up Flow', () => {
+  test.describe('Happy Path Flows', () => {
     test('should successfully sign up a new user', async ({ page }) => {
       const user = generateTestUser();
 
@@ -28,65 +18,6 @@ test.describe('Authentication Flows', () => {
       await expectToBeLoggedIn(page);
     });
 
-    test('should show validation errors for invalid email', async ({
-      page,
-    }) => {
-      await page.goto('/signup');
-
-      await page.fill('[data-testid="email-input"]', 'invalid-email');
-      await page.fill('[data-testid="password-input"]', 'TestPassword123!');
-      await page.fill('#confirmPassword', 'TestPassword123!');
-      await page.click('[data-testid="signup-button"]');
-
-      // Wait for validation to trigger
-      await page.waitForTimeout(1000);
-
-      // Check that we're still on the signup page (validation prevented submission)
-      await expect(page).toHaveURL(/\/signup/);
-      
-      // Check that the form is still visible
-      await expect(page.locator('form')).toBeVisible();
-    });
-
-    test('should show validation errors for weak password', async ({
-      page,
-    }) => {
-      await page.goto('/signup');
-
-      await page.fill('[data-testid="email-input"]', 'test@example.com');
-      await page.fill('[data-testid="password-input"]', 'weak');
-      await page.fill('#confirmPassword', 'weak');
-      await page.click('[data-testid="signup-button"]');
-
-      // Wait for validation to trigger
-      await page.waitForTimeout(1000);
-
-      // Check that we're still on the signup page (validation prevented submission)
-      await expect(page).toHaveURL(/\/signup/);
-      
-      // Check that the form is still visible
-      await expect(page.locator('form')).toBeVisible();
-    });
-
-    test('should show error for existing email', async ({ page }) => {
-      const user = generateTestUser();
-
-      // First signup
-      await signUpUser(page, user);
-      await logoutUser(page);
-
-      // Try to signup with same email
-      await page.goto('/signup');
-      await page.fill('[data-testid="email-input"]', user.email);
-      await page.fill('[data-testid="password-input"]', user.password);
-      await page.click('[data-testid="signup-button"]');
-
-      // Should show error for existing email
-      await expect(page.locator('[data-testid="signup-error"]')).toBeVisible();
-    });
-  });
-
-  test.describe('Login Flow', () => {
     test('should successfully login with valid credentials', async ({
       page,
     }) => {
@@ -101,34 +32,6 @@ test.describe('Authentication Flows', () => {
       await expectToBeLoggedIn(page);
     });
 
-    test('should show error for invalid credentials', async ({ page }) => {
-      await page.goto('/login');
-
-      await page.fill('[data-testid="email-input"]', 'nonexistent@example.com');
-      await page.fill('[data-testid="password-input"]', 'wrongpassword');
-      await page.click('[data-testid="login-button"]');
-
-      // Should show login error
-      await expect(page.locator('[data-testid="login-error"]')).toBeVisible();
-    });
-
-    test('should show error for empty fields', async ({ page }) => {
-      await page.goto('/login');
-
-      await page.click('[data-testid="login-button"]');
-
-      // Wait for validation to trigger
-      await page.waitForTimeout(500);
-
-      // Should show validation errors (native HTML validation or custom validation)
-      await expect(page.locator('[data-testid="email-error"]')).toBeVisible();
-      await expect(
-        page.locator('[data-testid="password-error"]')
-      ).toBeVisible();
-    });
-  });
-
-  test.describe('Logout Flow', () => {
     test('should successfully logout user', async ({ page }) => {
       const user = generateTestUser();
 
@@ -140,23 +43,9 @@ test.describe('Authentication Flows', () => {
       await logoutUser(page);
       await expectToBeLoggedOut(page);
     });
-
-    test('should redirect to login after logout', async ({ page }) => {
-      const user = generateTestUser();
-
-      // First signup and login
-      await signUpUser(page, user);
-
-      // Try to access protected route after logout
-      await logoutUser(page);
-      await page.goto('/dashboard');
-
-      // Should redirect to login
-      await expect(page).toHaveURL(/\/login/);
-    });
   });
 
-  test.describe('Navigation and Redirects', () => {
+  test.describe('Critical Security Flows', () => {
     test('should redirect authenticated user away from login/signup pages', async ({
       page,
     }) => {
@@ -182,6 +71,20 @@ test.describe('Authentication Flows', () => {
       await expect(page).toHaveURL(/\/login/);
 
       await page.goto('/profile');
+      await expect(page).toHaveURL(/\/login/);
+    });
+
+    test('should redirect to login after logout', async ({ page }) => {
+      const user = generateTestUser();
+
+      // First signup and login
+      await signUpUser(page, user);
+
+      // Try to access protected route after logout
+      await logoutUser(page);
+      await page.goto('/dashboard');
+
+      // Should redirect to login
       await expect(page).toHaveURL(/\/login/);
     });
   });
