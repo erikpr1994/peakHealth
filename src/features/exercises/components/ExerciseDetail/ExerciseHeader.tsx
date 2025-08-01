@@ -1,25 +1,24 @@
 import { Heart, Star, Printer } from 'lucide-react';
 
-import { ExerciseData } from '../../types';
+import { Exercise, ExerciseVariant } from '../../types';
 
 import { Button } from '@/components/ui/button';
 
 interface ExerciseHeaderProps {
-  exercise: ExerciseData;
+  exercise: Exercise;
+  variant: ExerciseVariant;
 }
 
-export const ExerciseHeader = ({ exercise }: ExerciseHeaderProps) => {
+export const ExerciseHeader = ({ exercise, variant }: ExerciseHeaderProps) => {
   return (
     <div className="flex items-start justify-between mb-6">
       <div className="flex-1">
         <div className="flex items-center gap-3 mb-2">
           <div className="w-12 h-12 bg-indigo-600 rounded-md flex items-center justify-center">
-            <span className="text-white text-xl">🏋️</span>
+            <span className="text-white text-xl">{exercise.icon}</span>
           </div>
           <div>
-            <h1 className="text-2xl font-bold text-gray-800">
-              {exercise.name}
-            </h1>
+            <h1 className="text-2xl font-bold text-gray-800">{variant.name}</h1>
             <div className="flex items-center gap-4 text-sm text-gray-600 mt-1">
               {exercise.isPopular && (
                 <div className="flex items-center gap-1">
@@ -27,12 +26,12 @@ export const ExerciseHeader = ({ exercise }: ExerciseHeaderProps) => {
                   <span>Popular</span>
                 </div>
               )}
-              <div className="flex items-center gap-1">
-                <Star className="w-4 h-4 text-yellow-500 fill-yellow-500" />
-                <span>
-                  {exercise.rating} ({exercise.totalRatings} ratings)
-                </span>
-              </div>
+              {exercise.rating && (
+                <div className="flex items-center gap-1">
+                  <Star className="w-4 h-4 text-yellow-500 fill-yellow-500" />
+                  <span>{exercise.rating}</span>
+                </div>
+              )}
             </div>
           </div>
         </div>

@@ -1,11 +1,12 @@
 import { Zap, Award, Users, Info } from 'lucide-react';
 
+import { Difficulty } from '../../types';
 import { getDifficultyColorWithBorder } from '../../utils/exerciseUtils';
 
 import { Badge } from '@/components/ui/badge';
 
 interface DifficultyBadgeProps {
-  difficulty: string;
+  difficulty: Difficulty;
   showIcon?: boolean;
   className?: string;
 }
@@ -15,7 +16,7 @@ export const DifficultyBadge = ({
   showIcon = true,
   className = '',
 }: DifficultyBadgeProps) => {
-  const getDifficultyIcon = (difficulty: string) => {
+  const getDifficultyIcon = (difficulty: Difficulty) => {
     switch (difficulty) {
       case 'Beginner':
         return <Zap className="w-3 h-3" />;
@@ -23,6 +24,8 @@ export const DifficultyBadge = ({
         return <Award className="w-3 h-3" />;
       case 'Advanced':
         return <Users className="w-3 h-3" />;
+      case 'Unknown':
+        return <Info className="w-3 h-3" />;
       default:
         return <Info className="w-3 h-3" />;
     }

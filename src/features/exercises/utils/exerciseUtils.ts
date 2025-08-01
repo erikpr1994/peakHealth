@@ -1,15 +1,16 @@
-import { Exercise, ExerciseVariant } from '../types';
+import { Exercise, ExerciseVariant, Difficulty } from '../types';
 
-export const getDifficultyColor = (difficulty: string) => {
+export const getDifficultyColor = (difficulty: Difficulty) => {
   const colors = {
     Beginner: 'bg-green-100 text-green-700',
     Intermediate: 'bg-yellow-100 text-yellow-700',
     Advanced: 'bg-red-100 text-red-700',
+    Unknown: 'bg-gray-100 text-gray-700',
   };
-  return colors[difficulty as keyof typeof colors] || colors.Intermediate;
+  return colors[difficulty] || colors.Unknown;
 };
 
-export const getDifficultyColorWithBorder = (difficulty: string) => {
+export const getDifficultyColorWithBorder = (difficulty: Difficulty) => {
   switch (difficulty) {
     case 'Beginner':
       return 'bg-emerald-100 text-emerald-700 border-emerald-200';
@@ -17,6 +18,8 @@ export const getDifficultyColorWithBorder = (difficulty: string) => {
       return 'bg-amber-100 text-amber-700 border-amber-200';
     case 'Advanced':
       return 'bg-red-100 text-red-700 border-red-200';
+    case 'Unknown':
+      return 'bg-gray-100 text-gray-700 border-gray-200';
     default:
       return 'bg-gray-100 text-gray-700 border-gray-200';
   }
@@ -35,32 +38,24 @@ export const getCategoryColor = (category: string) => {
 export const getEffectiveExercise = (
   exercise: Exercise,
   selectedVariant?: ExerciseVariant
-): Exercise => {
-  if (!selectedVariant) return exercise;
+): ExerciseVariant => {
+  if (!selectedVariant) {
+    // Return the main variant if no variant is selected
+    const mainVariant = exercise.variants.find(
+      v => v.id === exercise.mainVariantId
+    );
+    if (!mainVariant) {
+      throw new Error(`No main variant found for exercise ${exercise.id}`);
+    }
+    return mainVariant;
+  }
 
-  return {
-    ...exercise,
-    name: selectedVariant.name,
-    description: selectedVariant.description,
-    muscleGroups: selectedVariant.muscleGroups || exercise.muscleGroups,
-    equipment: selectedVariant.equipment || exercise.equipment,
-    difficulty: selectedVariant.difficulty || exercise.difficulty,
-    instructions: selectedVariant.instructions || exercise.instructions,
-  };
+  return selectedVariant;
 };
 
 export const createVariantExercise = (
   exercise: Exercise,
   variant: ExerciseVariant
-): Exercise => {
-  return {
-    ...exercise,
-    id: variant.id,
-    name: variant.name,
-    description: variant.description,
-    muscleGroups: variant.muscleGroups || exercise.muscleGroups,
-    equipment: variant.equipment || exercise.equipment,
-    difficulty: variant.difficulty || exercise.difficulty,
-    instructions: variant.instructions || exercise.instructions,
-  };
+): ExerciseVariant => {
+  return variant;
 };

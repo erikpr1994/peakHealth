@@ -1,7 +1,7 @@
-import { Star, Info, ChevronRight } from 'lucide-react';
+import { ChevronRight, Info, Star } from 'lucide-react';
 
 import { useExerciseFilters } from '../../hooks/useExerciseFilters';
-import { Exercise } from '../../types';
+import { Exercise, DIFFICULTY } from '../../types';
 import { filterExercises } from '../../utils/filterUtils';
 
 import { SearchAndFilters } from './SearchAndFilters';
@@ -29,6 +29,12 @@ export const ExerciseLibrary = ({
 }: ExerciseLibraryProps) => {
   const { filters } = useExerciseFilters();
 
+  // Helper function to get the main variant
+  const getMainVariant = (exercise: Exercise) => {
+    return exercise.variants.find(v => v.id === exercise.mainVariantId);
+  };
+
+  // Use advanced filtering with all filters
   const filteredExercises = filterExercises(
     exercises,
     searchTerm,
@@ -73,7 +79,8 @@ export const ExerciseLibrary = ({
                         <div className="flex items-center gap-1 bg-white/90 backdrop-blur-sm rounded-full px-2 py-1">
                           <Info className="w-3 h-3 text-gray-500" />
                           <span className="text-xs text-gray-700">
-                            {exercise.difficulty}
+                            {getMainVariant(exercise)?.difficulty ||
+                              DIFFICULTY.UNKNOWN}
                           </span>
                         </div>
                         <div className="flex items-center gap-2">
@@ -112,26 +119,34 @@ export const ExerciseLibrary = ({
 
                     <p className="text-sm text-gray-600 mb-3 line-clamp-2">
                       {exercise.description ||
-                        `A ${exercise.category.toLowerCase()} exercise targeting ${exercise.muscleGroups
-                          .join(', ')
-                          .toLowerCase()}.`}
+                        `A ${exercise.category.toLowerCase()} exercise targeting ${getMainVariant(exercise)?.muscleGroups.join(', ').toLowerCase() || 'multiple muscle groups'}.`}
                     </p>
 
                     <div className="flex items-center justify-between">
                       <div className="flex flex-wrap gap-1">
-                        {exercise.muscleGroups.slice(0, 2).map(muscle => (
-                          <span
-                            key={muscle}
-                            className="inline-block px-2 py-1 text-xs bg-blue-50 text-blue-700 rounded-md"
-                          >
-                            {muscle}
-                          </span>
-                        ))}
-                        {exercise.muscleGroups.length > 2 && (
-                          <span className="inline-block px-2 py-1 text-xs bg-gray-100 text-gray-600 rounded-md">
-                            +{exercise.muscleGroups.length - 2}
-                          </span>
-                        )}
+                        {(() => {
+                          const mainVariant = getMainVariant(exercise);
+                          return (
+                            <>
+                              {mainVariant?.muscleGroups
+                                .slice(0, 2)
+                                .map(muscle => (
+                                  <span
+                                    key={muscle}
+                                    className="inline-block px-2 py-1 text-xs bg-blue-50 text-blue-700 rounded-md"
+                                  >
+                                    {muscle}
+                                  </span>
+                                ))}
+                              {mainVariant?.muscleGroups.length &&
+                                mainVariant.muscleGroups.length > 2 && (
+                                  <span className="inline-block px-2 py-1 text-xs bg-gray-100 text-gray-600 rounded-md">
+                                    +{mainVariant.muscleGroups.length - 2}
+                                  </span>
+                                )}
+                            </>
+                          );
+                        })()}
                       </div>
                       {exercise.variants && exercise.variants.length > 0 && (
                         <span className="text-xs text-gray-500">
