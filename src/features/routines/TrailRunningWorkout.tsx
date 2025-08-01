@@ -10,38 +10,38 @@ import {
   Pause,
   Plus,
   X,
-} from "lucide-react";
-import { useState, useEffect } from "react";
+} from 'lucide-react';
+import { useState, useEffect } from 'react';
 
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Switch } from "@/components/ui/switch";
+} from '@/components/ui/select';
+import { Switch } from '@/components/ui/switch';
 
 interface TrailRunningWorkoutProps {
   onSave: (workoutData: TrailRunningWorkoutData) => void;
   onCancel: () => void;
   initialData?: TrailRunningWorkoutData;
-  mode: "create" | "edit";
+  mode: 'create' | 'edit';
 }
 
 export type IntervalType =
-  | "run"
-  | "uphill"
-  | "downhill"
-  | "sprint"
-  | "recovery"
-  | "rest"
-  | "walk";
+  | 'run'
+  | 'uphill'
+  | 'downhill'
+  | 'sprint'
+  | 'recovery'
+  | 'rest'
+  | 'walk';
 
 export interface TrailRunningInterval {
   id: string;
@@ -57,8 +57,8 @@ export interface TrailRunningWorkoutData {
   id: string;
   name: string;
   description: string;
-  type: "trail-running";
-  difficulty: "beginner" | "intermediate" | "advanced" | "expert";
+  type: 'trail-running';
+  difficulty: 'beginner' | 'intermediate' | 'advanced' | 'expert';
   estimatedDuration: number; // calculated from sections
   targetDistance: number; // calculated from sections
   elevationGain: number; // calculated from sections
@@ -66,7 +66,7 @@ export interface TrailRunningWorkoutData {
 }
 
 export interface IntensityTarget {
-  type: "heart-rate" | "speed" | "power" | "cadence" | "rpe";
+  type: 'heart-rate' | 'speed' | 'power' | 'cadence' | 'rpe';
   value?: number; // For fixed values (cadence)
   minValue?: number | string; // For ranges (heart rate, power zones) or pace strings (speed)
   maxValue?: number | string; // For ranges (heart rate, power zones) or pace strings (speed)
@@ -78,18 +78,18 @@ export interface TrailRunningSection {
   id: string;
   name: string;
   type:
-    | "warm-up"
-    | "cool-down"
-    | "run"
-    | "walk"
-    | "uphill-repeat"
-    | "downhill-repeat"
-    | "recovery"
-    | "rest"
-    | "caco"
-    | "fartlek"
-    | "series"
-    | "w-series";
+    | 'warm-up'
+    | 'cool-down'
+    | 'run'
+    | 'walk'
+    | 'uphill-repeat'
+    | 'downhill-repeat'
+    | 'recovery'
+    | 'rest'
+    | 'caco'
+    | 'fartlek'
+    | 'series'
+    | 'w-series';
   distance?: number; // in km
   duration?: number; // in minutes
   intensityTarget?: IntensityTarget; // Flexible intensity target configuration
@@ -101,124 +101,124 @@ export interface TrailRunningSection {
 
 const difficultyLevels = [
   {
-    value: "beginner",
-    label: "Beginner",
-    color: "bg-green-100 text-green-800",
+    value: 'beginner',
+    label: 'Beginner',
+    color: 'bg-green-100 text-green-800',
   },
   {
-    value: "intermediate",
-    label: "Intermediate",
-    color: "bg-yellow-100 text-yellow-800",
+    value: 'intermediate',
+    label: 'Intermediate',
+    color: 'bg-yellow-100 text-yellow-800',
   },
   {
-    value: "advanced",
-    label: "Advanced",
-    color: "bg-orange-100 text-orange-800",
+    value: 'advanced',
+    label: 'Advanced',
+    color: 'bg-orange-100 text-orange-800',
   },
-  { value: "expert", label: "Expert", color: "bg-red-100 text-red-800" },
+  { value: 'expert', label: 'Expert', color: 'bg-red-100 text-red-800' },
 ];
 
 // Categorized section types for better organization
 const sectionCategories = {
   basic: [
     {
-      value: "warm-up",
-      label: "Warm-up",
+      value: 'warm-up',
+      label: 'Warm-up',
       icon: Zap,
-      color: "text-blue-600",
-      description: "Easy preparation phase",
+      color: 'text-blue-600',
+      description: 'Easy preparation phase',
       autoRepeat: false,
     },
     {
-      value: "cool-down",
-      label: "Cool-down",
+      value: 'cool-down',
+      label: 'Cool-down',
       icon: Zap,
-      color: "text-blue-600",
-      description: "Easy recovery phase",
+      color: 'text-blue-600',
+      description: 'Easy recovery phase',
       autoRepeat: false,
     },
     {
-      value: "run",
-      label: "Run",
+      value: 'run',
+      label: 'Run',
       icon: TrendingUp,
-      color: "text-green-600",
-      description: "Steady running pace",
+      color: 'text-green-600',
+      description: 'Steady running pace',
       autoRepeat: false,
     },
     {
-      value: "walk",
-      label: "Walk",
+      value: 'walk',
+      label: 'Walk',
       icon: Play,
-      color: "text-gray-500",
-      description: "Walking pace section",
+      color: 'text-gray-500',
+      description: 'Walking pace section',
       autoRepeat: false,
     },
   ],
   rest: [
     {
-      value: "rest",
-      label: "Rest",
+      value: 'rest',
+      label: 'Rest',
       icon: Pause,
-      color: "text-gray-600",
-      description: "Complete rest (intensity 0)",
+      color: 'text-gray-600',
+      description: 'Complete rest (intensity 0)',
       autoRepeat: false,
     },
     {
-      value: "recovery",
-      label: "Recovery",
+      value: 'recovery',
+      label: 'Recovery',
       icon: Play,
-      color: "text-green-400",
-      description: "Active recovery (intensity 0-1)",
+      color: 'text-green-400',
+      description: 'Active recovery (intensity 0-1)',
       autoRepeat: false,
     },
   ],
   structured: [
     {
-      value: "uphill-repeat",
-      label: "Uphill Repeat",
+      value: 'uphill-repeat',
+      label: 'Uphill Repeat',
       icon: Mountain,
-      color: "text-orange-600",
-      description: "Uphill intervals",
+      color: 'text-orange-600',
+      description: 'Uphill intervals',
       autoRepeat: true,
     },
     {
-      value: "downhill-repeat",
-      label: "Downhill Repeat",
+      value: 'downhill-repeat',
+      label: 'Downhill Repeat',
       icon: TrendingDown,
-      color: "text-purple-600",
-      description: "Downhill intervals",
+      color: 'text-purple-600',
+      description: 'Downhill intervals',
       autoRepeat: true,
     },
     {
-      value: "w-series",
-      label: "W Series",
+      value: 'w-series',
+      label: 'W Series',
       icon: Zap,
-      color: "text-red-600",
-      description: "Paired uphill/downhill intervals",
+      color: 'text-red-600',
+      description: 'Paired uphill/downhill intervals',
       autoRepeat: true,
     },
     {
-      value: "caco",
-      label: "CACO (Run/Walk)",
+      value: 'caco',
+      label: 'CACO (Run/Walk)',
       icon: TrendingUp,
-      color: "text-blue-600",
-      description: "Alternating run/walk",
+      color: 'text-blue-600',
+      description: 'Alternating run/walk',
       autoRepeat: true,
     },
     {
-      value: "fartlek",
-      label: "Fartlek",
+      value: 'fartlek',
+      label: 'Fartlek',
       icon: Navigation,
-      color: "text-indigo-600",
-      description: "Playful speed variations",
+      color: 'text-indigo-600',
+      description: 'Playful speed variations',
       autoRepeat: true,
     },
     {
-      value: "series",
-      label: "Series",
+      value: 'series',
+      label: 'Series',
       icon: Repeat,
-      color: "text-orange-500",
-      description: "Structured interval series",
+      color: 'text-orange-500',
+      description: 'Structured interval series',
       autoRepeat: true,
     },
   ],
@@ -227,53 +227,53 @@ const sectionCategories = {
 // Basic interval types that can be used within sections
 const intervalTypes = [
   {
-    value: "run",
-    label: "Run",
+    value: 'run',
+    label: 'Run',
     icon: Zap,
-    color: "text-green-600",
-    description: "General running effort",
+    color: 'text-green-600',
+    description: 'General running effort',
   },
   {
-    value: "uphill",
-    label: "Uphill",
+    value: 'uphill',
+    label: 'Uphill',
     icon: Mountain,
-    color: "text-orange-600",
-    description: "Uphill climbing effort",
+    color: 'text-orange-600',
+    description: 'Uphill climbing effort',
   },
   {
-    value: "downhill",
-    label: "Downhill",
+    value: 'downhill',
+    label: 'Downhill',
     icon: TrendingDown,
-    color: "text-purple-600",
-    description: "Downhill running effort",
+    color: 'text-purple-600',
+    description: 'Downhill running effort',
   },
   {
-    value: "sprint",
-    label: "Sprint",
+    value: 'sprint',
+    label: 'Sprint',
     icon: TrendingUp,
-    color: "text-red-600",
-    description: "High intensity burst",
+    color: 'text-red-600',
+    description: 'High intensity burst',
   },
   {
-    value: "recovery",
-    label: "Recovery",
+    value: 'recovery',
+    label: 'Recovery',
     icon: Play,
-    color: "text-green-400",
-    description: "Active recovery",
+    color: 'text-green-400',
+    description: 'Active recovery',
   },
   {
-    value: "rest",
-    label: "Rest",
+    value: 'rest',
+    label: 'Rest',
     icon: Pause,
-    color: "text-gray-600",
-    description: "Complete rest",
+    color: 'text-gray-600',
+    description: 'Complete rest',
   },
   {
-    value: "walk",
-    label: "Walk",
+    value: 'walk',
+    label: 'Walk',
     icon: Play,
-    color: "text-gray-500",
-    description: "Walking pace",
+    color: 'text-gray-500',
+    description: 'Walking pace',
   },
 ];
 
@@ -286,27 +286,27 @@ const sectionTypes = [
 
 // Helper functions for intensity targets (moved here for global access)
 const formatIntensityTargetDisplay = (target?: IntensityTarget) => {
-  if (!target) return "Not set";
+  if (!target) return 'Not set';
 
   // Zone descriptions for heart rate and power zones (0-5)
   const getZoneDisplayDescription = (zoneValue: number) => {
     const descriptions = [
-      "Active Recovery",
-      "Endurance/Base",
-      "Aerobic",
-      "Tempo/Lactate Threshold",
-      "VO2 Max/Lactate",
-      "Anaerobic Capacity",
+      'Active Recovery',
+      'Endurance/Base',
+      'Aerobic',
+      'Tempo/Lactate Threshold',
+      'VO2 Max/Lactate',
+      'Anaerobic Capacity',
     ];
-    return descriptions[zoneValue] || "Unknown";
+    return descriptions[zoneValue] || 'Unknown';
   };
 
   switch (target.type) {
-    case "heart-rate":
+    case 'heart-rate':
       return `HR Zone ${target.value} - ${getZoneDisplayDescription(
         target.value || 3
       )}`;
-    case "speed":
+    case 'speed':
       if (target.minValue && target.maxValue) {
         return `${target.minValue}-${target.maxValue} ${target.unit}`;
       } else if (target.minValue) {
@@ -314,171 +314,174 @@ const formatIntensityTargetDisplay = (target?: IntensityTarget) => {
       } else if (target.maxValue) {
         return `<${target.maxValue} ${target.unit}`;
       }
-      return `${target.value || "Not set"} ${target.unit}`;
-    case "power":
+      return `${target.value || 'Not set'} ${target.unit}`;
+    case 'power':
       return `Power Zone ${target.value} - ${getZoneDisplayDescription(
         target.value || 3
       )}`;
-    case "cadence":
+    case 'cadence':
       return `${target.value} ${target.unit}`;
-    case "rpe":
+    case 'rpe':
       return `RPE ${target.value}/10`;
     default:
-      return "Unknown";
+      return 'Unknown';
   }
 };
 
 const getIntensityTargetColor = (target?: IntensityTarget) => {
-  if (!target) return "bg-gray-200 text-gray-600";
+  if (!target) return 'bg-gray-200 text-gray-600';
 
   switch (target.type) {
-    case "heart-rate":
+    case 'heart-rate': {
       // Color based on zone intensity (0-5)
       const hrValue = target.value || 3;
-      if (hrValue === 0) return "bg-gray-200 text-gray-600";
-      if (hrValue <= 1) return "bg-green-200 text-green-800";
-      if (hrValue <= 2) return "bg-blue-200 text-blue-800";
-      if (hrValue <= 3) return "bg-yellow-200 text-yellow-800";
-      if (hrValue <= 4) return "bg-orange-200 text-orange-800";
-      return "bg-red-200 text-red-800";
-    case "speed":
-      return "bg-blue-200 text-blue-800";
-    case "power":
+      if (hrValue === 0) return 'bg-gray-200 text-gray-600';
+      if (hrValue <= 1) return 'bg-green-200 text-green-800';
+      if (hrValue <= 2) return 'bg-blue-200 text-blue-800';
+      if (hrValue <= 3) return 'bg-yellow-200 text-yellow-800';
+      if (hrValue <= 4) return 'bg-orange-200 text-orange-800';
+      return 'bg-red-200 text-red-800';
+    }
+    case 'speed':
+      return 'bg-blue-200 text-blue-800';
+    case 'power': {
       // Color based on zone intensity (0-5)
       const powerValue = target.value || 3;
-      if (powerValue === 0) return "bg-gray-200 text-gray-600";
-      if (powerValue <= 1) return "bg-green-200 text-green-800";
-      if (powerValue <= 2) return "bg-blue-200 text-blue-800";
-      if (powerValue <= 3) return "bg-yellow-200 text-yellow-800";
-      if (powerValue <= 4) return "bg-orange-200 text-orange-800";
-      return "bg-red-200 text-red-800";
-    case "cadence":
-      return "bg-green-200 text-green-800";
-    case "rpe":
+      if (powerValue === 0) return 'bg-gray-200 text-gray-600';
+      if (powerValue <= 1) return 'bg-green-200 text-green-800';
+      if (powerValue <= 2) return 'bg-blue-200 text-blue-800';
+      if (powerValue <= 3) return 'bg-yellow-200 text-yellow-800';
+      if (powerValue <= 4) return 'bg-orange-200 text-orange-800';
+      return 'bg-red-200 text-red-800';
+    }
+    case 'cadence':
+      return 'bg-green-200 text-green-800';
+    case 'rpe': {
       const value = target.value || 5;
-      if (value <= 2) return "bg-gray-200 text-gray-600";
-      if (value <= 4) return "bg-green-200 text-green-800";
-      if (value <= 6) return "bg-yellow-200 text-yellow-800";
-      if (value <= 8) return "bg-orange-200 text-orange-800";
-      return "bg-red-200 text-red-800";
+      if (value <= 2) return 'bg-gray-200 text-gray-600';
+      if (value <= 4) return 'bg-green-200 text-green-800';
+      if (value <= 6) return 'bg-yellow-200 text-yellow-800';
+      if (value <= 8) return 'bg-orange-200 text-orange-800';
+      return 'bg-red-200 text-red-800';
+    }
     default:
-      return "bg-gray-200 text-gray-600";
+      return 'bg-gray-200 text-gray-600';
   }
 };
 
 const getDefaultIntensityTarget = (type: string): IntensityTarget => {
   switch (type) {
     // Section types
-    case "warm-up":
-      return { type: "heart-rate", value: 1, unit: "zone" }; // Zone 1 - Endurance/Base
-    case "cool-down":
-      return { type: "heart-rate", value: 0, unit: "zone" }; // Zone 0 - Active Recovery
-    case "run":
-      return { type: "heart-rate", value: 3, unit: "zone" }; // Zone 3 - Tempo
-    case "walk":
-      return { type: "heart-rate", value: 1, unit: "zone" }; // Zone 1 - Light walking effort
-    case "uphill-repeat":
-      return { type: "power", value: 4, unit: "zone" }; // Zone 4 - VO2 Max/Lactate
-    case "downhill-repeat":
-      return { type: "heart-rate", value: 3, unit: "zone" }; // Zone 3 - Controlled downhill effort
-    case "w-series":
-      return { type: "power", value: 4, unit: "zone" }; // Zone 4 - VO2 Max/Lactate for matched uphill/downhill efforts
-    case "fartlek":
-      return { type: "heart-rate", value: 3, unit: "zone" }; // Zone 3 - Tempo/Lactate Threshold
-    case "series":
-      return { type: "power", value: 5, unit: "zone" }; // Zone 5 - Anaerobic Capacity
-    case "caco":
-      return { type: "rpe", value: 4, unit: "RPE" }; // Moderate RPE for run/walk
+    case 'warm-up':
+      return { type: 'heart-rate', value: 1, unit: 'zone' }; // Zone 1 - Endurance/Base
+    case 'cool-down':
+      return { type: 'heart-rate', value: 0, unit: 'zone' }; // Zone 0 - Active Recovery
+    case 'run':
+      return { type: 'heart-rate', value: 3, unit: 'zone' }; // Zone 3 - Tempo
+    case 'walk':
+      return { type: 'heart-rate', value: 1, unit: 'zone' }; // Zone 1 - Light walking effort
+    case 'uphill-repeat':
+      return { type: 'power', value: 4, unit: 'zone' }; // Zone 4 - VO2 Max/Lactate
+    case 'downhill-repeat':
+      return { type: 'heart-rate', value: 3, unit: 'zone' }; // Zone 3 - Controlled downhill effort
+    case 'w-series':
+      return { type: 'power', value: 4, unit: 'zone' }; // Zone 4 - VO2 Max/Lactate for matched uphill/downhill efforts
+    case 'fartlek':
+      return { type: 'heart-rate', value: 3, unit: 'zone' }; // Zone 3 - Tempo/Lactate Threshold
+    case 'series':
+      return { type: 'power', value: 5, unit: 'zone' }; // Zone 5 - Anaerobic Capacity
+    case 'caco':
+      return { type: 'rpe', value: 4, unit: 'RPE' }; // Moderate RPE for run/walk
 
     // Interval types
-    case "uphill":
-      return { type: "power", value: 4, unit: "zone" }; // Zone 4 - VO2 Max/Lactate
-    case "downhill":
-      return { type: "heart-rate", value: 3, unit: "zone" }; // Zone 3 - Controlled effort
-    case "sprint":
-      return { type: "power", value: 5, unit: "zone" }; // Zone 5 - Anaerobic Capacity
-    case "recovery":
-      return { type: "heart-rate", value: 1, unit: "zone" }; // Zone 1 - Active Recovery
-    case "rest":
-      return { type: "rpe", value: 1, unit: "RPE" }; // Very light effort
+    case 'uphill':
+      return { type: 'power', value: 4, unit: 'zone' }; // Zone 4 - VO2 Max/Lactate
+    case 'downhill':
+      return { type: 'heart-rate', value: 3, unit: 'zone' }; // Zone 3 - Controlled effort
+    case 'sprint':
+      return { type: 'power', value: 5, unit: 'zone' }; // Zone 5 - Anaerobic Capacity
+    case 'recovery':
+      return { type: 'heart-rate', value: 1, unit: 'zone' }; // Zone 1 - Active Recovery
+    case 'rest':
+      return { type: 'rpe', value: 1, unit: 'RPE' }; // Very light effort
     default:
-      return { type: "rpe", value: 5, unit: "RPE" };
+      return { type: 'rpe', value: 5, unit: 'RPE' };
   }
 };
 
 // Intensity Target Configuration Component
-function IntensityTargetConfiguration({
+const IntensityTargetConfiguration = ({
   target,
   onChange,
 }: {
   target?: IntensityTarget;
   onChange: (target: IntensityTarget) => void;
-}) {
+}) => {
   const intensityTargetTypes = [
     {
-      value: "heart-rate",
-      label: "Heart Rate",
-      unit: "bpm",
-      icon: "💓",
-      description: "Target heart rate zone",
+      value: 'heart-rate',
+      label: 'Heart Rate',
+      unit: 'bpm',
+      icon: '💓',
+      description: 'Target heart rate zone',
     },
     {
-      value: "speed",
-      label: "Speed",
-      unit: "min/km",
-      icon: "🏃",
-      description: "Target pace range",
+      value: 'speed',
+      label: 'Speed',
+      unit: 'min/km',
+      icon: '🏃',
+      description: 'Target pace range',
     },
     {
-      value: "power",
-      label: "Power Zone",
-      unit: "zone",
-      icon: "⚡",
-      description: "Structured power zones",
+      value: 'power',
+      label: 'Power Zone',
+      unit: 'zone',
+      icon: '⚡',
+      description: 'Structured power zones',
     },
     {
-      value: "cadence",
-      label: "Cadence",
-      unit: "rpm",
-      icon: "🔄",
-      description: "Steps per minute",
+      value: 'cadence',
+      label: 'Cadence',
+      unit: 'rpm',
+      icon: '🔄',
+      description: 'Steps per minute',
     },
     {
-      value: "rpe",
-      label: "Perceived Exertion",
-      unit: "RPE",
-      icon: "🎯",
-      description: "Rate of perceived exertion (1-10)",
+      value: 'rpe',
+      label: 'Perceived Exertion',
+      unit: 'RPE',
+      icon: '🎯',
+      description: 'Rate of perceived exertion (1-10)',
     },
   ];
 
-  const currentTarget = target || { type: "rpe", value: 5, unit: "RPE" };
+  const currentTarget = target || { type: 'rpe', value: 5, unit: 'RPE' };
 
   const handleTargetTypeChange = (newType: string) => {
     const targetType = intensityTargetTypes.find(t => t.value === newType);
     if (!targetType) return;
 
     const newTarget: IntensityTarget = {
-      type: newType as IntensityTarget["type"],
+      type: newType as IntensityTarget['type'],
       unit: targetType.unit,
     };
 
     // Set appropriate default values based on type
     switch (newType) {
-      case "heart-rate":
+      case 'heart-rate':
         newTarget.value = 3; // Zone 3 (Tempo)
         break;
-      case "speed":
-        newTarget.minValue = "5:00"; // 5:00 min/km
-        newTarget.maxValue = "5:59"; // 5:59 min/km
+      case 'speed':
+        newTarget.minValue = '5:00'; // 5:00 min/km
+        newTarget.maxValue = '5:59'; // 5:59 min/km
         break;
-      case "power":
+      case 'power':
         newTarget.value = 3; // Zone 3 (Tempo)
         break;
-      case "cadence":
+      case 'cadence':
         newTarget.value = 180;
         break;
-      case "rpe":
+      case 'rpe':
         newTarget.value = 5;
         break;
     }
@@ -489,40 +492,40 @@ function IntensityTargetConfiguration({
   // Zone descriptions for heart rate and power zones (0-5)
   const getZoneDescription = (zone: number) => {
     const descriptions = [
-      "Active Recovery",
-      "Endurance/Base",
-      "Aerobic",
-      "Tempo/Lactate Threshold",
-      "VO2 Max/Lactate",
-      "Anaerobic Capacity",
+      'Active Recovery',
+      'Endurance/Base',
+      'Aerobic',
+      'Tempo/Lactate Threshold',
+      'VO2 Max/Lactate',
+      'Anaerobic Capacity',
     ];
-    return descriptions[zone] || "Unknown";
+    return descriptions[zone] || 'Unknown';
   };
 
   // RPE descriptions for 1-10 scale
   const getRPEDescription = (level: number) => {
     const descriptions = [
-      "", // No level 0 for RPE
-      "Very Easy - Minimal effort",
-      "Easy - Light effort",
-      "Moderate - Some effort",
-      "Somewhat Hard - Noticeable effort",
-      "Hard - Strong effort",
-      "Harder - Very strong effort",
-      "Very Hard - Very strong effort",
-      "Very, Very Hard - Maximal effort",
-      "Near Maximal - Almost all-out",
-      "Maximal - All-out effort",
+      '', // No level 0 for RPE
+      'Very Easy - Minimal effort',
+      'Easy - Light effort',
+      'Moderate - Some effort',
+      'Somewhat Hard - Noticeable effort',
+      'Hard - Strong effort',
+      'Harder - Very strong effort',
+      'Very Hard - Very strong effort',
+      'Very, Very Hard - Maximal effort',
+      'Near Maximal - Almost all-out',
+      'Maximal - All-out effort',
     ];
-    return descriptions[level] || "Unknown";
+    return descriptions[level] || 'Unknown';
   };
 
   const renderTargetInputs = () => {
     switch (currentTarget.type) {
-      case "heart-rate":
+      case 'heart-rate':
         return (
           <Select
-            value={currentTarget.value?.toString() || "3"}
+            value={currentTarget.value?.toString() || '3'}
             onValueChange={value =>
               onChange({ ...currentTarget, value: parseInt(value) })
             }
@@ -544,10 +547,10 @@ function IntensityTargetConfiguration({
             </SelectContent>
           </Select>
         );
-      case "power":
+      case 'power':
         return (
           <Select
-            value={currentTarget.value?.toString() || "3"}
+            value={currentTarget.value?.toString() || '3'}
             onValueChange={value =>
               onChange({ ...currentTarget, value: parseInt(value) })
             }
@@ -569,7 +572,7 @@ function IntensityTargetConfiguration({
             </SelectContent>
           </Select>
         );
-      case "speed":
+      case 'speed':
         return (
           <div className="space-y-3">
             <div className="grid grid-cols-2 gap-2">
@@ -579,12 +582,12 @@ function IntensityTargetConfiguration({
                   <Input
                     type="text"
                     placeholder="5:00"
-                    value={currentTarget.minValue || ""}
+                    value={currentTarget.minValue || ''}
                     onChange={e => {
                       const value = e.target.value;
                       // Allow partial input while typing: digits, digits with colon, or complete MM:SS
                       if (
-                        value === "" ||
+                        value === '' ||
                         /^(\d{1,2}(:[0-5]?\d?)?)?$/.test(value)
                       ) {
                         onChange({
@@ -609,7 +612,7 @@ function IntensityTargetConfiguration({
                           // Single digit seconds, pad with 0
                           const formattedValue = value.replace(
                             /(\d{1,2}):(\d)$/,
-                            "$1:0$2"
+                            '$1:0$2'
                           );
                           onChange({
                             ...currentTarget,
@@ -632,12 +635,12 @@ function IntensityTargetConfiguration({
                   <Input
                     type="text"
                     placeholder="5:59"
-                    value={currentTarget.maxValue || ""}
+                    value={currentTarget.maxValue || ''}
                     onChange={e => {
                       const value = e.target.value;
                       // Allow partial input while typing: digits, digits with colon, or complete MM:SS
                       if (
-                        value === "" ||
+                        value === '' ||
                         /^(\d{1,2}(:[0-5]?\d?)?)?$/.test(value)
                       ) {
                         onChange({
@@ -662,7 +665,7 @@ function IntensityTargetConfiguration({
                           // Single digit seconds, pad with 0
                           const formattedValue = value.replace(
                             /(\d{1,2}):(\d)$/,
-                            "$1:0$2"
+                            '$1:0$2'
                           );
                           onChange({
                             ...currentTarget,
@@ -685,12 +688,12 @@ function IntensityTargetConfiguration({
             </p>
           </div>
         );
-      case "cadence":
+      case 'cadence':
         return (
           <Input
             type="number"
             placeholder="Cadence (RPM)"
-            value={currentTarget.value || ""}
+            value={currentTarget.value || ''}
             onChange={e =>
               onChange({
                 ...currentTarget,
@@ -699,10 +702,10 @@ function IntensityTargetConfiguration({
             }
           />
         );
-      case "rpe":
+      case 'rpe':
         return (
           <Select
-            value={currentTarget.value?.toString() || "5"}
+            value={currentTarget.value?.toString() || '5'}
             onValueChange={value =>
               onChange({ ...currentTarget, value: parseInt(value) })
             }
@@ -757,7 +760,7 @@ function IntensityTargetConfiguration({
       {renderTargetInputs()}
     </div>
   );
-}
+};
 
 export default function TrailRunningWorkout({
   onSave,
@@ -768,10 +771,10 @@ export default function TrailRunningWorkout({
   const [workoutData, setWorkoutData] = useState<TrailRunningWorkoutData>(
     initialData || {
       id: Date.now().toString(),
-      name: "",
-      description: "",
-      type: "trail-running",
-      difficulty: "intermediate",
+      name: '',
+      description: '',
+      type: 'trail-running',
+      difficulty: 'intermediate',
       estimatedDuration: 0, // calculated
       targetDistance: 0, // calculated
       elevationGain: 0, // calculated
@@ -782,8 +785,8 @@ export default function TrailRunningWorkout({
   const [currentSection, setCurrentSection] = useState<
     Partial<TrailRunningSection>
   >({
-    type: "warm-up",
-    intensityTarget: { type: "rpe", value: 3, unit: "RPE" },
+    type: 'warm-up',
+    intensityTarget: { type: 'rpe', value: 3, unit: 'RPE' },
     isRepeated: false,
     repeatCount: 1,
   });
@@ -798,59 +801,59 @@ export default function TrailRunningWorkout({
   // Get smart defaults for section types
   const getSmartDefaults = (type: string) => {
     const defaults = {
-      "uphill-repeat": {
+      'uphill-repeat': {
         repeatCount: 6,
         intervals: [
           {
-            name: "Hill Climb",
-            type: "uphill",
+            name: 'Hill Climb',
+            type: 'uphill',
             distance: 0.2,
-            intensityTarget: { type: "power", value: 4, unit: "zone" },
+            intensityTarget: { type: 'power', value: 4, unit: 'zone' },
             elevationChange: 30,
           },
           {
-            name: "Recovery Jog",
-            type: "recovery",
+            name: 'Recovery Jog',
+            type: 'recovery',
             distance: 0.2,
-            intensityTarget: { type: "heart-rate", value: 1, unit: "zone" },
+            intensityTarget: { type: 'heart-rate', value: 1, unit: 'zone' },
             elevationChange: -30,
           },
         ],
       },
-      "downhill-repeat": {
+      'downhill-repeat': {
         repeatCount: 6,
         intervals: [
           {
-            name: "Downhill Run",
-            type: "downhill",
+            name: 'Downhill Run',
+            type: 'downhill',
             distance: 0.3,
-            intensityTarget: { type: "heart-rate", value: 3, unit: "zone" },
+            intensityTarget: { type: 'heart-rate', value: 3, unit: 'zone' },
             elevationChange: -40,
           },
           {
-            name: "Easy Recovery",
-            type: "recovery",
+            name: 'Easy Recovery',
+            type: 'recovery',
             distance: 0.2,
-            intensityTarget: { type: "heart-rate", value: 1, unit: "zone" },
+            intensityTarget: { type: 'heart-rate', value: 1, unit: 'zone' },
             elevationChange: 20,
           },
         ],
       },
-      "w-series": {
+      'w-series': {
         repeatCount: 6,
         intervals: [
           {
-            name: "Uphill Segment",
-            type: "uphill",
+            name: 'Uphill Segment',
+            type: 'uphill',
             distance: 0.4,
-            intensityTarget: { type: "power", value: 4, unit: "zone" },
+            intensityTarget: { type: 'power', value: 4, unit: 'zone' },
             elevationChange: 40,
           },
           {
-            name: "Downhill Segment",
-            type: "downhill",
+            name: 'Downhill Segment',
+            type: 'downhill',
             distance: 0.4,
-            intensityTarget: { type: "power", value: 4, unit: "zone" },
+            intensityTarget: { type: 'power', value: 4, unit: 'zone' },
             elevationChange: -40,
           },
         ],
@@ -859,18 +862,18 @@ export default function TrailRunningWorkout({
         repeatCount: 8,
         intervals: [
           {
-            name: "Run Segment",
-            type: "run",
+            name: 'Run Segment',
+            type: 'run',
             distance: 0.4,
             duration: 2,
-            intensityTarget: { type: "heart-rate", value: 2, unit: "zone" },
+            intensityTarget: { type: 'heart-rate', value: 2, unit: 'zone' },
           },
           {
-            name: "Walk Break",
-            type: "walk",
+            name: 'Walk Break',
+            type: 'walk',
             distance: 0.4,
             duration: 2,
-            intensityTarget: { type: "heart-rate", value: 1, unit: "zone" },
+            intensityTarget: { type: 'heart-rate', value: 1, unit: 'zone' },
           },
         ],
       },
@@ -878,16 +881,16 @@ export default function TrailRunningWorkout({
         repeatCount: 5,
         intervals: [
           {
-            name: "Fast Surge",
-            type: "sprint",
+            name: 'Fast Surge',
+            type: 'sprint',
             distance: 0.3,
-            intensityTarget: { type: "heart-rate", value: 4, unit: "zone" },
+            intensityTarget: { type: 'heart-rate', value: 4, unit: 'zone' },
           },
           {
-            name: "Easy Recovery",
-            type: "recovery",
+            name: 'Easy Recovery',
+            type: 'recovery',
             distance: 0.5,
-            intensityTarget: { type: "heart-rate", value: 1, unit: "zone" },
+            intensityTarget: { type: 'heart-rate', value: 1, unit: 'zone' },
           },
         ],
       },
@@ -895,12 +898,12 @@ export default function TrailRunningWorkout({
         repeatCount: 4,
         intervals: [
           {
-            name: "Work Interval",
-            type: "run",
+            name: 'Work Interval',
+            type: 'run',
             distance: 0.8,
-            intensityTarget: { type: "power", value: 5, unit: "zone" },
+            intensityTarget: { type: 'power', value: 5, unit: 'zone' },
           },
-          { name: "Rest Break", type: "rest", duration: 3 },
+          { name: 'Rest Break', type: 'rest', duration: 3 },
         ],
       },
     };
@@ -956,7 +959,7 @@ export default function TrailRunningWorkout({
   const isRestOrRecovery = (
     section: Partial<TrailRunningSection | TrailRunningInterval>
   ) => {
-    return section.type === "rest" || section.type === "recovery";
+    return section.type === 'rest' || section.type === 'recovery';
   };
 
   // Process repeat sections with skip last rest logic
@@ -989,15 +992,15 @@ export default function TrailRunningWorkout({
 
       const updatedSection: TrailRunningSection = {
         ...editingSection,
-        type: currentSection.type || "warm-up",
+        type: currentSection.type || 'warm-up',
         name: currentSection.name,
         distance: currentSection.distance,
         duration: currentSection.duration,
         elevationChange: currentSection.elevationChange,
         intensityTarget: currentSection.intensityTarget || {
-          type: "rpe",
+          type: 'rpe',
           value: 5,
-          unit: "RPE",
+          unit: 'RPE',
         },
         isRepeated: currentSection.isRepeated || false,
         repeatCount: currentSection.isRepeated
@@ -1009,11 +1012,11 @@ export default function TrailRunningWorkout({
                 ({
                   ...rs,
                   id: rs.id || Date.now().toString() + Math.random(),
-                  name: rs.name || "Unnamed Interval",
-                  type: rs.type || "run",
+                  name: rs.name || 'Unnamed Interval',
+                  type: rs.type || 'run',
                   intensityTarget:
                     rs.intensityTarget ||
-                    getDefaultIntensityTarget(rs.type || "run"),
+                    getDefaultIntensityTarget(rs.type || 'run'),
                 }) as TrailRunningInterval
             )
           : undefined,
@@ -1042,15 +1045,15 @@ export default function TrailRunningWorkout({
 
       const section: TrailRunningSection = {
         id: Date.now().toString(),
-        type: currentSection.type || "warm-up",
+        type: currentSection.type || 'warm-up',
         name: currentSection.name,
         distance: currentSection.distance,
         duration: currentSection.duration,
         elevationChange: currentSection.elevationChange,
         intensityTarget: currentSection.intensityTarget || {
-          type: "rpe",
+          type: 'rpe',
           value: 5,
-          unit: "RPE",
+          unit: 'RPE',
         },
         isRepeated: currentSection.isRepeated || false,
         repeatCount: currentSection.isRepeated
@@ -1062,11 +1065,11 @@ export default function TrailRunningWorkout({
                 ({
                   ...rs,
                   id: rs.id || Date.now().toString() + Math.random(),
-                  name: rs.name || "Unnamed Interval",
-                  type: rs.type || "run",
+                  name: rs.name || 'Unnamed Interval',
+                  type: rs.type || 'run',
                   intensityTarget:
                     rs.intensityTarget ||
-                    getDefaultIntensityTarget(rs.type || "run"),
+                    getDefaultIntensityTarget(rs.type || 'run'),
                 }) as TrailRunningInterval
             )
           : undefined,
@@ -1086,14 +1089,14 @@ export default function TrailRunningWorkout({
     }
 
     // Reset form with smart defaults
-    const nextType = "warm-up";
+    const nextType = 'warm-up';
     const nextTypeInfo = sectionTypes.find(t => t.value === nextType);
     const shouldAutoRepeat = nextTypeInfo?.autoRepeat || false;
     const smartDefaults = shouldAutoRepeat ? getSmartDefaults(nextType) : null;
 
     setCurrentSection({
       type: nextType,
-      intensityTarget: { type: "rpe", value: 5, unit: "RPE" },
+      intensityTarget: { type: 'rpe', value: 5, unit: 'RPE' },
       isRepeated: shouldAutoRepeat,
       repeatCount: smartDefaults?.repeatCount || 1,
       name: getDefaultName(nextType),
@@ -1105,21 +1108,21 @@ export default function TrailRunningWorkout({
           const mappedInterval: Partial<TrailRunningInterval> = {
             ...interval,
             id: `${Date.now()}-${index}`,
-            type: (interval.type as IntervalType) || "run",
+            type: (interval.type as IntervalType) || 'run',
             intensityTarget: interval.intensityTarget
               ? {
                   ...interval.intensityTarget,
                   type: interval.intensityTarget.type as
-                    | "heart-rate"
-                    | "speed"
-                    | "power"
-                    | "cadence"
-                    | "rpe",
+                    | 'heart-rate'
+                    | 'speed'
+                    | 'power'
+                    | 'cadence'
+                    | 'rpe',
                 }
               : undefined,
           };
 
-          if (mappedInterval.type === "rest") {
+          if (mappedInterval.type === 'rest') {
             delete mappedInterval.intensityTarget;
           }
 
@@ -1144,21 +1147,21 @@ export default function TrailRunningWorkout({
       // Determine appropriate default type based on current section type and position
       const getDefaultIntervalType = (currentLength: number) => {
         switch (currentSection.type) {
-          case "uphill-repeat":
-            return currentLength % 2 === 0 ? "uphill" : "recovery";
-          case "downhill-repeat":
-            return currentLength % 2 === 0 ? "downhill" : "recovery";
-          case "w-series":
+          case 'uphill-repeat':
+            return currentLength % 2 === 0 ? 'uphill' : 'recovery';
+          case 'downhill-repeat':
+            return currentLength % 2 === 0 ? 'downhill' : 'recovery';
+          case 'w-series':
             // W-pattern: uphill, downhill alternating
-            return currentLength % 2 === 0 ? "uphill" : "downhill";
-          case "fartlek":
-            return currentLength % 2 === 0 ? "sprint" : "recovery";
-          case "series":
-            return currentLength % 2 === 0 ? "run" : "rest";
-          case "caco":
-            return currentLength % 2 === 0 ? "run" : "walk";
+            return currentLength % 2 === 0 ? 'uphill' : 'downhill';
+          case 'fartlek':
+            return currentLength % 2 === 0 ? 'sprint' : 'recovery';
+          case 'series':
+            return currentLength % 2 === 0 ? 'run' : 'rest';
+          case 'caco':
+            return currentLength % 2 === 0 ? 'run' : 'walk';
           default:
-            return "run";
+            return 'run';
         }
       };
 
@@ -1169,7 +1172,7 @@ export default function TrailRunningWorkout({
       };
 
       // Only add intensity target if not a rest interval
-      if (intervalType !== "rest") {
+      if (intervalType !== 'rest') {
         newInterval.intensityTarget = getDefaultIntensityTarget(intervalType);
       }
 
@@ -1188,7 +1191,7 @@ export default function TrailRunningWorkout({
           const updatedInterval = { ...interval, [field]: value };
 
           // If changing type to 'rest', clear distance, elevation, and intensity target
-          if (field === "type" && value === "rest") {
+          if (field === 'type' && value === 'rest') {
             updatedInterval.distance = undefined;
             updatedInterval.elevationChange = undefined;
             updatedInterval.intensityTarget = undefined;
@@ -1238,14 +1241,14 @@ export default function TrailRunningWorkout({
   const cancelEdit = () => {
     setEditingSection(null);
     // Reset form
-    const nextType = "warm-up";
+    const nextType = 'warm-up';
     const nextTypeInfo = sectionTypes.find(t => t.value === nextType);
     const shouldAutoRepeat = nextTypeInfo?.autoRepeat || false;
     const smartDefaults = shouldAutoRepeat ? getSmartDefaults(nextType) : null;
 
     setCurrentSection({
       type: nextType,
-      intensityTarget: { type: "rpe", value: 5, unit: "RPE" },
+      intensityTarget: { type: 'rpe', value: 5, unit: 'RPE' },
       isRepeated: shouldAutoRepeat,
       repeatCount: smartDefaults?.repeatCount || 1,
       name: getDefaultName(nextType),
@@ -1257,21 +1260,21 @@ export default function TrailRunningWorkout({
           const mappedInterval: Partial<TrailRunningInterval> = {
             ...interval,
             id: `${Date.now()}-${index}`,
-            type: (interval.type as IntervalType) || "run",
+            type: (interval.type as IntervalType) || 'run',
             intensityTarget: interval.intensityTarget
               ? {
                   ...interval.intensityTarget,
                   type: interval.intensityTarget.type as
-                    | "heart-rate"
-                    | "speed"
-                    | "power"
-                    | "cadence"
-                    | "rpe",
+                    | 'heart-rate'
+                    | 'speed'
+                    | 'power'
+                    | 'cadence'
+                    | 'rpe',
                 }
               : undefined,
           };
 
-          if (mappedInterval.type === "rest") {
+          if (mappedInterval.type === 'rest') {
             delete mappedInterval.intensityTarget;
           }
 
@@ -1286,20 +1289,20 @@ export default function TrailRunningWorkout({
 
   const getDefaultName = (type: string) => {
     const names = {
-      "warm-up": "Warm-up Phase",
-      "cool-down": "Cool-down Phase",
-      run: "Running Section",
-      walk: "Walking Section",
-      "uphill-repeat": "Uphill Repeats",
-      "downhill-repeat": "Downhill Repeats",
-      "w-series": "W Series",
-      recovery: "Recovery Run",
-      rest: "Rest Break",
-      caco: "CACO Run/Walk",
-      fartlek: "Fartlek Play",
-      series: "Section Series",
+      'warm-up': 'Warm-up Phase',
+      'cool-down': 'Cool-down Phase',
+      run: 'Running Section',
+      walk: 'Walking Section',
+      'uphill-repeat': 'Uphill Repeats',
+      'downhill-repeat': 'Downhill Repeats',
+      'w-series': 'W Series',
+      recovery: 'Recovery Run',
+      rest: 'Rest Break',
+      caco: 'CACO Run/Walk',
+      fartlek: 'Fartlek Play',
+      series: 'Section Series',
     };
-    return names[type as keyof typeof names] || "Training Section";
+    return names[type as keyof typeof names] || 'Training Section';
   };
 
   const canSave = workoutData.name.trim() && workoutData.sections.length > 0;
@@ -1314,9 +1317,9 @@ export default function TrailRunningWorkout({
           </div>
           <div>
             <h3 className="text-lg font-semibold text-gray-900">
-              {mode === "create"
-                ? "Create Trail Running Workout"
-                : "Edit Trail Running Workout"}
+              {mode === 'create'
+                ? 'Create Trail Running Workout'
+                : 'Edit Trail Running Workout'}
             </h3>
             <p className="text-sm text-gray-600">
               Design your trail running adventure
@@ -1333,7 +1336,7 @@ export default function TrailRunningWorkout({
             disabled={!canSave}
             className="bg-gradient-to-r from-orange-500 to-red-600 hover:from-orange-600 hover:to-red-700"
           >
-            {mode === "create" ? "Add Workout" : "Save Changes"}
+            {mode === 'create' ? 'Add Workout' : 'Save Changes'}
           </Button>
         </div>
       </div>
@@ -1395,7 +1398,7 @@ export default function TrailRunningWorkout({
                 <Select
                   value={workoutData.difficulty}
                   onValueChange={(
-                    value: TrailRunningWorkoutData["difficulty"]
+                    value: TrailRunningWorkoutData['difficulty']
                   ) => setWorkoutData(prev => ({ ...prev, difficulty: value }))}
                 >
                   <SelectTrigger>
@@ -1407,7 +1410,7 @@ export default function TrailRunningWorkout({
                         <div className="flex items-center space-x-2">
                           <span
                             className={`inline-block w-2 h-2 rounded-full ${
-                              level.color.split(" ")[0]
+                              level.color.split(' ')[0]
                             }`}
                           />
                           <span>{level.label}</span>
@@ -1445,8 +1448,8 @@ export default function TrailRunningWorkout({
               <CardTitle className="flex items-center justify-between">
                 <span>
                   {editingSection
-                    ? "Edit Training Section"
-                    : "Add Training Section"}
+                    ? 'Edit Training Section'
+                    : 'Add Training Section'}
                 </span>
                 {editingSection && (
                   <Button
@@ -1466,7 +1469,7 @@ export default function TrailRunningWorkout({
                 <div className="space-y-2">
                   <Select
                     value={currentSection.type}
-                    onValueChange={(value: TrailRunningSection["type"]) => {
+                    onValueChange={(value: TrailRunningSection['type']) => {
                       const newType = value;
                       const selectedType = sectionTypes.find(
                         t => t.value === newType
@@ -1497,21 +1500,21 @@ export default function TrailRunningWorkout({
                               {
                                 ...interval,
                                 id: `${Date.now()}-${index}`,
-                                type: (interval.type as IntervalType) || "run",
+                                type: (interval.type as IntervalType) || 'run',
                                 intensityTarget: interval.intensityTarget
                                   ? {
                                       ...interval.intensityTarget,
                                       type: interval.intensityTarget.type as
-                                        | "heart-rate"
-                                        | "speed"
-                                        | "power"
-                                        | "cadence"
-                                        | "rpe",
+                                        | 'heart-rate'
+                                        | 'speed'
+                                        | 'power'
+                                        | 'cadence'
+                                        | 'rpe',
                                     }
                                   : undefined,
                               };
 
-                            if (mappedInterval.type === "rest") {
+                            if (mappedInterval.type === 'rest') {
                               delete mappedInterval.intensityTarget;
                             }
 
@@ -1656,7 +1659,7 @@ export default function TrailRunningWorkout({
                 <Label className="text-sm font-medium">Section Name</Label>
                 <Input
                   placeholder="e.g., Steep Ascent to Summit"
-                  value={currentSection.name || ""}
+                  value={currentSection.name || ''}
                   onChange={e =>
                     setCurrentSection(prev => ({
                       ...prev,
@@ -1683,7 +1686,7 @@ export default function TrailRunningWorkout({
                         } else {
                           // Auto-populate smart defaults when manually enabling
                           const smartDefaults = getSmartDefaults(
-                            currentSection.type || "warm-up"
+                            currentSection.type || 'warm-up'
                           );
                           if (smartDefaults) {
                             setCurrentSection(prev => ({
@@ -1697,22 +1700,22 @@ export default function TrailRunningWorkout({
                                     ...interval,
                                     id: `${Date.now()}-${index}`,
                                     type:
-                                      (interval.type as IntervalType) || "run",
+                                      (interval.type as IntervalType) || 'run',
                                     intensityTarget: interval.intensityTarget
                                       ? {
                                           ...interval.intensityTarget,
                                           type: interval.intensityTarget
                                             .type as
-                                            | "heart-rate"
-                                            | "speed"
-                                            | "power"
-                                            | "cadence"
-                                            | "rpe",
+                                            | 'heart-rate'
+                                            | 'speed'
+                                            | 'power'
+                                            | 'cadence'
+                                            | 'rpe',
                                         }
                                       : undefined,
                                   };
 
-                                if (mappedInterval.type === "rest") {
+                                if (mappedInterval.type === 'rest') {
                                   delete mappedInterval.intensityTarget;
                                 }
 
@@ -1741,15 +1744,15 @@ export default function TrailRunningWorkout({
                           Template Applied
                         </p>
                         <p className="text-xs text-blue-700 leading-relaxed">
-                          We&apos;ve automatically configured this{" "}
+                          We&apos;ve automatically configured this{' '}
                           {sectionTypes
                             .find(t => t.value === currentSection.type)
-                            ?.label.toLowerCase()}{" "}
-                          with{" "}
+                            ?.label.toLowerCase()}{' '}
+                          with{' '}
                           {
-                            getSmartDefaults(currentSection.type || "warm-up")
+                            getSmartDefaults(currentSection.type || 'warm-up')
                               ?.repeatCount
-                          }{" "}
+                          }{' '}
                           repetitions and suggested intervals. You can customize
                           them below.
                         </p>
@@ -1802,14 +1805,14 @@ export default function TrailRunningWorkout({
                       <div className="flex items-center justify-between">
                         <Label className="text-sm font-medium">Intervals</Label>
                         <div className="flex items-center space-x-2">
-                          {getSmartDefaults(currentSection.type || "warm-up") &&
+                          {getSmartDefaults(currentSection.type || 'warm-up') &&
                             repeatIntervals.length === 0 && (
                               <Button
                                 size="sm"
                                 variant="outline"
                                 onClick={() => {
                                   const smartDefaults = getSmartDefaults(
-                                    currentSection.type || "warm-up"
+                                    currentSection.type || 'warm-up'
                                   );
                                   if (smartDefaults) {
                                     setRepeatIntervals(
@@ -1821,7 +1824,7 @@ export default function TrailRunningWorkout({
                                               id: `${Date.now()}-${index}`,
                                               type:
                                                 (interval.type as IntervalType) ||
-                                                "run",
+                                                'run',
                                               intensityTarget:
                                                 interval.intensityTarget
                                                   ? {
@@ -1829,16 +1832,16 @@ export default function TrailRunningWorkout({
                                                       type: interval
                                                         .intensityTarget
                                                         .type as
-                                                        | "heart-rate"
-                                                        | "speed"
-                                                        | "power"
-                                                        | "cadence"
-                                                        | "rpe",
+                                                        | 'heart-rate'
+                                                        | 'speed'
+                                                        | 'power'
+                                                        | 'cadence'
+                                                        | 'rpe',
                                                     }
                                                   : undefined,
                                             };
 
-                                          if (mappedInterval.type === "rest") {
+                                          if (mappedInterval.type === 'rest') {
                                             delete mappedInterval.intensityTarget;
                                           }
 
@@ -1872,11 +1875,11 @@ export default function TrailRunningWorkout({
                           <div className="flex items-center justify-between">
                             <Input
                               placeholder="Interval name"
-                              value={interval.name || ""}
+                              value={interval.name || ''}
                               onChange={e =>
                                 updateRepeatInterval(
                                   index,
-                                  "name",
+                                  'name',
                                   e.target.value
                                 )
                               }
@@ -1896,9 +1899,9 @@ export default function TrailRunningWorkout({
                           <div className="space-y-2">
                             <Label className="text-xs">Type</Label>
                             <Select
-                              value={interval.type || "run"}
+                              value={interval.type || 'run'}
                               onValueChange={(value: IntervalType) =>
-                                updateRepeatInterval(index, "type", value)
+                                updateRepeatInterval(index, 'type', value)
                               }
                             >
                               <SelectTrigger className="text-xs">
@@ -1928,7 +1931,7 @@ export default function TrailRunningWorkout({
                           </div>
 
                           <div className="space-y-2">
-                            {interval.type === "rest" ? (
+                            {interval.type === 'rest' ? (
                               // Rest intervals only show duration
                               <>
                                 <div className="text-xs text-muted-foreground">
@@ -1937,11 +1940,11 @@ export default function TrailRunningWorkout({
                                 <Input
                                   type="number"
                                   placeholder="2"
-                                  value={interval.duration || ""}
+                                  value={interval.duration || ''}
                                   onChange={e =>
                                     updateRepeatInterval(
                                       index,
-                                      "duration",
+                                      'duration',
                                       parseInt(e.target.value) || 0
                                     )
                                   }
@@ -1960,11 +1963,11 @@ export default function TrailRunningWorkout({
                                     type="number"
                                     step="0.1"
                                     placeholder="0.5"
-                                    value={interval.distance || ""}
+                                    value={interval.distance || ''}
                                     onChange={e =>
                                       updateRepeatInterval(
                                         index,
-                                        "distance",
+                                        'distance',
                                         parseFloat(e.target.value) || 0
                                       )
                                     }
@@ -1972,11 +1975,11 @@ export default function TrailRunningWorkout({
                                   <Input
                                     type="number"
                                     placeholder="5"
-                                    value={interval.duration || ""}
+                                    value={interval.duration || ''}
                                     onChange={e =>
                                       updateRepeatInterval(
                                         index,
-                                        "duration",
+                                        'duration',
                                         parseInt(e.target.value) || 0
                                       )
                                     }
@@ -1984,11 +1987,11 @@ export default function TrailRunningWorkout({
                                   <Input
                                     type="number"
                                     placeholder="30"
-                                    value={interval.elevationChange || ""}
+                                    value={interval.elevationChange || ''}
                                     onChange={e =>
                                       updateRepeatInterval(
                                         index,
-                                        "elevationChange",
+                                        'elevationChange',
                                         parseInt(e.target.value) || 0
                                       )
                                     }
@@ -1998,13 +2001,13 @@ export default function TrailRunningWorkout({
                             )}
                           </div>
 
-                          {interval.type !== "rest" && (
+                          {interval.type !== 'rest' && (
                             <IntensityTargetConfiguration
                               target={interval.intensityTarget}
                               onChange={newTarget =>
                                 updateRepeatInterval(
                                   index,
-                                  "intensityTarget",
+                                  'intensityTarget',
                                   newTarget
                                 )
                               }
@@ -2026,7 +2029,7 @@ export default function TrailRunningWorkout({
                         type="number"
                         step="0.1"
                         placeholder="2.5"
-                        value={currentSection.distance || ""}
+                        value={currentSection.distance || ''}
                         onChange={e =>
                           setCurrentSection(prev => ({
                             ...prev,
@@ -2041,7 +2044,7 @@ export default function TrailRunningWorkout({
                       <Input
                         type="number"
                         placeholder="15"
-                        value={currentSection.duration || ""}
+                        value={currentSection.duration || ''}
                         onChange={e =>
                           setCurrentSection(prev => ({
                             ...prev,
@@ -2057,7 +2060,7 @@ export default function TrailRunningWorkout({
                     <Input
                       type="number"
                       placeholder="e.g., 200 (positive for uphill)"
-                      value={currentSection.elevationChange || ""}
+                      value={currentSection.elevationChange || ''}
                       onChange={e =>
                         setCurrentSection(prev => ({
                           ...prev,
@@ -2070,7 +2073,7 @@ export default function TrailRunningWorkout({
                 </>
               )}
 
-              {!currentSection.isRepeated && currentSection.type !== "rest" && (
+              {!currentSection.isRepeated && currentSection.type !== 'rest' && (
                 <IntensityTargetConfiguration
                   target={currentSection.intensityTarget}
                   onChange={newTarget =>
@@ -2087,7 +2090,7 @@ export default function TrailRunningWorkout({
                 disabled={!currentSection.name}
                 className="w-full bg-orange-600 hover:bg-orange-700"
               >
-                {editingSection ? "Update Section" : "Add Section"}
+                {editingSection ? 'Update Section' : 'Add Section'}
               </Button>
             </CardContent>
           </Card>
@@ -2098,7 +2101,7 @@ export default function TrailRunningWorkout({
               <CardTitle className="flex items-center justify-between">
                 <span>Training Sections ({workoutData.sections.length})</span>
                 <div className="text-sm text-gray-600">
-                  {workoutData.targetDistance}km •{" "}
+                  {workoutData.targetDistance}km •{' '}
                   {workoutData.estimatedDuration}min
                 </div>
               </CardTitle>
@@ -2116,7 +2119,7 @@ export default function TrailRunningWorkout({
                       Clock;
                     const sectionColor =
                       sectionTypes.find(t => t.value === section.type)?.color ||
-                      "text-gray-600";
+                      'text-gray-600';
 
                     return (
                       <div
@@ -2231,7 +2234,7 @@ export default function TrailRunningWorkout({
                                         <span className="font-medium text-sm">
                                           {interval.name}
                                         </span>
-                                        {interval.type !== "rest" && (
+                                        {interval.type !== 'rest' && (
                                           <span
                                             className={`px-2 py-1 rounded-full text-xs font-medium ${getIntensityTargetColor(
                                               interval.intensityTarget
@@ -2243,7 +2246,7 @@ export default function TrailRunningWorkout({
                                           </span>
                                         )}
                                       </div>
-                                      {interval.type === "rest" ? (
+                                      {interval.type === 'rest' ? (
                                         // Rest intervals only show duration
                                         <div className="text-sm text-gray-600">
                                           <div>
@@ -2253,7 +2256,7 @@ export default function TrailRunningWorkout({
                                             <span className="font-medium">
                                               {interval.duration
                                                 ? `${interval.duration}min`
-                                                : "Not set"}
+                                                : 'Not set'}
                                             </span>
                                           </div>
                                         </div>
@@ -2267,7 +2270,7 @@ export default function TrailRunningWorkout({
                                             <span>
                                               {interval.distance
                                                 ? `${interval.distance}km`
-                                                : "Not set"}
+                                                : 'Not set'}
                                             </span>
                                           </div>
                                           <div>
@@ -2277,7 +2280,7 @@ export default function TrailRunningWorkout({
                                             <span>
                                               {interval.duration
                                                 ? `${interval.duration}min`
-                                                : "Not set"}
+                                                : 'Not set'}
                                             </span>
                                           </div>
                                           <div>
@@ -2288,10 +2291,10 @@ export default function TrailRunningWorkout({
                                               {interval.elevationChange
                                                 ? `${
                                                     interval.elevationChange > 0
-                                                      ? "+"
-                                                      : ""
+                                                      ? '+'
+                                                      : ''
                                                   }${interval.elevationChange}m`
-                                                : "0m"}
+                                                : '0m'}
                                             </span>
                                           </div>
                                         </div>
@@ -2305,7 +2308,7 @@ export default function TrailRunningWorkout({
                         ) : (
                           <div className="space-y-3">
                             {/* Intensity target for non-repeated sections */}
-                            {section.type !== "rest" && (
+                            {section.type !== 'rest' && (
                               <div className="flex items-center space-x-2">
                                 <span className="text-sm text-gray-600">
                                   Intensity:
@@ -2331,7 +2334,7 @@ export default function TrailRunningWorkout({
                                 <span className="font-medium">
                                   {section.distance
                                     ? `${section.distance}km`
-                                    : "Not set"}
+                                    : 'Not set'}
                                 </span>
                               </div>
                               <div>
@@ -2341,7 +2344,7 @@ export default function TrailRunningWorkout({
                                 <span className="font-medium">
                                   {section.duration
                                     ? `${section.duration}min`
-                                    : "Not set"}
+                                    : 'Not set'}
                                 </span>
                               </div>
                               <div>
@@ -2351,9 +2354,9 @@ export default function TrailRunningWorkout({
                                 <span className="font-medium">
                                   {section.elevationChange
                                     ? `${
-                                        section.elevationChange > 0 ? "+" : ""
+                                        section.elevationChange > 0 ? '+' : ''
                                       }${section.elevationChange}m`
-                                    : "0m"}
+                                    : '0m'}
                                 </span>
                               </div>
                             </div>

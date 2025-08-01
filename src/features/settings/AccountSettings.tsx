@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import {
   ArrowLeft,
@@ -11,9 +11,9 @@ import {
   User,
   Globe,
   FileText,
-} from "lucide-react";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
+} from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 
 import {
   AlertDialog,
@@ -25,41 +25,39 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Separator } from "@/components/ui/separator";
-import { Switch } from "@/components/ui/switch";
-import { OnboardingData } from "@/types/app";
+} from '@/components/ui/alert-dialog';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Separator } from '@/components/ui/separator';
+import { Switch } from '@/components/ui/switch';
+import { OnboardingData } from '@/types/app';
 
 interface AccountSettingsProps {
   onboardingData?: OnboardingData | null;
 }
 
-export default function AccountSettings({
-  onboardingData,
-}: AccountSettingsProps) {
+const AccountSettings = ({ onboardingData }: AccountSettingsProps) => {
   const router = useRouter();
   const [showCurrentPassword, setShowCurrentPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const [passwords, setPasswords] = useState({
-    current: "",
-    new: "",
-    confirm: "",
+    current: '',
+    new: '',
+    confirm: '',
   });
 
-  const [email, setEmail] = useState("alex.johnson@email.com");
-  const [newEmail, setNewEmail] = useState("");
+  const [email, setEmail] = useState('alex.johnson@email.com');
+  const [newEmail, setNewEmail] = useState('');
 
   const [personalInfo, setPersonalInfo] = useState({
-    name: onboardingData?.name || "Alex Johnson",
-    phone: "+1 (555) 123-4567",
-    location: "San Francisco, CA",
-    bio: "Passionate about fitness and healthy living. Always looking to push my limits and achieve new goals.",
+    name: onboardingData?.name || 'Alex Johnson',
+    phone: '+1 (555) 123-4567',
+    location: 'San Francisco, CA',
+    bio: 'Passionate about fitness and healthy living. Always looking to push my limits and achieve new goals.',
   });
 
   const [privacySettings, setPrivacySettings] = useState({
@@ -83,32 +81,32 @@ export default function AccountSettings({
   const handlePasswordChange = () => {
     // Validate passwords match
     if (passwords.new !== passwords.confirm) {
-      alert("New passwords do not match");
+      alert('New passwords do not match');
       return;
     }
 
     // In a real app, this would make an API call
-    console.log("Changing password...");
-    setPasswords({ current: "", new: "", confirm: "" });
+    console.log('Changing password...');
+    setPasswords({ current: '', new: '', confirm: '' });
   };
 
   const handleEmailChange = () => {
     // In a real app, this would send verification email
-    console.log("Changing email from", email, "to", newEmail);
+    console.log('Changing email from', email, 'to', newEmail);
     setEmail(newEmail);
-    setNewEmail("");
+    setNewEmail('');
   };
 
   const handleDeleteAccount = () => {
     // In a real app, this would make an API call
-    console.log("Deleting account...");
+    console.log('Deleting account...');
   };
 
   return (
     <div className="w-full px-4 sm:px-6 lg:px-8 py-6">
       {/* Header */}
       <div className="flex items-center gap-4 mb-8">
-        <Button variant="ghost" onClick={() => router.push("/profile")}>
+        <Button variant="ghost" onClick={() => router.push('/profile')}>
           <ArrowLeft className="w-4 h-4" />
         </Button>
         <div>
@@ -202,7 +200,7 @@ export default function AccountSettings({
                 <div className="relative mt-1">
                   <Input
                     id="currentPassword"
-                    type={showCurrentPassword ? "text" : "password"}
+                    type={showCurrentPassword ? 'text' : 'password'}
                     value={passwords.current}
                     onChange={e =>
                       setPasswords({ ...passwords, current: e.target.value })
@@ -230,7 +228,7 @@ export default function AccountSettings({
                 <div className="relative mt-1">
                   <Input
                     id="newPassword"
-                    type={showNewPassword ? "text" : "password"}
+                    type={showNewPassword ? 'text' : 'password'}
                     value={passwords.new}
                     onChange={e =>
                       setPasswords({ ...passwords, new: e.target.value })
@@ -258,7 +256,7 @@ export default function AccountSettings({
                 <div className="relative mt-1">
                   <Input
                     id="confirmPassword"
-                    type={showConfirmPassword ? "text" : "password"}
+                    type={showConfirmPassword ? 'text' : 'password'}
                     value={passwords.confirm}
                     onChange={e =>
                       setPasswords({ ...passwords, confirm: e.target.value })
@@ -681,4 +679,6 @@ export default function AccountSettings({
       </div>
     </div>
   );
-}
+};
+
+export default AccountSettings;

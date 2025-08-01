@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import {
   ArrowLeft,
@@ -12,21 +12,21 @@ import {
   MessageCircle,
   Video,
   Clock,
-} from "lucide-react";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
+} from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+} from '@/components/ui/card';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 interface Trainer {
   id: string;
@@ -43,7 +43,7 @@ interface Trainer {
   nextSession?: {
     date: string;
     time: string;
-    type: "in-person" | "virtual";
+    type: 'in-person' | 'virtual';
   };
   stats: {
     totalSessions: number;
@@ -69,30 +69,30 @@ interface Club {
     location: string;
   };
   activities: string[];
-  level: "Beginner" | "Intermediate" | "Advanced" | "All Levels";
+  level: 'Beginner' | 'Intermediate' | 'Advanced' | 'All Levels';
 }
 
 export default function TrainerAndClubs() {
   const router = useRouter();
-  const [activeTab, setActiveTab] = useState("overview");
+  const [activeTab, setActiveTab] = useState('overview');
 
   // Mock data - in a real app, this would come from a user context or API
   const userTrainer: Trainer = {
-    id: "trainer-1",
-    name: "Sarah Mitchell",
-    email: "sarah.mitchell@fitness.com",
-    phone: "+1 (555) 123-4567",
-    avatar: "/api/placeholder/128/128",
-    specializations: ["Strength Training", "Weight Loss", "Functional Fitness"],
+    id: 'trainer-1',
+    name: 'Sarah Mitchell',
+    email: 'sarah.mitchell@fitness.com',
+    phone: '+1 (555) 123-4567',
+    avatar: '/api/placeholder/128/128',
+    specializations: ['Strength Training', 'Weight Loss', 'Functional Fitness'],
     experience: 8,
     rating: 4.9,
-    bio: "Sarah is a certified personal trainer with over 8 years of experience helping clients achieve their fitness goals. She specializes in strength training and functional movement patterns.",
-    certifications: ["NASM-CPT", "CSCS", "FMS Level 2"],
-    location: "Downtown Fitness Center",
+    bio: 'Sarah is a certified personal trainer with over 8 years of experience helping clients achieve their fitness goals. She specializes in strength training and functional movement patterns.',
+    certifications: ['NASM-CPT', 'CSCS', 'FMS Level 2'],
+    location: 'Downtown Fitness Center',
     nextSession: {
-      date: "2025-07-23",
-      time: "2:00 PM",
-      type: "in-person",
+      date: '2025-07-23',
+      time: '2:00 PM',
+      type: 'in-person',
     },
     stats: {
       totalSessions: 156,
@@ -103,44 +103,44 @@ export default function TrainerAndClubs() {
 
   const userClubs: Club[] = [
     {
-      id: "club-1",
-      name: "Morning Runners Club",
-      type: "Running",
+      id: 'club-1',
+      name: 'Morning Runners Club',
+      type: 'Running',
       description:
-        "A friendly group of early risers who love to start their day with a good run. We meet every Tuesday and Thursday for group runs.",
+        'A friendly group of early risers who love to start their day with a good run. We meet every Tuesday and Thursday for group runs.',
       memberCount: 24,
-      avatar: "/api/placeholder/64/64",
-      location: "Central Park",
-      meetingSchedule: "Tuesdays & Thursdays, 6:30 AM",
-      joinedDate: "2024-03-15",
+      avatar: '/api/placeholder/64/64',
+      location: 'Central Park',
+      meetingSchedule: 'Tuesdays & Thursdays, 6:30 AM',
+      joinedDate: '2024-03-15',
       nextEvent: {
-        name: "5K Fun Run",
-        date: "2025-07-26",
-        time: "7:00 AM",
-        location: "Central Park Loop",
+        name: '5K Fun Run',
+        date: '2025-07-26',
+        time: '7:00 AM',
+        location: 'Central Park Loop',
       },
-      activities: ["Group Runs", "Pace Training", "Social Events"],
-      level: "All Levels",
+      activities: ['Group Runs', 'Pace Training', 'Social Events'],
+      level: 'All Levels',
     },
     {
-      id: "club-2",
-      name: "Powerlifting Society",
-      type: "Powerlifting",
+      id: 'club-2',
+      name: 'Powerlifting Society',
+      type: 'Powerlifting',
       description:
-        "Serious powerlifters focused on improving their squat, bench, and deadlift. We provide coaching, spotting, and motivation.",
+        'Serious powerlifters focused on improving their squat, bench, and deadlift. We provide coaching, spotting, and motivation.',
       memberCount: 18,
-      avatar: "/api/placeholder/64/64",
-      location: "Iron Temple Gym",
-      meetingSchedule: "Saturdays, 10:00 AM",
-      joinedDate: "2024-05-20",
+      avatar: '/api/placeholder/64/64',
+      location: 'Iron Temple Gym',
+      meetingSchedule: 'Saturdays, 10:00 AM',
+      joinedDate: '2024-05-20',
       nextEvent: {
-        name: "Monthly Max Out Day",
-        date: "2025-07-28",
-        time: "10:00 AM",
-        location: "Iron Temple Gym",
+        name: 'Monthly Max Out Day',
+        date: '2025-07-28',
+        time: '10:00 AM',
+        location: 'Iron Temple Gym',
       },
-      activities: ["Technique Coaching", "Spotting", "Competition Prep"],
-      level: "Intermediate",
+      activities: ['Technique Coaching', 'Spotting', 'Competition Prep'],
+      level: 'Intermediate',
     },
   ];
 
@@ -149,27 +149,27 @@ export default function TrainerAndClubs() {
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
-    return date.toLocaleDateString("en-US", {
-      weekday: "long",
-      year: "numeric",
-      month: "long",
-      day: "numeric",
+    return date.toLocaleDateString('en-US', {
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
     });
   };
 
   const getTrainerStatusColor = () => {
-    if (hasTrainer) return "bg-green-100 text-green-800";
-    return "bg-gray-100 text-gray-800";
+    if (hasTrainer) return 'bg-green-100 text-green-800';
+    return 'bg-gray-100 text-gray-800';
   };
 
   const getLevelColor = (level: string) => {
     const colors = {
-      Beginner: "bg-green-100 text-green-700",
-      Intermediate: "bg-yellow-100 text-yellow-700",
-      Advanced: "bg-red-100 text-red-700",
-      "All Levels": "bg-blue-100 text-blue-700",
+      Beginner: 'bg-green-100 text-green-700',
+      Intermediate: 'bg-yellow-100 text-yellow-700',
+      Advanced: 'bg-red-100 text-red-700',
+      'All Levels': 'bg-blue-100 text-blue-700',
     };
-    return colors[level as keyof typeof colors] || colors["All Levels"];
+    return colors[level as keyof typeof colors] || colors['All Levels'];
   };
 
   return (
@@ -179,7 +179,7 @@ export default function TrainerAndClubs() {
         <Button
           variant="ghost"
           size="sm"
-          onClick={() => router.push("/dashboard")}
+          onClick={() => router.push('/dashboard')}
           className="flex items-center gap-2"
         >
           <ArrowLeft className="w-4 h-4" />
@@ -206,7 +206,7 @@ export default function TrainerAndClubs() {
               <div
                 className={`px-3 py-1 rounded-full text-sm font-medium ${getTrainerStatusColor()}`}
               >
-                {hasTrainer ? "Active" : "No Trainer"}
+                {hasTrainer ? 'Active' : 'No Trainer'}
               </div>
               {hasTrainer && (
                 <Badge variant="secondary" className="text-xs">
@@ -227,7 +227,7 @@ export default function TrainerAndClubs() {
                 {userClubs.length}
               </span>
               <span className="text-gray-600">
-                Active {userClubs.length === 1 ? "Club" : "Clubs"}
+                Active {userClubs.length === 1 ? 'Club' : 'Clubs'}
               </span>
             </div>
           </CardContent>
@@ -276,9 +276,9 @@ export default function TrainerAndClubs() {
                       />
                       <AvatarFallback>
                         {userTrainer.name
-                          .split(" ")
+                          .split(' ')
                           .map(n => n[0])
-                          .join("")}
+                          .join('')}
                       </AvatarFallback>
                     </Avatar>
                     <div className="flex-1">
@@ -286,7 +286,7 @@ export default function TrainerAndClubs() {
                         {userTrainer.name}
                       </h3>
                       <p className="text-gray-600">
-                        {userTrainer.specializations.join(", ")}
+                        {userTrainer.specializations.join(', ')}
                       </p>
                       <div className="flex items-center gap-2 mt-2">
                         <div className="flex items-center gap-1">
@@ -309,7 +309,7 @@ export default function TrainerAndClubs() {
                         <span className="font-medium">Next Session</span>
                       </div>
                       <p className="text-blue-700 mt-1">
-                        {formatDate(userTrainer.nextSession.date)} at{" "}
+                        {formatDate(userTrainer.nextSession.date)} at{' '}
                         {userTrainer.nextSession.time}
                       </p>
                     </div>
@@ -340,9 +340,9 @@ export default function TrainerAndClubs() {
                           <AvatarImage src={club.avatar} alt={club.name} />
                           <AvatarFallback>
                             {club.name
-                              .split(" ")
+                              .split(' ')
                               .map(n => n[0])
-                              .join("")}
+                              .join('')}
                           </AvatarFallback>
                         </Avatar>
                         <div className="flex-1">
@@ -351,7 +351,7 @@ export default function TrainerAndClubs() {
                           </h4>
                           <p className="text-sm text-gray-600">{club.name}</p>
                           <p className="text-xs text-gray-500">
-                            {club.nextEvent && formatDate(club.nextEvent.date)}{" "}
+                            {club.nextEvent && formatDate(club.nextEvent.date)}{' '}
                             at {club.nextEvent?.time}
                           </p>
                         </div>
@@ -401,9 +401,9 @@ export default function TrainerAndClubs() {
                       />
                       <AvatarFallback className="text-lg">
                         {userTrainer.name
-                          .split(" ")
+                          .split(' ')
                           .map(n => n[0])
-                          .join("")}
+                          .join('')}
                       </AvatarFallback>
                     </Avatar>
                     <div className="flex-1">
@@ -512,12 +512,12 @@ export default function TrainerAndClubs() {
                           <div className="flex items-center gap-2">
                             <Clock className="w-4 h-4 text-blue-600" />
                             <span>
-                              {formatDate(userTrainer.nextSession.date)} at{" "}
+                              {formatDate(userTrainer.nextSession.date)} at{' '}
                               {userTrainer.nextSession.time}
                             </span>
                           </div>
                           <div className="flex items-center gap-2">
-                            {userTrainer.nextSession.type === "virtual" ? (
+                            {userTrainer.nextSession.type === 'virtual' ? (
                               <Video className="w-4 h-4 text-blue-600" />
                             ) : (
                               <MapPin className="w-4 h-4 text-blue-600" />
@@ -573,9 +573,9 @@ export default function TrainerAndClubs() {
                         <AvatarImage src={club.avatar} alt={club.name} />
                         <AvatarFallback>
                           {club.name
-                            .split(" ")
+                            .split(' ')
                             .map(n => n[0])
-                            .join("")}
+                            .join('')}
                         </AvatarFallback>
                       </Avatar>
                       <div className="flex-1">
@@ -642,7 +642,7 @@ export default function TrainerAndClubs() {
                               {club.nextEvent.name}
                             </div>
                             <div className="text-green-700">
-                              {formatDate(club.nextEvent.date)} at{" "}
+                              {formatDate(club.nextEvent.date)} at{' '}
                               {club.nextEvent.time}
                             </div>
                             <div className="text-green-600">

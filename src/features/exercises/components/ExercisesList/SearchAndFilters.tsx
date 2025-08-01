@@ -1,16 +1,16 @@
-import { Search, Filter } from "lucide-react";
+import { Search, Filter } from 'lucide-react';
 
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { useExerciseFilters } from '../../hooks/useExerciseFilters';
+import { useExerciseSearch } from '../../hooks/useExerciseSearch';
 
-import { useExerciseFilters } from "../../hooks/useExerciseFilters";
-import { useExerciseSearch } from "../../hooks/useExerciseSearch";
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 
 interface SearchAndFiltersProps {
   onFilterOpen: () => void;
 }
 
-export function SearchAndFilters({ onFilterOpen }: SearchAndFiltersProps) {
+export const SearchAndFilters = ({ onFilterOpen }: SearchAndFiltersProps) => {
   const { searchTerm, handleSearchChange } = useExerciseSearch();
   const { getActiveFilterCount } = useExerciseFilters();
 
@@ -37,4 +37,4 @@ export function SearchAndFilters({ onFilterOpen }: SearchAndFiltersProps) {
       </Button>
     </div>
   );
-}
+};

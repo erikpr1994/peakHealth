@@ -1,15 +1,15 @@
-import { Heart } from "lucide-react";
+import { Heart } from 'lucide-react';
 
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
+import { ExerciseData } from '../../types';
 
-import { ExerciseData } from "../../types";
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
 
 interface ExerciseVariantsProps {
   exercise: ExerciseData;
 }
 
-export function ExerciseVariants({ exercise }: ExerciseVariantsProps) {
+export const ExerciseVariants = ({ exercise }: ExerciseVariantsProps) => {
   if (!exercise.variants || exercise.variants.length === 0) {
     return null;
   }
@@ -50,4 +50,4 @@ export function ExerciseVariants({ exercise }: ExerciseVariantsProps) {
       </div>
     </Card>
   );
-}
+};

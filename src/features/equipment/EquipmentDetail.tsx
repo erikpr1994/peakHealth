@@ -9,14 +9,14 @@ import {
   MapPin,
   TrendingUp,
   Calculator,
-} from "lucide-react";
+} from 'lucide-react';
 
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { Progress } from "@/components/ui/progress";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Page } from "@/types/app";
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
+import { Progress } from '@/components/ui/progress';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Page } from '@/types/app';
 
 interface EquipmentDetailProps {
   onNavigate: (page: Page, id?: string) => void;
@@ -26,16 +26,16 @@ interface EquipmentDetailProps {
 interface EquipmentSpecs {
   weightRange?: { min: number; max: number; increment: number };
   resistanceType?:
-    | "weight_stack"
-    | "weight_plates"
-    | "pneumatic"
-    | "magnetic"
-    | "hydraulic"
-    | "bodyweight";
+    | 'weight_stack'
+    | 'weight_plates'
+    | 'pneumatic'
+    | 'magnetic'
+    | 'hydraulic'
+    | 'bodyweight';
   conversionFactor?: number;
   pulleyRatio?: number;
   leverageRatio?: number;
-  resistanceCurve?: "linear" | "ascending" | "descending" | "bell_curve";
+  resistanceCurve?: 'linear' | 'ascending' | 'descending' | 'bell_curve';
   availableWeights?: number[];
   notes?: string;
 }
@@ -46,12 +46,12 @@ interface Equipment {
   brand: string;
   model: string;
   category:
-    | "Cardio"
-    | "Strength"
-    | "Free Weights"
-    | "Functional"
-    | "Accessories";
-  type: "custom" | "standard";
+    | 'Cardio'
+    | 'Strength'
+    | 'Free Weights'
+    | 'Functional'
+    | 'Accessories';
+  type: 'custom' | 'standard';
   description?: string;
   imageUrl?: string;
   specs: EquipmentSpecs;
@@ -64,68 +64,65 @@ interface Equipment {
     totalSessions: number;
     averageWeight: number;
     personalRecord: number;
-    progressTrend: "up" | "down" | "stable";
+    progressTrend: 'up' | 'down' | 'stable';
   };
 }
 
-export default function EquipmentDetail({
-  onNavigate,
-  equipmentId,
-}: EquipmentDetailProps) {
+const EquipmentDetail = ({ onNavigate, equipmentId }: EquipmentDetailProps) => {
   // Mock data - in a real app, this would be fetched based on equipmentId
   const equipment: Equipment = {
     id: equipmentId,
-    name: "Olympic Barbell",
-    brand: "Rogue",
-    model: "Ohio Bar",
-    category: "Free Weights",
-    type: "standard",
+    name: 'Olympic Barbell',
+    brand: 'Rogue',
+    model: 'Ohio Bar',
+    category: 'Free Weights',
+    type: 'standard',
     description:
-      "45lb Olympic barbell with aggressive knurling and dual markings. Built to IPF and IWF specifications with excellent whip and spin.",
-    imageUrl: "/api/placeholder/400/300",
+      '45lb Olympic barbell with aggressive knurling and dual markings. Built to IPF and IWF specifications with excellent whip and spin.',
+    imageUrl: '/api/placeholder/400/300',
     specs: {
       weightRange: { min: 45, max: 500, increment: 2.5 },
-      resistanceType: "weight_plates",
+      resistanceType: 'weight_plates',
       conversionFactor: 1.0,
-      resistanceCurve: "linear",
+      resistanceCurve: 'linear',
       availableWeights: [45],
       notes:
-        "Standard Olympic barbell weight is 45 lbs (20kg). Compatible with 2-inch Olympic plates only.",
+        'Standard Olympic barbell weight is 45 lbs (20kg). Compatible with 2-inch Olympic plates only.',
     },
     isPopular: true,
     usageCount: 25,
     gyms: [
-      { id: "1", name: "Downtown Fitness Center" },
-      { id: "2", name: "Iron Temple Gym" },
-      { id: "3", name: "My Home Gym" },
+      { id: '1', name: 'Downtown Fitness Center' },
+      { id: '2', name: 'Iron Temple Gym' },
+      { id: '3', name: 'My Home Gym' },
     ],
     userHistory: {
-      lastUsed: "2 days ago",
+      lastUsed: '2 days ago',
       totalSessions: 45,
       averageWeight: 185,
       personalRecord: 225,
-      progressTrend: "up",
+      progressTrend: 'up',
     },
   };
 
   const getResistanceTypeDisplay = (type: string) => {
     const types = {
-      weight_stack: "Weight Stack",
-      weight_plates: "Weight Plates",
-      pneumatic: "Pneumatic",
-      magnetic: "Magnetic",
-      hydraulic: "Hydraulic",
-      bodyweight: "Bodyweight",
+      weight_stack: 'Weight Stack',
+      weight_plates: 'Weight Plates',
+      pneumatic: 'Pneumatic',
+      magnetic: 'Magnetic',
+      hydraulic: 'Hydraulic',
+      bodyweight: 'Bodyweight',
     };
     return types[type as keyof typeof types] || type;
   };
 
   const getCurveDisplay = (curve: string) => {
     const curves = {
-      linear: "Linear",
-      ascending: "Ascending",
-      descending: "Descending",
-      bell_curve: "Bell Curve",
+      linear: 'Linear',
+      ascending: 'Ascending',
+      descending: 'Descending',
+      bell_curve: 'Bell Curve',
     };
     return curves[curve as keyof typeof curves] || curve;
   };
@@ -158,7 +155,7 @@ export default function EquipmentDetail({
       {/* Header */}
       <div className="flex items-center justify-between mb-8">
         <div className="flex items-center gap-4">
-          <Button variant="ghost" onClick={() => onNavigate("equipment")}>
+          <Button variant="ghost" onClick={() => onNavigate('equipment')}>
             <ArrowLeft className="w-4 h-4" />
           </Button>
           <div>
@@ -167,9 +164,9 @@ export default function EquipmentDetail({
                 {equipment.name}
               </h1>
               <Badge
-                variant={equipment.type === "custom" ? "secondary" : "outline"}
+                variant={equipment.type === 'custom' ? 'secondary' : 'outline'}
               >
-                {equipment.type === "custom" ? "Custom" : "Standard"}
+                {equipment.type === 'custom' ? 'Custom' : 'Standard'}
               </Badge>
               {equipment.isPopular && (
                 <Badge
@@ -191,7 +188,7 @@ export default function EquipmentDetail({
             <Share2 className="w-4 h-4 mr-2" />
             Share
           </Button>
-          <Button onClick={() => onNavigate("edit-equipment", equipment.id)}>
+          <Button onClick={() => onNavigate('edit-equipment', equipment.id)}>
             <Edit2 className="w-4 h-4 mr-2" />
             Edit Equipment
           </Button>
@@ -246,11 +243,11 @@ export default function EquipmentDetail({
                       </span>
                       <TrendingUp
                         className={`w-4 h-4 ${
-                          equipment.userHistory.progressTrend === "up"
-                            ? "text-green-500"
-                            : equipment.userHistory.progressTrend === "down"
-                              ? "text-red-500"
-                              : "text-gray-500"
+                          equipment.userHistory.progressTrend === 'up'
+                            ? 'text-green-500'
+                            : equipment.userHistory.progressTrend === 'down'
+                              ? 'text-red-500'
+                              : 'text-gray-500'
                         }`}
                       />
                     </div>
@@ -286,7 +283,7 @@ export default function EquipmentDetail({
                     icon={Zap}
                     label="Resistance Type"
                     value={getResistanceTypeDisplay(
-                      equipment.specs.resistanceType || ""
+                      equipment.specs.resistanceType || ''
                     )}
                     description="Type of resistance mechanism"
                   />
@@ -295,7 +292,7 @@ export default function EquipmentDetail({
                     icon={TrendingUp}
                     label="Resistance Curve"
                     value={getCurveDisplay(
-                      equipment.specs.resistanceCurve || ""
+                      equipment.specs.resistanceCurve || ''
                     )}
                     description="How resistance varies through range of motion"
                   />
@@ -363,10 +360,10 @@ export default function EquipmentDetail({
                         Weight Conversion
                       </h4>
                       <p className="text-sm text-blue-700">
-                        Due to the mechanical design, this equipment provides{" "}
+                        Due to the mechanical design, this equipment provides{' '}
                         {Math.round(equipment.specs.conversionFactor * 100)}% of
                         the displayed weight as actual resistance. For example,
-                        selecting 100 lbs will provide approximately{" "}
+                        selecting 100 lbs will provide approximately{' '}
                         {Math.round(100 * equipment.specs.conversionFactor)} lbs
                         of actual resistance.
                       </p>
@@ -488,7 +485,7 @@ export default function EquipmentDetail({
                       <Button
                         variant="link"
                         className="h-auto p-0 text-xs text-blue-600"
-                        onClick={() => onNavigate("gym-detail", gym.id)}
+                        onClick={() => onNavigate('gym-detail', gym.id)}
                       >
                         View Gym Details
                       </Button>
@@ -505,7 +502,7 @@ export default function EquipmentDetail({
             <div className="space-y-3">
               <Button
                 className="w-full"
-                onClick={() => onNavigate("create-routine")}
+                onClick={() => onNavigate('create-routine')}
               >
                 <Weight className="w-4 h-4 mr-2" />
                 Use in Routine
@@ -526,4 +523,6 @@ export default function EquipmentDetail({
       </div>
     </div>
   );
-}
+};
+
+export default EquipmentDetail;

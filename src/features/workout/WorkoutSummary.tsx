@@ -8,14 +8,14 @@ import {
   Star,
   MessageCircle,
   Calendar,
-} from "lucide-react";
-import { useState } from "react";
+} from 'lucide-react';
+import { useState } from 'react';
 
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { Textarea } from "@/components/ui/textarea";
-import { Page } from "@/types/app";
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
+import { Textarea } from '@/components/ui/textarea';
+import { Page } from '@/types/app';
 
 interface SetData {
   id: string;
@@ -32,7 +32,7 @@ interface SetData {
   completed: boolean;
   media?: Array<{
     id: string;
-    type: "photo" | "video";
+    type: 'photo' | 'video';
     url: string;
   }>;
 }
@@ -43,7 +43,7 @@ interface WorkoutData {
   sections: Array<{
     id: string;
     name: string;
-    type: "warmup" | "main" | "cooldown";
+    type: 'warmup' | 'main' | 'cooldown';
     exercises: Array<{
       id: string;
       name: string;
@@ -51,7 +51,7 @@ interface WorkoutData {
       muscleGroups: string[];
       sets: Array<{
         id: string;
-        type: "reps" | "time";
+        type: 'reps' | 'time';
         reps?: string;
         weight?: string;
         duration?: string;
@@ -94,7 +94,7 @@ export default function WorkoutSummary({
   onComplete,
   onNavigate,
 }: WorkoutSummaryProps) {
-  const [workoutNotes, setWorkoutNotes] = useState("");
+  const [workoutNotes, setWorkoutNotes] = useState('');
   const [rating, setRating] = useState(0);
   const [showCelebration] = useState(true);
 
@@ -154,17 +154,17 @@ export default function WorkoutSummary({
       completedAt: new Date(),
     };
 
-    console.log("Saving workout:", finalWorkoutData);
+    console.log('Saving workout:', finalWorkoutData);
     onComplete();
   };
 
   const getMotivationalMessage = () => {
     const messages = [
-      "Outstanding work! 💪",
-      "You crushed it today! 🔥",
-      "Another step closer to your goals! 🎯",
-      "Consistency is key - well done! ⭐",
-      "Your dedication is inspiring! 🚀",
+      'Outstanding work! 💪',
+      'You crushed it today! 🔥',
+      'Another step closer to your goals! 🎯',
+      'Consistency is key - well done! ⭐',
+      'Your dedication is inspiring! 🚀',
     ];
     return messages[Math.floor(Math.random() * messages.length)];
   };
@@ -190,7 +190,7 @@ export default function WorkoutSummary({
         <Card className="p-6 mb-8">
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-2xl font-bold text-gray-800">
-              {workoutSession.routineName || "Workout"}
+              {workoutSession.routineName || 'Workout'}
             </h2>
             <Badge className="bg-green-500 text-white">
               <CheckCircle className="w-4 h-4 mr-1" />
@@ -247,10 +247,10 @@ export default function WorkoutSummary({
                 <span className="ml-2 font-medium">
                   {workoutSession.startTime
                     ? workoutSession.startTime.toLocaleTimeString([], {
-                        hour: "2-digit",
-                        minute: "2-digit",
+                        hour: '2-digit',
+                        minute: '2-digit',
                       })
-                    : "N/A"}
+                    : 'N/A'}
                 </span>
               </div>
               <div>
@@ -258,10 +258,10 @@ export default function WorkoutSummary({
                 <span className="ml-2 font-medium">
                   {workoutSession.endTime
                     ? workoutSession.endTime.toLocaleTimeString([], {
-                        hour: "2-digit",
-                        minute: "2-digit",
+                        hour: '2-digit',
+                        minute: '2-digit',
                       })
-                    : "N/A"}
+                    : 'N/A'}
                 </span>
               </div>
               <div>
@@ -353,7 +353,7 @@ export default function WorkoutSummary({
                 key={star}
                 onClick={() => setRating(star)}
                 className={`text-2xl transition-colors ${
-                  star <= rating ? "text-yellow-400" : "text-gray-300"
+                  star <= rating ? 'text-yellow-400' : 'text-gray-300'
                 }`}
               >
                 ⭐
@@ -361,11 +361,11 @@ export default function WorkoutSummary({
             ))}
             {rating > 0 && (
               <span className="ml-2 text-gray-600">
-                {rating === 1 && "Could be better"}
-                {rating === 2 && "Okay workout"}
-                {rating === 3 && "Good session"}
-                {rating === 4 && "Great workout!"}
-                {rating === 5 && "Amazing session! 🔥"}
+                {rating === 1 && 'Could be better'}
+                {rating === 2 && 'Okay workout'}
+                {rating === 3 && 'Good session'}
+                {rating === 4 && 'Great workout!'}
+                {rating === 5 && 'Amazing session! 🔥'}
               </span>
             )}
           </div>
@@ -403,7 +403,7 @@ export default function WorkoutSummary({
               </div>
             </div>
             <Button
-              onClick={() => onNavigate("calendar")}
+              onClick={() => onNavigate('calendar')}
               variant="outline"
               className="w-full"
             >
@@ -431,7 +431,7 @@ export default function WorkoutSummary({
         <div className="flex gap-4">
           <Button
             variant="outline"
-            onClick={() => onNavigate("routines")}
+            onClick={() => onNavigate('routines')}
             className="flex-1"
           >
             Back to Routines

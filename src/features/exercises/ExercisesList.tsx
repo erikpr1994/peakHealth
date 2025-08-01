@@ -1,24 +1,24 @@
-"use client";
+'use client';
 
-import { Plus } from "lucide-react";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { Plus } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 
-import { Button } from "@/components/ui/button";
+import { CategoryTabs } from './components/ExercisesList/CategoryTabs';
+import { ExerciseGrid } from './components/ExercisesList/ExerciseGrid';
+import { FilterDialog } from './components/ExercisesList/FilterDialog';
+import { NewExercisesCarousel } from './components/ExercisesList/NewExercisesCarousel';
+import { SearchAndFilters } from './components/ExercisesList/SearchAndFilters';
+import { ExerciseProvider } from './context/ExerciseContext';
+import { mockExercises } from './data/mockExercises';
+import { Exercise } from './types';
 
-import { CategoryTabs } from "./components/ExercisesList/CategoryTabs";
-import { ExerciseGrid } from "./components/ExercisesList/ExerciseGrid";
-import { FilterDialog } from "./components/ExercisesList/FilterDialog";
-import { NewExercisesCarousel } from "./components/ExercisesList/NewExercisesCarousel";
-import { SearchAndFilters } from "./components/ExercisesList/SearchAndFilters";
-import { ExerciseProvider } from "./context/ExerciseContext";
-import { mockExercises } from "./data/mockExercises";
-import { Exercise } from "./types";
+import { Button } from '@/components/ui/button';
 
-function ExercisesListContent() {
+const ExercisesListContent = () => {
   const router = useRouter();
-  const [activeCategory, setActiveCategory] = useState("All Exercises");
-  const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
+  const [activeCategory, setActiveCategory] = useState('All Exercises');
+  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [isFilterOpen, setIsFilterOpen] = useState(false);
 
   const exercises = mockExercises;
@@ -40,7 +40,7 @@ function ExercisesListContent() {
         </div>
 
         <Button
-          onClick={() => router.push("/suggest-exercise")}
+          onClick={() => router.push('/suggest-exercise')}
           className="flex items-center gap-2 bg-primary text-primary-foreground hover:bg-primary/90"
         >
           <Plus className="w-4 h-4" />
@@ -79,12 +79,14 @@ function ExercisesListContent() {
       />
     </div>
   );
-}
+};
 
-export default function ExercisesList() {
+const ExercisesList = () => {
   return (
     <ExerciseProvider>
       <ExercisesListContent />
     </ExerciseProvider>
   );
-}
+};
+
+export default ExercisesList;

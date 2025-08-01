@@ -1,16 +1,16 @@
-"use client";
+'use client';
 
-import { Menu } from "lucide-react";
-import type { LucideIcon } from "lucide-react";
+import { Menu } from 'lucide-react';
+import type { LucideIcon } from 'lucide-react';
 
-import { Button } from "@/components/ui/button";
+import { Button } from '@/components/ui/button';
 import {
   Sheet,
   SheetContent,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from "@/components/ui/sheet";
+} from '@/components/ui/sheet';
 
 interface NavigationItem {
   id: string;
@@ -54,7 +54,7 @@ export const SideNav = ({
               return (
                 <Button
                   key={item.id}
-                  variant={isActive ? "secondary" : "ghost"}
+                  variant={isActive ? 'secondary' : 'ghost'}
                   onClick={() => onNavigate(item.path)}
                   className="flex items-center justify-start gap-3"
                 >

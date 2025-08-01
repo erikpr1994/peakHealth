@@ -1,14 +1,14 @@
-import { Badge } from "@/components/ui/badge";
+import { Badge } from '@/components/ui/badge';
 
 interface EquipmentTagsProps {
   equipment: string[];
   className?: string;
 }
 
-export function EquipmentTags({
+export const EquipmentTags = ({
   equipment,
-  className = "",
-}: EquipmentTagsProps) {
+  className = '',
+}: EquipmentTagsProps) => {
   if (!equipment || equipment.length === 0) return null;
 
   return (
@@ -20,4 +20,4 @@ export function EquipmentTags({
       ))}
     </div>
   );
-}
+};

@@ -1,19 +1,19 @@
-"use client";
+'use client';
 
-import { LifeBuoy, BookOpen, MessageSquare, Mail } from "lucide-react";
-import React from "react";
+import { LifeBuoy, BookOpen, MessageSquare, Mail } from 'lucide-react';
+import React from 'react';
 
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Textarea } from "@/components/ui/textarea";
+} from '@/components/ui/select';
+import { Textarea } from '@/components/ui/textarea';
 
 export default function HelpSupport() {
   return (

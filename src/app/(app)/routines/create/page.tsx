@@ -1,7 +1,9 @@
-"use client";
+'use client';
 
-import RoutineCreation from "@/features/routines/RoutineCreation";
+import RoutineCreation from '@/features/routines/RoutineCreation';
 
-export default function CreateRoutinePage() {
+const CreateRoutinePage = () => {
   return <RoutineCreation />;
-}
+};
+
+export default CreateRoutinePage;

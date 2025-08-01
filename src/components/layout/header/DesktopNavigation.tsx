@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import type { LucideIcon } from "lucide-react";
+import type { LucideIcon } from 'lucide-react';
 
-import { Button } from "@/components/ui/button";
+import { Button } from '@/components/ui/button';
 
 interface NavigationItem {
   id: string;
@@ -30,7 +30,7 @@ export const DesktopNavigation = ({
         return (
           <Button
             key={item.id}
-            variant={isActive ? "default" : "ghost"}
+            variant={isActive ? 'default' : 'ghost'}
             onClick={() => onNavigate(item.path)}
             className="flex items-center gap-2 px-4 py-2"
           >

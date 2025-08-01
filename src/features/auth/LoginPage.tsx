@@ -1,36 +1,36 @@
-"use client";
+'use client';
 
-import NextLink from "next/link";
-import React, { useState } from "react";
+import NextLink from 'next/link';
+import React, { useState } from 'react';
 
-import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Button } from "@/components/ui/button";
+import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Button } from '@/components/ui/button';
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { useAuth } from "@/features/auth/context/AuthContext";
+} from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { useAuth } from '@/features/auth/context/AuthContext';
 
-export default function LoginPage() {
+const LoginPage = () => {
   const { login, isAuthOperationLoading } = useAuth();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError("");
+    setError('');
 
     try {
       await login(email, password);
     } catch (err: unknown) {
       const errorMessage =
-        err instanceof Error ? err.message : "An unexpected error occurred.";
+        err instanceof Error ? err.message : 'An unexpected error occurred.';
       setError(errorMessage);
     }
   };
@@ -83,7 +83,7 @@ export default function LoginPage() {
               className="w-full"
               disabled={isAuthOperationLoading}
             >
-              {isAuthOperationLoading ? "Loading..." : "Sign In"}
+              {isAuthOperationLoading ? 'Loading...' : 'Sign In'}
             </Button>
           </form>
 
@@ -99,4 +99,6 @@ export default function LoginPage() {
       </Card>
     </div>
   );
-}
+};
+
+export default LoginPage;

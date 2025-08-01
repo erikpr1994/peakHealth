@@ -1,12 +1,12 @@
-import { Card } from "@/components/ui/card";
+import { ExerciseData } from '../../types';
 
-import { ExerciseData } from "../../types";
+import { Card } from '@/components/ui/card';
 
 interface ExerciseStepsProps {
   exercise: ExerciseData;
 }
 
-export function ExerciseSteps({ exercise }: ExerciseStepsProps) {
+export const ExerciseSteps = ({ exercise }: ExerciseStepsProps) => {
   return (
     <Card className="p-6 mb-8">
       <h2 className="text-xl font-bold text-gray-800 mb-6">
@@ -27,4 +27,4 @@ export function ExerciseSteps({ exercise }: ExerciseStepsProps) {
       </div>
     </Card>
   );
-}
+};

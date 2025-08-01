@@ -1,5 +1,5 @@
-import { useFeatureFlags } from "../context/FeatureFlagContext";
-import { UseFeatureFlagReturn } from "../types";
+import { useFeatureFlags } from '../context/FeatureFlagContext';
+import { UseFeatureFlagReturn } from '../types';
 
 export function useFeatureFlag(featureNames: string[]): UseFeatureFlagReturn {
   const { isEnabled, isLoading, flags: allFlags } = useFeatureFlags();

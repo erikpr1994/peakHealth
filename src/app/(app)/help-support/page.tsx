@@ -1,7 +1,9 @@
-"use client";
+'use client';
 
-import HelpSupport from "@/features/settings/HelpSupport";
+import HelpSupport from '@/features/settings/HelpSupport';
 
-export default function HelpSupportPage() {
+const HelpSupportPage = () => {
   return <HelpSupport />;
-}
+};
+
+export default HelpSupportPage;

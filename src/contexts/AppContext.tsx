@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
 // TODO: This is a temporary context for the app. It will be replaced with a more robust context later, probably each feature will have its own context.
 
-import React, { createContext, useContext, useState, ReactNode } from "react";
+import React, { createContext, useContext, useState, ReactNode } from 'react';
 
 interface AppContextType {
   hasTrainer: boolean;
@@ -18,7 +18,7 @@ const AppContext = createContext<AppContextType | undefined>(undefined);
 export const useAppContext = () => {
   const context = useContext(AppContext);
   if (!context) {
-    throw new Error("useAppContext must be used within an AppProvider");
+    throw new Error('useAppContext must be used within an AppProvider');
   }
   return context;
 };

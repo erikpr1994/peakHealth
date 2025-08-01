@@ -1,15 +1,15 @@
-import { Play } from "lucide-react";
+import { Play } from 'lucide-react';
 
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
+import { ExerciseData } from '../../types';
 
-import { ExerciseData } from "../../types";
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
 
 interface ExerciseVideoProps {
   exercise: ExerciseData;
 }
 
-export function ExerciseVideo({ exercise }: ExerciseVideoProps) {
+export const ExerciseVideo = ({ exercise }: ExerciseVideoProps) => {
   return (
     <Card className="overflow-hidden">
       <div className="bg-gray-100 h-64 relative">
@@ -35,4 +35,4 @@ export function ExerciseVideo({ exercise }: ExerciseVideoProps) {
       </div>
     </Card>
   );
-}
+};

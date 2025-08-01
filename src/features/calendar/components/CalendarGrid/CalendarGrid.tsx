@@ -1,8 +1,8 @@
-import { dayHeaders } from "../../config/workoutTypes";
-import { CalendarDay as CalendarDayType } from "../../types";
-import { CalendarDay } from "../CalendarDay";
+import { dayHeaders } from '../../config/workoutTypes';
+import { CalendarDay as CalendarDayType } from '../../types';
+import { CalendarDay } from '../CalendarDay';
 
-import styles from "./CalendarGrid.module.css";
+import styles from './CalendarGrid.module.css';
 
 interface CalendarGridProps {
   calendarDays: CalendarDayType[];

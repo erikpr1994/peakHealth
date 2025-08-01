@@ -1,14 +1,14 @@
-import { Clock, Edit, Play, Target, Trash } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { Clock, Edit, Play, Target, Trash } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+import { WorkoutEvent } from '../../types';
+import { isSameDay } from '../../utils/calendarUtils';
+import { getTimeOfDay, getWorkoutTypeConfig } from '../../utils/workoutUtils';
 
-import { WorkoutEvent } from "../../types";
-import { isSameDay } from "../../utils/calendarUtils";
-import { getTimeOfDay, getWorkoutTypeConfig } from "../../utils/workoutUtils";
+import styles from './WorkoutEventCard.module.css';
 
-import styles from "./WorkoutEventCard.module.css";
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 
 interface WorkoutEventCardProps {
   workout: WorkoutEvent;
@@ -29,7 +29,7 @@ export const WorkoutEventCard = ({
   const isToday = isSameDay(workout.date, today);
 
   const handleStartWorkout = () => {
-    router.push("/workout-tracker");
+    router.push('/workout-tracker');
   };
 
   const handleEdit = () => {

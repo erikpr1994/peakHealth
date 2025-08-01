@@ -1,7 +1,9 @@
-"use client";
+'use client';
 
-import Health from "@/features/health/Health";
+import Health from '@/features/health/Health';
 
-export default function HealthPage() {
+const HealthPage = () => {
   return <Health />;
-}
+};
+
+export default HealthPage;

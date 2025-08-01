@@ -97,7 +97,7 @@ supabase db push
 
 ```tsx
 // In your main layout or app component
-import { FeatureFlagProvider } from "@/features/feature-flags";
+import { FeatureFlagProvider } from '@/features/feature-flags';
 
 function App() {
   return (
@@ -113,7 +113,7 @@ function App() {
 ### Using the useFeatureFlag Hook
 
 ```tsx
-import { useFeatureFlag, FEATURE_FLAGS } from "@/features/feature-flags";
+import { useFeatureFlag, FEATURE_FLAGS } from '@/features/feature-flags';
 
 function MyComponent() {
   const { flags, isLoading } = useFeatureFlag([
@@ -143,7 +143,7 @@ import {
   useFeatureFlags,
   USER_TYPES,
   USER_GROUPS,
-} from "@/features/feature-flags";
+} from '@/features/feature-flags';
 
 function MyComponent() {
   const { hasUserType, isInGroup, isEnabled } = useFeatureFlags();
@@ -157,7 +157,7 @@ function MyComponent() {
   const isPremiumUser = isInGroup(USER_GROUPS.PREMIUM);
 
   // Check feature flags
-  const hasNotifications = isEnabled("notification_system_feature");
+  const hasNotifications = isEnabled('notification_system_feature');
 
   return (
     <div>
@@ -190,7 +190,7 @@ import {
   FEATURE_FLAGS,
   USER_TYPES,
   USER_GROUPS,
-} from "@/features/feature-flags";
+} from '@/features/feature-flags';
 
 // Available feature flags
 FEATURE_FLAGS.NOTIFICATION_SYSTEM_FEATURE;

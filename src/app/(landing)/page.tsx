@@ -1,7 +1,9 @@
-"use client";
+'use client';
 
-import LandingPage from "@/features/landing/LandingPage";
+import LandingPage from '@/features/landing/LandingPage';
 
-export default function Page() {
+const Page = () => {
   return <LandingPage />;
-}
+};
+
+export default Page;

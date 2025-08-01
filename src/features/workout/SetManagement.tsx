@@ -1,31 +1,31 @@
-import { Plus, Target, Flame, X as Failure, Zap } from "lucide-react";
-import { useState, useEffect } from "react";
+import { Plus, Target, Flame, X as Failure, Zap } from 'lucide-react';
+import { useState, useEffect } from 'react';
 
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover";
+} from '@/components/ui/popover';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
+} from '@/components/ui/select';
 
-export type SetType = "warmup" | "normal" | "failure" | "dropset";
-export type RepType = "fixed" | "range";
+export type SetType = 'warmup' | 'normal' | 'failure' | 'dropset';
+export type RepType = 'fixed' | 'range';
 export type ProgressionMethod =
-  | "linear"
-  | "dual"
-  | "inverse-pyramid"
-  | "myo-reps"
-  | "widowmaker"
-  | "amrap";
+  | 'linear'
+  | 'dual'
+  | 'inverse-pyramid'
+  | 'myo-reps'
+  | 'widowmaker'
+  | 'amrap';
 
 export interface WorkoutSet {
   id: string;
@@ -58,8 +58,8 @@ const getProgressionConfig = (method: ProgressionMethod | undefined) => {
       allowAddRemoveSets: true,
       allowRepsChange: true,
       allowRpeChange: true,
-      lockMessage: "Linear progression uses fixed reps and structure",
-      description: "Fixed 3x5 structure",
+      lockMessage: 'Linear progression uses fixed reps and structure',
+      description: 'Fixed 3x5 structure',
     },
     dual: {
       allowRepTypeChange: true,
@@ -67,26 +67,26 @@ const getProgressionConfig = (method: ProgressionMethod | undefined) => {
       allowAddRemoveSets: true,
       allowRepsChange: true,
       allowRpeChange: true,
-      lockMessage: "Dual progression uses rep ranges",
-      description: "Rep ranges with progression",
+      lockMessage: 'Dual progression uses rep ranges',
+      description: 'Rep ranges with progression',
     },
-    "inverse-pyramid": {
+    'inverse-pyramid': {
       allowRepTypeChange: true,
       allowSetTypeChange: true,
       allowAddRemoveSets: true,
       allowRepsChange: true,
       allowRpeChange: true,
-      lockMessage: "Inverse pyramid structure is predefined",
-      description: "Decreasing weight, increasing reps",
+      lockMessage: 'Inverse pyramid structure is predefined',
+      description: 'Decreasing weight, increasing reps',
     },
-    "myo-reps": {
+    'myo-reps': {
       allowRepTypeChange: true,
       allowSetTypeChange: true,
       allowAddRemoveSets: true,
       allowRepsChange: true,
       allowRpeChange: true,
-      lockMessage: "Myo-reps structure is predefined",
-      description: "Activation set + mini-sets",
+      lockMessage: 'Myo-reps structure is predefined',
+      description: 'Activation set + mini-sets',
     },
     widowmaker: {
       allowRepTypeChange: true,
@@ -94,8 +94,8 @@ const getProgressionConfig = (method: ProgressionMethod | undefined) => {
       allowAddRemoveSets: true,
       allowRepsChange: true,
       allowRpeChange: true,
-      lockMessage: "Widowmaker is a single failure set",
-      description: "Single high-rep failure set",
+      lockMessage: 'Widowmaker is a single failure set',
+      description: 'Single high-rep failure set',
     },
     amrap: {
       allowRepTypeChange: true,
@@ -103,8 +103,8 @@ const getProgressionConfig = (method: ProgressionMethod | undefined) => {
       allowAddRemoveSets: true,
       allowRepsChange: true,
       allowRpeChange: true,
-      lockMessage: "AMRAP structure is predefined",
-      description: "Regular sets + final AMRAP",
+      lockMessage: 'AMRAP structure is predefined',
+      description: 'Regular sets + final AMRAP',
     },
   };
 
@@ -129,7 +129,7 @@ export default function SetManagement({
       if (setsNeedingInitialization.length > 0) {
         const updatedSets = sets.map(set => ({
           ...set,
-          repType: set.repType || ("fixed" as RepType),
+          repType: set.repType || ('fixed' as RepType),
         }));
         onSetsChange(updatedSets);
       }
@@ -141,14 +141,14 @@ export default function SetManagement({
     const newSet: WorkoutSet = {
       id: Date.now().toString(),
       setNumber: sets.length + 1,
-      setType: "normal",
-      repType: "fixed",
+      setType: 'normal',
+      repType: 'fixed',
       reps: null,
       repsMin: undefined,
       repsMax: undefined,
       weight: null,
       rpe: null,
-      notes: "",
+      notes: '',
     };
     onSetsChange([...sets, newSet]);
   };
@@ -166,20 +166,20 @@ export default function SetManagement({
         const updatedSet = { ...set, ...updates };
 
         // Handle set type changes
-        if (updates.setType === "failure") {
+        if (updates.setType === 'failure') {
           // For failure sets, force fixed reps and clear rep values
-          updatedSet.repType = "fixed";
+          updatedSet.repType = 'fixed';
           updatedSet.reps = null;
           updatedSet.repsMin = undefined;
           updatedSet.repsMax = undefined;
         }
 
         // Clean up data when switching rep types (only for non-failure sets)
-        if (updates.repType && updatedSet.setType !== "failure") {
-          if (updates.repType === "fixed") {
+        if (updates.repType && updatedSet.setType !== 'failure') {
+          if (updates.repType === 'fixed') {
             updatedSet.repsMin = undefined;
             updatedSet.repsMax = undefined;
-          } else if (updates.repType === "range") {
+          } else if (updates.repType === 'range') {
             updatedSet.reps = null;
           }
         }
@@ -193,21 +193,21 @@ export default function SetManagement({
 
   // Calculate the display number/letter for each set
   const getSetDisplay = (set: WorkoutSet, index: number) => {
-    if (set.setType === "normal") {
+    if (set.setType === 'normal') {
       // Count how many normal sets come before this one
       const normalSetsBefore = sets
         .slice(0, index)
-        .filter(s => s.setType === "normal").length;
+        .filter(s => s.setType === 'normal').length;
       return (normalSetsBefore + 1).toString();
     } else {
       // Return letter for special sets
       switch (set.setType) {
-        case "warmup":
-          return "W";
-        case "failure":
-          return "F";
-        case "dropset":
-          return "D";
+        case 'warmup':
+          return 'W';
+        case 'failure':
+          return 'F';
+        case 'dropset':
+          return 'D';
         default:
           return (index + 1).toString();
       }
@@ -216,30 +216,30 @@ export default function SetManagement({
 
   const getSetTypeColor = (type: SetType) => {
     switch (type) {
-      case "warmup":
-        return "bg-orange-100 text-orange-800 border-orange-200";
-      case "failure":
-        return "bg-red-100 text-red-800 border-red-200";
-      case "dropset":
-        return "bg-purple-100 text-purple-800 border-purple-200";
+      case 'warmup':
+        return 'bg-orange-100 text-orange-800 border-orange-200';
+      case 'failure':
+        return 'bg-red-100 text-red-800 border-red-200';
+      case 'dropset':
+        return 'bg-purple-100 text-purple-800 border-purple-200';
       default:
-        return "bg-gray-100 text-gray-800 border-gray-200";
+        return 'bg-gray-100 text-gray-800 border-gray-200';
     }
   };
 
   const setTypeOptions = [
-    { value: "normal", label: "Normal Set", icon: null },
+    { value: 'normal', label: 'Normal Set', icon: null },
     {
-      value: "warmup",
-      label: "Warm-up Set",
+      value: 'warmup',
+      label: 'Warm-up Set',
       icon: <Target className="w-4 h-4" />,
     },
     {
-      value: "failure",
-      label: "Failure Set",
+      value: 'failure',
+      label: 'Failure Set',
       icon: <Flame className="w-4 h-4" />,
     },
-    { value: "dropset", label: "Drop Set", icon: <Zap className="w-4 h-4" /> },
+    { value: 'dropset', label: 'Drop Set', icon: <Zap className="w-4 h-4" /> },
   ];
 
   const handleSetTypeChange = (setId: string, newType: SetType) => {
@@ -293,9 +293,9 @@ export default function SetManagement({
                     variant="ghost"
                     size="sm"
                     className={`w-10 h-8 p-0 relative flex items-center justify-center rounded text-sm font-medium hover:opacity-80 ${
-                      set.setType !== "normal"
+                      set.setType !== 'normal'
                         ? getSetTypeColor(set.setType)
-                        : "bg-gray-100 text-gray-800"
+                        : 'bg-gray-100 text-gray-800'
                     }`}
                   >
                     <span>{getSetDisplay(set, index)}</span>
@@ -316,8 +316,8 @@ export default function SetManagement({
                         }
                         className={`w-full justify-start h-8 ${
                           set.setType === option.value
-                            ? "bg-primary/10 text-primary"
-                            : ""
+                            ? 'bg-primary/10 text-primary'
+                            : ''
                         }`}
                       >
                         <div className="flex items-center gap-2">
@@ -334,17 +334,17 @@ export default function SetManagement({
             {/* Rep Type Selector */}
             <div className="col-span-1">
               <Select
-                value={set.repType || "fixed"}
+                value={set.repType || 'fixed'}
                 onValueChange={(value: RepType) =>
                   updateSet(set.id, { repType: value })
                 }
-                disabled={set.setType === "failure"}
+                disabled={set.setType === 'failure'}
               >
                 <SelectTrigger
                   className={`w-full h-8 ${
-                    set.setType === "failure"
-                      ? "opacity-50 cursor-not-allowed"
-                      : ""
+                    set.setType === 'failure'
+                      ? 'opacity-50 cursor-not-allowed'
+                      : ''
                   }`}
                 >
                   <SelectValue />
@@ -358,16 +358,16 @@ export default function SetManagement({
 
             {/* Reps Input */}
             <div className="col-span-2">
-              {set.setType === "failure" ? (
+              {set.setType === 'failure' ? (
                 <div className="flex items-center justify-center h-8 text-xs text-red-600 font-medium bg-red-50 border border-red-200 rounded">
                   To failure
                 </div>
-              ) : set.repType === "range" ? (
+              ) : set.repType === 'range' ? (
                 <div className="flex items-center gap-1">
                   <Input
                     type="number"
                     placeholder="Min"
-                    value={set.repsMin || ""}
+                    value={set.repsMin || ''}
                     onChange={e =>
                       updateSet(set.id, {
                         repsMin: e.target.value
@@ -382,7 +382,7 @@ export default function SetManagement({
                   <Input
                     type="number"
                     placeholder="Max"
-                    value={set.repsMax || ""}
+                    value={set.repsMax || ''}
                     onChange={e =>
                       updateSet(set.id, {
                         repsMax: e.target.value
@@ -398,7 +398,7 @@ export default function SetManagement({
                 <Input
                   type="number"
                   placeholder="10"
-                  value={set.reps || ""}
+                  value={set.reps || ''}
                   onChange={e =>
                     updateSet(set.id, {
                       reps: e.target.value ? parseInt(e.target.value) : null,
@@ -415,7 +415,7 @@ export default function SetManagement({
               <Input
                 type="number"
                 placeholder="0"
-                value={set.weight || ""}
+                value={set.weight || ''}
                 onChange={e =>
                   updateSet(set.id, {
                     weight: e.target.value ? parseFloat(e.target.value) : null,
@@ -432,7 +432,7 @@ export default function SetManagement({
               <Input
                 type="number"
                 placeholder="8"
-                value={set.rpe || ""}
+                value={set.rpe || ''}
                 onChange={e =>
                   updateSet(set.id, {
                     rpe: e.target.value ? parseInt(e.target.value) : null,
@@ -451,9 +451,9 @@ export default function SetManagement({
                 size="sm"
                 onClick={() => onNotesClick(set.id)}
                 className={`h-8 w-8 p-0 flex items-center justify-center ${
-                  set.notes ? "text-blue-600" : "text-gray-400"
+                  set.notes ? 'text-blue-600' : 'text-gray-400'
                 }`}
-                title={set.notes ? "Edit notes" : "Add notes"}
+                title={set.notes ? 'Edit notes' : 'Add notes'}
               >
                 📝
               </Button>
