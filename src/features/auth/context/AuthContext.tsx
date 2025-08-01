@@ -52,23 +52,16 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setIsLoading(true);
 
     try {
-      const response = await fetch("/api/auth/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, password }),
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
       });
 
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.error || "Login failed");
+      if (error) {
+        throw new Error(error.message || "Login failed");
       }
 
-      setUser(data.user);
-      // Explicitly redirect to dashboard after successful login
-      router.push("/dashboard");
+      // User will be set by the onAuthStateChange listener
     } catch (error) {
       console.error("Error logging in:", error);
       throw error;
@@ -82,23 +75,21 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setIsLoading(true);
 
     try {
-      const response = await fetch("/api/auth/signup", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
+      const { data, error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          data: {
+            name,
+          },
         },
-        body: JSON.stringify({ email, password, name }),
       });
 
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.error || "Sign up failed");
+      if (error) {
+        throw new Error(error.message || "Sign up failed");
       }
 
-      setUser(data.user);
-      // Explicitly redirect to dashboard after successful signup
-      router.push("/dashboard");
+      // User will be set by the onAuthStateChange listener
     } catch (error) {
       console.error("Error signing up:", error);
       throw error;
@@ -111,19 +102,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setIsLoading(true);
 
     try {
-      const response = await fetch("/api/auth/logout", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      const { error } = await supabase.auth.signOut();
 
-      if (!response.ok) {
-        const data = await response.json();
-        throw new Error(data.error || "Logout failed");
+      if (error) {
+        throw new Error(error.message || "Logout failed");
       }
 
-      setUser(null);
+      // User will be cleared by the onAuthStateChange listener
     } catch (error) {
       console.error("Error logging out:", error);
       throw error;
