@@ -4,9 +4,7 @@ import { createClient } from '@/lib/supabase/server';
 
 export async function POST(request: NextRequest) {
   try {
-    console.log('Signup request received');
     const { email, password, name } = await request.json();
-    console.log('Request data:', { email, name });
 
     if (!email || !password || !name) {
       return NextResponse.json(
@@ -15,11 +13,8 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    console.log('Creating Supabase client...');
     const supabase = await createClient();
-    console.log('Supabase client created');
 
-    console.log('Calling supabase.auth.signUp...');
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
@@ -29,8 +24,6 @@ export async function POST(request: NextRequest) {
         },
       },
     });
-
-    console.log('SignUp response:', { data: !!data, error: error?.message });
 
     if (error) {
       console.error('Supabase auth error:', error);
