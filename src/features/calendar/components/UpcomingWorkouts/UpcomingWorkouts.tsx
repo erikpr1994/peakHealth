@@ -71,10 +71,12 @@ export const UpcomingWorkouts = ({
           <div className={styles.emptyState}>
             <CalendarIcon className={styles.emptyIcon} />
             <p className={styles.emptyTitle}>No upcoming workouts</p>
-            <p className={styles.emptyDescription}>Schedule your next session</p>
+            <p className={styles.emptyDescription}>
+              Schedule your next session
+            </p>
           </div>
         )}
       </div>
     </Card>
   );
-}; 
+};

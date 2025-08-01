@@ -29,7 +29,11 @@ export default function Calendar() {
   );
 
   const handleDaySelect = (date: number) => {
-    const newSelectedDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), date);
+    const newSelectedDate = new Date(
+      currentDate.getFullYear(),
+      currentDate.getMonth(),
+      date
+    );
     setSelectedDate(newSelectedDate);
   };
 
@@ -48,9 +52,7 @@ export default function Calendar() {
       {/* Header */}
       <div className={styles.header}>
         <h1 className={styles.title}>Calendar</h1>
-        <p className={styles.subtitle}>
-          View and manage your workout schedule
-        </p>
+        <p className={styles.subtitle}>View and manage your workout schedule</p>
       </div>
 
       {/* Stats Cards */}

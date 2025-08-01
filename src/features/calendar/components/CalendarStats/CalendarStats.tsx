@@ -67,4 +67,4 @@ export const CalendarStats = ({ stats }: CalendarStatsProps) => {
       </Card>
     </div>
   );
-}; 
+};

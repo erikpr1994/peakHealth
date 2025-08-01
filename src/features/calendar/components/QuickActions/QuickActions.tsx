@@ -38,4 +38,4 @@ export const QuickActions = () => {
       </div>
     </Card>
   );
-}; 
+};
