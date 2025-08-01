@@ -1,5 +1,11 @@
-import { WorkoutEvent, StatusConfig, TimeOfDayConfig, WorkoutTypeConfig, CalendarStats } from "../types";
 import { workoutTypes } from "../config/workoutTypes";
+import {
+  CalendarStats,
+  StatusConfig,
+  TimeOfDayConfig,
+  WorkoutEvent,
+  WorkoutTypeConfig,
+} from "../types";
 
 export const convertTo24Hour = (time: string): string => {
   const [timePart, period] = time.split(" ");
@@ -80,11 +86,15 @@ export const getTimeOfDay = (time: string): TimeOfDayConfig => {
   }
 };
 
-export const getWorkoutTypeConfig = (type: WorkoutEvent["type"]): WorkoutTypeConfig => {
+export const getWorkoutTypeConfig = (
+  type: WorkoutEvent["type"]
+): WorkoutTypeConfig => {
   return workoutTypes.find(wt => wt.name === type) || workoutTypes[0];
 };
 
-export const getStatusConfig = (status: WorkoutEvent["status"]): StatusConfig => {
+export const getStatusConfig = (
+  status: WorkoutEvent["status"]
+): StatusConfig => {
   switch (status) {
     case "completed":
       return {
@@ -119,7 +129,10 @@ export const getStatusConfig = (status: WorkoutEvent["status"]): StatusConfig =>
   }
 };
 
-export const calculateCalendarStats = (workouts: WorkoutEvent[], today: Date): CalendarStats => {
+export const calculateCalendarStats = (
+  workouts: WorkoutEvent[],
+  today: Date
+): CalendarStats => {
   const completedThisMonth = workouts.filter(
     w =>
       w.status === "completed" &&
@@ -176,4 +189,4 @@ export const calculateCalendarStats = (workouts: WorkoutEvent[], today: Date): C
     avgDuration,
     daysWithMultipleSessions,
   };
-}; 
+};

@@ -47,4 +47,4 @@ export interface CalendarStats {
   totalCaloriesBurned: number;
   avgDuration: number;
   daysWithMultipleSessions: number;
-} 
+}

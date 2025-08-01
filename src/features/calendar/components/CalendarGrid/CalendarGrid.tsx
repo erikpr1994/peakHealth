@@ -1,7 +1,7 @@
-import { CalendarDay as CalendarDayType } from "../../types";
 import { dayHeaders } from "../../config/workoutTypes";
+import { CalendarDay as CalendarDayType } from "../../types";
 import { CalendarDay } from "../CalendarDay";
-import { WorkoutTypeLegend } from "../WorkoutTypeLegend";
+
 import styles from "./CalendarGrid.module.css";
 
 interface CalendarGridProps {
@@ -9,7 +9,10 @@ interface CalendarGridProps {
   onDaySelect: (date: number) => void;
 }
 
-export const CalendarGrid = ({ calendarDays, onDaySelect }: CalendarGridProps) => {
+export const CalendarGrid = ({
+  calendarDays,
+  onDaySelect,
+}: CalendarGridProps) => {
   return (
     <div className={styles.grid}>
       {/* Day Headers */}
@@ -23,14 +26,13 @@ export const CalendarGrid = ({ calendarDays, onDaySelect }: CalendarGridProps) =
 
       {/* Calendar Days */}
       <div className={styles.calendarDays}>
-        {calendarDays.map((day, index) => (
-          <CalendarDay
-            key={index}
-            day={day}
-            onSelect={onDaySelect}
-          />
-        ))}
+        {calendarDays.map((day, index) => {
+          const uniqueKey = `${day.date}-${day.isCurrentMonth}-${day.isToday}-${day.isSelected}-${day.workouts.length}-${index}`;
+          return (
+            <CalendarDay key={uniqueKey} day={day} onSelect={onDaySelect} />
+          );
+        })}
       </div>
     </div>
   );
-}; 
+};

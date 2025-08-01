@@ -1,5 +1,9 @@
 import { CalendarDay as CalendarDayType } from "../../types";
-import { getWorkoutTypeConfig, getStatusConfig } from "../../utils/workoutUtils";
+import {
+  getStatusConfig,
+  getWorkoutTypeConfig,
+} from "../../utils/workoutUtils";
+
 import styles from "./CalendarDay.module.css";
 
 interface CalendarDayProps {
@@ -20,6 +24,13 @@ export const CalendarDay = ({ day, onSelect }: CalendarDayProps) => {
         day.isSelected ? styles.selected : ""
       }`}
       onClick={handleClick}
+      onKeyDown={e => {
+        if (e.key === "Enter" || e.key === " ") {
+          handleClick();
+        }
+      }}
+      role="button"
+      tabIndex={0}
     >
       <span
         className={`${styles.dateNumber} ${
@@ -39,12 +50,12 @@ export const CalendarDay = ({ day, onSelect }: CalendarDayProps) => {
           {day.workouts.length === 1 ? (
             // Single workout - show as before
             <div className={styles.singleWorkout}>
-              {day.workouts.map((workout, i) => {
+              {day.workouts.map(workout => {
                 const typeConfig = getWorkoutTypeConfig(workout.type);
                 const statusConfig = getStatusConfig(workout.status);
                 return (
                   <div
-                    key={i}
+                    key={workout.id}
                     className={`${styles.indicator} ${
                       workout.status === "completed"
                         ? statusConfig.color
@@ -60,12 +71,12 @@ export const CalendarDay = ({ day, onSelect }: CalendarDayProps) => {
             <div className={styles.multipleWorkouts}>
               <div className={styles.indicatorRow}>
                 <div className={styles.indicators}>
-                  {day.workouts.slice(0, 4).map((workout, i) => {
+                  {day.workouts.slice(0, 4).map(workout => {
                     const typeConfig = getWorkoutTypeConfig(workout.type);
                     const statusConfig = getStatusConfig(workout.status);
                     return (
                       <div
-                        key={i}
+                        key={workout.id}
                         className={`${styles.smallIndicator} ${
                           workout.status === "completed"
                             ? statusConfig.color
@@ -91,4 +102,4 @@ export const CalendarDay = ({ day, onSelect }: CalendarDayProps) => {
       )}
     </div>
   );
-}; 
+};

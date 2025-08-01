@@ -175,4 +175,4 @@ export const mockWorkouts: WorkoutEvent[] = [
     exercises: 8,
     estimatedCalories: 340,
   },
-]; 
+];

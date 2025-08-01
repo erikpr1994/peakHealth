@@ -1,4 +1,5 @@
 import { workoutTypes } from "../../config/workoutTypes";
+
 import styles from "./WorkoutTypeLegend.module.css";
 
 export const WorkoutTypeLegend = () => {
@@ -13,4 +14,4 @@ export const WorkoutTypeLegend = () => {
       ))}
     </div>
   );
-}; 
+};

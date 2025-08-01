@@ -85,4 +85,4 @@ export const formatDate = (date: Date): string => {
       weekday: "short",
     });
   }
-}; 
+};

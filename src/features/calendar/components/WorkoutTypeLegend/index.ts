@@ -1,1 +1,1 @@
-export { WorkoutTypeLegend } from "./WorkoutTypeLegend"; 
+export { WorkoutTypeLegend } from "./WorkoutTypeLegend";

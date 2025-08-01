@@ -48,4 +48,4 @@ export const months = [
   "December",
 ];
 
-export const dayHeaders = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]; 
+export const dayHeaders = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];

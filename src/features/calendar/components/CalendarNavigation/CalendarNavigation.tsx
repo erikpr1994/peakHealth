@@ -1,7 +1,10 @@
 import { ChevronLeft, ChevronRight } from "lucide-react";
+
 import { Button } from "@/components/ui/button";
-import { ViewMode } from "../../types";
+
 import { months } from "../../config/workoutTypes";
+import { ViewMode } from "../../types";
+
 import styles from "./CalendarNavigation.module.css";
 
 interface CalendarNavigationProps {
@@ -73,4 +76,4 @@ export const CalendarNavigation = ({
       </div>
     </div>
   );
-}; 
+};

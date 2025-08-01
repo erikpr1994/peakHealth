@@ -1,4 +1,5 @@
 import { useState } from "react";
+
 import { ViewMode } from "../types";
 
 export const useCalendar = () => {
@@ -32,4 +33,4 @@ export const useCalendar = () => {
     navigateMonth,
     navigateToToday,
   };
-}; 
+};

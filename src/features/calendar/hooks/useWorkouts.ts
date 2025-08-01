@@ -1,36 +1,36 @@
 import { useMemo } from "react";
-import { WorkoutEvent, CalendarStats } from "../types";
+
 import { mockWorkouts } from "../data/mockWorkouts";
-import { 
-  getUpcomingWorkouts, 
-  groupWorkoutsByDay, 
-  calculateCalendarStats 
-} from "../utils/workoutUtils";
 import { generateCalendarDays } from "../utils/calendarUtils";
+import {
+  calculateCalendarStats,
+  getUpcomingWorkouts,
+  groupWorkoutsByDay,
+} from "../utils/workoutUtils";
 
 export const useWorkouts = (currentDate: Date, selectedDate: Date) => {
-  const today = new Date(2025, 6, 22); // July 22, 2025
+  const today = useMemo(() => new Date(2025, 6, 22), []); // July 22, 2025
 
   const workouts = useMemo(() => mockWorkouts, []);
 
-  const calendarDays = useMemo(() => 
-    generateCalendarDays(currentDate, workouts, selectedDate, today), 
-    [currentDate, selectedDate, workouts]
+  const calendarDays = useMemo(
+    () => generateCalendarDays(currentDate, workouts, selectedDate, today),
+    [currentDate, selectedDate, workouts, today]
   );
 
-  const upcomingWorkouts = useMemo(() => 
-    getUpcomingWorkouts(workouts, today), 
-    [workouts]
+  const upcomingWorkouts = useMemo(
+    () => getUpcomingWorkouts(workouts, today),
+    [workouts, today]
   );
 
-  const groupedUpcoming = useMemo(() => 
-    groupWorkoutsByDay(upcomingWorkouts), 
+  const groupedUpcoming = useMemo(
+    () => groupWorkoutsByDay(upcomingWorkouts),
     [upcomingWorkouts]
   );
 
-  const stats = useMemo(() => 
-    calculateCalendarStats(workouts, today), 
-    [workouts]
+  const stats = useMemo(
+    () => calculateCalendarStats(workouts, today),
+    [workouts, today]
   );
 
   return {
@@ -41,4 +41,4 @@ export const useWorkouts = (currentDate: Date, selectedDate: Date) => {
     stats,
     today,
   };
-}; 
+};

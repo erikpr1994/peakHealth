@@ -1,10 +1,13 @@
-import { Play, Edit, Trash, Clock, Target } from "lucide-react";
+import { Clock, Edit, Play, Target, Trash } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { Button } from "@/components/ui/button";
+
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+
 import { WorkoutEvent } from "../../types";
-import { getWorkoutTypeConfig, getTimeOfDay } from "../../utils/workoutUtils";
 import { isSameDay } from "../../utils/calendarUtils";
+import { getTimeOfDay, getWorkoutTypeConfig } from "../../utils/workoutUtils";
+
 import styles from "./WorkoutEventCard.module.css";
 
 interface WorkoutEventCardProps {
@@ -39,9 +42,7 @@ export const WorkoutEventCard = ({
 
   return (
     <div
-      className={`${styles.card} ${
-        isToday ? styles.today : styles.default
-      }`}
+      className={`${styles.card} ${isToday ? styles.today : styles.default}`}
     >
       <div className={styles.header}>
         <div className={styles.content}>
@@ -95,7 +96,9 @@ export const WorkoutEventCard = ({
         </div>
         <div className={styles.detailItem}>
           <Target className={styles.detailIcon} />
-          <span className={styles.detailText}>{workout.exercises} exercises</span>
+          <span className={styles.detailText}>
+            {workout.exercises} exercises
+          </span>
         </div>
       </div>
 
@@ -117,4 +120,4 @@ export const WorkoutEventCard = ({
       )}
     </div>
   );
-}; 
+};

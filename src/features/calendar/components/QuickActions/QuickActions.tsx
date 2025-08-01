@@ -1,7 +1,9 @@
-import { Plus, Calendar as CalendarIcon, TrendingUp } from "lucide-react";
+import { Calendar as CalendarIcon, Plus, TrendingUp } from "lucide-react";
 import { useRouter } from "next/navigation";
+
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+
 import styles from "./QuickActions.module.css";
 
 export const QuickActions = () => {

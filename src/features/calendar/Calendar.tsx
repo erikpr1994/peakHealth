@@ -1,16 +1,17 @@
 "use client";
 
 import { Card } from "@/components/ui/card";
+
+import styles from "./Calendar.module.css";
+import { CalendarGrid } from "./components/CalendarGrid";
+import { CalendarNavigation } from "./components/CalendarNavigation";
+import { CalendarStats } from "./components/CalendarStats";
+import { QuickActions } from "./components/QuickActions";
+import { UpcomingWorkouts } from "./components/UpcomingWorkouts";
+import { WorkoutTypeLegend } from "./components/WorkoutTypeLegend";
 import { useCalendar } from "./hooks/useCalendar";
 import { useWorkouts } from "./hooks/useWorkouts";
-import { CalendarNavigation } from "./components/CalendarNavigation";
-import { CalendarGrid } from "./components/CalendarGrid";
-import { CalendarStats } from "./components/CalendarStats";
-import { UpcomingWorkouts } from "./components/UpcomingWorkouts";
-import { QuickActions } from "./components/QuickActions";
-import { WorkoutTypeLegend } from "./components/WorkoutTypeLegend";
 import { WorkoutEvent } from "./types";
-import styles from "./Calendar.module.css";
 
 export default function Calendar() {
   const {
@@ -39,11 +40,13 @@ export default function Calendar() {
 
   const handleEditWorkout = (workout: WorkoutEvent) => {
     // TODO: Implement edit functionality
+    // eslint-disable-next-line no-console
     console.log("Edit workout:", workout);
   };
 
   const handleDeleteWorkout = (workout: WorkoutEvent) => {
     // TODO: Implement delete functionality
+    // eslint-disable-next-line no-console
     console.log("Delete workout:", workout);
   };
 

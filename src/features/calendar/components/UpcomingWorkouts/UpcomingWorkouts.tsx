@@ -1,11 +1,14 @@
 import { Calendar as CalendarIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
+
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+
 import { WorkoutEvent } from "../../types";
 import { formatDate } from "../../utils/calendarUtils";
 import { WorkoutEventCard } from "../WorkoutEventCard";
+
 import styles from "./UpcomingWorkouts.module.css";
 
 interface UpcomingWorkoutsProps {
