@@ -1,5 +1,6 @@
-import { createClient } from "@/lib/supabase/server";
 import { NextResponse } from "next/server";
+
+import { createClient } from "@/lib/supabase/server";
 
 export async function GET() {
   const supabase = await createClient();
@@ -42,7 +43,8 @@ export async function GET() {
     });
   } catch (error: unknown) {
     console.error("Error fetching feature flags:", error);
-    const errorMessage = error instanceof Error ? error.message : "Unknown error";
+    const errorMessage =
+      error instanceof Error ? error.message : "Unknown error";
     return NextResponse.json(
       { error: "Internal Server Error", details: errorMessage },
       { status: 500 }

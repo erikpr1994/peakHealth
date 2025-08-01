@@ -1,4 +1,3 @@
-import { useState } from "react";
 import {
   Play,
   Info,
@@ -13,9 +12,11 @@ import {
   AlertTriangle,
   Lightbulb,
 } from "lucide-react";
-import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import { useState } from "react";
+
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 import {
   Collapsible,
   CollapsibleContent,
@@ -258,7 +259,7 @@ export default function ExerciseView({
           </div>
 
           <div className="flex flex-wrap justify-center gap-2 mb-6">
-            {enhancedExercise.muscleGroups.map((muscle) => (
+            {enhancedExercise.muscleGroups.map(muscle => (
               <Badge key={muscle} variant="secondary" className="text-sm">
                 {muscle}
               </Badge>
@@ -518,8 +519,8 @@ export default function ExerciseView({
                   index + 1 === setNumber
                     ? "border-indigo-500 bg-indigo-50"
                     : index + 1 < setNumber
-                    ? "border-green-500 bg-green-50"
-                    : "border-gray-200 bg-gray-50"
+                      ? "border-green-500 bg-green-50"
+                      : "border-gray-200 bg-gray-50"
                 }`}
               >
                 <div className="text-center">

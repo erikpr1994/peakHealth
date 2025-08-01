@@ -80,10 +80,12 @@ export const NotificationsProvider: React.FC<NotificationsProviderProps> = ({
       if (saved) {
         const parsed = JSON.parse(saved);
         // Convert timestamp strings back to Date objects
-        return parsed.map((notif: { timestamp: string; [key: string]: unknown }) => ({
-          ...notif,
-          timestamp: new Date(notif.timestamp),
-        }));
+        return parsed.map(
+          (notif: { timestamp: string; [key: string]: unknown }) => ({
+            ...notif,
+            timestamp: new Date(notif.timestamp),
+          })
+        );
       }
     }
     return [];
@@ -224,7 +226,7 @@ export const NotificationsProvider: React.FC<NotificationsProviderProps> = ({
     }
   }, [notifications]);
 
-  const unreadCount = notifications.filter((n) => !n.isRead).length;
+  const unreadCount = notifications.filter(n => !n.isRead).length;
 
   const addNotification = (
     notification: Omit<Notification, "id" | "timestamp">
@@ -236,12 +238,12 @@ export const NotificationsProvider: React.FC<NotificationsProviderProps> = ({
         .substr(2, 9)}`,
       timestamp: new Date(),
     };
-    setNotifications((prev) => [newNotification, ...prev]);
+    setNotifications(prev => [newNotification, ...prev]);
   };
 
   const markAsRead = (id: string) => {
-    setNotifications((prev) =>
-      prev.map((notification) =>
+    setNotifications(prev =>
+      prev.map(notification =>
         notification.id === id
           ? { ...notification, isRead: true }
           : notification
@@ -250,14 +252,14 @@ export const NotificationsProvider: React.FC<NotificationsProviderProps> = ({
   };
 
   const markAllAsRead = () => {
-    setNotifications((prev) =>
-      prev.map((notification) => ({ ...notification, isRead: true }))
+    setNotifications(prev =>
+      prev.map(notification => ({ ...notification, isRead: true }))
     );
   };
 
   const removeNotification = (id: string) => {
-    setNotifications((prev) =>
-      prev.filter((notification) => notification.id !== id)
+    setNotifications(prev =>
+      prev.filter(notification => notification.id !== id)
     );
   };
 

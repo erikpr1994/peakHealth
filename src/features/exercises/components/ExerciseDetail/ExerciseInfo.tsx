@@ -50,7 +50,7 @@ export function ExerciseInfo({ exercise }: ExerciseInfoProps) {
           Primary Muscles
         </h3>
         <div className="flex flex-wrap gap-2">
-          {exercise.primaryMuscles.map((muscle) => (
+          {exercise.primaryMuscles.map(muscle => (
             <span
               key={muscle}
               className="px-3 py-1 bg-indigo-100 text-indigo-700 rounded-full text-sm"

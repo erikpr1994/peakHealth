@@ -62,4 +62,4 @@ export interface ExerciseSelectionModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSelectExercise: (exercise: Exercise, variant?: ExerciseVariant) => void;
-} 
+}

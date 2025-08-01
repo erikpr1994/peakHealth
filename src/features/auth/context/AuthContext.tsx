@@ -1,5 +1,7 @@
 "use client";
 
+import { User } from "@supabase/supabase-js";
+import { useRouter } from "next/navigation";
 import React, {
   createContext,
   useContext,
@@ -7,9 +9,8 @@ import React, {
   ReactNode,
   useEffect,
 } from "react";
-import { useRouter } from "next/navigation";
+
 import { createClient } from "@/lib/supabase/client";
-import { User } from "@supabase/supabase-js";
 
 interface AuthContextType {
   isAuthenticated: boolean;

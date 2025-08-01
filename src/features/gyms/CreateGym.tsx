@@ -1,4 +1,3 @@
-import { useState } from "react";
 import {
   ArrowLeft,
   Save,
@@ -9,12 +8,14 @@ import {
   Home,
   Dumbbell,
 } from "lucide-react";
-import { Card } from "@/components/ui/card";
+import { useState } from "react";
+
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { Checkbox } from "@/components/ui/checkbox";
 import {
   Select,
   SelectContent,
@@ -22,8 +23,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Badge } from "@/components/ui/badge";
-
+import { Textarea } from "@/components/ui/textarea";
 import { Page } from "@/types/app";
 
 interface CreateGymProps {
@@ -156,19 +156,19 @@ export default function CreateGym({ onNavigate }: CreateGymProps) {
   ];
 
   const handleEquipmentToggle = (equipment: string) => {
-    setGymData((prev) => ({
+    setGymData(prev => ({
       ...prev,
       selectedEquipment: prev.selectedEquipment.includes(equipment)
-        ? prev.selectedEquipment.filter((e) => e !== equipment)
+        ? prev.selectedEquipment.filter(e => e !== equipment)
         : [...prev.selectedEquipment, equipment],
     }));
   };
 
   const handleAmenityToggle = (amenity: string) => {
-    setGymData((prev) => ({
+    setGymData(prev => ({
       ...prev,
       amenities: prev.amenities.includes(amenity)
-        ? prev.amenities.filter((a) => a !== amenity)
+        ? prev.amenities.filter(a => a !== amenity)
         : [...prev.amenities, amenity],
     }));
   };
@@ -178,7 +178,7 @@ export default function CreateGym({ onNavigate }: CreateGymProps) {
       newCustomEquipment &&
       !gymData.customEquipment.includes(newCustomEquipment)
     ) {
-      setGymData((prev) => ({
+      setGymData(prev => ({
         ...prev,
         customEquipment: [...prev.customEquipment, newCustomEquipment],
       }));
@@ -187,9 +187,9 @@ export default function CreateGym({ onNavigate }: CreateGymProps) {
   };
 
   const handleRemoveCustomEquipment = (equipment: string) => {
-    setGymData((prev) => ({
+    setGymData(prev => ({
       ...prev,
-      customEquipment: prev.customEquipment.filter((e) => e !== equipment),
+      customEquipment: prev.customEquipment.filter(e => e !== equipment),
     }));
   };
 
@@ -204,7 +204,7 @@ export default function CreateGym({ onNavigate }: CreateGymProps) {
     field: "open" | "close" | "closed",
     value: string | boolean
   ) => {
-    setGymData((prev) => ({
+    setGymData(prev => ({
       ...prev,
       operatingHours: {
         ...prev.operatingHours,
@@ -262,9 +262,7 @@ export default function CreateGym({ onNavigate }: CreateGymProps) {
               <Input
                 id="name"
                 value={gymData.name}
-                onChange={(e) =>
-                  setGymData({ ...gymData, name: e.target.value })
-                }
+                onChange={e => setGymData({ ...gymData, name: e.target.value })}
                 placeholder="e.g., My Home Gym, Garage Workout Space"
                 className="mt-2"
               />
@@ -282,7 +280,7 @@ export default function CreateGym({ onNavigate }: CreateGymProps) {
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  {gymTypes.map((type) => (
+                  {gymTypes.map(type => (
                     <SelectItem key={type.id} value={type.id}>
                       <div>
                         <div className="font-medium">{type.name}</div>
@@ -301,7 +299,7 @@ export default function CreateGym({ onNavigate }: CreateGymProps) {
               <Textarea
                 id="description"
                 value={gymData.description}
-                onChange={(e) =>
+                onChange={e =>
                   setGymData({ ...gymData, description: e.target.value })
                 }
                 placeholder="Describe your gym setup, atmosphere, and what makes it special for your workouts..."
@@ -329,7 +327,7 @@ export default function CreateGym({ onNavigate }: CreateGymProps) {
               <Input
                 id="address"
                 value={gymData.address}
-                onChange={(e) =>
+                onChange={e =>
                   setGymData({ ...gymData, address: e.target.value })
                 }
                 placeholder="123 Fitness Street (optional)"
@@ -342,9 +340,7 @@ export default function CreateGym({ onNavigate }: CreateGymProps) {
               <Input
                 id="city"
                 value={gymData.city}
-                onChange={(e) =>
-                  setGymData({ ...gymData, city: e.target.value })
-                }
+                onChange={e => setGymData({ ...gymData, city: e.target.value })}
                 placeholder="San Francisco"
                 className="mt-2"
               />
@@ -355,7 +351,7 @@ export default function CreateGym({ onNavigate }: CreateGymProps) {
               <Input
                 id="state"
                 value={gymData.state}
-                onChange={(e) =>
+                onChange={e =>
                   setGymData({ ...gymData, state: e.target.value })
                 }
                 placeholder="CA"
@@ -377,7 +373,7 @@ export default function CreateGym({ onNavigate }: CreateGymProps) {
           </p>
 
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 mb-6">
-            {availableEquipment.map((equipment) => (
+            {availableEquipment.map(equipment => (
               <div key={equipment} className="flex items-center space-x-2">
                 <Checkbox
                   id={equipment}
@@ -398,9 +394,9 @@ export default function CreateGym({ onNavigate }: CreateGymProps) {
               <Input
                 id="customEquipment"
                 value={newCustomEquipment}
-                onChange={(e) => setNewCustomEquipment(e.target.value)}
+                onChange={e => setNewCustomEquipment(e.target.value)}
                 placeholder="Enter custom equipment name"
-                onKeyPress={(e) =>
+                onKeyPress={e =>
                   e.key === "Enter" && handleAddCustomEquipment()
                 }
               />
@@ -411,7 +407,7 @@ export default function CreateGym({ onNavigate }: CreateGymProps) {
 
             {gymData.customEquipment.length > 0 && (
               <div className="flex flex-wrap gap-2 mt-3">
-                {gymData.customEquipment.map((equipment) => (
+                {gymData.customEquipment.map(equipment => (
                   <Badge
                     key={equipment}
                     variant="secondary"
@@ -439,7 +435,7 @@ export default function CreateGym({ onNavigate }: CreateGymProps) {
           <h3 className="text-lg font-semibold mb-6">Amenities & Features</h3>
 
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
-            {commonAmenities.map((amenity) => (
+            {commonAmenities.map(amenity => (
               <div key={amenity} className="flex items-center space-x-2">
                 <Checkbox
                   id={amenity}
@@ -465,12 +461,12 @@ export default function CreateGym({ onNavigate }: CreateGymProps) {
           </p>
 
           <div className="space-y-4">
-            {days.map((day) => (
+            {days.map(day => (
               <div key={day} className="flex items-center gap-4">
                 <div className="w-24 text-sm font-medium capitalize">{day}</div>
                 <Checkbox
                   checked={!gymData.operatingHours[day].closed}
-                  onCheckedChange={(checked) =>
+                  onCheckedChange={checked =>
                     updateOperatingHours(day, "closed", !checked)
                   }
                 />
@@ -479,7 +475,7 @@ export default function CreateGym({ onNavigate }: CreateGymProps) {
                     <Input
                       type="time"
                       value={gymData.operatingHours[day].open}
-                      onChange={(e) =>
+                      onChange={e =>
                         updateOperatingHours(day, "open", e.target.value)
                       }
                       className="w-24"
@@ -488,7 +484,7 @@ export default function CreateGym({ onNavigate }: CreateGymProps) {
                     <Input
                       type="time"
                       value={gymData.operatingHours[day].close}
-                      onChange={(e) =>
+                      onChange={e =>
                         updateOperatingHours(day, "close", e.target.value)
                       }
                       className="w-24"

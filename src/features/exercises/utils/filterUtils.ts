@@ -6,11 +6,11 @@ export const filterExercises = (
   selectedCategory: string,
   filters: FilterState
 ): Exercise[] => {
-  return exercises.filter((exercise) => {
+  return exercises.filter(exercise => {
     // Search filter
     const matchesSearch =
       exercise.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      exercise.muscleGroups.some((muscle) =>
+      exercise.muscleGroups.some(muscle =>
         muscle.toLowerCase().includes(searchTerm.toLowerCase())
       );
 
@@ -25,14 +25,12 @@ export const filterExercises = (
 
     const matchesMuscleGroup =
       filters.muscleGroups.length === 0 ||
-      filters.muscleGroups.some((group) =>
-        exercise.muscleGroups.includes(group)
-      );
+      filters.muscleGroups.some(group => exercise.muscleGroups.includes(group));
 
     const matchesEquipment =
       filters.equipment.length === 0 ||
       (exercise.equipment &&
-        filters.equipment.some((eq) => exercise.equipment!.includes(eq)));
+        filters.equipment.some(eq => exercise.equipment!.includes(eq)));
 
     return (
       matchesSearch &&
@@ -50,4 +48,4 @@ export const getActiveFilterCount = (filters: FilterState): number => {
     filters.muscleGroups.length +
     filters.equipment.length
   );
-}; 
+};

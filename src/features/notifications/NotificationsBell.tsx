@@ -1,14 +1,15 @@
 "use client";
 
+import { Bell } from "lucide-react";
 import { useState } from "react";
+
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Bell } from "lucide-react";
 
 interface NotificationsBellProps {
   unreadCount: number;
@@ -45,7 +46,7 @@ export const NotificationsBell = ({ unreadCount }: NotificationsBellProps) => {
             <Bell className="w-12 h-12 mx-auto text-gray-300" />
             <p className="mt-2 font-medium">No new notifications</p>
             <p className="text-sm text-gray-400">
-                              We&apos;ll let you know when something new comes up.
+              We&apos;ll let you know when something new comes up.
             </p>
           </div>
         </div>

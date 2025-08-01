@@ -1,7 +1,5 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
 import {
   Search,
   Plus,
@@ -16,17 +14,9 @@ import {
   Weight,
   Wrench,
 } from "lucide-react";
-import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+
 import {
   AlertDialog,
   AlertDialogAction,
@@ -38,6 +28,17 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 interface EquipmentSpecs {
   weightRange?: { min: number; max: number; increment: number };
@@ -211,7 +212,7 @@ export default function EquipmentPage() {
     { id: "Accessories", name: "Accessories", icon: Settings },
   ];
 
-  const filteredEquipment = equipment.filter((item) => {
+  const filteredEquipment = equipment.filter(item => {
     const matchesSearch =
       item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       item.brand.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -225,11 +226,11 @@ export default function EquipmentPage() {
   });
 
   const handleDelete = (equipmentId: string) => {
-    setEquipment(equipment.filter((item) => item.id !== equipmentId));
+    setEquipment(equipment.filter(item => item.id !== equipmentId));
   };
 
   const getCategoryIcon = (categoryName: string) => {
-    const category = categories.find((cat) => cat.id === categoryName);
+    const category = categories.find(cat => cat.id === categoryName);
     return category ? category.icon : Wrench;
   };
 
@@ -311,8 +312,8 @@ export default function EquipmentPage() {
                   <AlertDialogHeader>
                     <AlertDialogTitle>Delete Equipment</AlertDialogTitle>
                     <AlertDialogDescription>
-                      Are you sure you want to delete &quot;{item.name}&quot;? This action
-                      cannot be undone.
+                      Are you sure you want to delete &quot;{item.name}&quot;?
+                      This action cannot be undone.
                     </AlertDialogDescription>
                   </AlertDialogHeader>
                   <AlertDialogFooter>
@@ -428,7 +429,7 @@ export default function EquipmentPage() {
           <Input
             placeholder="Search equipment by name, brand, model, or description..."
             value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
+            onChange={e => setSearchQuery(e.target.value)}
             className="pl-10"
           />
         </div>
@@ -440,7 +441,7 @@ export default function EquipmentPage() {
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              {categories.map((category) => (
+              {categories.map(category => (
                 <SelectItem key={category.id} value={category.id}>
                   {category.name}
                 </SelectItem>
@@ -464,7 +465,7 @@ export default function EquipmentPage() {
       {/* Equipment Grid */}
       {filteredEquipment.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredEquipment.map((item) => (
+          {filteredEquipment.map(item => (
             <EquipmentCard key={item.id} item={item} />
           ))}
         </div>
@@ -500,14 +501,14 @@ export default function EquipmentPage() {
             </div>
             <div>
               <div className="text-2xl font-bold text-gray-900">
-                {filteredEquipment.filter((e) => e.type === "custom").length}
+                {filteredEquipment.filter(e => e.type === "custom").length}
               </div>
               <div className="text-sm text-gray-500">Custom Equipment</div>
             </div>
             <div>
               <div className="text-2xl font-bold text-gray-900">
                 {
-                  filteredEquipment.filter((e) => e.category === "Free Weights")
+                  filteredEquipment.filter(e => e.category === "Free Weights")
                     .length
                 }
               </div>

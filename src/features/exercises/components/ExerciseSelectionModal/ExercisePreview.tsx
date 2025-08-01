@@ -1,13 +1,16 @@
 import { Star, Info, ExternalLink } from "lucide-react";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { Button } from "@/components/ui/button";
-import { Exercise, ExerciseVariant } from "../../types";
-import { DifficultyBadge } from "../shared/DifficultyBadge";
-import { CategoryBadge } from "../shared/CategoryBadge";
-import { EquipmentTags } from "../shared/EquipmentTags";
-import { getEffectiveExercise } from "../../utils/exerciseUtils";
-import { VariantSelector } from "./VariantSelector";
 import { useRouter } from "next/navigation";
+
+import { Button } from "@/components/ui/button";
+import { ScrollArea } from "@/components/ui/scroll-area";
+
+import { Exercise, ExerciseVariant } from "../../types";
+import { getEffectiveExercise } from "../../utils/exerciseUtils";
+import { CategoryBadge } from "../shared/CategoryBadge";
+import { DifficultyBadge } from "../shared/DifficultyBadge";
+import { EquipmentTags } from "../shared/EquipmentTags";
+
+import { VariantSelector } from "./VariantSelector";
 
 interface ExercisePreviewProps {
   exercise: Exercise | null;
@@ -100,7 +103,7 @@ export function ExercisePreview({
                   Target Muscles
                 </h4>
                 <div className="grid grid-cols-2 gap-2">
-                  {effectiveExercise.muscleGroups.map((muscle) => (
+                  {effectiveExercise.muscleGroups.map(muscle => (
                     <div
                       key={muscle}
                       className="flex items-center justify-center px-3 py-2 bg-blue-50 text-blue-700 rounded-lg text-sm font-medium"

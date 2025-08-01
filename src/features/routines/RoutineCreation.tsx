@@ -1,7 +1,5 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
 import {
   ArrowLeft,
   Save,
@@ -23,8 +21,13 @@ import {
   Bike,
   TrendingUp,
 } from "lucide-react";
-import { Card } from "@/components/ui/card";
+import { useRouter } from "next/navigation";
+import { useState, useEffect } from "react";
+
+import NotesModal from "@/components/shared/NotesModal";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -41,16 +44,11 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { Badge } from "@/components/ui/badge";
 import ExerciseSelectionModal from "@/features/exercises/ExerciseSelectionModal";
-import NotesModal from "@/components/shared/NotesModal";
-import SetManagement, {
-  WorkoutSet,
-  ProgressionMethod as WorkoutProgressionMethod,
-} from "@/features/workout/SetManagement";
 import TrailRunningWorkout, {
   TrailRunningWorkoutData,
 } from "@/features/routines/TrailRunningWorkout";
+import SetManagement, { WorkoutSet } from "@/features/workout/SetManagement";
 
 export type WorkoutType =
   | "strength"
@@ -359,9 +357,7 @@ export default function RoutineCreation({
   ];
 
   const getProgressionMethodLabel = (method: ProgressionMethod) => {
-    return (
-      progressionMethods.find((pm) => pm.value === method)?.label || method
-    );
+    return progressionMethods.find(pm => pm.value === method)?.label || method;
   };
 
   const getProgressionMethodColor = (method: ProgressionMethod) => {
@@ -404,7 +400,7 @@ export default function RoutineCreation({
     if (editingRunning) {
       // Edit existing workout
       setRunningWorkouts(
-        runningWorkouts.map((workout) => {
+        runningWorkouts.map(workout => {
           if (workout.id === editingRunning.workoutId) {
             return {
               ...workout,
@@ -444,7 +440,7 @@ export default function RoutineCreation({
   };
 
   const handleEditRunning = (workoutId: string) => {
-    const workout = runningWorkouts.find((w) => w.id === workoutId);
+    const workout = runningWorkouts.find(w => w.id === workoutId);
     if (workout?.trailRunningData) {
       setEditingRunning({ workoutId, data: workout.trailRunningData });
     }
@@ -452,18 +448,18 @@ export default function RoutineCreation({
 
   const removeStrengthWorkout = (workoutId: string) => {
     setStrengthWorkouts(
-      strengthWorkouts.filter((workout) => workout.id !== workoutId)
+      strengthWorkouts.filter(workout => workout.id !== workoutId)
     );
   };
 
   const removeRunningWorkout = (workoutId: string) => {
     setRunningWorkouts(
-      runningWorkouts.filter((workout) => workout.id !== workoutId)
+      runningWorkouts.filter(workout => workout.id !== workoutId)
     );
   };
 
   const moveStrengthWorkout = (workoutId: string, direction: "up" | "down") => {
-    const currentIndex = strengthWorkouts.findIndex((w) => w.id === workoutId);
+    const currentIndex = strengthWorkouts.findIndex(w => w.id === workoutId);
     if (currentIndex === -1) return;
 
     const newIndex = direction === "up" ? currentIndex - 1 : currentIndex + 1;
@@ -476,7 +472,7 @@ export default function RoutineCreation({
   };
 
   const moveRunningWorkout = (workoutId: string, direction: "up" | "down") => {
-    const currentIndex = runningWorkouts.findIndex((w) => w.id === workoutId);
+    const currentIndex = runningWorkouts.findIndex(w => w.id === workoutId);
     if (currentIndex === -1) return;
 
     const newIndex = direction === "up" ? currentIndex - 1 : currentIndex + 1;
@@ -490,7 +486,7 @@ export default function RoutineCreation({
 
   const updateStrengthWorkoutName = (workoutId: string, name: string) => {
     setStrengthWorkouts(
-      strengthWorkouts.map((workout) =>
+      strengthWorkouts.map(workout =>
         workout.id === workoutId ? { ...workout, name } : workout
       )
     );
@@ -498,7 +494,7 @@ export default function RoutineCreation({
 
   const updateRunningWorkoutName = (workoutId: string, name: string) => {
     setRunningWorkouts(
-      runningWorkouts.map((workout) =>
+      runningWorkouts.map(workout =>
         workout.id === workoutId ? { ...workout, name } : workout
       )
     );
@@ -509,7 +505,7 @@ export default function RoutineCreation({
     objective: string
   ) => {
     setStrengthWorkouts(
-      strengthWorkouts.map((workout) =>
+      strengthWorkouts.map(workout =>
         workout.id === workoutId ? { ...workout, objective } : workout
       )
     );
@@ -520,7 +516,7 @@ export default function RoutineCreation({
     objective: string
   ) => {
     setRunningWorkouts(
-      runningWorkouts.map((workout) =>
+      runningWorkouts.map(workout =>
         workout.id === workoutId ? { ...workout, objective } : workout
       )
     );
@@ -532,7 +528,7 @@ export default function RoutineCreation({
     value: string
   ) => {
     setStrengthWorkouts(
-      strengthWorkouts.map((workout) =>
+      strengthWorkouts.map(workout =>
         workout.id === workoutId
           ? { ...workout, schedule: { ...workout.schedule, [field]: value } }
           : workout
@@ -546,7 +542,7 @@ export default function RoutineCreation({
     value: string
   ) => {
     setRunningWorkouts(
-      runningWorkouts.map((workout) =>
+      runningWorkouts.map(workout =>
         workout.id === workoutId
           ? { ...workout, schedule: { ...workout.schedule, [field]: value } }
           : workout
@@ -670,7 +666,7 @@ export default function RoutineCreation({
     };
 
     setStrengthWorkouts(
-      strengthWorkouts.map((workout) =>
+      strengthWorkouts.map(workout =>
         workout.id === workoutId
           ? { ...workout, sections: [...workout.sections, newSection] }
           : workout
@@ -688,7 +684,7 @@ export default function RoutineCreation({
     };
 
     setRunningWorkouts(
-      runningWorkouts.map((workout) =>
+      runningWorkouts.map(workout =>
         workout.id === workoutId
           ? { ...workout, sections: [...workout.sections, newSection] }
           : workout
@@ -698,12 +694,12 @@ export default function RoutineCreation({
 
   const removeStrengthSection = (workoutId: string, sectionId: string) => {
     setStrengthWorkouts(
-      strengthWorkouts.map((workout) =>
+      strengthWorkouts.map(workout =>
         workout.id === workoutId
           ? {
               ...workout,
               sections: workout.sections.filter(
-                (section) => section.id !== sectionId
+                section => section.id !== sectionId
               ),
             }
           : workout
@@ -713,12 +709,12 @@ export default function RoutineCreation({
 
   const removeRunningSection = (workoutId: string, sectionId: string) => {
     setRunningWorkouts(
-      runningWorkouts.map((workout) =>
+      runningWorkouts.map(workout =>
         workout.id === workoutId
           ? {
               ...workout,
               sections: workout.sections.filter(
-                (section) => section.id !== sectionId
+                section => section.id !== sectionId
               ),
             }
           : workout
@@ -732,11 +728,11 @@ export default function RoutineCreation({
     name: string
   ) => {
     setStrengthWorkouts(
-      strengthWorkouts.map((workout) =>
+      strengthWorkouts.map(workout =>
         workout.id === workoutId
           ? {
               ...workout,
-              sections: workout.sections.map((section) =>
+              sections: workout.sections.map(section =>
                 section.id === sectionId ? { ...section, name } : section
               ),
             }
@@ -751,11 +747,11 @@ export default function RoutineCreation({
     name: string
   ) => {
     setRunningWorkouts(
-      runningWorkouts.map((workout) =>
+      runningWorkouts.map(workout =>
         workout.id === workoutId
           ? {
               ...workout,
-              sections: workout.sections.map((section) =>
+              sections: workout.sections.map(section =>
                 section.id === sectionId ? { ...section, name } : section
               ),
             }
@@ -770,11 +766,11 @@ export default function RoutineCreation({
     type: WorkoutSection["type"]
   ) => {
     setStrengthWorkouts(
-      strengthWorkouts.map((workout) =>
+      strengthWorkouts.map(workout =>
         workout.id === workoutId
           ? {
               ...workout,
-              sections: workout.sections.map((section) =>
+              sections: workout.sections.map(section =>
                 section.id === sectionId
                   ? {
                       ...section,
@@ -801,11 +797,11 @@ export default function RoutineCreation({
     type: WorkoutSection["type"]
   ) => {
     setRunningWorkouts(
-      runningWorkouts.map((workout) =>
+      runningWorkouts.map(workout =>
         workout.id === workoutId
           ? {
               ...workout,
-              sections: workout.sections.map((section) =>
+              sections: workout.sections.map(section =>
                 section.id === sectionId
                   ? {
                       ...section,
@@ -832,11 +828,11 @@ export default function RoutineCreation({
     restAfter: string
   ) => {
     setStrengthWorkouts(
-      strengthWorkouts.map((workout) =>
+      strengthWorkouts.map(workout =>
         workout.id === workoutId
           ? {
               ...workout,
-              sections: workout.sections.map((section) =>
+              sections: workout.sections.map(section =>
                 section.id === sectionId ? { ...section, restAfter } : section
               ),
             }
@@ -851,11 +847,11 @@ export default function RoutineCreation({
     restAfter: string
   ) => {
     setRunningWorkouts(
-      runningWorkouts.map((workout) =>
+      runningWorkouts.map(workout =>
         workout.id === workoutId
           ? {
               ...workout,
-              sections: workout.sections.map((section) =>
+              sections: workout.sections.map(section =>
                 section.id === sectionId ? { ...section, restAfter } : section
               ),
             }
@@ -870,11 +866,11 @@ export default function RoutineCreation({
     duration: number
   ) => {
     setStrengthWorkouts(
-      strengthWorkouts.map((workout) =>
+      strengthWorkouts.map(workout =>
         workout.id === workoutId
           ? {
               ...workout,
-              sections: workout.sections.map((section) =>
+              sections: workout.sections.map(section =>
                 section.id === sectionId
                   ? { ...section, emomDuration: duration }
                   : section
@@ -891,11 +887,11 @@ export default function RoutineCreation({
     duration: number
   ) => {
     setRunningWorkouts(
-      runningWorkouts.map((workout) =>
+      runningWorkouts.map(workout =>
         workout.id === workoutId
           ? {
               ...workout,
-              sections: workout.sections.map((section) =>
+              sections: workout.sections.map(section =>
                 section.id === sectionId
                   ? { ...section, emomDuration: duration }
                   : section
@@ -913,15 +909,15 @@ export default function RoutineCreation({
     reps: number
   ) => {
     setStrengthWorkouts(
-      strengthWorkouts.map((workout) =>
+      strengthWorkouts.map(workout =>
         workout.id === workoutId
           ? {
               ...workout,
-              sections: workout.sections.map((section) =>
+              sections: workout.sections.map(section =>
                 section.id === sectionId
                   ? {
                       ...section,
-                      exercises: section.exercises.map((exercise) =>
+                      exercises: section.exercises.map(exercise =>
                         exercise.id === exerciseId
                           ? { ...exercise, emomReps: reps }
                           : exercise
@@ -942,15 +938,15 @@ export default function RoutineCreation({
     reps: number
   ) => {
     setRunningWorkouts(
-      runningWorkouts.map((workout) =>
+      runningWorkouts.map(workout =>
         workout.id === workoutId
           ? {
               ...workout,
-              sections: workout.sections.map((section) =>
+              sections: workout.sections.map(section =>
                 section.id === sectionId
                   ? {
                       ...section,
-                      exercises: section.exercises.map((exercise) =>
+                      exercises: section.exercises.map(exercise =>
                         exercise.id === exerciseId
                           ? { ...exercise, emomReps: reps }
                           : exercise
@@ -1121,15 +1117,15 @@ export default function RoutineCreation({
     progressionMethod: ProgressionMethod
   ) => {
     setStrengthWorkouts(
-      strengthWorkouts.map((workout) =>
+      strengthWorkouts.map(workout =>
         workout.id === workoutId
           ? {
               ...workout,
-              sections: workout.sections.map((section) =>
+              sections: workout.sections.map(section =>
                 section.id === sectionId
                   ? {
                       ...section,
-                      exercises: section.exercises.map((exercise) =>
+                      exercises: section.exercises.map(exercise =>
                         exercise.id === exerciseId
                           ? {
                               ...exercise,
@@ -1155,19 +1151,19 @@ export default function RoutineCreation({
     exerciseId: string
   ) => {
     setStrengthWorkouts(
-      strengthWorkouts.map((workout) =>
+      strengthWorkouts.map(workout =>
         workout.id === workoutId
           ? {
               ...workout,
-              sections: workout.sections.map((section) =>
+              sections: workout.sections.map(section =>
                 section.id === sectionId
                   ? {
                       ...section,
-                      exercises: section.exercises.map((exercise) => {
+                      exercises: section.exercises.map(exercise => {
                         if (exercise.id === exerciseId) {
                           // Create 2-3 approach sets with lower weight and similar reps
                           const mainSets = exercise.sets.filter(
-                            (set) => set.setType === "normal"
+                            set => set.setType === "normal"
                           );
                           const firstMainSet =
                             mainSets.length > 0 ? mainSets[0] : null;
@@ -1226,22 +1222,26 @@ export default function RoutineCreation({
     setExerciseModalOpen(true);
   };
 
-  const handleExerciseSelect = (selectedExercise: { name: string; category?: string; muscleGroups?: string[] }) => {
+  const handleExerciseSelect = (selectedExercise: {
+    name: string;
+    category?: string;
+    muscleGroups?: string[];
+  }) => {
     if (!currentAddExerciseContext) return;
 
     // Find the section to determine exercise configuration
     const strengthWorkout = strengthWorkouts.find(
-      (w) => w.id === currentAddExerciseContext.workoutId
+      w => w.id === currentAddExerciseContext.workoutId
     );
     const runningWorkout = runningWorkouts.find(
-      (w) => w.id === currentAddExerciseContext.workoutId
+      w => w.id === currentAddExerciseContext.workoutId
     );
     const workout = strengthWorkout || runningWorkout;
 
     if (!workout) return;
 
     const section = workout.sections.find(
-      (s) => s.id === currentAddExerciseContext.sectionId
+      s => s.id === currentAddExerciseContext.sectionId
     );
 
     const newExercise: Exercise = {
@@ -1253,8 +1253,8 @@ export default function RoutineCreation({
         section?.type === "tabata"
           ? []
           : strengthWorkout
-          ? generateSetsForProgression("linear")
-          : [], // Auto-generate sets for strength exercises
+            ? generateSetsForProgression("linear")
+            : [], // Auto-generate sets for strength exercises
       restTimer: section?.type === "emom" ? "00:00" : "01:30", // EMOM doesn't need rest between sets
       restAfter: section?.type === "tabata" ? "00:00" : "02:00", // TABATA rest is built into the protocol
       notes: "",
@@ -1265,11 +1265,11 @@ export default function RoutineCreation({
 
     if (strengthWorkout) {
       setStrengthWorkouts(
-        strengthWorkouts.map((workout) =>
+        strengthWorkouts.map(workout =>
           workout.id === currentAddExerciseContext!.workoutId
             ? {
                 ...workout,
-                sections: workout.sections.map((section) =>
+                sections: workout.sections.map(section =>
                   section.id === currentAddExerciseContext!.sectionId
                     ? {
                         ...section,
@@ -1283,11 +1283,11 @@ export default function RoutineCreation({
       );
     } else if (runningWorkout) {
       setRunningWorkouts(
-        runningWorkouts.map((workout) =>
+        runningWorkouts.map(workout =>
           workout.id === currentAddExerciseContext!.workoutId
             ? {
                 ...workout,
-                sections: workout.sections.map((section) =>
+                sections: workout.sections.map(section =>
                   section.id === currentAddExerciseContext!.sectionId
                     ? {
                         ...section,
@@ -1312,20 +1312,20 @@ export default function RoutineCreation({
     exerciseId: string,
     setId?: string
   ) => {
-    const strengthWorkout = strengthWorkouts.find((w) => w.id === workoutId);
-    const runningWorkout = runningWorkouts.find((w) => w.id === workoutId);
+    const strengthWorkout = strengthWorkouts.find(w => w.id === workoutId);
+    const runningWorkout = runningWorkouts.find(w => w.id === workoutId);
     const workout = strengthWorkout || runningWorkout;
 
     if (!workout) return;
 
-    const section = workout.sections.find((s) => s.id === sectionId);
-    const exercise = section?.exercises.find((e) => e.id === exerciseId);
+    const section = workout.sections.find(s => s.id === sectionId);
+    const exercise = section?.exercises.find(e => e.id === exerciseId);
 
     let currentNotes = "";
     if (type === "exercise") {
       currentNotes = exercise?.notes || "";
     } else if (type === "set" && setId) {
-      const set = exercise?.sets.find((s) => s.id === setId);
+      const set = exercise?.sets.find(s => s.id === setId);
       currentNotes = set?.notes || "";
     }
 
@@ -1348,21 +1348,21 @@ export default function RoutineCreation({
 
     // Update in strength workouts
     setStrengthWorkouts(
-      strengthWorkouts.map((workout) =>
+      strengthWorkouts.map(workout =>
         workout.id === workoutId
           ? {
               ...workout,
-              sections: workout.sections.map((section) =>
+              sections: workout.sections.map(section =>
                 section.id === sectionId
                   ? {
                       ...section,
-                      exercises: section.exercises.map((exercise) =>
+                      exercises: section.exercises.map(exercise =>
                         exercise.id === exerciseId
                           ? type === "exercise"
                             ? { ...exercise, notes }
                             : {
                                 ...exercise,
-                                sets: exercise.sets.map((set) =>
+                                sets: exercise.sets.map(set =>
                                   set.id === setId ? { ...set, notes } : set
                                 ),
                               }
@@ -1378,21 +1378,21 @@ export default function RoutineCreation({
 
     // Update in running workouts
     setRunningWorkouts(
-      runningWorkouts.map((workout) =>
+      runningWorkouts.map(workout =>
         workout.id === workoutId
           ? {
               ...workout,
-              sections: workout.sections.map((section) =>
+              sections: workout.sections.map(section =>
                 section.id === sectionId
                   ? {
                       ...section,
-                      exercises: section.exercises.map((exercise) =>
+                      exercises: section.exercises.map(exercise =>
                         exercise.id === exerciseId
                           ? type === "exercise"
                             ? { ...exercise, notes }
                             : {
                                 ...exercise,
-                                sets: exercise.sets.map((set) =>
+                                sets: exercise.sets.map(set =>
                                   set.id === setId ? { ...set, notes } : set
                                 ),
                               }
@@ -1416,15 +1416,15 @@ export default function RoutineCreation({
     sets: WorkoutSet[]
   ) => {
     setStrengthWorkouts(
-      strengthWorkouts.map((workout) =>
+      strengthWorkouts.map(workout =>
         workout.id === workoutId
           ? {
               ...workout,
-              sections: workout.sections.map((section) =>
+              sections: workout.sections.map(section =>
                 section.id === sectionId
                   ? {
                       ...section,
-                      exercises: section.exercises.map((exercise) =>
+                      exercises: section.exercises.map(exercise =>
                         exercise.id === exerciseId
                           ? { ...exercise, sets }
                           : exercise
@@ -1445,15 +1445,15 @@ export default function RoutineCreation({
     sets: WorkoutSet[]
   ) => {
     setRunningWorkouts(
-      runningWorkouts.map((workout) =>
+      runningWorkouts.map(workout =>
         workout.id === workoutId
           ? {
               ...workout,
-              sections: workout.sections.map((section) =>
+              sections: workout.sections.map(section =>
                 section.id === sectionId
                   ? {
                       ...section,
-                      exercises: section.exercises.map((exercise) =>
+                      exercises: section.exercises.map(exercise =>
                         exercise.id === exerciseId
                           ? { ...exercise, sets }
                           : exercise
@@ -1474,15 +1474,15 @@ export default function RoutineCreation({
     name: string
   ) => {
     setStrengthWorkouts(
-      strengthWorkouts.map((workout) =>
+      strengthWorkouts.map(workout =>
         workout.id === workoutId
           ? {
               ...workout,
-              sections: workout.sections.map((section) =>
+              sections: workout.sections.map(section =>
                 section.id === sectionId
                   ? {
                       ...section,
-                      exercises: section.exercises.map((exercise) =>
+                      exercises: section.exercises.map(exercise =>
                         exercise.id === exerciseId
                           ? { ...exercise, name }
                           : exercise
@@ -1503,15 +1503,15 @@ export default function RoutineCreation({
     name: string
   ) => {
     setRunningWorkouts(
-      runningWorkouts.map((workout) =>
+      runningWorkouts.map(workout =>
         workout.id === workoutId
           ? {
               ...workout,
-              sections: workout.sections.map((section) =>
+              sections: workout.sections.map(section =>
                 section.id === sectionId
                   ? {
                       ...section,
-                      exercises: section.exercises.map((exercise) =>
+                      exercises: section.exercises.map(exercise =>
                         exercise.id === exerciseId
                           ? { ...exercise, name }
                           : exercise
@@ -1532,15 +1532,15 @@ export default function RoutineCreation({
     restTimer: string
   ) => {
     setStrengthWorkouts(
-      strengthWorkouts.map((workout) =>
+      strengthWorkouts.map(workout =>
         workout.id === workoutId
           ? {
               ...workout,
-              sections: workout.sections.map((section) =>
+              sections: workout.sections.map(section =>
                 section.id === sectionId
                   ? {
                       ...section,
-                      exercises: section.exercises.map((exercise) =>
+                      exercises: section.exercises.map(exercise =>
                         exercise.id === exerciseId
                           ? { ...exercise, restTimer }
                           : exercise
@@ -1561,15 +1561,15 @@ export default function RoutineCreation({
     restTimer: string
   ) => {
     setRunningWorkouts(
-      runningWorkouts.map((workout) =>
+      runningWorkouts.map(workout =>
         workout.id === workoutId
           ? {
               ...workout,
-              sections: workout.sections.map((section) =>
+              sections: workout.sections.map(section =>
                 section.id === sectionId
                   ? {
                       ...section,
-                      exercises: section.exercises.map((exercise) =>
+                      exercises: section.exercises.map(exercise =>
                         exercise.id === exerciseId
                           ? { ...exercise, restTimer }
                           : exercise
@@ -1590,15 +1590,15 @@ export default function RoutineCreation({
     restAfter: string
   ) => {
     setStrengthWorkouts(
-      strengthWorkouts.map((workout) =>
+      strengthWorkouts.map(workout =>
         workout.id === workoutId
           ? {
               ...workout,
-              sections: workout.sections.map((section) =>
+              sections: workout.sections.map(section =>
                 section.id === sectionId
                   ? {
                       ...section,
-                      exercises: section.exercises.map((exercise) =>
+                      exercises: section.exercises.map(exercise =>
                         exercise.id === exerciseId
                           ? { ...exercise, restAfter }
                           : exercise
@@ -1619,15 +1619,15 @@ export default function RoutineCreation({
     restAfter: string
   ) => {
     setRunningWorkouts(
-      runningWorkouts.map((workout) =>
+      runningWorkouts.map(workout =>
         workout.id === workoutId
           ? {
               ...workout,
-              sections: workout.sections.map((section) =>
+              sections: workout.sections.map(section =>
                 section.id === sectionId
                   ? {
                       ...section,
-                      exercises: section.exercises.map((exercise) =>
+                      exercises: section.exercises.map(exercise =>
                         exercise.id === exerciseId
                           ? { ...exercise, restAfter }
                           : exercise
@@ -1642,7 +1642,7 @@ export default function RoutineCreation({
   };
 
   const toggleStrengthWorkoutCollapse = (workoutId: string) => {
-    setCollapsedStrengthWorkouts((prev) => {
+    setCollapsedStrengthWorkouts(prev => {
       const newSet = new Set(prev);
       if (newSet.has(workoutId)) {
         newSet.delete(workoutId);
@@ -1654,7 +1654,7 @@ export default function RoutineCreation({
   };
 
   const toggleRunningWorkoutCollapse = (workoutId: string) => {
-    setCollapsedRunningWorkouts((prev) => {
+    setCollapsedRunningWorkouts(prev => {
       const newSet = new Set(prev);
       if (newSet.has(workoutId)) {
         newSet.delete(workoutId);
@@ -1728,16 +1728,16 @@ export default function RoutineCreation({
     exerciseId: string
   ) => {
     setStrengthWorkouts(
-      strengthWorkouts.map((workout) =>
+      strengthWorkouts.map(workout =>
         workout.id === workoutId
           ? {
               ...workout,
-              sections: workout.sections.map((section) =>
+              sections: workout.sections.map(section =>
                 section.id === sectionId
                   ? {
                       ...section,
                       exercises: section.exercises.filter(
-                        (exercise) => exercise.id !== exerciseId
+                        exercise => exercise.id !== exerciseId
                       ),
                     }
                   : section
@@ -1754,16 +1754,16 @@ export default function RoutineCreation({
     exerciseId: string
   ) => {
     setRunningWorkouts(
-      runningWorkouts.map((workout) =>
+      runningWorkouts.map(workout =>
         workout.id === workoutId
           ? {
               ...workout,
-              sections: workout.sections.map((section) =>
+              sections: workout.sections.map(section =>
                 section.id === sectionId
                   ? {
                       ...section,
                       exercises: section.exercises.filter(
-                        (exercise) => exercise.id !== exerciseId
+                        exercise => exercise.id !== exerciseId
                       ),
                     }
                   : section
@@ -1928,9 +1928,7 @@ export default function RoutineCreation({
               <div>
                 <Input
                   value={workout.name}
-                  onChange={(e) =>
-                    updateWorkoutName(workout.id, e.target.value)
-                  }
+                  onChange={e => updateWorkoutName(workout.id, e.target.value)}
                   className="font-medium border-none p-0 h-auto bg-transparent focus:bg-white focus:border-gray-300"
                 />
                 <div className="flex items-center space-x-4 mt-1">
@@ -1977,9 +1975,7 @@ export default function RoutineCreation({
             <Label>Objective</Label>
             <Textarea
               value={workout.objective}
-              onChange={(e) =>
-                updateWorkoutObjective(workout.id, e.target.value)
-              }
+              onChange={e => updateWorkoutObjective(workout.id, e.target.value)}
               placeholder="What is the primary goal of this workout?"
               rows={2}
             />
@@ -1991,7 +1987,7 @@ export default function RoutineCreation({
               <Label>Weeks</Label>
               <Input
                 value={workout.schedule.weeks}
-                onChange={(e) =>
+                onChange={e =>
                   updateWorkoutSchedule(workout.id, "weeks", e.target.value)
                 }
                 placeholder="e.g., Week 1, 3, 5"
@@ -2001,7 +1997,7 @@ export default function RoutineCreation({
               <Label>Day</Label>
               <Select
                 value={workout.schedule.day}
-                onValueChange={(value) =>
+                onValueChange={value =>
                   updateWorkoutSchedule(workout.id, "day", value)
                 }
               >
@@ -2023,7 +2019,7 @@ export default function RoutineCreation({
               <Label>Time</Label>
               <Input
                 value={workout.schedule.time}
-                onChange={(e) =>
+                onChange={e =>
                   updateWorkoutSchedule(workout.id, "time", e.target.value)
                 }
                 placeholder="e.g., 9:00 AM"
@@ -2087,7 +2083,7 @@ export default function RoutineCreation({
                         <SectionIcon className={`h-4 w-4 ${colors.icon}`} />
                         <Input
                           value={section.name}
-                          onChange={(e) =>
+                          onChange={e =>
                             updateSectionName(
                               workout.id,
                               section.id,
@@ -2137,7 +2133,7 @@ export default function RoutineCreation({
                           <Input
                             type="number"
                             value={section.emomDuration || 10}
-                            onChange={(e) =>
+                            onChange={e =>
                               updateSectionEmomDuration(
                                 workout.id,
                                 section.id,
@@ -2194,7 +2190,7 @@ export default function RoutineCreation({
                                 <div className="flex items-center space-x-3 flex-1">
                                   <Input
                                     value={exercise.name}
-                                    onChange={(e) =>
+                                    onChange={e =>
                                       updateExerciseName(
                                         workout.id,
                                         section.id,
@@ -2226,7 +2222,7 @@ export default function RoutineCreation({
                                         <TooltipContent>
                                           {
                                             progressionMethods.find(
-                                              (pm) =>
+                                              pm =>
                                                 pm.value ===
                                                 exercise.progressionMethod
                                             )?.description
@@ -2311,7 +2307,7 @@ export default function RoutineCreation({
                                         <SelectValue />
                                       </SelectTrigger>
                                       <SelectContent>
-                                        {progressionMethods.map((method) => (
+                                        {progressionMethods.map(method => (
                                           <SelectItem
                                             key={method.value}
                                             value={method.value}
@@ -2338,7 +2334,7 @@ export default function RoutineCreation({
                                   <Input
                                     type="number"
                                     value={exercise.emomReps || 10}
-                                    onChange={(e) =>
+                                    onChange={e =>
                                       updateExerciseEmomReps(
                                         workout.id,
                                         section.id,
@@ -2359,7 +2355,7 @@ export default function RoutineCreation({
                                   <div className="space-y-3">
                                     <SetManagement
                                       sets={exercise.sets}
-                                      onSetsChange={(sets) =>
+                                      onSetsChange={sets =>
                                         updateExerciseSets(
                                           workout.id,
                                           section.id,
@@ -2367,7 +2363,7 @@ export default function RoutineCreation({
                                           sets
                                         )
                                       }
-                                      onNotesClick={(setId) =>
+                                      onNotesClick={setId =>
                                         handleNotesClick(
                                           "set",
                                           workout.id,
@@ -2432,7 +2428,7 @@ export default function RoutineCreation({
                                           </Label>
                                           <Input
                                             value={exercise.restAfter}
-                                            onChange={(e) =>
+                                            onChange={e =>
                                               updateExerciseRestAfter(
                                                 workout.id,
                                                 section.id,
@@ -2462,7 +2458,7 @@ export default function RoutineCreation({
                                         </Label>
                                         <Input
                                           value={exercise.restTimer}
-                                          onChange={(e) =>
+                                          onChange={e =>
                                             updateRestTimer(
                                               workout.id,
                                               section.id,
@@ -2483,7 +2479,7 @@ export default function RoutineCreation({
                                           </Label>
                                           <Input
                                             value={exercise.restAfter}
-                                            onChange={(e) =>
+                                            onChange={e =>
                                               updateExerciseRestAfter(
                                                 workout.id,
                                                 section.id,
@@ -2511,7 +2507,7 @@ export default function RoutineCreation({
                           <Label className="text-sm">Rest after section</Label>
                           <Input
                             value={section.restAfter}
-                            onChange={(e) =>
+                            onChange={e =>
                               updateSectionRestAfter(
                                 workout.id,
                                 section.id,
@@ -2582,7 +2578,7 @@ export default function RoutineCreation({
                 <Input
                   id="name"
                   value={routineName}
-                  onChange={(e) => setRoutineName(e.target.value)}
+                  onChange={e => setRoutineName(e.target.value)}
                   placeholder="e.g., Full Body Split"
                 />
               </div>
@@ -2621,7 +2617,7 @@ export default function RoutineCreation({
               <Textarea
                 id="description"
                 value={description}
-                onChange={(e) => setDescription(e.target.value)}
+                onChange={e => setDescription(e.target.value)}
                 placeholder="Describe your routine..."
                 rows={3}
               />
@@ -2632,7 +2628,7 @@ export default function RoutineCreation({
               <Textarea
                 id="objectives"
                 value={objectives}
-                onChange={(e) => setObjectives(e.target.value)}
+                onChange={e => setObjectives(e.target.value)}
                 placeholder="What are the main goals and focus areas of this routine?"
                 rows={3}
               />

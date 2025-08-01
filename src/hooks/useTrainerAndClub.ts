@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState } from "react";
 
 export function useTrainerAndClub() {
   const [hasTrainer, setHasTrainer] = useState(false);
@@ -16,6 +16,6 @@ export function useTrainerAndClub() {
     hasTrainer,
     isClubMember,
     handleToggleTrainer,
-    handleToggleClubMembership
+    handleToggleClubMembership,
   };
 }

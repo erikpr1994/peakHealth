@@ -1,5 +1,7 @@
 import { Heart, Star, Printer } from "lucide-react";
+
 import { Button } from "@/components/ui/button";
+
 import { ExerciseData } from "../../types";
 
 interface ExerciseHeaderProps {

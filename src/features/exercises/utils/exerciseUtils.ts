@@ -63,4 +63,4 @@ export const createVariantExercise = (
     difficulty: variant.difficulty || exercise.difficulty,
     instructions: variant.instructions || exercise.instructions,
   };
-}; 
+};

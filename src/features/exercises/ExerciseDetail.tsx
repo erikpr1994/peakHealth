@@ -1,15 +1,17 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import { ArrowLeft, ChevronRight } from "lucide-react";
+import { useRouter } from "next/navigation";
+
 import { Card } from "@/components/ui/card";
+
+import { AddToRoutine } from "./components/ExerciseDetail/AddToRoutine";
 import { ExerciseHeader } from "./components/ExerciseDetail/ExerciseHeader";
 import { ExerciseInfo } from "./components/ExerciseDetail/ExerciseInfo";
-import { ExerciseVideo } from "./components/ExerciseDetail/ExerciseVideo";
 import { ExerciseSteps } from "./components/ExerciseDetail/ExerciseSteps";
-import { ExerciseVariants } from "./components/ExerciseDetail/ExerciseVariants";
 import { ExerciseTips } from "./components/ExerciseDetail/ExerciseTips";
-import { AddToRoutine } from "./components/ExerciseDetail/AddToRoutine";
+import { ExerciseVariants } from "./components/ExerciseDetail/ExerciseVariants";
+import { ExerciseVideo } from "./components/ExerciseDetail/ExerciseVideo";
 import { mockExerciseData, mockRoutines } from "./data/mockExercises";
 
 interface ExerciseDetailProps {

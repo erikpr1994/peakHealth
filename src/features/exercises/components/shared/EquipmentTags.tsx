@@ -13,7 +13,7 @@ export function EquipmentTags({
 
   return (
     <div className={`flex flex-wrap gap-2 ${className}`}>
-      {equipment.map((item) => (
+      {equipment.map(item => (
         <Badge key={item} variant="outline" className="bg-gray-50">
           {item}
         </Badge>

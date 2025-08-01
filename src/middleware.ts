@@ -29,7 +29,7 @@ export async function middleware(request: NextRequest) {
   // Check if user is authenticated by getting the session
   // This is used for route protection, not for user data access
   await supabase.auth.getSession();
-  
+
   // If you need authenticated user data in middleware, use getUser() instead:
   // const { data: { user }, error } = await supabase.auth.getUser();
 

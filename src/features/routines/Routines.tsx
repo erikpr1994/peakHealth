@@ -1,7 +1,5 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
 import {
   Search,
   Grid,
@@ -11,7 +9,6 @@ import {
   Heart,
   Activity,
   Calendar,
-  Star,
   Eye,
   Edit,
   Target,
@@ -19,8 +16,11 @@ import {
   Zap,
   Dumbbell,
 } from "lucide-react";
-import { Card } from "@/components/ui/card";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+
 import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -53,7 +53,6 @@ interface Routine {
 
 export default function Routines() {
   const router = useRouter();
-  const trainerName = "Sarah Johnson";
 
   const [searchQuery, setSearchQuery] = useState("");
   const [levelFilter, setLevelFilter] = useState("all");
@@ -141,8 +140,8 @@ export default function Routines() {
     },
   ];
 
-  const activeRoutine = routines.find((routine) => routine.isActive);
-  const inactiveRoutines = routines.filter((routine) => !routine.isActive);
+  const activeRoutine = routines.find(routine => routine.isActive);
+  const inactiveRoutines = routines.filter(routine => !routine.isActive);
 
   const getIconColor = (color: string) => {
     const colors = {
@@ -175,7 +174,7 @@ export default function Routines() {
 
   const dayLabels = ["M", "T", "W", "T", "F", "S", "S"];
 
-  const filteredInactiveRoutines = inactiveRoutines.filter((routine) => {
+  const filteredInactiveRoutines = inactiveRoutines.filter(routine => {
     const matchesSearch =
       routine.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       routine.description.toLowerCase().includes(searchQuery.toLowerCase());
@@ -418,7 +417,7 @@ export default function Routines() {
                 <Input
                   placeholder="Search routines..."
                   value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
+                  onChange={e => setSearchQuery(e.target.value)}
                   className="pl-10"
                 />
               </div>
@@ -509,7 +508,7 @@ export default function Routines() {
 
       {/* Inactive Routines Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {filteredInactiveRoutines.map((routine) => (
+        {filteredInactiveRoutines.map(routine => (
           <Card key={routine.id} className="p-6">
             {/* Header */}
             <div className="flex items-start justify-between mb-4">

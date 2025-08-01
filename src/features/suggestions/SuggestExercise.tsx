@@ -1,20 +1,23 @@
-import { useState } from "react";
 import {
   ArrowLeft,
   Send,
   Plus,
   X,
-  AlertCircle,
   Video,
   Image,
   CheckCircle2,
   Info,
 } from "lucide-react";
-import { Card } from "@/components/ui/card";
+import { useState } from "react";
+
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
+import { Progress } from "@/components/ui/progress";
 import {
   Select,
   SelectContent,
@@ -22,11 +25,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Badge } from "@/components/ui/badge";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Progress } from "@/components/ui/progress";
-
+import { Textarea } from "@/components/ui/textarea";
 import { Page } from "@/types/app";
 
 interface SuggestExerciseProps {
@@ -206,31 +205,31 @@ export default function SuggestExercise({ onNavigate }: SuggestExerciseProps) {
       },
     ];
 
-    const completed = sections.filter((s) => s.completed).length;
+    const completed = sections.filter(s => s.completed).length;
     return Math.round((completed / sections.length) * 100);
   };
 
   const handleMuscleGroupToggle = (muscle: string) => {
-    setExerciseData((prev) => ({
+    setExerciseData(prev => ({
       ...prev,
       muscleGroups: prev.muscleGroups.includes(muscle)
-        ? prev.muscleGroups.filter((m) => m !== muscle)
+        ? prev.muscleGroups.filter(m => m !== muscle)
         : [...prev.muscleGroups, muscle],
     }));
   };
 
   const handleEquipmentToggle = (equipment: string) => {
-    setExerciseData((prev) => ({
+    setExerciseData(prev => ({
       ...prev,
       equipment: prev.equipment.includes(equipment)
-        ? prev.equipment.filter((e) => e !== equipment)
+        ? prev.equipment.filter(e => e !== equipment)
         : [...prev.equipment, equipment],
     }));
   };
 
   const handleAddVariation = () => {
     if (newVariation && !exerciseData.variations.includes(newVariation)) {
-      setExerciseData((prev) => ({
+      setExerciseData(prev => ({
         ...prev,
         variations: [...prev.variations, newVariation],
       }));
@@ -239,9 +238,9 @@ export default function SuggestExercise({ onNavigate }: SuggestExerciseProps) {
   };
 
   const handleRemoveVariation = (variation: string) => {
-    setExerciseData((prev) => ({
+    setExerciseData(prev => ({
       ...prev,
-      variations: prev.variations.filter((v) => v !== variation),
+      variations: prev.variations.filter(v => v !== variation),
     }));
   };
 
@@ -250,7 +249,7 @@ export default function SuggestExercise({ onNavigate }: SuggestExerciseProps) {
       newAlternateName &&
       !exerciseData.alternativeNames.includes(newAlternateName)
     ) {
-      setExerciseData((prev) => ({
+      setExerciseData(prev => ({
         ...prev,
         alternativeNames: [...prev.alternativeNames, newAlternateName],
       }));
@@ -259,15 +258,15 @@ export default function SuggestExercise({ onNavigate }: SuggestExerciseProps) {
   };
 
   const handleRemoveAlternateName = (name: string) => {
-    setExerciseData((prev) => ({
+    setExerciseData(prev => ({
       ...prev,
-      alternativeNames: prev.alternativeNames.filter((n) => n !== name),
+      alternativeNames: prev.alternativeNames.filter(n => n !== name),
     }));
   };
 
   const handleAddImageUrl = () => {
     if (newImageUrl && !exerciseData.imageUrls.includes(newImageUrl)) {
-      setExerciseData((prev) => ({
+      setExerciseData(prev => ({
         ...prev,
         imageUrls: [...prev.imageUrls, newImageUrl],
       }));
@@ -276,9 +275,9 @@ export default function SuggestExercise({ onNavigate }: SuggestExerciseProps) {
   };
 
   const handleRemoveImageUrl = (url: string) => {
-    setExerciseData((prev) => ({
+    setExerciseData(prev => ({
       ...prev,
-      imageUrls: prev.imageUrls.filter((u) => u !== url),
+      imageUrls: prev.imageUrls.filter(u => u !== url),
     }));
   };
 
@@ -377,7 +376,7 @@ export default function SuggestExercise({ onNavigate }: SuggestExerciseProps) {
               <Input
                 id="name"
                 value={exerciseData.name}
-                onChange={(e) =>
+                onChange={e =>
                   setExerciseData({ ...exerciseData, name: e.target.value })
                 }
                 placeholder="e.g., Bulgarian Split Squat, Single-Arm Dumbbell Row"
@@ -389,7 +388,7 @@ export default function SuggestExercise({ onNavigate }: SuggestExerciseProps) {
               <Label htmlFor="category">Primary Category *</Label>
               <Select
                 value={exerciseData.category}
-                onValueChange={(value) =>
+                onValueChange={value =>
                   setExerciseData({ ...exerciseData, category: value })
                 }
               >
@@ -397,7 +396,7 @@ export default function SuggestExercise({ onNavigate }: SuggestExerciseProps) {
                   <SelectValue placeholder="Select category" />
                 </SelectTrigger>
                 <SelectContent>
-                  {categories.map((category) => (
+                  {categories.map(category => (
                     <SelectItem key={category} value={category}>
                       {category}
                     </SelectItem>
@@ -418,7 +417,7 @@ export default function SuggestExercise({ onNavigate }: SuggestExerciseProps) {
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  {difficultyLevels.map((level) => (
+                  {difficultyLevels.map(level => (
                     <SelectItem key={level.id} value={level.id}>
                       <div>
                         <div className="font-medium">{level.name}</div>
@@ -437,7 +436,7 @@ export default function SuggestExercise({ onNavigate }: SuggestExerciseProps) {
                 <Checkbox
                   id="compound"
                   checked={exerciseData.isCompoundMovement}
-                  onCheckedChange={(checked) =>
+                  onCheckedChange={checked =>
                     setExerciseData({
                       ...exerciseData,
                       isCompoundMovement: !!checked,
@@ -454,7 +453,7 @@ export default function SuggestExercise({ onNavigate }: SuggestExerciseProps) {
             <div className="lg:col-span-2 xl:col-span-3">
               <Label className="mb-3 block">Target Muscle Groups</Label>
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-3">
-                {muscleGroups.map((muscle) => (
+                {muscleGroups.map(muscle => (
                   <div key={muscle} className="flex items-center space-x-2">
                     <Checkbox
                       id={muscle}
@@ -485,7 +484,7 @@ export default function SuggestExercise({ onNavigate }: SuggestExerciseProps) {
           <div className="max-w-4xl">
             <Textarea
               value={exerciseData.reasonForSuggestion}
-              onChange={(e) =>
+              onChange={e =>
                 setExerciseData({
                   ...exerciseData,
                   reasonForSuggestion: e.target.value,
@@ -523,9 +522,9 @@ export default function SuggestExercise({ onNavigate }: SuggestExerciseProps) {
                 <Input
                   id="alternateName"
                   value={newAlternateName}
-                  onChange={(e) => setNewAlternateName(e.target.value)}
+                  onChange={e => setNewAlternateName(e.target.value)}
                   placeholder="e.g., Rear Foot Elevated Split Squat"
-                  onKeyPress={(e) =>
+                  onKeyPress={e =>
                     e.key === "Enter" && handleAddAlternateName()
                   }
                 />
@@ -539,7 +538,7 @@ export default function SuggestExercise({ onNavigate }: SuggestExerciseProps) {
               <div>
                 <Label>Alternative Names</Label>
                 <div className="flex flex-wrap gap-2 mt-2">
-                  {exerciseData.alternativeNames.map((name) => (
+                  {exerciseData.alternativeNames.map(name => (
                     <Badge
                       key={name}
                       variant="secondary"
@@ -576,7 +575,7 @@ export default function SuggestExercise({ onNavigate }: SuggestExerciseProps) {
           </p>
 
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
-            {equipmentOptions.map((equipment) => (
+            {equipmentOptions.map(equipment => (
               <div key={equipment} className="flex items-center space-x-2">
                 <Checkbox
                   id={equipment}
@@ -606,7 +605,7 @@ export default function SuggestExercise({ onNavigate }: SuggestExerciseProps) {
               <Textarea
                 id="instructions"
                 value={exerciseData.instructions}
-                onChange={(e) =>
+                onChange={e =>
                   setExerciseData({
                     ...exerciseData,
                     instructions: e.target.value,
@@ -624,7 +623,7 @@ export default function SuggestExercise({ onNavigate }: SuggestExerciseProps) {
                 <Textarea
                   id="tips"
                   value={exerciseData.tips}
-                  onChange={(e) =>
+                  onChange={e =>
                     setExerciseData({ ...exerciseData, tips: e.target.value })
                   }
                   placeholder="• Keep your torso upright throughout the movement&#10;• Drive through your front heel when returning to start&#10;• Focus on controlled movement rather than speed..."
@@ -638,7 +637,7 @@ export default function SuggestExercise({ onNavigate }: SuggestExerciseProps) {
                 <Textarea
                   id="commonMistakes"
                   value={exerciseData.commonMistakes}
-                  onChange={(e) =>
+                  onChange={e =>
                     setExerciseData({
                       ...exerciseData,
                       commonMistakes: e.target.value,
@@ -656,7 +655,7 @@ export default function SuggestExercise({ onNavigate }: SuggestExerciseProps) {
               <Textarea
                 id="safetyNotes"
                 value={exerciseData.safetyNotes}
-                onChange={(e) =>
+                onChange={e =>
                   setExerciseData({
                     ...exerciseData,
                     safetyNotes: e.target.value,
@@ -687,7 +686,7 @@ export default function SuggestExercise({ onNavigate }: SuggestExerciseProps) {
               <Input
                 id="targetSets"
                 value={exerciseData.targetSets}
-                onChange={(e) =>
+                onChange={e =>
                   setExerciseData({
                     ...exerciseData,
                     targetSets: e.target.value,
@@ -703,7 +702,7 @@ export default function SuggestExercise({ onNavigate }: SuggestExerciseProps) {
               <Input
                 id="targetReps"
                 value={exerciseData.targetReps}
-                onChange={(e) =>
+                onChange={e =>
                   setExerciseData({
                     ...exerciseData,
                     targetReps: e.target.value,
@@ -719,7 +718,7 @@ export default function SuggestExercise({ onNavigate }: SuggestExerciseProps) {
               <Input
                 id="restTime"
                 value={exerciseData.restTime}
-                onChange={(e) =>
+                onChange={e =>
                   setExerciseData({ ...exerciseData, restTime: e.target.value })
                 }
                 placeholder="e.g., 60-90s, 2-3 minutes"
@@ -748,9 +747,9 @@ export default function SuggestExercise({ onNavigate }: SuggestExerciseProps) {
                 <Input
                   id="variation"
                   value={newVariation}
-                  onChange={(e) => setNewVariation(e.target.value)}
+                  onChange={e => setNewVariation(e.target.value)}
                   placeholder="e.g., Weighted Bulgarian Split Squat, Jumping Bulgarian Split Squat"
-                  onKeyPress={(e) => e.key === "Enter" && handleAddVariation()}
+                  onKeyPress={e => e.key === "Enter" && handleAddVariation()}
                 />
                 <Button type="button" onClick={handleAddVariation}>
                   <Plus className="w-4 h-4" />
@@ -762,7 +761,7 @@ export default function SuggestExercise({ onNavigate }: SuggestExerciseProps) {
               <div>
                 <Label>Variations</Label>
                 <div className="flex flex-wrap gap-2 mt-2">
-                  {exerciseData.variations.map((variation) => (
+                  {exerciseData.variations.map(variation => (
                     <Badge
                       key={variation}
                       variant="secondary"
@@ -804,7 +803,7 @@ export default function SuggestExercise({ onNavigate }: SuggestExerciseProps) {
               <Input
                 id="videoUrl"
                 value={exerciseData.videoUrl}
-                onChange={(e) =>
+                onChange={e =>
                   setExerciseData({ ...exerciseData, videoUrl: e.target.value })
                 }
                 placeholder="https://youtube.com/watch?v=..."
@@ -817,7 +816,7 @@ export default function SuggestExercise({ onNavigate }: SuggestExerciseProps) {
               <Textarea
                 id="sourcesReferences"
                 value={exerciseData.sourcesReferences}
-                onChange={(e) =>
+                onChange={e =>
                   setExerciseData({
                     ...exerciseData,
                     sourcesReferences: e.target.value,
@@ -838,9 +837,9 @@ export default function SuggestExercise({ onNavigate }: SuggestExerciseProps) {
                 <Input
                   id="imageUrl"
                   value={newImageUrl}
-                  onChange={(e) => setNewImageUrl(e.target.value)}
+                  onChange={e => setNewImageUrl(e.target.value)}
                   placeholder="https://example.com/exercise-image.jpg"
-                  onKeyPress={(e) => e.key === "Enter" && handleAddImageUrl()}
+                  onKeyPress={e => e.key === "Enter" && handleAddImageUrl()}
                 />
                 <Button type="button" onClick={handleAddImageUrl}>
                   <Plus className="w-4 h-4" />

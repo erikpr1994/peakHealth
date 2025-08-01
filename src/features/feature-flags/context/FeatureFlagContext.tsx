@@ -8,9 +8,11 @@ import React, {
   useCallback,
   ReactNode,
 } from "react";
+
 import { useAuth } from "@/features/auth/context/AuthContext";
-import { featureFlagMonitor } from "../lib/monitoring";
+
 import { featureFlagCache } from "../lib/cache";
+import { featureFlagMonitor } from "../lib/monitoring";
 import {
   FeatureFlagContextType,
   UserFeatureFlag,
@@ -109,11 +111,11 @@ export function FeatureFlagProvider({ children }: { children: ReactNode }) {
   };
 
   const hasUserType = (typeName: string): boolean => {
-    return userTypes.some((type) => type.typeName === typeName);
+    return userTypes.some(type => type.typeName === typeName);
   };
 
   const isInGroup = (groupName: string): boolean => {
-    return userGroups.some((group) => group.groupName === groupName);
+    return userGroups.some(group => group.groupName === groupName);
   };
 
   const refreshFlags = async (): Promise<void> => {

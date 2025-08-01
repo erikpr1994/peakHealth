@@ -1,5 +1,7 @@
-import { useState, useEffect } from "react";
 import { FileText, Save, X } from "lucide-react";
+import { useState, useEffect } from "react";
+
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -7,9 +9,8 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 
 interface NotesModalProps {
   isOpen: boolean;
@@ -64,7 +65,7 @@ export default function NotesModal({
             <Textarea
               id="notes"
               value={notes}
-              onChange={(e) => setNotes(e.target.value)}
+              onChange={e => setNotes(e.target.value)}
               placeholder={placeholder}
               className="min-h-[200px] resize-none"
               autoFocus

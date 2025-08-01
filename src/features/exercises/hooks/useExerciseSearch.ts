@@ -8,4 +8,4 @@ export function useExerciseSearch() {
     handleSearchChange,
     clearSearch,
   };
-} 
+}

@@ -1,5 +1,7 @@
 import { CheckCircle, XCircle } from "lucide-react";
+
 import { Card } from "@/components/ui/card";
+
 import { ExerciseData } from "../../types";
 
 interface ExerciseTipsProps {

@@ -1,10 +1,10 @@
 "use client";
 
-import React, { useState } from "react";
 import NextLink from "next/link";
+import React, { useState } from "react";
+
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import {
   Card,
   CardContent,
@@ -12,7 +12,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { useAuth } from "@/features/auth/context/AuthContext";
 
 export default function LoginPage() {
@@ -30,7 +31,8 @@ export default function LoginPage() {
     try {
       await login(email, password);
     } catch (err: unknown) {
-      const errorMessage = err instanceof Error ? err.message : "An unexpected error occurred.";
+      const errorMessage =
+        err instanceof Error ? err.message : "An unexpected error occurred.";
       setError(errorMessage);
     } finally {
       setIsLoading(false);
@@ -62,7 +64,7 @@ export default function LoginPage() {
                 id="email"
                 type="email"
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={e => setEmail(e.target.value)}
                 placeholder="Enter your email"
                 required
               />
@@ -74,7 +76,7 @@ export default function LoginPage() {
                 id="password"
                 type="password"
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={e => setPassword(e.target.value)}
                 placeholder="Enter your password"
                 required
               />

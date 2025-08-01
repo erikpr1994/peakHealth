@@ -1,4 +1,3 @@
-import { useState } from "react";
 import {
   Activity,
   Clock,
@@ -6,15 +5,9 @@ import {
   Heart,
   TrendingUp,
   TrendingDown,
-  Filter,
-  Calendar,
   Target,
   Award,
   Download,
-  Upload,
-  BarChart3,
-  PieChart,
-  Users,
   Scale,
   Droplets,
   Eye,
@@ -27,18 +20,7 @@ import {
   MoreHorizontal,
   Play,
 } from "lucide-react";
-import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Progress } from "@/components/ui/progress";
+import { useState } from "react";
 import {
   LineChart,
   Line,
@@ -56,13 +38,25 @@ import {
   Cell,
   ComposedChart,
 } from "recharts";
+
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-
+import { Progress } from "@/components/ui/progress";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Page } from "@/types/app";
 
 interface StatisticsProps {
@@ -672,7 +666,7 @@ export default function Statistics({ onNavigate }: StatisticsProps) {
                 </Button>
               </div>
               <div className="space-y-4">
-                {recentWorkouts.map((workout) => (
+                {recentWorkouts.map(workout => (
                   <div
                     key={workout.id}
                     className="flex items-center justify-between p-4 border rounded-lg hover:bg-gray-50"

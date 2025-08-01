@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import {
   Plus,
   TrendingUp,
@@ -20,29 +19,7 @@ import {
   Download,
   Dumbbell,
 } from "lucide-react";
-import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Progress } from "@/components/ui/progress";
+import { useState } from "react";
 import {
   LineChart,
   Line,
@@ -55,12 +32,35 @@ import {
   Area,
 } from "recharts";
 
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Progress } from "@/components/ui/progress";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Textarea } from "@/components/ui/textarea";
 
 interface HealthEntry {
   id: string;
@@ -210,7 +210,7 @@ export default function Health() {
   ];
 
   // Prepare chart data
-  const chartData = healthData.map((entry) => ({
+  const chartData = healthData.map(entry => ({
     date: entry.date.toLocaleDateString("en-US", {
       month: "short",
       day: "numeric",
@@ -426,7 +426,7 @@ export default function Health() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {goals.map((goal) => {
+          {goals.map(goal => {
             const progress = (goal.current / goal.target) * 100;
             const isAchieved = progress >= 100;
             const daysLeft = Math.ceil(
@@ -772,7 +772,7 @@ export default function Health() {
                 {healthData
                   .slice(-3)
                   .reverse()
-                  .map((entry) => (
+                  .map(entry => (
                     <div
                       key={entry.id}
                       className="flex items-center justify-between p-4 border rounded-lg"
@@ -1039,7 +1039,7 @@ export default function Health() {
                           <span className="text-gray-600 capitalize">
                             {key
                               .replace(/([A-Z])/g, " $1")
-                              .replace(/^./, (str) => str.toUpperCase())}
+                              .replace(/^./, str => str.toUpperCase())}
                           </span>
                           <span className="font-medium">{value} cm</span>
                         </div>
@@ -1130,7 +1130,9 @@ export default function Health() {
                     <div className="text-3xl font-bold text-gray-900 mb-2">
                       {latestEntry.vitals.waterIntake}L
                     </div>
-                    <div className="text-sm text-gray-600">Today&apos;s intake</div>
+                    <div className="text-sm text-gray-600">
+                      Today&apos;s intake
+                    </div>
                   </Card>
 
                   {latestEntry.vitals.bodyTemperature && (
@@ -1158,7 +1160,7 @@ export default function Health() {
                 Health History
               </h3>
               <div className="space-y-6">
-                {healthData.reverse().map((entry) => (
+                {healthData.reverse().map(entry => (
                   <div
                     key={entry.id}
                     className="border-l-4 border-blue-200 pl-6 pb-6"
@@ -1178,11 +1180,11 @@ export default function Health() {
                             {entry.date.toLocaleDateString() ===
                             new Date().toLocaleDateString()
                               ? "Today"
-                              : Math.ceil(
+                              : `${Math.ceil(
                                   (new Date().getTime() -
                                     entry.date.getTime()) /
                                     (1000 * 60 * 60 * 24)
-                                ) + " days ago"}
+                                )} days ago`}
                           </Badge>
                         </div>
 

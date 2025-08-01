@@ -1,4 +1,3 @@
-import { useState, useEffect } from "react";
 import {
   Play,
   Pause,
@@ -10,8 +9,10 @@ import {
   Target,
   Flame,
 } from "lucide-react";
-import { Card } from "@/components/ui/card";
+import { useState, useEffect } from "react";
+
 import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 import {
   Select,
   SelectContent,
@@ -93,7 +94,7 @@ export default function RestTimer({
 
     if (isRunning && timeRemaining > 0) {
       interval = setInterval(() => {
-        setTimeRemaining((prev) => {
+        setTimeRemaining(prev => {
           if (prev <= 1) {
             setIsRunning(false);
             setIsCompleted(true);
@@ -248,7 +249,7 @@ export default function RestTimer({
                 <SelectValue placeholder="Choose rest time" />
               </SelectTrigger>
               <SelectContent>
-                {presetTimes.map((time) => (
+                {presetTimes.map(time => (
                   <SelectItem key={time} value={time.toString()}>
                     {formatTimeShort(time)}
                   </SelectItem>

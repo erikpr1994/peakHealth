@@ -15,12 +15,12 @@ import {
   Calendar,
   Share2,
 } from "lucide-react";
-import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Page } from "@/types/app";
 
 interface GymDetailProps {
@@ -205,13 +205,16 @@ export default function GymDetail({ onNavigate, gymId }: GymDetailProps) {
     return icons[category as keyof typeof icons] || Dumbbell;
   };
 
-  const groupedEquipment = gym.equipment.reduce((acc, equipment) => {
-    if (!acc[equipment.category]) {
-      acc[equipment.category] = [];
-    }
-    acc[equipment.category].push(equipment);
-    return acc;
-  }, {} as Record<string, Equipment[]>);
+  const groupedEquipment = gym.equipment.reduce(
+    (acc, equipment) => {
+      if (!acc[equipment.category]) {
+        acc[equipment.category] = [];
+      }
+      acc[equipment.category].push(equipment);
+      return acc;
+    },
+    {} as Record<string, Equipment[]>
+  );
 
   const categories = Object.keys(groupedEquipment);
 
@@ -318,7 +321,7 @@ export default function GymDetail({ onNavigate, gymId }: GymDetailProps) {
               </TabsList>
 
               <TabsContent value="equipment" className="space-y-6">
-                {categories.map((category) => {
+                {categories.map(category => {
                   const Icon = getCategoryIcon(category);
                   return (
                     <div key={category}>
@@ -332,7 +335,7 @@ export default function GymDetail({ onNavigate, gymId }: GymDetailProps) {
                         </Badge>
                       </div>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                        {groupedEquipment[category].map((equipment) => (
+                        {groupedEquipment[category].map(equipment => (
                           <div
                             key={equipment.id}
                             className="p-4 bg-gray-50 rounded-lg"
@@ -360,7 +363,7 @@ export default function GymDetail({ onNavigate, gymId }: GymDetailProps) {
 
               <TabsContent value="amenities">
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-                  {gym.amenities.map((amenity) => (
+                  {gym.amenities.map(amenity => (
                     <div
                       key={amenity}
                       className="p-3 bg-gray-50 rounded-lg text-center"
@@ -373,7 +376,7 @@ export default function GymDetail({ onNavigate, gymId }: GymDetailProps) {
 
               {gym.reviews && (
                 <TabsContent value="reviews" className="space-y-4">
-                  {gym.reviews.map((review) => (
+                  {gym.reviews.map(review => (
                     <div key={review.id} className="p-4 bg-gray-50 rounded-lg">
                       <div className="flex items-start gap-3">
                         <Avatar className="w-10 h-10">
@@ -381,7 +384,7 @@ export default function GymDetail({ onNavigate, gymId }: GymDetailProps) {
                           <AvatarFallback>
                             {review.user
                               .split(" ")
-                              .map((n) => n[0])
+                              .map(n => n[0])
                               .join("")}
                           </AvatarFallback>
                         </Avatar>
@@ -494,7 +497,7 @@ export default function GymDetail({ onNavigate, gymId }: GymDetailProps) {
           <Card className="p-6">
             <h3 className="text-lg font-semibold mb-4">Equipment Summary</h3>
             <div className="space-y-3">
-              {categories.map((category) => {
+              {categories.map(category => {
                 const Icon = getCategoryIcon(category);
                 return (
                   <div

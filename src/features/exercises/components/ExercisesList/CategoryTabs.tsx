@@ -19,7 +19,7 @@ export function CategoryTabs({
   return (
     <div className="border-b border-gray-200 mb-8">
       <div className="flex space-x-4 sm:space-x-8 overflow-x-auto pb-2">
-        {categories.map((category) => (
+        {categories.map(category => (
           <button
             key={category}
             onClick={() => onCategoryChange(category)}

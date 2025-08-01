@@ -1,4 +1,5 @@
 import { useState } from "react";
+
 import {
   Dialog,
   DialogContent,
@@ -6,17 +7,17 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+
 import { ExerciseLibrary } from "./components/ExerciseSelectionModal/ExerciseLibrary";
 import { ExercisePreview } from "./components/ExerciseSelectionModal/ExercisePreview";
 import { mockExercises } from "./data/mockExercises";
 import { useExerciseSelection } from "./hooks/useExerciseSelection";
-import { createVariantExercise } from "./utils/exerciseUtils";
-
 import {
   Exercise,
   ExerciseVariant,
   ExerciseSelectionModalProps,
 } from "./types";
+import { createVariantExercise } from "./utils/exerciseUtils";
 
 const exercises = mockExercises;
 

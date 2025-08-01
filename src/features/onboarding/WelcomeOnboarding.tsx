@@ -1,11 +1,3 @@
-import React, { useState, useRef, useEffect } from "react";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Progress } from "@/components/ui/progress";
-import { Badge } from "@/components/ui/badge";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import {
   Send,
   Sparkles,
@@ -15,6 +7,15 @@ import {
   ArrowRight,
   X,
 } from "lucide-react";
+import React, { useState, useRef, useEffect } from "react";
+
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Progress } from "@/components/ui/progress";
+import { Textarea } from "@/components/ui/textarea";
 
 interface Message {
   id: string;
@@ -192,25 +193,28 @@ export default function WelcomeOnboarding({
     setIsTyping(true);
 
     // Simulate typing delay
-    setTimeout(() => {
-      const processedContent = content.replace(
-        "{name}",
-        onboardingData.name || ""
-      );
+    setTimeout(
+      () => {
+        const processedContent = content.replace(
+          "{name}",
+          onboardingData.name || ""
+        );
 
-      const newMessage: Message = {
-        id: Date.now().toString(),
-        type: "ai",
-        content: processedContent,
-        timestamp: new Date(),
-        options,
+        const newMessage: Message = {
+          id: Date.now().toString(),
+          type: "ai",
+          content: processedContent,
+          timestamp: new Date(),
+          options,
 
-        requiresInput,
-      };
+          requiresInput,
+        };
 
-      setMessages((prev) => [...prev, newMessage]);
-      setIsTyping(false);
-    }, 1000 + Math.random() * 1000); // Random delay between 1-2 seconds
+        setMessages(prev => [...prev, newMessage]);
+        setIsTyping(false);
+      },
+      1000 + Math.random() * 1000
+    ); // Random delay between 1-2 seconds
   };
 
   const addUserMessage = (content: string) => {
@@ -221,7 +225,7 @@ export default function WelcomeOnboarding({
       timestamp: new Date(),
     };
 
-    setMessages((prev) => [...prev, newMessage]);
+    setMessages(prev => [...prev, newMessage]);
     setInputValue("");
   };
 
@@ -357,7 +361,7 @@ export default function WelcomeOnboarding({
         <Card className="h-96 flex flex-col">
           {/* Messages */}
           <div className="flex-1 overflow-y-auto p-4 space-y-4">
-            {messages.map((message) => (
+            {messages.map(message => (
               <div
                 key={message.id}
                 className={`flex ${
@@ -420,8 +424,8 @@ export default function WelcomeOnboarding({
                           ONBOARDING_FLOW[currentStepIndex]?.id ===
                             "workout-types") && (
                           <p className="text-xs text-gray-500 mt-2">
-                            💡 You can select multiple options. Click &quot;Continue&quot;
-                            when done.
+                            💡 You can select multiple options. Click
+                            &quot;Continue&quot; when done.
                           </p>
                         )}
                       </div>
@@ -503,7 +507,7 @@ export default function WelcomeOnboarding({
                   "textarea" ? (
                     <Textarea
                       value={inputValue}
-                      onChange={(e) => setInputValue(e.target.value)}
+                      onChange={e => setInputValue(e.target.value)}
                       placeholder={
                         ONBOARDING_FLOW[currentStepIndex]?.optional
                           ? "Type your response (optional)..."
@@ -514,7 +518,7 @@ export default function WelcomeOnboarding({
                   ) : (
                     <Input
                       value={inputValue}
-                      onChange={(e) => setInputValue(e.target.value)}
+                      onChange={e => setInputValue(e.target.value)}
                       placeholder="Type your response..."
                       className="flex-1"
                     />

@@ -1,4 +1,3 @@
-import { useState } from "react";
 import {
   User,
   CreditCard,
@@ -12,8 +11,11 @@ import {
   DollarSign,
   Camera,
 } from "lucide-react";
-import { Card } from "@/components/ui/card";
+import { useState } from "react";
+
 import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -24,8 +26,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
-import { Checkbox } from "@/components/ui/checkbox";
-
 import { Page } from "@/types/app";
 
 interface SettingsProps {
@@ -80,8 +80,8 @@ export default function Settings({ onNavigate: _onNavigate }: SettingsProps) {
   ];
 
   const handleGoalToggle = (goal: string) => {
-    setFitnessGoals((prev) =>
-      prev.includes(goal) ? prev.filter((g) => g !== goal) : [...prev, goal]
+    setFitnessGoals(prev =>
+      prev.includes(goal) ? prev.filter(g => g !== goal) : [...prev, goal]
     );
   };
 
@@ -125,13 +125,13 @@ export default function Settings({ onNavigate: _onNavigate }: SettingsProps) {
         <div className="w-64">
           <Card className="p-4">
             <div className="space-y-6">
-              {sidebarSections.map((section) => (
+              {sidebarSections.map(section => (
                 <div key={section.title}>
                   <h3 className="text-sm font-medium text-gray-500 mb-3 px-3">
                     {section.title}
                   </h3>
                   <div className="space-y-1">
-                    {section.items.map((item) => {
+                    {section.items.map(item => {
                       const Icon = item.icon;
                       const isActive =
                         item.id === "profile" && activeSection === "profile";
@@ -308,7 +308,7 @@ export default function Settings({ onNavigate: _onNavigate }: SettingsProps) {
                   "Improve Endurance",
                   "Increase Flexibility",
                   "General Health",
-                ].map((goal) => (
+                ].map(goal => (
                   <div key={goal} className="flex items-center space-x-3">
                     <Checkbox
                       checked={fitnessGoals.includes(goal)}

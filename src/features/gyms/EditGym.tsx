@@ -1,4 +1,3 @@
-import { useState, useEffect } from "react";
 import {
   ArrowLeft,
   Save,
@@ -13,28 +12,8 @@ import {
   Settings,
   Target,
 } from "lucide-react";
-import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Badge } from "@/components/ui/badge";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
+import { useState, useEffect } from "react";
+
 import {
   AlertDialog,
   AlertDialogAction,
@@ -46,7 +25,28 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { Checkbox } from "@/components/ui/checkbox";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Textarea } from "@/components/ui/textarea";
 import { Page } from "@/types/app";
 
 interface EditGymProps {
@@ -391,7 +391,7 @@ export default function EditGym({ onNavigate, gymId }: EditGymProps) {
     { id: "Accessories", name: "Accessories", icon: Settings },
   ];
 
-  const filteredEquipment = equipmentDatabase.filter((equipment) => {
+  const filteredEquipment = equipmentDatabase.filter(equipment => {
     const matchesSearch =
       equipment.name.toLowerCase().includes(equipmentSearch.toLowerCase()) ||
       (equipment.description &&
@@ -405,10 +405,10 @@ export default function EditGym({ onNavigate, gymId }: EditGymProps) {
   });
 
   const handleEquipmentToggle = (equipment: Equipment) => {
-    const isSelected = selectedEquipment.some((eq) => eq.id === equipment.id);
+    const isSelected = selectedEquipment.some(eq => eq.id === equipment.id);
     if (isSelected) {
       setSelectedEquipment(
-        selectedEquipment.filter((eq) => eq.id !== equipment.id)
+        selectedEquipment.filter(eq => eq.id !== equipment.id)
       );
     } else {
       setSelectedEquipment([...selectedEquipment, equipment]);
@@ -416,14 +416,12 @@ export default function EditGym({ onNavigate, gymId }: EditGymProps) {
   };
 
   const handleEquipmentRemove = (equipmentId: string) => {
-    setSelectedEquipment(
-      selectedEquipment.filter((eq) => eq.id !== equipmentId)
-    );
+    setSelectedEquipment(selectedEquipment.filter(eq => eq.id !== equipmentId));
   };
 
   const handleAmenityToggle = (amenity: string) => {
     if (selectedAmenities.includes(amenity)) {
-      setSelectedAmenities(selectedAmenities.filter((a) => a !== amenity));
+      setSelectedAmenities(selectedAmenities.filter(a => a !== amenity));
     } else {
       setSelectedAmenities([...selectedAmenities, amenity]);
     }
@@ -447,7 +445,7 @@ export default function EditGym({ onNavigate, gymId }: EditGymProps) {
   };
 
   const getCategoryIcon = (categoryName: string) => {
-    const category = categories.find((cat) => cat.id === categoryName);
+    const category = categories.find(cat => cat.id === categoryName);
     return category ? category.icon : Dumbbell;
   };
 
@@ -528,9 +526,7 @@ export default function EditGym({ onNavigate, gymId }: EditGymProps) {
               <Input
                 id="gymName"
                 value={gymData.name}
-                onChange={(e) =>
-                  setGymData({ ...gymData, name: e.target.value })
-                }
+                onChange={e => setGymData({ ...gymData, name: e.target.value })}
                 placeholder="e.g., My Home Gym, Downtown Fitness"
                 className="mt-2"
               />
@@ -565,7 +561,7 @@ export default function EditGym({ onNavigate, gymId }: EditGymProps) {
                 <Input
                   id="address"
                   value={gymData.address}
-                  onChange={(e) =>
+                  onChange={e =>
                     setGymData({ ...gymData, address: e.target.value })
                   }
                   placeholder="e.g., Home, 123 Main St, San Francisco, CA"
@@ -579,7 +575,7 @@ export default function EditGym({ onNavigate, gymId }: EditGymProps) {
               <Textarea
                 id="description"
                 value={gymData.description}
-                onChange={(e) =>
+                onChange={e =>
                   setGymData({ ...gymData, description: e.target.value })
                 }
                 placeholder="Describe your gym and what makes it special..."
@@ -595,7 +591,7 @@ export default function EditGym({ onNavigate, gymId }: EditGymProps) {
                   <Input
                     id="hours"
                     value={gymData.hours}
-                    onChange={(e) =>
+                    onChange={e =>
                       setGymData({ ...gymData, hours: e.target.value })
                     }
                     placeholder="e.g., 6:00 AM - 10:00 PM, 24/7"
@@ -608,7 +604,7 @@ export default function EditGym({ onNavigate, gymId }: EditGymProps) {
                   <Input
                     id="phone"
                     value={gymData.phone}
-                    onChange={(e) =>
+                    onChange={e =>
                       setGymData({ ...gymData, phone: e.target.value })
                     }
                     placeholder="e.g., (555) 123-4567"
@@ -621,7 +617,7 @@ export default function EditGym({ onNavigate, gymId }: EditGymProps) {
                   <Input
                     id="website"
                     value={gymData.website}
-                    onChange={(e) =>
+                    onChange={e =>
                       setGymData({ ...gymData, website: e.target.value })
                     }
                     placeholder="e.g., https://mygym.com"
@@ -665,7 +661,7 @@ export default function EditGym({ onNavigate, gymId }: EditGymProps) {
                       <Input
                         placeholder="Search equipment..."
                         value={equipmentSearch}
-                        onChange={(e) => setEquipmentSearch(e.target.value)}
+                        onChange={e => setEquipmentSearch(e.target.value)}
                         className="pl-10"
                       />
                     </div>
@@ -678,7 +674,7 @@ export default function EditGym({ onNavigate, gymId }: EditGymProps) {
                     className="space-y-4"
                   >
                     <TabsList className="grid grid-cols-6 w-full">
-                      {categories.map((category) => {
+                      {categories.map(category => {
                         const Icon = category.icon;
                         return (
                           <TabsTrigger
@@ -697,9 +693,9 @@ export default function EditGym({ onNavigate, gymId }: EditGymProps) {
 
                     <TabsContent value="all" className="space-y-4">
                       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-                        {filteredEquipment.map((equipment) => {
+                        {filteredEquipment.map(equipment => {
                           const isSelected = selectedEquipment.some(
-                            (eq) => eq.id === equipment.id
+                            eq => eq.id === equipment.id
                           );
                           const Icon = getCategoryIcon(equipment.category);
 
@@ -754,14 +750,14 @@ export default function EditGym({ onNavigate, gymId }: EditGymProps) {
                     </TabsContent>
 
                     {/* Category-specific tabs */}
-                    {categories.slice(1).map((category) => (
+                    {categories.slice(1).map(category => (
                       <TabsContent key={category.id} value={category.id}>
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
                           {filteredEquipment
-                            .filter((eq) => eq.category === category.id)
-                            .map((equipment) => {
+                            .filter(eq => eq.category === category.id)
+                            .map(equipment => {
                               const isSelected = selectedEquipment.some(
-                                (eq) => eq.id === equipment.id
+                                eq => eq.id === equipment.id
                               );
                               const Icon = category.icon;
 
@@ -832,7 +828,7 @@ export default function EditGym({ onNavigate, gymId }: EditGymProps) {
           {selectedEquipment.length > 0 ? (
             <div className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                {selectedEquipment.map((equipment) => (
+                {selectedEquipment.map(equipment => (
                   <div
                     key={equipment.id}
                     className="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
@@ -878,7 +874,7 @@ export default function EditGym({ onNavigate, gymId }: EditGymProps) {
         <Card className="p-6">
           <h3 className="text-lg font-semibold mb-6">Amenities</h3>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
-            {availableAmenities.map((amenity) => (
+            {availableAmenities.map(amenity => (
               <div key={amenity} className="flex items-center space-x-2">
                 <Checkbox
                   id={amenity}

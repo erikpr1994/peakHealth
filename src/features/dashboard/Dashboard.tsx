@@ -1,10 +1,5 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Progress } from "@/components/ui/progress";
 import {
   Calendar,
   Clock,
@@ -18,6 +13,8 @@ import {
   Play,
   Star,
 } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 import {
   AreaChart,
   Area,
@@ -26,6 +23,10 @@ import {
   CartesianGrid,
   ResponsiveContainer,
 } from "recharts";
+
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Progress } from "@/components/ui/progress";
 import ClubEventConflictModal from "@/features/social/ClubEventConflictModal";
 
 interface ClubEvent {
@@ -109,8 +110,6 @@ export default function Dashboard() {
     },
   ];
 
-
-
   // Mock clubs around user
   const nearbyClubs = [
     {
@@ -138,8 +137,6 @@ export default function Dashboard() {
       specialty: "Powerlifting",
     },
   ];
-
-
 
   const handleStartWorkout = (routineId: string) => {
     router.push(`/workout-tracker/${routineId}`);
@@ -261,11 +258,11 @@ export default function Dashboard() {
         <CardHeader className="pb-3">
           <CardTitle className="flex items-center gap-2">
             <Calendar className="w-5 h-5" />
-                          Today&apos;s Workout
+            Today&apos;s Workout
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
-          {activeRoutines.map((routine) => (
+          {activeRoutines.map(routine => (
             <div
               key={routine.id}
               className="p-4 border border-gray-200 rounded-lg"
@@ -372,7 +369,7 @@ export default function Dashboard() {
           </CardHeader>
           <CardContent>
             <div className="space-y-3">
-              {recentWorkouts.slice(0, 4).map((workout) => (
+              {recentWorkouts.slice(0, 4).map(workout => (
                 <div
                   key={workout.id}
                   className="grid grid-cols-2 gap-4 p-3 bg-gray-50 rounded-lg"
@@ -402,7 +399,7 @@ export default function Dashboard() {
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {nearbyClubs.map((club) => (
+            {nearbyClubs.map(club => (
               <div
                 key={club.id}
                 className="p-4 border border-gray-200 rounded-lg hover:shadow-md transition-shadow"

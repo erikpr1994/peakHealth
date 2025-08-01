@@ -64,8 +64,7 @@ export const mockExerciseData: ExerciseData = {
     {
       id: "dumbbell-bench",
       name: "Dumbbell Bench Press",
-      description:
-        "Allows greater range of motion and stabilizer engagement.",
+      description: "Allows greater range of motion and stabilizer engagement.",
       focus: "Stabilizer Focus",
       image: "/exercise-images/dumbbell-bench.jpg",
     },
@@ -612,4 +611,4 @@ export const mockExercises: Exercise[] = [
     icon: "🏋️",
     iconColor: "bg-indigo-100 text-indigo-600",
   },
-]; 
+];

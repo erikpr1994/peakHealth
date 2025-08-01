@@ -1,7 +1,8 @@
 "use client";
 
-import ExerciseDetail from "@/features/exercises/ExerciseDetail";
 import { useParams } from "next/navigation";
+
+import ExerciseDetail from "@/features/exercises/ExerciseDetail";
 
 export default function ExerciseDetailPage() {
   const { exerciseId } = useParams();

@@ -1,4 +1,5 @@
 import { Badge } from "@/components/ui/badge";
+
 import { Exercise, ExerciseVariant } from "../../types";
 
 interface VariantSelectorProps {
@@ -20,7 +21,7 @@ export function VariantSelector({
     <div>
       <h4 className="font-medium text-gray-900 mb-3">Variants</h4>
       <div className="space-y-3">
-        {exercise.variants.map((variant) => (
+        {exercise.variants.map(variant => (
           <div
             key={variant.id}
             className={`p-3 border rounded-lg cursor-pointer transition-colors hover:bg-gray-50 ${

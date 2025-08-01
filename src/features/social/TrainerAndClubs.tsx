@@ -1,7 +1,5 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
 import {
   ArrowLeft,
   Mail,
@@ -15,6 +13,12 @@ import {
   Video,
   Clock,
 } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -22,9 +26,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 interface Trainer {
@@ -276,7 +277,7 @@ export default function TrainerAndClubs() {
                       <AvatarFallback>
                         {userTrainer.name
                           .split(" ")
-                          .map((n) => n[0])
+                          .map(n => n[0])
                           .join("")}
                       </AvatarFallback>
                     </Avatar>
@@ -328,9 +329,9 @@ export default function TrainerAndClubs() {
                 </CardHeader>
                 <CardContent className="space-y-4">
                   {userClubs
-                    .filter((club) => club.nextEvent)
+                    .filter(club => club.nextEvent)
                     .slice(0, 2)
-                    .map((club) => (
+                    .map(club => (
                       <div
                         key={club.id}
                         className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg"
@@ -340,7 +341,7 @@ export default function TrainerAndClubs() {
                           <AvatarFallback>
                             {club.name
                               .split(" ")
-                              .map((n) => n[0])
+                              .map(n => n[0])
                               .join("")}
                           </AvatarFallback>
                         </Avatar>
@@ -401,7 +402,7 @@ export default function TrainerAndClubs() {
                       <AvatarFallback className="text-lg">
                         {userTrainer.name
                           .split(" ")
-                          .map((n) => n[0])
+                          .map(n => n[0])
                           .join("")}
                       </AvatarFallback>
                     </Avatar>
@@ -479,7 +480,7 @@ export default function TrainerAndClubs() {
                   <div>
                     <h3 className="font-semibold mb-3">Specializations</h3>
                     <div className="flex flex-wrap gap-2">
-                      {userTrainer.specializations.map((spec) => (
+                      {userTrainer.specializations.map(spec => (
                         <Badge key={spec} variant="secondary">
                           {spec}
                         </Badge>
@@ -490,7 +491,7 @@ export default function TrainerAndClubs() {
                   <div>
                     <h3 className="font-semibold mb-3">Certifications</h3>
                     <div className="flex flex-wrap gap-2">
-                      {userTrainer.certifications.map((cert) => (
+                      {userTrainer.certifications.map(cert => (
                         <Badge key={cert} className="bg-blue-100 text-blue-800">
                           {cert}
                         </Badge>
@@ -564,7 +565,7 @@ export default function TrainerAndClubs() {
         <TabsContent value="clubs" className="space-y-6">
           {hasClubs ? (
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              {userClubs.map((club) => (
+              {userClubs.map(club => (
                 <Card key={club.id}>
                   <CardHeader>
                     <div className="flex items-start gap-4">
@@ -573,7 +574,7 @@ export default function TrainerAndClubs() {
                         <AvatarFallback>
                           {club.name
                             .split(" ")
-                            .map((n) => n[0])
+                            .map(n => n[0])
                             .join("")}
                         </AvatarFallback>
                       </Avatar>
@@ -618,7 +619,7 @@ export default function TrainerAndClubs() {
                     <div>
                       <h4 className="font-medium mb-2">Activities</h4>
                       <div className="flex flex-wrap gap-1">
-                        {club.activities.map((activity) => (
+                        {club.activities.map(activity => (
                           <Badge
                             key={activity}
                             variant="secondary"
