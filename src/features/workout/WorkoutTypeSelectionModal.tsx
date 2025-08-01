@@ -1,7 +1,7 @@
-import { X, Dumbbell, MapPin, Waves, Bike, Activity } from "lucide-react";
-import { useState, useEffect } from "react";
+import { X, Dumbbell, MapPin, Waves, Bike, Activity } from 'lucide-react';
+import { useState, useEffect } from 'react';
 
-import { Button } from "@/components/ui/button";
+import { Button } from '@/components/ui/button';
 
 interface WorkoutTypeSelectionModalProps {
   isOpen: boolean;
@@ -10,11 +10,11 @@ interface WorkoutTypeSelectionModalProps {
 }
 
 export type WorkoutType =
-  | "strength"
-  | "running"
-  | "trail-running"
-  | "swimming"
-  | "cycling";
+  | 'strength'
+  | 'running'
+  | 'trail-running'
+  | 'swimming'
+  | 'cycling';
 
 interface WorkoutTypeOption {
   id: WorkoutType;
@@ -32,93 +32,93 @@ interface WorkoutTypeOption {
 
 const workoutTypes: WorkoutTypeOption[] = [
   {
-    id: "strength",
-    name: "Strength Training",
+    id: 'strength',
+    name: 'Strength Training',
     description:
-      "Build muscle, increase strength, and improve body composition with progressive resistance training.",
+      'Build muscle, increase strength, and improve body composition with progressive resistance training.',
     icon: Dumbbell,
-    gradient: "from-indigo-500 to-purple-600",
-    bgColor: "bg-indigo-50",
-    borderColor: "border-indigo-200",
-    textColor: "text-indigo-900",
-    iconColor: "text-indigo-600",
+    gradient: 'from-indigo-500 to-purple-600',
+    bgColor: 'bg-indigo-50',
+    borderColor: 'border-indigo-200',
+    textColor: 'text-indigo-900',
+    iconColor: 'text-indigo-600',
     features: [
-      "Set & rep tracking",
-      "Weight progression",
-      "Rest timers",
-      "Exercise library",
+      'Set & rep tracking',
+      'Weight progression',
+      'Rest timers',
+      'Exercise library',
     ],
     comingSoon: false,
   },
   {
-    id: "running",
-    name: "Running",
+    id: 'running',
+    name: 'Running',
     description:
-      "Track distance, pace, and improve cardiovascular fitness through structured running workouts.",
+      'Track distance, pace, and improve cardiovascular fitness through structured running workouts.',
     icon: Activity,
-    gradient: "from-green-500 to-emerald-600",
-    bgColor: "bg-green-50",
-    borderColor: "border-green-200",
-    textColor: "text-green-900",
-    iconColor: "text-green-600",
+    gradient: 'from-green-500 to-emerald-600',
+    bgColor: 'bg-green-50',
+    borderColor: 'border-green-200',
+    textColor: 'text-green-900',
+    iconColor: 'text-green-600',
     features: [
-      "Distance tracking",
-      "Pace targets",
-      "Heart rate zones",
-      "Route planning",
+      'Distance tracking',
+      'Pace targets',
+      'Heart rate zones',
+      'Route planning',
     ],
     comingSoon: true,
   },
   {
-    id: "trail-running",
-    name: "Trail Running",
+    id: 'trail-running',
+    name: 'Trail Running',
     description:
-      "Conquer trails with elevation and terrain-specific training designed for outdoor adventures.",
+      'Conquer trails with elevation and terrain-specific training designed for outdoor adventures.',
     icon: MapPin,
-    gradient: "from-orange-500 to-red-600",
-    bgColor: "bg-orange-50",
-    borderColor: "border-orange-200",
-    textColor: "text-orange-900",
-    iconColor: "text-orange-600",
+    gradient: 'from-orange-500 to-red-600',
+    bgColor: 'bg-orange-50',
+    borderColor: 'border-orange-200',
+    textColor: 'text-orange-900',
+    iconColor: 'text-orange-600',
     features: [
-      "Elevation tracking",
-      "Terrain analysis",
-      "Hill training",
-      "Trail routes",
+      'Elevation tracking',
+      'Terrain analysis',
+      'Hill training',
+      'Trail routes',
     ],
     comingSoon: false,
   },
   {
-    id: "swimming",
-    name: "Swimming",
+    id: 'swimming',
+    name: 'Swimming',
     description:
-      "Track laps, strokes, and build aquatic endurance with comprehensive pool and open water workouts.",
+      'Track laps, strokes, and build aquatic endurance with comprehensive pool and open water workouts.',
     icon: Waves,
-    gradient: "from-blue-500 to-cyan-600",
-    bgColor: "bg-blue-50",
-    borderColor: "border-blue-200",
-    textColor: "text-blue-900",
-    iconColor: "text-blue-600",
+    gradient: 'from-blue-500 to-cyan-600',
+    bgColor: 'bg-blue-50',
+    borderColor: 'border-blue-200',
+    textColor: 'text-blue-900',
+    iconColor: 'text-blue-600',
     features: [
-      "Lap counting",
-      "Stroke tracking",
-      "Pool/open water",
-      "Technique drills",
+      'Lap counting',
+      'Stroke tracking',
+      'Pool/open water',
+      'Technique drills',
     ],
     comingSoon: true,
   },
   {
-    id: "cycling",
-    name: "Cycling",
+    id: 'cycling',
+    name: 'Cycling',
     description:
-      "Power through rides with comprehensive distance, power, and performance tracking.",
+      'Power through rides with comprehensive distance, power, and performance tracking.',
     icon: Bike,
-    gradient: "from-purple-500 to-pink-600",
-    bgColor: "bg-purple-50",
-    borderColor: "border-purple-200",
-    textColor: "text-purple-900",
-    iconColor: "text-purple-600",
-    features: ["Distance tracking", "Power meters", "Cadence", "Route mapping"],
+    gradient: 'from-purple-500 to-pink-600',
+    bgColor: 'bg-purple-50',
+    borderColor: 'border-purple-200',
+    textColor: 'text-purple-900',
+    iconColor: 'text-purple-600',
+    features: ['Distance tracking', 'Power meters', 'Cadence', 'Route mapping'],
     comingSoon: true,
   },
 ];
@@ -134,11 +134,11 @@ export default function WorkoutTypeSelectionModal({
   useEffect(() => {
     if (isOpen) {
       // Add overflow-hidden to body when modal opens
-      document.body.style.overflow = "hidden";
+      document.body.style.overflow = 'hidden';
 
       // Cleanup: restore body scroll when modal closes
       return () => {
-        document.body.style.overflow = "unset";
+        document.body.style.overflow = 'unset';
       };
     }
   }, [isOpen]);
@@ -208,8 +208,8 @@ export default function WorkoutTypeSelectionModal({
                       key={type.id}
                       className={`relative group cursor-pointer transition-all duration-300 ${
                         isSelected
-                          ? "transform scale-[1.02]"
-                          : "hover:transform hover:scale-[1.01]"
+                          ? 'transform scale-[1.02]'
+                          : 'hover:transform hover:scale-[1.01]'
                       }`}
                       onClick={() => handleSelect(type.id)}
                     >
@@ -222,8 +222,8 @@ export default function WorkoutTypeSelectionModal({
                           : `border-gray-200 hover:${
                               type.borderColor
                             } hover:shadow-xl group-hover:ring-2 group-hover:${type.borderColor.replace(
-                              "border-",
-                              "ring-"
+                              'border-',
+                              'ring-'
                             )}`
                       }
                     `}
@@ -251,7 +251,7 @@ export default function WorkoutTypeSelectionModal({
                               <Icon
                                 className={`
                               w-10 h-10 transition-all duration-300
-                              ${isSelected ? "text-white" : type.iconColor}
+                              ${isSelected ? 'text-white' : type.iconColor}
                             `}
                               />
                             </div>
@@ -262,7 +262,7 @@ export default function WorkoutTypeSelectionModal({
                                 <h3
                                   className={`
                                 text-2xl font-bold transition-colors duration-300
-                                ${isSelected ? type.textColor : "text-gray-900"}
+                                ${isSelected ? type.textColor : 'text-gray-900'}
                               `}
                                 >
                                   {type.name}
@@ -298,8 +298,8 @@ export default function WorkoutTypeSelectionModal({
                               text-base mb-4 leading-relaxed transition-colors duration-300
                               ${
                                 isSelected
-                                  ? type.textColor.replace("900", "700")
-                                  : "text-gray-600"
+                                  ? type.textColor.replace('900', '700')
+                                  : 'text-gray-600'
                               }
                             `}
                               >
@@ -319,7 +319,7 @@ export default function WorkoutTypeSelectionModal({
                                     ${
                                       isSelected
                                         ? `bg-gradient-to-r ${type.gradient}`
-                                        : type.iconColor.replace("text-", "bg-")
+                                        : type.iconColor.replace('text-', 'bg-')
                                     }
                                   `}
                                     />
@@ -328,8 +328,8 @@ export default function WorkoutTypeSelectionModal({
                                     text-sm font-medium transition-colors duration-300
                                     ${
                                       isSelected
-                                        ? type.textColor.replace("900", "700")
-                                        : "text-gray-700"
+                                        ? type.textColor.replace('900', '700')
+                                        : 'text-gray-700'
                                     }
                                   `}
                                     >
@@ -412,8 +412,8 @@ export default function WorkoutTypeSelectionModal({
                                     >
                                       <div
                                         className={`w-1.5 h-1.5 rounded-full ${type.iconColor.replace(
-                                          "text-",
-                                          "bg-"
+                                          'text-',
+                                          'bg-'
                                         )}`}
                                       />
                                       <span className="text-xs font-medium text-gray-700">
@@ -465,8 +465,8 @@ export default function WorkoutTypeSelectionModal({
                   px-8 py-3 text-base font-medium transition-all duration-300
                   ${
                     selectedType
-                      ? "bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white shadow-lg hover:shadow-xl"
-                      : "bg-gray-200 text-gray-400 cursor-not-allowed"
+                      ? 'bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white shadow-lg hover:shadow-xl'
+                      : 'bg-gray-200 text-gray-400 cursor-not-allowed'
                   }
                 `}
               >
@@ -488,7 +488,7 @@ export default function WorkoutTypeSelectionModal({
                     </svg>
                   </>
                 ) : (
-                  "Select a Workout Type"
+                  'Select a Workout Type'
                 )}
               </Button>
             </div>

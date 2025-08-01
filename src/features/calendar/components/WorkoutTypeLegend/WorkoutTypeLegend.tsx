@@ -1,6 +1,6 @@
-import { workoutTypes } from "../../config/workoutTypes";
+import { workoutTypes } from '../../config/workoutTypes';
 
-import styles from "./WorkoutTypeLegend.module.css";
+import styles from './WorkoutTypeLegend.module.css';
 
 export const WorkoutTypeLegend = () => {
   return (

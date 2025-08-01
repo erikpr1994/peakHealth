@@ -1,10 +1,10 @@
-import { Calendar as CalendarIcon, Plus, TrendingUp } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { Calendar as CalendarIcon, Plus, TrendingUp } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
+import styles from './QuickActions.module.css';
 
-import styles from "./QuickActions.module.css";
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
 
 export const QuickActions = () => {
   const router = useRouter();
@@ -16,7 +16,7 @@ export const QuickActions = () => {
         <Button
           variant="outline"
           className={styles.actionButton}
-          onClick={() => router.push("/routines/create")}
+          onClick={() => router.push('/routines/create')}
         >
           <Plus className={styles.actionIcon} />
           Schedule Workout
@@ -24,7 +24,7 @@ export const QuickActions = () => {
         <Button
           variant="outline"
           className={styles.actionButton}
-          onClick={() => router.push("/routines")}
+          onClick={() => router.push('/routines')}
         >
           <CalendarIcon className={styles.actionIcon} />
           View Routines
@@ -32,7 +32,7 @@ export const QuickActions = () => {
         <Button
           variant="outline"
           className={styles.actionButton}
-          onClick={() => router.push("/statistics")}
+          onClick={() => router.push('/statistics')}
         >
           <TrendingUp className={styles.actionIcon} />
           View Progress

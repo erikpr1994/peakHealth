@@ -1,19 +1,19 @@
-"use client";
+'use client';
 
-import { Card } from "@/components/ui/card";
+import styles from './Calendar.module.css';
+import { CalendarGrid } from './components/CalendarGrid';
+import { CalendarNavigation } from './components/CalendarNavigation';
+import { CalendarStats } from './components/CalendarStats';
+import { QuickActions } from './components/QuickActions';
+import { UpcomingWorkouts } from './components/UpcomingWorkouts';
+import { WorkoutTypeLegend } from './components/WorkoutTypeLegend';
+import { useCalendar } from './hooks/useCalendar';
+import { useWorkouts } from './hooks/useWorkouts';
+import { WorkoutEvent, CalendarDay as CalendarDayType } from './types';
 
-import styles from "./Calendar.module.css";
-import { CalendarGrid } from "./components/CalendarGrid";
-import { CalendarNavigation } from "./components/CalendarNavigation";
-import { CalendarStats } from "./components/CalendarStats";
-import { QuickActions } from "./components/QuickActions";
-import { UpcomingWorkouts } from "./components/UpcomingWorkouts";
-import { WorkoutTypeLegend } from "./components/WorkoutTypeLegend";
-import { useCalendar } from "./hooks/useCalendar";
-import { useWorkouts } from "./hooks/useWorkouts";
-import { WorkoutEvent, CalendarDay as CalendarDayType } from "./types";
+import { Card } from '@/components/ui/card';
 
-export default function Calendar() {
+const Calendar = () => {
   const {
     currentDate,
     selectedDate,
@@ -85,13 +85,13 @@ export default function Calendar() {
   const handleEditWorkout = (workout: WorkoutEvent) => {
     // TODO: Implement edit functionality
     // eslint-disable-next-line no-console
-    console.log("Edit workout:", workout);
+    console.log('Edit workout:', workout);
   };
 
   const handleDeleteWorkout = (workout: WorkoutEvent) => {
     // TODO: Implement delete functionality
     // eslint-disable-next-line no-console
-    console.log("Delete workout:", workout);
+    console.log('Delete workout:', workout);
   };
 
   return (
@@ -140,4 +140,6 @@ export default function Calendar() {
       </div>
     </div>
   );
-}
+};
+
+export default Calendar;

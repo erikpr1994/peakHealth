@@ -1,10 +1,10 @@
-import { Clock, Target, TrendingUp, Users } from "lucide-react";
+import { Clock, Target, TrendingUp, Users } from 'lucide-react';
 
-import { Card } from "@/components/ui/card";
+import { CalendarStats as CalendarStatsType } from '../../types';
 
-import { CalendarStats as CalendarStatsType } from "../../types";
+import styles from './CalendarStats.module.css';
 
-import styles from "./CalendarStats.module.css";
+import { Card } from '@/components/ui/card';
 
 interface CalendarStatsProps {
   stats: CalendarStatsType;

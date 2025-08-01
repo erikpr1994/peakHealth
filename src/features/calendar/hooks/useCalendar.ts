@@ -1,15 +1,15 @@
-import { useState } from "react";
+import { useState } from 'react';
 
-import { ViewMode } from "../types";
+import { ViewMode } from '../types';
 
 export const useCalendar = () => {
   const [currentDate, setCurrentDate] = useState(new Date(2025, 6, 22)); // July 22, 2025
   const [selectedDate, setSelectedDate] = useState(new Date(2025, 6, 22)); // July 22, 2025
-  const [viewMode, setViewMode] = useState<ViewMode>("Month");
+  const [viewMode, setViewMode] = useState<ViewMode>('Month');
 
-  const navigateMonth = (direction: "prev" | "next") => {
+  const navigateMonth = (direction: 'prev' | 'next') => {
     const newDate = new Date(currentDate);
-    if (direction === "prev") {
+    if (direction === 'prev') {
       newDate.setMonth(newDate.getMonth() - 1);
     } else {
       newDate.setMonth(newDate.getMonth() + 1);

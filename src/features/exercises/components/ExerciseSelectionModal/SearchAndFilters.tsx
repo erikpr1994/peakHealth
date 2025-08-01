@@ -1,9 +1,9 @@
-import { Search } from "lucide-react";
+import { Search } from 'lucide-react';
 
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { exerciseCategories } from '../../data/exerciseCategories';
 
-import { exerciseCategories } from "../../data/exerciseCategories";
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 
 interface SearchAndFiltersProps {
   searchTerm: string;
@@ -12,12 +12,12 @@ interface SearchAndFiltersProps {
   onCategoryChange: (category: string) => void;
 }
 
-export function SearchAndFilters({
+export const SearchAndFilters = ({
   searchTerm,
   onSearchChange,
   selectedCategory,
   onCategoryChange,
-}: SearchAndFiltersProps) {
+}: SearchAndFiltersProps) => {
   return (
     <div className="p-6 bg-white border-b border-gray-100 flex-shrink-0">
       <div className="space-y-4">
@@ -35,13 +35,13 @@ export function SearchAndFilters({
           {exerciseCategories.map(category => (
             <Button
               key={category}
-              variant={selectedCategory === category ? "default" : "outline"}
+              variant={selectedCategory === category ? 'default' : 'outline'}
               size="sm"
               onClick={() => onCategoryChange(category)}
               className={`h-8 px-4 rounded-full transition-all ${
                 selectedCategory === category
-                  ? "bg-primary text-white shadow-sm"
-                  : "bg-white border-gray-200 text-gray-600 hover:bg-gray-50"
+                  ? 'bg-primary text-white shadow-sm'
+                  : 'bg-white border-gray-200 text-gray-600 hover:bg-gray-50'
               }`}
             >
               {category}
@@ -51,4 +51,4 @@ export function SearchAndFilters({
       </div>
     </div>
   );
-}
+};

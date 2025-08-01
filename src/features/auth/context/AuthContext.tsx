@@ -1,17 +1,17 @@
-"use client";
+'use client';
 
-import { User } from "@supabase/supabase-js";
-import { useRouter } from "next/navigation";
+import { User } from '@supabase/supabase-js';
+import { useRouter } from 'next/navigation';
 import React, {
   createContext,
   useContext,
   ReactNode,
   useEffect,
   useState,
-} from "react";
-import useSWR from "swr";
+} from 'react';
+import useSWR from 'swr';
 
-import { createClient } from "@/lib/supabase/client";
+import { createClient } from '@/lib/supabase/client';
 
 interface AuthContextType {
   isAuthenticated: boolean;
@@ -34,7 +34,7 @@ const userFetcher = async (url: string): Promise<User | null> => {
       // Not authenticated, return null
       return null;
     }
-    const error = new Error("An error occurred while fetching the user.");
+    const error = new Error('An error occurred while fetching the user.');
     (error as any).info = await response.json();
     (error as any).status = response.status;
     throw error;
@@ -54,11 +54,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     data: user,
     isLoading,
     mutate: mutateUser,
-  } = useSWR<User | null>("/api/auth/user", userFetcher, {
+  } = useSWR<User | null>('/api/auth/user', userFetcher, {
     revalidateOnFocus: false,
     shouldRetryOnError: false,
     onError: (error: any) => {
-      console.error("Error fetching user:", error);
+      console.error('Error fetching user:', error);
     },
   });
 
@@ -67,17 +67,17 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange(async (event, session) => {
-      console.log("Auth state changed:", event, session?.user?.id);
+      console.log('Auth state changed:', event, session?.user?.id);
 
-      if (event === "SIGNED_IN" && session?.user) {
+      if (event === 'SIGNED_IN' && session?.user) {
         // Update SWR cache with new user data
         await mutateUser(session.user);
-        router.push("/dashboard");
-      } else if (event === "SIGNED_OUT") {
+        router.push('/dashboard');
+      } else if (event === 'SIGNED_OUT') {
         // Clear user from SWR cache and redirect
         await mutateUser(null);
-        router.push("/");
-      } else if (event === "USER_UPDATED" && session?.user) {
+        router.push('/');
+      } else if (event === 'USER_UPDATED' && session?.user) {
         // Update user data in cache
         await mutateUser(session.user);
       }
@@ -95,10 +95,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
     setIsAuthOperationLoading(true);
     try {
-      const response = await fetch("/api/auth/login", {
-        method: "POST",
+      const response = await fetch('/api/auth/login', {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({ email, password }),
       });
@@ -106,13 +106,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.error || "Login failed");
+        throw new Error(data.error || 'Login failed');
       }
 
       // The auth state change handler will handle the redirect
       // No need to manually redirect here
     } catch (error) {
-      console.error("Error logging in:", error);
+      console.error('Error logging in:', error);
       throw error;
     } finally {
       setIsAuthOperationLoading(false);
@@ -124,10 +124,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
     setIsAuthOperationLoading(true);
     try {
-      const response = await fetch("/api/auth/signup", {
-        method: "POST",
+      const response = await fetch('/api/auth/signup', {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({ email, password, name }),
       });
@@ -135,14 +135,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.error || "Sign up failed");
+        throw new Error(data.error || 'Sign up failed');
       }
 
       // Don't manually call mutateUser here - let the auth state change handler
       // manage the user state to avoid race conditions and duplicate updates
       // The onAuthStateChange listener will handle SIGNED_IN events automatically
     } catch (error) {
-      console.error("Error signing up:", error);
+      console.error('Error signing up:', error);
       throw error;
     } finally {
       setIsAuthOperationLoading(false);
@@ -152,22 +152,22 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const logout = async () => {
     setIsAuthOperationLoading(true);
     try {
-      const response = await fetch("/api/auth/logout", {
-        method: "POST",
+      const response = await fetch('/api/auth/logout', {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
       });
 
       if (!response.ok) {
         const data = await response.json();
-        throw new Error(data.error || "Logout failed");
+        throw new Error(data.error || 'Logout failed');
       }
 
       // The auth state change handler will handle clearing user and redirect
       // No need to manually clear user or redirect here
     } catch (error) {
-      console.error("Error logging out:", error);
+      console.error('Error logging out:', error);
       throw error;
     } finally {
       setIsAuthOperationLoading(false);
@@ -194,7 +194,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (context === undefined) {
-    throw new Error("useAuth must be used within an AuthProvider");
+    throw new Error('useAuth must be used within an AuthProvider');
   }
   return context;
 };

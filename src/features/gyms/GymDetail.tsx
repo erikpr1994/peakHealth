@@ -14,14 +14,14 @@ import {
   Settings,
   Calendar,
   Share2,
-} from "lucide-react";
+} from 'lucide-react';
 
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Page } from "@/types/app";
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Page } from '@/types/app';
 
 interface GymDetailProps {
   onNavigate: (page: Page, id?: string) => void;
@@ -32,11 +32,11 @@ interface Equipment {
   id: string;
   name: string;
   category:
-    | "Cardio"
-    | "Strength"
-    | "Free Weights"
-    | "Functional"
-    | "Accessories";
+    | 'Cardio'
+    | 'Strength'
+    | 'Free Weights'
+    | 'Functional'
+    | 'Accessories';
   brand?: string;
   notes?: string;
   description?: string;
@@ -46,7 +46,7 @@ interface Gym {
   id: string;
   name: string;
   address: string;
-  type: "public" | "private";
+  type: 'public' | 'private';
   isJoined: boolean;
   isOwner?: boolean;
   members?: number;
@@ -72,124 +72,124 @@ export default function GymDetail({ onNavigate, gymId }: GymDetailProps) {
   // Mock data - in a real app, this would be fetched based on gymId
   const gym: Gym = {
     id: gymId,
-    name: "Downtown Fitness Center",
-    address: "123 Main St, San Francisco, CA 94105",
-    type: "public",
+    name: 'Downtown Fitness Center',
+    address: '123 Main St, San Francisco, CA 94105',
+    type: 'public',
     isJoined: true,
     isOwner: false,
     members: 1250,
     rating: 4.6,
-    hours: "5:00 AM - 11:00 PM",
-    phone: "(555) 123-4567",
-    website: "https://downtownfitness.com",
+    hours: '5:00 AM - 11:00 PM',
+    phone: '(555) 123-4567',
+    website: 'https://downtownfitness.com',
     description:
-      "A state-of-the-art fitness center in the heart of downtown San Francisco. We offer top-quality equipment, expert personal training, and a welcoming community atmosphere. Perfect for professionals looking to maintain their fitness routine.",
+      'A state-of-the-art fitness center in the heart of downtown San Francisco. We offer top-quality equipment, expert personal training, and a welcoming community atmosphere. Perfect for professionals looking to maintain their fitness routine.',
     equipment: [
       {
-        id: "1",
-        name: "Treadmill",
-        category: "Cardio",
-        brand: "Life Fitness",
-        description: "Commercial-grade treadmills with entertainment systems",
+        id: '1',
+        name: 'Treadmill',
+        category: 'Cardio',
+        brand: 'Life Fitness',
+        description: 'Commercial-grade treadmills with entertainment systems',
       },
       {
-        id: "2",
-        name: "Elliptical Machine",
-        category: "Cardio",
-        brand: "Precor",
-        description: "Low-impact cardio with upper body engagement",
+        id: '2',
+        name: 'Elliptical Machine',
+        category: 'Cardio',
+        brand: 'Precor',
+        description: 'Low-impact cardio with upper body engagement',
       },
       {
-        id: "3",
-        name: "Bench Press",
-        category: "Strength",
-        brand: "Hammer Strength",
-        description: "Olympic bench press with safety spotters",
+        id: '3',
+        name: 'Bench Press',
+        category: 'Strength',
+        brand: 'Hammer Strength',
+        description: 'Olympic bench press with safety spotters',
       },
       {
-        id: "4",
-        name: "Squat Rack",
-        category: "Strength",
-        brand: "Rogue",
-        description: "Power rack with pull-up bar and safety bars",
+        id: '4',
+        name: 'Squat Rack',
+        category: 'Strength',
+        brand: 'Rogue',
+        description: 'Power rack with pull-up bar and safety bars',
       },
       {
-        id: "5",
-        name: "Cable Machine",
-        category: "Strength",
-        brand: "Life Fitness",
-        description: "Dual adjustable cable system",
+        id: '5',
+        name: 'Cable Machine',
+        category: 'Strength',
+        brand: 'Life Fitness',
+        description: 'Dual adjustable cable system',
       },
       {
-        id: "6",
-        name: "Dumbbells (5-100 lbs)",
-        category: "Free Weights",
-        brand: "Hammer Strength",
-        description: "Complete set of rubber-coated dumbbells",
+        id: '6',
+        name: 'Dumbbells (5-100 lbs)',
+        category: 'Free Weights',
+        brand: 'Hammer Strength',
+        description: 'Complete set of rubber-coated dumbbells',
       },
       {
-        id: "7",
-        name: "Olympic Barbells",
-        category: "Free Weights",
-        brand: "Rogue",
-        description: "45lb Olympic barbells with knurled grips",
+        id: '7',
+        name: 'Olympic Barbells',
+        category: 'Free Weights',
+        brand: 'Rogue',
+        description: '45lb Olympic barbells with knurled grips',
       },
       {
-        id: "8",
-        name: "Pull-up Bar",
-        category: "Functional",
-        description: "Multi-grip pull-up station",
+        id: '8',
+        name: 'Pull-up Bar',
+        category: 'Functional',
+        description: 'Multi-grip pull-up station',
       },
       {
-        id: "9",
-        name: "TRX Suspension Trainer",
-        category: "Functional",
-        brand: "TRX",
-        description: "Suspension training system",
+        id: '9',
+        name: 'TRX Suspension Trainer',
+        category: 'Functional',
+        brand: 'TRX',
+        description: 'Suspension training system',
       },
       {
-        id: "10",
-        name: "Yoga Mats",
-        category: "Accessories",
-        description: "Premium non-slip yoga mats",
+        id: '10',
+        name: 'Yoga Mats',
+        category: 'Accessories',
+        description: 'Premium non-slip yoga mats',
       },
     ],
     amenities: [
-      "Locker Rooms",
-      "Showers",
-      "WiFi",
-      "Parking",
-      "Personal Training",
-      "Group Classes",
-      "Towel Service",
+      'Locker Rooms',
+      'Showers',
+      'WiFi',
+      'Parking',
+      'Personal Training',
+      'Group Classes',
+      'Towel Service',
     ],
     reviews: [
       {
-        id: "1",
-        user: "Sarah Chen",
-        avatar: "/api/placeholder/40/40",
+        id: '1',
+        user: 'Sarah Chen',
+        avatar: '/api/placeholder/40/40',
         rating: 5,
         comment:
-          "Amazing gym with excellent equipment. The staff is super friendly and helpful!",
-        date: "2 days ago",
+          'Amazing gym with excellent equipment. The staff is super friendly and helpful!',
+        date: '2 days ago',
       },
       {
-        id: "2",
-        user: "Mike Rodriguez",
-        avatar: "/api/placeholder/40/40",
+        id: '2',
+        user: 'Mike Rodriguez',
+        avatar: '/api/placeholder/40/40',
         rating: 4,
         comment:
-          "Great location and facilities. Can get crowded during peak hours but overall very satisfied.",
-        date: "1 week ago",
+          'Great location and facilities. Can get crowded during peak hours but overall very satisfied.',
+        date: '1 week ago',
       },
       {
-        id: "3",
-        user: "Jennifer Kim",
-        avatar: "/api/placeholder/40/40",
+        id: '3',
+        user: 'Jennifer Kim',
+        avatar: '/api/placeholder/40/40',
         rating: 5,
         comment:
-          "Love the variety of classes and the modern equipment. Worth every penny!",
-        date: "2 weeks ago",
+          'Love the variety of classes and the modern equipment. Worth every penny!',
+        date: '2 weeks ago',
       },
     ],
   };
@@ -198,7 +198,7 @@ export default function GymDetail({ onNavigate, gymId }: GymDetailProps) {
     const icons = {
       Cardio: Heart,
       Strength: Trophy,
-      "Free Weights": Dumbbell,
+      'Free Weights': Dumbbell,
       Functional: Target,
       Accessories: Settings,
     };
@@ -223,7 +223,7 @@ export default function GymDetail({ onNavigate, gymId }: GymDetailProps) {
       {/* Header */}
       <div className="flex items-center justify-between mb-8">
         <div className="flex items-center gap-4">
-          <Button variant="ghost" onClick={() => onNavigate("gyms")}>
+          <Button variant="ghost" onClick={() => onNavigate('gyms')}>
             <ArrowLeft className="w-4 h-4" />
           </Button>
           <div>
@@ -241,7 +241,7 @@ export default function GymDetail({ onNavigate, gymId }: GymDetailProps) {
             Share
           </Button>
           {gym.isOwner && (
-            <Button onClick={() => onNavigate("edit-gym", gym.id)}>
+            <Button onClick={() => onNavigate('edit-gym', gym.id)}>
               <Edit2 className="w-4 h-4 mr-2" />
               Edit Gym
             </Button>
@@ -383,9 +383,9 @@ export default function GymDetail({ onNavigate, gymId }: GymDetailProps) {
                           <AvatarImage src={review.avatar} alt={review.user} />
                           <AvatarFallback>
                             {review.user
-                              .split(" ")
+                              .split(' ')
                               .map(n => n[0])
-                              .join("")}
+                              .join('')}
                           </AvatarFallback>
                         </Avatar>
                         <div className="flex-1">
@@ -399,8 +399,8 @@ export default function GymDetail({ onNavigate, gymId }: GymDetailProps) {
                                   key={i}
                                   className={`w-4 h-4 ${
                                     i < review.rating
-                                      ? "text-yellow-500 fill-yellow-500"
-                                      : "text-gray-300"
+                                      ? 'text-yellow-500 fill-yellow-500'
+                                      : 'text-gray-300'
                                   }`}
                                 />
                               ))}
@@ -473,7 +473,7 @@ export default function GymDetail({ onNavigate, gymId }: GymDetailProps) {
             <div className="space-y-3">
               <Button
                 className="w-full"
-                onClick={() => onNavigate("create-routine")}
+                onClick={() => onNavigate('create-routine')}
               >
                 <Calendar className="w-4 h-4 mr-2" />
                 Plan Workout Here
@@ -484,7 +484,7 @@ export default function GymDetail({ onNavigate, gymId }: GymDetailProps) {
                 Get Directions
               </Button>
 
-              {gym.type === "public" && !gym.isJoined && (
+              {gym.type === 'public' && !gym.isJoined && (
                 <Button variant="outline" className="w-full">
                   <Users className="w-4 h-4 mr-2" />
                   Join Gym

@@ -1,14 +1,14 @@
 // Feature Flag System - Main Export
 
 // Types
-export * from "./types";
+export * from './types';
 
 // Configuration
-export * from "./lib/config";
+export * from './lib/config';
 
 // Context and Hooks
 export {
   FeatureFlagProvider,
   useFeatureFlags,
-} from "./context/FeatureFlagContext";
-export { useFeatureFlag } from "./hooks/useFeatureFlag";
+} from './context/FeatureFlagContext';
+export { useFeatureFlag } from './hooks/useFeatureFlag';

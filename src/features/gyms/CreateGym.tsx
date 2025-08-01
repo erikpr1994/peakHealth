@@ -7,24 +7,24 @@ import {
   X,
   Home,
   Dumbbell,
-} from "lucide-react";
-import { useState } from "react";
+} from 'lucide-react';
+import { useState } from 'react';
 
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Textarea } from "@/components/ui/textarea";
-import { Page } from "@/types/app";
+} from '@/components/ui/select';
+import { Textarea } from '@/components/ui/textarea';
+import { Page } from '@/types/app';
 
 interface CreateGymProps {
   onNavigate: (page: Page, id?: string) => void;
@@ -32,7 +32,7 @@ interface CreateGymProps {
 
 interface PrivateGym {
   name: string;
-  type: "home" | "garage" | "basement" | "spare_room" | "outdoor" | "other";
+  type: 'home' | 'garage' | 'basement' | 'spare_room' | 'outdoor' | 'other';
   address: string;
   city: string;
   state: string;
@@ -46,113 +46,113 @@ interface PrivateGym {
   };
 }
 
-export default function CreateGym({ onNavigate }: CreateGymProps) {
+const CreateGym = ({ onNavigate }: CreateGymProps) => {
   const [gymData, setGymData] = useState<PrivateGym>({
-    name: "",
-    type: "home",
-    address: "",
-    city: "",
-    state: "",
-    zipCode: "",
-    description: "",
+    name: '',
+    type: 'home',
+    address: '',
+    city: '',
+    state: '',
+    zipCode: '',
+    description: '',
     selectedEquipment: [],
     customEquipment: [],
     amenities: [],
     operatingHours: {
-      monday: { open: "06:00", close: "22:00", closed: false },
-      tuesday: { open: "06:00", close: "22:00", closed: false },
-      wednesday: { open: "06:00", close: "22:00", closed: false },
-      thursday: { open: "06:00", close: "22:00", closed: false },
-      friday: { open: "06:00", close: "22:00", closed: false },
-      saturday: { open: "08:00", close: "20:00", closed: false },
-      sunday: { open: "08:00", close: "20:00", closed: false },
+      monday: { open: '06:00', close: '22:00', closed: false },
+      tuesday: { open: '06:00', close: '22:00', closed: false },
+      wednesday: { open: '06:00', close: '22:00', closed: false },
+      thursday: { open: '06:00', close: '22:00', closed: false },
+      friday: { open: '06:00', close: '22:00', closed: false },
+      saturday: { open: '08:00', close: '20:00', closed: false },
+      sunday: { open: '08:00', close: '20:00', closed: false },
     },
   });
 
-  const [newCustomEquipment, setNewCustomEquipment] = useState("");
+  const [newCustomEquipment, setNewCustomEquipment] = useState('');
 
   const gymTypes = [
-    { id: "home", name: "Home Gym", description: "Main living space setup" },
-    { id: "garage", name: "Garage Gym", description: "Converted garage space" },
+    { id: 'home', name: 'Home Gym', description: 'Main living space setup' },
+    { id: 'garage', name: 'Garage Gym', description: 'Converted garage space' },
     {
-      id: "basement",
-      name: "Basement Gym",
-      description: "Basement workout area",
+      id: 'basement',
+      name: 'Basement Gym',
+      description: 'Basement workout area',
     },
     {
-      id: "spare_room",
-      name: "Spare Room",
-      description: "Dedicated room for workouts",
+      id: 'spare_room',
+      name: 'Spare Room',
+      description: 'Dedicated room for workouts',
     },
     {
-      id: "outdoor",
-      name: "Outdoor Space",
-      description: "Backyard or patio setup",
+      id: 'outdoor',
+      name: 'Outdoor Space',
+      description: 'Backyard or patio setup',
     },
-    { id: "other", name: "Other", description: "Custom setup location" },
+    { id: 'other', name: 'Other', description: 'Custom setup location' },
   ];
 
   const availableEquipment = [
     // Cardio
-    "Treadmill",
-    "Stationary Bike",
-    "Elliptical",
-    "Rowing Machine",
-    "Jump Rope",
+    'Treadmill',
+    'Stationary Bike',
+    'Elliptical',
+    'Rowing Machine',
+    'Jump Rope',
     // Strength
-    "Adjustable Dumbbells",
-    "Fixed Dumbbells",
-    "Barbell",
-    "Weight Plates",
-    "Kettlebells",
-    "Resistance Bands",
-    "Pull-up Bar",
-    "Dip Station",
-    "Power Rack",
-    "Squat Rack",
-    "Bench (Flat)",
-    "Bench (Adjustable)",
-    "Cable Machine",
+    'Adjustable Dumbbells',
+    'Fixed Dumbbells',
+    'Barbell',
+    'Weight Plates',
+    'Kettlebells',
+    'Resistance Bands',
+    'Pull-up Bar',
+    'Dip Station',
+    'Power Rack',
+    'Squat Rack',
+    'Bench (Flat)',
+    'Bench (Adjustable)',
+    'Cable Machine',
     // Functional
-    "Yoga Mat",
-    "Foam Roller",
-    "Medicine Ball",
-    "Swiss Ball",
-    "TRX Suspension Trainer",
-    "Parallette Bars",
-    "Plyo Box",
-    "Battle Ropes",
-    "Landmine",
+    'Yoga Mat',
+    'Foam Roller',
+    'Medicine Ball',
+    'Swiss Ball',
+    'TRX Suspension Trainer',
+    'Parallette Bars',
+    'Plyo Box',
+    'Battle Ropes',
+    'Landmine',
     // Accessories
-    "Mirrors",
-    "Storage Rack",
-    "Weight Tree",
-    "Resistance Band Anchor",
+    'Mirrors',
+    'Storage Rack',
+    'Weight Tree',
+    'Resistance Band Anchor',
   ];
 
   const commonAmenities = [
-    "Climate Control",
-    "Ventilation",
-    "Music System",
-    "TV/Entertainment",
-    "Rubber Flooring",
-    "Carpet",
-    "Mirrors",
-    "Storage Space",
-    "Water Access",
-    "Natural Light",
-    "Artificial Lighting",
-    "Safety Equipment",
+    'Climate Control',
+    'Ventilation',
+    'Music System',
+    'TV/Entertainment',
+    'Rubber Flooring',
+    'Carpet',
+    'Mirrors',
+    'Storage Space',
+    'Water Access',
+    'Natural Light',
+    'Artificial Lighting',
+    'Safety Equipment',
   ];
 
   const days = [
-    "monday",
-    "tuesday",
-    "wednesday",
-    "thursday",
-    "friday",
-    "saturday",
-    "sunday",
+    'monday',
+    'tuesday',
+    'wednesday',
+    'thursday',
+    'friday',
+    'saturday',
+    'sunday',
   ];
 
   const handleEquipmentToggle = (equipment: string) => {
@@ -182,7 +182,7 @@ export default function CreateGym({ onNavigate }: CreateGymProps) {
         ...prev,
         customEquipment: [...prev.customEquipment, newCustomEquipment],
       }));
-      setNewCustomEquipment("");
+      setNewCustomEquipment('');
     }
   };
 
@@ -195,13 +195,13 @@ export default function CreateGym({ onNavigate }: CreateGymProps) {
 
   const handleCreateGym = () => {
     // In a real app, this would save to the database immediately
-    console.log("Creating private gym:", gymData);
-    onNavigate("gyms");
+    console.log('Creating private gym:', gymData);
+    onNavigate('gyms');
   };
 
   const updateOperatingHours = (
     day: string,
-    field: "open" | "close" | "closed",
+    field: 'open' | 'close' | 'closed',
     value: string | boolean
   ) => {
     setGymData(prev => ({
@@ -221,7 +221,7 @@ export default function CreateGym({ onNavigate }: CreateGymProps) {
       {/* Header */}
       <div className="flex items-center justify-between mb-8">
         <div className="flex items-center gap-4">
-          <Button variant="ghost" onClick={() => onNavigate("gyms")}>
+          <Button variant="ghost" onClick={() => onNavigate('gyms')}>
             <ArrowLeft className="w-4 h-4" />
           </Button>
           <div>
@@ -235,7 +235,7 @@ export default function CreateGym({ onNavigate }: CreateGymProps) {
         </div>
 
         <div className="flex gap-3">
-          <Button variant="outline" onClick={() => onNavigate("gyms")}>
+          <Button variant="outline" onClick={() => onNavigate('gyms')}>
             Cancel
           </Button>
           <Button
@@ -272,7 +272,7 @@ export default function CreateGym({ onNavigate }: CreateGymProps) {
               <Label htmlFor="type">Gym Type *</Label>
               <Select
                 value={gymData.type}
-                onValueChange={(value: PrivateGym["type"]) =>
+                onValueChange={(value: PrivateGym['type']) =>
                   setGymData({ ...gymData, type: value })
                 }
               >
@@ -397,7 +397,7 @@ export default function CreateGym({ onNavigate }: CreateGymProps) {
                 onChange={e => setNewCustomEquipment(e.target.value)}
                 placeholder="Enter custom equipment name"
                 onKeyPress={e =>
-                  e.key === "Enter" && handleAddCustomEquipment()
+                  e.key === 'Enter' && handleAddCustomEquipment()
                 }
               />
               <Button type="button" onClick={handleAddCustomEquipment}>
@@ -467,7 +467,7 @@ export default function CreateGym({ onNavigate }: CreateGymProps) {
                 <Checkbox
                   checked={!gymData.operatingHours[day].closed}
                   onCheckedChange={checked =>
-                    updateOperatingHours(day, "closed", !checked)
+                    updateOperatingHours(day, 'closed', !checked)
                   }
                 />
                 {!gymData.operatingHours[day].closed ? (
@@ -476,7 +476,7 @@ export default function CreateGym({ onNavigate }: CreateGymProps) {
                       type="time"
                       value={gymData.operatingHours[day].open}
                       onChange={e =>
-                        updateOperatingHours(day, "open", e.target.value)
+                        updateOperatingHours(day, 'open', e.target.value)
                       }
                       className="w-24"
                     />
@@ -485,7 +485,7 @@ export default function CreateGym({ onNavigate }: CreateGymProps) {
                       type="time"
                       value={gymData.operatingHours[day].close}
                       onChange={e =>
-                        updateOperatingHours(day, "close", e.target.value)
+                        updateOperatingHours(day, 'close', e.target.value)
                       }
                       className="w-24"
                     />
@@ -500,4 +500,6 @@ export default function CreateGym({ onNavigate }: CreateGymProps) {
       </div>
     </div>
   );
-}
+};
+
+export default CreateGym;

@@ -1,5 +1,5 @@
-import { ArrowLeft, Save, Plus, X, Trash2 } from "lucide-react";
-import { useState, useEffect } from "react";
+import { ArrowLeft, Save, Plus, X, Trash2 } from 'lucide-react';
+import { useState, useEffect } from 'react';
 
 import {
   AlertDialog,
@@ -11,22 +11,22 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+} from '@/components/ui/alert-dialog';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Textarea } from "@/components/ui/textarea";
-import { Page } from "@/types/app";
+} from '@/components/ui/select';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Textarea } from '@/components/ui/textarea';
+import { Page } from '@/types/app';
 
 interface EditEquipmentProps {
   onNavigate: (page: Page, id?: string) => void;
@@ -36,16 +36,16 @@ interface EditEquipmentProps {
 interface EquipmentSpecs {
   weightRange?: { min: number; max: number; increment: number };
   resistanceType?:
-    | "weight_stack"
-    | "weight_plates"
-    | "pneumatic"
-    | "magnetic"
-    | "hydraulic"
-    | "bodyweight";
+    | 'weight_stack'
+    | 'weight_plates'
+    | 'pneumatic'
+    | 'magnetic'
+    | 'hydraulic'
+    | 'bodyweight';
   conversionFactor?: number;
   pulleyRatio?: number;
   leverageRatio?: number;
-  resistanceCurve?: "linear" | "ascending" | "descending" | "bell_curve";
+  resistanceCurve?: 'linear' | 'ascending' | 'descending' | 'bell_curve';
   availableWeights?: number[];
   notes?: string;
 }
@@ -55,64 +55,61 @@ interface EquipmentData {
   brand: string;
   model: string;
   category:
-    | "Cardio"
-    | "Strength"
-    | "Free Weights"
-    | "Functional"
-    | "Accessories"
-    | "";
+    | 'Cardio'
+    | 'Strength'
+    | 'Free Weights'
+    | 'Functional'
+    | 'Accessories'
+    | '';
   description: string;
   imageUrl: string;
   specs: EquipmentSpecs;
-  type: "custom" | "standard";
+  type: 'custom' | 'standard';
 }
 
-export default function EditEquipment({
-  onNavigate,
-  equipmentId,
-}: EditEquipmentProps) {
+const EditEquipment = ({ onNavigate, equipmentId }: EditEquipmentProps) => {
   const [equipmentData, setEquipmentData] = useState<EquipmentData>({
-    name: "",
-    brand: "",
-    model: "",
-    category: "",
-    description: "",
-    imageUrl: "",
-    type: "custom",
+    name: '',
+    brand: '',
+    model: '',
+    category: '',
+    description: '',
+    imageUrl: '',
+    type: 'custom',
     specs: {
-      resistanceType: "weight_plates",
+      resistanceType: 'weight_plates',
       conversionFactor: 1.0,
       pulleyRatio: 1.0,
       leverageRatio: 1.0,
-      resistanceCurve: "linear",
+      resistanceCurve: 'linear',
       availableWeights: [],
-      notes: "",
+      notes: '',
     },
   });
 
-  const [newWeight, setNewWeight] = useState("");
+  const [newWeight, setNewWeight] = useState('');
 
   // Load existing equipment data
   useEffect(() => {
     // Mock data - in a real app, this would be fetched based on equipmentId
     const existingEquipment = {
-      name: "Home Gym Dumbbells",
-      brand: "CAP Barbell",
-      model: "Cast Iron Hex",
-      category: "Free Weights" as const,
-      description: "Personal set of hex dumbbells for home workouts",
-      imageUrl: "",
-      type: "custom" as const,
+      name: 'Home Gym Dumbbells',
+      brand: 'CAP Barbell',
+      model: 'Cast Iron Hex',
+      category: 'Free Weights' as const,
+      description: 'Personal set of hex dumbbells for home workouts',
+      imageUrl: '',
+      type: 'custom' as const,
       specs: {
-        resistanceType: "weight_plates" as const,
+        resistanceType: 'weight_plates' as const,
         conversionFactor: 1.0,
         pulleyRatio: 1.0,
         leverageRatio: 1.0,
-        resistanceCurve: "linear" as const,
+        resistanceCurve: 'linear' as const,
         availableWeights: [10, 15, 20, 25, 30, 35, 40, 45, 50],
         weightRange: { min: 10, max: 50, increment: 5 },
         notes:
-          "Personal collection built over time. Good condition, stored in dry garage.",
+          'Personal collection built over time. Good condition, stored in dry garage.',
       },
     };
 
@@ -121,89 +118,89 @@ export default function EditEquipment({
 
   const categories = [
     {
-      id: "Cardio",
-      name: "Cardio",
-      description: "Treadmills, bikes, ellipticals",
+      id: 'Cardio',
+      name: 'Cardio',
+      description: 'Treadmills, bikes, ellipticals',
     },
     {
-      id: "Strength",
-      name: "Strength Machines",
-      description: "Cable machines, press machines",
+      id: 'Strength',
+      name: 'Strength Machines',
+      description: 'Cable machines, press machines',
     },
     {
-      id: "Free Weights",
-      name: "Free Weights",
-      description: "Dumbbells, barbells, plates",
+      id: 'Free Weights',
+      name: 'Free Weights',
+      description: 'Dumbbells, barbells, plates',
     },
     {
-      id: "Functional",
-      name: "Functional",
-      description: "Pull-up bars, suspension trainers",
+      id: 'Functional',
+      name: 'Functional',
+      description: 'Pull-up bars, suspension trainers',
     },
     {
-      id: "Accessories",
-      name: "Accessories",
-      description: "Mats, belts, straps",
+      id: 'Accessories',
+      name: 'Accessories',
+      description: 'Mats, belts, straps',
     },
   ];
 
   const resistanceTypes = [
     {
-      id: "weight_plates",
-      name: "Weight Plates",
-      description: "Uses removable weight plates",
+      id: 'weight_plates',
+      name: 'Weight Plates',
+      description: 'Uses removable weight plates',
     },
     {
-      id: "weight_stack",
-      name: "Weight Stack",
-      description: "Pin-selected weight stack",
+      id: 'weight_stack',
+      name: 'Weight Stack',
+      description: 'Pin-selected weight stack',
     },
     {
-      id: "pneumatic",
-      name: "Pneumatic",
-      description: "Air pressure resistance",
+      id: 'pneumatic',
+      name: 'Pneumatic',
+      description: 'Air pressure resistance',
     },
-    { id: "magnetic", name: "Magnetic", description: "Magnetic resistance" },
-    { id: "hydraulic", name: "Hydraulic", description: "Hydraulic resistance" },
+    { id: 'magnetic', name: 'Magnetic', description: 'Magnetic resistance' },
+    { id: 'hydraulic', name: 'Hydraulic', description: 'Hydraulic resistance' },
     {
-      id: "bodyweight",
-      name: "Bodyweight",
-      description: "Body weight + optional added weight",
+      id: 'bodyweight',
+      name: 'Bodyweight',
+      description: 'Body weight + optional added weight',
     },
   ];
 
   const resistanceCurves = [
     {
-      id: "linear",
-      name: "Linear",
-      description: "Consistent resistance throughout range",
+      id: 'linear',
+      name: 'Linear',
+      description: 'Consistent resistance throughout range',
     },
     {
-      id: "ascending",
-      name: "Ascending",
-      description: "Resistance increases through range",
+      id: 'ascending',
+      name: 'Ascending',
+      description: 'Resistance increases through range',
     },
     {
-      id: "descending",
-      name: "Descending",
-      description: "Resistance decreases through range",
+      id: 'descending',
+      name: 'Descending',
+      description: 'Resistance decreases through range',
     },
     {
-      id: "bell_curve",
-      name: "Bell Curve",
-      description: "Peak resistance in middle of range",
+      id: 'bell_curve',
+      name: 'Bell Curve',
+      description: 'Peak resistance in middle of range',
     },
   ];
 
   const commonWeightSets = {
-    "dumbbell-light": [5, 10, 15, 20, 25, 30, 35, 40, 45, 50],
-    "dumbbell-heavy": [
+    'dumbbell-light': [5, 10, 15, 20, 25, 30, 35, 40, 45, 50],
+    'dumbbell-heavy': [
       5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95,
       100,
     ],
-    "dumbbell-commercial": Array.from({ length: 40 }, (_, i) => 5 + i * 2.5),
-    "plates-standard": [2.5, 5, 10, 25, 35, 45],
-    "plates-olympic": [2.5, 5, 10, 25, 35, 45, 100],
+    'dumbbell-commercial': Array.from({ length: 40 }, (_, i) => 5 + i * 2.5),
+    'plates-standard': [2.5, 5, 10, 25, 35, 45],
+    'plates-olympic': [2.5, 5, 10, 25, 35, 45, 100],
     kettlebell: [10, 15, 20, 25, 30, 35, 40, 50, 60, 70, 80],
   };
 
@@ -221,7 +218,7 @@ export default function EditEquipment({
           availableWeights: updatedWeights,
         },
       });
-      setNewWeight("");
+      setNewWeight('');
     }
   };
 
@@ -255,14 +252,14 @@ export default function EditEquipment({
 
   const handleSave = () => {
     // In a real app, this would update the database
-    console.log("Updating equipment:", { id: equipmentId, ...equipmentData });
-    onNavigate("equipment-detail", equipmentId);
+    console.log('Updating equipment:', { id: equipmentId, ...equipmentData });
+    onNavigate('equipment-detail', equipmentId);
   };
 
   const handleDelete = () => {
     // In a real app, this would delete from database
-    console.log("Deleting equipment:", equipmentId);
-    onNavigate("equipment");
+    console.log('Deleting equipment:', equipmentId);
+    onNavigate('equipment');
   };
 
   const updateSpecs = (
@@ -300,7 +297,7 @@ export default function EditEquipment({
         <div className="flex items-center gap-4">
           <Button
             variant="ghost"
-            onClick={() => onNavigate("equipment-detail", equipmentId)}
+            onClick={() => onNavigate('equipment-detail', equipmentId)}
           >
             <ArrowLeft className="w-4 h-4" />
           </Button>
@@ -313,7 +310,7 @@ export default function EditEquipment({
         </div>
 
         <div className="flex gap-3">
-          {equipmentData.type === "custom" && (
+          {equipmentData.type === 'custom' && (
             <AlertDialog>
               <AlertDialogTrigger asChild>
                 <Button
@@ -348,7 +345,7 @@ export default function EditEquipment({
 
           <Button
             variant="outline"
-            onClick={() => onNavigate("equipment-detail", equipmentId)}
+            onClick={() => onNavigate('equipment-detail', equipmentId)}
           >
             Cancel
           </Button>
@@ -387,11 +384,11 @@ export default function EditEquipment({
                 value={equipmentData.category}
                 onValueChange={(
                   value:
-                    | "Cardio"
-                    | "Strength"
-                    | "Free Weights"
-                    | "Functional"
-                    | "Accessories"
+                    | 'Cardio'
+                    | 'Strength'
+                    | 'Free Weights'
+                    | 'Functional'
+                    | 'Accessories'
                 ) => setEquipmentData({ ...equipmentData, category: value })}
               >
                 <SelectTrigger className="mt-2">
@@ -483,7 +480,7 @@ export default function EditEquipment({
             <TabsList>
               <TabsTrigger value="resistance">Resistance</TabsTrigger>
               <TabsTrigger value="mechanics">Mechanics</TabsTrigger>
-              {equipmentData.category === "Free Weights" && (
+              {equipmentData.category === 'Free Weights' && (
                 <TabsTrigger value="weights">Available Weights</TabsTrigger>
               )}
               <TabsTrigger value="notes">Notes</TabsTrigger>
@@ -496,7 +493,7 @@ export default function EditEquipment({
                   <Select
                     value={equipmentData.specs.resistanceType}
                     onValueChange={value =>
-                      updateSpecs("resistanceType", value)
+                      updateSpecs('resistanceType', value)
                     }
                   >
                     <SelectTrigger className="mt-2">
@@ -522,7 +519,7 @@ export default function EditEquipment({
                   <Select
                     value={equipmentData.specs.resistanceCurve}
                     onValueChange={value =>
-                      updateSpecs("resistanceCurve", value)
+                      updateSpecs('resistanceCurve', value)
                     }
                   >
                     <SelectTrigger className="mt-2">
@@ -550,7 +547,7 @@ export default function EditEquipment({
                   <Input
                     id="minWeight"
                     type="number"
-                    value={equipmentData.specs.weightRange?.min || ""}
+                    value={equipmentData.specs.weightRange?.min || ''}
                     onChange={e =>
                       updateWeightRange({
                         min: parseFloat(e.target.value) || 0,
@@ -565,7 +562,7 @@ export default function EditEquipment({
                   <Input
                     id="maxWeight"
                     type="number"
-                    value={equipmentData.specs.weightRange?.max || ""}
+                    value={equipmentData.specs.weightRange?.max || ''}
                     onChange={e =>
                       updateWeightRange({
                         max: parseFloat(e.target.value) || 100,
@@ -581,7 +578,7 @@ export default function EditEquipment({
                     id="increment"
                     type="number"
                     step="0.5"
-                    value={equipmentData.specs.weightRange?.increment || ""}
+                    value={equipmentData.specs.weightRange?.increment || ''}
                     onChange={e =>
                       updateWeightRange({
                         increment: parseFloat(e.target.value) || 5,
@@ -601,10 +598,10 @@ export default function EditEquipment({
                     id="conversionFactor"
                     type="number"
                     step="0.01"
-                    value={equipmentData.specs.conversionFactor || ""}
+                    value={equipmentData.specs.conversionFactor || ''}
                     onChange={e =>
                       updateSpecs(
-                        "conversionFactor",
+                        'conversionFactor',
                         parseFloat(e.target.value) || 1.0
                       )
                     }
@@ -621,10 +618,10 @@ export default function EditEquipment({
                     id="pulleyRatio"
                     type="number"
                     step="0.1"
-                    value={equipmentData.specs.pulleyRatio || ""}
+                    value={equipmentData.specs.pulleyRatio || ''}
                     onChange={e =>
                       updateSpecs(
-                        "pulleyRatio",
+                        'pulleyRatio',
                         parseFloat(e.target.value) || 1.0
                       )
                     }
@@ -641,10 +638,10 @@ export default function EditEquipment({
                     id="leverageRatio"
                     type="number"
                     step="0.01"
-                    value={equipmentData.specs.leverageRatio || ""}
+                    value={equipmentData.specs.leverageRatio || ''}
                     onChange={e =>
                       updateSpecs(
-                        "leverageRatio",
+                        'leverageRatio',
                         parseFloat(e.target.value) || 1.0
                       )
                     }
@@ -657,7 +654,7 @@ export default function EditEquipment({
               </div>
             </TabsContent>
 
-            {equipmentData.category === "Free Weights" && (
+            {equipmentData.category === 'Free Weights' && (
               <TabsContent value="weights" className="space-y-6">
                 {/* Quick Add Common Sets */}
                 <div>
@@ -667,7 +664,7 @@ export default function EditEquipment({
                       type="button"
                       variant="outline"
                       size="sm"
-                      onClick={() => handleAddWeightSet("dumbbell-light")}
+                      onClick={() => handleAddWeightSet('dumbbell-light')}
                     >
                       Light Dumbbells (5-50 lbs)
                     </Button>
@@ -675,7 +672,7 @@ export default function EditEquipment({
                       type="button"
                       variant="outline"
                       size="sm"
-                      onClick={() => handleAddWeightSet("dumbbell-heavy")}
+                      onClick={() => handleAddWeightSet('dumbbell-heavy')}
                     >
                       Heavy Dumbbells (5-100 lbs)
                     </Button>
@@ -683,7 +680,7 @@ export default function EditEquipment({
                       type="button"
                       variant="outline"
                       size="sm"
-                      onClick={() => handleAddWeightSet("plates-standard")}
+                      onClick={() => handleAddWeightSet('plates-standard')}
                     >
                       Standard Plates
                     </Button>
@@ -701,7 +698,7 @@ export default function EditEquipment({
                       value={newWeight}
                       onChange={e => setNewWeight(e.target.value)}
                       placeholder="Weight in lbs"
-                      onKeyPress={e => e.key === "Enter" && handleAddWeight()}
+                      onKeyPress={e => e.key === 'Enter' && handleAddWeight()}
                     />
                     <Button type="button" onClick={handleAddWeight}>
                       <Plus className="w-4 h-4" />
@@ -747,8 +744,8 @@ export default function EditEquipment({
                 <Label htmlFor="notes">Additional Notes</Label>
                 <Textarea
                   id="notes"
-                  value={equipmentData.specs.notes || ""}
-                  onChange={e => updateSpecs("notes", e.target.value)}
+                  value={equipmentData.specs.notes || ''}
+                  onChange={e => updateSpecs('notes', e.target.value)}
                   placeholder="Any additional specifications, maintenance notes, or usage tips..."
                   className="mt-2"
                   rows={6}
@@ -760,4 +757,6 @@ export default function EditEquipment({
       </div>
     </div>
   );
-}
+};
+
+export default EditEquipment;

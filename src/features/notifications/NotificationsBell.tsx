@@ -1,15 +1,15 @@
-"use client";
+'use client';
 
-import { Bell } from "lucide-react";
-import { useState } from "react";
+import { Bell } from 'lucide-react';
+import { useState } from 'react';
 
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover";
+} from '@/components/ui/popover';
 
 interface NotificationsBellProps {
   unreadCount: number;
@@ -29,7 +29,7 @@ export const NotificationsBell = ({ unreadCount }: NotificationsBellProps) => {
           <Bell className="h-5 w-5 text-gray-600" />
           {unreadCount > 0 && (
             <Badge className="absolute -top-1 -right-1 h-5 w-5 flex items-center justify-center p-0 text-xs font-semibold bg-red-500 hover:bg-red-500 text-white border-2 border-white">
-              {unreadCount > 9 ? "9+" : unreadCount}
+              {unreadCount > 9 ? '9+' : unreadCount}
             </Badge>
           )}
         </Button>

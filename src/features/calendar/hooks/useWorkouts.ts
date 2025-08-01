@@ -1,12 +1,12 @@
-import { useMemo } from "react";
+import { useMemo } from 'react';
 
-import { mockWorkouts } from "../data/mockWorkouts";
-import { generateCalendarDays } from "../utils/calendarUtils";
+import { mockWorkouts } from '../data/mockWorkouts';
+import { generateCalendarDays } from '../utils/calendarUtils';
 import {
   calculateCalendarStats,
   getUpcomingWorkouts,
   groupWorkoutsByDay,
-} from "../utils/workoutUtils";
+} from '../utils/workoutUtils';
 
 export const useWorkouts = (currentDate: Date, selectedDate: Date) => {
   const today = useMemo(() => new Date(2025, 6, 22), []); // July 22, 2025

@@ -1,23 +1,23 @@
-import { Button } from "@/components/ui/button";
+import { useIsMobile } from '../../../../hooks/use-mobile';
+import { Exercise } from '../../types';
+import { ExerciseCard } from '../shared/ExerciseCard';
+
+import { Button } from '@/components/ui/button';
 import {
   Carousel,
   CarouselContent,
   CarouselItem,
-} from "@/components/ui/carousel";
-
-import { useIsMobile } from "../../../../hooks/use-mobile";
-import { Exercise } from "../../types";
-import { ExerciseCard } from "../shared/ExerciseCard";
+} from '@/components/ui/carousel';
 
 interface NewExercisesCarouselProps {
   newExercises: Exercise[];
   onExerciseClick: (exercise: Exercise) => void;
 }
 
-export function NewExercisesCarousel({
+export const NewExercisesCarousel = ({
   newExercises,
   onExerciseClick,
-}: NewExercisesCarouselProps) {
+}: NewExercisesCarouselProps) => {
   const isMobile = useIsMobile();
 
   if (newExercises.length === 0) {
@@ -64,4 +64,4 @@ export function NewExercisesCarousel({
       )}
     </div>
   );
-}
+};

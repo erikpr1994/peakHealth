@@ -1,6 +1,6 @@
-import React, { createContext, useContext, useState, ReactNode } from "react";
+import React, { createContext, useContext, useState, ReactNode } from 'react';
 
-import { FilterState } from "../types";
+import { FilterState } from '../types';
 
 interface ExerciseContextType {
   searchTerm: string;
@@ -20,8 +20,8 @@ interface ExerciseProviderProps {
   children: ReactNode;
 }
 
-export function ExerciseProvider({ children }: ExerciseProviderProps) {
-  const [searchTerm, setSearchTerm] = useState("");
+export const ExerciseProvider = ({ children }: ExerciseProviderProps) => {
+  const [searchTerm, setSearchTerm] = useState('');
   const [filters, setFilters] = useState<FilterState>({
     difficulties: [],
     muscleGroups: [],
@@ -33,7 +33,7 @@ export function ExerciseProvider({ children }: ExerciseProviderProps) {
   };
 
   const clearSearch = () => {
-    setSearchTerm("");
+    setSearchTerm('');
   };
 
   const handleFilterChange = (type: keyof FilterState, value: string) => {
@@ -76,13 +76,13 @@ export function ExerciseProvider({ children }: ExerciseProviderProps) {
       {children}
     </ExerciseContext.Provider>
   );
-}
+};
 
 export function useExerciseContext() {
   const context = useContext(ExerciseContext);
   if (context === undefined) {
     throw new Error(
-      "useExerciseContext must be used within an ExerciseProvider"
+      'useExerciseContext must be used within an ExerciseProvider'
     );
   }
   return context;

@@ -1,19 +1,19 @@
-"use client";
+'use client';
 
-import { usePathname, useRouter } from "next/navigation";
-import { useState } from "react";
+import { usePathname, useRouter } from 'next/navigation';
+import { useState } from 'react';
 
-import { useAuth } from "@/features/auth/context/AuthContext";
-import { FEATURE_FLAGS, useFeatureFlag } from "@/features/feature-flags";
-import { useNotifications, NotificationsBell } from "@/features/notifications";
+import { DesktopNavigation } from './DesktopNavigation';
+import styles from './Header.module.css';
+import { navigationItems } from './menuItems';
+import { SideNav } from './SideNav';
+import { UserMenu } from './UserMenu';
 
-import { DesktopNavigation } from "./DesktopNavigation";
-import styles from "./Header.module.css";
-import { navigationItems } from "./menuItems";
-import { SideNav } from "./SideNav";
-import { UserMenu } from "./UserMenu";
+import { useAuth } from '@/features/auth/context/AuthContext';
+import { FEATURE_FLAGS, useFeatureFlag } from '@/features/feature-flags';
+import { useNotifications, NotificationsBell } from '@/features/notifications';
 
-export default function Header() {
+const Header = () => {
   const router = useRouter();
   const pathname = usePathname();
   const { logout, user } = useAuth();
@@ -33,14 +33,14 @@ export default function Header() {
     <header className={styles.header}>
       <div
         className="w-full px-4 sm:px-6 lg:px-8"
-        style={{ maxWidth: "100vw", boxSizing: "border-box" }}
+        style={{ maxWidth: '100vw', boxSizing: 'border-box' }}
       >
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center gap-2">
             <SideNav
               items={navigationItems}
               onNavigate={handleNavigate}
-              pathname={pathname ?? ""}
+              pathname={pathname ?? ''}
               isOpen={isSideNavOpen}
               onOpenChange={setIsSideNavOpen}
             />
@@ -51,7 +51,7 @@ export default function Header() {
 
           <DesktopNavigation
             items={navigationItems}
-            pathname={pathname ?? ""}
+            pathname={pathname ?? ''}
             onNavigate={handleNavigate}
           />
 
@@ -65,4 +65,6 @@ export default function Header() {
       </div>
     </header>
   );
-}
+};
+
+export default Header;

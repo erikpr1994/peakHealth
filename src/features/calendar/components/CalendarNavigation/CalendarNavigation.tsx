@@ -1,16 +1,16 @@
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 
-import { Button } from "@/components/ui/button";
+import { months } from '../../config/workoutTypes';
+import { ViewMode } from '../../types';
 
-import { months } from "../../config/workoutTypes";
-import { ViewMode } from "../../types";
+import styles from './CalendarNavigation.module.css';
 
-import styles from "./CalendarNavigation.module.css";
+import { Button } from '@/components/ui/button';
 
 interface CalendarNavigationProps {
   currentDate: Date;
   viewMode: ViewMode;
-  onNavigateMonth: (direction: "prev" | "next") => void;
+  onNavigateMonth: (direction: 'prev' | 'next') => void;
   onNavigateToToday: () => void;
   onViewModeChange: (mode: ViewMode) => void;
 }
@@ -35,7 +35,7 @@ export const CalendarNavigation = ({
           <Button
             variant="ghost"
             size="sm"
-            onClick={() => onNavigateMonth("prev")}
+            onClick={() => onNavigateMonth('prev')}
             className={styles.navButton}
           >
             <ChevronLeft className={styles.icon} />
@@ -43,7 +43,7 @@ export const CalendarNavigation = ({
           <Button
             variant="ghost"
             size="sm"
-            onClick={() => onNavigateMonth("next")}
+            onClick={() => onNavigateMonth('next')}
             className={styles.navButton}
           >
             <ChevronRight className={styles.icon} />
@@ -60,14 +60,14 @@ export const CalendarNavigation = ({
       </div>
 
       <div className={styles.viewModeSelector}>
-        {(["Month", "Week", "Day"] as ViewMode[]).map(mode => (
+        {(['Month', 'Week', 'Day'] as ViewMode[]).map(mode => (
           <Button
             key={mode}
-            variant={viewMode === mode ? "default" : "ghost"}
+            variant={viewMode === mode ? 'default' : 'ghost'}
             size="sm"
             onClick={() => onViewModeChange(mode)}
             className={`${styles.viewModeButton} ${
-              viewMode === mode ? styles.active : ""
+              viewMode === mode ? styles.active : ''
             }`}
           >
             {mode}

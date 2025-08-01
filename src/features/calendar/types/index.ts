@@ -2,9 +2,9 @@ export interface WorkoutEvent {
   id: string;
   name: string;
   duration: string;
-  difficulty: "Beginner" | "Intermediate" | "Advanced";
-  type: "Strength" | "Cardio" | "HIIT" | "Flexibility" | "Recovery";
-  status: "scheduled" | "completed" | "missed" | "active";
+  difficulty: 'Beginner' | 'Intermediate' | 'Advanced';
+  type: 'Strength' | 'Cardio' | 'HIIT' | 'Flexibility' | 'Recovery';
+  status: 'scheduled' | 'completed' | 'missed' | 'active';
   date: Date;
   time: string;
   exercises: number;
@@ -39,7 +39,7 @@ export interface TimeOfDayConfig {
   bgColor: string;
 }
 
-export type ViewMode = "Month" | "Week" | "Day";
+export type ViewMode = 'Month' | 'Week' | 'Day';
 
 export interface CalendarStats {
   completedThisMonth: number;

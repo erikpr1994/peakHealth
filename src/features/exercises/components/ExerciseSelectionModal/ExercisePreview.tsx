@@ -1,16 +1,16 @@
-import { Star, Info, ExternalLink } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { Star, Info, ExternalLink } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 
-import { Button } from "@/components/ui/button";
-import { ScrollArea } from "@/components/ui/scroll-area";
+import { Exercise, ExerciseVariant } from '../../types';
+import { getEffectiveExercise } from '../../utils/exerciseUtils';
+import { CategoryBadge } from '../shared/CategoryBadge';
+import { DifficultyBadge } from '../shared/DifficultyBadge';
+import { EquipmentTags } from '../shared/EquipmentTags';
 
-import { Exercise, ExerciseVariant } from "../../types";
-import { getEffectiveExercise } from "../../utils/exerciseUtils";
-import { CategoryBadge } from "../shared/CategoryBadge";
-import { DifficultyBadge } from "../shared/DifficultyBadge";
-import { EquipmentTags } from "../shared/EquipmentTags";
+import { VariantSelector } from './VariantSelector';
 
-import { VariantSelector } from "./VariantSelector";
+import { Button } from '@/components/ui/button';
+import { ScrollArea } from '@/components/ui/scroll-area';
 
 interface ExercisePreviewProps {
   exercise: Exercise | null;
@@ -20,13 +20,13 @@ interface ExercisePreviewProps {
   onClose: () => void;
 }
 
-export function ExercisePreview({
+export const ExercisePreview = ({
   exercise,
   selectedVariant,
   onVariantSelect,
   onSelectExercise,
   onClose,
-}: ExercisePreviewProps) {
+}: ExercisePreviewProps) => {
   const router = useRouter();
 
   const handleViewDetails = () => {
@@ -87,7 +87,7 @@ export function ExercisePreview({
         <p className="text-gray-600 leading-relaxed">
           {effectiveExercise.description ||
             `A ${exercise.category.toLowerCase()} exercise targeting ${effectiveExercise.muscleGroups
-              .join(", ")
+              .join(', ')
               .toLowerCase()}.`}
         </p>
       </div>
@@ -203,4 +203,4 @@ export function ExercisePreview({
       </div>
     </div>
   );
-}
+};

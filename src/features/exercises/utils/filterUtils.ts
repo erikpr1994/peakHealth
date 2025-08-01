@@ -1,4 +1,4 @@
-import { Exercise, FilterState } from "../types";
+import { Exercise, FilterState } from '../types';
 
 export const filterExercises = (
   exercises: Exercise[],
@@ -16,7 +16,7 @@ export const filterExercises = (
 
     // Category filter
     const matchesCategory =
-      selectedCategory === "All" || exercise.category === selectedCategory;
+      selectedCategory === 'All' || exercise.category === selectedCategory;
 
     // Advanced filters
     const matchesDifficulty =

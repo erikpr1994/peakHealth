@@ -1,7 +1,9 @@
-"use client";
+'use client';
 
-import SignUpPage from "@/features/auth/SignUpPage";
+import SignUpPage from '@/features/auth/SignUpPage';
 
-export default function SignUpPageContainer() {
+const SignUpPageContainer = () => {
   return <SignUpPage />;
-}
+};
+
+export default SignUpPageContainer;

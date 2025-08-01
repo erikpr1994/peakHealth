@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import React, {
   createContext,
@@ -7,24 +7,24 @@ import React, {
   useEffect,
   useCallback,
   ReactNode,
-} from "react";
+} from 'react';
 
-import { useAuth } from "@/features/auth/context/AuthContext";
-
-import { featureFlagCache } from "../lib/cache";
-import { featureFlagMonitor } from "../lib/monitoring";
+import { featureFlagCache } from '../lib/cache';
+import { featureFlagMonitor } from '../lib/monitoring';
 import {
   FeatureFlagContextType,
   UserFeatureFlag,
   UserTypeInfo,
   UserGroupInfo,
-} from "../types";
+} from '../types';
+
+import { useAuth } from '@/features/auth/context/AuthContext';
 
 const FeatureFlagContext = createContext<FeatureFlagContextType | undefined>(
   undefined
 );
 
-export function FeatureFlagProvider({ children }: { children: ReactNode }) {
+export const FeatureFlagProvider = ({ children }: { children: ReactNode }) => {
   const { user } = useAuth();
   const [flags, setFlags] = useState<Record<string, UserFeatureFlag>>({});
   const [userTypes, setUserTypes] = useState<UserTypeInfo[]>([]);
@@ -42,9 +42,9 @@ export function FeatureFlagProvider({ children }: { children: ReactNode }) {
 
     const startTime = Date.now();
     try {
-      const response = await fetch("/api/feature-flags");
+      const response = await fetch('/api/feature-flags');
       if (!response.ok) {
-        throw new Error("Failed to fetch feature flags");
+        throw new Error('Failed to fetch feature flags');
       }
       const { flags, userTypes, userGroups } = await response.json();
 
@@ -73,14 +73,14 @@ export function FeatureFlagProvider({ children }: { children: ReactNode }) {
 
       const loadTime = Date.now() - startTime;
       featureFlagMonitor.trackFeatureFlagPerformance(
-        "feature_flags_load",
+        'feature_flags_load',
         loadTime,
         user.id
       );
     } catch (error) {
-      console.error("Error loading feature flag data:", error);
+      console.error('Error loading feature flag data:', error);
       featureFlagMonitor.trackFeatureFlagError(
-        "feature_flags_load",
+        'feature_flags_load',
         error as Error,
         user.id
       );
@@ -142,12 +142,12 @@ export function FeatureFlagProvider({ children }: { children: ReactNode }) {
       {children}
     </FeatureFlagContext.Provider>
   );
-}
+};
 
 export const useFeatureFlags = (): FeatureFlagContextType => {
   const context = useContext(FeatureFlagContext);
   if (!context) {
-    throw new Error("useFeatureFlags must be used within FeatureFlagProvider");
+    throw new Error('useFeatureFlags must be used within FeatureFlagProvider');
   }
   return context;
 };

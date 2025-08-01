@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import {
   Bell,
@@ -9,22 +9,22 @@ import {
   Dumbbell,
   TestTube2,
   Sparkles,
-} from "lucide-react";
-import React, { useState } from "react";
+} from 'lucide-react';
+import React, { useState } from 'react';
 
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Label } from "@/components/ui/label";
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Label } from '@/components/ui/label';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Separator } from "@/components/ui/separator";
-import { Switch } from "@/components/ui/switch";
+} from '@/components/ui/select';
+import { Separator } from '@/components/ui/separator';
+import { Switch } from '@/components/ui/switch';
 
 interface AppSettingsProps {
   hasTrainer: boolean;
@@ -51,8 +51,8 @@ export default function AppSettings({
     soundEffects: true,
     hapticFeedback: true,
     darkMode: false,
-    language: "en",
-    units: "metric",
+    language: 'en',
+    units: 'metric',
     autoBackup: true,
     dataSharing: false,
   });
@@ -93,7 +93,7 @@ export default function AppSettings({
                 id="notifications"
                 checked={settings.notifications}
                 onCheckedChange={checked =>
-                  handleSettingChange("notifications", checked)
+                  handleSettingChange('notifications', checked)
                 }
               />
             </div>
@@ -112,7 +112,7 @@ export default function AppSettings({
                 id="workout-reminders"
                 checked={settings.workoutReminders}
                 onCheckedChange={checked =>
-                  handleSettingChange("workoutReminders", checked)
+                  handleSettingChange('workoutReminders', checked)
                 }
                 disabled={!settings.notifications}
               />
@@ -132,7 +132,7 @@ export default function AppSettings({
                 id="achievement-alerts"
                 checked={settings.achievementAlerts}
                 onCheckedChange={checked =>
-                  handleSettingChange("achievementAlerts", checked)
+                  handleSettingChange('achievementAlerts', checked)
                 }
                 disabled={!settings.notifications}
               />
@@ -160,7 +160,7 @@ export default function AppSettings({
                 id="sound-effects"
                 checked={settings.soundEffects}
                 onCheckedChange={checked =>
-                  handleSettingChange("soundEffects", checked)
+                  handleSettingChange('soundEffects', checked)
                 }
               />
             </div>
@@ -176,7 +176,7 @@ export default function AppSettings({
                 id="haptic-feedback"
                 checked={settings.hapticFeedback}
                 onCheckedChange={checked =>
-                  handleSettingChange("hapticFeedback", checked)
+                  handleSettingChange('hapticFeedback', checked)
                 }
               />
             </div>
@@ -192,7 +192,7 @@ export default function AppSettings({
                 id="dark-mode"
                 checked={settings.darkMode}
                 onCheckedChange={checked =>
-                  handleSettingChange("darkMode", checked)
+                  handleSettingChange('darkMode', checked)
                 }
               />
             </div>
@@ -212,7 +212,7 @@ export default function AppSettings({
               <Label>Language</Label>
               <Select
                 value={settings.language}
-                onValueChange={value => handleSettingChange("language", value)}
+                onValueChange={value => handleSettingChange('language', value)}
               >
                 <SelectTrigger>
                   <SelectValue />
@@ -232,7 +232,7 @@ export default function AppSettings({
               <Label>Units</Label>
               <Select
                 value={settings.units}
-                onValueChange={value => handleSettingChange("units", value)}
+                onValueChange={value => handleSettingChange('units', value)}
               >
                 <SelectTrigger>
                   <SelectValue />
@@ -266,7 +266,7 @@ export default function AppSettings({
                 id="auto-backup"
                 checked={settings.autoBackup}
                 onCheckedChange={checked =>
-                  handleSettingChange("autoBackup", checked)
+                  handleSettingChange('autoBackup', checked)
                 }
               />
             </div>
@@ -282,7 +282,7 @@ export default function AppSettings({
                 id="data-sharing"
                 checked={settings.dataSharing}
                 onCheckedChange={checked =>
-                  handleSettingChange("dataSharing", checked)
+                  handleSettingChange('dataSharing', checked)
                 }
               />
             </div>
@@ -318,8 +318,8 @@ export default function AppSettings({
                 </span>
                 <span className="text-sm text-gray-600">
                   {hasTrainer
-                    ? "You have a trainer (routines disabled)"
-                    : "No trainer (can create routines)"}
+                    ? 'You have a trainer (routines disabled)'
+                    : 'No trainer (can create routines)'}
                 </span>
               </Label>
               <Switch
@@ -337,8 +337,8 @@ export default function AppSettings({
                 </span>
                 <span className="text-sm text-gray-600">
                   {isClubMember
-                    ? "Member of clubs (events shown)"
-                    : "Not a member (no events)"}
+                    ? 'Member of clubs (events shown)'
+                    : 'Not a member (no events)'}
                 </span>
               </Label>
               <Switch
@@ -356,8 +356,8 @@ export default function AppSettings({
                 </span>
                 <span className="text-sm text-gray-600">
                   {showWelcomeScreen
-                    ? "AI onboarding enabled (will show on next activation)"
-                    : "AI onboarding disabled (skipped)"}
+                    ? 'AI onboarding enabled (will show on next activation)'
+                    : 'AI onboarding disabled (skipped)'}
                 </span>
               </Label>
               <Switch

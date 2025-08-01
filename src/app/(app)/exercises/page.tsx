@@ -1,7 +1,9 @@
-"use client";
+'use client';
 
-import ExercisesList from "@/features/exercises/ExercisesList";
+import ExercisesList from '@/features/exercises/ExercisesList';
 
-export default function ExercisesPage() {
+const ExercisesPage = () => {
   return <ExercisesList />;
-}
+};
+
+export default ExercisesPage;

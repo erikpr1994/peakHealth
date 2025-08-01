@@ -1,7 +1,9 @@
-"use client";
+'use client';
 
-import EquipmentPage from "@/features/equipment/Equipment";
+import EquipmentPage from '@/features/equipment/Equipment';
 
-export default function Equipment() {
+const Equipment = () => {
   return <EquipmentPage />;
-}
+};
+
+export default Equipment;

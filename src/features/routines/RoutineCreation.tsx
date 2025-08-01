@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import {
   ArrowLeft,
@@ -20,54 +20,54 @@ import {
   Waves,
   Bike,
   TrendingUp,
-} from "lucide-react";
-import { useRouter } from "next/navigation";
-import { useState, useEffect } from "react";
+} from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { useState, useEffect } from 'react';
 
-import NotesModal from "@/components/shared/NotesModal";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import NotesModal from '@/components/shared/NotesModal';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Textarea } from "@/components/ui/textarea";
+} from '@/components/ui/select';
+import { Textarea } from '@/components/ui/textarea';
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "@/components/ui/tooltip";
-import ExerciseSelectionModal from "@/features/exercises/ExerciseSelectionModal";
+} from '@/components/ui/tooltip';
+import ExerciseSelectionModal from '@/features/exercises/ExerciseSelectionModal';
 import TrailRunningWorkout, {
   TrailRunningWorkoutData,
-} from "@/features/routines/TrailRunningWorkout";
-import SetManagement, { WorkoutSet } from "@/features/workout/SetManagement";
+} from '@/features/routines/TrailRunningWorkout';
+import SetManagement, { WorkoutSet } from '@/features/workout/SetManagement';
 
 export type WorkoutType =
-  | "strength"
-  | "running"
-  | "trail-running"
-  | "swimming"
-  | "cycling";
+  | 'strength'
+  | 'running'
+  | 'trail-running'
+  | 'swimming'
+  | 'cycling';
 
 export type ProgressionMethod =
-  | "linear"
-  | "dual"
-  | "inverse-pyramid"
-  | "myo-reps"
-  | "widowmaker"
-  | "amrap";
+  | 'linear'
+  | 'dual'
+  | 'inverse-pyramid'
+  | 'myo-reps'
+  | 'widowmaker'
+  | 'amrap';
 
 interface RoutineCreationProps {
   editRoutineId?: string;
-  mode?: "create" | "edit";
+  mode?: 'create' | 'edit';
 }
 
 interface Exercise {
@@ -89,7 +89,7 @@ interface Exercise {
 interface WorkoutSection {
   id: string;
   name: string;
-  type: "warmup" | "basic" | "cooldown" | "emom" | "tabata";
+  type: 'warmup' | 'basic' | 'cooldown' | 'emom' | 'tabata';
   exercises: Exercise[];
   restAfter: string; // rest after this section
   // EMOM specific properties
@@ -100,7 +100,7 @@ interface WorkoutSection {
 interface StrengthWorkout {
   id: string;
   name: string;
-  type: "strength";
+  type: 'strength';
   objective: string;
   schedule: {
     weeks: string;
@@ -113,7 +113,7 @@ interface StrengthWorkout {
 interface RunningWorkout {
   id: string;
   name: string;
-  type: "running" | "trail-running" | "swimming" | "cycling";
+  type: 'running' | 'trail-running' | 'swimming' | 'cycling';
   objective: string;
   schedule: {
     weeks: string;
@@ -126,14 +126,14 @@ interface RunningWorkout {
 
 export default function RoutineCreation({
   editRoutineId,
-  mode = "create",
+  mode = 'create',
 }: RoutineCreationProps) {
   const router = useRouter();
-  const [routineName, setRoutineName] = useState("");
-  const [duration, setDuration] = useState("4");
-  const [difficulty, setDifficulty] = useState("Beginner");
-  const [description, setDescription] = useState("");
-  const [objectives, setObjectives] = useState("");
+  const [routineName, setRoutineName] = useState('');
+  const [duration, setDuration] = useState('4');
+  const [difficulty, setDifficulty] = useState('Beginner');
+  const [description, setDescription] = useState('');
+  const [objectives, setObjectives] = useState('');
 
   // Modal states
   const [exerciseModalOpen, setExerciseModalOpen] = useState(false);
@@ -147,7 +147,7 @@ export default function RoutineCreation({
   } | null>(null);
 
   const [currentNotesContext, setCurrentNotesContext] = useState<{
-    type: "exercise" | "set";
+    type: 'exercise' | 'set';
     workoutId: string;
     sectionId: string;
     exerciseId: string;
@@ -176,133 +176,133 @@ export default function RoutineCreation({
 
   // Load existing routine data when in edit mode
   useEffect(() => {
-    if (mode === "edit" && editRoutineId) {
+    if (mode === 'edit' && editRoutineId) {
       // Mock data for editing - in a real app, this would come from an API
       const existingRoutine = {
-        name: "Full Body Split",
-        duration: "8",
-        difficulty: "Intermediate",
+        name: 'Full Body Split',
+        duration: '8',
+        difficulty: 'Intermediate',
         description:
-          "A comprehensive full-body workout targeting all major muscle groups with compound movements.",
+          'A comprehensive full-body workout targeting all major muscle groups with compound movements.',
         objectives:
-          "Build strength, increase muscle mass, and improve overall fitness through progressive overload",
+          'Build strength, increase muscle mass, and improve overall fitness through progressive overload',
         strengthWorkouts: [
           {
-            id: "1",
-            name: "Full Body Strength A",
-            type: "strength" as const,
+            id: '1',
+            name: 'Full Body Strength A',
+            type: 'strength' as const,
             objective:
-              "Build foundational strength across all major muscle groups with compound movements",
+              'Build foundational strength across all major muscle groups with compound movements',
             schedule: {
-              weeks: "Week 1, 3, 5",
-              day: "Monday",
-              time: "9:00 AM",
+              weeks: 'Week 1, 3, 5',
+              day: 'Monday',
+              time: '9:00 AM',
             },
             sections: [
               {
-                id: "1",
-                name: "Warm-up",
-                type: "warmup" as const,
-                restAfter: "02:00",
+                id: '1',
+                name: 'Warm-up',
+                type: 'warmup' as const,
+                restAfter: '02:00',
                 exercises: [
                   {
-                    id: "1",
-                    name: "Dynamic Stretching",
+                    id: '1',
+                    name: 'Dynamic Stretching',
                     sets: [
                       {
-                        id: "1",
+                        id: '1',
                         setNumber: 1,
-                        setType: "normal" as const,
-                        repType: "fixed" as const,
+                        setType: 'normal' as const,
+                        repType: 'fixed' as const,
                         reps: null,
                         weight: null,
                         rpe: null,
-                        notes: "",
+                        notes: '',
                       },
                     ],
-                    restTimer: "00:15",
-                    restAfter: "01:00",
-                    notes: "",
-                    progressionMethod: "linear" as const,
+                    restTimer: '00:15',
+                    restAfter: '01:00',
+                    notes: '',
+                    progressionMethod: 'linear' as const,
                   },
                 ],
               },
               {
-                id: "2",
-                name: "Basic Workout",
-                type: "basic" as const,
-                restAfter: "03:00",
+                id: '2',
+                name: 'Basic Workout',
+                type: 'basic' as const,
+                restAfter: '03:00',
                 exercises: [
                   {
-                    id: "2",
-                    name: "Barbell Squat",
+                    id: '2',
+                    name: 'Barbell Squat',
                     sets: [
                       {
-                        id: "1",
+                        id: '1',
                         setNumber: 1,
-                        setType: "warmup" as const,
-                        repType: "fixed" as const,
+                        setType: 'warmup' as const,
+                        repType: 'fixed' as const,
                         reps: 10,
                         weight: 60,
                         rpe: 6,
-                        notes: "",
+                        notes: '',
                       },
                       {
-                        id: "2",
+                        id: '2',
                         setNumber: 2,
-                        setType: "normal" as const,
-                        repType: "range" as const,
+                        setType: 'normal' as const,
+                        repType: 'range' as const,
                         reps: null,
                         repsMin: 8,
                         repsMax: 12,
                         weight: 80,
                         rpe: 8,
-                        notes: "",
+                        notes: '',
                       },
                       {
-                        id: "3",
+                        id: '3',
                         setNumber: 3,
-                        setType: "normal" as const,
-                        repType: "range" as const,
+                        setType: 'normal' as const,
+                        repType: 'range' as const,
                         reps: null,
                         repsMin: 8,
                         repsMax: 12,
                         weight: 80,
                         rpe: 8,
-                        notes: "",
+                        notes: '',
                       },
                       {
-                        id: "4",
+                        id: '4',
                         setNumber: 4,
-                        setType: "failure" as const,
-                        repType: "fixed" as const,
+                        setType: 'failure' as const,
+                        repType: 'fixed' as const,
                         reps: null,
                         weight: 70,
                         rpe: 10,
-                        notes: "",
+                        notes: '',
                       },
                     ],
-                    restTimer: "02:00",
-                    restAfter: "02:30",
-                    notes: "Focus on depth and controlled movement",
-                    progressionMethod: "dual" as const,
+                    restTimer: '02:00',
+                    restAfter: '02:30',
+                    notes: 'Focus on depth and controlled movement',
+                    progressionMethod: 'dual' as const,
                   },
                 ],
               },
               {
-                id: "3",
-                name: "Cool-down",
-                type: "cooldown" as const,
-                restAfter: "00:00",
+                id: '3',
+                name: 'Cool-down',
+                type: 'cooldown' as const,
+                restAfter: '00:00',
                 exercises: [
                   {
-                    id: "3",
-                    name: "Static Stretching",
+                    id: '3',
+                    name: 'Static Stretching',
                     sets: [],
-                    restTimer: "00:00",
-                    restAfter: "00:00",
-                    notes: "",
-                    progressionMethod: "linear" as const,
+                    restTimer: '00:00',
+                    restAfter: '00:00',
+                    notes: '',
+                    progressionMethod: 'linear' as const,
                   },
                 ],
               },
@@ -325,34 +325,34 @@ export default function RoutineCreation({
   // Progression method options with descriptions
   const progressionMethods = [
     {
-      value: "linear",
-      label: "Linear Progression",
-      description: "Increase weight consistently each session",
+      value: 'linear',
+      label: 'Linear Progression',
+      description: 'Increase weight consistently each session',
     },
     {
-      value: "dual",
-      label: "Dual Progression",
-      description: "Progress reps first, then weight",
+      value: 'dual',
+      label: 'Dual Progression',
+      description: 'Progress reps first, then weight',
     },
     {
-      value: "inverse-pyramid",
-      label: "Inverse Pyramid",
-      description: "Start heavy, decrease weight and increase reps",
+      value: 'inverse-pyramid',
+      label: 'Inverse Pyramid',
+      description: 'Start heavy, decrease weight and increase reps',
     },
     {
-      value: "myo-reps",
-      label: "Myo-Reps",
-      description: "Activation set followed by mini-sets to failure",
+      value: 'myo-reps',
+      label: 'Myo-Reps',
+      description: 'Activation set followed by mini-sets to failure',
     },
     {
-      value: "widowmaker",
-      label: "Widowmaker",
-      description: "Single high-rep set with moderate weight",
+      value: 'widowmaker',
+      label: 'Widowmaker',
+      description: 'Single high-rep set with moderate weight',
     },
     {
-      value: "amrap",
-      label: "AMRAP",
-      description: "As Many Reps As Possible on final set",
+      value: 'amrap',
+      label: 'AMRAP',
+      description: 'As Many Reps As Possible on final set',
     },
   ];
 
@@ -362,29 +362,29 @@ export default function RoutineCreation({
 
   const getProgressionMethodColor = (method: ProgressionMethod) => {
     const colors = {
-      linear: "bg-green-100 text-green-800 border-green-200",
-      dual: "bg-blue-100 text-blue-800 border-blue-200",
-      "inverse-pyramid": "bg-purple-100 text-purple-800 border-purple-200",
-      "myo-reps": "bg-orange-100 text-orange-800 border-orange-200",
-      widowmaker: "bg-red-100 text-red-800 border-red-200",
-      amrap: "bg-yellow-100 text-yellow-800 border-yellow-200",
+      linear: 'bg-green-100 text-green-800 border-green-200',
+      dual: 'bg-blue-100 text-blue-800 border-blue-200',
+      'inverse-pyramid': 'bg-purple-100 text-purple-800 border-purple-200',
+      'myo-reps': 'bg-orange-100 text-orange-800 border-orange-200',
+      widowmaker: 'bg-red-100 text-red-800 border-red-200',
+      amrap: 'bg-yellow-100 text-yellow-800 border-yellow-200',
     };
-    return colors[method] || "bg-gray-100 text-gray-800 border-gray-200";
+    return colors[method] || 'bg-gray-100 text-gray-800 border-gray-200';
   };
 
   const handleAddStrengthWorkout = () => {
     const workoutName = `Strength Workout ${strengthWorkouts.length + 1}`;
-    const defaultObjective = "";
+    const defaultObjective = '';
 
     const newStrengthWorkout: StrengthWorkout = {
       id: Date.now().toString(),
       name: workoutName,
-      type: "strength",
+      type: 'strength',
       objective: defaultObjective,
       schedule: {
-        weeks: "",
-        day: "Monday",
-        time: "",
+        weeks: '',
+        day: 'Monday',
+        time: '',
       },
       sections: [],
     };
@@ -418,12 +418,12 @@ export default function RoutineCreation({
       const newWorkout: RunningWorkout = {
         id: Date.now().toString(),
         name: runningData.name,
-        type: "running",
+        type: 'running',
         objective: runningData.description,
         schedule: {
-          weeks: "Week 1, 2, 3",
-          day: "Tuesday",
-          time: "10:00 AM",
+          weeks: 'Week 1, 2, 3',
+          day: 'Tuesday',
+          time: '10:00 AM',
         },
         sections: [], // Running uses its own data structure
         trailRunningData: runningData,
@@ -458,11 +458,11 @@ export default function RoutineCreation({
     );
   };
 
-  const moveStrengthWorkout = (workoutId: string, direction: "up" | "down") => {
+  const moveStrengthWorkout = (workoutId: string, direction: 'up' | 'down') => {
     const currentIndex = strengthWorkouts.findIndex(w => w.id === workoutId);
     if (currentIndex === -1) return;
 
-    const newIndex = direction === "up" ? currentIndex - 1 : currentIndex + 1;
+    const newIndex = direction === 'up' ? currentIndex - 1 : currentIndex + 1;
     if (newIndex < 0 || newIndex >= strengthWorkouts.length) return;
 
     const newWorkouts = [...strengthWorkouts];
@@ -471,11 +471,11 @@ export default function RoutineCreation({
     setStrengthWorkouts(newWorkouts);
   };
 
-  const moveRunningWorkout = (workoutId: string, direction: "up" | "down") => {
+  const moveRunningWorkout = (workoutId: string, direction: 'up' | 'down') => {
     const currentIndex = runningWorkouts.findIndex(w => w.id === workoutId);
     if (currentIndex === -1) return;
 
-    const newIndex = direction === "up" ? currentIndex - 1 : currentIndex + 1;
+    const newIndex = direction === 'up' ? currentIndex - 1 : currentIndex + 1;
     if (newIndex < 0 || newIndex >= runningWorkouts.length) return;
 
     const newWorkouts = [...runningWorkouts];
@@ -524,7 +524,7 @@ export default function RoutineCreation({
 
   const updateStrengthWorkoutSchedule = (
     workoutId: string,
-    field: keyof StrengthWorkout["schedule"],
+    field: keyof StrengthWorkout['schedule'],
     value: string
   ) => {
     setStrengthWorkouts(
@@ -538,7 +538,7 @@ export default function RoutineCreation({
 
   const updateRunningWorkoutSchedule = (
     workoutId: string,
-    field: keyof RunningWorkout["schedule"],
+    field: keyof RunningWorkout['schedule'],
     value: string
   ) => {
     setRunningWorkouts(
@@ -558,7 +558,7 @@ export default function RoutineCreation({
   ) => {
     updateStrengthWorkoutSchedule(
       workoutId,
-      field as keyof StrengthWorkout["schedule"],
+      field as keyof StrengthWorkout['schedule'],
       value
     );
   };
@@ -570,7 +570,7 @@ export default function RoutineCreation({
   ) => {
     updateRunningWorkoutSchedule(
       workoutId,
-      field as keyof RunningWorkout["schedule"],
+      field as keyof RunningWorkout['schedule'],
       value
     );
   };
@@ -581,8 +581,8 @@ export default function RoutineCreation({
   ): string => {
     // For running workouts with trail running data, use the actual estimated duration
     if (
-      workout.type === "running" &&
-      "trailRunningData" in workout &&
+      workout.type === 'running' &&
+      'trailRunningData' in workout &&
       workout.trailRunningData
     ) {
       const duration = workout.trailRunningData.estimatedDuration;
@@ -593,23 +593,23 @@ export default function RoutineCreation({
     }
 
     // For other non-strength workouts, show placeholder or basic estimates
-    if (workout.type !== "strength") {
+    if (workout.type !== 'strength') {
       const baseEstimates = {
-        running: "45 min",
-        swimming: "45 min",
-        cycling: "60 min",
-        "trail-running": "45 min",
+        running: '45 min',
+        swimming: '45 min',
+        cycling: '60 min',
+        'trail-running': '45 min',
       };
-      return baseEstimates[workout.type] || "45 min";
+      return baseEstimates[workout.type] || '45 min';
     }
 
     let totalMinutes = 0;
 
     workout.sections.forEach((section, sectionIndex) => {
-      if (section.type === "emom" && section.emomDuration) {
+      if (section.type === 'emom' && section.emomDuration) {
         // EMOM duration is fixed
         totalMinutes += section.emomDuration;
-      } else if (section.type === "tabata") {
+      } else if (section.type === 'tabata') {
         // TABATA is always 4 minutes
         totalMinutes += 4;
       } else {
@@ -623,7 +623,7 @@ export default function RoutineCreation({
           // Add rest time between sets
           if (exercise.sets.length > 1) {
             const restTime = exercise.restTimer;
-            const [minutes, seconds] = restTime.split(":").map(Number);
+            const [minutes, seconds] = restTime.split(':').map(Number);
             const restMinutes = minutes + seconds / 60;
             totalMinutes += restMinutes * (exercise.sets.length - 1);
           }
@@ -631,7 +631,7 @@ export default function RoutineCreation({
           // Add rest time after exercise (except for the last exercise in section)
           if (exerciseIndex < section.exercises.length - 1) {
             const restAfter = exercise.restAfter;
-            const [minutes, seconds] = restAfter.split(":").map(Number);
+            const [minutes, seconds] = restAfter.split(':').map(Number);
             totalMinutes += minutes + seconds / 60;
           }
         });
@@ -640,7 +640,7 @@ export default function RoutineCreation({
       // Add rest time after section (except for the last section)
       if (sectionIndex < workout.sections.length - 1) {
         const sectionRest = section.restAfter;
-        const [minutes, seconds] = sectionRest.split(":").map(Number);
+        const [minutes, seconds] = sectionRest.split(':').map(Number);
         totalMinutes += minutes + seconds / 60;
       }
     });
@@ -648,7 +648,7 @@ export default function RoutineCreation({
     // Round to nearest 5 minutes and format
     const roundedMinutes = Math.round(totalMinutes / 5) * 5;
 
-    if (roundedMinutes === 0) return "—";
+    if (roundedMinutes === 0) return '—';
     if (roundedMinutes < 60) return `${roundedMinutes} min`;
 
     const hours = Math.floor(roundedMinutes / 60);
@@ -659,9 +659,9 @@ export default function RoutineCreation({
   const addStrengthSection = (workoutId: string) => {
     const newSection: WorkoutSection = {
       id: Date.now().toString(),
-      name: "Basic Section",
-      type: "basic",
-      restAfter: "02:00",
+      name: 'Basic Section',
+      type: 'basic',
+      restAfter: '02:00',
       exercises: [],
     };
 
@@ -677,9 +677,9 @@ export default function RoutineCreation({
   const addRunningSection = (workoutId: string) => {
     const newSection: WorkoutSection = {
       id: Date.now().toString(),
-      name: "Basic Section",
-      type: "basic",
-      restAfter: "02:00",
+      name: 'Basic Section',
+      type: 'basic',
+      restAfter: '02:00',
       exercises: [],
     };
 
@@ -763,7 +763,7 @@ export default function RoutineCreation({
   const updateStrengthSectionType = (
     workoutId: string,
     sectionId: string,
-    type: WorkoutSection["type"]
+    type: WorkoutSection['type']
   ) => {
     setStrengthWorkouts(
       strengthWorkouts.map(workout =>
@@ -776,10 +776,10 @@ export default function RoutineCreation({
                       ...section,
                       type,
                       // Set default values for EMOM and TABATA
-                      emomDuration: type === "emom" ? 10 : section.emomDuration,
+                      emomDuration: type === 'emom' ? 10 : section.emomDuration,
                       // Clear exercises if switching to TABATA since they need different configuration
                       exercises:
-                        type === "tabata" || type === "emom"
+                        type === 'tabata' || type === 'emom'
                           ? []
                           : section.exercises,
                     }
@@ -794,7 +794,7 @@ export default function RoutineCreation({
   const updateRunningSectionType = (
     workoutId: string,
     sectionId: string,
-    type: WorkoutSection["type"]
+    type: WorkoutSection['type']
   ) => {
     setRunningWorkouts(
       runningWorkouts.map(workout =>
@@ -807,10 +807,10 @@ export default function RoutineCreation({
                       ...section,
                       type,
                       // Set default values for EMOM and TABATA
-                      emomDuration: type === "emom" ? 10 : section.emomDuration,
+                      emomDuration: type === 'emom' ? 10 : section.emomDuration,
                       // Clear exercises if switching to TABATA since they need different configuration
                       exercises:
-                        type === "tabata" || type === "emom"
+                        type === 'tabata' || type === 'emom'
                           ? []
                           : section.exercises,
                     }
@@ -968,55 +968,55 @@ export default function RoutineCreation({
     let setNumber = 1;
 
     switch (progressionMethod) {
-      case "linear":
+      case 'linear':
         // 3 sets of 5 fixed reps
         for (let i = 0; i < 3; i++) {
           sets.push({
             id: `${Date.now()}_${i}_linear`,
             setNumber: setNumber++,
-            setType: "normal",
-            repType: "fixed",
+            setType: 'normal',
+            repType: 'fixed',
             reps: 5,
             weight: null,
             rpe: null,
-            notes: "",
+            notes: '',
           });
         }
         break;
 
-      case "dual":
+      case 'dual':
         // 3 sets of 8-12 rep ranges
         for (let i = 0; i < 3; i++) {
           sets.push({
             id: `${Date.now()}_${i}_dual`,
             setNumber: setNumber++,
-            setType: "normal",
-            repType: "range",
+            setType: 'normal',
+            repType: 'range',
             reps: null,
             repsMin: 8,
             repsMax: 12,
             weight: null,
             rpe: null,
-            notes: "",
+            notes: '',
           });
         }
         break;
 
-      case "inverse-pyramid":
+      case 'inverse-pyramid': {
         // 4 sets with decreasing weight/increasing reps
         const pyramidSets = [
-          { reps: 6, note: "Start with heaviest weight" },
-          { reps: 8, note: "~90% of first set" },
-          { reps: 10, note: "~80% of first set" },
-          { reps: 12, note: "~70% of first set" },
+          { reps: 6, note: 'Start with heaviest weight' },
+          { reps: 8, note: '~90% of first set' },
+          { reps: 10, note: '~80% of first set' },
+          { reps: 12, note: '~70% of first set' },
         ];
 
         pyramidSets.forEach((pyramid, i) => {
           sets.push({
             id: `${Date.now()}_${i}_pyramid`,
             setNumber: setNumber++,
-            setType: "normal",
-            repType: "fixed",
+            setType: 'normal',
+            repType: 'fixed',
             reps: pyramid.reps,
             weight: null,
             rpe: null,
@@ -1024,26 +1024,27 @@ export default function RoutineCreation({
           });
         });
         break;
+      }
 
-      case "myo-reps":
+      case 'myo-reps':
         // Activation set + 4 mini-sets
         sets.push({
           id: `${Date.now()}_activation`,
           setNumber: setNumber++,
-          setType: "normal",
-          repType: "fixed",
+          setType: 'normal',
+          repType: 'fixed',
           reps: 12,
           weight: null,
           rpe: null,
-          notes: "Activation set - 2-3 reps in reserve",
+          notes: 'Activation set - 2-3 reps in reserve',
         });
 
         for (let i = 0; i < 4; i++) {
           sets.push({
             id: `${Date.now()}_mini_${i}`,
             setNumber: setNumber++,
-            setType: "failure",
-            repType: "fixed",
+            setType: 'failure',
+            repType: 'fixed',
             reps: 3,
             weight: null,
             rpe: null,
@@ -1052,44 +1053,44 @@ export default function RoutineCreation({
         }
         break;
 
-      case "widowmaker":
+      case 'widowmaker':
         // Single high-rep failure set
         sets.push({
           id: `${Date.now()}_widowmaker`,
           setNumber: 1,
-          setType: "failure",
-          repType: "fixed",
+          setType: 'failure',
+          repType: 'fixed',
           reps: 20,
           weight: null,
           rpe: null,
-          notes: "Single high-rep set to failure",
+          notes: 'Single high-rep set to failure',
         });
         break;
 
-      case "amrap":
+      case 'amrap':
         // 2 regular sets + 1 AMRAP set
         for (let i = 0; i < 2; i++) {
           sets.push({
             id: `${Date.now()}_regular_${i}`,
             setNumber: setNumber++,
-            setType: "normal",
-            repType: "fixed",
+            setType: 'normal',
+            repType: 'fixed',
             reps: 8,
             weight: null,
             rpe: null,
-            notes: "",
+            notes: '',
           });
         }
 
         sets.push({
           id: `${Date.now()}_amrap`,
           setNumber: setNumber,
-          setType: "failure",
-          repType: "fixed",
+          setType: 'failure',
+          repType: 'fixed',
           reps: null,
           weight: null,
           rpe: null,
-          notes: "AMRAP - As many reps as possible",
+          notes: 'AMRAP - As many reps as possible',
         });
         break;
 
@@ -1098,12 +1099,12 @@ export default function RoutineCreation({
         sets.push({
           id: `${Date.now()}_default`,
           setNumber: 1,
-          setType: "normal",
-          repType: "fixed",
+          setType: 'normal',
+          repType: 'fixed',
           reps: 5,
           weight: null,
           rpe: null,
-          notes: "",
+          notes: '',
         });
     }
 
@@ -1163,7 +1164,7 @@ export default function RoutineCreation({
                         if (exercise.id === exerciseId) {
                           // Create 2-3 approach sets with lower weight and similar reps
                           const mainSets = exercise.sets.filter(
-                            set => set.setType === "normal"
+                            set => set.setType === 'normal'
                           );
                           const firstMainSet =
                             mainSets.length > 0 ? mainSets[0] : null;
@@ -1183,12 +1184,12 @@ export default function RoutineCreation({
                               approachSets.push({
                                 id: `approach-${Date.now()}-${i}`,
                                 setNumber: i,
-                                setType: "warmup",
-                                repType: "fixed",
+                                setType: 'warmup',
+                                repType: 'fixed',
                                 reps: Math.max(3, Math.round(targetReps * 0.6)), // Fewer reps for approach
                                 weight: approachWeight,
                                 rpe: Math.min(6, i + 3), // RPE 4-6 for approach sets
-                                notes: "",
+                                notes: '',
                               });
                             }
                           }
@@ -1250,17 +1251,17 @@ export default function RoutineCreation({
       category: selectedExercise.category,
       muscleGroups: selectedExercise.muscleGroups,
       sets:
-        section?.type === "tabata"
+        section?.type === 'tabata'
           ? []
           : strengthWorkout
-            ? generateSetsForProgression("linear")
+            ? generateSetsForProgression('linear')
             : [], // Auto-generate sets for strength exercises
-      restTimer: section?.type === "emom" ? "00:00" : "01:30", // EMOM doesn't need rest between sets
-      restAfter: section?.type === "tabata" ? "00:00" : "02:00", // TABATA rest is built into the protocol
-      notes: "",
-      progressionMethod: strengthWorkout ? "linear" : undefined, // Only add progression method for strength exercises
+      restTimer: section?.type === 'emom' ? '00:00' : '01:30', // EMOM doesn't need rest between sets
+      restAfter: section?.type === 'tabata' ? '00:00' : '02:00', // TABATA rest is built into the protocol
+      notes: '',
+      progressionMethod: strengthWorkout ? 'linear' : undefined, // Only add progression method for strength exercises
       // Initialize EMOM properties
-      emomReps: section?.type === "emom" ? 10 : undefined,
+      emomReps: section?.type === 'emom' ? 10 : undefined,
     };
 
     if (strengthWorkout) {
@@ -1306,7 +1307,7 @@ export default function RoutineCreation({
   };
 
   const handleNotesClick = (
-    type: "exercise" | "set",
+    type: 'exercise' | 'set',
     workoutId: string,
     sectionId: string,
     exerciseId: string,
@@ -1321,12 +1322,12 @@ export default function RoutineCreation({
     const section = workout.sections.find(s => s.id === sectionId);
     const exercise = section?.exercises.find(e => e.id === exerciseId);
 
-    let currentNotes = "";
-    if (type === "exercise") {
-      currentNotes = exercise?.notes || "";
-    } else if (type === "set" && setId) {
+    let currentNotes = '';
+    if (type === 'exercise') {
+      currentNotes = exercise?.notes || '';
+    } else if (type === 'set' && setId) {
       const set = exercise?.sets.find(s => s.id === setId);
-      currentNotes = set?.notes || "";
+      currentNotes = set?.notes || '';
     }
 
     setCurrentNotesContext({
@@ -1358,7 +1359,7 @@ export default function RoutineCreation({
                       ...section,
                       exercises: section.exercises.map(exercise =>
                         exercise.id === exerciseId
-                          ? type === "exercise"
+                          ? type === 'exercise'
                             ? { ...exercise, notes }
                             : {
                                 ...exercise,
@@ -1388,7 +1389,7 @@ export default function RoutineCreation({
                       ...section,
                       exercises: section.exercises.map(exercise =>
                         exercise.id === exerciseId
-                          ? type === "exercise"
+                          ? type === 'exercise'
                             ? { ...exercise, notes }
                             : {
                                 ...exercise,
@@ -1668,44 +1669,44 @@ export default function RoutineCreation({
   const getSectionColors = (type: string) => {
     const colors = {
       warmup: {
-        bg: "bg-orange-50/50",
-        border: "border-orange-200",
-        headerBg: "bg-orange-100",
-        headerText: "text-orange-800",
-        headerBorder: "border-orange-200",
-        icon: "text-orange-600",
+        bg: 'bg-orange-50/50',
+        border: 'border-orange-200',
+        headerBg: 'bg-orange-100',
+        headerText: 'text-orange-800',
+        headerBorder: 'border-orange-200',
+        icon: 'text-orange-600',
       },
       basic: {
-        bg: "bg-indigo-50/50",
-        border: "border-indigo-200",
-        headerBg: "bg-indigo-100",
-        headerText: "text-indigo-800",
-        headerBorder: "border-indigo-200",
-        icon: "text-indigo-600",
+        bg: 'bg-indigo-50/50',
+        border: 'border-indigo-200',
+        headerBg: 'bg-indigo-100',
+        headerText: 'text-indigo-800',
+        headerBorder: 'border-indigo-200',
+        icon: 'text-indigo-600',
       },
       cooldown: {
-        bg: "bg-blue-50/50",
-        border: "border-blue-200",
-        headerBg: "bg-blue-100",
-        headerText: "text-blue-800",
-        headerBorder: "border-blue-200",
-        icon: "text-blue-600",
+        bg: 'bg-blue-50/50',
+        border: 'border-blue-200',
+        headerBg: 'bg-blue-100',
+        headerText: 'text-blue-800',
+        headerBorder: 'border-blue-200',
+        icon: 'text-blue-600',
       },
       emom: {
-        bg: "bg-purple-50/50",
-        border: "border-purple-200",
-        headerBg: "bg-purple-100",
-        headerText: "text-purple-800",
-        headerBorder: "border-purple-200",
-        icon: "text-purple-600",
+        bg: 'bg-purple-50/50',
+        border: 'border-purple-200',
+        headerBg: 'bg-purple-100',
+        headerText: 'text-purple-800',
+        headerBorder: 'border-purple-200',
+        icon: 'text-purple-600',
       },
       tabata: {
-        bg: "bg-red-50/50",
-        border: "border-red-200",
-        headerBg: "bg-red-100",
-        headerText: "text-red-800",
-        headerBorder: "border-red-200",
-        icon: "text-red-600",
+        bg: 'bg-red-50/50',
+        border: 'border-red-200',
+        headerBg: 'bg-red-100',
+        headerText: 'text-red-800',
+        headerBorder: 'border-red-200',
+        icon: 'text-red-600',
       },
     };
     return colors[type as keyof typeof colors] || colors.basic;
@@ -1784,7 +1785,7 @@ export default function RoutineCreation({
     isStrength: boolean,
     collapsedSet: Set<string>,
     toggleCollapse: (id: string) => void,
-    moveWorkout: (id: string, direction: "up" | "down") => void,
+    moveWorkout: (id: string, direction: 'up' | 'down') => void,
     removeWorkout: (id: string) => void,
     updateWorkoutName: (id: string, name: string) => void,
     updateWorkoutObjective: (id: string, objective: string) => void,
@@ -1799,7 +1800,7 @@ export default function RoutineCreation({
     updateSectionType: (
       workoutId: string,
       sectionId: string,
-      type: WorkoutSection["type"]
+      type: WorkoutSection['type']
     ) => void,
     updateSectionRestAfter: (
       workoutId: string,
@@ -1861,7 +1862,7 @@ export default function RoutineCreation({
                     <Button
                       variant="ghost"
                       size="sm"
-                      onClick={() => moveWorkout(workout.id, "up")}
+                      onClick={() => moveWorkout(workout.id, 'up')}
                       disabled={index === 0}
                       className="p-1 h-6 w-6"
                     >
@@ -1878,7 +1879,7 @@ export default function RoutineCreation({
                     <Button
                       variant="ghost"
                       size="sm"
-                      onClick={() => moveWorkout(workout.id, "down")}
+                      onClick={() => moveWorkout(workout.id, 'down')}
                       disabled={index === totalCount - 1}
                       className="p-1 h-6 w-6"
                     >
@@ -1909,19 +1910,19 @@ export default function RoutineCreation({
             </Button>
 
             <div className="flex items-center space-x-3">
-              {workout.type === "strength" && (
+              {workout.type === 'strength' && (
                 <Dumbbell className="h-5 w-5 text-indigo-600" />
               )}
-              {workout.type === "running" && (
+              {workout.type === 'running' && (
                 <Activity className="h-5 w-5 text-green-600" />
               )}
-              {workout.type === "trail-running" && (
+              {workout.type === 'trail-running' && (
                 <MapPin className="h-5 w-5 text-orange-600" />
               )}
-              {workout.type === "swimming" && (
+              {workout.type === 'swimming' && (
                 <Waves className="h-5 w-5 text-blue-600" />
               )}
-              {workout.type === "cycling" && (
+              {workout.type === 'cycling' && (
                 <Bike className="h-5 w-5 text-purple-600" />
               )}
 
@@ -1937,7 +1938,7 @@ export default function RoutineCreation({
                   </span>
                   <span className="text-sm text-gray-400">•</span>
                   <span className="text-sm text-gray-500 capitalize">
-                    {workout.type.replace("-", " ")}
+                    {workout.type.replace('-', ' ')}
                   </span>
                 </div>
               </div>
@@ -1945,7 +1946,7 @@ export default function RoutineCreation({
           </div>
 
           <div className="flex items-center space-x-2">
-            {workout.type === "running" && (
+            {workout.type === 'running' && (
               <Button
                 variant="ghost"
                 size="sm"
@@ -1988,7 +1989,7 @@ export default function RoutineCreation({
               <Input
                 value={workout.schedule.weeks}
                 onChange={e =>
-                  updateWorkoutSchedule(workout.id, "weeks", e.target.value)
+                  updateWorkoutSchedule(workout.id, 'weeks', e.target.value)
                 }
                 placeholder="e.g., Week 1, 3, 5"
               />
@@ -1998,7 +1999,7 @@ export default function RoutineCreation({
               <Select
                 value={workout.schedule.day}
                 onValueChange={value =>
-                  updateWorkoutSchedule(workout.id, "day", value)
+                  updateWorkoutSchedule(workout.id, 'day', value)
                 }
               >
                 <SelectTrigger>
@@ -2020,7 +2021,7 @@ export default function RoutineCreation({
               <Input
                 value={workout.schedule.time}
                 onChange={e =>
-                  updateWorkoutSchedule(workout.id, "time", e.target.value)
+                  updateWorkoutSchedule(workout.id, 'time', e.target.value)
                 }
                 placeholder="e.g., 9:00 AM"
               />
@@ -2028,8 +2029,8 @@ export default function RoutineCreation({
           </div>
 
           {/* Running Workout Details */}
-          {workout.type === "running" &&
-            "trailRunningData" in workout &&
+          {workout.type === 'running' &&
+            'trailRunningData' in workout &&
             workout.trailRunningData && (
               <div className="bg-green-50 border border-green-200 rounded-lg p-4">
                 <div className="flex items-center justify-between mb-3">
@@ -2052,7 +2053,7 @@ export default function RoutineCreation({
             )}
 
           {/* Sections for other workout types */}
-          {workout.type !== "running" && (
+          {workout.type !== 'running' && (
             <div className="space-y-3">
               <div className="flex items-center justify-between">
                 <h4 className="font-medium text-gray-900">Sections</h4>
@@ -2096,7 +2097,7 @@ export default function RoutineCreation({
                       <div className="flex items-center space-x-2">
                         <Select
                           value={section.type}
-                          onValueChange={(value: WorkoutSection["type"]) =>
+                          onValueChange={(value: WorkoutSection['type']) =>
                             updateSectionType(workout.id, section.id, value)
                           }
                         >
@@ -2125,7 +2126,7 @@ export default function RoutineCreation({
                     {/* Section Content */}
                     <div className="p-3 space-y-3">
                       {/* EMOM Duration */}
-                      {section.type === "emom" && (
+                      {section.type === 'emom' && (
                         <div className="flex items-center space-x-4">
                           <Label className="text-sm font-medium">
                             Duration (minutes):
@@ -2148,7 +2149,7 @@ export default function RoutineCreation({
                       )}
 
                       {/* TABATA Info */}
-                      {section.type === "tabata" && (
+                      {section.type === 'tabata' && (
                         <div className="bg-red-100 border border-red-200 rounded p-3">
                           <p className="text-sm text-red-800">
                             TABATA Protocol: 4 minutes total (8 rounds of 20
@@ -2241,7 +2242,7 @@ export default function RoutineCreation({
                                           size="sm"
                                           onClick={() =>
                                             handleNotesClick(
-                                              "exercise",
+                                              'exercise',
                                               workout.id,
                                               section.id,
                                               exercise.id
@@ -2249,8 +2250,8 @@ export default function RoutineCreation({
                                           }
                                           className={
                                             exercise.notes
-                                              ? "text-blue-600"
-                                              : "text-gray-400"
+                                              ? 'text-blue-600'
+                                              : 'text-gray-400'
                                           }
                                         >
                                           <FileText className="h-4 w-4" />
@@ -2258,8 +2259,8 @@ export default function RoutineCreation({
                                       </TooltipTrigger>
                                       <TooltipContent>
                                         {exercise.notes
-                                          ? "Edit notes"
-                                          : "Add notes"}
+                                          ? 'Edit notes'
+                                          : 'Add notes'}
                                       </TooltipContent>
                                     </Tooltip>
                                   </TooltipProvider>
@@ -2282,15 +2283,15 @@ export default function RoutineCreation({
 
                               {/* Progression Method Selection for Strength Exercises */}
                               {isStrength &&
-                                section.type !== "tabata" &&
-                                section.type !== "emom" && (
+                                section.type !== 'tabata' &&
+                                section.type !== 'emom' && (
                                   <div>
                                     <Label className="text-sm">
                                       Progression Method
                                     </Label>
                                     <Select
                                       value={
-                                        exercise.progressionMethod || "linear"
+                                        exercise.progressionMethod || 'linear'
                                       }
                                       onValueChange={(
                                         value: ProgressionMethod
@@ -2326,7 +2327,7 @@ export default function RoutineCreation({
                                 )}
 
                               {/* EMOM Reps */}
-                              {section.type === "emom" && (
+                              {section.type === 'emom' && (
                                 <div className="flex items-center space-x-4">
                                   <Label className="text-sm">
                                     Target reps per minute:
@@ -2350,8 +2351,8 @@ export default function RoutineCreation({
                               )}
 
                               {/* Sets Management for non-TABATA/EMOM */}
-                              {section.type !== "tabata" &&
-                                section.type !== "emom" && (
+                              {section.type !== 'tabata' &&
+                                section.type !== 'emom' && (
                                   <div className="space-y-3">
                                     <SetManagement
                                       sets={exercise.sets}
@@ -2365,7 +2366,7 @@ export default function RoutineCreation({
                                       }
                                       onNotesClick={setId =>
                                         handleNotesClick(
-                                          "set",
+                                          'set',
                                           workout.id,
                                           section.id,
                                           exercise.id,
@@ -2406,9 +2407,9 @@ export default function RoutineCreation({
                                 )}
 
                               {/* Rest Timers for non-TABATA */}
-                              {section.type !== "tabata" && (
+                              {section.type !== 'tabata' && (
                                 <div className="space-y-3">
-                                  {section.type === "emom" ? (
+                                  {section.type === 'emom' ? (
                                     <>
                                       {/* EMOM Rest Explanation */}
                                       <div className="bg-purple-50 border border-purple-200 rounded p-3">
@@ -2448,8 +2449,8 @@ export default function RoutineCreation({
                                       className={`grid gap-4 ${
                                         exerciseIndex <
                                         section.exercises.length - 1
-                                          ? "grid-cols-2"
-                                          : "grid-cols-1"
+                                          ? 'grid-cols-2'
+                                          : 'grid-cols-1'
                                       }`}
                                     >
                                       <div>
@@ -2539,7 +2540,7 @@ export default function RoutineCreation({
             <Button
               variant="ghost"
               size="sm"
-              onClick={() => router.push("/routines")}
+              onClick={() => router.push('/routines')}
               className="flex items-center space-x-2"
             >
               <ArrowLeft className="h-4 w-4" />
@@ -2547,21 +2548,21 @@ export default function RoutineCreation({
             </Button>
             <div className="h-6 w-px bg-gray-300" />
             <h1 className="text-xl font-semibold text-gray-900">
-              {mode === "create" ? "Create Routine" : "Edit Routine"}
+              {mode === 'create' ? 'Create Routine' : 'Edit Routine'}
             </h1>
           </div>
           <div className="flex items-center space-x-3">
-            <Button variant="outline" onClick={() => router.push("/routines")}>
+            <Button variant="outline" onClick={() => router.push('/routines')}>
               Cancel
             </Button>
             <Button
-              onClick={() => router.push("/routines")}
+              onClick={() => router.push('/routines')}
               disabled={!canSave}
               className="flex items-center space-x-2"
             >
               <Save className="h-4 w-4" />
               <span>
-                {mode === "create" ? "Create Routine" : "Save Changes"}
+                {mode === 'create' ? 'Create Routine' : 'Save Changes'}
               </span>
             </Button>
           </div>
@@ -2806,7 +2807,7 @@ export default function RoutineCreation({
           setCurrentNotesContext(null);
         }}
         onSave={handleNotesSave}
-        initialNotes={currentNotesContext?.currentNotes || ""}
+        initialNotes={currentNotesContext?.currentNotes || ''}
       />
     </div>
   );

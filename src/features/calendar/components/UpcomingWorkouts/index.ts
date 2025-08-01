@@ -1,1 +1,1 @@
-export { UpcomingWorkouts } from "./UpcomingWorkouts";
+export { UpcomingWorkouts } from './UpcomingWorkouts';

@@ -1,14 +1,14 @@
-import { Heart, Star, Printer } from "lucide-react";
+import { Heart, Star, Printer } from 'lucide-react';
 
-import { Button } from "@/components/ui/button";
+import { ExerciseData } from '../../types';
 
-import { ExerciseData } from "../../types";
+import { Button } from '@/components/ui/button';
 
 interface ExerciseHeaderProps {
   exercise: ExerciseData;
 }
 
-export function ExerciseHeader({ exercise }: ExerciseHeaderProps) {
+export const ExerciseHeader = ({ exercise }: ExerciseHeaderProps) => {
   return (
     <div className="flex items-start justify-between mb-6">
       <div className="flex-1">
@@ -43,8 +43,8 @@ export function ExerciseHeader({ exercise }: ExerciseHeaderProps) {
           <Heart
             className={`w-4 h-4 ${
               exercise.isFavorite
-                ? "text-red-500 fill-red-500"
-                : "text-gray-400"
+                ? 'text-red-500 fill-red-500'
+                : 'text-gray-400'
             }`}
           />
         </Button>
@@ -54,4 +54,4 @@ export function ExerciseHeader({ exercise }: ExerciseHeaderProps) {
       </div>
     </div>
   );
-}
+};
