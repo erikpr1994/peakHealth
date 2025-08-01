@@ -1,0 +1,27 @@
+.grid {
+  display: flex;
+  flex-direction: column;
+}
+
+.dayHeaders {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 0.25rem;
+}
+
+.dayHeader {
+  padding: 0.5rem;
+  text-align: center;
+}
+
+.dayHeaderText {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #6b7280;
+}
+
+.calendarDays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 0.25rem;
+}
