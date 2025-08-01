@@ -1,15 +1,5 @@
 "use client";
 
-import React, { useState } from "react";
-import { useRouter } from "next/navigation";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { Badge } from "@/components/ui/badge";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Separator } from "@/components/ui/separator";
 import {
   User,
   Mail,
@@ -26,6 +16,16 @@ import {
   RefreshCw,
   Sparkles,
 } from "lucide-react";
+import React, { useState } from "react";
+
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Separator } from "@/components/ui/separator";
+import { Textarea } from "@/components/ui/textarea";
 import { OnboardingData } from "@/types/app";
 
 interface ProfileProps {
@@ -33,7 +33,6 @@ interface ProfileProps {
 }
 
 export default function Profile({ onboardingData }: ProfileProps) {
-  const router = useRouter();
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState({
     name: onboardingData?.name || "Alex Johnson",
@@ -132,7 +131,7 @@ export default function Profile({ onboardingData }: ProfileProps) {
                   <AvatarFallback className="text-lg">
                     {formData.name
                       .split(" ")
-                      .map((n) => n[0])
+                      .map(n => n[0])
                       .join("")}
                   </AvatarFallback>
                 </Avatar>
@@ -144,7 +143,7 @@ export default function Profile({ onboardingData }: ProfileProps) {
                         <Input
                           id="name"
                           value={formData.name}
-                          onChange={(e) =>
+                          onChange={e =>
                             setFormData({ ...formData, name: e.target.value })
                           }
                         />
@@ -172,7 +171,7 @@ export default function Profile({ onboardingData }: ProfileProps) {
                       id="email"
                       type="email"
                       value={formData.email}
-                      onChange={(e) =>
+                      onChange={e =>
                         setFormData({ ...formData, email: e.target.value })
                       }
                     />
@@ -190,7 +189,7 @@ export default function Profile({ onboardingData }: ProfileProps) {
                     <Input
                       id="phone"
                       value={formData.phone}
-                      onChange={(e) =>
+                      onChange={e =>
                         setFormData({ ...formData, phone: e.target.value })
                       }
                     />
@@ -208,7 +207,7 @@ export default function Profile({ onboardingData }: ProfileProps) {
                     <Input
                       id="location"
                       value={formData.location}
-                      onChange={(e) =>
+                      onChange={e =>
                         setFormData({ ...formData, location: e.target.value })
                       }
                     />
@@ -230,7 +229,7 @@ export default function Profile({ onboardingData }: ProfileProps) {
                       id="birthDate"
                       type="date"
                       value={formData.birthDate}
-                      onChange={(e) =>
+                      onChange={e =>
                         setFormData({ ...formData, birthDate: e.target.value })
                       }
                     />
@@ -248,7 +247,7 @@ export default function Profile({ onboardingData }: ProfileProps) {
                   <Textarea
                     id="bio"
                     value={formData.bio}
-                    onChange={(e) =>
+                    onChange={e =>
                       setFormData({ ...formData, bio: e.target.value })
                     }
                     className="mt-1"

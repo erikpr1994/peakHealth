@@ -1,10 +1,12 @@
 import { Heart, Star, ChevronRight } from "lucide-react";
-import { Card } from "@/components/ui/card";
+
 import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+
 import { Exercise } from "../../types";
+
 import { CategoryBadge } from "./CategoryBadge";
 import { DifficultyBadge } from "./DifficultyBadge";
-import { MuscleGroupTags } from "./MuscleGroupTags";
 
 interface ExerciseCardProps {
   exercise: Exercise;

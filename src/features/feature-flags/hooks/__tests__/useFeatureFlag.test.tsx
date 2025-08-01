@@ -1,8 +1,10 @@
-import { describe, it, expect, vi, beforeEach, Mock } from "vitest";
 import { renderHook, waitFor } from "@testing-library/react";
-import { useFeatureFlag } from "../useFeatureFlag";
-import { FeatureFlagProvider } from "../../context/FeatureFlagContext";
+import { describe, it, expect, vi, beforeEach, Mock } from "vitest";
+
 import { useAuth } from "@/features/auth/context/AuthContext";
+
+import { FeatureFlagProvider } from "../../context/FeatureFlagContext";
+import { useFeatureFlag } from "../useFeatureFlag";
 
 // Mock dependencies
 vi.mock("@/features/auth/context/AuthContext");
@@ -29,7 +31,15 @@ describe("useFeatureFlag Hook", () => {
   });
 
   const setupHook = (
-    apiResponse: { flags: any[]; userTypes: any[]; userGroups: any[] },
+    apiResponse: {
+      flags: Array<{
+        name: string;
+        is_enabled: boolean;
+        rollout_percentage: number;
+      }>;
+      userTypes: Array<{ typeName: string; displayName: string }>;
+      userGroups: Array<{ groupName: string; displayName: string }>;
+    },
     hookArg: string[]
   ) => {
     mockFetch.mockResolvedValue({

@@ -1,10 +1,20 @@
 "use client";
 
+import {
+  Bell,
+  Globe,
+  Shield,
+  Database,
+  Users,
+  Dumbbell,
+  TestTube2,
+  Sparkles,
+} from "lucide-react";
 import React, { useState } from "react";
-import { useRouter } from "next/navigation";
+
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import {
   Select,
@@ -14,21 +24,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
-import { Badge } from "@/components/ui/badge";
-import {
-  Settings,
-  Bell,
-  Globe,
-  Moon,
-  Volume2,
-  Shield,
-  Database,
-  Smartphone,
-  Users,
-  Dumbbell,
-  TestTube2,
-  Sparkles,
-} from "lucide-react";
+import { Switch } from "@/components/ui/switch";
 
 interface AppSettingsProps {
   hasTrainer: boolean;
@@ -47,7 +43,6 @@ export default function AppSettings({
   showWelcomeScreen,
   onToggleWelcomeScreen,
 }: AppSettingsProps) {
-  const router = useRouter();
   // Mock settings state
   const [settings, setSettings] = useState({
     notifications: true,
@@ -63,7 +58,7 @@ export default function AppSettings({
   });
 
   const handleSettingChange = (key: string, value: boolean | string) => {
-    setSettings((prev) => ({ ...prev, [key]: value }));
+    setSettings(prev => ({ ...prev, [key]: value }));
     // In a real app, this would save to backend/localStorage
     console.log(`Setting ${key} changed to:`, value);
   };
@@ -97,7 +92,7 @@ export default function AppSettings({
               <Switch
                 id="notifications"
                 checked={settings.notifications}
-                onCheckedChange={(checked) =>
+                onCheckedChange={checked =>
                   handleSettingChange("notifications", checked)
                 }
               />
@@ -116,7 +111,7 @@ export default function AppSettings({
               <Switch
                 id="workout-reminders"
                 checked={settings.workoutReminders}
-                onCheckedChange={(checked) =>
+                onCheckedChange={checked =>
                   handleSettingChange("workoutReminders", checked)
                 }
                 disabled={!settings.notifications}
@@ -136,7 +131,7 @@ export default function AppSettings({
               <Switch
                 id="achievement-alerts"
                 checked={settings.achievementAlerts}
-                onCheckedChange={(checked) =>
+                onCheckedChange={checked =>
                   handleSettingChange("achievementAlerts", checked)
                 }
                 disabled={!settings.notifications}
@@ -164,7 +159,7 @@ export default function AppSettings({
               <Switch
                 id="sound-effects"
                 checked={settings.soundEffects}
-                onCheckedChange={(checked) =>
+                onCheckedChange={checked =>
                   handleSettingChange("soundEffects", checked)
                 }
               />
@@ -180,7 +175,7 @@ export default function AppSettings({
               <Switch
                 id="haptic-feedback"
                 checked={settings.hapticFeedback}
-                onCheckedChange={(checked) =>
+                onCheckedChange={checked =>
                   handleSettingChange("hapticFeedback", checked)
                 }
               />
@@ -196,7 +191,7 @@ export default function AppSettings({
               <Switch
                 id="dark-mode"
                 checked={settings.darkMode}
-                onCheckedChange={(checked) =>
+                onCheckedChange={checked =>
                   handleSettingChange("darkMode", checked)
                 }
               />
@@ -217,9 +212,7 @@ export default function AppSettings({
               <Label>Language</Label>
               <Select
                 value={settings.language}
-                onValueChange={(value) =>
-                  handleSettingChange("language", value)
-                }
+                onValueChange={value => handleSettingChange("language", value)}
               >
                 <SelectTrigger>
                   <SelectValue />
@@ -239,7 +232,7 @@ export default function AppSettings({
               <Label>Units</Label>
               <Select
                 value={settings.units}
-                onValueChange={(value) => handleSettingChange("units", value)}
+                onValueChange={value => handleSettingChange("units", value)}
               >
                 <SelectTrigger>
                   <SelectValue />
@@ -272,7 +265,7 @@ export default function AppSettings({
               <Switch
                 id="auto-backup"
                 checked={settings.autoBackup}
-                onCheckedChange={(checked) =>
+                onCheckedChange={checked =>
                   handleSettingChange("autoBackup", checked)
                 }
               />
@@ -288,7 +281,7 @@ export default function AppSettings({
               <Switch
                 id="data-sharing"
                 checked={settings.dataSharing}
-                onCheckedChange={(checked) =>
+                onCheckedChange={checked =>
                   handleSettingChange("dataSharing", checked)
                 }
               />

@@ -1,3 +1,6 @@
-export { NotificationsBell } from './NotificationsBell';
-export { NotificationsProvider, useNotifications } from './NotificationsContext';
-export type { Notification } from './NotificationsContext'; 
+export { NotificationsBell } from "./NotificationsBell";
+export {
+  NotificationsProvider,
+  useNotifications,
+} from "./NotificationsContext";
+export type { Notification } from "./NotificationsContext";

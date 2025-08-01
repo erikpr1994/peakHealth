@@ -1,4 +1,3 @@
-import { useState } from "react";
 import {
   Trophy,
   Clock,
@@ -10,11 +9,12 @@ import {
   MessageCircle,
   Calendar,
 } from "lucide-react";
-import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
-import { Badge } from "@/components/ui/badge";
+import { useState } from "react";
 
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { Textarea } from "@/components/ui/textarea";
 import { Page } from "@/types/app";
 
 interface SetData {
@@ -111,7 +111,7 @@ export default function WorkoutSummary({
   const calculateStats = () => {
     // Safely access setData with fallback
     const setData = workoutSession.setData || [];
-    const totalSets = setData.filter((set) => set.completed).length;
+    const totalSets = setData.filter(set => set.completed).length;
     const totalReps = setData.reduce(
       (acc, set) => acc + (set.actualReps || 0),
       0
@@ -182,7 +182,7 @@ export default function WorkoutSummary({
               <h1 className="text-4xl font-bold mb-2">Workout Complete!</h1>
               <p className="text-xl opacity-90">{getMotivationalMessage()}</p>
             </div>
-            <div className="absolute inset-0 bg-gradient-to-r from-green-400/20 to-blue-500/20"></div>
+            <div className="absolute inset-0 bg-gradient-to-r from-green-400/20 to-blue-500/20" />
           </Card>
         )}
 
@@ -279,13 +279,13 @@ export default function WorkoutSummary({
             {workoutSession.workouts && workoutSession.workouts.length > 0 ? (
               workoutSession.workouts
                 .map(
-                  (workout) =>
+                  workout =>
                     workout.sections?.map(
-                      (section) =>
-                        section.exercises?.map((exercise) => {
+                      section =>
+                        section.exercises?.map(exercise => {
                           const exerciseSets = (
                             workoutSession.setData || []
-                          ).filter((set) => set.exerciseId === exercise.id);
+                          ).filter(set => set.exerciseId === exercise.id);
                           return (
                             <div
                               key={exercise.id}
@@ -348,7 +348,7 @@ export default function WorkoutSummary({
             Rate Your Workout
           </h3>
           <div className="flex items-center gap-2 mb-4">
-            {[1, 2, 3, 4, 5].map((star) => (
+            {[1, 2, 3, 4, 5].map(star => (
               <button
                 key={star}
                 onClick={() => setRating(star)}
@@ -380,7 +380,7 @@ export default function WorkoutSummary({
           <Textarea
             placeholder="How did today's workout feel? Any observations, achievements, or areas for improvement..."
             value={workoutNotes}
-            onChange={(e) => setWorkoutNotes(e.target.value)}
+            onChange={e => setWorkoutNotes(e.target.value)}
             rows={4}
             className="mb-4"
           />

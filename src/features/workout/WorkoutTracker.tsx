@@ -1,5 +1,6 @@
-import { useState, useEffect } from "react";
 import { X, Play, Pause, Square, AlertTriangle, MapPin } from "lucide-react";
+import { useState, useEffect } from "react";
+
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import {
@@ -10,12 +11,12 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog";
 import { Textarea } from "@/components/ui/textarea";
+import { Page } from "@/types/app";
+
 import ExerciseView from "./ExerciseView";
+import { RestType } from "./RestTimer";
 import RestView from "./RestView";
 import WorkoutSummary from "./WorkoutSummary";
-import { RestType } from "./RestTimer";
-
-import { Page } from "@/types/app";
 
 interface WorkoutTrackerProps {
   onNavigate: (page: Page) => void;
@@ -349,7 +350,7 @@ export default function WorkoutTracker({
 
   const totalSets = getTotalSets();
   const completedSets = workoutSession.setData.filter(
-    (set) => set.completed
+    set => set.completed
   ).length;
   const progressPercentage =
     totalSets > 0 ? (completedSets / totalSets) * 100 : 0;
@@ -377,7 +378,7 @@ export default function WorkoutTracker({
           )
         : 0;
 
-      setWorkoutSession((prev) => ({
+      setWorkoutSession(prev => ({
         ...prev,
         isPaused: false,
         pauseStartTime: undefined,
@@ -391,7 +392,7 @@ export default function WorkoutTracker({
   };
 
   const confirmPause = () => {
-    setWorkoutSession((prev) => ({
+    setWorkoutSession(prev => ({
       ...prev,
       isPaused: true,
       pauseReason,
@@ -407,7 +408,7 @@ export default function WorkoutTracker({
   };
 
   const confirmEndWorkout = () => {
-    setWorkoutSession((prev) => ({
+    setWorkoutSession(prev => ({
       ...prev,
       endTime: new Date(),
       totalDuration: workoutDuration,
@@ -429,10 +430,10 @@ export default function WorkoutTracker({
       ...setData,
     };
 
-    setWorkoutSession((prev) => ({
+    setWorkoutSession(prev => ({
       ...prev,
       setData: [
-        ...prev.setData.filter((s) => s.id !== newSetData.id),
+        ...prev.setData.filter(s => s.id !== newSetData.id),
         newSetData,
       ],
     }));
@@ -449,7 +450,7 @@ export default function WorkoutTracker({
 
     if (hasMoreSets) {
       // Rest between sets
-      setWorkoutSession((prev) => ({
+      setWorkoutSession(prev => ({
         ...prev,
         currentSetIndex: prev.currentSetIndex + 1,
       }));
@@ -458,7 +459,7 @@ export default function WorkoutTracker({
       setWorkoutState("rest");
     } else if (hasMoreExercises) {
       // Rest between exercises
-      setWorkoutSession((prev) => ({
+      setWorkoutSession(prev => ({
         ...prev,
         currentExerciseIndex: prev.currentExerciseIndex + 1,
         currentSetIndex: 0,
@@ -468,7 +469,7 @@ export default function WorkoutTracker({
       setWorkoutState("rest");
     } else if (hasMoreSections) {
       // Rest between sections
-      setWorkoutSession((prev) => ({
+      setWorkoutSession(prev => ({
         ...prev,
         currentSectionIndex: prev.currentSectionIndex + 1,
         currentExerciseIndex: 0,
@@ -479,7 +480,7 @@ export default function WorkoutTracker({
       setWorkoutState("section-rest");
     } else if (hasMoreWorkouts) {
       // Rest between workouts
-      setWorkoutSession((prev) => ({
+      setWorkoutSession(prev => ({
         ...prev,
         currentWorkoutIndex: prev.currentWorkoutIndex + 1,
         currentSectionIndex: 0,
@@ -683,7 +684,7 @@ export default function WorkoutTracker({
             setData={
               restType === "set"
                 ? workoutSession.setData.find(
-                    (s) =>
+                    s =>
                       s.id ===
                       `${currentExercise.id}-${
                         workoutSession.currentSetIndex - 1
@@ -714,7 +715,7 @@ export default function WorkoutTracker({
             </DialogTitle>
             <DialogDescription>
               Are you sure you want to end this workout? Your progress will be
-              saved, but you won't be able to resume this session.
+              saved, but you won&apos;t be able to resume this session.
             </DialogDescription>
           </DialogHeader>
           <div className="flex gap-3 mt-6">
@@ -749,7 +750,7 @@ export default function WorkoutTracker({
           <Textarea
             placeholder="e.g., Quick break, phone call, equipment wait..."
             value={pauseReason}
-            onChange={(e) => setPauseReason(e.target.value)}
+            onChange={e => setPauseReason(e.target.value)}
             className="mt-4"
           />
           <div className="flex gap-3 mt-6">

@@ -1,24 +1,19 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
 import {
   FileCheck,
   Plus,
-  Clock,
-  CheckCircle,
-  XCircle,
   ThumbsUp,
-  Eye,
-  Edit2,
   MessageSquare,
   Filter,
   Search,
 } from "lucide-react";
-import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+
 import { Badge } from "@/components/ui/badge";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -27,6 +22,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 type SuggestionStatus = "pending" | "approved" | "rejected" | "under_review";
 type SuggestionType = "gym" | "equipment" | "exercise";
@@ -141,7 +137,7 @@ export default function Suggestions() {
     console.log("Upvoting suggestion:", suggestionId);
   };
 
-  const filteredSuggestions = suggestions.filter((suggestion) => {
+  const filteredSuggestions = suggestions.filter(suggestion => {
     const matchesSearch =
       suggestion.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       suggestion.description.toLowerCase().includes(searchQuery.toLowerCase());
@@ -233,7 +229,7 @@ export default function Suggestions() {
 
       {suggestion.tags && suggestion.tags.length > 0 && (
         <div className="flex flex-wrap gap-1 mb-4">
-          {suggestion.tags.map((tag) => (
+          {suggestion.tags.map(tag => (
             <span
               key={tag}
               className="px-2 py-1 bg-gray-100 text-gray-600 rounded text-xs"
@@ -272,9 +268,9 @@ export default function Suggestions() {
 
   const getSummaryStats = () => {
     const total = suggestions.length;
-    const pending = suggestions.filter((s) => s.status === "pending").length;
-    const approved = suggestions.filter((s) => s.status === "approved").length;
-    const rejected = suggestions.filter((s) => s.status === "rejected").length;
+    const pending = suggestions.filter(s => s.status === "pending").length;
+    const approved = suggestions.filter(s => s.status === "approved").length;
+    const rejected = suggestions.filter(s => s.status === "rejected").length;
 
     return { total, pending, approved, rejected };
   };
@@ -347,7 +343,7 @@ export default function Suggestions() {
           <Input
             placeholder="Search suggestions..."
             value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
+            onChange={e => setSearchQuery(e.target.value)}
             className="pl-10"
           />
         </div>
@@ -389,21 +385,21 @@ export default function Suggestions() {
           </TabsTrigger>
           <TabsTrigger value="pending">
             Pending (
-            {filteredSuggestions.filter((s) => s.status === "pending").length})
+            {filteredSuggestions.filter(s => s.status === "pending").length})
           </TabsTrigger>
           <TabsTrigger value="approved">
             Approved (
-            {filteredSuggestions.filter((s) => s.status === "approved").length})
+            {filteredSuggestions.filter(s => s.status === "approved").length})
           </TabsTrigger>
           <TabsTrigger value="rejected">
             Rejected (
-            {filteredSuggestions.filter((s) => s.status === "rejected").length})
+            {filteredSuggestions.filter(s => s.status === "rejected").length})
           </TabsTrigger>
         </TabsList>
 
         <TabsContent value="all" className="space-y-4">
           {filteredSuggestions.length > 0 ? (
-            filteredSuggestions.map((suggestion) => (
+            filteredSuggestions.map(suggestion => (
               <SuggestionCard key={suggestion.id} suggestion={suggestion} />
             ))
           ) : (
@@ -440,24 +436,24 @@ export default function Suggestions() {
 
         <TabsContent value="pending" className="space-y-4">
           {filteredSuggestions
-            .filter((s) => s.status === "pending")
-            .map((suggestion) => (
+            .filter(s => s.status === "pending")
+            .map(suggestion => (
               <SuggestionCard key={suggestion.id} suggestion={suggestion} />
             ))}
         </TabsContent>
 
         <TabsContent value="approved" className="space-y-4">
           {filteredSuggestions
-            .filter((s) => s.status === "approved")
-            .map((suggestion) => (
+            .filter(s => s.status === "approved")
+            .map(suggestion => (
               <SuggestionCard key={suggestion.id} suggestion={suggestion} />
             ))}
         </TabsContent>
 
         <TabsContent value="rejected" className="space-y-4">
           {filteredSuggestions
-            .filter((s) => s.status === "rejected")
-            .map((suggestion) => (
+            .filter(s => s.status === "rejected")
+            .map(suggestion => (
               <SuggestionCard key={suggestion.id} suggestion={suggestion} />
             ))}
         </TabsContent>

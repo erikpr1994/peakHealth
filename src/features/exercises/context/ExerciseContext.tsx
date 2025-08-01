@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, ReactNode } from "react";
+
 import { FilterState } from "../types";
 
 interface ExerciseContextType {
@@ -36,10 +37,10 @@ export function ExerciseProvider({ children }: ExerciseProviderProps) {
   };
 
   const handleFilterChange = (type: keyof FilterState, value: string) => {
-    setFilters((prev) => ({
+    setFilters(prev => ({
       ...prev,
       [type]: prev[type].includes(value)
-        ? prev[type].filter((item) => item !== value)
+        ? prev[type].filter(item => item !== value)
         : [...prev[type], value],
     }));
   };

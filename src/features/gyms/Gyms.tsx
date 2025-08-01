@@ -1,7 +1,5 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
 import {
   MapPin,
   Plus,
@@ -20,17 +18,9 @@ import {
   Filter,
   Home,
 } from "lucide-react";
-import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+
 import {
   AlertDialog,
   AlertDialogAction,
@@ -42,6 +32,17 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 interface Equipment {
   id: string;
@@ -268,13 +269,13 @@ export default function Gyms() {
 
   const handleFavoriteToggle = (gymId: string) => {
     // In a real app, this would update the database
-    setFavoritedGyms((prevFavorited) => {
-      const gym = [...nearbyGyms, ...favoritedGyms].find((g) => g.id === gymId);
+    setFavoritedGyms(prevFavorited => {
+      const gym = [...nearbyGyms, ...favoritedGyms].find(g => g.id === gymId);
       if (!gym) return prevFavorited;
 
-      const isCurrentlyFavorited = prevFavorited.some((g) => g.id === gymId);
+      const isCurrentlyFavorited = prevFavorited.some(g => g.id === gymId);
       if (isCurrentlyFavorited) {
-        return prevFavorited.filter((g) => g.id !== gymId);
+        return prevFavorited.filter(g => g.id !== gymId);
       } else {
         return [...prevFavorited, { ...gym, isFavorited: true }];
       }
@@ -282,10 +283,10 @@ export default function Gyms() {
   };
 
   const handleDeleteGym = (gymId: string) => {
-    setPersonalGyms(personalGyms.filter((gym) => gym.id !== gymId));
+    setPersonalGyms(personalGyms.filter(gym => gym.id !== gymId));
   };
 
-  const filteredNearbyGyms = nearbyGyms.filter((gym) => {
+  const filteredNearbyGyms = nearbyGyms.filter(gym => {
     const matchesSearch =
       gym.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       gym.address.toLowerCase().includes(searchQuery.toLowerCase());
@@ -300,7 +301,7 @@ export default function Gyms() {
     return (
       matchesSearch &&
       matchesLocation &&
-      !favoritedGyms.some((fav) => fav.id === gym.id)
+      !favoritedGyms.some(fav => fav.id === gym.id)
     );
   });
 
@@ -361,8 +362,8 @@ export default function Gyms() {
                     <AlertDialogHeader>
                       <AlertDialogTitle>Delete Gym</AlertDialogTitle>
                       <AlertDialogDescription>
-                        Are you sure you want to delete "{gym.name}"? This
-                        action cannot be undone.
+                        Are you sure you want to delete &quot;{gym.name}&quot;?
+                        This action cannot be undone.
                       </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
@@ -522,7 +523,7 @@ export default function Gyms() {
           <Input
             placeholder="Search gyms by name or location..."
             value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
+            onChange={e => setSearchQuery(e.target.value)}
             className="pl-10"
           />
         </div>
@@ -553,7 +554,7 @@ export default function Gyms() {
               <Badge variant="secondary">{personalGyms.length}</Badge>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {personalGyms.map((gym) => (
+              {personalGyms.map(gym => (
                 <GymCard key={gym.id} gym={gym} />
               ))}
             </div>
@@ -571,7 +572,7 @@ export default function Gyms() {
               <Badge variant="secondary">{favoritedGyms.length}</Badge>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {favoritedGyms.map((gym) => (
+              {favoritedGyms.map(gym => (
                 <GymCard key={gym.id} gym={gym} />
               ))}
             </div>
@@ -590,7 +591,7 @@ export default function Gyms() {
 
           {filteredNearbyGyms.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {filteredNearbyGyms.map((gym) => (
+              {filteredNearbyGyms.map(gym => (
                 <GymCard key={gym.id} gym={gym} showJoinButton />
               ))}
             </div>

@@ -1,7 +1,5 @@
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Label } from "@/components/ui/label";
-import { Separator } from "@/components/ui/separator";
 import {
   Dialog,
   DialogContent,
@@ -9,10 +7,13 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { useExerciseFilters } from "../../hooks/useExerciseFilters";
+import { Label } from "@/components/ui/label";
+import { Separator } from "@/components/ui/separator";
+
 import { difficulties } from "../../data/difficulties";
-import { muscleGroups } from "../../data/muscleGroups";
 import { equipment } from "../../data/equipment";
+import { muscleGroups } from "../../data/muscleGroups";
+import { useExerciseFilters } from "../../hooks/useExerciseFilters";
 
 interface FilterDialogProps {
   isOpen: boolean;
@@ -37,7 +38,7 @@ export function FilterDialog({ isOpen, onClose }: FilterDialogProps) {
           <div>
             <Label className="font-semibold mb-3 block">Difficulty</Label>
             <div className="space-y-2">
-              {difficulties.map((difficulty) => (
+              {difficulties.map(difficulty => (
                 <div key={difficulty} className="flex items-center space-x-2">
                   <Checkbox
                     id={`difficulty-${difficulty}`}
@@ -60,7 +61,7 @@ export function FilterDialog({ isOpen, onClose }: FilterDialogProps) {
           <div>
             <Label className="font-semibold mb-3 block">Muscle Groups</Label>
             <div className="grid grid-cols-2 gap-2">
-              {muscleGroups.slice(0, 10).map((group) => (
+              {muscleGroups.slice(0, 10).map(group => (
                 <div key={group} className="flex items-center space-x-2">
                   <Checkbox
                     id={`muscle-${group}`}
@@ -83,7 +84,7 @@ export function FilterDialog({ isOpen, onClose }: FilterDialogProps) {
           <div>
             <Label className="font-semibold mb-3 block">Equipment</Label>
             <div className="space-y-2">
-              {equipment.slice(0, 7).map((equipmentItem) => (
+              {equipment.slice(0, 7).map(equipmentItem => (
                 <div
                   key={equipmentItem}
                   className="flex items-center space-x-2"

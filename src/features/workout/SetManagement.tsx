@@ -1,7 +1,14 @@
-import { useState, useEffect } from "react";
 import { Plus, Target, Flame, X as Failure, Zap } from "lucide-react";
+import { useState, useEffect } from "react";
+
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import {
   Select,
   SelectContent,
@@ -9,12 +16,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Badge } from "@/components/ui/badge";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
 
 export type SetType = "warmup" | "normal" | "failure" | "dropset";
 export type RepType = "fixed" | "range";
@@ -124,9 +125,9 @@ export default function SetManagement({
   // Initialize repType for any sets that don't have it defined
   useEffect(() => {
     if (!initialized) {
-      const setsNeedingInitialization = sets.filter((set) => !set.repType);
+      const setsNeedingInitialization = sets.filter(set => !set.repType);
       if (setsNeedingInitialization.length > 0) {
-        const updatedSets = sets.map((set) => ({
+        const updatedSets = sets.map(set => ({
           ...set,
           repType: set.repType || ("fixed" as RepType),
         }));
@@ -154,13 +155,13 @@ export default function SetManagement({
 
   const removeSet = (setId: string) => {
     const updatedSets = sets
-      .filter((set) => set.id !== setId)
+      .filter(set => set.id !== setId)
       .map((set, index) => ({ ...set, setNumber: index + 1 }));
     onSetsChange(updatedSets);
   };
 
   const updateSet = (setId: string, updates: Partial<WorkoutSet>) => {
-    const updatedSets = sets.map((set) => {
+    const updatedSets = sets.map(set => {
       if (set.id === setId) {
         const updatedSet = { ...set, ...updates };
 
@@ -196,7 +197,7 @@ export default function SetManagement({
       // Count how many normal sets come before this one
       const normalSetsBefore = sets
         .slice(0, index)
-        .filter((s) => s.setType === "normal").length;
+        .filter(s => s.setType === "normal").length;
       return (normalSetsBefore + 1).toString();
     } else {
       // Return letter for special sets
@@ -271,7 +272,7 @@ export default function SetManagement({
         <div className="col-span-1">WEIGHT (KG)</div>
         <div className="col-span-1">RPE</div>
         <div className="col-span-1">NOTES</div>
-        <div className="col-span-1"></div>
+        <div className="col-span-1" />
       </div>
 
       {/* Sets List */}
@@ -285,7 +286,7 @@ export default function SetManagement({
             <div className="col-span-1">
               <Popover
                 open={openPopoverId === set.id}
-                onOpenChange={(open) => setOpenPopoverId(open ? set.id : null)}
+                onOpenChange={open => setOpenPopoverId(open ? set.id : null)}
               >
                 <PopoverTrigger asChild>
                   <Button
@@ -305,7 +306,7 @@ export default function SetManagement({
                     <div className="text-xs font-medium text-gray-700 mb-2">
                       Set Type
                     </div>
-                    {setTypeOptions.map((option) => (
+                    {setTypeOptions.map(option => (
                       <Button
                         key={option.value}
                         variant="ghost"
@@ -367,7 +368,7 @@ export default function SetManagement({
                     type="number"
                     placeholder="Min"
                     value={set.repsMin || ""}
-                    onChange={(e) =>
+                    onChange={e =>
                       updateSet(set.id, {
                         repsMin: e.target.value
                           ? parseInt(e.target.value)
@@ -382,7 +383,7 @@ export default function SetManagement({
                     type="number"
                     placeholder="Max"
                     value={set.repsMax || ""}
-                    onChange={(e) =>
+                    onChange={e =>
                       updateSet(set.id, {
                         repsMax: e.target.value
                           ? parseInt(e.target.value)
@@ -398,7 +399,7 @@ export default function SetManagement({
                   type="number"
                   placeholder="10"
                   value={set.reps || ""}
-                  onChange={(e) =>
+                  onChange={e =>
                     updateSet(set.id, {
                       reps: e.target.value ? parseInt(e.target.value) : null,
                     })
@@ -415,7 +416,7 @@ export default function SetManagement({
                 type="number"
                 placeholder="0"
                 value={set.weight || ""}
-                onChange={(e) =>
+                onChange={e =>
                   updateSet(set.id, {
                     weight: e.target.value ? parseFloat(e.target.value) : null,
                   })
@@ -432,7 +433,7 @@ export default function SetManagement({
                 type="number"
                 placeholder="8"
                 value={set.rpe || ""}
-                onChange={(e) =>
+                onChange={e =>
                   updateSet(set.id, {
                     rpe: e.target.value ? parseInt(e.target.value) : null,
                   })
@@ -480,7 +481,7 @@ export default function SetManagement({
             <Target className="w-12 h-12 mx-auto text-gray-300" />
           </div>
           <p>No sets added yet</p>
-          <p className="text-sm">Click "Add Set" to get started</p>
+          <p className="text-sm">Click &quot;Add Set&quot; to get started</p>
         </div>
       )}
     </div>

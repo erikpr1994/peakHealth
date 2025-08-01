@@ -1,15 +1,17 @@
 "use client";
 
-import { useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
+import { useState } from "react";
+
 import { useAuth } from "@/features/auth/context/AuthContext";
-import { useNotifications, NotificationsBell } from "@/features/notifications";
 import { FEATURE_FLAGS, useFeatureFlag } from "@/features/feature-flags";
-import { navigationItems } from "./menuItems";
+import { useNotifications, NotificationsBell } from "@/features/notifications";
+
 import { DesktopNavigation } from "./DesktopNavigation";
+import styles from "./Header.module.css";
+import { navigationItems } from "./menuItems";
 import { SideNav } from "./SideNav";
 import { UserMenu } from "./UserMenu";
-import styles from "./Header.module.css";
 
 export default function Header() {
   const router = useRouter();

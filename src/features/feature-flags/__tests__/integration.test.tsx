@@ -1,9 +1,11 @@
-import { describe, it, expect, vi, beforeEach, Mock } from "vitest";
 import { render, screen, waitFor } from "@testing-library/react";
+import React from "react";
+import { describe, it, expect, vi, beforeEach, Mock } from "vitest";
+
+import { useAuth } from "@/features/auth/context/AuthContext";
+
 import { FeatureFlagProvider } from "../context/FeatureFlagContext";
 import { useFeatureFlag } from "../hooks/useFeatureFlag";
-import { useAuth } from "@/features/auth/context/AuthContext";
-import React from "react";
 
 // Mock external dependencies
 vi.mock("@/features/auth/context/AuthContext");
@@ -40,7 +42,15 @@ const TestComponent = ({ featureNames }: { featureNames: string[] }) => {
 
 const renderWithFlags = (
   ui: React.ReactElement,
-  apiResponse: { flags: any[]; userTypes: any[]; userGroups: any[] }
+  apiResponse: {
+    flags: Array<{
+      name: string;
+      is_enabled: boolean;
+      rollout_percentage: number;
+    }>;
+    userTypes: Array<{ typeName: string; displayName: string }>;
+    userGroups: Array<{ groupName: string; displayName: string }>;
+  }
 ) => {
   mockFetch.mockResolvedValue({
     ok: true,

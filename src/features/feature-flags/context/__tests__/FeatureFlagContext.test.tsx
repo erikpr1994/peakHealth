@@ -1,7 +1,9 @@
-import { describe, it, expect, beforeEach, Mock, vi } from "vitest";
 import { render, screen, waitFor } from "@testing-library/react";
-import { FeatureFlagProvider, useFeatureFlags } from "../FeatureFlagContext";
+import { describe, it, expect, beforeEach, Mock, vi } from "vitest";
+
 import { useAuth } from "@/features/auth/context/AuthContext";
+
+import { FeatureFlagProvider, useFeatureFlags } from "../FeatureFlagContext";
 
 // Mock all external dependencies
 vi.mock("@/lib/supabase/client");

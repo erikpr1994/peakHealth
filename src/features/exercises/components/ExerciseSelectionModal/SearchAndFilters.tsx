@@ -1,6 +1,8 @@
 import { Search } from "lucide-react";
-import { Input } from "@/components/ui/input";
+
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+
 import { exerciseCategories } from "../../data/exerciseCategories";
 
 interface SearchAndFiltersProps {
@@ -24,13 +26,13 @@ export function SearchAndFilters({
           <Input
             placeholder="Search exercises..."
             value={searchTerm}
-            onChange={(e) => onSearchChange(e.target.value)}
+            onChange={e => onSearchChange(e.target.value)}
             className="pl-10 h-11 bg-gray-50 border-gray-200 focus:bg-white transition-colors"
           />
         </div>
 
         <div className="flex flex-wrap gap-2">
-          {exerciseCategories.map((category) => (
+          {exerciseCategories.map(category => (
             <Button
               key={category}
               variant={selectedCategory === category ? "default" : "outline"}

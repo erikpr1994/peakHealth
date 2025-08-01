@@ -1,7 +1,5 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
 import {
   ArrowLeft,
   Play,
@@ -15,8 +13,11 @@ import {
   Copy,
   Trash,
 } from "lucide-react";
-import { Card } from "@/components/ui/card";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+
 import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 
 interface RoutineDetailProps {
@@ -200,8 +201,8 @@ export default function RoutineDetail({ routineId }: RoutineDetailProps) {
     100;
 
   const displayedExercises = showAllExercises
-    ? routineData.workoutDays.flatMap((day) => day.exercises)
-    : routineData.workoutDays.flatMap((day) => day.exercises).slice(0, 6);
+    ? routineData.workoutDays.flatMap(day => day.exercises)
+    : routineData.workoutDays.flatMap(day => day.exercises).slice(0, 6);
 
   return (
     <div className="w-full px-4 sm:px-6 lg:px-8 py-6">
@@ -439,7 +440,7 @@ export default function RoutineDetail({ routineId }: RoutineDetailProps) {
           Workout Days
         </h2>
         <div className="space-y-6">
-          {routineData.workoutDays.map((workout) => (
+          {routineData.workoutDays.map(workout => (
             <div
               key={workout.id}
               className="border border-gray-200 rounded-lg p-6"
@@ -472,14 +473,14 @@ export default function RoutineDetail({ routineId }: RoutineDetailProps) {
               </div>
 
               <div className="space-y-3">
-                {workout.exercises.map((exercise) => (
+                {workout.exercises.map(exercise => (
                   <div key={exercise.id} className="bg-gray-50 p-4 rounded-lg">
                     <div className="flex items-center justify-between mb-2">
                       <h4 className="font-medium text-gray-800">
                         {exercise.name}
                       </h4>
                       <div className="flex flex-wrap gap-1">
-                        {exercise.muscleGroups.map((group) => (
+                        {exercise.muscleGroups.map(group => (
                           <span
                             key={group}
                             className="px-2 py-1 bg-white text-gray-600 rounded text-xs"
@@ -491,7 +492,7 @@ export default function RoutineDetail({ routineId }: RoutineDetailProps) {
                     </div>
                     <div className="text-sm text-gray-600">
                       {exercise.sets.length} sets •{" "}
-                      {exercise.sets.map((set) => set.reps).join(", ")} reps
+                      {exercise.sets.map(set => set.reps).join(", ")} reps
                     </div>
                   </div>
                 ))}
@@ -515,7 +516,7 @@ export default function RoutineDetail({ routineId }: RoutineDetailProps) {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {displayedExercises.map((exercise) => (
+          {displayedExercises.map(exercise => (
             <div
               key={exercise.id}
               className="border border-gray-200 rounded-lg p-4"
@@ -524,7 +525,7 @@ export default function RoutineDetail({ routineId }: RoutineDetailProps) {
                 {exercise.name}
               </h4>
               <div className="flex flex-wrap gap-1 mb-2">
-                {exercise.muscleGroups.map((group) => (
+                {exercise.muscleGroups.map(group => (
                   <span
                     key={group}
                     className="px-2 py-1 bg-gray-100 text-gray-600 rounded text-xs"

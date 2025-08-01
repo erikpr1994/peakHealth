@@ -1,10 +1,12 @@
 import { Grid, List } from "lucide-react";
+
 import { Button } from "@/components/ui/button";
-import { Exercise } from "../../types";
-import { ExerciseCard } from "../shared/ExerciseCard";
-import { filterExercises } from "../../utils/filterUtils";
-import { useExerciseSearch } from "../../hooks/useExerciseSearch";
+
 import { useExerciseFilters } from "../../hooks/useExerciseFilters";
+import { useExerciseSearch } from "../../hooks/useExerciseSearch";
+import { Exercise } from "../../types";
+import { filterExercises } from "../../utils/filterUtils";
+import { ExerciseCard } from "../shared/ExerciseCard";
 
 interface ExerciseGridProps {
   exercises: Exercise[];
@@ -62,7 +64,7 @@ export function ExerciseGrid({
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 sm:gap-6">
-        {filteredExercises.map((exercise) => (
+        {filteredExercises.map(exercise => (
           <ExerciseCard
             key={exercise.id}
             exercise={exercise}

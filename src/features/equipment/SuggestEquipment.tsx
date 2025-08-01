@@ -1,10 +1,12 @@
-import { useState } from "react";
 import { ArrowLeft, Send, Plus, X, Info, AlertCircle } from "lucide-react";
-import { Card } from "@/components/ui/card";
+import { useState } from "react";
+
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import {
   Select,
   SelectContent,
@@ -12,10 +14,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Alert, AlertDescription } from "@/components/ui/alert";
-
+import { Textarea } from "@/components/ui/textarea";
 import { Page } from "@/types/app";
 
 interface SuggestEquipmentProps {
@@ -196,7 +196,7 @@ export default function SuggestEquipment({
 
   const handleRemoveWeight = (weight: number) => {
     const updatedWeights =
-      equipmentData.specs.availableWeights?.filter((w) => w !== weight) || [];
+      equipmentData.specs.availableWeights?.filter(w => w !== weight) || [];
     setEquipmentData({
       ...equipmentData,
       specs: {
@@ -222,9 +222,7 @@ export default function SuggestEquipment({
   const handleRemoveAlternateName = (name: string) => {
     setEquipmentData({
       ...equipmentData,
-      alternativeNames: equipmentData.alternativeNames.filter(
-        (n) => n !== name
-      ),
+      alternativeNames: equipmentData.alternativeNames.filter(n => n !== name),
     });
   };
 
@@ -250,12 +248,30 @@ export default function SuggestEquipment({
     onNavigate("suggestions");
   };
 
-  const updateSpecs = (key: keyof EquipmentSpecs, value: any) => {
+  const updateSpecs = (
+    key: keyof EquipmentSpecs,
+    value: string | number | boolean | EquipmentSpecs[keyof EquipmentSpecs]
+  ) => {
     setEquipmentData({
       ...equipmentData,
       specs: {
         ...equipmentData.specs,
         [key]: value,
+      },
+    });
+  };
+
+  const updateWeightRange = (
+    updates: Partial<{ min: number; max: number; increment: number }>
+  ) => {
+    setEquipmentData({
+      ...equipmentData,
+      specs: {
+        ...equipmentData.specs,
+        weightRange: {
+          ...equipmentData.specs.weightRange,
+          ...updates,
+        } as { min: number; max: number; increment: number },
       },
     });
   };
@@ -313,7 +329,7 @@ export default function SuggestEquipment({
               <Input
                 id="name"
                 value={equipmentData.name}
-                onChange={(e) =>
+                onChange={e =>
                   setEquipmentData({ ...equipmentData, name: e.target.value })
                 }
                 placeholder="e.g., Olympic Barbell, Chest Press"
@@ -338,7 +354,7 @@ export default function SuggestEquipment({
                   <SelectValue placeholder="Select category" />
                 </SelectTrigger>
                 <SelectContent>
-                  {categories.map((cat) => (
+                  {categories.map(cat => (
                     <SelectItem key={cat.id} value={cat.id}>
                       <div>
                         <div className="font-medium">{cat.name}</div>
@@ -357,7 +373,7 @@ export default function SuggestEquipment({
               <Input
                 id="brand"
                 value={equipmentData.brand}
-                onChange={(e) =>
+                onChange={e =>
                   setEquipmentData({ ...equipmentData, brand: e.target.value })
                 }
                 placeholder="e.g., Rogue, Hammer Strength"
@@ -370,7 +386,7 @@ export default function SuggestEquipment({
               <Input
                 id="model"
                 value={equipmentData.model}
-                onChange={(e) =>
+                onChange={e =>
                   setEquipmentData({ ...equipmentData, model: e.target.value })
                 }
                 placeholder="e.g., Ohio Bar, ISO-Lateral"
@@ -385,7 +401,7 @@ export default function SuggestEquipment({
               <Input
                 id="manufacturer"
                 value={equipmentData.manufacturer}
-                onChange={(e) =>
+                onChange={e =>
                   setEquipmentData({
                     ...equipmentData,
                     manufacturer: e.target.value,
@@ -401,7 +417,7 @@ export default function SuggestEquipment({
               <Input
                 id="estimatedPrice"
                 value={equipmentData.estimatedPrice}
-                onChange={(e) =>
+                onChange={e =>
                   setEquipmentData({
                     ...equipmentData,
                     estimatedPrice: e.target.value,
@@ -417,7 +433,7 @@ export default function SuggestEquipment({
               <Textarea
                 id="description"
                 value={equipmentData.description}
-                onChange={(e) =>
+                onChange={e =>
                   setEquipmentData({
                     ...equipmentData,
                     description: e.target.value,
@@ -434,7 +450,7 @@ export default function SuggestEquipment({
               <Input
                 id="imageUrl"
                 value={equipmentData.imageUrl}
-                onChange={(e) =>
+                onChange={e =>
                   setEquipmentData({
                     ...equipmentData,
                     imageUrl: e.target.value,
@@ -463,11 +479,9 @@ export default function SuggestEquipment({
               <Input
                 id="alternateName"
                 value={newAlternateName}
-                onChange={(e) => setNewAlternateName(e.target.value)}
+                onChange={e => setNewAlternateName(e.target.value)}
                 placeholder="e.g., T-Bar Row, Cable Cross"
-                onKeyPress={(e) =>
-                  e.key === "Enter" && handleAddAlternateName()
-                }
+                onKeyPress={e => e.key === "Enter" && handleAddAlternateName()}
               />
               <Button type="button" onClick={handleAddAlternateName}>
                 <Plus className="w-4 h-4" />
@@ -479,7 +493,7 @@ export default function SuggestEquipment({
             <div>
               <Label>Alternative Names</Label>
               <div className="flex flex-wrap gap-2 mt-2">
-                {equipmentData.alternativeNames.map((name) => (
+                {equipmentData.alternativeNames.map(name => (
                   <Badge
                     key={name}
                     variant="secondary"
@@ -528,7 +542,7 @@ export default function SuggestEquipment({
                   <Label htmlFor="resistanceType">Resistance Type</Label>
                   <Select
                     value={equipmentData.specs.resistanceType}
-                    onValueChange={(value) =>
+                    onValueChange={value =>
                       updateSpecs("resistanceType", value)
                     }
                   >
@@ -536,7 +550,7 @@ export default function SuggestEquipment({
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      {resistanceTypes.map((type) => (
+                      {resistanceTypes.map(type => (
                         <SelectItem key={type.id} value={type.id}>
                           <div>
                             <div className="font-medium">{type.name}</div>
@@ -554,7 +568,7 @@ export default function SuggestEquipment({
                   <Label htmlFor="resistanceCurve">Resistance Curve</Label>
                   <Select
                     value={equipmentData.specs.resistanceCurve}
-                    onValueChange={(value) =>
+                    onValueChange={value =>
                       updateSpecs("resistanceCurve", value)
                     }
                   >
@@ -562,7 +576,7 @@ export default function SuggestEquipment({
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      {resistanceCurves.map((curve) => (
+                      {resistanceCurves.map(curve => (
                         <SelectItem key={curve.id} value={curve.id}>
                           <div>
                             <div className="font-medium">{curve.name}</div>
@@ -584,9 +598,8 @@ export default function SuggestEquipment({
                     id="minWeight"
                     type="number"
                     value={equipmentData.specs.weightRange?.min || ""}
-                    onChange={(e) =>
-                      updateSpecs("weightRange", {
-                        ...equipmentData.specs.weightRange,
+                    onChange={e =>
+                      updateWeightRange({
                         min: parseFloat(e.target.value) || 0,
                       })
                     }
@@ -600,9 +613,8 @@ export default function SuggestEquipment({
                     id="maxWeight"
                     type="number"
                     value={equipmentData.specs.weightRange?.max || ""}
-                    onChange={(e) =>
-                      updateSpecs("weightRange", {
-                        ...equipmentData.specs.weightRange,
+                    onChange={e =>
+                      updateWeightRange({
                         max: parseFloat(e.target.value) || 100,
                       })
                     }
@@ -617,9 +629,8 @@ export default function SuggestEquipment({
                     type="number"
                     step="0.5"
                     value={equipmentData.specs.weightRange?.increment || ""}
-                    onChange={(e) =>
-                      updateSpecs("weightRange", {
-                        ...equipmentData.specs.weightRange,
+                    onChange={e =>
+                      updateWeightRange({
                         increment: parseFloat(e.target.value) || 5,
                       })
                     }
@@ -641,7 +652,7 @@ export default function SuggestEquipment({
                     type="number"
                     step="0.01"
                     value={equipmentData.specs.conversionFactor || ""}
-                    onChange={(e) =>
+                    onChange={e =>
                       updateSpecs(
                         "conversionFactor",
                         parseFloat(e.target.value) || 1.0
@@ -662,7 +673,7 @@ export default function SuggestEquipment({
                     type="number"
                     step="0.1"
                     value={equipmentData.specs.pulleyRatio || ""}
-                    onChange={(e) =>
+                    onChange={e =>
                       updateSpecs(
                         "pulleyRatio",
                         parseFloat(e.target.value) || 1.0
@@ -682,7 +693,7 @@ export default function SuggestEquipment({
                     type="number"
                     step="0.01"
                     value={equipmentData.specs.leverageRatio || ""}
-                    onChange={(e) =>
+                    onChange={e =>
                       updateSpecs(
                         "leverageRatio",
                         parseFloat(e.target.value) || 1.0
@@ -739,9 +750,9 @@ export default function SuggestEquipment({
                       type="number"
                       step="0.5"
                       value={newWeight}
-                      onChange={(e) => setNewWeight(e.target.value)}
+                      onChange={e => setNewWeight(e.target.value)}
                       placeholder="Weight in lbs"
-                      onKeyPress={(e) => e.key === "Enter" && handleAddWeight()}
+                      onKeyPress={e => e.key === "Enter" && handleAddWeight()}
                     />
                     <Button type="button" onClick={handleAddWeight}>
                       <Plus className="w-4 h-4" />
@@ -758,7 +769,7 @@ export default function SuggestEquipment({
                         {equipmentData.specs.availableWeights.length})
                       </Label>
                       <div className="flex flex-wrap gap-2 mt-2 p-4 bg-gray-50 rounded-lg max-h-40 overflow-y-auto">
-                        {equipmentData.specs.availableWeights.map((weight) => (
+                        {equipmentData.specs.availableWeights.map(weight => (
                           <Badge
                             key={weight}
                             variant="secondary"
@@ -788,7 +799,7 @@ export default function SuggestEquipment({
                 <Textarea
                   id="notes"
                   value={equipmentData.specs.notes || ""}
-                  onChange={(e) => updateSpecs("notes", e.target.value)}
+                  onChange={e => updateSpecs("notes", e.target.value)}
                   placeholder="Any additional specifications, unique features, maintenance notes, or usage tips..."
                   className="mt-2"
                   rows={6}
@@ -810,7 +821,7 @@ export default function SuggestEquipment({
               <Input
                 id="whereFound"
                 value={equipmentData.whereFound}
-                onChange={(e) =>
+                onChange={e =>
                   setEquipmentData({
                     ...equipmentData,
                     whereFound: e.target.value,
@@ -828,7 +839,7 @@ export default function SuggestEquipment({
               <Textarea
                 id="reasonForSuggestion"
                 value={equipmentData.reasonForSuggestion}
-                onChange={(e) =>
+                onChange={e =>
                   setEquipmentData({
                     ...equipmentData,
                     reasonForSuggestion: e.target.value,

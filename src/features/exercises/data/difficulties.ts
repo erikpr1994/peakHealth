@@ -1,7 +1,3 @@
-export const difficulties = [
-  "Beginner", 
-  "Intermediate", 
-  "Advanced"
-] as const;
+export const difficulties = ["Beginner", "Intermediate", "Advanced"] as const;
 
-export type Difficulty = typeof difficulties[number]; 
+export type Difficulty = (typeof difficulties)[number];

@@ -1,7 +1,8 @@
 "use client";
 
-import RoutineDetail from "@/features/routines/RoutineDetail";
 import { useParams } from "next/navigation";
+
+import RoutineDetail from "@/features/routines/RoutineDetail";
 
 export default function RoutineDetailPage() {
   const { routineId } = useParams();

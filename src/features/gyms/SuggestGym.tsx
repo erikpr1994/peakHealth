@@ -1,20 +1,12 @@
+import { ArrowLeft, Send, MapPin, Clock, AlertCircle } from "lucide-react";
 import { useState } from "react";
-import {
-  ArrowLeft,
-  Send,
-  MapPin,
-  Clock,
-  Phone,
-  Globe,
-  Star,
-  AlertCircle,
-} from "lucide-react";
-import { Card } from "@/components/ui/card";
+
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { Checkbox } from "@/components/ui/checkbox";
 import {
   Select,
   SelectContent,
@@ -22,7 +14,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Textarea } from "@/components/ui/textarea";
 
 type Page =
   | "dashboard"
@@ -224,28 +216,28 @@ export default function SuggestGym({ onNavigate }: SuggestGymProps) {
   ];
 
   const handleAmenityToggle = (amenity: string) => {
-    setGymData((prev) => ({
+    setGymData(prev => ({
       ...prev,
       amenities: prev.amenities.includes(amenity)
-        ? prev.amenities.filter((a) => a !== amenity)
+        ? prev.amenities.filter(a => a !== amenity)
         : [...prev.amenities, amenity],
     }));
   };
 
   const handleMembershipToggle = (membership: string) => {
-    setGymData((prev) => ({
+    setGymData(prev => ({
       ...prev,
       membershipTypes: prev.membershipTypes.includes(membership)
-        ? prev.membershipTypes.filter((m) => m !== membership)
+        ? prev.membershipTypes.filter(m => m !== membership)
         : [...prev.membershipTypes, membership],
     }));
   };
 
   const handleSpecialtyToggle = (specialty: string) => {
-    setGymData((prev) => ({
+    setGymData(prev => ({
       ...prev,
       specialties: prev.specialties.includes(specialty)
-        ? prev.specialties.filter((s) => s !== specialty)
+        ? prev.specialties.filter(s => s !== specialty)
         : [...prev.specialties, specialty],
     }));
   };
@@ -261,7 +253,7 @@ export default function SuggestGym({ onNavigate }: SuggestGymProps) {
     field: "open" | "close" | "closed",
     value: string | boolean
   ) => {
-    setGymData((prev) => ({
+    setGymData(prev => ({
       ...prev,
       operatingHours: {
         ...prev.operatingHours,
@@ -324,9 +316,7 @@ export default function SuggestGym({ onNavigate }: SuggestGymProps) {
               <Input
                 id="name"
                 value={gymData.name}
-                onChange={(e) =>
-                  setGymData({ ...gymData, name: e.target.value })
-                }
+                onChange={e => setGymData({ ...gymData, name: e.target.value })}
                 placeholder="e.g., Gold's Gym, CrossFit Downtown"
                 className="mt-2"
               />
@@ -336,7 +326,7 @@ export default function SuggestGym({ onNavigate }: SuggestGymProps) {
               <Label htmlFor="type">Gym Type *</Label>
               <Select
                 value={gymData.type}
-                onValueChange={(value: any) =>
+                onValueChange={(value: GymSuggestion["type"]) =>
                   setGymData({ ...gymData, type: value })
                 }
               >
@@ -344,7 +334,7 @@ export default function SuggestGym({ onNavigate }: SuggestGymProps) {
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  {gymTypes.map((type) => (
+                  {gymTypes.map(type => (
                     <SelectItem key={type.id} value={type.id}>
                       <div>
                         <div className="font-medium">{type.name}</div>
@@ -362,7 +352,7 @@ export default function SuggestGym({ onNavigate }: SuggestGymProps) {
               <Label htmlFor="priceRange">Price Range</Label>
               <Select
                 value={gymData.priceRange}
-                onValueChange={(value: any) =>
+                onValueChange={(value: GymSuggestion["priceRange"]) =>
                   setGymData({ ...gymData, priceRange: value })
                 }
               >
@@ -370,7 +360,7 @@ export default function SuggestGym({ onNavigate }: SuggestGymProps) {
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  {priceRanges.map((range) => (
+                  {priceRanges.map(range => (
                     <SelectItem key={range.id} value={range.id}>
                       <div>
                         <div className="font-medium">{range.name}</div>
@@ -389,7 +379,7 @@ export default function SuggestGym({ onNavigate }: SuggestGymProps) {
               <Textarea
                 id="description"
                 value={gymData.description}
-                onChange={(e) =>
+                onChange={e =>
                   setGymData({ ...gymData, description: e.target.value })
                 }
                 placeholder="Describe the gym, its atmosphere, target clientele, and what makes it unique..."
@@ -413,7 +403,7 @@ export default function SuggestGym({ onNavigate }: SuggestGymProps) {
               <Input
                 id="address"
                 value={gymData.address}
-                onChange={(e) =>
+                onChange={e =>
                   setGymData({ ...gymData, address: e.target.value })
                 }
                 placeholder="123 Fitness Street"
@@ -426,9 +416,7 @@ export default function SuggestGym({ onNavigate }: SuggestGymProps) {
               <Input
                 id="city"
                 value={gymData.city}
-                onChange={(e) =>
-                  setGymData({ ...gymData, city: e.target.value })
-                }
+                onChange={e => setGymData({ ...gymData, city: e.target.value })}
                 placeholder="San Francisco"
                 className="mt-2"
               />
@@ -439,7 +427,7 @@ export default function SuggestGym({ onNavigate }: SuggestGymProps) {
               <Input
                 id="state"
                 value={gymData.state}
-                onChange={(e) =>
+                onChange={e =>
                   setGymData({ ...gymData, state: e.target.value })
                 }
                 placeholder="CA"
@@ -452,7 +440,7 @@ export default function SuggestGym({ onNavigate }: SuggestGymProps) {
               <Input
                 id="zipCode"
                 value={gymData.zipCode}
-                onChange={(e) =>
+                onChange={e =>
                   setGymData({ ...gymData, zipCode: e.target.value })
                 }
                 placeholder="94105"
@@ -472,7 +460,7 @@ export default function SuggestGym({ onNavigate }: SuggestGymProps) {
               <Input
                 id="phone"
                 value={gymData.phone}
-                onChange={(e) =>
+                onChange={e =>
                   setGymData({ ...gymData, phone: e.target.value })
                 }
                 placeholder="(555) 123-4567"
@@ -485,7 +473,7 @@ export default function SuggestGym({ onNavigate }: SuggestGymProps) {
               <Input
                 id="website"
                 value={gymData.website}
-                onChange={(e) =>
+                onChange={e =>
                   setGymData({ ...gymData, website: e.target.value })
                 }
                 placeholder="https://www.gymname.com"
@@ -499,7 +487,7 @@ export default function SuggestGym({ onNavigate }: SuggestGymProps) {
                 id="email"
                 type="email"
                 value={gymData.email}
-                onChange={(e) =>
+                onChange={e =>
                   setGymData({ ...gymData, email: e.target.value })
                 }
                 placeholder="info@gymname.com"
@@ -517,12 +505,12 @@ export default function SuggestGym({ onNavigate }: SuggestGymProps) {
           </h3>
 
           <div className="space-y-4">
-            {days.map((day) => (
+            {days.map(day => (
               <div key={day} className="flex items-center gap-4">
                 <div className="w-24 text-sm font-medium capitalize">{day}</div>
                 <Checkbox
                   checked={!gymData.operatingHours[day].closed}
-                  onCheckedChange={(checked) =>
+                  onCheckedChange={checked =>
                     updateOperatingHours(day, "closed", !checked)
                   }
                 />
@@ -531,7 +519,7 @@ export default function SuggestGym({ onNavigate }: SuggestGymProps) {
                     <Input
                       type="time"
                       value={gymData.operatingHours[day].open}
-                      onChange={(e) =>
+                      onChange={e =>
                         updateOperatingHours(day, "open", e.target.value)
                       }
                       className="w-24"
@@ -540,7 +528,7 @@ export default function SuggestGym({ onNavigate }: SuggestGymProps) {
                     <Input
                       type="time"
                       value={gymData.operatingHours[day].close}
-                      onChange={(e) =>
+                      onChange={e =>
                         updateOperatingHours(day, "close", e.target.value)
                       }
                       className="w-24"
@@ -559,7 +547,7 @@ export default function SuggestGym({ onNavigate }: SuggestGymProps) {
           <h3 className="text-lg font-semibold mb-6">Amenities & Features</h3>
 
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
-            {commonAmenities.map((amenity) => (
+            {commonAmenities.map(amenity => (
               <div key={amenity} className="flex items-center space-x-2">
                 <Checkbox
                   id={amenity}
@@ -579,7 +567,7 @@ export default function SuggestGym({ onNavigate }: SuggestGymProps) {
           <h3 className="text-lg font-semibold mb-6">Membership Options</h3>
 
           <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-            {membershipOptions.map((membership) => (
+            {membershipOptions.map(membership => (
               <div key={membership} className="flex items-center space-x-2">
                 <Checkbox
                   id={membership}
@@ -601,7 +589,7 @@ export default function SuggestGym({ onNavigate }: SuggestGymProps) {
           </h3>
 
           <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-            {specialtyAreas.map((specialty) => (
+            {specialtyAreas.map(specialty => (
               <div key={specialty} className="flex items-center space-x-2">
                 <Checkbox
                   id={specialty}
@@ -622,7 +610,7 @@ export default function SuggestGym({ onNavigate }: SuggestGymProps) {
 
           <Textarea
             value={gymData.reasonForSuggestion}
-            onChange={(e) =>
+            onChange={e =>
               setGymData({ ...gymData, reasonForSuggestion: e.target.value })
             }
             placeholder="Help our team understand why this gym should be added. Is it popular in your area? Does it offer unique services? Would it benefit the community?"
