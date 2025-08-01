@@ -945,7 +945,7 @@ export default function Performance() {
                         Consistency Achievement
                       </h4>
                       <p className="text-sm text-green-700">
-                        You've maintained a 15-day workout streak! This
+                        You&apos;ve maintained a 15-day workout streak! This
                         consistency is key to reaching your fitness goals.
                       </p>
                     </div>

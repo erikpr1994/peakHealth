@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState } from "react";
-import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
@@ -16,14 +15,10 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
 import {
-  Settings,
   Bell,
   Globe,
-  Moon,
-  Volume2,
   Shield,
   Database,
-  Smartphone,
   Users,
   Dumbbell,
   TestTube2,
@@ -47,7 +42,7 @@ export default function AppSettings({
   showWelcomeScreen,
   onToggleWelcomeScreen,
 }: AppSettingsProps) {
-  const router = useRouter();
+
   // Mock settings state
   const [settings, setSettings] = useState({
     notifications: true,

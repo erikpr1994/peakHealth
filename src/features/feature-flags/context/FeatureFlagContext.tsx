@@ -10,6 +10,7 @@ import React, {
 } from "react";
 import { useAuth } from "@/features/auth/context/AuthContext";
 import { featureFlagMonitor } from "../lib/monitoring";
+import { featureFlagCache } from "../lib/cache";
 import {
   FeatureFlagContextType,
   UserFeatureFlag,
@@ -84,7 +85,7 @@ export function FeatureFlagProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     loadUserData();
-  }, [user, loadUserData]);
+  }, [user]);
 
   const isEnabled = (featureName: string): boolean => {
     const flag = flags[featureName];

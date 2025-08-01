@@ -2,7 +2,7 @@ import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
 export async function middleware(request: NextRequest) {
-  let response = NextResponse.next({
+  const response = NextResponse.next({
     request: {
       headers: request.headers,
     },
@@ -28,7 +28,7 @@ export async function middleware(request: NextRequest) {
 
   // Check if user is authenticated by getting the session
   // This is used for route protection, not for user data access
-  const { data: { session } } = await supabase.auth.getSession();
+  await supabase.auth.getSession();
   
   // If you need authenticated user data in middleware, use getUser() instead:
   // const { data: { user }, error } = await supabase.auth.getUser();

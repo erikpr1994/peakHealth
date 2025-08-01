@@ -11,7 +11,6 @@ import {
   Download,
   DollarSign,
   Camera,
-  Check,
 } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -36,12 +35,12 @@ interface SettingsProps {
 interface SidebarItem {
   id: string;
   name: string;
-  icon: React.ComponentType<any>;
+  icon: React.ComponentType<{ className?: string }>;
   active?: boolean;
   badge?: string;
 }
 
-export default function Settings({ onNavigate }: SettingsProps) {
+export default function Settings({ onNavigate: _onNavigate }: SettingsProps) {
   const [activeSection, setActiveSection] = useState("profile");
   const [fitnessGoals, setFitnessGoals] = useState([
     "Build Strength",
@@ -387,7 +386,7 @@ export default function Settings({ onNavigate }: SettingsProps) {
             </div>
 
             <p className="text-indigo-100 mb-8">
-              We're working on exciting new features to enhance your fitness
+              We&apos;re working on exciting new features to enhance your fitness
               journey. Stay tuned!
             </p>
 

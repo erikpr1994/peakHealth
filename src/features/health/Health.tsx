@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import {
   Plus,
   TrendingUp,
@@ -10,7 +9,6 @@ import {
   Target,
   Calendar,
   Scale,
-  Ruler,
   Activity,
   Heart,
   Droplets,
@@ -20,7 +18,6 @@ import {
   Edit,
   Trash,
   Download,
-  Upload,
   Dumbbell,
 } from "lucide-react";
 import { Card } from "@/components/ui/card";
@@ -104,7 +101,6 @@ interface Goal {
 }
 
 export default function Health() {
-  const router = useRouter();
   const [activeTab, setActiveTab] = useState("overview");
   const [isAddEntryOpen, setIsAddEntryOpen] = useState(false);
   const [isAddGoalOpen, setIsAddGoalOpen] = useState(false);
@@ -1134,7 +1130,7 @@ export default function Health() {
                     <div className="text-3xl font-bold text-gray-900 mb-2">
                       {latestEntry.vitals.waterIntake}L
                     </div>
-                    <div className="text-sm text-gray-600">Today's intake</div>
+                    <div className="text-sm text-gray-600">Today&apos;s intake</div>
                   </Card>
 
                   {latestEntry.vitals.bodyTemperature && (

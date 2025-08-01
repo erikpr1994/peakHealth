@@ -42,7 +42,7 @@ interface ClubEvent {
 export default function Dashboard() {
   const router = useRouter();
   const [showConflictModal, setShowConflictModal] = useState(false);
-  const [selectedEvent, setSelectedEvent] = useState<ClubEvent | null>(null);
+  const [selectedEvent] = useState<ClubEvent | null>(null);
 
   // Mock data for weekly progress
   const weeklyData = [

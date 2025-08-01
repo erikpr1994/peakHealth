@@ -242,7 +242,7 @@ export default function WelcomeOnboarding({
     const currentStep = ONBOARDING_FLOW[currentStepIndex];
 
     // Store the response in onboarding data
-    let updatedData = { ...onboardingData };
+    const updatedData = { ...onboardingData };
 
     switch (currentStep.id) {
       case "welcome":
@@ -340,7 +340,7 @@ export default function WelcomeOnboarding({
             <h1 className="text-2xl font-bold text-gray-900">Peak Health</h1>
           </div>
           <p className="text-gray-600">
-            Let's personalize your fitness journey
+            Let&apos;s personalize your fitness journey
           </p>
 
           {/* Progress Bar */}
@@ -420,7 +420,7 @@ export default function WelcomeOnboarding({
                           ONBOARDING_FLOW[currentStepIndex]?.id ===
                             "workout-types") && (
                           <p className="text-xs text-gray-500 mt-2">
-                            💡 You can select multiple options. Click "Continue"
+                            💡 You can select multiple options. Click &quot;Continue&quot;
                             when done.
                           </p>
                         )}

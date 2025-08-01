@@ -80,7 +80,7 @@ export const NotificationsProvider: React.FC<NotificationsProviderProps> = ({
       if (saved) {
         const parsed = JSON.parse(saved);
         // Convert timestamp strings back to Date objects
-        return parsed.map((notif: any) => ({
+        return parsed.map((notif: { timestamp: string; [key: string]: unknown }) => ({
           ...notif,
           timestamp: new Date(notif.timestamp),
         }));
