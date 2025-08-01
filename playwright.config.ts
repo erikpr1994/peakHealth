@@ -1,14 +1,12 @@
 import { defineConfig, devices } from '@playwright/test';
 
-import { globalSetup, globalTeardown } from './e2e/setup/supabase-setup';
-
 /**
  * @see https://playwright.dev/docs/test-configuration
  */
 export default defineConfig({
   testDir: './e2e',
-  globalSetup,
-  globalTeardown,
+  globalSetup: './e2e/setup/supabase-setup.ts',
+  globalTeardown: './e2e/setup/supabase-setup.ts',
   /* Run tests in files in parallel */
   fullyParallel: true,
   /* Fail the build on CI if you accidentally left test.only in the source code. */
