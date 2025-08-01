@@ -1,0 +1,72 @@
+.container {
+  width: 100%;
+  padding: 1.5rem;
+  max-width: none;
+}
+
+@media (min-width: 640px) {
+  .container {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .container {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+}
+
+.header {
+  margin-bottom: 2rem;
+}
+
+.title {
+  font-size: 1.875rem;
+  font-weight: 700;
+  color: #1f2937;
+}
+
+.subtitle {
+  color: #6b7280;
+  margin-top: 0.5rem;
+}
+
+.mainContent {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+}
+
+@media (min-width: 1024px) {
+  .mainContent {
+    grid-template-columns: 2fr 1fr;
+  }
+}
+
+.calendarSection {
+  grid-column: 1;
+}
+
+@media (min-width: 1024px) {
+  .calendarSection {
+    grid-column: 1;
+  }
+}
+
+.calendarCard {
+  padding: 1.5rem;
+}
+
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+@media (min-width: 1024px) {
+  .sidebar {
+    grid-column: 2;
+  }
+} 

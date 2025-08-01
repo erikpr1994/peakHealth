@@ -1,0 +1,128 @@
+.card {
+  padding: 0.75rem;
+  border-radius: 0.5rem;
+  border: 1px solid #e5e7eb;
+  transition: border-color 0.2s;
+}
+
+.card.default {
+  background-color: white;
+}
+
+.card.default:hover {
+  border-color: #d1d5db;
+}
+
+.card.today {
+  background-color: #eef2ff;
+  border-color: #c7d2fe;
+}
+
+.header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+
+.content {
+  flex: 1;
+}
+
+.titleSection {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.25rem;
+}
+
+.title {
+  font-weight: 500;
+  color: #111827;
+}
+
+.timeBadge {
+  border: 0;
+}
+
+.badges {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.typeBadge {
+  border: 0;
+}
+
+.difficultyBadge {
+  font-size: 0.75rem;
+}
+
+.actions {
+  display: flex;
+  gap: 0.25rem;
+}
+
+.actionButton {
+  width: 1.75rem;
+  height: 1.75rem;
+  padding: 0;
+}
+
+.actionIcon {
+  width: 0.75rem;
+  height: 0.75rem;
+  color: #6b7280;
+}
+
+.deleteIcon {
+  width: 0.75rem;
+  height: 0.75rem;
+  color: #ef4444;
+}
+
+.details {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0.5rem;
+  font-size: 0.75rem;
+  color: #6b7280;
+  margin-bottom: 0.5rem;
+}
+
+.detailItem {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.detailItem:last-child {
+  justify-content: flex-end;
+}
+
+.detailIcon {
+  width: 0.75rem;
+  height: 0.75rem;
+}
+
+.detailText {
+  font-size: 0.75rem;
+}
+
+.calories {
+  font-size: 0.75rem;
+  color: #6b7280;
+  margin-bottom: 0.5rem;
+}
+
+.startButton {
+  width: 100%;
+  margin-top: 0.5rem;
+}
+
+.startIcon {
+  width: 0.75rem;
+  height: 0.75rem;
+  margin-right: 0.5rem;
+} 

@@ -1,0 +1,97 @@
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+@media (min-width: 768px) {
+  .statsGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .statsGrid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.statCard {
+  padding: 1.5rem;
+}
+
+.statContent {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.statInfo {
+  flex: 1;
+}
+
+.statLabel {
+  font-size: 0.875rem;
+  color: #6b7280;
+  margin: 0;
+}
+
+.statValue {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #111827;
+  margin: 0.25rem 0;
+}
+
+.statDescription {
+  font-size: 0.75rem;
+  color: #6b7280;
+  margin: 0;
+}
+
+.statIcon {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.statCard:nth-child(1) .statIcon {
+  background-color: #eef2ff;
+}
+
+.statCard:nth-child(1) .icon {
+  color: #4f46e5;
+}
+
+.statCard:nth-child(2) .statIcon {
+  background-color: #fef3c7;
+}
+
+.statCard:nth-child(2) .icon {
+  color: #f59e0b;
+}
+
+.statCard:nth-child(3) .statIcon {
+  background-color: #dcfce7;
+}
+
+.statCard:nth-child(3) .icon {
+  color: #16a34a;
+}
+
+.statCard:nth-child(4) .statIcon {
+  background-color: #f3e8ff;
+}
+
+.statCard:nth-child(4) .icon {
+  color: #9333ea;
+}
+
+.icon {
+  width: 1.5rem;
+  height: 1.5rem;
+} 

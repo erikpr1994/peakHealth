@@ -1,0 +1,65 @@
+.navigation {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+}
+
+.leftSection {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #1f2937;
+}
+
+.controls {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.navButton {
+  width: 2rem;
+  height: 2rem;
+  padding: 0;
+}
+
+.icon {
+  width: 1rem;
+  height: 1rem;
+}
+
+.todayButton {
+  margin-left: 0.5rem;
+}
+
+.viewModeSelector {
+  display: flex;
+  gap: 0.25rem;
+  background-color: #f3f4f6;
+  border-radius: 0.5rem;
+  padding: 0.25rem;
+}
+
+.viewModeButton {
+  padding: 0.25rem 0.75rem;
+  font-size: 0.875rem;
+}
+
+.viewModeButton.active {
+  background-color: white;
+  color: #111827;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+.viewModeButton:not(.active) {
+  color: #6b7280;
+}
+
+.viewModeButton:not(.active):hover {
+  color: #111827;
+} 
