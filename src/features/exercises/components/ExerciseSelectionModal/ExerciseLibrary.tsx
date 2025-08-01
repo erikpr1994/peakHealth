@@ -1,6 +1,8 @@
 import { ChevronRight, Info, Star } from 'lucide-react';
 
+import { useExerciseFilters } from '../../hooks/useExerciseFilters';
 import { Exercise } from '../../types';
+import { filterExercises } from '../../utils/filterUtils';
 
 import { SearchAndFilters } from './SearchAndFilters';
 
@@ -25,20 +27,20 @@ export const ExerciseLibrary = ({
   onSearchChange,
   onCategoryChange,
 }: ExerciseLibraryProps) => {
+  const { filters } = useExerciseFilters();
+
   // Helper function to get the main variant
   const getMainVariant = (exercise: Exercise) => {
     return exercise.variants.find(v => v.id === exercise.mainVariantId);
   };
 
-  // Filter exercises based on search term and category
-  const filteredExercises = exercises.filter(exercise => {
-    const matchesSearch = exercise.name
-      .toLowerCase()
-      .includes(searchTerm.toLowerCase());
-    const matchesCategory =
-      selectedCategory === 'All' || exercise.category === selectedCategory;
-    return matchesSearch && matchesCategory;
-  });
+  // Use advanced filtering with all filters
+  const filteredExercises = filterExercises(
+    exercises,
+    searchTerm,
+    selectedCategory,
+    filters
+  );
 
   return (
     <div className="w-2/3 border-r border-gray-100 flex flex-col bg-gray-50/50 overflow-hidden">

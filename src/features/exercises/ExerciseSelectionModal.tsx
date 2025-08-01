@@ -4,6 +4,7 @@ import { useState } from 'react';
 
 import { ExerciseLibrary } from './components/ExerciseSelectionModal/ExerciseLibrary';
 import { ExercisePreview } from './components/ExerciseSelectionModal/ExercisePreview';
+import { ExerciseProvider } from './context/ExerciseContext';
 import { useExerciseSelection } from './hooks/useExerciseSelection';
 import { mockExercises } from './types';
 import { Exercise, ExerciseVariant } from './types';
@@ -24,7 +25,7 @@ interface ExerciseSelectionModalProps {
   onSelectExercise: (exercise: Exercise, variant?: ExerciseVariant) => void;
 }
 
-const ExerciseSelectionModal = ({
+const ExerciseSelectionModalContent = ({
   isOpen,
   onClose,
   onSelectExercise,
@@ -97,6 +98,14 @@ const ExerciseSelectionModal = ({
         </div>
       </DialogContent>
     </Dialog>
+  );
+};
+
+const ExerciseSelectionModal = (props: ExerciseSelectionModalProps) => {
+  return (
+    <ExerciseProvider>
+      <ExerciseSelectionModalContent {...props} />
+    </ExerciseProvider>
   );
 };
 
