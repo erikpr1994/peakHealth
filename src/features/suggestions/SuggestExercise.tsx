@@ -410,7 +410,7 @@ export default function SuggestExercise({ onNavigate }: SuggestExerciseProps) {
               <Label htmlFor="difficulty">Difficulty Level</Label>
               <Select
                 value={exerciseData.difficulty}
-                onValueChange={(value: any) =>
+                onValueChange={(value: ExerciseSuggestion["difficulty"]) =>
                   setExerciseData({ ...exerciseData, difficulty: value })
                 }
               >

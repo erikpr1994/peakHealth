@@ -372,10 +372,10 @@ export default function TrainerAndClubs() {
               </CardHeader>
               <CardContent>
                 <p className="text-amber-700">
-                  You're currently enrolled in a professional training program
+                  You&apos;re currently enrolled in a professional training program
                   with {userTrainer.name}. Your trainer will manage your workout
                   routines to ensure optimal progress and safety. Routine
-                  creation is temporarily disabled while you're under
+                  creation is temporarily disabled while you&apos;re under
                   professional guidance.
                 </p>
               </CardContent>
@@ -546,7 +546,7 @@ export default function TrainerAndClubs() {
               <CardHeader>
                 <CardTitle>No Trainer Assigned</CardTitle>
                 <CardDescription>
-                  You don't currently have a personal trainer. Consider hiring
+                  You don&apos;t currently have a personal trainer. Consider hiring
                   one to get professional guidance and customized workout plans.
                 </CardDescription>
               </CardHeader>
@@ -668,7 +668,7 @@ export default function TrainerAndClubs() {
               <CardHeader>
                 <CardTitle>No Club Memberships</CardTitle>
                 <CardDescription>
-                  You're not currently a member of any fitness clubs. Join a
+                  You&apos;re not currently a member of any fitness clubs. Join a
                   club to connect with like-minded fitness enthusiasts!
                 </CardDescription>
               </CardHeader>

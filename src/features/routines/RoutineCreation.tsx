@@ -1226,7 +1226,7 @@ export default function RoutineCreation({
     setExerciseModalOpen(true);
   };
 
-  const handleExerciseSelect = (selectedExercise: any) => {
+  const handleExerciseSelect = (selectedExercise: { name: string; category?: string; muscleGroups?: string[] }) => {
     if (!currentAddExerciseContext) return;
 
     // Find the section to determine exercise configuration
@@ -2100,7 +2100,7 @@ export default function RoutineCreation({
                       <div className="flex items-center space-x-2">
                         <Select
                           value={section.type}
-                          onValueChange={(value: any) =>
+                          onValueChange={(value: WorkoutSection["type"]) =>
                             updateSectionType(workout.id, section.id, value)
                           }
                         >

@@ -1020,7 +1020,9 @@ export default function TrailRunningWorkout({
 
       // Store the skipLastRest setting in a custom property for editing later
       if (currentSection.isRepeated) {
-        (updatedSection as TrailRunningSection & { skipLastRest?: boolean }).skipLastRest = skipLastRest;
+        (
+          updatedSection as TrailRunningSection & { skipLastRest?: boolean }
+        ).skipLastRest = skipLastRest;
       }
 
       setWorkoutData((prev) => ({
@@ -1071,7 +1073,9 @@ export default function TrailRunningWorkout({
 
       // Store the skipLastRest setting in a custom property for editing later
       if (currentSection.isRepeated) {
-        (section as TrailRunningSection & { skipLastRest?: boolean }).skipLastRest = skipLastRest;
+        (
+          section as TrailRunningSection & { skipLastRest?: boolean }
+        ).skipLastRest = skipLastRest;
       }
 
       setWorkoutData((prev) => ({
@@ -1172,7 +1176,11 @@ export default function TrailRunningWorkout({
     });
   };
 
-  const updateRepeatInterval = (index: number, field: string, value: string | number | boolean) => {
+  const updateRepeatInterval = (
+    index: number,
+    field: string,
+    value: string | number | boolean
+  ) => {
     setRepeatIntervals((prev) =>
       prev.map((interval, i) => {
         if (i === index) {
@@ -1216,7 +1224,7 @@ export default function TrailRunningWorkout({
         }))
       );
       // Check if skip last rest was enabled for this section (stored in a custom property)
-      setSkipLastRest((section as any).skipLastRest || false);
+      setSkipLastRest((section as TrailRunningSection & { skipLastRest?: boolean }).skipLastRest || false);
     } else {
       setRepeatIntervals([]);
       setSkipLastRest(false);
@@ -1382,7 +1390,7 @@ export default function TrailRunningWorkout({
                 <Label htmlFor="difficulty">Difficulty Level</Label>
                 <Select
                   value={workoutData.difficulty}
-                  onValueChange={(value: any) =>
+                  onValueChange={(value: TrailRunningWorkoutData["difficulty"]) =>
                     setWorkoutData((prev) => ({ ...prev, difficulty: value }))
                   }
                 >
@@ -1454,7 +1462,7 @@ export default function TrailRunningWorkout({
                 <div className="space-y-2">
                   <Select
                     value={currentSection.type}
-                    onValueChange={(value: any) => {
+                    onValueChange={(value: TrailRunningSection["type"]) => {
                       const newType = value;
                       const selectedType = sectionTypes.find(
                         (t) => t.value === newType
@@ -1781,8 +1789,8 @@ export default function TrailRunningWorkout({
                         </div>
                       </div>
                       <p className="text-xs text-muted-foreground leading-relaxed">
-                        When enabled, the last interval will be removed if it&apos;s
-                        a rest or recovery type
+                        When enabled, the last interval will be removed if
+                        it&apos;s a rest or recovery type
                       </p>
                     </div>
 
@@ -1885,7 +1893,7 @@ export default function TrailRunningWorkout({
                             <Label className="text-xs">Type</Label>
                             <Select
                               value={interval.type || "run"}
-                              onValueChange={(value: any) =>
+                              onValueChange={(value: IntervalType) =>
                                 updateRepeatInterval(index, "type", value)
                               }
                             >
@@ -2156,7 +2164,7 @@ export default function TrailRunningWorkout({
                                   <span className="text-xs text-blue-600">
                                     {section.repeatCount} repetitions
                                   </span>
-                                  {(section as any).skipLastRest && (
+                                  {(section as TrailRunningSection & { skipLastRest?: boolean }).skipLastRest && (
                                     <Badge
                                       variant="outline"
                                       className="text-xs bg-orange-50 text-orange-600 border-orange-200"
