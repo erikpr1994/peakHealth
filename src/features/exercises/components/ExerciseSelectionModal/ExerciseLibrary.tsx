@@ -1,7 +1,7 @@
 import { ChevronRight, Info, Star } from 'lucide-react';
 
 import { useExerciseFilters } from '../../hooks/useExerciseFilters';
-import { Exercise } from '../../types';
+import { Exercise, DIFFICULTY } from '../../types';
 import { filterExercises } from '../../utils/filterUtils';
 
 import { SearchAndFilters } from './SearchAndFilters';
@@ -79,7 +79,8 @@ export const ExerciseLibrary = ({
                         <div className="flex items-center gap-1 bg-white/90 backdrop-blur-sm rounded-full px-2 py-1">
                           <Info className="w-3 h-3 text-gray-500" />
                           <span className="text-xs text-gray-700">
-                            {getMainVariant(exercise)?.difficulty || 'Unknown'}
+                            {getMainVariant(exercise)?.difficulty ||
+                              DIFFICULTY.UNKNOWN}
                           </span>
                         </div>
                         <div className="flex items-center gap-2">

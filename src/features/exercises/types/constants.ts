@@ -17,6 +17,7 @@ export const DIFFICULTY = {
   BEGINNER: 'Beginner',
   INTERMEDIATE: 'Intermediate',
   ADVANCED: 'Advanced',
+  UNKNOWN: 'Unknown',
 } as const;
 
 export type Difficulty = (typeof DIFFICULTY)[keyof typeof DIFFICULTY];

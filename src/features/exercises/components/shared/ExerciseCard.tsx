@@ -1,6 +1,6 @@
 import { Heart, Star, ChevronRight } from 'lucide-react';
 
-import { Exercise } from '../../types';
+import { Exercise, DIFFICULTY } from '../../types';
 
 import { CategoryBadge } from './CategoryBadge';
 import { DifficultyBadge } from './DifficultyBadge';
@@ -84,7 +84,7 @@ export const ExerciseCard = ({
         <div className="absolute bottom-3 left-3 right-3">
           <div className="flex items-center justify-between">
             <DifficultyBadge
-              difficulty={mainVariant?.difficulty || 'Unknown'}
+              difficulty={mainVariant?.difficulty || DIFFICULTY.UNKNOWN}
             />
             <div className="flex items-center gap-2">
               {exercise.isPopular && (
