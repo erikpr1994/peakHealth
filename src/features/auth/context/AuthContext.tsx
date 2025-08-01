@@ -109,8 +109,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         throw new Error(data.error || 'Login failed');
       }
 
-      // The auth state change handler will handle the redirect
-      // No need to manually redirect here
+      // Manually update user state and redirect for immediate feedback
+      if (data.user) {
+        await mutateUser(data.user);
+        router.push('/dashboard');
+      }
     } catch (error) {
       console.error('Error logging in:', error);
       throw error;
@@ -138,9 +141,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         throw new Error(data.error || 'Sign up failed');
       }
 
-      // Don't manually call mutateUser here - let the auth state change handler
-      // manage the user state to avoid race conditions and duplicate updates
-      // The onAuthStateChange listener will handle SIGNED_IN events automatically
+      // Manually update user state and redirect for immediate feedback
+      if (data.user) {
+        await mutateUser(data.user);
+        router.push('/dashboard');
+      }
     } catch (error) {
       console.error('Error signing up:', error);
       throw error;
@@ -164,8 +169,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         throw new Error(data.error || 'Logout failed');
       }
 
-      // The auth state change handler will handle clearing user and redirect
-      // No need to manually clear user or redirect here
+      // Manually clear user state and redirect for immediate feedback
+      await mutateUser(null);
+      router.push('/');
     } catch (error) {
       console.error('Error logging out:', error);
       throw error;

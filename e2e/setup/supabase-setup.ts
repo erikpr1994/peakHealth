@@ -102,13 +102,23 @@ export class SupabaseManager {
   }
 }
 
-// Global setup and teardown functions
-export const globalSetup = async (): Promise<void> => {
+// Global setup function
+export default async (): Promise<void> => {
   const supabase = SupabaseManager.getInstance();
   await supabase.start();
-};
-
-export const globalTeardown = async (): Promise<void> => {
-  const supabase = SupabaseManager.getInstance();
-  await supabase.stop();
+  
+  // Set up process exit handler for cleanup
+  process.on('exit', async () => {
+    await supabase.stop();
+  });
+  
+  process.on('SIGINT', async () => {
+    await supabase.stop();
+    process.exit(0);
+  });
+  
+  process.on('SIGTERM', async () => {
+    await supabase.stop();
+    process.exit(0);
+  });
 };

@@ -18,12 +18,28 @@ export const signUpUser = async (page: Page, user: TestUser) => {
   // Fill in the signup form
   await page.fill('[data-testid="email-input"]', user.email);
   await page.fill('[data-testid="password-input"]', user.password);
+  await page.fill('#confirmPassword', user.password); // Fill confirm password field
   if (user.name) {
     await page.fill('[data-testid="name-input"]', user.name);
   }
 
   // Submit the form
   await page.click('[data-testid="signup-button"]');
+
+  // Wait a moment for any validation errors
+  await page.waitForTimeout(1000);
+
+  // Check if there are any validation errors
+  const emailError = await page.locator('[data-testid="email-error"]').isVisible();
+  const passwordError = await page.locator('[data-testid="password-error"]').isVisible();
+  const nameError = await page.locator('[data-testid="name-error"]').isVisible();
+  const confirmPasswordError = await page.locator('[data-testid="confirm-password-error"]').isVisible();
+  const signupError = await page.locator('[data-testid="signup-error"]').isVisible();
+
+  if (emailError || passwordError || nameError || confirmPasswordError || signupError) {
+    console.log('Validation errors found:', { emailError, passwordError, nameError, confirmPasswordError, signupError });
+    throw new Error('Signup form has validation errors');
+  }
 
   // Wait for successful signup (redirect to dashboard or success message)
   await expect(page).toHaveURL(/\/dashboard/);
