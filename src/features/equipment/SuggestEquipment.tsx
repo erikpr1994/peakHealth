@@ -260,6 +260,19 @@ export default function SuggestEquipment({
     });
   };
 
+  const updateWeightRange = (updates: Partial<{ min: number; max: number; increment: number }>) => {
+    setEquipmentData({
+      ...equipmentData,
+      specs: {
+        ...equipmentData.specs,
+        weightRange: {
+          ...equipmentData.specs.weightRange,
+          ...updates,
+        } as { min: number; max: number; increment: number },
+      },
+    });
+  };
+
   return (
     <div className="w-full px-4 sm:px-6 lg:px-8 py-6">
       {/* Header */}
@@ -585,8 +598,7 @@ export default function SuggestEquipment({
                     type="number"
                     value={equipmentData.specs.weightRange?.min || ""}
                     onChange={(e) =>
-                      updateSpecs("weightRange", {
-                        ...equipmentData.specs.weightRange,
+                      updateWeightRange({
                         min: parseFloat(e.target.value) || 0,
                       })
                     }
@@ -601,8 +613,7 @@ export default function SuggestEquipment({
                     type="number"
                     value={equipmentData.specs.weightRange?.max || ""}
                     onChange={(e) =>
-                      updateSpecs("weightRange", {
-                        ...equipmentData.specs.weightRange,
+                      updateWeightRange({
                         max: parseFloat(e.target.value) || 100,
                       })
                     }
@@ -618,8 +629,7 @@ export default function SuggestEquipment({
                     step="0.5"
                     value={equipmentData.specs.weightRange?.increment || ""}
                     onChange={(e) =>
-                      updateSpecs("weightRange", {
-                        ...equipmentData.specs.weightRange,
+                      updateWeightRange({
                         increment: parseFloat(e.target.value) || 5,
                       })
                     }
