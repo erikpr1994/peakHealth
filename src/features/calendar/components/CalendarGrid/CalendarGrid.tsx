@@ -6,7 +6,7 @@ import styles from "./CalendarGrid.module.css";
 
 interface CalendarGridProps {
   calendarDays: CalendarDayType[];
-  onDaySelect: (date: number) => void;
+  onDaySelect: (day: CalendarDayType) => void;
 }
 
 export const CalendarGrid = ({

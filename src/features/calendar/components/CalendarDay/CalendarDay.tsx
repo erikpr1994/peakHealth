@@ -8,12 +8,12 @@ import styles from "./CalendarDay.module.css";
 
 interface CalendarDayProps {
   day: CalendarDayType;
-  onSelect: (date: number) => void;
+  onSelect: (day: CalendarDayType) => void;
 }
 
 export const CalendarDay = ({ day, onSelect }: CalendarDayProps) => {
   const handleClick = () => {
-    onSelect(day.date);
+    onSelect(day);
   };
 
   return (
@@ -37,8 +37,8 @@ export const CalendarDay = ({ day, onSelect }: CalendarDayProps) => {
           day.isToday
             ? styles.todayText
             : day.isCurrentMonth
-            ? styles.currentMonthText
-            : styles.otherMonthText
+              ? styles.currentMonthText
+              : styles.otherMonthText
         }`}
       >
         {day.date}
