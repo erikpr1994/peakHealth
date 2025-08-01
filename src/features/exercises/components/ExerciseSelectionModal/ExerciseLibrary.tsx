@@ -85,7 +85,9 @@ export function ExerciseLibrary({
                       </h3>
                       <ChevronRight
                         className={`w-4 h-4 text-gray-400 group-hover:text-primary transition-all ${
-                          selectedExercise?.id === exercise.id ? "rotate-90" : ""
+                          selectedExercise?.id === exercise.id
+                            ? "rotate-90"
+                            : ""
                         }`}
                       />
                     </div>
@@ -142,4 +144,4 @@ export function ExerciseLibrary({
       </div>
     </div>
   );
-} 
+}

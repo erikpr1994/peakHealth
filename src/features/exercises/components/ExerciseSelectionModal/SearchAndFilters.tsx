@@ -33,9 +33,7 @@ export function SearchAndFilters({
           {exerciseCategories.map((category) => (
             <Button
               key={category}
-              variant={
-                selectedCategory === category ? "default" : "outline"
-              }
+              variant={selectedCategory === category ? "default" : "outline"}
               size="sm"
               onClick={() => onCategoryChange(category)}
               className={`h-8 px-4 rounded-full transition-all ${
@@ -51,4 +49,4 @@ export function SearchAndFilters({
       </div>
     </div>
   );
-} 
+}

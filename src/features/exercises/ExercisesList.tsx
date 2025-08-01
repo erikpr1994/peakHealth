@@ -22,8 +22,6 @@ export default function ExercisesList() {
   const exercises = mockExercises;
   const newExercises = exercises.filter((exercise) => exercise.isNew);
 
-
-
   return (
     <div className="w-full px-4 sm:px-6 lg:px-8 py-6">
       {/* Header */}
@@ -68,7 +66,10 @@ export default function ExercisesList() {
       />
 
       {/* Filter Dialog */}
-      <FilterDialog isOpen={isFilterOpen} onClose={() => setIsFilterOpen(false)} />
+      <FilterDialog
+        isOpen={isFilterOpen}
+        onClose={() => setIsFilterOpen(false)}
+      />
     </div>
   );
 }

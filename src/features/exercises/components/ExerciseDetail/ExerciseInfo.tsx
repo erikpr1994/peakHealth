@@ -17,7 +17,7 @@ export function ExerciseInfo({ exercise }: ExerciseInfoProps) {
         <div className="bg-gray-50 p-4 rounded-lg">
           <div className="text-sm text-gray-500 mb-1">Equipment</div>
           <div className="font-medium text-gray-800">
-            {exercise.equipment.join(", ")}
+            {exercise.equipment?.join(", ") || "None"}
           </div>
         </div>
         <div className="bg-gray-50 p-4 rounded-lg">

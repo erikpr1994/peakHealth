@@ -14,7 +14,11 @@ import { useExerciseSearch } from "./hooks/useExerciseSearch";
 import { useExerciseSelection } from "./hooks/useExerciseSelection";
 import { createVariantExercise } from "./utils/exerciseUtils";
 
-import { Exercise, ExerciseVariant, ExerciseSelectionModalProps } from "./types";
+import {
+  Exercise,
+  ExerciseVariant,
+  ExerciseSelectionModalProps,
+} from "./types";
 
 const exercises = mockExercises;
 
@@ -24,7 +28,13 @@ export default function ExerciseSelectionModal({
   onSelectExercise,
 }: ExerciseSelectionModalProps) {
   const { searchTerm, handleSearchChange } = useExerciseSearch();
-  const { selectedExercise, selectedVariant, selectExercise, selectVariant, clearSelection } = useExerciseSelection();
+  const {
+    selectedExercise,
+    selectedVariant,
+    selectExercise,
+    selectVariant,
+    clearSelection,
+  } = useExerciseSelection();
   const [selectedCategory, setSelectedCategory] = useState("All");
 
   const handleSelectExercise = (
@@ -81,7 +91,12 @@ export default function ExerciseSelectionModal({
             exercise={selectedExercise}
             selectedVariant={selectedVariant}
             onVariantSelect={selectVariant}
-            onSelectExercise={() => handleSelectExercise(selectedExercise!, selectedVariant || undefined)}
+            onSelectExercise={() =>
+              handleSelectExercise(
+                selectedExercise!,
+                selectedVariant || undefined
+              )
+            }
             onClose={onClose}
           />
         </div>

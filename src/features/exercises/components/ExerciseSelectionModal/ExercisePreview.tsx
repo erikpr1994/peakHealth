@@ -45,7 +45,10 @@ export function ExercisePreview({
     );
   }
 
-  const effectiveExercise = getEffectiveExercise(exercise, selectedVariant);
+  const effectiveExercise = getEffectiveExercise(
+    exercise,
+    selectedVariant || undefined
+  );
 
   return (
     <div className="w-1/3 flex flex-col bg-white overflow-hidden">
@@ -170,7 +173,10 @@ export function ExercisePreview({
             <Button onClick={onClose} variant="outline" className="flex-1">
               Cancel
             </Button>
-            <Button onClick={onSelectExercise} className="flex-1 bg-primary hover:bg-primary/90">
+            <Button
+              onClick={onSelectExercise}
+              className="flex-1 bg-primary hover:bg-primary/90"
+            >
               Add Exercise
             </Button>
           </div>
@@ -178,4 +184,4 @@ export function ExercisePreview({
       </div>
     </div>
   );
-} 
+}
