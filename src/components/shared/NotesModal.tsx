@@ -68,7 +68,6 @@ export default function NotesModal({
               onChange={e => setNotes(e.target.value)}
               placeholder={placeholder}
               className="min-h-[200px] resize-none"
-              autoFocus
             />
           </div>
 

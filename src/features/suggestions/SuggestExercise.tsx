@@ -830,7 +830,7 @@ export default function SuggestExercise({ onNavigate }: SuggestExerciseProps) {
 
             <div className="lg:col-span-2">
               <Label htmlFor="imageUrl" className="flex items-center gap-2">
-                <Image className="w-4 h-4" />
+                <Image className="w-4 h-4" aria-label="Image icon" />
                 Reference Images
               </Label>
               <div className="flex gap-2 mt-2 mb-4">

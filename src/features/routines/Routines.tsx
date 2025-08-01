@@ -514,12 +514,12 @@ export default function Routines() {
             <div className="flex items-start justify-between mb-4">
               <div className="flex-1">
                 <div className="flex items-center gap-3 mb-2">
-                  <h3
-                    className="text-xl font-bold text-gray-800 cursor-pointer hover:text-indigo-600 transition-colors"
+                  <button
+                    className="text-xl font-bold text-gray-800 cursor-pointer hover:text-indigo-600 transition-colors text-left"
                     onClick={() => router.push(`/routines/${routine.id}`)}
                   >
                     {routine.name}
-                  </h3>
+                  </button>
                   {routine.isFavorite && (
                     <Button variant="ghost" size="sm" className="p-1">
                       <Heart className="w-4 h-4 text-red-500 fill-red-500" />

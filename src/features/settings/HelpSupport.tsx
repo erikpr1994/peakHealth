@@ -115,29 +115,29 @@ export default function HelpSupport() {
             <CardContent>
               <ul className="space-y-4 text-indigo-600">
                 <li>
-                  <a href="#" className="hover:underline">
+                  <button className="hover:underline text-left">
                     Getting Started with Peak Health
-                  </a>
+                  </button>
                 </li>
                 <li>
-                  <a href="#" className="hover:underline">
+                  <button className="hover:underline text-left">
                     How to Create a Custom Routine
-                  </a>
+                  </button>
                 </li>
                 <li>
-                  <a href="#" className="hover:underline">
+                  <button className="hover:underline text-left">
                     Connecting Your Wearable Device
-                  </a>
+                  </button>
                 </li>
                 <li>
-                  <a href="#" className="hover:underline">
+                  <button className="hover:underline text-left">
                     Understanding Your Performance Analytics
-                  </a>
+                  </button>
                 </li>
                 <li>
-                  <a href="#" className="hover:underline">
+                  <button className="hover:underline text-left">
                     Managing Your Subscription
-                  </a>
+                  </button>
                 </li>
               </ul>
             </CardContent>
@@ -152,19 +152,19 @@ export default function HelpSupport() {
             <CardContent>
               <ul className="space-y-4 text-gray-700">
                 <li>
-                  <a href="#" className="hover:text-indigo-600">
+                  <button className="hover:text-indigo-600 text-left">
                     How do I reset my password?
-                  </a>
+                  </button>
                 </li>
                 <li>
-                  <a href="#" className="hover:text-indigo-600">
+                  <button className="hover:text-indigo-600 text-left">
                     Is my data secure?
-                  </a>
+                  </button>
                 </li>
                 <li>
-                  <a href="#" className="hover:text-indigo-600">
+                  <button className="hover:text-indigo-600 text-left">
                     Can I use the app offline?
-                  </a>
+                  </button>
                 </li>
               </ul>
             </CardContent>
