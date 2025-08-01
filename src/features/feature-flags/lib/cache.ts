@@ -18,7 +18,7 @@ class FeatureFlagCache {
     const entry = this.cache.get(key);
     
     if (entry && Date.now() - entry.timestamp < entry.ttl) {
-      return entry.data;
+      return entry.data as T;
     }
 
     const data = await fetcher();
