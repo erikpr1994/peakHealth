@@ -29,7 +29,11 @@ describe("useFeatureFlag Hook", () => {
   });
 
   const setupHook = (
-    apiResponse: { flags: any[]; userTypes: any[]; userGroups: any[] },
+    apiResponse: { 
+      flags: Array<{ name: string; is_enabled: boolean; rollout_percentage: number }>; 
+      userTypes: Array<{ typeName: string; displayName: string }>; 
+      userGroups: Array<{ groupName: string; displayName: string }> 
+    },
     hookArg: string[]
   ) => {
     mockFetch.mockResolvedValue({

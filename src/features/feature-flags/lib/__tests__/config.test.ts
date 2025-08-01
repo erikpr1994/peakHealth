@@ -73,7 +73,7 @@ describe('Feature Flag Config', () => {
 
     it('should be readonly', () => {
       // TypeScript should prevent this at compile time, but we can test the runtime behavior
-      const flags = FEATURE_FLAGS as any;
+      const flags = FEATURE_FLAGS as Record<string, string>;
       const originalValue = flags.NOTIFICATION_SYSTEM_FEATURE;
       
       // This should not actually modify the original object due to Object.freeze behavior
@@ -100,7 +100,7 @@ describe('Feature Flag Config', () => {
     });
 
     it('should be readonly', () => {
-      const types = USER_TYPES as any;
+      const types = USER_TYPES as Record<string, string>;
       const originalValue = types.REGULAR;
       
       try {
@@ -122,7 +122,7 @@ describe('Feature Flag Config', () => {
     });
 
     it('should be readonly', () => {
-      const groups = USER_GROUPS as any;
+      const groups = USER_GROUPS as Record<string, string>;
       const originalValue = groups.BETA;
       
       try {

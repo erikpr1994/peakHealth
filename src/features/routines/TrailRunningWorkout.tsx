@@ -1224,7 +1224,10 @@ export default function TrailRunningWorkout({
         }))
       );
       // Check if skip last rest was enabled for this section (stored in a custom property)
-      setSkipLastRest((section as TrailRunningSection & { skipLastRest?: boolean }).skipLastRest || false);
+      setSkipLastRest(
+        (section as TrailRunningSection & { skipLastRest?: boolean })
+          .skipLastRest || false
+      );
     } else {
       setRepeatIntervals([]);
       setSkipLastRest(false);
@@ -1390,7 +1393,9 @@ export default function TrailRunningWorkout({
                 <Label htmlFor="difficulty">Difficulty Level</Label>
                 <Select
                   value={workoutData.difficulty}
-                  onValueChange={(value: TrailRunningWorkoutData["difficulty"]) =>
+                  onValueChange={(
+                    value: TrailRunningWorkoutData["difficulty"]
+                  ) =>
                     setWorkoutData((prev) => ({ ...prev, difficulty: value }))
                   }
                 >
@@ -2164,7 +2169,11 @@ export default function TrailRunningWorkout({
                                   <span className="text-xs text-blue-600">
                                     {section.repeatCount} repetitions
                                   </span>
-                                  {(section as TrailRunningSection & { skipLastRest?: boolean }).skipLastRest && (
+                                  {(
+                                    section as TrailRunningSection & {
+                                      skipLastRest?: boolean;
+                                    }
+                                  ).skipLastRest && (
                                     <Badge
                                       variant="outline"
                                       className="text-xs bg-orange-50 text-orange-600 border-orange-200"

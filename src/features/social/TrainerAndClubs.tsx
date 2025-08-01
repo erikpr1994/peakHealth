@@ -372,11 +372,11 @@ export default function TrainerAndClubs() {
               </CardHeader>
               <CardContent>
                 <p className="text-amber-700">
-                  You&apos;re currently enrolled in a professional training program
-                  with {userTrainer.name}. Your trainer will manage your workout
-                  routines to ensure optimal progress and safety. Routine
-                  creation is temporarily disabled while you&apos;re under
-                  professional guidance.
+                  You&apos;re currently enrolled in a professional training
+                  program with {userTrainer.name}. Your trainer will manage your
+                  workout routines to ensure optimal progress and safety.
+                  Routine creation is temporarily disabled while you&apos;re
+                  under professional guidance.
                 </p>
               </CardContent>
             </Card>
@@ -546,8 +546,9 @@ export default function TrainerAndClubs() {
               <CardHeader>
                 <CardTitle>No Trainer Assigned</CardTitle>
                 <CardDescription>
-                  You don&apos;t currently have a personal trainer. Consider hiring
-                  one to get professional guidance and customized workout plans.
+                  You don&apos;t currently have a personal trainer. Consider
+                  hiring one to get professional guidance and customized workout
+                  plans.
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -668,8 +669,8 @@ export default function TrainerAndClubs() {
               <CardHeader>
                 <CardTitle>No Club Memberships</CardTitle>
                 <CardDescription>
-                  You&apos;re not currently a member of any fitness clubs. Join a
-                  club to connect with like-minded fitness enthusiasts!
+                  You&apos;re not currently a member of any fitness clubs. Join
+                  a club to connect with like-minded fitness enthusiasts!
                 </CardDescription>
               </CardHeader>
               <CardContent>
