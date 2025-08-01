@@ -47,7 +47,14 @@ export function FeatureFlagProvider({ children }: { children: ReactNode }) {
       const { flags, userTypes, userGroups } = await response.json();
 
       const flagsMap = flags.reduce(
-        (acc: Record<string, UserFeatureFlag>, flag: { name: string; is_enabled: boolean; rollout_percentage: number }) => {
+        (
+          acc: Record<string, UserFeatureFlag>,
+          flag: {
+            name: string;
+            is_enabled: boolean;
+            rollout_percentage: number;
+          }
+        ) => {
           acc[flag.name] = {
             name: flag.name,
             isEnabled: flag.is_enabled,
@@ -81,7 +88,7 @@ export function FeatureFlagProvider({ children }: { children: ReactNode }) {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [user]);
 
   useEffect(() => {
     loadUserData();
