@@ -7,17 +7,17 @@ interface CategoryBadgeProps {
   className?: string;
 }
 
-export function CategoryBadge({ 
-  category, 
-  variant = "outline", 
-  className = "" 
+export function CategoryBadge({
+  category,
+  variant = "outline",
+  className = "",
 }: CategoryBadgeProps) {
   return (
-    <Badge 
+    <Badge
       variant={variant}
       className={`text-xs ${getCategoryColor(category)} ${className}`}
     >
       {category}
     </Badge>
   );
-} 
+}

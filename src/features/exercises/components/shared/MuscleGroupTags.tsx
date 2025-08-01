@@ -4,10 +4,10 @@ interface MuscleGroupTagsProps {
   className?: string;
 }
 
-export function MuscleGroupTags({ 
-  muscleGroups, 
-  maxDisplay = 2, 
-  className = "" 
+export function MuscleGroupTags({
+  muscleGroups,
+  maxDisplay = 2,
+  className = "",
 }: MuscleGroupTagsProps) {
   const displayGroups = muscleGroups.slice(0, maxDisplay);
   const remainingCount = muscleGroups.length - maxDisplay;
@@ -29,4 +29,4 @@ export function MuscleGroupTags({
       )}
     </div>
   );
-} 
+}

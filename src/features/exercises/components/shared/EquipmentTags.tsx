@@ -5,7 +5,10 @@ interface EquipmentTagsProps {
   className?: string;
 }
 
-export function EquipmentTags({ equipment, className = "" }: EquipmentTagsProps) {
+export function EquipmentTags({
+  equipment,
+  className = "",
+}: EquipmentTagsProps) {
   if (!equipment || equipment.length === 0) return null;
 
   return (
@@ -17,4 +20,4 @@ export function EquipmentTags({ equipment, className = "" }: EquipmentTagsProps)
       ))}
     </div>
   );
-} 
+}

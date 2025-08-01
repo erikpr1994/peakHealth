@@ -8,10 +8,10 @@ interface DifficultyBadgeProps {
   className?: string;
 }
 
-export function DifficultyBadge({ 
-  difficulty, 
-  showIcon = true, 
-  className = "" 
+export function DifficultyBadge({
+  difficulty,
+  showIcon = true,
+  className = "",
 }: DifficultyBadgeProps) {
   const getDifficultyIcon = (difficulty: string) => {
     switch (difficulty) {
@@ -27,11 +27,13 @@ export function DifficultyBadge({
   };
 
   return (
-    <Badge className={`${getDifficultyColorWithBorder(difficulty)} text-xs border ${className}`}>
+    <Badge
+      className={`${getDifficultyColorWithBorder(
+        difficulty
+      )} text-xs border ${className}`}
+    >
       {showIcon && getDifficultyIcon(difficulty)}
-      <span className={showIcon ? "ml-1" : ""}>
-        {difficulty}
-      </span>
+      <span className={showIcon ? "ml-1" : ""}>{difficulty}</span>
     </Badge>
   );
-} 
+}
