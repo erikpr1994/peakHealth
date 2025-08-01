@@ -10,7 +10,7 @@ import { FilterDialog } from './components/ExercisesList/FilterDialog';
 import { NewExercisesCarousel } from './components/ExercisesList/NewExercisesCarousel';
 import { SearchAndFilters } from './components/ExercisesList/SearchAndFilters';
 import { ExerciseProvider } from './context/ExerciseContext';
-import { mockExercises } from './data/mockExercises';
+import { mockExercises } from './types';
 import { Exercise } from './types';
 
 import { Button } from '@/components/ui/button';

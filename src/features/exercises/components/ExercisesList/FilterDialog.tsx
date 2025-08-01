@@ -1,7 +1,5 @@
-import { difficulties } from '../../data/difficulties';
-import { equipment } from '../../data/equipment';
-import { muscleGroups } from '../../data/muscleGroups';
 import { useExerciseFilters } from '../../hooks/useExerciseFilters';
+import { difficulties, equipment, muscleGroups } from '../../types';
 
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';

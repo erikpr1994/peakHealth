@@ -1,12 +1,12 @@
 import { Heart } from 'lucide-react';
 
-import { ExerciseData } from '../../types';
+import { Exercise } from '../../types';
 
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 
 interface ExerciseVariantsProps {
-  exercise: ExerciseData;
+  exercise: Exercise;
 }
 
 export const ExerciseVariants = ({ exercise }: ExerciseVariantsProps) => {
@@ -28,7 +28,15 @@ export const ExerciseVariants = ({ exercise }: ExerciseVariantsProps) => {
             key={variant.id}
             className="cursor-pointer hover:shadow-md transition-shadow"
           >
-            <div className="bg-gray-100 h-40" />
+            <div className="bg-gray-100 h-40 relative">
+              {variant.media?.featuredImage && (
+                <img
+                  src={variant.media.featuredImage}
+                  alt={variant.name}
+                  className="w-full h-full object-cover"
+                />
+              )}
+            </div>
             <div className="p-4">
               <h4 className="font-semibold text-gray-800 mb-2">
                 {variant.name}

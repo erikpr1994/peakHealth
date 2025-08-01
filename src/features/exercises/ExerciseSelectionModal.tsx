@@ -1,15 +1,13 @@
+'use client';
+
 import { useState } from 'react';
 
 import { ExerciseLibrary } from './components/ExerciseSelectionModal/ExerciseLibrary';
 import { ExercisePreview } from './components/ExerciseSelectionModal/ExercisePreview';
-import { mockExercises } from './data/mockExercises';
+import { ExerciseProvider } from './context/ExerciseContext';
 import { useExerciseSelection } from './hooks/useExerciseSelection';
-import {
-  Exercise,
-  ExerciseVariant,
-  ExerciseSelectionModalProps,
-} from './types';
-import { createVariantExercise } from './utils/exerciseUtils';
+import { mockExercises } from './types';
+import { Exercise, ExerciseVariant } from './types';
 
 import {
   Dialog,
@@ -21,7 +19,13 @@ import {
 
 const exercises = mockExercises;
 
-const ExerciseSelectionModal = ({
+interface ExerciseSelectionModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onSelectExercise: (exercise: Exercise, variant?: ExerciseVariant) => void;
+}
+
+const ExerciseSelectionModalContent = ({
   isOpen,
   onClose,
   onSelectExercise,
@@ -44,14 +48,8 @@ const ExerciseSelectionModal = ({
     exercise: Exercise,
     variant?: ExerciseVariant
   ) => {
-    // If variant is selected, create a new exercise object with variant data
-    if (variant) {
-      const variantExercise = createVariantExercise(exercise, variant);
-      onSelectExercise(variantExercise, variant);
-    } else {
-      onSelectExercise(exercise, variant);
-    }
-
+    // Always pass the original exercise with the selected variant
+    onSelectExercise(exercise, variant);
     onClose();
     clearSelection();
   };
@@ -89,8 +87,9 @@ const ExerciseSelectionModal = ({
             selectedVariant={selectedVariant}
             onVariantSelect={selectVariant}
             onSelectExercise={() =>
+              selectedExercise &&
               handleSelectExercise(
-                selectedExercise!,
+                selectedExercise,
                 selectedVariant || undefined
               )
             }
@@ -99,6 +98,14 @@ const ExerciseSelectionModal = ({
         </div>
       </DialogContent>
     </Dialog>
+  );
+};
+
+const ExerciseSelectionModal = (props: ExerciseSelectionModalProps) => {
+  return (
+    <ExerciseProvider>
+      <ExerciseSelectionModalContent {...props} />
+    </ExerciseProvider>
   );
 };
 

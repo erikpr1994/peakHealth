@@ -37,12 +37,17 @@ export const ExerciseProvider = ({ children }: ExerciseProviderProps) => {
   };
 
   const handleFilterChange = (type: keyof FilterState, value: string) => {
-    setFilters(prev => ({
-      ...prev,
-      [type]: prev[type].includes(value)
-        ? prev[type].filter(item => item !== value)
-        : [...prev[type], value],
-    }));
+    setFilters(prev => {
+      const currentArray = prev[type] as any[];
+      const isIncluded = currentArray.includes(value);
+
+      return {
+        ...prev,
+        [type]: isIncluded
+          ? currentArray.filter(item => item !== value)
+          : [...currentArray, value],
+      };
+    });
   };
 
   const clearFilters = () => {
