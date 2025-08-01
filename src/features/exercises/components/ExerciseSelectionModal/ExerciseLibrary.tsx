@@ -3,6 +3,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Exercise } from "../../types";
 import { ExerciseCard } from "../shared/ExerciseCard";
 import { filterExercises } from "../../utils/filterUtils";
+import { SearchAndFilters } from "./SearchAndFilters";
 
 interface ExerciseLibraryProps {
   exercises: Exercise[];
@@ -10,6 +11,8 @@ interface ExerciseLibraryProps {
   selectedCategory: string;
   selectedExercise: Exercise | null;
   onExerciseSelect: (exercise: Exercise) => void;
+  onSearchChange: (value: string) => void;
+  onCategoryChange: (category: string) => void;
 }
 
 export function ExerciseLibrary({
@@ -18,6 +21,8 @@ export function ExerciseLibrary({
   selectedCategory,
   selectedExercise,
   onExerciseSelect,
+  onSearchChange,
+  onCategoryChange,
 }: ExerciseLibraryProps) {
   const filteredExercises = filterExercises(
     exercises,
@@ -28,6 +33,14 @@ export function ExerciseLibrary({
 
   return (
     <div className="w-2/3 border-r border-gray-100 flex flex-col bg-gray-50/50 overflow-hidden">
+      {/* Search and Filters */}
+      <SearchAndFilters
+        searchTerm={searchTerm}
+        onSearchChange={onSearchChange}
+        selectedCategory={selectedCategory}
+        onCategoryChange={onCategoryChange}
+      />
+
       {/* Exercise Grid - Scrollable */}
       <div className="flex-1 overflow-hidden">
         <ScrollArea className="h-full w-full">

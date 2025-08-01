@@ -6,7 +6,6 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { SearchAndFilters } from "./components/ExerciseSelectionModal/SearchAndFilters";
 import { ExerciseLibrary } from "./components/ExerciseSelectionModal/ExerciseLibrary";
 import { ExercisePreview } from "./components/ExerciseSelectionModal/ExercisePreview";
 import { mockExercises } from "./data/mockExercises";
@@ -69,14 +68,6 @@ export default function ExerciseSelectionModal({
         </DialogHeader>
 
         <div className="flex h-full overflow-hidden">
-          {/* Search and Filters */}
-          <SearchAndFilters
-            searchTerm={searchTerm}
-            onSearchChange={handleSearchChange}
-            selectedCategory={selectedCategory}
-            onCategoryChange={setSelectedCategory}
-          />
-
           {/* Exercise Library */}
           <ExerciseLibrary
             exercises={exercises}
@@ -84,6 +75,8 @@ export default function ExerciseSelectionModal({
             selectedCategory={selectedCategory}
             selectedExercise={selectedExercise}
             onExerciseSelect={selectExercise}
+            onSearchChange={handleSearchChange}
+            onCategoryChange={setSelectedCategory}
           />
 
           {/* Exercise Preview */}
