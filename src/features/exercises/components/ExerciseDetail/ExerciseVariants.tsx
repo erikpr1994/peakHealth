@@ -48,4 +48,4 @@ export function ExerciseVariants({ exercise }: ExerciseVariantsProps) {
       </div>
     </Card>
   );
-} 
+}

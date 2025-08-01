@@ -44,4 +44,4 @@ export function ExerciseTips({ exercise }: ExerciseTipsProps) {
       </Card>
     </div>
   );
-} 
+}

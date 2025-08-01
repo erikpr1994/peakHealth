@@ -12,9 +12,7 @@ export function ExerciseInfo({ exercise }: ExerciseInfoProps) {
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
         <div className="bg-gray-50 p-4 rounded-lg">
           <div className="text-sm text-gray-500 mb-1">Type</div>
-          <div className="font-medium text-gray-800">
-            {exercise.type}
-          </div>
+          <div className="font-medium text-gray-800">{exercise.type}</div>
         </div>
         <div className="bg-gray-50 p-4 rounded-lg">
           <div className="text-sm text-gray-500 mb-1">Equipment</div>
@@ -34,9 +32,7 @@ export function ExerciseInfo({ exercise }: ExerciseInfoProps) {
         </div>
         <div className="bg-gray-50 p-4 rounded-lg">
           <div className="text-sm text-gray-500 mb-1">Mechanics</div>
-          <div className="font-medium text-gray-800">
-            {exercise.mechanics}
-          </div>
+          <div className="font-medium text-gray-800">{exercise.mechanics}</div>
         </div>
       </div>
 
@@ -45,9 +41,7 @@ export function ExerciseInfo({ exercise }: ExerciseInfoProps) {
         <h3 className="text-lg font-semibold text-gray-800 mb-3">
           Description
         </h3>
-        <p className="text-gray-700 leading-relaxed">
-          {exercise.description}
-        </p>
+        <p className="text-gray-700 leading-relaxed">{exercise.description}</p>
       </div>
 
       {/* Primary Muscles */}
@@ -68,4 +62,4 @@ export function ExerciseInfo({ exercise }: ExerciseInfoProps) {
       </div>
     </>
   );
-} 
+}

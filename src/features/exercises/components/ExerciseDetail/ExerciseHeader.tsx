@@ -52,4 +52,4 @@ export function ExerciseHeader({ exercise }: ExerciseHeaderProps) {
       </div>
     </div>
   );
-} 
+}

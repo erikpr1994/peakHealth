@@ -33,4 +33,4 @@ export function ExerciseVideo({ exercise }: ExerciseVideoProps) {
       </div>
     </Card>
   );
-} 
+}

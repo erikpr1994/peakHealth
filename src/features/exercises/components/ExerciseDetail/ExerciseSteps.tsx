@@ -26,4 +26,4 @@ export function ExerciseSteps({ exercise }: ExerciseStepsProps) {
       </div>
     </Card>
   );
-} 
+}
