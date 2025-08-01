@@ -49,42 +49,82 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const login = async (email?: string, password?: string) => {
     if (!email || !password) return;
     setIsLoading(true);
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
-    if (error) {
+
+    try {
+      const response = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Login failed");
+      }
+
+      setUser(data.user);
+    } catch (error) {
       console.error("Error logging in:", error);
       throw error;
+    } finally {
+      setIsLoading(false);
     }
-    setIsLoading(false);
   };
 
   const signUp = async (email?: string, password?: string, name?: string) => {
     if (!email || !password || !name) return;
     setIsLoading(true);
-    const { error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        data: {
-          display_name: name,
+
+    try {
+      const response = await fetch("/api/auth/signup", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
         },
-      },
-    });
-    if (error) {
+        body: JSON.stringify({ email, password, name }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Sign up failed");
+      }
+
+      setUser(data.user);
+    } catch (error) {
       console.error("Error signing up:", error);
       throw error;
+    } finally {
+      setIsLoading(false);
     }
-
-    setIsLoading(false);
   };
 
   const logout = async () => {
     setIsLoading(true);
-    await supabase.auth.signOut();
-    setUser(null);
-    setIsLoading(false);
+
+    try {
+      const response = await fetch("/api/auth/logout", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!response.ok) {
+        const data = await response.json();
+        throw new Error(data.error || "Logout failed");
+      }
+
+      setUser(null);
+    } catch (error) {
+      console.error("Error logging out:", error);
+      throw error;
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
