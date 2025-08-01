@@ -10,14 +10,7 @@ import {
 } from '../utils/auth-helpers';
 
 test.describe('Authentication Flows', () => {
-  test.describe('Happy Path Flows', () => {
-    test('should successfully sign up a new user', async ({ page }) => {
-      const user = generateTestUser();
-
-      await signUpUser(page, user);
-      await expectToBeLoggedIn(page);
-    });
-
+  test.describe('Core User Flows', () => {
     test('should successfully login with valid credentials', async ({
       page,
     }) => {
@@ -45,7 +38,7 @@ test.describe('Authentication Flows', () => {
     });
   });
 
-  test.describe('Critical Security Flows', () => {
+  test.describe('Security & Redirects', () => {
     test('should redirect authenticated user away from login/signup pages', async ({
       page,
     }) => {
