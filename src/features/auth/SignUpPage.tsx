@@ -165,6 +165,7 @@ const SignUpPage = () => {
                 onChange={e => setConfirmPassword(e.target.value)}
                 placeholder="Confirm your password"
                 required
+                data-testid="confirm-password-input"
               />
               {validationErrors.confirmPassword && (
                 <div

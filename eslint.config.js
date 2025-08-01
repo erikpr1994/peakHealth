@@ -45,6 +45,7 @@ module.exports = [
         module: 'readonly',
         require: 'readonly',
         exports: 'readonly',
+        URL: 'readonly',
 
         // React globals
         React: 'readonly',

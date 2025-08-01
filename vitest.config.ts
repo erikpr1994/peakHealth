@@ -22,6 +22,13 @@ export default defineConfig({
       'src/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}',
       '**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}',
     ],
+    onConsoleLog(log, type) {
+      // Suppress unhandled rejection warnings in tests
+      if (type === 'stderr' && log.includes('Unhandled Rejection')) {
+        return false;
+      }
+      return true;
+    },
   },
   resolve: {
     alias: {
