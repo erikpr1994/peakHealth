@@ -106,17 +106,17 @@ export class SupabaseManager {
 export default async (): Promise<void> => {
   const supabase = SupabaseManager.getInstance();
   await supabase.start();
-  
+
   // Set up process exit handler for cleanup
   process.on('exit', async () => {
     await supabase.stop();
   });
-  
+
   process.on('SIGINT', async () => {
     await supabase.stop();
     process.exit(0);
   });
-  
+
   process.on('SIGTERM', async () => {
     await supabase.stop();
     process.exit(0);

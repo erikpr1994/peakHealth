@@ -11,7 +11,7 @@ export const generateTestUser = (): TestUser => {
   const timestamp = Date.now();
   const random = Math.floor(Math.random() * 10000);
   const uniqueId = `${timestamp}-${random}`;
-  
+
   return {
     email: `test-${uniqueId}@example.com`,
     password: 'TestPassword123!',
@@ -37,14 +37,36 @@ export const signUpUser = async (page: Page, user: TestUser) => {
   await page.waitForTimeout(2000);
 
   // Check if there are any validation errors
-  const emailError = await page.locator('[data-testid="email-error"]').isVisible();
-  const passwordError = await page.locator('[data-testid="password-error"]').isVisible();
-  const nameError = await page.locator('[data-testid="name-error"]').isVisible();
-  const confirmPasswordError = await page.locator('[data-testid="confirm-password-error"]').isVisible();
-  const signupError = await page.locator('[data-testid="signup-error"]').isVisible();
+  const emailError = await page
+    .locator('[data-testid="email-error"]')
+    .isVisible();
+  const passwordError = await page
+    .locator('[data-testid="password-error"]')
+    .isVisible();
+  const nameError = await page
+    .locator('[data-testid="name-error"]')
+    .isVisible();
+  const confirmPasswordError = await page
+    .locator('[data-testid="confirm-password-error"]')
+    .isVisible();
+  const signupError = await page
+    .locator('[data-testid="signup-error"]')
+    .isVisible();
 
-  if (emailError || passwordError || nameError || confirmPasswordError || signupError) {
-    console.log('Validation errors found:', { emailError, passwordError, nameError, confirmPasswordError, signupError });
+  if (
+    emailError ||
+    passwordError ||
+    nameError ||
+    confirmPasswordError ||
+    signupError
+  ) {
+    console.log('Validation errors found:', {
+      emailError,
+      passwordError,
+      nameError,
+      confirmPasswordError,
+      signupError,
+    });
     throw new Error('Signup form has validation errors');
   }
 

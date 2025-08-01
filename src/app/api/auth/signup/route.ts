@@ -26,6 +26,7 @@ export async function POST(request: NextRequest) {
     });
 
     if (error) {
+      console.error('Supabase auth error:', error);
       return NextResponse.json({ error: error.message }, { status: 400 });
     }
 
@@ -36,7 +37,8 @@ export async function POST(request: NextRequest) {
       },
       { status: 201 }
     );
-  } catch {
+  } catch (error) {
+    console.error('Signup error:', error);
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }

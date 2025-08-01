@@ -12,6 +12,7 @@ export async function GET() {
     } = await supabase.auth.getUser();
 
     if (error) {
+      console.error('Supabase auth error:', error);
       return NextResponse.json({ error: error.message }, { status: 401 });
     }
 
