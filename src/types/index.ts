@@ -4,4 +4,4 @@ export type {
   OnboardingData,
   NavigateFunction,
   AppContextType,
-} from "./app";
+} from './app';

@@ -3,17 +3,17 @@ interface CategoryTabsProps {
   onCategoryChange: (category: string) => void;
 }
 
-export function CategoryTabs({
+export const CategoryTabs = ({
   activeCategory,
   onCategoryChange,
-}: CategoryTabsProps) {
+}: CategoryTabsProps) => {
   const categories = [
-    "All Exercises",
-    "Strength",
-    "Cardio",
-    "Flexibility",
-    "Balance",
-    "Favorites",
+    'All Exercises',
+    'Strength',
+    'Cardio',
+    'Flexibility',
+    'Balance',
+    'Favorites',
   ];
 
   return (
@@ -25,8 +25,8 @@ export function CategoryTabs({
             onClick={() => onCategoryChange(category)}
             className={`py-2 px-1 border-b-2 transition-colors whitespace-nowrap ${
               activeCategory === category
-                ? "border-indigo-600 text-indigo-600 font-medium"
-                : "border-transparent text-gray-500 hover:text-gray-700"
+                ? 'border-indigo-600 text-indigo-600 font-medium'
+                : 'border-transparent text-gray-500 hover:text-gray-700'
             }`}
           >
             {category}
@@ -35,4 +35,4 @@ export function CategoryTabs({
       </div>
     </div>
   );
-}
+};

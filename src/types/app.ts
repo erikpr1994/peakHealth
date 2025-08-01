@@ -1,33 +1,33 @@
-export type AppState = "landing" | "auth" | "app";
+export type AppState = 'landing' | 'auth' | 'app';
 
 export type Page =
-  | "dashboard"
-  | "exercises"
-  | "exercise-detail"
-  | "routines"
-  | "routine-detail"
-  | "edit-routine"
-  | "create-routine"
-  | "calendar"
-  | "performance"
-  | "health"
-  | "profile"
-  | "gyms"
-  | "create-gym"
-  | "suggest-gym"
-  | "edit-gym"
-  | "gym-detail"
-  | "equipment"
-  | "suggest-equipment"
-  | "edit-equipment"
-  | "equipment-detail"
-  | "suggestions"
-  | "suggest-exercise"
-  | "account-settings"
-  | "app-settings"
-  | "workout-tracker"
-  | "trainer-and-clubs"
-  | "statistics";
+  | 'dashboard'
+  | 'exercises'
+  | 'exercise-detail'
+  | 'routines'
+  | 'routine-detail'
+  | 'edit-routine'
+  | 'create-routine'
+  | 'calendar'
+  | 'performance'
+  | 'health'
+  | 'profile'
+  | 'gyms'
+  | 'create-gym'
+  | 'suggest-gym'
+  | 'edit-gym'
+  | 'gym-detail'
+  | 'equipment'
+  | 'suggest-equipment'
+  | 'edit-equipment'
+  | 'equipment-detail'
+  | 'suggestions'
+  | 'suggest-exercise'
+  | 'account-settings'
+  | 'app-settings'
+  | 'workout-tracker'
+  | 'trainer-and-clubs'
+  | 'statistics';
 
 export interface OnboardingData {
   name: string;

@@ -1,7 +1,9 @@
-"use client";
+'use client';
 
-import LoginPage from "@/features/auth/LoginPage";
+import LoginPage from '@/features/auth/LoginPage';
 
-export default function LoginPageContainer() {
+const LoginPageContainer = () => {
   return <LoginPage />;
-}
+};
+
+export default LoginPageContainer;

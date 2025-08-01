@@ -1,4 +1,4 @@
-import { FEATURE_FLAG_CONFIG } from "./config";
+import { FEATURE_FLAG_CONFIG } from './config';
 
 interface CacheEntry<T = unknown> {
   data: T;

@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import { useAppContext } from "@/contexts/AppContext";
-import AppSettings from "@/features/settings/AppSettings";
+import { useAppContext } from '@/contexts/AppContext';
+import AppSettings from '@/features/settings/AppSettings';
 
-export default function AppSettingsPage() {
+const AppSettingsPage = () => {
   const {
     hasTrainer,
     toggleTrainer,
@@ -23,4 +23,6 @@ export default function AppSettingsPage() {
       onToggleWelcomeScreen={toggleWelcomeScreen}
     />
   );
-}
+};
+
+export default AppSettingsPage;

@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useState } from 'react';
 
-import { Exercise, ExerciseVariant } from "../types";
+import { Exercise, ExerciseVariant } from '../types';
 
 export function useExerciseSelection() {
   const [selectedExercise, setSelectedExercise] = useState<Exercise | null>(

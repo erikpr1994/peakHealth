@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import {
   FileCheck,
@@ -7,25 +7,25 @@ import {
   MessageSquare,
   Filter,
   Search,
-} from "lucide-react";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
+} from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+} from '@/components/ui/select';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
-type SuggestionStatus = "pending" | "approved" | "rejected" | "under_review";
-type SuggestionType = "gym" | "equipment" | "exercise";
+type SuggestionStatus = 'pending' | 'approved' | 'rejected' | 'under_review';
+type SuggestionType = 'gym' | 'equipment' | 'exercise';
 
 interface Suggestion {
   id: string;
@@ -46,95 +46,95 @@ interface Suggestion {
 
 export default function Suggestions() {
   const router = useRouter();
-  const [searchQuery, setSearchQuery] = useState("");
-  const [statusFilter, setStatusFilter] = useState("all");
-  const [typeFilter, setTypeFilter] = useState("all");
+  const [searchQuery, setSearchQuery] = useState('');
+  const [statusFilter, setStatusFilter] = useState('all');
+  const [typeFilter, setTypeFilter] = useState('all');
 
   // Mock suggestion data
   const [suggestions] = useState<Suggestion[]>([
     {
-      id: "1",
-      type: "exercise",
-      title: "Bulgarian Split Squat Variations",
+      id: '1',
+      type: 'exercise',
+      title: 'Bulgarian Split Squat Variations',
       description:
-        "A single-leg exercise that targets quads, glutes, and improves balance. Multiple variations including elevated rear foot, jumping, and weighted versions.",
-      status: "approved",
-      submittedAt: new Date("2024-01-15"),
-      submittedBy: "Alex Johnson",
+        'A single-leg exercise that targets quads, glutes, and improves balance. Multiple variations including elevated rear foot, jumping, and weighted versions.',
+      status: 'approved',
+      submittedAt: new Date('2024-01-15'),
+      submittedBy: 'Alex Johnson',
       upvotes: 24,
       hasUserUpvoted: true,
-      reviewedAt: new Date("2024-01-18"),
-      reviewedBy: "Fitness Team",
-      category: "Legs",
-      tags: ["unilateral", "balance", "functional"],
+      reviewedAt: new Date('2024-01-18'),
+      reviewedBy: 'Fitness Team',
+      category: 'Legs',
+      tags: ['unilateral', 'balance', 'functional'],
     },
     {
-      id: "2",
-      type: "gym",
-      title: "CrossFit Downtown",
+      id: '2',
+      type: 'gym',
+      title: 'CrossFit Downtown',
       description:
-        "New CrossFit gym in downtown area with Olympic lifting platforms, rings, and functional fitness equipment.",
-      status: "pending",
-      submittedAt: new Date("2024-01-20"),
-      submittedBy: "Alex Johnson",
+        'New CrossFit gym in downtown area with Olympic lifting platforms, rings, and functional fitness equipment.',
+      status: 'pending',
+      submittedAt: new Date('2024-01-20'),
+      submittedBy: 'Alex Johnson',
       upvotes: 8,
       hasUserUpvoted: false,
-      category: "CrossFit",
-      tags: ["crossfit", "olympic", "functional"],
+      category: 'CrossFit',
+      tags: ['crossfit', 'olympic', 'functional'],
     },
     {
-      id: "3",
-      type: "equipment",
-      title: "Concept2 Model E Rower",
+      id: '3',
+      type: 'equipment',
+      title: 'Concept2 Model E Rower',
       description:
-        "Premium rowing machine with advanced performance monitor and smooth flywheel design.",
-      status: "under_review",
-      submittedAt: new Date("2024-01-18"),
-      submittedBy: "Alex Johnson",
+        'Premium rowing machine with advanced performance monitor and smooth flywheel design.',
+      status: 'under_review',
+      submittedAt: new Date('2024-01-18'),
+      submittedBy: 'Alex Johnson',
       upvotes: 15,
       hasUserUpvoted: true,
-      category: "Cardio",
-      tags: ["rowing", "cardio", "concept2"],
+      category: 'Cardio',
+      tags: ['rowing', 'cardio', 'concept2'],
     },
     {
-      id: "4",
-      type: "exercise",
-      title: "Tempo Push-ups",
+      id: '4',
+      type: 'exercise',
+      title: 'Tempo Push-ups',
       description:
-        "Push-up variation with controlled tempo (3-1-3-1) to increase time under tension and muscle engagement.",
-      status: "rejected",
-      submittedAt: new Date("2024-01-12"),
-      submittedBy: "Alex Johnson",
+        'Push-up variation with controlled tempo (3-1-3-1) to increase time under tension and muscle engagement.',
+      status: 'rejected',
+      submittedAt: new Date('2024-01-12'),
+      submittedBy: 'Alex Johnson',
       upvotes: 5,
       hasUserUpvoted: false,
       reviewNotes:
-        "Too similar to existing push-up variations. Consider submitting as a modification to standard push-ups.",
-      reviewedAt: new Date("2024-01-16"),
-      reviewedBy: "Fitness Team",
-      category: "Chest",
-      tags: ["tempo", "bodyweight", "upper body"],
+        'Too similar to existing push-up variations. Consider submitting as a modification to standard push-ups.',
+      reviewedAt: new Date('2024-01-16'),
+      reviewedBy: 'Fitness Team',
+      category: 'Chest',
+      tags: ['tempo', 'bodyweight', 'upper body'],
     },
     {
-      id: "5",
-      type: "gym",
-      title: "Planet Fitness - Westside",
+      id: '5',
+      type: 'gym',
+      title: 'Planet Fitness - Westside',
       description:
-        "Budget-friendly gym with cardio equipment, basic strength machines, and 24/7 access.",
-      status: "approved",
-      submittedAt: new Date("2024-01-10"),
-      submittedBy: "Mike Wilson",
+        'Budget-friendly gym with cardio equipment, basic strength machines, and 24/7 access.',
+      status: 'approved',
+      submittedAt: new Date('2024-01-10'),
+      submittedBy: 'Mike Wilson',
       upvotes: 12,
       hasUserUpvoted: false,
-      reviewedAt: new Date("2024-01-14"),
-      reviewedBy: "Location Team",
-      category: "Commercial",
-      tags: ["budget", "chain", "cardio"],
+      reviewedAt: new Date('2024-01-14'),
+      reviewedBy: 'Location Team',
+      category: 'Commercial',
+      tags: ['budget', 'chain', 'cardio'],
     },
   ]);
 
   const handleUpvote = (suggestionId: string) => {
     // In a real app, this would make an API call
-    console.log("Upvoting suggestion:", suggestionId);
+    console.log('Upvoting suggestion:', suggestionId);
   };
 
   const filteredSuggestions = suggestions.filter(suggestion => {
@@ -142,36 +142,36 @@ export default function Suggestions() {
       suggestion.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       suggestion.description.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesStatus =
-      statusFilter === "all" || suggestion.status === statusFilter;
-    const matchesType = typeFilter === "all" || suggestion.type === typeFilter;
+      statusFilter === 'all' || suggestion.status === statusFilter;
+    const matchesType = typeFilter === 'all' || suggestion.type === typeFilter;
     return matchesSearch && matchesStatus && matchesType;
   });
 
   const getStatusColor = (status: SuggestionStatus) => {
     switch (status) {
-      case "approved":
-        return "bg-green-50 text-green-700 border-green-200";
-      case "rejected":
-        return "bg-red-50 text-red-700 border-red-200";
-      case "under_review":
-        return "bg-blue-50 text-blue-700 border-blue-200";
-      case "pending":
-        return "bg-yellow-50 text-yellow-700 border-yellow-200";
+      case 'approved':
+        return 'bg-green-50 text-green-700 border-green-200';
+      case 'rejected':
+        return 'bg-red-50 text-red-700 border-red-200';
+      case 'under_review':
+        return 'bg-blue-50 text-blue-700 border-blue-200';
+      case 'pending':
+        return 'bg-yellow-50 text-yellow-700 border-yellow-200';
       default:
-        return "bg-gray-50 text-gray-700 border-gray-200";
+        return 'bg-gray-50 text-gray-700 border-gray-200';
     }
   };
 
   const getStatusLabel = (status: SuggestionStatus) => {
     switch (status) {
-      case "approved":
-        return "Approved";
-      case "rejected":
-        return "Rejected";
-      case "under_review":
-        return "Under Review";
-      case "pending":
-        return "Pending";
+      case 'approved':
+        return 'Approved';
+      case 'rejected':
+        return 'Rejected';
+      case 'under_review':
+        return 'Under Review';
+      case 'pending':
+        return 'Pending';
       default:
         return status;
     }
@@ -179,14 +179,14 @@ export default function Suggestions() {
 
   const getTypeIcon = (type: SuggestionType) => {
     switch (type) {
-      case "gym":
-        return "🏢";
-      case "equipment":
-        return "🏋️";
-      case "exercise":
-        return "💪";
+      case 'gym':
+        return '🏢';
+      case 'equipment':
+        return '🏋️';
+      case 'exercise':
+        return '💪';
       default:
-        return "📝";
+        return '📝';
     }
   };
 
@@ -214,7 +214,7 @@ export default function Suggestions() {
             size="sm"
             onClick={() => handleUpvote(suggestion.id)}
             className={`h-8 ${
-              suggestion.hasUserUpvoted ? "text-blue-600 bg-blue-50" : ""
+              suggestion.hasUserUpvoted ? 'text-blue-600 bg-blue-50' : ''
             }`}
           >
             <ThumbsUp className="w-4 h-4 mr-1" />
@@ -240,7 +240,7 @@ export default function Suggestions() {
         </div>
       )}
 
-      {suggestion.status === "rejected" && suggestion.reviewNotes && (
+      {suggestion.status === 'rejected' && suggestion.reviewNotes && (
         <div className="p-3 bg-red-50 border border-red-200 rounded-lg mb-4">
           <div className="flex items-center gap-2 mb-1">
             <MessageSquare className="w-4 h-4 text-red-600" />
@@ -268,9 +268,9 @@ export default function Suggestions() {
 
   const getSummaryStats = () => {
     const total = suggestions.length;
-    const pending = suggestions.filter(s => s.status === "pending").length;
-    const approved = suggestions.filter(s => s.status === "approved").length;
-    const rejected = suggestions.filter(s => s.status === "rejected").length;
+    const pending = suggestions.filter(s => s.status === 'pending').length;
+    const approved = suggestions.filter(s => s.status === 'approved').length;
+    const rejected = suggestions.filter(s => s.status === 'rejected').length;
 
     return { total, pending, approved, rejected };
   };
@@ -291,19 +291,19 @@ export default function Suggestions() {
         <div className="flex gap-2">
           <Button
             variant="outline"
-            onClick={() => router.push("/suggestions/exercise")}
+            onClick={() => router.push('/suggestions/exercise')}
           >
             <Plus className="w-4 h-4 mr-2" />
             Suggest Exercise
           </Button>
           <Button
             variant="outline"
-            onClick={() => router.push("/suggestions/equipment")}
+            onClick={() => router.push('/suggestions/equipment')}
           >
             <Plus className="w-4 h-4 mr-2" />
             Suggest Equipment
           </Button>
-          <Button onClick={() => router.push("/suggestions/gym")}>
+          <Button onClick={() => router.push('/suggestions/gym')}>
             <Plus className="w-4 h-4 mr-2" />
             Suggest Gym
           </Button>
@@ -385,15 +385,15 @@ export default function Suggestions() {
           </TabsTrigger>
           <TabsTrigger value="pending">
             Pending (
-            {filteredSuggestions.filter(s => s.status === "pending").length})
+            {filteredSuggestions.filter(s => s.status === 'pending').length})
           </TabsTrigger>
           <TabsTrigger value="approved">
             Approved (
-            {filteredSuggestions.filter(s => s.status === "approved").length})
+            {filteredSuggestions.filter(s => s.status === 'approved').length})
           </TabsTrigger>
           <TabsTrigger value="rejected">
             Rejected (
-            {filteredSuggestions.filter(s => s.status === "rejected").length})
+            {filteredSuggestions.filter(s => s.status === 'rejected').length})
           </TabsTrigger>
         </TabsList>
 
@@ -409,22 +409,22 @@ export default function Suggestions() {
                 No Suggestions Found
               </h3>
               <p className="text-gray-500 mb-6">
-                {searchQuery || statusFilter !== "all" || typeFilter !== "all"
-                  ? "Try adjusting your search criteria or filters."
-                  : "Start contributing to the community by suggesting new content."}
+                {searchQuery || statusFilter !== 'all' || typeFilter !== 'all'
+                  ? 'Try adjusting your search criteria or filters.'
+                  : 'Start contributing to the community by suggesting new content.'}
               </p>
               {!searchQuery &&
-                statusFilter === "all" &&
-                typeFilter === "all" && (
+                statusFilter === 'all' &&
+                typeFilter === 'all' && (
                   <div className="flex gap-2 justify-center">
                     <Button
-                      onClick={() => router.push("/suggestions/exercise")}
+                      onClick={() => router.push('/suggestions/exercise')}
                       variant="outline"
                     >
                       <Plus className="w-4 h-4 mr-2" />
                       Suggest Exercise
                     </Button>
-                    <Button onClick={() => router.push("/suggestions/gym")}>
+                    <Button onClick={() => router.push('/suggestions/gym')}>
                       <Plus className="w-4 h-4 mr-2" />
                       Suggest Gym
                     </Button>
@@ -436,7 +436,7 @@ export default function Suggestions() {
 
         <TabsContent value="pending" className="space-y-4">
           {filteredSuggestions
-            .filter(s => s.status === "pending")
+            .filter(s => s.status === 'pending')
             .map(suggestion => (
               <SuggestionCard key={suggestion.id} suggestion={suggestion} />
             ))}
@@ -444,7 +444,7 @@ export default function Suggestions() {
 
         <TabsContent value="approved" className="space-y-4">
           {filteredSuggestions
-            .filter(s => s.status === "approved")
+            .filter(s => s.status === 'approved')
             .map(suggestion => (
               <SuggestionCard key={suggestion.id} suggestion={suggestion} />
             ))}
@@ -452,7 +452,7 @@ export default function Suggestions() {
 
         <TabsContent value="rejected" className="space-y-4">
           {filteredSuggestions
-            .filter(s => s.status === "rejected")
+            .filter(s => s.status === 'rejected')
             .map(suggestion => (
               <SuggestionCard key={suggestion.id} suggestion={suggestion} />
             ))}

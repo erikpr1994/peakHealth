@@ -1,14 +1,14 @@
-import { CheckCircle, XCircle } from "lucide-react";
+import { CheckCircle, XCircle } from 'lucide-react';
 
-import { Card } from "@/components/ui/card";
+import { ExerciseData } from '../../types';
 
-import { ExerciseData } from "../../types";
+import { Card } from '@/components/ui/card';
 
 interface ExerciseTipsProps {
   exercise: ExerciseData;
 }
 
-export function ExerciseTips({ exercise }: ExerciseTipsProps) {
+export const ExerciseTips = ({ exercise }: ExerciseTipsProps) => {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
       <Card className="p-6">
@@ -46,4 +46,4 @@ export function ExerciseTips({ exercise }: ExerciseTipsProps) {
       </Card>
     </div>
   );
-}
+};

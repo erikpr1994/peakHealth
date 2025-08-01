@@ -19,8 +19,8 @@ import {
   ArrowDown,
   MoreHorizontal,
   Play,
-} from "lucide-react";
-import { useState } from "react";
+} from 'lucide-react';
+import { useState } from 'react';
 import {
   LineChart,
   Line,
@@ -37,40 +37,40 @@ import {
   Pie,
   Cell,
   ComposedChart,
-} from "recharts";
+} from 'recharts';
 
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Progress } from "@/components/ui/progress";
+} from '@/components/ui/dropdown-menu';
+import { Progress } from '@/components/ui/progress';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Page } from "@/types/app";
+} from '@/components/ui/select';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Page } from '@/types/app';
 
 interface StatisticsProps {
   onNavigate: (page: Page) => void;
 }
 
 export default function Statistics({ onNavigate }: StatisticsProps) {
-  const [timeFilter, setTimeFilter] = useState("monthly");
-  const [activeTab, setActiveTab] = useState("overview");
+  const [timeFilter, setTimeFilter] = useState('monthly');
+  const [activeTab, setActiveTab] = useState('overview');
 
   // Enhanced mock data with real charts
   const performanceData = [
     {
-      date: "Jun 1",
+      date: 'Jun 1',
       workouts: 3,
       calories: 850,
       duration: 120,
@@ -78,7 +78,7 @@ export default function Statistics({ onNavigate }: StatisticsProps) {
       endurance: 75,
     },
     {
-      date: "Jun 8",
+      date: 'Jun 8',
       workouts: 4,
       calories: 1200,
       duration: 160,
@@ -86,7 +86,7 @@ export default function Statistics({ onNavigate }: StatisticsProps) {
       endurance: 78,
     },
     {
-      date: "Jun 15",
+      date: 'Jun 15',
       workouts: 3,
       calories: 980,
       duration: 135,
@@ -94,7 +94,7 @@ export default function Statistics({ onNavigate }: StatisticsProps) {
       endurance: 82,
     },
     {
-      date: "Jun 22",
+      date: 'Jun 22',
       workouts: 5,
       calories: 1450,
       duration: 200,
@@ -102,7 +102,7 @@ export default function Statistics({ onNavigate }: StatisticsProps) {
       endurance: 85,
     },
     {
-      date: "Jun 29",
+      date: 'Jun 29',
       workouts: 4,
       calories: 1150,
       duration: 170,
@@ -110,7 +110,7 @@ export default function Statistics({ onNavigate }: StatisticsProps) {
       endurance: 87,
     },
     {
-      date: "Jul 6",
+      date: 'Jul 6',
       workouts: 4,
       calories: 1320,
       duration: 180,
@@ -118,7 +118,7 @@ export default function Statistics({ onNavigate }: StatisticsProps) {
       endurance: 89,
     },
     {
-      date: "Jul 13",
+      date: 'Jul 13',
       workouts: 5,
       calories: 1520,
       duration: 210,
@@ -126,7 +126,7 @@ export default function Statistics({ onNavigate }: StatisticsProps) {
       endurance: 91,
     },
     {
-      date: "Jul 20",
+      date: 'Jul 20',
       workouts: 4,
       calories: 1280,
       duration: 185,
@@ -136,73 +136,73 @@ export default function Statistics({ onNavigate }: StatisticsProps) {
   ];
 
   const workoutDistribution = [
-    { name: "Strength Training", value: 45, color: "#3b82f6" },
-    { name: "Cardio", value: 25, color: "#10b981" },
-    { name: "HIIT", value: 20, color: "#f59e0b" },
-    { name: "Flexibility", value: 10, color: "#8b5cf6" },
+    { name: 'Strength Training', value: 45, color: '#3b82f6' },
+    { name: 'Cardio', value: 25, color: '#10b981' },
+    { name: 'HIIT', value: 20, color: '#f59e0b' },
+    { name: 'Flexibility', value: 10, color: '#8b5cf6' },
   ];
 
   const muscleGroupData = [
-    { group: "Chest", frequency: 8, volume: 2840, growth: 12 },
-    { group: "Back", frequency: 9, volume: 3250, growth: 15 },
-    { group: "Shoulders", frequency: 7, volume: 2180, growth: 8 },
-    { group: "Arms", frequency: 10, volume: 1920, growth: 18 },
-    { group: "Legs", frequency: 6, volume: 4100, growth: 22 },
-    { group: "Core", frequency: 12, volume: 1650, growth: 10 },
+    { group: 'Chest', frequency: 8, volume: 2840, growth: 12 },
+    { group: 'Back', frequency: 9, volume: 3250, growth: 15 },
+    { group: 'Shoulders', frequency: 7, volume: 2180, growth: 8 },
+    { group: 'Arms', frequency: 10, volume: 1920, growth: 18 },
+    { group: 'Legs', frequency: 6, volume: 4100, growth: 22 },
+    { group: 'Core', frequency: 12, volume: 1650, growth: 10 },
   ];
 
   const healthMetricsData = [
     {
-      date: "Jun 1",
+      date: 'Jun 1',
       weight: 82.1,
       bodyFat: 15.8,
       muscleMass: 42.2,
       restingHR: 65,
     },
     {
-      date: "Jun 8",
+      date: 'Jun 8',
       weight: 82.3,
       bodyFat: 15.5,
       muscleMass: 42.6,
       restingHR: 63,
     },
     {
-      date: "Jun 15",
+      date: 'Jun 15',
       weight: 82.6,
       bodyFat: 15.2,
       muscleMass: 43.1,
       restingHR: 62,
     },
     {
-      date: "Jun 22",
+      date: 'Jun 22',
       weight: 82.9,
       bodyFat: 14.9,
       muscleMass: 43.5,
       restingHR: 61,
     },
     {
-      date: "Jun 29",
+      date: 'Jun 29',
       weight: 83.2,
       bodyFat: 14.6,
       muscleMass: 43.9,
       restingHR: 60,
     },
     {
-      date: "Jul 6",
+      date: 'Jul 6',
       weight: 83.4,
       bodyFat: 14.4,
       muscleMass: 44.2,
       restingHR: 59,
     },
     {
-      date: "Jul 13",
+      date: 'Jul 13',
       weight: 83.7,
       bodyFat: 14.1,
       muscleMass: 44.6,
       restingHR: 58,
     },
     {
-      date: "Jul 20",
+      date: 'Jul 20',
       weight: 83.9,
       bodyFat: 13.9,
       muscleMass: 44.9,
@@ -212,245 +212,245 @@ export default function Statistics({ onNavigate }: StatisticsProps) {
 
   const fitnessOverview = [
     {
-      title: "Total Workouts",
-      value: "142",
-      change: "+18",
-      period: "this month",
-      trending: "up",
-      goal: "160",
+      title: 'Total Workouts',
+      value: '142',
+      change: '+18',
+      period: 'this month',
+      trending: 'up',
+      goal: '160',
       progress: 88.75,
       icon: Activity,
-      color: "bg-blue-500",
-      lightColor: "bg-blue-50",
-      textColor: "text-blue-600",
+      color: 'bg-blue-500',
+      lightColor: 'bg-blue-50',
+      textColor: 'text-blue-600',
     },
     {
-      title: "Active Hours",
-      value: "68.5",
-      change: "+12.3",
-      period: "this month",
-      trending: "up",
-      goal: "75",
+      title: 'Active Hours',
+      value: '68.5',
+      change: '+12.3',
+      period: 'this month',
+      trending: 'up',
+      goal: '75',
       progress: 91.33,
       icon: Clock,
-      color: "bg-green-500",
-      lightColor: "bg-green-50",
-      textColor: "text-green-600",
+      color: 'bg-green-500',
+      lightColor: 'bg-green-50',
+      textColor: 'text-green-600',
     },
     {
-      title: "Calories Burned",
-      value: "54,280",
-      change: "+4,320",
-      period: "this month",
-      trending: "up",
-      goal: "60,000",
+      title: 'Calories Burned',
+      value: '54,280',
+      change: '+4,320',
+      period: 'this month',
+      trending: 'up',
+      goal: '60,000',
       progress: 90.47,
       icon: Flame,
-      color: "bg-orange-500",
-      lightColor: "bg-orange-50",
-      textColor: "text-orange-600",
+      color: 'bg-orange-500',
+      lightColor: 'bg-orange-50',
+      textColor: 'text-orange-600',
     },
     {
-      title: "Avg Heart Rate",
-      value: "142",
-      change: "-8",
-      period: "improvement",
-      trending: "down",
-      goal: "130-150",
+      title: 'Avg Heart Rate',
+      value: '142',
+      change: '-8',
+      period: 'improvement',
+      trending: 'down',
+      goal: '130-150',
       progress: 95,
       icon: Heart,
-      color: "bg-red-500",
-      lightColor: "bg-red-50",
-      textColor: "text-red-600",
+      color: 'bg-red-500',
+      lightColor: 'bg-red-50',
+      textColor: 'text-red-600',
     },
     {
-      title: "Weight Progress",
-      value: "83.9kg",
-      change: "+1.8kg",
-      period: "muscle gain",
-      trending: "up",
-      goal: "85kg",
+      title: 'Weight Progress',
+      value: '83.9kg',
+      change: '+1.8kg',
+      period: 'muscle gain',
+      trending: 'up',
+      goal: '85kg',
       progress: 78,
       icon: Scale,
-      color: "bg-purple-500",
-      lightColor: "bg-purple-50",
-      textColor: "text-purple-600",
+      color: 'bg-purple-500',
+      lightColor: 'bg-purple-50',
+      textColor: 'text-purple-600',
     },
     {
-      title: "Body Fat",
-      value: "13.9%",
-      change: "-1.9%",
-      period: "improvement",
-      trending: "down",
-      goal: "12%",
+      title: 'Body Fat',
+      value: '13.9%',
+      change: '-1.9%',
+      period: 'improvement',
+      trending: 'down',
+      goal: '12%',
       progress: 85,
       icon: Droplets,
-      color: "bg-cyan-500",
-      lightColor: "bg-cyan-50",
-      textColor: "text-cyan-600",
+      color: 'bg-cyan-500',
+      lightColor: 'bg-cyan-50',
+      textColor: 'text-cyan-600',
     },
     {
-      title: "Muscle Mass",
-      value: "44.9kg",
-      change: "+2.7kg",
-      period: "this period",
-      trending: "up",
-      goal: "47kg",
+      title: 'Muscle Mass',
+      value: '44.9kg',
+      change: '+2.7kg',
+      period: 'this period',
+      trending: 'up',
+      goal: '47kg',
       progress: 82,
       icon: Dumbbell,
-      color: "bg-indigo-500",
-      lightColor: "bg-indigo-50",
-      textColor: "text-indigo-600",
+      color: 'bg-indigo-500',
+      lightColor: 'bg-indigo-50',
+      textColor: 'text-indigo-600',
     },
     {
-      title: "Sleep Quality",
-      value: "8.2h",
-      change: "+0.5h",
-      period: "average",
-      trending: "up",
-      goal: "8h",
+      title: 'Sleep Quality',
+      value: '8.2h',
+      change: '+0.5h',
+      period: 'average',
+      trending: 'up',
+      goal: '8h',
       progress: 103,
       icon: Eye,
-      color: "bg-violet-500",
-      lightColor: "bg-violet-50",
-      textColor: "text-violet-600",
+      color: 'bg-violet-500',
+      lightColor: 'bg-violet-50',
+      textColor: 'text-violet-600',
     },
   ];
 
   const achievements = [
     {
-      title: "Consistency Streak",
-      description: "15 days workout streak",
+      title: 'Consistency Streak',
+      description: '15 days workout streak',
       icon: Trophy,
-      color: "bg-yellow-500",
-      lightColor: "bg-yellow-50",
-      textColor: "text-yellow-600",
+      color: 'bg-yellow-500',
+      lightColor: 'bg-yellow-50',
+      textColor: 'text-yellow-600',
       isNew: true,
     },
     {
-      title: "Personal Best",
-      description: "New bench press record: 190lbs",
+      title: 'Personal Best',
+      description: 'New bench press record: 190lbs',
       icon: Award,
-      color: "bg-green-500",
-      lightColor: "bg-green-50",
-      textColor: "text-green-600",
+      color: 'bg-green-500',
+      lightColor: 'bg-green-50',
+      textColor: 'text-green-600',
       isNew: true,
     },
     {
-      title: "Milestone Reached",
-      description: "100 total workouts completed",
+      title: 'Milestone Reached',
+      description: '100 total workouts completed',
       icon: Star,
-      color: "bg-purple-500",
-      lightColor: "bg-purple-50",
-      textColor: "text-purple-600",
+      color: 'bg-purple-500',
+      lightColor: 'bg-purple-50',
+      textColor: 'text-purple-600',
       isNew: false,
     },
   ];
 
   const recentWorkouts = [
     {
-      id: "1",
-      date: "Jul 22, 2025",
-      name: "Upper Body Power",
-      type: "Strength",
-      duration: "48 min",
+      id: '1',
+      date: 'Jul 22, 2025',
+      name: 'Upper Body Power',
+      type: 'Strength',
+      duration: '48 min',
       calories: 340,
       exercises: 8,
       sets: 24,
       volume: 2850,
       rating: 9.2,
-      notes: "Great session, felt strong throughout",
+      notes: 'Great session, felt strong throughout',
     },
     {
-      id: "2",
-      date: "Jul 21, 2025",
-      name: "Morning Cardio",
-      type: "Cardio",
-      duration: "35 min",
+      id: '2',
+      date: 'Jul 21, 2025',
+      name: 'Morning Cardio',
+      type: 'Cardio',
+      duration: '35 min',
       calories: 420,
       exercises: 5,
       sets: 0,
       volume: 0,
       rating: 8.5,
-      notes: "Good endurance work",
+      notes: 'Good endurance work',
     },
     {
-      id: "3",
-      date: "Jul 20, 2025",
-      name: "Leg Day Crusher",
-      type: "Strength",
-      duration: "55 min",
+      id: '3',
+      date: 'Jul 20, 2025',
+      name: 'Leg Day Crusher',
+      type: 'Strength',
+      duration: '55 min',
       calories: 480,
       exercises: 10,
       sets: 32,
       volume: 4200,
       rating: 9.8,
-      notes: "Intense session, new squat PR!",
+      notes: 'Intense session, new squat PR!',
     },
     {
-      id: "4",
-      date: "Jul 19, 2025",
-      name: "HIIT Circuit",
-      type: "HIIT",
-      duration: "25 min",
+      id: '4',
+      date: 'Jul 19, 2025',
+      name: 'HIIT Circuit',
+      type: 'HIIT',
+      duration: '25 min',
       calories: 380,
       exercises: 6,
       sets: 18,
       volume: 1200,
       rating: 8.8,
-      notes: "High intensity, great sweat",
+      notes: 'High intensity, great sweat',
     },
   ];
 
   const personalRecords = [
     {
-      exercise: "Bench Press",
-      current: "190 lbs",
-      previous: "185 lbs",
-      improvement: "+5 lbs",
-      date: "Jul 20, 2025",
+      exercise: 'Bench Press',
+      current: '190 lbs',
+      previous: '185 lbs',
+      improvement: '+5 lbs',
+      date: 'Jul 20, 2025',
       isNew: true,
     },
     {
-      exercise: "Squat",
-      current: "285 lbs",
-      previous: "275 lbs",
-      improvement: "+10 lbs",
-      date: "Jul 18, 2025",
+      exercise: 'Squat',
+      current: '285 lbs',
+      previous: '275 lbs',
+      improvement: '+10 lbs',
+      date: 'Jul 18, 2025',
       isNew: true,
     },
     {
-      exercise: "Deadlift",
-      current: "325 lbs",
-      previous: "315 lbs",
-      improvement: "+10 lbs",
-      date: "Jul 15, 2025",
+      exercise: 'Deadlift',
+      current: '325 lbs',
+      previous: '315 lbs',
+      improvement: '+10 lbs',
+      date: 'Jul 15, 2025',
       isNew: false,
     },
     {
-      exercise: "5K Run",
-      current: "22:15",
-      previous: "22:45",
-      improvement: "-0:30",
-      date: "Jul 12, 2025",
+      exercise: '5K Run',
+      current: '22:15',
+      previous: '22:45',
+      improvement: '-0:30',
+      date: 'Jul 12, 2025',
       isNew: false,
     },
   ];
 
   const getTrendIcon = (trending: string) => {
-    return trending === "up" ? ArrowUp : ArrowDown;
+    return trending === 'up' ? ArrowUp : ArrowDown;
   };
 
   const getTrendColor = (trending: string) => {
-    return trending === "up" ? "text-green-600" : "text-blue-600";
+    return trending === 'up' ? 'text-green-600' : 'text-blue-600';
   };
 
   const getWorkoutTypeColor = (type: string) => {
     const colors = {
-      Strength: "bg-blue-100 text-blue-800",
-      Cardio: "bg-green-100 text-green-800",
-      HIIT: "bg-orange-100 text-orange-800",
-      Flexibility: "bg-purple-100 text-purple-800",
+      Strength: 'bg-blue-100 text-blue-800',
+      Cardio: 'bg-green-100 text-green-800',
+      HIIT: 'bg-orange-100 text-orange-800',
+      Flexibility: 'bg-purple-100 text-purple-800',
     };
     return colors[type as keyof typeof colors] || colors.Strength;
   };
@@ -471,23 +471,23 @@ export default function Statistics({ onNavigate }: StatisticsProps) {
           <div className="flex gap-3">
             <div className="flex bg-white rounded-lg border border-gray-200 p-1">
               <Button
-                variant={timeFilter === "weekly" ? "default" : "ghost"}
+                variant={timeFilter === 'weekly' ? 'default' : 'ghost'}
                 size="sm"
-                onClick={() => setTimeFilter("weekly")}
+                onClick={() => setTimeFilter('weekly')}
               >
                 Weekly
               </Button>
               <Button
-                variant={timeFilter === "monthly" ? "default" : "ghost"}
+                variant={timeFilter === 'monthly' ? 'default' : 'ghost'}
                 size="sm"
-                onClick={() => setTimeFilter("monthly")}
+                onClick={() => setTimeFilter('monthly')}
               >
                 Monthly
               </Button>
               <Button
-                variant={timeFilter === "yearly" ? "default" : "ghost"}
+                variant={timeFilter === 'yearly' ? 'default' : 'ghost'}
                 size="sm"
-                onClick={() => setTimeFilter("yearly")}
+                onClick={() => setTimeFilter('yearly')}
               >
                 Yearly
               </Button>
@@ -660,7 +660,7 @@ export default function Statistics({ onNavigate }: StatisticsProps) {
                 <Button
                   variant="ghost"
                   size="sm"
-                  onClick={() => onNavigate("calendar")}
+                  onClick={() => onNavigate('calendar')}
                 >
                   View All
                 </Button>
@@ -914,13 +914,13 @@ export default function Statistics({ onNavigate }: StatisticsProps) {
                 <ResponsiveContainer width="100%" height="100%">
                   <LineChart
                     data={[
-                      { month: "Jan", weight: 150 },
-                      { month: "Feb", weight: 160 },
-                      { month: "Mar", weight: 165 },
-                      { month: "Apr", weight: 175 },
-                      { month: "May", weight: 180 },
-                      { month: "Jun", weight: 185 },
-                      { month: "Jul", weight: 190 },
+                      { month: 'Jan', weight: 150 },
+                      { month: 'Feb', weight: 160 },
+                      { month: 'Mar', weight: 165 },
+                      { month: 'Apr', weight: 175 },
+                      { month: 'May', weight: 180 },
+                      { month: 'Jun', weight: 185 },
+                      { month: 'Jul', weight: 190 },
                     ]}
                   >
                     <CartesianGrid strokeDasharray="3 3" />
@@ -1036,7 +1036,7 @@ export default function Statistics({ onNavigate }: StatisticsProps) {
                 <Button
                   variant="outline"
                   size="sm"
-                  onClick={() => onNavigate("health")}
+                  onClick={() => onNavigate('health')}
                 >
                   View Health Dashboard
                 </Button>
@@ -1047,7 +1047,7 @@ export default function Statistics({ onNavigate }: StatisticsProps) {
                 <p className="text-sm">
                   Integrate with health apps for comprehensive insights
                 </p>
-                <Button className="mt-4" onClick={() => onNavigate("health")}>
+                <Button className="mt-4" onClick={() => onNavigate('health')}>
                   Go to Health Tracking
                 </Button>
               </div>
@@ -1065,13 +1065,13 @@ export default function Statistics({ onNavigate }: StatisticsProps) {
                   <ResponsiveContainer width="100%" height="100%">
                     <BarChart
                       data={[
-                        { day: "Mon", workouts: 5 },
-                        { day: "Tue", workouts: 8 },
-                        { day: "Wed", workouts: 6 },
-                        { day: "Thu", workouts: 7 },
-                        { day: "Fri", workouts: 9 },
-                        { day: "Sat", workouts: 4 },
-                        { day: "Sun", workouts: 3 },
+                        { day: 'Mon', workouts: 5 },
+                        { day: 'Tue', workouts: 8 },
+                        { day: 'Wed', workouts: 6 },
+                        { day: 'Thu', workouts: 7 },
+                        { day: 'Fri', workouts: 9 },
+                        { day: 'Sat', workouts: 4 },
+                        { day: 'Sun', workouts: 3 },
                       ]}
                     >
                       <CartesianGrid strokeDasharray="3 3" />
@@ -1092,13 +1092,13 @@ export default function Statistics({ onNavigate }: StatisticsProps) {
                   <ResponsiveContainer width="100%" height="100%">
                     <AreaChart
                       data={[
-                        { month: "Jan", thisYear: 12, lastYear: 8 },
-                        { month: "Feb", thisYear: 15, lastYear: 10 },
-                        { month: "Mar", thisYear: 18, lastYear: 14 },
-                        { month: "Apr", thisYear: 20, lastYear: 16 },
-                        { month: "May", thisYear: 22, lastYear: 18 },
-                        { month: "Jun", thisYear: 25, lastYear: 20 },
-                        { month: "Jul", thisYear: 28, lastYear: 22 },
+                        { month: 'Jan', thisYear: 12, lastYear: 8 },
+                        { month: 'Feb', thisYear: 15, lastYear: 10 },
+                        { month: 'Mar', thisYear: 18, lastYear: 14 },
+                        { month: 'Apr', thisYear: 20, lastYear: 16 },
+                        { month: 'May', thisYear: 22, lastYear: 18 },
+                        { month: 'Jun', thisYear: 25, lastYear: 20 },
+                        { month: 'Jul', thisYear: 28, lastYear: 22 },
                       ]}
                     >
                       <CartesianGrid strokeDasharray="3 3" />

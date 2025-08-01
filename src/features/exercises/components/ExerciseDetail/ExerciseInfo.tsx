@@ -1,11 +1,11 @@
-import { ExerciseData } from "../../types";
-import { getDifficultyColor } from "../../utils/exerciseUtils";
+import { ExerciseData } from '../../types';
+import { getDifficultyColor } from '../../utils/exerciseUtils';
 
 interface ExerciseInfoProps {
   exercise: ExerciseData;
 }
 
-export function ExerciseInfo({ exercise }: ExerciseInfoProps) {
+export const ExerciseInfo = ({ exercise }: ExerciseInfoProps) => {
   return (
     <>
       {/* Exercise Details Grid */}
@@ -17,7 +17,7 @@ export function ExerciseInfo({ exercise }: ExerciseInfoProps) {
         <div className="bg-gray-50 p-4 rounded-lg">
           <div className="text-sm text-gray-500 mb-1">Equipment</div>
           <div className="font-medium text-gray-800">
-            {exercise.equipment?.join(", ") || "None"}
+            {exercise.equipment?.join(', ') || 'None'}
           </div>
         </div>
         <div className="bg-gray-50 p-4 rounded-lg">
@@ -62,4 +62,4 @@ export function ExerciseInfo({ exercise }: ExerciseInfoProps) {
       </div>
     </>
   );
-}
+};

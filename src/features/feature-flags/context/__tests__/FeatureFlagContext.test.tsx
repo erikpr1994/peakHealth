@@ -1,13 +1,13 @@
-import { render, screen, waitFor } from "@testing-library/react";
-import { describe, it, expect, beforeEach, Mock, vi } from "vitest";
+import { render, screen, waitFor } from '@testing-library/react';
+import { describe, it, expect, beforeEach, Mock, vi } from 'vitest';
 
-import { useAuth } from "@/features/auth/context/AuthContext";
+import { FeatureFlagProvider, useFeatureFlags } from '../FeatureFlagContext';
 
-import { FeatureFlagProvider, useFeatureFlags } from "../FeatureFlagContext";
+import { useAuth } from '@/features/auth/context/AuthContext';
 
 // Mock all external dependencies
-vi.mock("@/lib/supabase/client");
-vi.mock("@/features/auth/context/AuthContext");
+vi.mock('@/lib/supabase/client');
+vi.mock('@/features/auth/context/AuthContext');
 
 const mockedUseAuth = useAuth as Mock;
 
@@ -15,7 +15,7 @@ const mockedUseAuth = useAuth as Mock;
 const mockFetch = vi.fn();
 global.fetch = mockFetch;
 
-describe("FeatureFlagContext", () => {
+describe('FeatureFlagContext', () => {
   const TestComponent = () => {
     const { flags, isLoading, isEnabled } = useFeatureFlags();
 
@@ -25,7 +25,7 @@ describe("FeatureFlagContext", () => {
       <div>
         <div data-testid="flag-count">{Object.keys(flags).length}</div>
         <div data-testid="test-feature-enabled">
-          {isEnabled("test-feature") ? "true" : "false"}
+          {isEnabled('test-feature') ? 'true' : 'false'}
         </div>
       </div>
     );
@@ -34,7 +34,7 @@ describe("FeatureFlagContext", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     mockedUseAuth.mockReturnValue({
-      user: { id: "test-user-id" },
+      user: { id: 'test-user-id' },
       isAuthenticated: true,
       isLoading: false,
       isAuthOperationLoading: false,
@@ -45,13 +45,13 @@ describe("FeatureFlagContext", () => {
     });
   });
 
-  it("should load and provide feature flags data", async () => {
+  it('should load and provide feature flags data', async () => {
     mockFetch.mockResolvedValue({
       ok: true,
       json: () =>
         Promise.resolve({
           flags: [
-            { name: "test-feature", is_enabled: true, rollout_percentage: 100 },
+            { name: 'test-feature', is_enabled: true, rollout_percentage: 100 },
           ],
           userTypes: [],
           userGroups: [],
@@ -64,18 +64,18 @@ describe("FeatureFlagContext", () => {
       </FeatureFlagProvider>
     );
 
-    expect(screen.getByText("Loading...")).toBeInTheDocument();
+    expect(screen.getByText('Loading...')).toBeInTheDocument();
 
     await waitFor(() => {
-      expect(screen.queryByText("Loading...")).not.toBeInTheDocument();
-      expect(screen.getByTestId("flag-count")).toHaveTextContent("1");
-      expect(screen.getByTestId("test-feature-enabled")).toHaveTextContent(
-        "true"
+      expect(screen.queryByText('Loading...')).not.toBeInTheDocument();
+      expect(screen.getByTestId('flag-count')).toHaveTextContent('1');
+      expect(screen.getByTestId('test-feature-enabled')).toHaveTextContent(
+        'true'
       );
     });
   });
 
-  it("should handle API errors gracefully", async () => {
+  it('should handle API errors gracefully', async () => {
     mockFetch.mockResolvedValue({
       ok: false,
     });
@@ -87,13 +87,13 @@ describe("FeatureFlagContext", () => {
     );
 
     await waitFor(() => {
-      expect(screen.queryByText("Loading...")).not.toBeInTheDocument();
+      expect(screen.queryByText('Loading...')).not.toBeInTheDocument();
       // Should default to no flags on error
-      expect(screen.getByTestId("flag-count")).toHaveTextContent("0");
+      expect(screen.getByTestId('flag-count')).toHaveTextContent('0');
     });
   });
 
-  it("should not fetch data for unauthenticated users", async () => {
+  it('should not fetch data for unauthenticated users', async () => {
     mockedUseAuth.mockReturnValue({
       user: null,
       isAuthenticated: false,
@@ -108,10 +108,10 @@ describe("FeatureFlagContext", () => {
     );
 
     await waitFor(() => {
-      expect(screen.queryByText("Loading...")).not.toBeInTheDocument();
+      expect(screen.queryByText('Loading...')).not.toBeInTheDocument();
     });
 
     expect(mockFetch).not.toHaveBeenCalled();
-    expect(screen.getByTestId("flag-count")).toHaveTextContent("0");
+    expect(screen.getByTestId('flag-count')).toHaveTextContent('0');
   });
 });

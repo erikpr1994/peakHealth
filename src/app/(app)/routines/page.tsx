@@ -1,7 +1,9 @@
-"use client";
+'use client';
 
-import Routines from "@/features/routines/Routines";
+import Routines from '@/features/routines/Routines';
 
-export default function RoutinesPage() {
+const RoutinesPage = () => {
   return <Routines />;
-}
+};
+
+export default RoutinesPage;

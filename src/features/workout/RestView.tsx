@@ -1,14 +1,14 @@
-import { Plus, Minus, MessageCircle, Camera, Video } from "lucide-react";
-import { useState } from "react";
+import { Plus, Minus, MessageCircle, Camera, Video } from 'lucide-react';
+import { useState } from 'react';
 
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
+import RestTimer, { RestType } from './RestTimer';
 
-import RestTimer, { RestType } from "./RestTimer";
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
 
 interface SetData {
   id: string;
@@ -32,7 +32,7 @@ interface RestViewProps {
     name: string;
     sets: Array<{
       id: string;
-      type: "reps" | "time";
+      type: 'reps' | 'time';
       reps?: string;
       weight?: string;
       duration?: string;
@@ -52,7 +52,7 @@ export default function RestView({
   nextExercise,
   nextSetNumber,
   restTime,
-  restType = "set",
+  restType = 'set',
   onRestCompleted,
   customTitle,
   customSubtitle,
@@ -62,15 +62,15 @@ export default function RestView({
   const [actualDuration, setActualDuration] = useState(
     setData?.actualDuration || 0
   );
-  const [notes, setNotes] = useState(setData?.notes || "");
+  const [notes, setNotes] = useState(setData?.notes || '');
   const [mediaFiles, setMediaFiles] = useState<
-    Array<{ id: string; type: "photo" | "video"; url: string }>
+    Array<{ id: string; type: 'photo' | 'video'; url: string }>
   >([]);
 
   const handleRestCompleted = () => {
     // Save the set data with actual values (only if we have set data)
     if (setData) {
-      console.log("Set completed with data:", {
+      console.log('Set completed with data:', {
         actualReps,
         actualWeight,
         actualDuration,
@@ -81,7 +81,7 @@ export default function RestView({
     onRestCompleted();
   };
 
-  const addMedia = (type: "photo" | "video") => {
+  const addMedia = (type: 'photo' | 'video') => {
     // Mock media upload - in real app, this would handle file upload
     const mockId = Date.now().toString();
     const mockUrl = `mock-${type}-url-${mockId}`;
@@ -93,19 +93,19 @@ export default function RestView({
   };
 
   const getNextInfo = () => {
-    if (restType === "set" && nextExercise) {
+    if (restType === 'set' && nextExercise) {
       return `${nextExercise.name} - Set ${nextSetNumber}`;
     }
-    if (restType === "exercise") {
-      return nextExercise ? `Next: ${nextExercise.name}` : "Next Exercise";
+    if (restType === 'exercise') {
+      return nextExercise ? `Next: ${nextExercise.name}` : 'Next Exercise';
     }
-    if (restType === "section") {
-      return "Next Section";
+    if (restType === 'section') {
+      return 'Next Section';
     }
-    if (restType === "workout") {
-      return "Next Workout";
+    if (restType === 'workout') {
+      return 'Next Workout';
     }
-    return "";
+    return '';
   };
 
   return (
@@ -123,7 +123,7 @@ export default function RestView({
         />
 
         {/* Set Data Input - Only show for set rest */}
-        {restType === "set" && setData && (
+        {restType === 'set' && setData && (
           <Card className="p-4 sm:p-6">
             <h3 className="font-semibold mb-4">How did that set go?</h3>
 
@@ -176,7 +176,7 @@ export default function RestView({
               )}
 
               {setData.targetWeight &&
-                setData.targetWeight !== "Bodyweight" && (
+                setData.targetWeight !== 'Bodyweight' && (
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                       <Label>Target Weight</Label>
@@ -224,7 +224,7 @@ export default function RestView({
         )}
 
         {/* Notes and Media - Only show for set rest */}
-        {restType === "set" && setData && (
+        {restType === 'set' && setData && (
           <Card className="p-6">
             <h3 className="font-semibold mb-4 flex items-center gap-2">
               <MessageCircle className="w-4 h-4" />
@@ -243,7 +243,7 @@ export default function RestView({
               <Button
                 variant="outline"
                 size="sm"
-                onClick={() => addMedia("photo")}
+                onClick={() => addMedia('photo')}
                 className="flex-1"
               >
                 <Camera className="w-4 h-4 mr-2" />
@@ -252,7 +252,7 @@ export default function RestView({
               <Button
                 variant="outline"
                 size="sm"
-                onClick={() => addMedia("video")}
+                onClick={() => addMedia('video')}
                 className="flex-1"
               >
                 <Video className="w-4 h-4 mr-2" />
@@ -267,7 +267,7 @@ export default function RestView({
                     key={file.id}
                     className="relative bg-gray-100 rounded-lg aspect-square flex items-center justify-center"
                   >
-                    {file.type === "photo" ? (
+                    {file.type === 'photo' ? (
                       <Camera className="w-6 h-6 text-gray-400" />
                     ) : (
                       <Video className="w-6 h-6 text-gray-400" />

@@ -76,7 +76,7 @@ export interface FeatureFlagUserGroup {
 export interface FeatureFlagAuditLog {
   id: string;
   featureFlagId: string;
-  action: "created" | "updated" | "deleted" | "enabled" | "disabled";
+  action: 'created' | 'updated' | 'deleted' | 'enabled' | 'disabled';
   oldValues?: Record<string, unknown>;
   newValues?: Record<string, unknown>;
   changedBy?: string;
@@ -135,7 +135,7 @@ export interface FeatureFlagConfig {
 }
 
 // Environment Types
-export type Environment = "development" | "staging" | "production";
+export type Environment = 'development' | 'staging' | 'production';
 
 // Hook Return Types
 export interface UseFeatureFlagReturn {

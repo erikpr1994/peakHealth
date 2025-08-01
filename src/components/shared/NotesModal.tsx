@@ -1,16 +1,16 @@
-import { FileText, Save, X } from "lucide-react";
-import { useState, useEffect } from "react";
+import { FileText, Save, X } from 'lucide-react';
+import { useState, useEffect } from 'react';
 
-import { Button } from "@/components/ui/button";
+import { Button } from '@/components/ui/button';
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
+} from '@/components/ui/dialog';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
 
 interface NotesModalProps {
   isOpen: boolean;
@@ -21,14 +21,14 @@ interface NotesModalProps {
   placeholder?: string;
 }
 
-export default function NotesModal({
+const NotesModal = ({
   isOpen,
   onClose,
   onSave,
-  initialNotes = "",
-  title = "Edit Notes",
-  placeholder = "Add your notes here...",
-}: NotesModalProps) {
+  initialNotes = '',
+  title = 'Edit Notes',
+  placeholder = 'Add your notes here...',
+}: NotesModalProps) => {
   const [notes, setNotes] = useState(initialNotes);
 
   useEffect(() => {
@@ -93,4 +93,6 @@ export default function NotesModal({
       </DialogContent>
     </Dialog>
   );
-}
+};
+
+export default NotesModal;

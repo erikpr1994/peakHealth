@@ -8,20 +8,20 @@ import {
   Dumbbell,
   Target,
   Flame,
-} from "lucide-react";
-import { useState, useEffect } from "react";
+} from 'lucide-react';
+import { useState, useEffect } from 'react';
 
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
+} from '@/components/ui/select';
 
-export type RestType = "set" | "exercise" | "section" | "workout";
+export type RestType = 'set' | 'exercise' | 'section' | 'workout';
 
 interface RestTimerProps {
   restType: RestType;
@@ -45,27 +45,27 @@ const DEFAULT_REST_TIMES = {
 const REST_TYPE_CONFIG = {
   set: {
     icon: <Dumbbell className="w-5 h-5" />,
-    color: "bg-green-100 text-green-700 border-green-200",
-    title: "Set Rest",
-    description: "Rest between sets",
+    color: 'bg-green-100 text-green-700 border-green-200',
+    title: 'Set Rest',
+    description: 'Rest between sets',
   },
   exercise: {
     icon: <Target className="w-5 h-5" />,
-    color: "bg-blue-100 text-blue-700 border-blue-200",
-    title: "Exercise Rest",
-    description: "Rest between exercises",
+    color: 'bg-blue-100 text-blue-700 border-blue-200',
+    title: 'Exercise Rest',
+    description: 'Rest between exercises',
   },
   section: {
     icon: <Flame className="w-5 h-5" />,
-    color: "bg-purple-100 text-purple-700 border-purple-200",
-    title: "Section Rest",
-    description: "Rest between workout sections",
+    color: 'bg-purple-100 text-purple-700 border-purple-200',
+    title: 'Section Rest',
+    description: 'Rest between workout sections',
   },
   workout: {
     icon: <Clock className="w-5 h-5" />,
-    color: "bg-orange-100 text-orange-700 border-orange-200",
-    title: "Workout Rest",
-    description: "Rest between workouts",
+    color: 'bg-orange-100 text-orange-700 border-orange-200',
+    title: 'Workout Rest',
+    description: 'Rest between workouts',
   },
 };
 
@@ -99,7 +99,7 @@ export default function RestTimer({
             setIsRunning(false);
             setIsCompleted(true);
             // Play notification sound or vibration
-            if ("vibrate" in navigator) {
+            if ('vibrate' in navigator) {
               navigator.vibrate([200, 100, 200]);
             }
             return 0;
@@ -118,11 +118,11 @@ export default function RestTimer({
     const secs = seconds % 60;
 
     if (hours > 0) {
-      return `${hours}:${minutes.toString().padStart(2, "0")}:${secs
+      return `${hours}:${minutes.toString().padStart(2, '0')}:${secs
         .toString()
-        .padStart(2, "0")}`;
+        .padStart(2, '0')}`;
     }
-    return `${minutes}:${secs.toString().padStart(2, "0")}`;
+    return `${minutes}:${secs.toString().padStart(2, '0')}`;
   };
 
   const formatTimeShort = (seconds: number) => {
@@ -130,7 +130,7 @@ export default function RestTimer({
     const secs = seconds % 60;
 
     if (minutes > 0) {
-      return `${minutes}:${secs.toString().padStart(2, "0")}`;
+      return `${minutes}:${secs.toString().padStart(2, '0')}`;
     }
     return `${secs}s`;
   };
@@ -168,11 +168,11 @@ export default function RestTimer({
   };
 
   const getTimerColor = () => {
-    if (isCompleted) return "text-green-600";
+    if (isCompleted) return 'text-green-600';
     const percentage = (timeRemaining / totalTime) * 100;
-    if (percentage > 50) return "text-green-600";
-    if (percentage > 25) return "text-yellow-600";
-    return "text-red-600";
+    if (percentage > 50) return 'text-green-600';
+    if (percentage > 25) return 'text-yellow-600';
+    return 'text-red-600';
   };
 
   const getProgressPercentage = () => {
@@ -180,11 +180,11 @@ export default function RestTimer({
   };
 
   const getProgressColor = () => {
-    if (isCompleted) return "stroke-green-500";
+    if (isCompleted) return 'stroke-green-500';
     const percentage = getProgressPercentage();
-    if (percentage > 75) return "stroke-green-500";
-    if (percentage > 50) return "stroke-yellow-500";
-    return "stroke-red-500";
+    if (percentage > 75) return 'stroke-green-500';
+    if (percentage > 50) return 'stroke-yellow-500';
+    return 'stroke-red-500';
   };
 
   return (
@@ -275,7 +275,7 @@ export default function RestTimer({
             ) : (
               <>
                 <Play className="w-4 h-4 mr-2" />
-                {timeRemaining === 0 ? "Start" : "Resume"}
+                {timeRemaining === 0 ? 'Start' : 'Resume'}
               </>
             )}
           </Button>
@@ -308,7 +308,7 @@ export default function RestTimer({
             className="flex-1 bg-indigo-600 hover:bg-indigo-700"
             disabled={timeRemaining > 0 && isRunning}
           >
-            {isCompleted ? "Continue" : "Continue Early"}
+            {isCompleted ? 'Continue' : 'Continue Early'}
           </Button>
         </div>
       </Card>

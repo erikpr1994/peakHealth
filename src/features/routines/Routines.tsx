@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import {
   Search,
@@ -15,28 +15,28 @@ import {
   Trophy,
   Zap,
   Dumbbell,
-} from "lucide-react";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
+} from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
+} from '@/components/ui/select';
 
 interface Routine {
   id: string;
   name: string;
   description: string;
   daysPerWeek: number;
-  difficulty: "Beginner" | "Intermediate" | "Advanced";
-  goal: "Strength" | "Hypertrophy" | "Endurance" | "Weight Loss";
+  difficulty: 'Beginner' | 'Intermediate' | 'Advanced';
+  goal: 'Strength' | 'Hypertrophy' | 'Endurance' | 'Weight Loss';
   isActive: boolean;
   isFavorite: boolean;
   schedule: boolean[]; // [Mon, Tue, Wed, Thu, Fri, Sat, Sun]
@@ -54,89 +54,89 @@ interface Routine {
 export default function Routines() {
   const router = useRouter();
 
-  const [searchQuery, setSearchQuery] = useState("");
-  const [levelFilter, setLevelFilter] = useState("all");
-  const [goalFilter, setGoalFilter] = useState("all");
-  const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
+  const [searchQuery, setSearchQuery] = useState('');
+  const [levelFilter, setLevelFilter] = useState('all');
+  const [goalFilter, setGoalFilter] = useState('all');
+  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
 
   const routines: Routine[] = [
     {
-      id: "full-body-split",
-      name: "Full Body Split",
+      id: 'full-body-split',
+      name: 'Full Body Split',
       description:
-        "A comprehensive full-body workout targeting all major muscle groups with compound movements. Perfect for intermediate lifters looking to build strength and muscle mass.",
+        'A comprehensive full-body workout targeting all major muscle groups with compound movements. Perfect for intermediate lifters looking to build strength and muscle mass.',
       daysPerWeek: 3,
-      difficulty: "Intermediate",
-      goal: "Hypertrophy",
+      difficulty: 'Intermediate',
+      goal: 'Hypertrophy',
       isActive: true,
       isFavorite: false,
       schedule: [true, false, true, false, true, false, false], // M W F
       progress: { current: 4, total: 8 },
       objectives: [
-        "Increase muscle mass by 15%",
-        "Boost strength by 25%",
-        "4-5 workouts per week",
-        "Improve cardiovascular health",
+        'Increase muscle mass by 15%',
+        'Boost strength by 25%',
+        '4-5 workouts per week',
+        'Improve cardiovascular health',
       ],
       totalWorkouts: 24,
       completedWorkouts: 9,
-      estimatedDuration: "55 min",
+      estimatedDuration: '55 min',
     },
     {
-      id: "upper-lower-split",
-      name: "Upper/Lower Split",
+      id: 'upper-lower-split',
+      name: 'Upper/Lower Split',
       description:
-        "Split routine focusing on upper body and lower body on alternating days for maximum recovery.",
+        'Split routine focusing on upper body and lower body on alternating days for maximum recovery.',
       daysPerWeek: 4,
-      difficulty: "Advanced",
-      goal: "Strength",
+      difficulty: 'Advanced',
+      goal: 'Strength',
       isActive: false,
       isFavorite: false,
       schedule: [true, true, false, true, true, false, false], // M T Th F
       progress: { current: 0, total: 8 },
-      lastUsed: "2 weeks ago",
+      lastUsed: '2 weeks ago',
     },
     {
-      id: "push-pull-legs",
-      name: "Push/Pull/Legs",
+      id: 'push-pull-legs',
+      name: 'Push/Pull/Legs',
       description:
-        "High-frequency training split targeting push muscles, pull muscles, and legs twice per week.",
+        'High-frequency training split targeting push muscles, pull muscles, and legs twice per week.',
       daysPerWeek: 6,
-      difficulty: "Advanced",
-      goal: "Hypertrophy",
+      difficulty: 'Advanced',
+      goal: 'Hypertrophy',
       isActive: false,
       isFavorite: true,
       schedule: [true, true, true, true, true, false, false], // M T W Th F
       progress: { current: 0, total: 8 },
-      lastUsed: "2 weeks ago",
+      lastUsed: '2 weeks ago',
     },
   ];
 
   const stats = [
     {
-      title: "Total Routines",
-      value: "8",
+      title: 'Total Routines',
+      value: '8',
       icon: Activity,
-      color: "indigo",
+      color: 'indigo',
     },
     {
-      title: "Active Routine",
-      value: "Full Body Split",
+      title: 'Active Routine',
+      value: 'Full Body Split',
       subtitle: true,
       icon: Play,
-      color: "green",
+      color: 'green',
     },
     {
-      title: "Avg Days/Week",
-      value: "4.2",
+      title: 'Avg Days/Week',
+      value: '4.2',
       icon: Calendar,
-      color: "amber",
+      color: 'amber',
     },
     {
-      title: "Favorites",
-      value: "3",
+      title: 'Favorites',
+      value: '3',
       icon: Heart,
-      color: "red",
+      color: 'red',
     },
   ];
 
@@ -145,42 +145,42 @@ export default function Routines() {
 
   const getIconColor = (color: string) => {
     const colors = {
-      indigo: "bg-indigo-100 text-indigo-600",
-      green: "bg-green-100 text-green-600",
-      amber: "bg-amber-100 text-amber-600",
-      red: "bg-red-100 text-red-600",
+      indigo: 'bg-indigo-100 text-indigo-600',
+      green: 'bg-green-100 text-green-600',
+      amber: 'bg-amber-100 text-amber-600',
+      red: 'bg-red-100 text-red-600',
     };
     return colors[color as keyof typeof colors] || colors.indigo;
   };
 
   const getDifficultyColor = (difficulty: string) => {
     const colors = {
-      Beginner: "bg-green-100 text-green-700",
-      Intermediate: "bg-yellow-100 text-yellow-700",
-      Advanced: "bg-red-100 text-red-700",
+      Beginner: 'bg-green-100 text-green-700',
+      Intermediate: 'bg-yellow-100 text-yellow-700',
+      Advanced: 'bg-red-100 text-red-700',
     };
     return colors[difficulty as keyof typeof colors] || colors.Intermediate;
   };
 
   const getGoalColor = (goal: string) => {
     const colors = {
-      Strength: "bg-blue-100 text-blue-700",
-      Hypertrophy: "bg-purple-100 text-purple-700",
-      Endurance: "bg-green-100 text-green-700",
-      "Weight Loss": "bg-orange-100 text-orange-700",
+      Strength: 'bg-blue-100 text-blue-700',
+      Hypertrophy: 'bg-purple-100 text-purple-700',
+      Endurance: 'bg-green-100 text-green-700',
+      'Weight Loss': 'bg-orange-100 text-orange-700',
     };
     return colors[goal as keyof typeof colors] || colors.Strength;
   };
 
-  const dayLabels = ["M", "T", "W", "T", "F", "S", "S"];
+  const dayLabels = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
 
   const filteredInactiveRoutines = inactiveRoutines.filter(routine => {
     const matchesSearch =
       routine.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       routine.description.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesLevel =
-      levelFilter === "all" || routine.difficulty === levelFilter;
-    const matchesGoal = goalFilter === "all" || routine.goal === goalFilter;
+      levelFilter === 'all' || routine.difficulty === levelFilter;
+    const matchesGoal = goalFilter === 'all' || routine.goal === goalFilter;
 
     return matchesSearch && matchesLevel && matchesGoal;
   });
@@ -228,7 +228,7 @@ export default function Routines() {
                     <div className="flex items-center justify-between mb-3">
                       <h3 className="text-lg font-semibold">Week Progress</h3>
                       <span className="text-indigo-100">
-                        Week {activeRoutine.progress.current} of{" "}
+                        Week {activeRoutine.progress.current} of{' '}
                         {activeRoutine.progress.total}
                       </span>
                     </div>
@@ -400,7 +400,7 @@ export default function Routines() {
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-2xl font-bold text-gray-800">My Routines</h2>
           <Button
-            onClick={() => router.push("/routines/create")}
+            onClick={() => router.push('/routines/create')}
             className="bg-primary text-primary-foreground hover:bg-primary/90"
           >
             <Plus className="w-4 h-4 mr-2" />
@@ -453,17 +453,17 @@ export default function Routines() {
 
               <div className="flex border border-gray-300 rounded-md">
                 <Button
-                  variant={viewMode === "grid" ? "default" : "ghost"}
+                  variant={viewMode === 'grid' ? 'default' : 'ghost'}
                   size="sm"
-                  onClick={() => setViewMode("grid")}
+                  onClick={() => setViewMode('grid')}
                   className="rounded-r-none"
                 >
                   <Grid className="w-4 h-4" />
                 </Button>
                 <Button
-                  variant={viewMode === "list" ? "default" : "ghost"}
+                  variant={viewMode === 'list' ? 'default' : 'ghost'}
                   size="sm"
-                  onClick={() => setViewMode("list")}
+                  onClick={() => setViewMode('list')}
                   className="rounded-l-none"
                 >
                   <List className="w-4 h-4" />
@@ -495,7 +495,7 @@ export default function Routines() {
               <div className="space-y-1">
                 <div
                   className={`font-bold text-gray-800 ${
-                    stat.subtitle ? "text-lg" : "text-2xl"
+                    stat.subtitle ? 'text-lg' : 'text-2xl'
                   }`}
                 >
                   {stat.value}
@@ -585,8 +585,8 @@ export default function Routines() {
                     key={index}
                     className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
                       isActive
-                        ? "bg-green-100 text-green-700"
-                        : "bg-gray-200 text-gray-500"
+                        ? 'bg-green-100 text-green-700'
+                        : 'bg-gray-200 text-gray-500'
                     }`}
                   >
                     {dayLabels[index]}

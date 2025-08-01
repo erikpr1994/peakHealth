@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import {
   ChevronLeft,
@@ -12,21 +12,21 @@ import {
   Target,
   TrendingUp,
   Users,
-} from "lucide-react";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
+} from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
 
 interface WorkoutEvent {
   id: string;
   name: string;
   duration: string;
-  difficulty: "Beginner" | "Intermediate" | "Advanced";
-  type: "Strength" | "Cardio" | "HIIT" | "Flexibility" | "Recovery";
-  status: "scheduled" | "completed" | "missed" | "active";
+  difficulty: 'Beginner' | 'Intermediate' | 'Advanced';
+  type: 'Strength' | 'Cardio' | 'HIIT' | 'Flexibility' | 'Recovery';
+  status: 'scheduled' | 'completed' | 'missed' | 'active';
   date: Date;
   time: string;
   exercises: number;
@@ -42,245 +42,245 @@ interface CalendarDay {
   workouts: WorkoutEvent[];
 }
 
-export default function Calendar() {
+const Calendar = () => {
   const router = useRouter();
   const [currentDate, setCurrentDate] = useState(new Date(2025, 6, 22)); // July 22, 2025
   const [selectedDate, setSelectedDate] = useState(new Date(2025, 6, 22)); // July 22, 2025
-  const [viewMode, setViewMode] = useState<"Month" | "Week" | "Day">("Month");
+  const [viewMode, setViewMode] = useState<'Month' | 'Week' | 'Day'>('Month');
 
   const today = new Date(2025, 6, 22); // July 22, 2025
   const currentMonth = currentDate.getMonth();
   const currentYear = currentDate.getFullYear();
 
   const months = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December",
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December',
   ];
 
   const workoutTypes = [
     {
-      name: "Strength",
-      color: "bg-indigo-500",
-      textColor: "text-indigo-700",
-      bgColor: "bg-indigo-50",
+      name: 'Strength',
+      color: 'bg-indigo-500',
+      textColor: 'text-indigo-700',
+      bgColor: 'bg-indigo-50',
     },
     {
-      name: "Cardio",
-      color: "bg-green-500",
-      textColor: "text-green-700",
-      bgColor: "bg-green-50",
+      name: 'Cardio',
+      color: 'bg-green-500',
+      textColor: 'text-green-700',
+      bgColor: 'bg-green-50',
     },
     {
-      name: "HIIT",
-      color: "bg-orange-500",
-      textColor: "text-orange-700",
-      bgColor: "bg-orange-50",
+      name: 'HIIT',
+      color: 'bg-orange-500',
+      textColor: 'text-orange-700',
+      bgColor: 'bg-orange-50',
     },
     {
-      name: "Flexibility",
-      color: "bg-purple-500",
-      textColor: "text-purple-700",
-      bgColor: "bg-purple-50",
+      name: 'Flexibility',
+      color: 'bg-purple-500',
+      textColor: 'text-purple-700',
+      bgColor: 'bg-purple-50',
     },
     {
-      name: "Recovery",
-      color: "bg-blue-500",
-      textColor: "text-blue-700",
-      bgColor: "bg-blue-50",
+      name: 'Recovery',
+      color: 'bg-blue-500',
+      textColor: 'text-blue-700',
+      bgColor: 'bg-blue-50',
     },
   ];
 
   // Sample workout data - July 2025 with multiple daily sessions
   const workouts: WorkoutEvent[] = [
     {
-      id: "1",
-      name: "Upper Body Strength",
-      duration: "45 minutes",
-      difficulty: "Intermediate",
-      type: "Strength",
-      status: "completed",
+      id: '1',
+      name: 'Upper Body Strength',
+      duration: '45 minutes',
+      difficulty: 'Intermediate',
+      type: 'Strength',
+      status: 'completed',
       date: new Date(2025, 6, 20), // July 20, 2025
-      time: "5:30 PM",
+      time: '5:30 PM',
       exercises: 8,
       estimatedCalories: 320,
       actualCalories: 298,
     },
     {
-      id: "2",
-      name: "Morning HIIT",
-      duration: "30 minutes",
-      difficulty: "Advanced",
-      type: "HIIT",
-      status: "scheduled",
+      id: '2',
+      name: 'Morning HIIT',
+      duration: '30 minutes',
+      difficulty: 'Advanced',
+      type: 'HIIT',
+      status: 'scheduled',
       date: new Date(2025, 6, 22), // July 22, 2025 (Today)
-      time: "7:00 AM",
+      time: '7:00 AM',
       exercises: 6,
       estimatedCalories: 280,
     },
     {
-      id: "2b",
-      name: "Evening Yoga",
-      duration: "25 minutes",
-      difficulty: "Beginner",
-      type: "Flexibility",
-      status: "scheduled",
+      id: '2b',
+      name: 'Evening Yoga',
+      duration: '25 minutes',
+      difficulty: 'Beginner',
+      type: 'Flexibility',
+      status: 'scheduled',
       date: new Date(2025, 6, 22), // July 22, 2025 (Today - Evening)
-      time: "7:30 PM",
+      time: '7:30 PM',
       exercises: 4,
       estimatedCalories: 120,
     },
     {
-      id: "3",
-      name: "Lower Body Focus",
-      duration: "50 minutes",
-      difficulty: "Intermediate",
-      type: "Strength",
-      status: "scheduled",
+      id: '3',
+      name: 'Lower Body Focus',
+      duration: '50 minutes',
+      difficulty: 'Intermediate',
+      type: 'Strength',
+      status: 'scheduled',
       date: new Date(2025, 6, 23), // July 23, 2025 (Tomorrow)
-      time: "6:00 PM",
+      time: '6:00 PM',
       exercises: 10,
       estimatedCalories: 350,
     },
     {
-      id: "4a",
-      name: "Morning Walk",
-      duration: "30 minutes",
-      difficulty: "Beginner",
-      type: "Cardio",
-      status: "scheduled",
+      id: '4a',
+      name: 'Morning Walk',
+      duration: '30 minutes',
+      difficulty: 'Beginner',
+      type: 'Cardio',
+      status: 'scheduled',
       date: new Date(2025, 6, 24), // July 24, 2025
-      time: "7:00 AM",
+      time: '7:00 AM',
       exercises: 2,
       estimatedCalories: 150,
     },
     {
-      id: "4b",
-      name: "Strength Training",
-      duration: "45 minutes",
-      difficulty: "Intermediate",
-      type: "Strength",
-      status: "scheduled",
+      id: '4b',
+      name: 'Strength Training',
+      duration: '45 minutes',
+      difficulty: 'Intermediate',
+      type: 'Strength',
+      status: 'scheduled',
       date: new Date(2025, 6, 24), // July 24, 2025 (Same day - Evening)
-      time: "6:30 PM",
+      time: '6:30 PM',
       exercises: 7,
       estimatedCalories: 300,
     },
     {
-      id: "5",
-      name: "Full Body Circuit",
-      duration: "40 minutes",
-      difficulty: "Advanced",
-      type: "HIIT",
-      status: "completed",
+      id: '5',
+      name: 'Full Body Circuit',
+      duration: '40 minutes',
+      difficulty: 'Advanced',
+      type: 'HIIT',
+      status: 'completed',
       date: new Date(2025, 6, 18), // July 18, 2025
-      time: "6:30 PM",
+      time: '6:30 PM',
       exercises: 12,
       estimatedCalories: 380,
       actualCalories: 365,
     },
     {
-      id: "6a",
-      name: "Morning Cardio",
-      duration: "25 minutes",
-      difficulty: "Beginner",
-      type: "Cardio",
-      status: "completed",
+      id: '6a',
+      name: 'Morning Cardio',
+      duration: '25 minutes',
+      difficulty: 'Beginner',
+      type: 'Cardio',
+      status: 'completed',
       date: new Date(2025, 6, 19), // July 19, 2025
-      time: "6:45 AM",
+      time: '6:45 AM',
       exercises: 3,
       estimatedCalories: 180,
       actualCalories: 165,
     },
     {
-      id: "6b",
-      name: "Core & Flexibility",
-      duration: "35 minutes",
-      difficulty: "Beginner",
-      type: "Flexibility",
-      status: "completed",
+      id: '6b',
+      name: 'Core & Flexibility',
+      duration: '35 minutes',
+      difficulty: 'Beginner',
+      type: 'Flexibility',
+      status: 'completed',
       date: new Date(2025, 6, 19), // July 19, 2025 (Same day - Evening)
-      time: "8:00 PM",
+      time: '8:00 PM',
       exercises: 6,
       estimatedCalories: 150,
       actualCalories: 142,
     },
     {
-      id: "7a",
-      name: "Morning Run",
-      duration: "35 minutes",
-      difficulty: "Intermediate",
-      type: "Cardio",
-      status: "completed",
+      id: '7a',
+      name: 'Morning Run',
+      duration: '35 minutes',
+      difficulty: 'Intermediate',
+      type: 'Cardio',
+      status: 'completed',
       date: new Date(2025, 6, 21), // July 21, 2025
-      time: "6:30 AM",
+      time: '6:30 AM',
       exercises: 3,
       estimatedCalories: 250,
       actualCalories: 265,
     },
     {
-      id: "7b",
-      name: "Push Day",
-      duration: "55 minutes",
-      difficulty: "Advanced",
-      type: "Strength",
-      status: "completed",
+      id: '7b',
+      name: 'Push Day',
+      duration: '55 minutes',
+      difficulty: 'Advanced',
+      type: 'Strength',
+      status: 'completed',
       date: new Date(2025, 6, 21), // July 21, 2025 (Same day - Evening)
-      time: "6:00 PM",
+      time: '6:00 PM',
       exercises: 9,
       estimatedCalories: 380,
       actualCalories: 395,
     },
     {
-      id: "8",
-      name: "Morning Cardio",
-      duration: "25 minutes",
-      difficulty: "Intermediate",
-      type: "Cardio",
-      status: "scheduled",
+      id: '8',
+      name: 'Morning Cardio',
+      duration: '25 minutes',
+      difficulty: 'Intermediate',
+      type: 'Cardio',
+      status: 'scheduled',
       date: new Date(2025, 6, 25), // July 25, 2025
-      time: "6:30 AM",
+      time: '6:30 AM',
       exercises: 5,
       estimatedCalories: 220,
     },
     {
-      id: "9a",
-      name: "Lunch Break Stretch",
-      duration: "20 minutes",
-      difficulty: "Beginner",
-      type: "Flexibility",
-      status: "scheduled",
+      id: '9a',
+      name: 'Lunch Break Stretch',
+      duration: '20 minutes',
+      difficulty: 'Beginner',
+      type: 'Flexibility',
+      status: 'scheduled',
       date: new Date(2025, 6, 26), // July 26, 2025
-      time: "12:30 PM",
+      time: '12:30 PM',
       exercises: 4,
       estimatedCalories: 80,
     },
     {
-      id: "9b",
-      name: "Pull Day",
-      duration: "50 minutes",
-      difficulty: "Intermediate",
-      type: "Strength",
-      status: "scheduled",
+      id: '9b',
+      name: 'Pull Day',
+      duration: '50 minutes',
+      difficulty: 'Intermediate',
+      type: 'Strength',
+      status: 'scheduled',
       date: new Date(2025, 6, 26), // July 26, 2025 (Same day - Evening)
-      time: "7:00 PM",
+      time: '7:00 PM',
       exercises: 8,
       estimatedCalories: 340,
     },
   ];
 
-  const navigateMonth = (direction: "prev" | "next") => {
+  const navigateMonth = (direction: 'prev' | 'next') => {
     const newDate = new Date(currentDate);
-    if (direction === "prev") {
+    if (direction === 'prev') {
       newDate.setMonth(newDate.getMonth() - 1);
     } else {
       newDate.setMonth(newDate.getMonth() + 1);
@@ -356,7 +356,7 @@ export default function Calendar() {
 
   const getUpcomingWorkouts = () => {
     return workouts
-      .filter(w => w.status === "scheduled" && w.date >= today)
+      .filter(w => w.status === 'scheduled' && w.date >= today)
       .sort((a, b) => {
         // First sort by date, then by time
         if (a.date.getTime() !== b.date.getTime()) {
@@ -371,17 +371,17 @@ export default function Calendar() {
   };
 
   const convertTo24Hour = (time: string): string => {
-    const [timePart, period] = time.split(" ");
-    const [hours, minutes] = timePart.split(":");
+    const [timePart, period] = time.split(' ');
+    const [hours, minutes] = timePart.split(':');
     let hour = parseInt(hours);
 
-    if (period === "PM" && hour !== 12) {
+    if (period === 'PM' && hour !== 12) {
       hour += 12;
-    } else if (period === "AM" && hour === 12) {
+    } else if (period === 'AM' && hour === 12) {
       hour = 0;
     }
 
-    return `${hour.toString().padStart(2, "0")}:${minutes}`;
+    return `${hour.toString().padStart(2, '0')}:${minutes}`;
   };
 
   const groupWorkoutsByDay = (workoutList: WorkoutEvent[]) => {
@@ -412,64 +412,64 @@ export default function Calendar() {
   const getTimeOfDay = (
     time: string
   ): { period: string; color: string; bgColor: string } => {
-    const hour24 = parseInt(convertTo24Hour(time).split(":")[0]);
+    const hour24 = parseInt(convertTo24Hour(time).split(':')[0]);
 
     if (hour24 >= 5 && hour24 < 12) {
       return {
-        period: "Morning",
-        color: "text-amber-700",
-        bgColor: "bg-amber-50 border-amber-200",
+        period: 'Morning',
+        color: 'text-amber-700',
+        bgColor: 'bg-amber-50 border-amber-200',
       };
     } else if (hour24 >= 12 && hour24 < 17) {
       return {
-        period: "Afternoon",
-        color: "text-blue-700",
-        bgColor: "bg-blue-50 border-blue-200",
+        period: 'Afternoon',
+        color: 'text-blue-700',
+        bgColor: 'bg-blue-50 border-blue-200',
       };
     } else {
       return {
-        period: "Evening",
-        color: "text-purple-700",
-        bgColor: "bg-purple-50 border-purple-200",
+        period: 'Evening',
+        color: 'text-purple-700',
+        bgColor: 'bg-purple-50 border-purple-200',
       };
     }
   };
 
-  const getWorkoutTypeConfig = (type: WorkoutEvent["type"]) => {
+  const getWorkoutTypeConfig = (type: WorkoutEvent['type']) => {
     return workoutTypes.find(wt => wt.name === type) || workoutTypes[0];
   };
 
-  const getStatusConfig = (status: WorkoutEvent["status"]) => {
+  const getStatusConfig = (status: WorkoutEvent['status']) => {
     switch (status) {
-      case "completed":
+      case 'completed':
         return {
-          color: "bg-green-500",
-          text: "Completed",
-          textColor: "text-green-700",
+          color: 'bg-green-500',
+          text: 'Completed',
+          textColor: 'text-green-700',
         };
-      case "scheduled":
+      case 'scheduled':
         return {
-          color: "bg-blue-500",
-          text: "Scheduled",
-          textColor: "text-blue-700",
+          color: 'bg-blue-500',
+          text: 'Scheduled',
+          textColor: 'text-blue-700',
         };
-      case "missed":
+      case 'missed':
         return {
-          color: "bg-red-500",
-          text: "Missed",
-          textColor: "text-red-700",
+          color: 'bg-red-500',
+          text: 'Missed',
+          textColor: 'text-red-700',
         };
-      case "active":
+      case 'active':
         return {
-          color: "bg-yellow-500",
-          text: "In Progress",
-          textColor: "text-yellow-700",
+          color: 'bg-yellow-500',
+          text: 'In Progress',
+          textColor: 'text-yellow-700',
         };
       default:
         return {
-          color: "bg-gray-500",
-          text: "Unknown",
-          textColor: "text-gray-700",
+          color: 'bg-gray-500',
+          text: 'Unknown',
+          textColor: 'text-gray-700',
         };
     }
   };
@@ -480,14 +480,14 @@ export default function Calendar() {
     tomorrow.setDate(tomorrow.getDate() + 1);
 
     if (isSameDay(date, today)) {
-      return "Today";
+      return 'Today';
     } else if (isSameDay(date, tomorrow)) {
-      return "Tomorrow";
+      return 'Tomorrow';
     } else {
-      return date.toLocaleDateString("en-US", {
-        month: "short",
-        day: "numeric",
-        weekday: "short",
+      return date.toLocaleDateString('en-US', {
+        month: 'short',
+        day: 'numeric',
+        weekday: 'short',
       });
     }
   };
@@ -499,7 +499,7 @@ export default function Calendar() {
   // Calculate stats
   const completedThisMonth = workouts.filter(
     w =>
-      w.status === "completed" &&
+      w.status === 'completed' &&
       w.date.getMonth() === today.getMonth() &&
       w.date.getFullYear() === today.getFullYear()
   ).length;
@@ -511,7 +511,7 @@ export default function Calendar() {
   ).length;
 
   const totalCaloriesBurned = workouts
-    .filter(w => w.status === "completed" && w.actualCalories)
+    .filter(w => w.status === 'completed' && w.actualCalories)
     .reduce((sum, w) => sum + (w.actualCalories || 0), 0);
 
   // Calculate days with multiple sessions this month
@@ -536,9 +536,9 @@ export default function Calendar() {
   ).filter(count => count > 1).length;
 
   // Calculate average workout duration
-  const completedWorkouts = workouts.filter(w => w.status === "completed");
+  const completedWorkouts = workouts.filter(w => w.status === 'completed');
   const totalMinutes = completedWorkouts.reduce((sum, w) => {
-    const minutes = parseInt(w.duration.split(" ")[0]);
+    const minutes = parseInt(w.duration.split(' ')[0]);
     return sum + minutes;
   }, 0);
   const avgDuration =
@@ -631,7 +631,7 @@ export default function Calendar() {
                   <Button
                     variant="ghost"
                     size="sm"
-                    onClick={() => navigateMonth("prev")}
+                    onClick={() => navigateMonth('prev')}
                     className="w-8 h-8 p-0"
                   >
                     <ChevronLeft className="w-4 h-4" />
@@ -639,7 +639,7 @@ export default function Calendar() {
                   <Button
                     variant="ghost"
                     size="sm"
-                    onClick={() => navigateMonth("next")}
+                    onClick={() => navigateMonth('next')}
                     className="w-8 h-8 p-0"
                   >
                     <ChevronRight className="w-4 h-4" />
@@ -656,18 +656,18 @@ export default function Calendar() {
               </div>
 
               <div className="flex gap-1 bg-gray-100 rounded-lg p-1">
-                {["Month", "Week", "Day"].map(mode => (
+                {['Month', 'Week', 'Day'].map(mode => (
                   <Button
                     key={mode}
-                    variant={viewMode === mode ? "default" : "ghost"}
+                    variant={viewMode === mode ? 'default' : 'ghost'}
                     size="sm"
                     onClick={() =>
-                      setViewMode(mode as "Month" | "Week" | "Day")
+                      setViewMode(mode as 'Month' | 'Week' | 'Day')
                     }
                     className={`px-3 py-1 text-sm ${
                       viewMode === mode
-                        ? "bg-white text-gray-900 shadow-sm"
-                        : "text-gray-600 hover:text-gray-900"
+                        ? 'bg-white text-gray-900 shadow-sm'
+                        : 'text-gray-600 hover:text-gray-900'
                     }`}
                   >
                     {mode}
@@ -690,7 +690,7 @@ export default function Calendar() {
             {/* Calendar Grid */}
             <div className="grid grid-cols-7 gap-1">
               {/* Day Headers */}
-              {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map(day => (
+              {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(day => (
                 <div key={day} className="p-2 text-center">
                   <span className="text-sm font-medium text-gray-600">
                     {day}
@@ -704,10 +704,10 @@ export default function Calendar() {
                   key={index}
                   className={`relative min-h-[80px] p-2 border border-gray-100 cursor-pointer transition-colors ${
                     day.isCurrentMonth
-                      ? "bg-white hover:bg-gray-50"
-                      : "bg-gray-50 text-gray-400"
-                  } ${day.isToday ? "bg-indigo-50 border-indigo-200" : ""} ${
-                    day.isSelected ? "ring-2 ring-indigo-500" : ""
+                      ? 'bg-white hover:bg-gray-50'
+                      : 'bg-gray-50 text-gray-400'
+                  } ${day.isToday ? 'bg-indigo-50 border-indigo-200' : ''} ${
+                    day.isSelected ? 'ring-2 ring-indigo-500' : ''
                   }`}
                   onClick={() =>
                     setSelectedDate(
@@ -718,10 +718,10 @@ export default function Calendar() {
                   <span
                     className={`text-sm font-medium ${
                       day.isToday
-                        ? "text-indigo-600"
+                        ? 'text-indigo-600'
                         : day.isCurrentMonth
-                          ? "text-gray-900"
-                          : "text-gray-400"
+                          ? 'text-gray-900'
+                          : 'text-gray-400'
                     }`}
                   >
                     {day.date}
@@ -744,7 +744,7 @@ export default function Calendar() {
                               <div
                                 key={i}
                                 className={`w-2 h-2 rounded-full ${
-                                  workout.status === "completed"
+                                  workout.status === 'completed'
                                     ? statusConfig.color
                                     : typeConfig.color
                                 }`}
@@ -769,7 +769,7 @@ export default function Calendar() {
                                   <div
                                     key={i}
                                     className={`w-1.5 h-1.5 rounded-full ${
-                                      workout.status === "completed"
+                                      workout.status === 'completed'
                                         ? statusConfig.color
                                         : typeConfig.color
                                     }`}
@@ -808,7 +808,7 @@ export default function Calendar() {
               <Button
                 variant="ghost"
                 size="sm"
-                onClick={() => router.push("/routines")}
+                onClick={() => router.push('/routines')}
                 className="text-indigo-600 hover:text-indigo-700"
               >
                 View All
@@ -842,8 +842,8 @@ export default function Calendar() {
                           key={workout.id}
                           className={`p-3 rounded-lg border transition-colors ${
                             isToday
-                              ? "bg-indigo-50 border-indigo-200"
-                              : "bg-white border-gray-200 hover:border-gray-300"
+                              ? 'bg-indigo-50 border-indigo-200'
+                              : 'bg-white border-gray-200 hover:border-gray-300'
                           }`}
                         >
                           <div className="flex items-start justify-between mb-2">
@@ -912,7 +912,7 @@ export default function Calendar() {
                             <Button
                               className="w-full mt-2"
                               size="sm"
-                              onClick={() => router.push("/workout-tracker")}
+                              onClick={() => router.push('/workout-tracker')}
                             >
                               <Play className="w-3 h-3 mr-2" />
                               Start {timeOfDay.period} Workout
@@ -944,7 +944,7 @@ export default function Calendar() {
               <Button
                 variant="outline"
                 className="w-full justify-start"
-                onClick={() => router.push("/routines/create")}
+                onClick={() => router.push('/routines/create')}
               >
                 <Plus className="w-4 h-4 mr-3" />
                 Schedule Workout
@@ -952,7 +952,7 @@ export default function Calendar() {
               <Button
                 variant="outline"
                 className="w-full justify-start"
-                onClick={() => router.push("/routines")}
+                onClick={() => router.push('/routines')}
               >
                 <CalendarIcon className="w-4 h-4 mr-3" />
                 View Routines
@@ -960,7 +960,7 @@ export default function Calendar() {
               <Button
                 variant="outline"
                 className="w-full justify-start"
-                onClick={() => router.push("/statistics")}
+                onClick={() => router.push('/statistics')}
               >
                 <TrendingUp className="w-4 h-4 mr-3" />
                 View Progress
@@ -971,4 +971,6 @@ export default function Calendar() {
       </div>
     </div>
   );
-}
+};
+
+export default Calendar;

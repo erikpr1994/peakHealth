@@ -1,7 +1,9 @@
-"use client";
+'use client';
 
-import Suggestions from "@/features/suggestions/Suggestions";
+import Suggestions from '@/features/suggestions/Suggestions';
 
-export default function SuggestionsPage() {
+const SuggestionsPage = () => {
   return <Suggestions />;
-}
+};
+
+export default SuggestionsPage;

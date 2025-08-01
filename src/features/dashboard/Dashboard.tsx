@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import {
   Calendar,
@@ -12,9 +12,9 @@ import {
   Zap,
   Play,
   Star,
-} from "lucide-react";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
+} from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 import {
   AreaChart,
   Area,
@@ -22,12 +22,12 @@ import {
   YAxis,
   CartesianGrid,
   ResponsiveContainer,
-} from "recharts";
+} from 'recharts';
 
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Progress } from "@/components/ui/progress";
-import ClubEventConflictModal from "@/features/social/ClubEventConflictModal";
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Progress } from '@/components/ui/progress';
+import ClubEventConflictModal from '@/features/social/ClubEventConflictModal';
 
 interface ClubEvent {
   id: string;
@@ -40,40 +40,40 @@ interface ClubEvent {
   participants: number;
 }
 
-export default function Dashboard() {
+const Dashboard = () => {
   const router = useRouter();
   const [showConflictModal, setShowConflictModal] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState<ClubEvent | null>(null);
 
   // Mock data for weekly progress
   const weeklyData = [
-    { day: "Mon", workouts: 1, calories: 320 },
-    { day: "Tue", workouts: 1, calories: 450 },
-    { day: "Wed", workouts: 0, calories: 0 },
-    { day: "Thu", workouts: 1, calories: 380 },
-    { day: "Fri", workouts: 2, calories: 720 },
-    { day: "Sat", workouts: 1, calories: 290 },
-    { day: "Sun", workouts: 0, calories: 0 },
+    { day: 'Mon', workouts: 1, calories: 320 },
+    { day: 'Tue', workouts: 1, calories: 450 },
+    { day: 'Wed', workouts: 0, calories: 0 },
+    { day: 'Thu', workouts: 1, calories: 380 },
+    { day: 'Fri', workouts: 2, calories: 720 },
+    { day: 'Sat', workouts: 1, calories: 290 },
+    { day: 'Sun', workouts: 0, calories: 0 },
   ];
 
   // Mock data for active routines
   const activeRoutines = [
     {
-      id: "routine-1",
-      name: "Upper Body Strength",
-      nextWorkout: "Push Day",
-      lastCompleted: "2 days ago",
+      id: 'routine-1',
+      name: 'Upper Body Strength',
+      nextWorkout: 'Push Day',
+      lastCompleted: '2 days ago',
       progress: 75,
-      estimatedTime: "45 min",
+      estimatedTime: '45 min',
       exercises: 8,
     },
     {
-      id: "routine-2",
-      name: "Cardio & Core",
-      nextWorkout: "HIIT Session",
-      lastCompleted: "4 days ago",
+      id: 'routine-2',
+      name: 'Cardio & Core',
+      nextWorkout: 'HIIT Session',
+      lastCompleted: '4 days ago',
       progress: 45,
-      estimatedTime: "30 min",
+      estimatedTime: '30 min',
       exercises: 6,
     },
   ];
@@ -81,93 +81,93 @@ export default function Dashboard() {
   // Mock recent workouts data
   const recentWorkouts = [
     {
-      id: "1",
-      name: "Push Day",
-      type: "Strength",
-      duration: "52 min",
-      date: "Yesterday",
+      id: '1',
+      name: 'Push Day',
+      type: 'Strength',
+      duration: '52 min',
+      date: 'Yesterday',
     },
     {
-      id: "2",
-      name: "HIIT Cardio",
-      type: "Cardio",
-      duration: "28 min",
-      date: "3 days ago",
+      id: '2',
+      name: 'HIIT Cardio',
+      type: 'Cardio',
+      duration: '28 min',
+      date: '3 days ago',
     },
     {
-      id: "3",
-      name: "Pull Day",
-      type: "Strength",
-      duration: "48 min",
-      date: "5 days ago",
+      id: '3',
+      name: 'Pull Day',
+      type: 'Strength',
+      duration: '48 min',
+      date: '5 days ago',
     },
     {
-      id: "4",
-      name: "Yoga Flow",
-      type: "Flexibility",
-      duration: "35 min",
-      date: "1 week ago",
+      id: '4',
+      name: 'Yoga Flow',
+      type: 'Flexibility',
+      duration: '35 min',
+      date: '1 week ago',
     },
   ];
 
   // Mock clubs around user
   const nearbyClubs = [
     {
-      id: "club-1",
-      name: "Zen Fitness Club",
-      distance: "0.3 miles",
+      id: 'club-1',
+      name: 'Zen Fitness Club',
+      distance: '0.3 miles',
       rating: 4.8,
-      members: "2.1k",
-      specialty: "Yoga & Mindfulness",
+      members: '2.1k',
+      specialty: 'Yoga & Mindfulness',
     },
     {
-      id: "club-2",
-      name: "Peak Performance",
-      distance: "0.7 miles",
+      id: 'club-2',
+      name: 'Peak Performance',
+      distance: '0.7 miles',
       rating: 4.6,
-      members: "1.5k",
-      specialty: "HIIT & CrossFit",
+      members: '1.5k',
+      specialty: 'HIIT & CrossFit',
     },
     {
-      id: "club-3",
-      name: "Iron Warriors",
-      distance: "1.2 miles",
+      id: 'club-3',
+      name: 'Iron Warriors',
+      distance: '1.2 miles',
       rating: 4.9,
-      members: "890",
-      specialty: "Powerlifting",
+      members: '890',
+      specialty: 'Powerlifting',
     },
   ];
 
   // Mock club events
   const clubEvents: ClubEvent[] = [
     {
-      id: "event-1",
-      name: "Morning Yoga Flow",
-      club: "Zen Fitness Club",
-      time: "7:00 AM",
-      date: "2024-01-15",
-      duration: "60 min",
-      difficulty: "Beginner",
+      id: 'event-1',
+      name: 'Morning Yoga Flow',
+      club: 'Zen Fitness Club',
+      time: '7:00 AM',
+      date: '2024-01-15',
+      duration: '60 min',
+      difficulty: 'Beginner',
       participants: 12,
     },
     {
-      id: "event-2",
-      name: "HIIT Bootcamp",
-      club: "Peak Performance",
-      time: "6:30 AM",
-      date: "2024-01-15",
-      duration: "45 min",
-      difficulty: "Advanced",
+      id: 'event-2',
+      name: 'HIIT Bootcamp',
+      club: 'Peak Performance',
+      time: '6:30 AM',
+      date: '2024-01-15',
+      duration: '45 min',
+      difficulty: 'Advanced',
       participants: 8,
     },
     {
-      id: "event-3",
-      name: "Powerlifting Workshop",
-      club: "Iron Warriors",
-      time: "5:00 PM",
-      date: "2024-01-15",
-      duration: "90 min",
-      difficulty: "Intermediate",
+      id: 'event-3',
+      name: 'Powerlifting Workshop',
+      club: 'Iron Warriors',
+      time: '5:00 PM',
+      date: '2024-01-15',
+      duration: '90 min',
+      difficulty: 'Intermediate',
       participants: 6,
     },
   ];
@@ -184,17 +184,17 @@ export default function Dashboard() {
   // Get personalized greeting based on onboarding data
   const getPersonalizedGreeting = () => {
     const hour = new Date().getHours();
-    let timeGreeting = "Good morning";
-    if (hour >= 12 && hour < 17) timeGreeting = "Good afternoon";
-    if (hour >= 17) timeGreeting = "Good evening";
+    let timeGreeting = 'Good morning';
+    if (hour >= 12 && hour < 17) timeGreeting = 'Good afternoon';
+    if (hour >= 17) timeGreeting = 'Good evening';
 
-    const name = "there";
+    const name = 'there';
     return `${timeGreeting}, ${name}!`;
   };
 
   // Get personalized motivation message
   const getMotivationMessage = () => {
-    return "Ready to take your fitness to the next level?";
+    return 'Ready to take your fitness to the next level?';
   };
 
   return (
@@ -362,7 +362,7 @@ export default function Dashboard() {
               </div>
             </div>
             <Button
-              onClick={() => router.push("/trainer-and-clubs")}
+              onClick={() => router.push('/trainer-and-clubs')}
               className="ml-6"
             >
               Find a Trainer
@@ -521,11 +521,11 @@ export default function Dashboard() {
         hasTrainer={false}
         onConfirm={(action, message) => {
           console.log(
-            "Event joined:",
+            'Event joined:',
             selectedEvent,
-            "Action:",
+            'Action:',
             action,
-            "Message:",
+            'Message:',
             message
           );
           setShowConflictModal(false);
@@ -533,4 +533,6 @@ export default function Dashboard() {
       />
     </div>
   );
-}
+};
+
+export default Dashboard;

@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import {
   Search,
@@ -13,9 +13,9 @@ import {
   Settings,
   Weight,
   Wrench,
-} from "lucide-react";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
+} from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 
 import {
   AlertDialog,
@@ -27,31 +27,31 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
+} from '@/components/ui/alert-dialog';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
+} from '@/components/ui/select';
 
 interface EquipmentSpecs {
   weightRange?: { min: number; max: number; increment: number };
   resistanceType?:
-    | "weight_stack"
-    | "weight_plates"
-    | "pneumatic"
-    | "magnetic"
-    | "hydraulic";
+    | 'weight_stack'
+    | 'weight_plates'
+    | 'pneumatic'
+    | 'magnetic'
+    | 'hydraulic';
   conversionFactor?: number; // For weight conversions between equipment
   pulleyRatio?: number;
   leverageRatio?: number;
-  resistanceCurve?: "linear" | "ascending" | "descending" | "bell_curve";
+  resistanceCurve?: 'linear' | 'ascending' | 'descending' | 'bell_curve';
   availableWeights?: number[]; // For free weights
   notes?: string;
 }
@@ -62,12 +62,12 @@ interface Equipment {
   brand: string;
   model: string;
   category:
-    | "Cardio"
-    | "Strength"
-    | "Free Weights"
-    | "Functional"
-    | "Accessories";
-  type: "custom" | "standard"; // custom = user created, standard = from database
+    | 'Cardio'
+    | 'Strength'
+    | 'Free Weights'
+    | 'Functional'
+    | 'Accessories';
+  type: 'custom' | 'standard'; // custom = user created, standard = from database
   description?: string;
   imageUrl?: string;
   specs: EquipmentSpecs;
@@ -76,42 +76,42 @@ interface Equipment {
   usageCount?: number; // how many gyms use this equipment
 }
 
-export default function EquipmentPage() {
+const EquipmentPage = () => {
   const router = useRouter();
-  const [searchQuery, setSearchQuery] = useState("");
-  const [categoryFilter, setCategoryFilter] = useState("all");
-  const [typeFilter, setTypeFilter] = useState("all");
+  const [searchQuery, setSearchQuery] = useState('');
+  const [categoryFilter, setCategoryFilter] = useState('all');
+  const [typeFilter, setTypeFilter] = useState('all');
 
   // Mock equipment data with detailed specifications
   const [equipment, setEquipment] = useState<Equipment[]>([
     // Standard Database Equipment
     {
-      id: "1",
-      name: "Olympic Barbell",
-      brand: "Rogue",
-      model: "Ohio Bar",
-      category: "Free Weights",
-      type: "standard",
-      description: "45lb Olympic barbell with aggressive knurling",
+      id: '1',
+      name: 'Olympic Barbell',
+      brand: 'Rogue',
+      model: 'Ohio Bar',
+      category: 'Free Weights',
+      type: 'standard',
+      description: '45lb Olympic barbell with aggressive knurling',
       specs: {
         weightRange: { min: 45, max: 500, increment: 2.5 },
-        resistanceType: "weight_plates",
+        resistanceType: 'weight_plates',
         availableWeights: [45], // Base bar weight
       },
       isPopular: true,
       usageCount: 25,
     },
     {
-      id: "2",
-      name: "Adjustable Dumbbells",
-      brand: "PowerBlock",
-      model: "Elite EXP",
-      category: "Free Weights",
-      type: "standard",
-      description: "Adjustable dumbbells with quick-change system",
+      id: '2',
+      name: 'Adjustable Dumbbells',
+      brand: 'PowerBlock',
+      model: 'Elite EXP',
+      category: 'Free Weights',
+      type: 'standard',
+      description: 'Adjustable dumbbells with quick-change system',
       specs: {
         weightRange: { min: 5, max: 90, increment: 2.5 },
-        resistanceType: "weight_plates",
+        resistanceType: 'weight_plates',
         availableWeights: [
           5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90,
         ],
@@ -120,96 +120,96 @@ export default function EquipmentPage() {
       usageCount: 18,
     },
     {
-      id: "3",
-      name: "Chest Press Machine",
-      brand: "Hammer Strength",
-      model: "ISO-Lateral",
-      category: "Strength",
-      type: "standard",
-      description: "Plate-loaded chest press with independent arm movement",
+      id: '3',
+      name: 'Chest Press Machine',
+      brand: 'Hammer Strength',
+      model: 'ISO-Lateral',
+      category: 'Strength',
+      type: 'standard',
+      description: 'Plate-loaded chest press with independent arm movement',
       specs: {
         weightRange: { min: 0, max: 720, increment: 45 },
-        resistanceType: "weight_plates",
+        resistanceType: 'weight_plates',
         conversionFactor: 0.85, // Due to leverage mechanics
         leverageRatio: 0.85,
-        resistanceCurve: "ascending",
+        resistanceCurve: 'ascending',
       },
       usageCount: 12,
     },
     {
-      id: "4",
-      name: "Leg Press",
-      brand: "Life Fitness",
-      model: "Signature Series",
-      category: "Strength",
-      type: "standard",
-      description: "45-degree leg press with smooth linear bearings",
+      id: '4',
+      name: 'Leg Press',
+      brand: 'Life Fitness',
+      model: 'Signature Series',
+      category: 'Strength',
+      type: 'standard',
+      description: '45-degree leg press with smooth linear bearings',
       specs: {
         weightRange: { min: 90, max: 1000, increment: 45 },
-        resistanceType: "weight_plates",
+        resistanceType: 'weight_plates',
         conversionFactor: 0.7, // Due to 45-degree angle
         leverageRatio: 0.7,
-        resistanceCurve: "linear",
+        resistanceCurve: 'linear',
       },
       usageCount: 8,
     },
     {
-      id: "5",
-      name: "Cable Crossover",
-      brand: "Freemotion",
-      model: "Genesis",
-      category: "Strength",
-      type: "standard",
-      description: "Dual adjustable pulleys with 360-degree rotation",
+      id: '5',
+      name: 'Cable Crossover',
+      brand: 'Freemotion',
+      model: 'Genesis',
+      category: 'Strength',
+      type: 'standard',
+      description: 'Dual adjustable pulleys with 360-degree rotation',
       specs: {
         weightRange: { min: 10, max: 300, increment: 10 },
-        resistanceType: "weight_stack",
+        resistanceType: 'weight_stack',
         pulleyRatio: 2.0, // 2:1 pulley system
         conversionFactor: 0.5,
-        resistanceCurve: "linear",
+        resistanceCurve: 'linear',
       },
       usageCount: 15,
     },
     // Custom User Equipment
     {
-      id: "6",
-      name: "Home Gym Dumbbells",
-      brand: "CAP Barbell",
-      model: "Cast Iron Hex",
-      category: "Free Weights",
-      type: "custom",
-      description: "Personal set of hex dumbbells for home workouts",
+      id: '6',
+      name: 'Home Gym Dumbbells',
+      brand: 'CAP Barbell',
+      model: 'Cast Iron Hex',
+      category: 'Free Weights',
+      type: 'custom',
+      description: 'Personal set of hex dumbbells for home workouts',
       specs: {
-        resistanceType: "weight_plates",
+        resistanceType: 'weight_plates',
         availableWeights: [10, 15, 20, 25, 30, 35, 40, 45, 50],
       },
-      createdBy: "user-123",
+      createdBy: 'user-123',
       usageCount: 1,
     },
     {
-      id: "7",
-      name: "Garage Pull-up Bar",
-      brand: "Iron Gym",
-      model: "Total Upper Body",
-      category: "Functional",
-      type: "custom",
-      description: "Doorway pull-up bar with multiple grip positions",
+      id: '7',
+      name: 'Garage Pull-up Bar',
+      brand: 'Iron Gym',
+      model: 'Total Upper Body',
+      category: 'Functional',
+      type: 'custom',
+      description: 'Doorway pull-up bar with multiple grip positions',
       specs: {
-        resistanceType: "weight_plates", // bodyweight + added weight
+        resistanceType: 'weight_plates', // bodyweight + added weight
         weightRange: { min: 0, max: 100, increment: 5 },
       },
-      createdBy: "user-123",
+      createdBy: 'user-123',
       usageCount: 1,
     },
   ]);
 
   const categories = [
-    { id: "all", name: "All Categories", icon: Wrench },
-    { id: "Cardio", name: "Cardio", icon: Heart },
-    { id: "Strength", name: "Strength", icon: Trophy },
-    { id: "Free Weights", name: "Free Weights", icon: Weight },
-    { id: "Functional", name: "Functional", icon: Target },
-    { id: "Accessories", name: "Accessories", icon: Settings },
+    { id: 'all', name: 'All Categories', icon: Wrench },
+    { id: 'Cardio', name: 'Cardio', icon: Heart },
+    { id: 'Strength', name: 'Strength', icon: Trophy },
+    { id: 'Free Weights', name: 'Free Weights', icon: Weight },
+    { id: 'Functional', name: 'Functional', icon: Target },
+    { id: 'Accessories', name: 'Accessories', icon: Settings },
   ];
 
   const filteredEquipment = equipment.filter(item => {
@@ -220,8 +220,8 @@ export default function EquipmentPage() {
       (item.description &&
         item.description.toLowerCase().includes(searchQuery.toLowerCase()));
     const matchesCategory =
-      categoryFilter === "all" || item.category === categoryFilter;
-    const matchesType = typeFilter === "all" || item.type === typeFilter;
+      categoryFilter === 'all' || item.category === categoryFilter;
+    const matchesType = typeFilter === 'all' || item.type === typeFilter;
     return matchesSearch && matchesCategory && matchesType;
   });
 
@@ -236,11 +236,11 @@ export default function EquipmentPage() {
 
   const getResistanceTypeDisplay = (type: string) => {
     const types = {
-      weight_stack: "Weight Stack",
-      weight_plates: "Weight Plates",
-      pneumatic: "Pneumatic",
-      magnetic: "Magnetic",
-      hydraulic: "Hydraulic",
+      weight_stack: 'Weight Stack',
+      weight_plates: 'Weight Plates',
+      pneumatic: 'Pneumatic',
+      magnetic: 'Magnetic',
+      hydraulic: 'Hydraulic',
     };
     return types[type as keyof typeof types] || type;
   };
@@ -260,10 +260,10 @@ export default function EquipmentPage() {
               <div className="flex items-center gap-2">
                 <h3 className="font-semibold text-gray-900">{item.name}</h3>
                 <Badge
-                  variant={item.type === "custom" ? "secondary" : "outline"}
+                  variant={item.type === 'custom' ? 'secondary' : 'outline'}
                   className="text-xs"
                 >
-                  {item.type === "custom" ? "Custom" : "Standard"}
+                  {item.type === 'custom' ? 'Custom' : 'Standard'}
                 </Badge>
                 {item.isPopular && (
                   <Badge
@@ -297,7 +297,7 @@ export default function EquipmentPage() {
             >
               <Edit2 className="w-4 h-4" />
             </Button>
-            {item.type === "custom" && (
+            {item.type === 'custom' && (
               <AlertDialog>
                 <AlertDialogTrigger asChild>
                   <Button
@@ -365,7 +365,7 @@ export default function EquipmentPage() {
             </div>
           )}
 
-          {item.specs.availableWeights && item.category === "Free Weights" && (
+          {item.specs.availableWeights && item.category === 'Free Weights' && (
             <div className="flex items-center justify-between text-sm">
               <span className="text-gray-500">Available Weights:</span>
               <span className="text-gray-900">
@@ -389,14 +389,14 @@ export default function EquipmentPage() {
           <div className="flex items-center gap-4">
             {item.usageCount && (
               <span>
-                {item.usageCount} gym{item.usageCount !== 1 ? "s" : ""}
+                {item.usageCount} gym{item.usageCount !== 1 ? 's' : ''}
               </span>
             )}
             {item.specs.pulleyRatio && item.specs.pulleyRatio !== 1 && (
               <span>{item.specs.pulleyRatio}:1 ratio</span>
             )}
           </div>
-          {item.type === "custom" && <span>Personal Equipment</span>}
+          {item.type === 'custom' && <span>Personal Equipment</span>}
         </div>
       </Card>
     );
@@ -414,7 +414,7 @@ export default function EquipmentPage() {
         </div>
 
         <Button
-          onClick={() => router.push("/equipment/suggest")}
+          onClick={() => router.push('/equipment/suggest')}
           className="flex items-center gap-2"
         >
           <Plus className="w-4 h-4" />
@@ -476,12 +476,12 @@ export default function EquipmentPage() {
             No Equipment Found
           </h3>
           <p className="text-gray-500 mb-6 max-w-md mx-auto">
-            {searchQuery || categoryFilter !== "all" || typeFilter !== "all"
-              ? "Try adjusting your search criteria or filters."
-              : "Create your first piece of equipment to get started."}
+            {searchQuery || categoryFilter !== 'all' || typeFilter !== 'all'
+              ? 'Try adjusting your search criteria or filters.'
+              : 'Create your first piece of equipment to get started.'}
           </p>
-          {!searchQuery && categoryFilter === "all" && typeFilter === "all" && (
-            <Button onClick={() => router.push("/equipment/suggest")}>
+          {!searchQuery && categoryFilter === 'all' && typeFilter === 'all' && (
+            <Button onClick={() => router.push('/equipment/suggest')}>
               <Plus className="w-4 h-4 mr-2" />
               Suggest Your First Equipment
             </Button>
@@ -501,14 +501,14 @@ export default function EquipmentPage() {
             </div>
             <div>
               <div className="text-2xl font-bold text-gray-900">
-                {filteredEquipment.filter(e => e.type === "custom").length}
+                {filteredEquipment.filter(e => e.type === 'custom').length}
               </div>
               <div className="text-sm text-gray-500">Custom Equipment</div>
             </div>
             <div>
               <div className="text-2xl font-bold text-gray-900">
                 {
-                  filteredEquipment.filter(e => e.category === "Free Weights")
+                  filteredEquipment.filter(e => e.category === 'Free Weights')
                     .length
                 }
               </div>
@@ -528,4 +528,6 @@ export default function EquipmentPage() {
       )}
     </div>
   );
-}
+};
+
+export default EquipmentPage;

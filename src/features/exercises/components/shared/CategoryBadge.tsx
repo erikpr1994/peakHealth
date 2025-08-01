@@ -1,18 +1,18 @@
-import { Badge } from "@/components/ui/badge";
+import { getCategoryColor } from '../../utils/exerciseUtils';
 
-import { getCategoryColor } from "../../utils/exerciseUtils";
+import { Badge } from '@/components/ui/badge';
 
 interface CategoryBadgeProps {
   category: string;
-  variant?: "default" | "outline";
+  variant?: 'default' | 'outline';
   className?: string;
 }
 
-export function CategoryBadge({
+export const CategoryBadge = ({
   category,
-  variant = "outline",
-  className = "",
-}: CategoryBadgeProps) {
+  variant = 'outline',
+  className = '',
+}: CategoryBadgeProps) => {
   return (
     <Badge
       variant={variant}
@@ -21,4 +21,4 @@ export function CategoryBadge({
       {category}
     </Badge>
   );
-}
+};

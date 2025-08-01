@@ -1,4 +1,4 @@
-import { useExerciseContext } from "../context/ExerciseContext";
+import { useExerciseContext } from '../context/ExerciseContext';
 
 export function useExerciseSearch() {
   const { searchTerm, handleSearchChange, clearSearch } = useExerciseContext();

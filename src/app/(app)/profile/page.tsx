@@ -1,7 +1,9 @@
-"use client";
+'use client';
 
-import Profile from "@/features/profile/Profile";
+import Profile from '@/features/profile/Profile';
 
-export default function ProfilePage() {
+const ProfilePage = () => {
   return <Profile />;
-}
+};
+
+export default ProfilePage;

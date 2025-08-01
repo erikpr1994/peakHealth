@@ -1,12 +1,12 @@
-import { Heart, Star, ChevronRight } from "lucide-react";
+import { Heart, Star, ChevronRight } from 'lucide-react';
 
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
+import { Exercise } from '../../types';
 
-import { Exercise } from "../../types";
+import { CategoryBadge } from './CategoryBadge';
+import { DifficultyBadge } from './DifficultyBadge';
 
-import { CategoryBadge } from "./CategoryBadge";
-import { DifficultyBadge } from "./DifficultyBadge";
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
 
 interface ExerciseCardProps {
   exercise: Exercise;
@@ -15,45 +15,45 @@ interface ExerciseCardProps {
   showChevron?: boolean;
   isSelected?: boolean;
   className?: string;
-  size?: "sm" | "md" | "lg";
+  size?: 'sm' | 'md' | 'lg';
 }
 
-export function ExerciseCard({
+export const ExerciseCard = ({
   exercise,
   onClick,
   onFavoriteToggle,
   showChevron = false,
   isSelected = false,
-  className = "",
-  size = "md",
-}: ExerciseCardProps) {
+  className = '',
+  size = 'md',
+}: ExerciseCardProps) => {
   const handleFavoriteClick = (e: React.MouseEvent) => {
     e.stopPropagation();
     onFavoriteToggle?.();
   };
 
   const sizeClasses = {
-    sm: "w-64",
-    md: "w-full max-w-md",
-    lg: "w-full",
+    sm: 'w-64',
+    md: 'w-full max-w-md',
+    lg: 'w-full',
   };
 
   const iconSizes = {
-    sm: "text-4xl",
-    md: "text-6xl",
-    lg: "text-6xl",
+    sm: 'text-4xl',
+    md: 'text-6xl',
+    lg: 'text-6xl',
   };
 
   const imageHeights = {
-    sm: "h-32",
-    md: "h-40",
-    lg: "h-48",
+    sm: 'h-32',
+    md: 'h-40',
+    lg: 'h-48',
   };
 
   const paddingSizes = {
-    sm: "p-3",
-    md: "p-4",
-    lg: "p-4",
+    sm: 'p-3',
+    md: 'p-4',
+    lg: 'p-4',
   };
 
   return (
@@ -62,8 +62,8 @@ export function ExerciseCard({
         sizeClasses[size]
       } mx-auto ${
         isSelected
-          ? "border-primary shadow-lg ring-1 ring-primary/20"
-          : "border-gray-200 hover:border-gray-300"
+          ? 'border-primary shadow-lg ring-1 ring-primary/20'
+          : 'border-gray-200 hover:border-gray-300'
       } ${className}`}
       onClick={onClick}
     >
@@ -93,7 +93,7 @@ export function ExerciseCard({
           </div>
         </div>
 
-        {exercise.rating && size !== "sm" && (
+        {exercise.rating && size !== 'sm' && (
           <div className="absolute top-3 right-3 flex items-center gap-1 bg-white px-2 py-1 rounded-full text-sm">
             <Star className="w-3 h-3 text-yellow-500 fill-yellow-500" />
             <span className="text-gray-600">{exercise.rating}</span>
@@ -110,14 +110,14 @@ export function ExerciseCard({
             </h3>
             <div className="flex items-center text-sm text-gray-600 mb-3">
               <span className="truncate">
-                {exercise.muscleGroups.join(", ")}
+                {exercise.muscleGroups.join(', ')}
               </span>
             </div>
           </div>
           {showChevron && (
             <ChevronRight
               className={`w-4 h-4 text-gray-400 group-hover:text-primary transition-all ${
-                isSelected ? "rotate-90" : ""
+                isSelected ? 'rotate-90' : ''
               }`}
             />
           )}
@@ -141,8 +141,8 @@ export function ExerciseCard({
             <Heart
               className={`w-4 h-4 ${
                 exercise.isFavorite
-                  ? "text-red-500 fill-red-500"
-                  : "text-gray-400"
+                  ? 'text-red-500 fill-red-500'
+                  : 'text-gray-400'
               }`}
             />
           </Button>
@@ -150,4 +150,4 @@ export function ExerciseCard({
       </div>
     </Card>
   );
-}
+};

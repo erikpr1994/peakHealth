@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import {
   Plus,
@@ -18,8 +18,8 @@ import {
   Trash,
   Download,
   Dumbbell,
-} from "lucide-react";
-import { useState } from "react";
+} from 'lucide-react';
+import { useState } from 'react';
 import {
   LineChart,
   Line,
@@ -30,11 +30,11 @@ import {
   ResponsiveContainer,
   AreaChart,
   Area,
-} from "recharts";
+} from 'recharts';
 
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
 import {
   Dialog,
   DialogContent,
@@ -42,25 +42,25 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog";
+} from '@/components/ui/dialog';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Progress } from "@/components/ui/progress";
+} from '@/components/ui/dropdown-menu';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Progress } from '@/components/ui/progress';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Textarea } from "@/components/ui/textarea";
+} from '@/components/ui/select';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Textarea } from '@/components/ui/textarea';
 
 interface HealthEntry {
   id: string;
@@ -92,7 +92,7 @@ interface HealthEntry {
 
 interface Goal {
   id: string;
-  type: "weight" | "bodyFat" | "muscle" | "measurement";
+  type: 'weight' | 'bodyFat' | 'muscle' | 'measurement';
   target: number;
   current: number;
   deadline: Date;
@@ -101,14 +101,14 @@ interface Goal {
 }
 
 export default function Health() {
-  const [activeTab, setActiveTab] = useState("overview");
+  const [activeTab, setActiveTab] = useState('overview');
   const [isAddEntryOpen, setIsAddEntryOpen] = useState(false);
   const [isAddGoalOpen, setIsAddGoalOpen] = useState(false);
 
   // Mock data - in a real app, this would come from API/database
   const healthData: HealthEntry[] = [
     {
-      id: "1",
+      id: '1',
       date: new Date(2025, 6, 1), // July 1, 2025
       weight: 82.5,
       bodyFat: 15.2,
@@ -126,10 +126,10 @@ export default function Health() {
         sleepHours: 7.5,
         waterIntake: 2.8,
       },
-      notes: "Feeling strong and energetic. Increased water intake this week.",
+      notes: 'Feeling strong and energetic. Increased water intake this week.',
     },
     {
-      id: "2",
+      id: '2',
       date: new Date(2025, 6, 8), // July 8, 2025
       weight: 82.8,
       bodyFat: 14.9,
@@ -145,7 +145,7 @@ export default function Health() {
       },
     },
     {
-      id: "3",
+      id: '3',
       date: new Date(2025, 6, 15), // July 15, 2025
       weight: 83.1,
       bodyFat: 14.6,
@@ -155,10 +155,10 @@ export default function Health() {
         sleepHours: 7.8,
         waterIntake: 3.2,
       },
-      notes: "Great progress on muscle mass. Sleep quality improving.",
+      notes: 'Great progress on muscle mass. Sleep quality improving.',
     },
     {
-      id: "4",
+      id: '4',
       date: new Date(2025, 6, 22), // July 22, 2025 (Today)
       weight: 83.4,
       bodyFat: 14.3,
@@ -181,39 +181,39 @@ export default function Health() {
 
   const goals: Goal[] = [
     {
-      id: "1",
-      type: "weight",
+      id: '1',
+      type: 'weight',
       target: 85,
       current: 83.4,
       deadline: new Date(2025, 9, 1), // October 1, 2025
-      description: "Gain lean muscle mass",
-      unit: "kg",
+      description: 'Gain lean muscle mass',
+      unit: 'kg',
     },
     {
-      id: "2",
-      type: "bodyFat",
+      id: '2',
+      type: 'bodyFat',
       target: 12,
       current: 14.3,
       deadline: new Date(2025, 11, 31), // December 31, 2025
-      description: "Reduce body fat percentage",
-      unit: "%",
+      description: 'Reduce body fat percentage',
+      unit: '%',
     },
     {
-      id: "3",
-      type: "measurement",
+      id: '3',
+      type: 'measurement',
       target: 105,
       current: 103,
       deadline: new Date(2025, 8, 15), // September 15, 2025
-      description: "Increase chest measurement",
-      unit: "cm",
+      description: 'Increase chest measurement',
+      unit: 'cm',
     },
   ];
 
   // Prepare chart data
   const chartData = healthData.map(entry => ({
-    date: entry.date.toLocaleDateString("en-US", {
-      month: "short",
-      day: "numeric",
+    date: entry.date.toLocaleDateString('en-US', {
+      month: 'short',
+      day: 'numeric',
     }),
     weight: entry.weight || 0,
     bodyFat: entry.bodyFat || 0,
@@ -238,8 +238,8 @@ export default function Health() {
       isPositive,
       isGood,
       icon: isPositive ? TrendingUp : TrendingDown,
-      color: isGood ? "text-green-600" : "text-red-600",
-      bgColor: isGood ? "bg-green-50" : "bg-red-50",
+      color: isGood ? 'text-green-600' : 'text-red-600',
+      bgColor: isGood ? 'bg-green-50' : 'bg-red-50',
     };
   };
 
@@ -445,7 +445,7 @@ export default function Health() {
                       {goal.current} / {goal.target} {goal.unit}
                     </div>
                   </div>
-                  <Badge variant={isAchieved ? "default" : "secondary"}>
+                  <Badge variant={isAchieved ? 'default' : 'secondary'}>
                     {progress.toFixed(0)}%
                   </Badge>
                 </div>
@@ -453,14 +453,14 @@ export default function Health() {
                 <div className="w-full bg-gray-200 rounded-full h-2 mb-3">
                   <div
                     className={`h-2 rounded-full transition-all ${
-                      isAchieved ? "bg-green-600" : "bg-blue-600"
+                      isAchieved ? 'bg-green-600' : 'bg-blue-600'
                     }`}
                     style={{ width: `${Math.min(progress, 100)}%` }}
                   />
                 </div>
 
                 <div className="text-xs text-gray-500">
-                  {daysLeft > 0 ? `${daysLeft} days left` : "Deadline passed"}
+                  {daysLeft > 0 ? `${daysLeft} days left` : 'Deadline passed'}
                 </div>
               </div>
             );
@@ -509,7 +509,7 @@ export default function Health() {
                     <Input
                       id="entry-date"
                       type="date"
-                      defaultValue={new Date().toISOString().split("T")[0]}
+                      defaultValue={new Date().toISOString().split('T')[0]}
                     />
                   </div>
 
@@ -763,7 +763,7 @@ export default function Health() {
                 <Button
                   variant="ghost"
                   size="sm"
-                  onClick={() => setActiveTab("history")}
+                  onClick={() => setActiveTab('history')}
                 >
                   View All
                 </Button>
@@ -783,11 +783,11 @@ export default function Health() {
                         </div>
                         <div>
                           <div className="font-medium text-gray-900">
-                            {entry.date.toLocaleDateString("en-US", {
-                              weekday: "long",
-                              year: "numeric",
-                              month: "long",
-                              day: "numeric",
+                            {entry.date.toLocaleDateString('en-US', {
+                              weekday: 'long',
+                              year: 'numeric',
+                              month: 'long',
+                              day: 'numeric',
                             })}
                           </div>
                           <div className="text-sm text-gray-600">
@@ -950,10 +950,10 @@ export default function Health() {
                   <ResponsiveContainer width="100%" height="100%">
                     <AreaChart
                       data={[
-                        { week: "Week 1", score: 82 },
-                        { week: "Week 2", score: 85 },
-                        { week: "Week 3", score: 88 },
-                        { week: "Week 4", score: 91 },
+                        { week: 'Week 1', score: 82 },
+                        { week: 'Week 2', score: 85 },
+                        { week: 'Week 3', score: 88 },
+                        { week: 'Week 4', score: 91 },
                       ]}
                     >
                       <CartesianGrid strokeDasharray="3 3" />
@@ -1038,7 +1038,7 @@ export default function Health() {
                         >
                           <span className="text-gray-600 capitalize">
                             {key
-                              .replace(/([A-Z])/g, " $1")
+                              .replace(/([A-Z])/g, ' $1')
                               .replace(/^./, str => str.toUpperCase())}
                           </span>
                           <span className="font-medium">{value} cm</span>
@@ -1169,17 +1169,17 @@ export default function Health() {
                       <div className="flex-1">
                         <div className="flex items-center gap-4 mb-3">
                           <h4 className="font-medium text-gray-900">
-                            {entry.date.toLocaleDateString("en-US", {
-                              weekday: "long",
-                              year: "numeric",
-                              month: "long",
-                              day: "numeric",
+                            {entry.date.toLocaleDateString('en-US', {
+                              weekday: 'long',
+                              year: 'numeric',
+                              month: 'long',
+                              day: 'numeric',
                             })}
                           </h4>
                           <Badge variant="outline" className="text-xs">
                             {entry.date.toLocaleDateString() ===
                             new Date().toLocaleDateString()
-                              ? "Today"
+                              ? 'Today'
                               : `${Math.ceil(
                                   (new Date().getTime() -
                                     entry.date.getTime()) /

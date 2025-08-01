@@ -7,26 +7,26 @@ import {
   Image,
   CheckCircle2,
   Info,
-} from "lucide-react";
-import { useState } from "react";
+} from 'lucide-react';
+import { useState } from 'react';
 
-import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Progress } from "@/components/ui/progress";
+import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Progress } from '@/components/ui/progress';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Textarea } from "@/components/ui/textarea";
-import { Page } from "@/types/app";
+} from '@/components/ui/select';
+import { Textarea } from '@/components/ui/textarea';
+import { Page } from '@/types/app';
 
 interface SuggestExerciseProps {
   onNavigate: (page: Page, id?: string) => void;
@@ -37,7 +37,7 @@ interface ExerciseSuggestion {
   category: string;
   muscleGroups: string[];
   equipment: string[];
-  difficulty: "beginner" | "intermediate" | "advanced" | "expert";
+  difficulty: 'beginner' | 'intermediate' | 'advanced' | 'expert';
   instructions: string;
   tips: string;
   commonMistakes: string;
@@ -56,118 +56,118 @@ interface ExerciseSuggestion {
 
 export default function SuggestExercise({ onNavigate }: SuggestExerciseProps) {
   const [exerciseData, setExerciseData] = useState<ExerciseSuggestion>({
-    name: "",
-    category: "",
+    name: '',
+    category: '',
     muscleGroups: [],
     equipment: [],
-    difficulty: "beginner",
-    instructions: "",
-    tips: "",
-    commonMistakes: "",
+    difficulty: 'beginner',
+    instructions: '',
+    tips: '',
+    commonMistakes: '',
     variations: [],
     alternativeNames: [],
-    videoUrl: "",
+    videoUrl: '',
     imageUrls: [],
-    reasonForSuggestion: "",
-    sourcesReferences: "",
+    reasonForSuggestion: '',
+    sourcesReferences: '',
     isCompoundMovement: false,
-    safetyNotes: "",
-    targetReps: "",
-    targetSets: "",
-    restTime: "",
+    safetyNotes: '',
+    targetReps: '',
+    targetSets: '',
+    restTime: '',
   });
 
-  const [newVariation, setNewVariation] = useState("");
-  const [newAlternateName, setNewAlternateName] = useState("");
-  const [newImageUrl, setNewImageUrl] = useState("");
+  const [newVariation, setNewVariation] = useState('');
+  const [newAlternateName, setNewAlternateName] = useState('');
+  const [newImageUrl, setNewImageUrl] = useState('');
 
   const categories = [
-    "Chest",
-    "Back",
-    "Shoulders",
-    "Arms",
-    "Legs",
-    "Core",
-    "Cardio",
-    "Full Body",
-    "Flexibility",
-    "Balance",
-    "Power",
-    "Olympic Lifts",
+    'Chest',
+    'Back',
+    'Shoulders',
+    'Arms',
+    'Legs',
+    'Core',
+    'Cardio',
+    'Full Body',
+    'Flexibility',
+    'Balance',
+    'Power',
+    'Olympic Lifts',
   ];
 
   const muscleGroups = [
-    "Chest",
-    "Back",
-    "Shoulders",
-    "Biceps",
-    "Triceps",
-    "Forearms",
-    "Quadriceps",
-    "Hamstrings",
-    "Glutes",
-    "Calves",
-    "Core",
-    "Abs",
-    "Obliques",
-    "Lower Back",
-    "Traps",
-    "Lats",
-    "Rhomboids",
-    "Delts",
+    'Chest',
+    'Back',
+    'Shoulders',
+    'Biceps',
+    'Triceps',
+    'Forearms',
+    'Quadriceps',
+    'Hamstrings',
+    'Glutes',
+    'Calves',
+    'Core',
+    'Abs',
+    'Obliques',
+    'Lower Back',
+    'Traps',
+    'Lats',
+    'Rhomboids',
+    'Delts',
   ];
 
   const equipmentOptions = [
-    "None (Bodyweight)",
-    "Barbell",
-    "Dumbbells",
-    "Kettlebell",
-    "Resistance Bands",
-    "Cable Machine",
-    "Pull-up Bar",
-    "Bench",
-    "Swiss Ball",
-    "Medicine Ball",
-    "TRX/Suspension Trainer",
-    "Yoga Mat",
-    "Foam Roller",
-    "Parallette Bars",
-    "Olympic Rings",
-    "Plyo Box",
-    "Battle Ropes",
-    "Landmine",
-    "Smith Machine",
+    'None (Bodyweight)',
+    'Barbell',
+    'Dumbbells',
+    'Kettlebell',
+    'Resistance Bands',
+    'Cable Machine',
+    'Pull-up Bar',
+    'Bench',
+    'Swiss Ball',
+    'Medicine Ball',
+    'TRX/Suspension Trainer',
+    'Yoga Mat',
+    'Foam Roller',
+    'Parallette Bars',
+    'Olympic Rings',
+    'Plyo Box',
+    'Battle Ropes',
+    'Landmine',
+    'Smith Machine',
   ];
 
   const difficultyLevels = [
     {
-      id: "beginner",
-      name: "Beginner",
-      description: "New to exercise or movement pattern",
+      id: 'beginner',
+      name: 'Beginner',
+      description: 'New to exercise or movement pattern',
     },
     {
-      id: "intermediate",
-      name: "Intermediate",
-      description: "Some experience with similar movements",
+      id: 'intermediate',
+      name: 'Intermediate',
+      description: 'Some experience with similar movements',
     },
     {
-      id: "advanced",
-      name: "Advanced",
-      description: "Experienced with complex movements",
+      id: 'advanced',
+      name: 'Advanced',
+      description: 'Experienced with complex movements',
     },
     {
-      id: "expert",
-      name: "Expert",
-      description: "High level of skill and strength required",
+      id: 'expert',
+      name: 'Expert',
+      description: 'High level of skill and strength required',
     },
   ];
 
   // Check if required fields are filled
   const isMinimumRequirementsMet = () => {
     return (
-      exerciseData.name.trim() !== "" &&
-      exerciseData.category !== "" &&
-      exerciseData.reasonForSuggestion.trim() !== ""
+      exerciseData.name.trim() !== '' &&
+      exerciseData.category !== '' &&
+      exerciseData.reasonForSuggestion.trim() !== ''
     );
   };
 
@@ -175,32 +175,32 @@ export default function SuggestExercise({ onNavigate }: SuggestExerciseProps) {
   const calculateCompletionPercentage = () => {
     const sections = [
       {
-        name: "Basic Info",
+        name: 'Basic Info',
         completed:
           exerciseData.name &&
           exerciseData.category &&
           exerciseData.muscleGroups.length > 0,
       },
       {
-        name: "Reason",
-        completed: exerciseData.reasonForSuggestion.trim() !== "",
+        name: 'Reason',
+        completed: exerciseData.reasonForSuggestion.trim() !== '',
       },
       {
-        name: "Alternative Names",
+        name: 'Alternative Names',
         completed: exerciseData.alternativeNames.length > 0,
       },
-      { name: "Equipment", completed: exerciseData.equipment.length > 0 },
+      { name: 'Equipment', completed: exerciseData.equipment.length > 0 },
       {
-        name: "Instructions",
-        completed: exerciseData.instructions.trim() !== "",
+        name: 'Instructions',
+        completed: exerciseData.instructions.trim() !== '',
       },
       {
-        name: "Programming",
+        name: 'Programming',
         completed: exerciseData.targetReps || exerciseData.targetSets,
       },
-      { name: "Variations", completed: exerciseData.variations.length > 0 },
+      { name: 'Variations', completed: exerciseData.variations.length > 0 },
       {
-        name: "Media",
+        name: 'Media',
         completed: exerciseData.videoUrl || exerciseData.imageUrls.length > 0,
       },
     ];
@@ -233,7 +233,7 @@ export default function SuggestExercise({ onNavigate }: SuggestExerciseProps) {
         ...prev,
         variations: [...prev.variations, newVariation],
       }));
-      setNewVariation("");
+      setNewVariation('');
     }
   };
 
@@ -253,7 +253,7 @@ export default function SuggestExercise({ onNavigate }: SuggestExerciseProps) {
         ...prev,
         alternativeNames: [...prev.alternativeNames, newAlternateName],
       }));
-      setNewAlternateName("");
+      setNewAlternateName('');
     }
   };
 
@@ -270,7 +270,7 @@ export default function SuggestExercise({ onNavigate }: SuggestExerciseProps) {
         ...prev,
         imageUrls: [...prev.imageUrls, newImageUrl],
       }));
-      setNewImageUrl("");
+      setNewImageUrl('');
     }
   };
 
@@ -283,8 +283,8 @@ export default function SuggestExercise({ onNavigate }: SuggestExerciseProps) {
 
   const handleSubmitSuggestion = () => {
     // In a real app, this would submit to an API for professional review
-    console.log("Submitting exercise suggestion:", exerciseData);
-    onNavigate("suggestions");
+    console.log('Submitting exercise suggestion:', exerciseData);
+    onNavigate('suggestions');
   };
 
   const completionPercentage = calculateCompletionPercentage();
@@ -294,7 +294,7 @@ export default function SuggestExercise({ onNavigate }: SuggestExerciseProps) {
       {/* Header */}
       <div className="flex items-center justify-between mb-8">
         <div className="flex items-center gap-4">
-          <Button variant="ghost" onClick={() => onNavigate("exercises")}>
+          <Button variant="ghost" onClick={() => onNavigate('exercises')}>
             <ArrowLeft className="w-4 h-4" />
           </Button>
           <div>
@@ -309,7 +309,7 @@ export default function SuggestExercise({ onNavigate }: SuggestExerciseProps) {
         </div>
 
         <div className="flex gap-3">
-          <Button variant="outline" onClick={() => onNavigate("exercises")}>
+          <Button variant="outline" onClick={() => onNavigate('exercises')}>
             Cancel
           </Button>
           <Button
@@ -409,7 +409,7 @@ export default function SuggestExercise({ onNavigate }: SuggestExerciseProps) {
               <Label htmlFor="difficulty">Difficulty Level</Label>
               <Select
                 value={exerciseData.difficulty}
-                onValueChange={(value: ExerciseSuggestion["difficulty"]) =>
+                onValueChange={(value: ExerciseSuggestion['difficulty']) =>
                   setExerciseData({ ...exerciseData, difficulty: value })
                 }
               >
@@ -525,7 +525,7 @@ export default function SuggestExercise({ onNavigate }: SuggestExerciseProps) {
                   onChange={e => setNewAlternateName(e.target.value)}
                   placeholder="e.g., Rear Foot Elevated Split Squat"
                   onKeyPress={e =>
-                    e.key === "Enter" && handleAddAlternateName()
+                    e.key === 'Enter' && handleAddAlternateName()
                   }
                 />
                 <Button type="button" onClick={handleAddAlternateName}>
@@ -749,7 +749,7 @@ export default function SuggestExercise({ onNavigate }: SuggestExerciseProps) {
                   value={newVariation}
                   onChange={e => setNewVariation(e.target.value)}
                   placeholder="e.g., Weighted Bulgarian Split Squat, Jumping Bulgarian Split Squat"
-                  onKeyPress={e => e.key === "Enter" && handleAddVariation()}
+                  onKeyPress={e => e.key === 'Enter' && handleAddVariation()}
                 />
                 <Button type="button" onClick={handleAddVariation}>
                   <Plus className="w-4 h-4" />
@@ -839,7 +839,7 @@ export default function SuggestExercise({ onNavigate }: SuggestExerciseProps) {
                   value={newImageUrl}
                   onChange={e => setNewImageUrl(e.target.value)}
                   placeholder="https://example.com/exercise-image.jpg"
-                  onKeyPress={e => e.key === "Enter" && handleAddImageUrl()}
+                  onKeyPress={e => e.key === 'Enter' && handleAddImageUrl()}
                 />
                 <Button type="button" onClick={handleAddImageUrl}>
                   <Plus className="w-4 h-4" />
@@ -886,7 +886,7 @@ export default function SuggestExercise({ onNavigate }: SuggestExerciseProps) {
               <p className="text-sm text-gray-600 mt-1">
                 {isMinimumRequirementsMet()
                   ? `Great! Your suggestion is ${completionPercentage}% complete and ready for review.`
-                  : "Complete the required fields above to submit your suggestion."}
+                  : 'Complete the required fields above to submit your suggestion.'}
               </p>
             </div>
             <Button

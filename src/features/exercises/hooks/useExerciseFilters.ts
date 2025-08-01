@@ -1,4 +1,4 @@
-import { useExerciseContext } from "../context/ExerciseContext";
+import { useExerciseContext } from '../context/ExerciseContext';
 
 export function useExerciseFilters() {
   const { filters, handleFilterChange, clearFilters, getActiveFilterCount } =

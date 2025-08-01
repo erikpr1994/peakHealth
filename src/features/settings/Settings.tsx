@@ -10,23 +10,23 @@ import {
   Download,
   DollarSign,
   Camera,
-} from "lucide-react";
-import { useState } from "react";
+} from 'lucide-react';
+import { useState } from 'react';
 
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Switch } from "@/components/ui/switch";
-import { Page } from "@/types/app";
+} from '@/components/ui/select';
+import { Switch } from '@/components/ui/switch';
+import { Page } from '@/types/app';
 
 interface SettingsProps {
   onNavigate: (page: Page, exerciseId?: string) => void;
@@ -41,41 +41,41 @@ interface SidebarItem {
 }
 
 export default function Settings({ onNavigate: _onNavigate }: SettingsProps) {
-  const [activeSection, setActiveSection] = useState("profile");
+  const [activeSection, setActiveSection] = useState('profile');
   const [fitnessGoals, setFitnessGoals] = useState([
-    "Build Strength",
-    "Gain Muscle",
-    "Improve Endurance",
+    'Build Strength',
+    'Gain Muscle',
+    'Improve Endurance',
   ]);
 
   const sidebarSections: { title: string; items: SidebarItem[] }[] = [
     {
-      title: "PERSONAL",
+      title: 'PERSONAL',
       items: [
-        { id: "profile", name: "Profile", icon: User, active: true },
-        { id: "account", name: "Account", icon: CreditCard },
-        { id: "notifications", name: "Notifications", icon: Bell },
+        { id: 'profile', name: 'Profile', icon: User, active: true },
+        { id: 'account', name: 'Account', icon: CreditCard },
+        { id: 'notifications', name: 'Notifications', icon: Bell },
       ],
     },
     {
-      title: "PREFERENCES",
+      title: 'PREFERENCES',
       items: [
-        { id: "appearance", name: "Appearance", icon: Palette },
-        { id: "units", name: "Units & Measurements", icon: Ruler },
-        { id: "privacy", name: "Privacy", icon: Shield },
+        { id: 'appearance', name: 'Appearance', icon: Palette },
+        { id: 'units', name: 'Units & Measurements', icon: Ruler },
+        { id: 'privacy', name: 'Privacy', icon: Shield },
       ],
     },
     {
-      title: "DATA & INTEGRATIONS",
+      title: 'DATA & INTEGRATIONS',
       items: [
-        { id: "wearables", name: "Wearables", icon: Smartphone, badge: "New" },
-        { id: "connected", name: "Connected Apps", icon: Zap },
-        { id: "export", name: "Export Data", icon: Download },
+        { id: 'wearables', name: 'Wearables', icon: Smartphone, badge: 'New' },
+        { id: 'connected', name: 'Connected Apps', icon: Zap },
+        { id: 'export', name: 'Export Data', icon: Download },
       ],
     },
     {
-      title: "SUBSCRIPTION",
-      items: [{ id: "billing", name: "Plan & Billing", icon: DollarSign }],
+      title: 'SUBSCRIPTION',
+      items: [{ id: 'billing', name: 'Plan & Billing', icon: DollarSign }],
     },
   ];
 
@@ -87,25 +87,25 @@ export default function Settings({ onNavigate: _onNavigate }: SettingsProps) {
 
   const comingSoonFeatures = [
     {
-      title: "Mobile App Integration",
+      title: 'Mobile App Integration',
       description:
-        "Sync your workouts and progress with our upcoming mobile application.",
+        'Sync your workouts and progress with our upcoming mobile application.',
       icon: Smartphone,
     },
     {
-      title: "Team Workouts",
-      description: "Create and join workout groups with friends and teammates.",
+      title: 'Team Workouts',
+      description: 'Create and join workout groups with friends and teammates.',
       icon: User,
     },
     {
-      title: "Coaching Features",
-      description: "Connect with fitness coaches or become a coach yourself.",
+      title: 'Coaching Features',
+      description: 'Connect with fitness coaches or become a coach yourself.',
       icon: User,
     },
     {
-      title: "Advanced Analytics",
+      title: 'Advanced Analytics',
       description:
-        "Gain deeper insights into your fitness data with AI-powered analytics.",
+        'Gain deeper insights into your fitness data with AI-powered analytics.',
       icon: DollarSign,
     },
   ];
@@ -134,7 +134,7 @@ export default function Settings({ onNavigate: _onNavigate }: SettingsProps) {
                     {section.items.map(item => {
                       const Icon = item.icon;
                       const isActive =
-                        item.id === "profile" && activeSection === "profile";
+                        item.id === 'profile' && activeSection === 'profile';
 
                       return (
                         <button
@@ -142,8 +142,8 @@ export default function Settings({ onNavigate: _onNavigate }: SettingsProps) {
                           onClick={() => setActiveSection(item.id)}
                           className={`w-full flex items-center gap-3 px-3 py-2 rounded-md text-left transition-colors ${
                             isActive
-                              ? "bg-indigo-50 text-indigo-600"
-                              : "text-gray-700 hover:bg-gray-50"
+                              ? 'bg-indigo-50 text-indigo-600'
+                              : 'text-gray-700 hover:bg-gray-50'
                           }`}
                         >
                           <Icon className="w-4 h-4" />
@@ -302,12 +302,12 @@ export default function Settings({ onNavigate: _onNavigate }: SettingsProps) {
               <Label>Fitness Goals (Select up to 3)</Label>
               <div className="mt-3 grid grid-cols-1 md:grid-cols-2 gap-4">
                 {[
-                  "Build Strength",
-                  "Gain Muscle",
-                  "Lose Weight",
-                  "Improve Endurance",
-                  "Increase Flexibility",
-                  "General Health",
+                  'Build Strength',
+                  'Gain Muscle',
+                  'Lose Weight',
+                  'Improve Endurance',
+                  'Increase Flexibility',
+                  'General Health',
                 ].map(goal => (
                   <div key={goal} className="flex items-center space-x-3">
                     <Checkbox
