@@ -69,6 +69,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     } = supabase.auth.onAuthStateChange(async (event, session) => {
       console.log('Auth state changed:', event, session?.user?.id);
 
+      // Clear any pending fallback timeout
+      if ((window as any).__authFallbackClear) {
+        (window as any).__authFallbackClear();
+        (window as any).__authFallbackClear = null;
+      }
+
       if (event === 'SIGNED_IN' && session?.user) {
         // Update SWR cache with new user data
         await mutateUser(session.user);
@@ -109,11 +115,19 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         throw new Error(data.error || 'Login failed');
       }
 
-      // Manually update user state and redirect for immediate feedback
-      if (data.user) {
-        await mutateUser(data.user);
-        router.push('/dashboard');
-      }
+      // Fallback: If onAuthStateChange doesn't fire within 1 second, manually update state
+      const fallbackTimeout = setTimeout(async () => {
+        if (data.user) {
+          await mutateUser(data.user);
+          router.push('/dashboard');
+        }
+      }, 1000);
+
+      // Clear timeout if onAuthStateChange fires (handled in useEffect)
+      const clearFallback = () => clearTimeout(fallbackTimeout);
+
+      // Store the clear function to be called when auth state changes
+      (window as any).__authFallbackClear = clearFallback;
     } catch (error) {
       console.error('Error logging in:', error);
       throw error;
@@ -141,11 +155,19 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         throw new Error(data.error || 'Sign up failed');
       }
 
-      // Manually update user state and redirect for immediate feedback
-      if (data.user) {
-        await mutateUser(data.user);
-        router.push('/dashboard');
-      }
+      // Fallback: If onAuthStateChange doesn't fire within 1 second, manually update state
+      const fallbackTimeout = setTimeout(async () => {
+        if (data.user) {
+          await mutateUser(data.user);
+          router.push('/dashboard');
+        }
+      }, 1000);
+
+      // Clear timeout if onAuthStateChange fires (handled in useEffect)
+      const clearFallback = () => clearTimeout(fallbackTimeout);
+
+      // Store the clear function to be called when auth state changes
+      (window as any).__authFallbackClear = clearFallback;
     } catch (error) {
       console.error('Error signing up:', error);
       throw error;
@@ -169,9 +191,17 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         throw new Error(data.error || 'Logout failed');
       }
 
-      // Manually clear user state and redirect for immediate feedback
-      await mutateUser(null);
-      router.push('/');
+      // Fallback: If onAuthStateChange doesn't fire within 1 second, manually update state
+      const fallbackTimeout = setTimeout(async () => {
+        await mutateUser(null);
+        router.push('/');
+      }, 1000);
+
+      // Clear timeout if onAuthStateChange fires (handled in useEffect)
+      const clearFallback = () => clearTimeout(fallbackTimeout);
+
+      // Store the clear function to be called when auth state changes
+      (window as any).__authFallbackClear = clearFallback;
     } catch (error) {
       console.error('Error logging out:', error);
       throw error;
