@@ -4,7 +4,6 @@ import { Button } from "@/components/ui/button";
 import { Exercise } from "../../types";
 import { CategoryBadge } from "./CategoryBadge";
 import { DifficultyBadge } from "./DifficultyBadge";
-import { MuscleGroupTags } from "./MuscleGroupTags";
 
 interface ExerciseCardProps {
   exercise: Exercise;

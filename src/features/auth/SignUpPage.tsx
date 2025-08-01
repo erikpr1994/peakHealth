@@ -37,8 +37,9 @@ export default function SignUpPage() {
 
     try {
       await signUp(email, password, name);
-    } catch (err: any) {
-      setError(err.message || "An unexpected error occurred.");
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : "An unexpected error occurred.";
+      setError(errorMessage);
     } finally {
       setIsLoading(false);
     }

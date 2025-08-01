@@ -4,9 +4,6 @@ import {
   Send,
   MapPin,
   Clock,
-  Phone,
-  Globe,
-  Star,
   AlertCircle,
 } from "lucide-react";
 import { Card } from "@/components/ui/card";
@@ -336,7 +333,7 @@ export default function SuggestGym({ onNavigate }: SuggestGymProps) {
               <Label htmlFor="type">Gym Type *</Label>
               <Select
                 value={gymData.type}
-                onValueChange={(value: any) =>
+                onValueChange={(value: GymSuggestion['type']) =>
                   setGymData({ ...gymData, type: value })
                 }
               >
@@ -362,7 +359,7 @@ export default function SuggestGym({ onNavigate }: SuggestGymProps) {
               <Label htmlFor="priceRange">Price Range</Label>
               <Select
                 value={gymData.priceRange}
-                onValueChange={(value: any) =>
+                onValueChange={(value: GymSuggestion['priceRange']) =>
                   setGymData({ ...gymData, priceRange: value })
                 }
               >

@@ -40,10 +40,11 @@ export async function GET() {
       userTypes: typesResponse.data,
       userGroups: groupsResponse.data,
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Error fetching feature flags:", error);
+    const errorMessage = error instanceof Error ? error.message : "Unknown error";
     return NextResponse.json(
-      { error: "Internal Server Error", details: error.message },
+      { error: "Internal Server Error", details: errorMessage },
       { status: 500 }
     );
   }

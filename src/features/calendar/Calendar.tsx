@@ -371,7 +371,7 @@ export default function Calendar() {
 
   const convertTo24Hour = (time: string): string => {
     const [timePart, period] = time.split(" ");
-    let [hours, minutes] = timePart.split(":");
+    const [hours, minutes] = timePart.split(":");
     let hour = parseInt(hours);
 
     if (period === "PM" && hour !== 12) {

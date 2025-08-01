@@ -265,7 +265,7 @@ export default function EditEquipment({
     onNavigate("equipment");
   };
 
-  const updateSpecs = (key: keyof EquipmentSpecs, value: any) => {
+  const updateSpecs = (key: keyof EquipmentSpecs, value: string | number | boolean | EquipmentSpecs[keyof EquipmentSpecs]) => {
     setEquipmentData({
       ...equipmentData,
       specs: {

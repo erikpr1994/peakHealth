@@ -1,13 +1,13 @@
 import { FEATURE_FLAG_CONFIG } from './config';
 
-interface CacheEntry {
-  data: any;
+interface CacheEntry<T = unknown> {
+  data: T;
   timestamp: number;
   ttl: number;
 }
 
 class FeatureFlagCache {
-  private cache = new Map<string, CacheEntry>();
+  private cache = new Map<string, CacheEntry<unknown>>();
   private readonly DEFAULT_TTL = FEATURE_FLAG_CONFIG.caching.ttl;
 
   async get<T>(key: string, fetcher: () => Promise<T>, ttl = this.DEFAULT_TTL): Promise<T> {

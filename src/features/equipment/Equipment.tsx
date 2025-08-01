@@ -311,7 +311,7 @@ export default function EquipmentPage() {
                   <AlertDialogHeader>
                     <AlertDialogTitle>Delete Equipment</AlertDialogTitle>
                     <AlertDialogDescription>
-                      Are you sure you want to delete "{item.name}"? This action
+                      Are you sure you want to delete &quot;{item.name}&quot;? This action
                       cannot be undone.
                     </AlertDialogDescription>
                   </AlertDialogHeader>

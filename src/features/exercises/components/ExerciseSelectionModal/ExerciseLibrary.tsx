@@ -1,7 +1,6 @@
-import { ChevronRight, Star, Info } from "lucide-react";
+import { Star, Info, ChevronRight } from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Exercise } from "../../types";
-import { ExerciseCard } from "../shared/ExerciseCard";
 import { filterExercises } from "../../utils/filterUtils";
 import { SearchAndFilters } from "./SearchAndFilters";
 import { useExerciseFilters } from "../../hooks/useExerciseFilters";

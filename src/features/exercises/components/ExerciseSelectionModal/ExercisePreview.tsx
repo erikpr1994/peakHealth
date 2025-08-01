@@ -1,6 +1,5 @@
 import { Star, Info, ExternalLink } from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Exercise, ExerciseVariant } from "../../types";
 import { DifficultyBadge } from "../shared/DifficultyBadge";

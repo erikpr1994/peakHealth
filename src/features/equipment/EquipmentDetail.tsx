@@ -136,7 +136,7 @@ export default function EquipmentDetail({
     value,
     description,
   }: {
-    icon: any;
+    icon: React.ComponentType<{ className?: string }>;
     label: string;
     value: string | number;
     description?: string;

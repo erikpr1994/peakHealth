@@ -16,7 +16,7 @@ interface ExerciseDetailProps {
   exerciseId: string;
 }
 
-export default function ExerciseDetail({ exerciseId }: ExerciseDetailProps) {
+export default function ExerciseDetail({ exerciseId: _exerciseId }: ExerciseDetailProps) {
   const router = useRouter();
 
   // Mock exercise data - in a real app, this would come from an API

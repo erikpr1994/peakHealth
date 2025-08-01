@@ -5,7 +5,7 @@ export interface UserType {
   name: string;
   displayName: string;
   description?: string;
-  permissions: Record<string, any>;
+  permissions: Record<string, unknown>;
   createdAt: string;
   updatedAt: string;
 }
@@ -77,8 +77,8 @@ export interface FeatureFlagAuditLog {
   id: string;
   featureFlagId: string;
   action: 'created' | 'updated' | 'deleted' | 'enabled' | 'disabled';
-  oldValues?: Record<string, any>;
-  newValues?: Record<string, any>;
+  oldValues?: Record<string, unknown>;
+  newValues?: Record<string, unknown>;
   changedBy?: string;
   changedAt: string;
   environment?: string;

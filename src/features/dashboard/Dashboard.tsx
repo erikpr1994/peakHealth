@@ -28,10 +28,21 @@ import {
 } from "recharts";
 import ClubEventConflictModal from "@/features/social/ClubEventConflictModal";
 
+interface ClubEvent {
+  id: string;
+  name: string;
+  club: string;
+  time: string;
+  date: string;
+  duration: string;
+  difficulty: string;
+  participants: number;
+}
+
 export default function Dashboard() {
   const router = useRouter();
   const [showConflictModal, setShowConflictModal] = useState(false);
-  const [selectedEvent, setSelectedEvent] = useState<any>(null);
+  const [selectedEvent, setSelectedEvent] = useState<ClubEvent | null>(null);
 
   // Mock data for weekly progress
   const weeklyData = [
@@ -98,39 +109,7 @@ export default function Dashboard() {
     },
   ];
 
-  // Mock club events data
-  const clubEvents = [
-    {
-      id: "event-1",
-      name: "Morning Yoga Class",
-      club: "Zen Fitness Club",
-      time: "7:00 AM",
-      date: "Tomorrow",
-      duration: "60 min",
-      difficulty: "Beginner",
-      participants: 12,
-    },
-    {
-      id: "event-2",
-      name: "HIIT Bootcamp",
-      club: "Peak Performance",
-      time: "6:30 PM",
-      date: "Wednesday",
-      duration: "45 min",
-      difficulty: "Intermediate",
-      participants: 8,
-    },
-    {
-      id: "event-3",
-      name: "Strength Training",
-      club: "Iron Warriors",
-      time: "5:00 PM",
-      date: "Friday",
-      duration: "75 min",
-      difficulty: "Advanced",
-      participants: 15,
-    },
-  ];
+
 
   // Mock clubs around user
   const nearbyClubs = [
@@ -160,10 +139,7 @@ export default function Dashboard() {
     },
   ];
 
-  const handleJoinEvent = (event: any) => {
-    setSelectedEvent(event);
-    setShowConflictModal(true);
-  };
+
 
   const handleStartWorkout = (routineId: string) => {
     router.push(`/workout-tracker/${routineId}`);
@@ -285,7 +261,7 @@ export default function Dashboard() {
         <CardHeader className="pb-3">
           <CardTitle className="flex items-center gap-2">
             <Calendar className="w-5 h-5" />
-            Today's Workout
+                          Today&apos;s Workout
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
@@ -365,7 +341,7 @@ export default function Dashboard() {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <TrendingUp className="w-5 h-5" />
-              This Week's Activity
+              This Week&apos;s Activity
             </CardTitle>
           </CardHeader>
           <CardContent>

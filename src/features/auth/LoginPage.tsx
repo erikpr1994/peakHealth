@@ -29,8 +29,9 @@ export default function LoginPage() {
 
     try {
       await login(email, password);
-    } catch (err: any) {
-      setError(err.message || "An unexpected error occurred.");
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : "An unexpected error occurred.";
+      setError(errorMessage);
     } finally {
       setIsLoading(false);
     }
@@ -89,7 +90,7 @@ export default function LoginPage() {
               href="/signup"
               className="text-sm text-muted-foreground hover:text-primary underline"
             >
-              Don't have an account? Sign up
+              Don&apos;t have an account? Sign up
             </NextLink>
           </div>
         </CardContent>

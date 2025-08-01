@@ -5,13 +5,11 @@ import React, {
   useContext,
   useState,
   useEffect,
+  useCallback,
   ReactNode,
 } from "react";
-import { createClient } from "@/lib/supabase/client";
 import { useAuth } from "@/features/auth/context/AuthContext";
-import { featureFlagCache } from "../lib/cache";
 import { featureFlagMonitor } from "../lib/monitoring";
-import { getCurrentEnvironment } from "../lib/config";
 import {
   FeatureFlagContextType,
   UserFeatureFlag,
@@ -29,9 +27,8 @@ export function FeatureFlagProvider({ children }: { children: ReactNode }) {
   const [userTypes, setUserTypes] = useState<UserTypeInfo[]>([]);
   const [userGroups, setUserGroups] = useState<UserGroupInfo[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const supabase = createClient();
 
-  const loadUserData = async () => {
+  const loadUserData = useCallback(async () => {
     if (!user) {
       setFlags({});
       setUserTypes([]);
@@ -49,7 +46,7 @@ export function FeatureFlagProvider({ children }: { children: ReactNode }) {
       const { flags, userTypes, userGroups } = await response.json();
 
       const flagsMap = flags.reduce(
-        (acc: Record<string, UserFeatureFlag>, flag: any) => {
+        (acc: Record<string, UserFeatureFlag>, flag: { name: string; is_enabled: boolean; rollout_percentage: number }) => {
           acc[flag.name] = {
             name: flag.name,
             isEnabled: flag.is_enabled,
@@ -87,7 +84,7 @@ export function FeatureFlagProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     loadUserData();
-  }, [user]);
+  }, [user, loadUserData]);
 
   const isEnabled = (featureName: string): boolean => {
     const flag = flags[featureName];

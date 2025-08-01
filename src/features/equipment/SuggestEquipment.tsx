@@ -250,7 +250,7 @@ export default function SuggestEquipment({
     onNavigate("suggestions");
   };
 
-  const updateSpecs = (key: keyof EquipmentSpecs, value: any) => {
+  const updateSpecs = (key: keyof EquipmentSpecs, value: string | number | boolean | EquipmentSpecs[keyof EquipmentSpecs]) => {
     setEquipmentData({
       ...equipmentData,
       specs: {
