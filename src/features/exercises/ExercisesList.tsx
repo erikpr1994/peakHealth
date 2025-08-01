@@ -10,10 +10,11 @@ import { NewExercisesCarousel } from "./components/ExercisesList/NewExercisesCar
 import { ExerciseGrid } from "./components/ExercisesList/ExerciseGrid";
 import { FilterDialog } from "./components/ExercisesList/FilterDialog";
 import { mockExercises } from "./data/mockExercises";
+import { ExerciseProvider } from "./context/ExerciseContext";
 
 import { Exercise } from "./types";
 
-export default function ExercisesList() {
+function ExercisesListContent() {
   const router = useRouter();
   const [activeCategory, setActiveCategory] = useState("All Exercises");
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
@@ -47,10 +48,7 @@ export default function ExercisesList() {
       </div>
 
       {/* Search and Filters */}
-      <SearchAndFilters
-        onFilterOpen={() => setIsFilterOpen(true)}
-        isFilterOpen={isFilterOpen}
-      />
+      <SearchAndFilters onFilterOpen={() => setIsFilterOpen(true)} />
 
       {/* Category Tabs */}
       <CategoryTabs
@@ -79,5 +77,13 @@ export default function ExercisesList() {
         onClose={() => setIsFilterOpen(false)}
       />
     </div>
+  );
+}
+
+export default function ExercisesList() {
+  return (
+    <ExerciseProvider>
+      <ExercisesListContent />
+    </ExerciseProvider>
   );
 }

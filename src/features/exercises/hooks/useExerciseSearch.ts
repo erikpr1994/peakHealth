@@ -1,15 +1,7 @@
-import { useState } from "react";
+import { useExerciseContext } from "../context/ExerciseContext";
 
 export function useExerciseSearch() {
-  const [searchTerm, setSearchTerm] = useState("");
-
-  const handleSearchChange = (value: string) => {
-    setSearchTerm(value);
-  };
-
-  const clearSearch = () => {
-    setSearchTerm("");
-  };
+  const { searchTerm, handleSearchChange, clearSearch } = useExerciseContext();
 
   return {
     searchTerm,

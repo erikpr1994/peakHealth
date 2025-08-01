@@ -3,17 +3,12 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useExerciseSearch } from "../../hooks/useExerciseSearch";
 import { useExerciseFilters } from "../../hooks/useExerciseFilters";
-import { FilterDialog } from "./FilterDialog";
 
 interface SearchAndFiltersProps {
   onFilterOpen: () => void;
-  isFilterOpen: boolean;
 }
 
-export function SearchAndFilters({
-  onFilterOpen,
-  isFilterOpen,
-}: SearchAndFiltersProps) {
+export function SearchAndFilters({ onFilterOpen }: SearchAndFiltersProps) {
   const { searchTerm, handleSearchChange } = useExerciseSearch();
   const { getActiveFilterCount } = useExerciseFilters();
 

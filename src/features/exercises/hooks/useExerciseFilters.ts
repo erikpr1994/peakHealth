@@ -1,37 +1,7 @@
-import { useState } from "react";
-import { FilterState } from "../types";
+import { useExerciseContext } from "../context/ExerciseContext";
 
 export function useExerciseFilters() {
-  const [filters, setFilters] = useState<FilterState>({
-    difficulties: [],
-    muscleGroups: [],
-    equipment: [],
-  });
-
-  const handleFilterChange = (type: keyof FilterState, value: string) => {
-    setFilters((prev) => ({
-      ...prev,
-      [type]: prev[type].includes(value)
-        ? prev[type].filter((item) => item !== value)
-        : [...prev[type], value],
-    }));
-  };
-
-  const clearFilters = () => {
-    setFilters({
-      difficulties: [],
-      muscleGroups: [],
-      equipment: [],
-    });
-  };
-
-  const getActiveFilterCount = () => {
-    return (
-      filters.difficulties.length +
-      filters.muscleGroups.length +
-      filters.equipment.length
-    );
-  };
+  const { filters, handleFilterChange, clearFilters, getActiveFilterCount } = useExerciseContext();
 
   return {
     filters,
