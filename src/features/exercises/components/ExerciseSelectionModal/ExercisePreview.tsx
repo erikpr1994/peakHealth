@@ -1,4 +1,4 @@
-import { Star, Info } from "lucide-react";
+import { Star, Info, ExternalLink } from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -8,6 +8,7 @@ import { CategoryBadge } from "../shared/CategoryBadge";
 import { EquipmentTags } from "../shared/EquipmentTags";
 import { getEffectiveExercise } from "../../utils/exerciseUtils";
 import { VariantSelector } from "./VariantSelector";
+import { useRouter } from "next/navigation";
 
 interface ExercisePreviewProps {
   exercise: Exercise | null;
@@ -24,6 +25,14 @@ export function ExercisePreview({
   onSelectExercise,
   onClose,
 }: ExercisePreviewProps) {
+  const router = useRouter();
+
+  const handleViewDetails = () => {
+    if (exercise) {
+      router.push(`/exercises/${exercise.id}`);
+      onClose();
+    }
+  };
   if (!exercise) {
     return (
       <div className="w-1/3 flex flex-col bg-white overflow-hidden">
@@ -172,6 +181,14 @@ export function ExercisePreview({
           <div className="flex gap-3">
             <Button onClick={onClose} variant="outline" className="flex-1">
               Cancel
+            </Button>
+            <Button
+              onClick={handleViewDetails}
+              variant="outline"
+              className="flex-1"
+            >
+              <ExternalLink className="w-4 h-4 mr-2" />
+              View Details
             </Button>
             <Button
               onClick={onSelectExercise}

@@ -11,6 +11,7 @@ interface ExerciseGridProps {
   activeCategory: string;
   viewMode: "grid" | "list";
   onViewModeChange: (mode: "grid" | "list") => void;
+  onExerciseClick: (exercise: Exercise) => void;
 }
 
 export function ExerciseGrid({
@@ -18,6 +19,7 @@ export function ExerciseGrid({
   activeCategory,
   viewMode,
   onViewModeChange,
+  onExerciseClick,
 }: ExerciseGridProps) {
   const { searchTerm } = useExerciseSearch();
   const { filters } = useExerciseFilters();
@@ -61,7 +63,11 @@ export function ExerciseGrid({
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 sm:gap-6">
         {filteredExercises.map((exercise) => (
-          <ExerciseCard key={exercise.id} exercise={exercise} />
+          <ExerciseCard
+            key={exercise.id}
+            exercise={exercise}
+            onClick={() => onExerciseClick(exercise)}
+          />
         ))}
       </div>
     </div>

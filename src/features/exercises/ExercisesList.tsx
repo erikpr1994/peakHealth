@@ -22,6 +22,10 @@ export default function ExercisesList() {
   const exercises = mockExercises;
   const newExercises = exercises.filter((exercise) => exercise.isNew);
 
+  const handleExerciseClick = (exercise: Exercise) => {
+    router.push(`/exercises/${exercise.id}`);
+  };
+
   return (
     <div className="w-full px-4 sm:px-6 lg:px-8 py-6">
       {/* Header */}
@@ -55,7 +59,10 @@ export default function ExercisesList() {
       />
 
       {/* New Exercises Section */}
-      <NewExercisesCarousel newExercises={newExercises} />
+      <NewExercisesCarousel
+        newExercises={newExercises}
+        onExerciseClick={handleExerciseClick}
+      />
 
       {/* Main Exercises Section */}
       <ExerciseGrid
@@ -63,6 +70,7 @@ export default function ExercisesList() {
         activeCategory={activeCategory}
         viewMode={viewMode}
         onViewModeChange={setViewMode}
+        onExerciseClick={handleExerciseClick}
       />
 
       {/* Filter Dialog */}
