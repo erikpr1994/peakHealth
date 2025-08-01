@@ -6,7 +6,10 @@ export async function GET() {
   try {
     const supabase = await createClient();
 
-    const { data: { user }, error } = await supabase.auth.getUser();
+    const {
+      data: { user },
+      error,
+    } = await supabase.auth.getUser();
 
     if (error) {
       return NextResponse.json({ error: error.message }, { status: 401 });
@@ -24,4 +27,4 @@ export async function GET() {
       { status: 500 }
     );
   }
-} 
+}
