@@ -67,6 +67,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       }
 
       setUser(data.user);
+      // Explicitly redirect to dashboard after successful login
+      router.push("/dashboard");
     } catch (error) {
       console.error("Error logging in:", error);
       throw error;
@@ -95,6 +97,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       }
 
       setUser(data.user);
+      // Explicitly redirect to dashboard after successful signup
+      router.push("/dashboard");
     } catch (error) {
       console.error("Error signing up:", error);
       throw error;
