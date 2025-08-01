@@ -29,12 +29,14 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: error.message }, { status: 400 });
     }
 
-    return NextResponse.json({
-      user: data.user,
-      session: data.session,
-    });
-  } catch (error) {
-    console.error('Signup error:', error);
+    return NextResponse.json(
+      {
+        message: 'User created successfully',
+        user: data.user,
+      },
+      { status: 201 }
+    );
+  } catch {
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }
