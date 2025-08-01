@@ -1,7 +1,8 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
 import type { LucideIcon } from "lucide-react";
+
+import { Button } from "@/components/ui/button";
 
 interface NavigationItem {
   id: string;
@@ -23,7 +24,7 @@ export const DesktopNavigation = ({
 }: DesktopNavigationProps) => {
   return (
     <nav className="hidden md:flex space-x-1">
-      {items.map((item) => {
+      {items.map(item => {
         const Icon = item.icon;
         const isActive = pathname === item.path;
         return (

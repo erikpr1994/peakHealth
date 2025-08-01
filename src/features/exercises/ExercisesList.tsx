@@ -1,17 +1,18 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
 import { Plus } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+
 import { Button } from "@/components/ui/button";
-import { SearchAndFilters } from "./components/ExercisesList/SearchAndFilters";
+
 import { CategoryTabs } from "./components/ExercisesList/CategoryTabs";
-import { NewExercisesCarousel } from "./components/ExercisesList/NewExercisesCarousel";
 import { ExerciseGrid } from "./components/ExercisesList/ExerciseGrid";
 import { FilterDialog } from "./components/ExercisesList/FilterDialog";
-import { mockExercises } from "./data/mockExercises";
+import { NewExercisesCarousel } from "./components/ExercisesList/NewExercisesCarousel";
+import { SearchAndFilters } from "./components/ExercisesList/SearchAndFilters";
 import { ExerciseProvider } from "./context/ExerciseContext";
-
+import { mockExercises } from "./data/mockExercises";
 import { Exercise } from "./types";
 
 function ExercisesListContent() {
@@ -21,7 +22,7 @@ function ExercisesListContent() {
   const [isFilterOpen, setIsFilterOpen] = useState(false);
 
   const exercises = mockExercises;
-  const newExercises = exercises.filter((exercise) => exercise.isNew);
+  const newExercises = exercises.filter(exercise => exercise.isNew);
 
   const handleExerciseClick = (exercise: Exercise) => {
     router.push(`/exercises/${exercise.id}`);

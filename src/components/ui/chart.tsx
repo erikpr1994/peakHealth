@@ -104,6 +104,16 @@ ${colorConfig
 
 const ChartTooltip = RechartsPrimitive.Tooltip;
 
+interface ChartPayload {
+  dataKey?: string;
+  name?: string;
+  value?: number;
+  color?: string;
+  payload?: {
+    fill?: string;
+  };
+}
+
 function ChartTooltipContent({
   active,
   payload,
@@ -120,20 +130,23 @@ function ChartTooltipContent({
   labelKey,
 }: {
   active?: boolean;
-  payload?: any[];
+  payload?: ChartPayload[];
   className?: string;
   indicator?: "line" | "dot" | "dashed";
   hideLabel?: boolean;
   hideIndicator?: boolean;
-  label?: any;
-  labelFormatter?: (value: any, payload: any[]) => React.ReactNode;
+  label?: string | React.ReactNode;
+  labelFormatter?: (
+    value: string | React.ReactNode,
+    payload: ChartPayload[]
+  ) => React.ReactNode;
   labelClassName?: string;
   formatter?: (
-    value: any,
+    value: number,
     name: string,
-    props: any,
+    props: ChartPayload,
     index: number,
-    payload: any
+    payload: ChartPayload
   ) => React.ReactNode;
   color?: string;
   nameKey?: string;
@@ -195,7 +208,7 @@ function ChartTooltipContent({
         {payload.map((item, index) => {
           const key = `${nameKey || item.name || item.dataKey || "value"}`;
           const itemConfig = getPayloadConfigFromPayload(config, item, key);
-          const indicatorColor = color || item.payload.fill || item.color;
+          const indicatorColor = color || item.payload?.fill || item.color;
 
           return (
             <div
@@ -206,7 +219,7 @@ function ChartTooltipContent({
               )}
             >
               {formatter && item?.value !== undefined && item.name ? (
-                formatter(item.value, item.name, item, index, item.payload)
+                formatter(item.value, item.name, item, index, item)
               ) : (
                 <>
                   {itemConfig?.icon ? (
@@ -272,7 +285,7 @@ function ChartLegendContent({
 }: {
   className?: string;
   hideIcon?: boolean;
-  payload?: any[];
+  payload?: ChartPayload[];
   verticalAlign?: "top" | "bottom";
   nameKey?: string;
 }) {
@@ -290,7 +303,7 @@ function ChartLegendContent({
         className
       )}
     >
-      {payload.map((item) => {
+      {payload.map(item => {
         const key = `${nameKey || item.dataKey || "value"}`;
         const itemConfig = getPayloadConfigFromPayload(config, item, key);
 

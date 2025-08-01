@@ -4,9 +4,10 @@ import {
   CarouselContent,
   CarouselItem,
 } from "@/components/ui/carousel";
+
+import { useIsMobile } from "../../../../hooks/use-mobile";
 import { Exercise } from "../../types";
 import { ExerciseCard } from "../shared/ExerciseCard";
-import { useIsMobile } from "../../../../hooks/use-mobile";
 
 interface NewExercisesCarouselProps {
   newExercises: Exercise[];
@@ -36,7 +37,7 @@ export function NewExercisesCarousel({
       {isMobile ? (
         <Carousel className="w-full" opts={{ dragFree: true }}>
           <CarouselContent className="-ml-2">
-            {newExercises.map((exercise) => (
+            {newExercises.map(exercise => (
               <CarouselItem key={exercise.id} className="pl-2 basis-64">
                 <ExerciseCard
                   exercise={exercise}
@@ -50,7 +51,7 @@ export function NewExercisesCarousel({
         </Carousel>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 max-w-none">
-          {newExercises.slice(0, 5).map((exercise) => (
+          {newExercises.slice(0, 5).map(exercise => (
             <div key={exercise.id} className="w-full max-w-64">
               <ExerciseCard
                 exercise={exercise}

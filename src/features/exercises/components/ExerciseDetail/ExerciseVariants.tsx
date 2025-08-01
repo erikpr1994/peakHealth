@@ -1,6 +1,8 @@
 import { Heart } from "lucide-react";
-import { Card } from "@/components/ui/card";
+
 import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+
 import { ExerciseData } from "../../types";
 
 interface ExerciseVariantsProps {
@@ -21,12 +23,12 @@ export function ExerciseVariants({ exercise }: ExerciseVariantsProps) {
         </Button>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {exercise.variants.map((variant) => (
+        {exercise.variants.map(variant => (
           <Card
             key={variant.id}
             className="cursor-pointer hover:shadow-md transition-shadow"
           >
-            <div className="bg-gray-100 h-40"></div>
+            <div className="bg-gray-100 h-40" />
             <div className="p-4">
               <h4 className="font-semibold text-gray-800 mb-2">
                 {variant.name}

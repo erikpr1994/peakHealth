@@ -1,4 +1,3 @@
-import { useState } from "react";
 import {
   User,
   CreditCard,
@@ -11,10 +10,12 @@ import {
   Download,
   DollarSign,
   Camera,
-  Check,
 } from "lucide-react";
-import { Card } from "@/components/ui/card";
+import { useState } from "react";
+
 import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -25,8 +26,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
-import { Checkbox } from "@/components/ui/checkbox";
-
 import { Page } from "@/types/app";
 
 interface SettingsProps {
@@ -36,12 +35,12 @@ interface SettingsProps {
 interface SidebarItem {
   id: string;
   name: string;
-  icon: React.ComponentType<any>;
+  icon: React.ComponentType<{ className?: string }>;
   active?: boolean;
   badge?: string;
 }
 
-export default function Settings({ onNavigate }: SettingsProps) {
+export default function Settings({ onNavigate: _onNavigate }: SettingsProps) {
   const [activeSection, setActiveSection] = useState("profile");
   const [fitnessGoals, setFitnessGoals] = useState([
     "Build Strength",
@@ -81,8 +80,8 @@ export default function Settings({ onNavigate }: SettingsProps) {
   ];
 
   const handleGoalToggle = (goal: string) => {
-    setFitnessGoals((prev) =>
-      prev.includes(goal) ? prev.filter((g) => g !== goal) : [...prev, goal]
+    setFitnessGoals(prev =>
+      prev.includes(goal) ? prev.filter(g => g !== goal) : [...prev, goal]
     );
   };
 
@@ -126,13 +125,13 @@ export default function Settings({ onNavigate }: SettingsProps) {
         <div className="w-64">
           <Card className="p-4">
             <div className="space-y-6">
-              {sidebarSections.map((section) => (
+              {sidebarSections.map(section => (
                 <div key={section.title}>
                   <h3 className="text-sm font-medium text-gray-500 mb-3 px-3">
                     {section.title}
                   </h3>
                   <div className="space-y-1">
-                    {section.items.map((item) => {
+                    {section.items.map(item => {
                       const Icon = item.icon;
                       const isActive =
                         item.id === "profile" && activeSection === "profile";
@@ -309,7 +308,7 @@ export default function Settings({ onNavigate }: SettingsProps) {
                   "Improve Endurance",
                   "Increase Flexibility",
                   "General Health",
-                ].map((goal) => (
+                ].map(goal => (
                   <div key={goal} className="flex items-center space-x-3">
                     <Checkbox
                       checked={fitnessGoals.includes(goal)}
@@ -387,8 +386,8 @@ export default function Settings({ onNavigate }: SettingsProps) {
             </div>
 
             <p className="text-indigo-100 mb-8">
-              We're working on exciting new features to enhance your fitness
-              journey. Stay tuned!
+              We&apos;re working on exciting new features to enhance your
+              fitness journey. Stay tuned!
             </p>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">

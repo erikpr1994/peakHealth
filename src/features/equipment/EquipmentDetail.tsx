@@ -10,12 +10,12 @@ import {
   TrendingUp,
   Calculator,
 } from "lucide-react";
-import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Progress } from "@/components/ui/progress";
 
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { Progress } from "@/components/ui/progress";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Page } from "@/types/app";
 
 interface EquipmentDetailProps {
@@ -136,7 +136,7 @@ export default function EquipmentDetail({
     value,
     description,
   }: {
-    icon: any;
+    icon: React.ComponentType<{ className?: string }>;
     label: string;
     value: string | number;
     description?: string;
@@ -249,8 +249,8 @@ export default function EquipmentDetail({
                           equipment.userHistory.progressTrend === "up"
                             ? "text-green-500"
                             : equipment.userHistory.progressTrend === "down"
-                            ? "text-red-500"
-                            : "text-gray-500"
+                              ? "text-red-500"
+                              : "text-gray-500"
                         }`}
                       />
                     </div>
@@ -383,7 +383,7 @@ export default function EquipmentDetail({
                         {equipment.specs.availableWeights.length})
                       </h4>
                       <div className="flex flex-wrap gap-2">
-                        {equipment.specs.availableWeights.map((weight) => (
+                        {equipment.specs.availableWeights.map(weight => (
                           <Badge
                             key={weight}
                             variant="outline"
@@ -475,7 +475,7 @@ export default function EquipmentDetail({
             <Card className="p-6">
               <h3 className="text-lg font-semibold mb-4">Available At</h3>
               <div className="space-y-3">
-                {equipment.gyms.map((gym) => (
+                {equipment.gyms.map(gym => (
                   <div
                     key={gym.id}
                     className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg"

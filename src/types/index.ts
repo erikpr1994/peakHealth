@@ -3,5 +3,5 @@ export type {
   Page,
   OnboardingData,
   NavigateFunction,
-  AppContextType
-} from './app';
+  AppContextType,
+} from "./app";

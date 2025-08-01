@@ -1,8 +1,10 @@
-import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Card } from "@/components/ui/card";
+import { useState } from "react";
+
 import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
+
 import { Routine } from "../../types";
 
 interface AddToRoutineProps {
@@ -14,9 +16,9 @@ export function AddToRoutine({ routines }: AddToRoutineProps) {
   const [selectedRoutines, setSelectedRoutines] = useState<string[]>([]);
 
   const handleRoutineToggle = (routineId: string) => {
-    setSelectedRoutines((prev) =>
+    setSelectedRoutines(prev =>
       prev.includes(routineId)
-        ? prev.filter((id) => id !== routineId)
+        ? prev.filter(id => id !== routineId)
         : [...prev, routineId]
     );
   };
@@ -33,7 +35,7 @@ export function AddToRoutine({ routines }: AddToRoutineProps) {
         </Button>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        {routines.map((routine) => (
+        {routines.map(routine => (
           <div
             key={routine.id}
             className="border border-gray-200 rounded-lg p-4 cursor-pointer hover:bg-gray-50"

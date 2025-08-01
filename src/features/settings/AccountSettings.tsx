@@ -1,7 +1,5 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
 import {
   ArrowLeft,
   Key,
@@ -14,12 +12,9 @@ import {
   Globe,
   FileText,
 } from "lucide-react";
-import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Switch } from "@/components/ui/switch";
-import { Separator } from "@/components/ui/separator";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+
 import {
   AlertDialog,
   AlertDialogAction,
@@ -31,6 +26,12 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Separator } from "@/components/ui/separator";
+import { Switch } from "@/components/ui/switch";
 import { OnboardingData } from "@/types/app";
 
 interface AccountSettingsProps {
@@ -135,7 +136,7 @@ export default function AccountSettings({
                 <Input
                   id="fullName"
                   value={personalInfo.name}
-                  onChange={(e) =>
+                  onChange={e =>
                     setPersonalInfo({ ...personalInfo, name: e.target.value })
                   }
                   className="mt-1"
@@ -148,7 +149,7 @@ export default function AccountSettings({
                   id="phone"
                   type="tel"
                   value={personalInfo.phone}
-                  onChange={(e) =>
+                  onChange={e =>
                     setPersonalInfo({ ...personalInfo, phone: e.target.value })
                   }
                   className="mt-1"
@@ -160,7 +161,7 @@ export default function AccountSettings({
                 <Input
                   id="location"
                   value={personalInfo.location}
-                  onChange={(e) =>
+                  onChange={e =>
                     setPersonalInfo({
                       ...personalInfo,
                       location: e.target.value,
@@ -175,7 +176,7 @@ export default function AccountSettings({
                 <textarea
                   id="bio"
                   value={personalInfo.bio}
-                  onChange={(e) =>
+                  onChange={e =>
                     setPersonalInfo({ ...personalInfo, bio: e.target.value })
                   }
                   className="mt-1 w-full px-3 py-2 border border-gray-200 rounded-md resize-none focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -203,7 +204,7 @@ export default function AccountSettings({
                     id="currentPassword"
                     type={showCurrentPassword ? "text" : "password"}
                     value={passwords.current}
-                    onChange={(e) =>
+                    onChange={e =>
                       setPasswords({ ...passwords, current: e.target.value })
                     }
                     placeholder="Enter current password"
@@ -231,7 +232,7 @@ export default function AccountSettings({
                     id="newPassword"
                     type={showNewPassword ? "text" : "password"}
                     value={passwords.new}
-                    onChange={(e) =>
+                    onChange={e =>
                       setPasswords({ ...passwords, new: e.target.value })
                     }
                     placeholder="Enter new password"
@@ -259,7 +260,7 @@ export default function AccountSettings({
                     id="confirmPassword"
                     type={showConfirmPassword ? "text" : "password"}
                     value={passwords.confirm}
-                    onChange={(e) =>
+                    onChange={e =>
                       setPasswords({ ...passwords, confirm: e.target.value })
                     }
                     placeholder="Confirm new password"
@@ -310,7 +311,7 @@ export default function AccountSettings({
                   id="newEmail"
                   type="email"
                   value={newEmail}
-                  onChange={(e) => setNewEmail(e.target.value)}
+                  onChange={e => setNewEmail(e.target.value)}
                   placeholder="Enter new email address"
                   className="mt-1"
                 />
@@ -346,7 +347,7 @@ export default function AccountSettings({
                 </div>
                 <Switch
                   checked={privacySettings.profileVisible}
-                  onCheckedChange={(checked) =>
+                  onCheckedChange={checked =>
                     setPrivacySettings({
                       ...privacySettings,
                       profileVisible: checked,
@@ -366,7 +367,7 @@ export default function AccountSettings({
                 </div>
                 <Switch
                   checked={privacySettings.workoutsVisible}
-                  onCheckedChange={(checked) =>
+                  onCheckedChange={checked =>
                     setPrivacySettings({
                       ...privacySettings,
                       workoutsVisible: checked,
@@ -386,7 +387,7 @@ export default function AccountSettings({
                 </div>
                 <Switch
                   checked={privacySettings.statsVisible}
-                  onCheckedChange={(checked) =>
+                  onCheckedChange={checked =>
                     setPrivacySettings({
                       ...privacySettings,
                       statsVisible: checked,
@@ -406,7 +407,7 @@ export default function AccountSettings({
                 </div>
                 <Switch
                   checked={privacySettings.allowMessages}
-                  onCheckedChange={(checked) =>
+                  onCheckedChange={checked =>
                     setPrivacySettings({
                       ...privacySettings,
                       allowMessages: checked,
@@ -426,7 +427,7 @@ export default function AccountSettings({
                 </div>
                 <Switch
                   checked={privacySettings.showLocation}
-                  onCheckedChange={(checked) =>
+                  onCheckedChange={checked =>
                     setPrivacySettings({
                       ...privacySettings,
                       showLocation: checked,
@@ -446,7 +447,7 @@ export default function AccountSettings({
                 </div>
                 <Switch
                   checked={privacySettings.showPhone}
-                  onCheckedChange={(checked) =>
+                  onCheckedChange={checked =>
                     setPrivacySettings({
                       ...privacySettings,
                       showPhone: checked,
@@ -476,7 +477,7 @@ export default function AccountSettings({
                 </div>
                 <Switch
                   checked={notificationSettings.emailNotifications}
-                  onCheckedChange={(checked) =>
+                  onCheckedChange={checked =>
                     setNotificationSettings({
                       ...notificationSettings,
                       emailNotifications: checked,
@@ -496,7 +497,7 @@ export default function AccountSettings({
                 </div>
                 <Switch
                   checked={notificationSettings.workoutReminders}
-                  onCheckedChange={(checked) =>
+                  onCheckedChange={checked =>
                     setNotificationSettings({
                       ...notificationSettings,
                       workoutReminders: checked,
@@ -516,7 +517,7 @@ export default function AccountSettings({
                 </div>
                 <Switch
                   checked={notificationSettings.achievementAlerts}
-                  onCheckedChange={(checked) =>
+                  onCheckedChange={checked =>
                     setNotificationSettings({
                       ...notificationSettings,
                       achievementAlerts: checked,
@@ -536,7 +537,7 @@ export default function AccountSettings({
                 </div>
                 <Switch
                   checked={notificationSettings.weeklyReports}
-                  onCheckedChange={(checked) =>
+                  onCheckedChange={checked =>
                     setNotificationSettings({
                       ...notificationSettings,
                       weeklyReports: checked,
@@ -556,7 +557,7 @@ export default function AccountSettings({
                 </div>
                 <Switch
                   checked={notificationSettings.socialUpdates}
-                  onCheckedChange={(checked) =>
+                  onCheckedChange={checked =>
                     setNotificationSettings({
                       ...notificationSettings,
                       socialUpdates: checked,
@@ -576,7 +577,7 @@ export default function AccountSettings({
                 </div>
                 <Switch
                   checked={notificationSettings.marketingEmails}
-                  onCheckedChange={(checked) =>
+                  onCheckedChange={checked =>
                     setNotificationSettings({
                       ...notificationSettings,
                       marketingEmails: checked,

@@ -1,7 +1,8 @@
 "use client";
 
-import WorkoutTracker from "@/features/workout/WorkoutTracker";
 import { useParams, useRouter } from "next/navigation";
+
+import WorkoutTracker from "@/features/workout/WorkoutTracker";
 
 export default function WorkoutTrackerPage() {
   const { routineId } = useParams();

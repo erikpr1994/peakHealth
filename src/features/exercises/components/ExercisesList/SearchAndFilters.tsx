@@ -1,8 +1,10 @@
 import { Search, Filter } from "lucide-react";
-import { Input } from "@/components/ui/input";
+
 import { Button } from "@/components/ui/button";
-import { useExerciseSearch } from "../../hooks/useExerciseSearch";
+import { Input } from "@/components/ui/input";
+
 import { useExerciseFilters } from "../../hooks/useExerciseFilters";
+import { useExerciseSearch } from "../../hooks/useExerciseSearch";
 
 interface SearchAndFiltersProps {
   onFilterOpen: () => void;
@@ -19,7 +21,7 @@ export function SearchAndFilters({ onFilterOpen }: SearchAndFiltersProps) {
         <Input
           placeholder="Search exercises..."
           value={searchTerm}
-          onChange={(e) => handleSearchChange(e.target.value)}
+          onChange={e => handleSearchChange(e.target.value)}
           className="pl-10"
         />
       </div>

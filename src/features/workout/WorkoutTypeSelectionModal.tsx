@@ -1,5 +1,6 @@
-import { useState, useEffect } from "react";
 import { X, Dumbbell, MapPin, Waves, Bike, Activity } from "lucide-react";
+import { useState, useEffect } from "react";
+
 import { Button } from "@/components/ui/button";
 
 interface WorkoutTypeSelectionModalProps {
@@ -191,14 +192,14 @@ export default function WorkoutTypeSelectionModal({
           {/* Available Workout Types */}
           <div className="mb-8">
             <h4 className="text-xl font-semibold text-gray-800 mb-6 flex items-center">
-              <span className="w-2 h-2 bg-green-500 rounded-full mr-3"></span>
+              <span className="w-2 h-2 bg-green-500 rounded-full mr-3" />
               Available Now
             </h4>
 
             <div className="space-y-6">
               {workoutTypes
-                .filter((type) => !type.comingSoon)
-                .map((type) => {
+                .filter(type => !type.comingSoon)
+                .map(type => {
                   const Icon = type.icon;
                   const isSelected = selectedType === type.id;
 
@@ -348,11 +349,11 @@ export default function WorkoutTypeSelectionModal({
           </div>
 
           {/* Coming Soon Section */}
-          {workoutTypes.filter((type) => type.comingSoon).length > 0 && (
+          {workoutTypes.filter(type => type.comingSoon).length > 0 && (
             <>
               <div className="mb-6">
                 <h4 className="text-xl font-semibold text-gray-800 mb-4 flex items-center">
-                  <span className="w-2 h-2 bg-amber-400 rounded-full mr-3 animate-pulse"></span>
+                  <span className="w-2 h-2 bg-amber-400 rounded-full mr-3 animate-pulse" />
                   Coming Soon
                 </h4>
               </div>
@@ -360,8 +361,8 @@ export default function WorkoutTypeSelectionModal({
               {/* Grid for Coming Soon Items */}
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 {workoutTypes
-                  .filter((type) => type.comingSoon)
-                  .map((type) => {
+                  .filter(type => type.comingSoon)
+                  .map(type => {
                     const Icon = type.icon;
 
                     return (
@@ -438,9 +439,9 @@ export default function WorkoutTypeSelectionModal({
           <div className="flex justify-between items-center">
             <div className="text-sm text-gray-500">
               {selectedType &&
-                workoutTypes.find((t) => t.id === selectedType)?.comingSoon && (
+                workoutTypes.find(t => t.id === selectedType)?.comingSoon && (
                   <div className="flex items-center space-x-2">
-                    <div className="w-2 h-2 bg-amber-400 rounded-full animate-pulse"></div>
+                    <div className="w-2 h-2 bg-amber-400 rounded-full animate-pulse" />
                     <span className="text-amber-600 font-medium">
                       This workout type will be available in a future update
                     </span>
@@ -471,7 +472,7 @@ export default function WorkoutTypeSelectionModal({
               >
                 {selectedType ? (
                   <>
-                    Add {workoutTypes.find((t) => t.id === selectedType)?.name}
+                    Add {workoutTypes.find(t => t.id === selectedType)?.name}
                     <svg
                       className="ml-2 w-5 h-5"
                       fill="none"

@@ -1,10 +1,12 @@
-import { ChevronRight, Star, Info } from "lucide-react";
+import { Star, Info, ChevronRight } from "lucide-react";
+
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Exercise } from "../../types";
-import { ExerciseCard } from "../shared/ExerciseCard";
-import { filterExercises } from "../../utils/filterUtils";
-import { SearchAndFilters } from "./SearchAndFilters";
+
 import { useExerciseFilters } from "../../hooks/useExerciseFilters";
+import { Exercise } from "../../types";
+import { filterExercises } from "../../utils/filterUtils";
+
+import { SearchAndFilters } from "./SearchAndFilters";
 
 interface ExerciseLibraryProps {
   exercises: Exercise[];
@@ -49,7 +51,7 @@ export function ExerciseLibrary({
         <ScrollArea className="h-full w-full">
           <div className="p-6">
             <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4">
-              {filteredExercises.map((exercise) => (
+              {filteredExercises.map(exercise => (
                 <div
                   key={exercise.id}
                   className={`group bg-white rounded-xl border-2 cursor-pointer transition-all duration-200 hover:shadow-lg hover:-translate-y-1 ${
@@ -117,7 +119,7 @@ export function ExerciseLibrary({
 
                     <div className="flex items-center justify-between">
                       <div className="flex flex-wrap gap-1">
-                        {exercise.muscleGroups.slice(0, 2).map((muscle) => (
+                        {exercise.muscleGroups.slice(0, 2).map(muscle => (
                           <span
                             key={muscle}
                             className="inline-block px-2 py-1 text-xs bg-blue-50 text-blue-700 rounded-md"

@@ -1,4 +1,5 @@
 import { Badge } from "@/components/ui/badge";
+
 import { getCategoryColor } from "../../utils/exerciseUtils";
 
 interface CategoryBadgeProps {

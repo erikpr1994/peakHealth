@@ -33,15 +33,15 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
   const [showWelcomeScreen, setShowWelcomeScreen] = useState(true);
 
   const toggleTrainer = () => {
-    setHasTrainer((prev) => !prev);
+    setHasTrainer(prev => !prev);
   };
 
   const toggleClubMembership = () => {
-    setIsClubMember((prev) => !prev);
+    setIsClubMember(prev => !prev);
   };
 
   const toggleWelcomeScreen = () => {
-    setShowWelcomeScreen((prev) => !prev);
+    setShowWelcomeScreen(prev => !prev);
   };
 
   return (

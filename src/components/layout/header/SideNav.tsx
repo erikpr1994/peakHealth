@@ -1,5 +1,9 @@
 "use client";
 
+import { Menu } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
+
+import { Button } from "@/components/ui/button";
 import {
   Sheet,
   SheetContent,
@@ -7,9 +11,6 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { Button } from "@/components/ui/button";
-import { Menu } from "lucide-react";
-import type { LucideIcon } from "lucide-react";
 
 interface NavigationItem {
   id: string;
@@ -47,7 +48,7 @@ export const SideNav = ({
             <SheetTitle>Peak Health</SheetTitle>
           </SheetHeader>
           <nav className="mt-8 flex flex-col gap-2">
-            {items.map((item) => {
+            {items.map(item => {
               const Icon = item.icon;
               const isActive = pathname === item.path;
               return (

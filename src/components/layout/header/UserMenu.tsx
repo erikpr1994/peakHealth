@@ -1,8 +1,11 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
 import type { User } from "@supabase/supabase-js";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -10,8 +13,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Button } from "@/components/ui/button";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+
 import {
   userMenuItems,
   settingsMenuItems,
@@ -74,7 +76,7 @@ export const UserMenu = ({ user, onLogout }: UserMenuProps) => {
       <DropdownMenuContent align="end" className="w-56" sideOffset={8}>
         {menuSections.map((section, index) => (
           <div key={index}>
-            {section.map((item) => {
+            {section.map(item => {
               const Icon = item.icon;
               return (
                 <DropdownMenuItem

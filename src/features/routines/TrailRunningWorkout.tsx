@@ -1,4 +1,3 @@
-import { useState, useEffect } from "react";
 import {
   Mountain,
   Clock,
@@ -12,6 +11,9 @@ import {
   Plus,
   X,
 } from "lucide-react";
+import { useState, useEffect } from "react";
+
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -23,7 +25,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
 
 interface TrailRunningWorkoutProps {
@@ -454,10 +455,10 @@ function IntensityTargetConfiguration({
   const currentTarget = target || { type: "rpe", value: 5, unit: "RPE" };
 
   const handleTargetTypeChange = (newType: string) => {
-    const targetType = intensityTargetTypes.find((t) => t.value === newType);
+    const targetType = intensityTargetTypes.find(t => t.value === newType);
     if (!targetType) return;
 
-    let newTarget: IntensityTarget = {
+    const newTarget: IntensityTarget = {
       type: newType as IntensityTarget["type"],
       unit: targetType.unit,
     };
@@ -522,7 +523,7 @@ function IntensityTargetConfiguration({
         return (
           <Select
             value={currentTarget.value?.toString() || "3"}
-            onValueChange={(value) =>
+            onValueChange={value =>
               onChange({ ...currentTarget, value: parseInt(value) })
             }
           >
@@ -530,7 +531,7 @@ function IntensityTargetConfiguration({
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              {[0, 1, 2, 3, 4, 5].map((zone) => (
+              {[0, 1, 2, 3, 4, 5].map(zone => (
                 <SelectItem key={zone} value={zone.toString()}>
                   <div className="flex flex-col">
                     <span>Heart Rate Zone {zone}</span>
@@ -547,7 +548,7 @@ function IntensityTargetConfiguration({
         return (
           <Select
             value={currentTarget.value?.toString() || "3"}
-            onValueChange={(value) =>
+            onValueChange={value =>
               onChange({ ...currentTarget, value: parseInt(value) })
             }
           >
@@ -555,7 +556,7 @@ function IntensityTargetConfiguration({
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              {[0, 1, 2, 3, 4, 5].map((zone) => (
+              {[0, 1, 2, 3, 4, 5].map(zone => (
                 <SelectItem key={zone} value={zone.toString()}>
                   <div className="flex flex-col">
                     <span>Power Zone {zone}</span>
@@ -579,7 +580,7 @@ function IntensityTargetConfiguration({
                     type="text"
                     placeholder="5:00"
                     value={currentTarget.minValue || ""}
-                    onChange={(e) => {
+                    onChange={e => {
                       const value = e.target.value;
                       // Allow partial input while typing: digits, digits with colon, or complete MM:SS
                       if (
@@ -592,7 +593,7 @@ function IntensityTargetConfiguration({
                         });
                       }
                     }}
-                    onBlur={(e) => {
+                    onBlur={e => {
                       const value = e.target.value;
                       // On blur, validate complete MM:SS format and auto-format if needed
                       if (value && !/^\d{1,2}:[0-5]\d$/.test(value)) {
@@ -632,7 +633,7 @@ function IntensityTargetConfiguration({
                     type="text"
                     placeholder="5:59"
                     value={currentTarget.maxValue || ""}
-                    onChange={(e) => {
+                    onChange={e => {
                       const value = e.target.value;
                       // Allow partial input while typing: digits, digits with colon, or complete MM:SS
                       if (
@@ -645,7 +646,7 @@ function IntensityTargetConfiguration({
                         });
                       }
                     }}
-                    onBlur={(e) => {
+                    onBlur={e => {
                       const value = e.target.value;
                       // On blur, validate complete MM:SS format and auto-format if needed
                       if (value && !/^\d{1,2}:[0-5]\d$/.test(value)) {
@@ -690,7 +691,7 @@ function IntensityTargetConfiguration({
             type="number"
             placeholder="Cadence (RPM)"
             value={currentTarget.value || ""}
-            onChange={(e) =>
+            onChange={e =>
               onChange({
                 ...currentTarget,
                 value: parseInt(e.target.value) || undefined,
@@ -702,7 +703,7 @@ function IntensityTargetConfiguration({
         return (
           <Select
             value={currentTarget.value?.toString() || "5"}
-            onValueChange={(value) =>
+            onValueChange={value =>
               onChange({ ...currentTarget, value: parseInt(value) })
             }
           >
@@ -710,7 +711,7 @@ function IntensityTargetConfiguration({
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((level) => (
+              {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(level => (
                 <SelectItem key={level} value={level.toString()}>
                   <div className="flex flex-col">
                     <span>RPE {level}/10</span>
@@ -737,7 +738,7 @@ function IntensityTargetConfiguration({
           <SelectValue />
         </SelectTrigger>
         <SelectContent>
-          {intensityTargetTypes.map((type) => (
+          {intensityTargetTypes.map(type => (
             <SelectItem key={type.value} value={type.value}>
               <div className="flex items-center space-x-2">
                 <span>{type.icon}</span>
@@ -923,9 +924,9 @@ export default function TrailRunningWorkout({
         totalElevation += Math.max(0, section.elevationChange) * multiplier;
     };
 
-    sections.forEach((section) => {
+    sections.forEach(section => {
       if (section.isRepeated && section.repeatSections && section.repeatCount) {
-        section.repeatSections.forEach((repeatSection) => {
+        section.repeatSections.forEach(repeatSection => {
           processSection(repeatSection, section.repeatCount!);
         });
       } else {
@@ -943,7 +944,7 @@ export default function TrailRunningWorkout({
   // Update calculated values whenever sections change
   useEffect(() => {
     const totals = calculateTotals(workoutData.sections);
-    setWorkoutData((prev) => ({
+    setWorkoutData(prev => ({
       ...prev,
       targetDistance: totals.distance,
       estimatedDuration: totals.duration,
@@ -1004,7 +1005,7 @@ export default function TrailRunningWorkout({
           : undefined,
         repeatSections: processedRepeatIntervals
           ? processedRepeatIntervals.map(
-              (rs) =>
+              rs =>
                 ({
                   ...rs,
                   id: rs.id || Date.now().toString() + Math.random(),
@@ -1013,19 +1014,21 @@ export default function TrailRunningWorkout({
                   intensityTarget:
                     rs.intensityTarget ||
                     getDefaultIntensityTarget(rs.type || "run"),
-                } as TrailRunningInterval)
+                }) as TrailRunningInterval
             )
           : undefined,
       };
 
       // Store the skipLastRest setting in a custom property for editing later
       if (currentSection.isRepeated) {
-        (updatedSection as any).skipLastRest = skipLastRest;
+        (
+          updatedSection as TrailRunningSection & { skipLastRest?: boolean }
+        ).skipLastRest = skipLastRest;
       }
 
-      setWorkoutData((prev) => ({
+      setWorkoutData(prev => ({
         ...prev,
-        sections: prev.sections.map((section) =>
+        sections: prev.sections.map(section =>
           section.id === editingSection.id ? updatedSection : section
         ),
       }));
@@ -1055,7 +1058,7 @@ export default function TrailRunningWorkout({
           : undefined,
         repeatSections: processedRepeatIntervals
           ? processedRepeatIntervals.map(
-              (rs) =>
+              rs =>
                 ({
                   ...rs,
                   id: rs.id || Date.now().toString() + Math.random(),
@@ -1064,17 +1067,19 @@ export default function TrailRunningWorkout({
                   intensityTarget:
                     rs.intensityTarget ||
                     getDefaultIntensityTarget(rs.type || "run"),
-                } as TrailRunningInterval)
+                }) as TrailRunningInterval
             )
           : undefined,
       };
 
       // Store the skipLastRest setting in a custom property for editing later
       if (currentSection.isRepeated) {
-        (section as any).skipLastRest = skipLastRest;
+        (
+          section as TrailRunningSection & { skipLastRest?: boolean }
+        ).skipLastRest = skipLastRest;
       }
 
-      setWorkoutData((prev) => ({
+      setWorkoutData(prev => ({
         ...prev,
         sections: [...prev.sections, section],
       }));
@@ -1082,7 +1087,7 @@ export default function TrailRunningWorkout({
 
     // Reset form with smart defaults
     const nextType = "warm-up";
-    const nextTypeInfo = sectionTypes.find((t) => t.value === nextType);
+    const nextTypeInfo = sectionTypes.find(t => t.value === nextType);
     const shouldAutoRepeat = nextTypeInfo?.autoRepeat || false;
     const smartDefaults = shouldAutoRepeat ? getSmartDefaults(nextType) : null;
 
@@ -1128,14 +1133,14 @@ export default function TrailRunningWorkout({
   };
 
   const removeSection = (id: string) => {
-    setWorkoutData((prev) => ({
+    setWorkoutData(prev => ({
       ...prev,
-      sections: prev.sections.filter((section) => section.id !== id),
+      sections: prev.sections.filter(section => section.id !== id),
     }));
   };
 
   const addRepeatInterval = () => {
-    setRepeatIntervals((prev) => {
+    setRepeatIntervals(prev => {
       // Determine appropriate default type based on current section type and position
       const getDefaultIntervalType = (currentLength: number) => {
         switch (currentSection.type) {
@@ -1172,8 +1177,12 @@ export default function TrailRunningWorkout({
     });
   };
 
-  const updateRepeatInterval = (index: number, field: string, value: any) => {
-    setRepeatIntervals((prev) =>
+  const updateRepeatInterval = (
+    index: number,
+    field: string,
+    value: string | number | boolean | IntensityTarget
+  ) => {
+    setRepeatIntervals(prev =>
       prev.map((interval, i) => {
         if (i === index) {
           const updatedInterval = { ...interval, [field]: value };
@@ -1193,7 +1202,7 @@ export default function TrailRunningWorkout({
   };
 
   const removeRepeatInterval = (index: number) => {
-    setRepeatIntervals((prev) => prev.filter((_, i) => i !== index));
+    setRepeatIntervals(prev => prev.filter((_, i) => i !== index));
   };
 
   const editSection = (section: TrailRunningSection) => {
@@ -1211,12 +1220,15 @@ export default function TrailRunningWorkout({
 
     if (section.isRepeated && section.repeatSections) {
       setRepeatIntervals(
-        section.repeatSections.map((rs) => ({
+        section.repeatSections.map(rs => ({
           ...rs,
         }))
       );
       // Check if skip last rest was enabled for this section (stored in a custom property)
-      setSkipLastRest((section as any).skipLastRest || false);
+      setSkipLastRest(
+        (section as TrailRunningSection & { skipLastRest?: boolean })
+          .skipLastRest || false
+      );
     } else {
       setRepeatIntervals([]);
       setSkipLastRest(false);
@@ -1227,7 +1239,7 @@ export default function TrailRunningWorkout({
     setEditingSection(null);
     // Reset form
     const nextType = "warm-up";
-    const nextTypeInfo = sectionTypes.find((t) => t.value === nextType);
+    const nextTypeInfo = sectionTypes.find(t => t.value === nextType);
     const shouldAutoRepeat = nextTypeInfo?.autoRepeat || false;
     const smartDefaults = shouldAutoRepeat ? getSmartDefaults(nextType) : null;
 
@@ -1369,8 +1381,8 @@ export default function TrailRunningWorkout({
                   id="name"
                   placeholder="e.g., Mountain Peak Challenge"
                   value={workoutData.name}
-                  onChange={(e) =>
-                    setWorkoutData((prev) => ({
+                  onChange={e =>
+                    setWorkoutData(prev => ({
                       ...prev,
                       name: e.target.value,
                     }))
@@ -1382,22 +1394,22 @@ export default function TrailRunningWorkout({
                 <Label htmlFor="difficulty">Difficulty Level</Label>
                 <Select
                   value={workoutData.difficulty}
-                  onValueChange={(value: any) =>
-                    setWorkoutData((prev) => ({ ...prev, difficulty: value }))
-                  }
+                  onValueChange={(
+                    value: TrailRunningWorkoutData["difficulty"]
+                  ) => setWorkoutData(prev => ({ ...prev, difficulty: value }))}
                 >
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    {difficultyLevels.map((level) => (
+                    {difficultyLevels.map(level => (
                       <SelectItem key={level.value} value={level.value}>
                         <div className="flex items-center space-x-2">
                           <span
                             className={`inline-block w-2 h-2 rounded-full ${
                               level.color.split(" ")[0]
                             }`}
-                          ></span>
+                          />
                           <span>{level.label}</span>
                         </div>
                       </SelectItem>
@@ -1414,8 +1426,8 @@ export default function TrailRunningWorkout({
                 className="w-full min-h-[100px] px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-orange-500 focus:border-transparent"
                 placeholder="Describe your trail running workout, terrain challenges, and what makes it special..."
                 value={workoutData.description}
-                onChange={(e) =>
-                  setWorkoutData((prev) => ({
+                onChange={e =>
+                  setWorkoutData(prev => ({
                     ...prev,
                     description: e.target.value,
                   }))
@@ -1454,10 +1466,10 @@ export default function TrailRunningWorkout({
                 <div className="space-y-2">
                   <Select
                     value={currentSection.type}
-                    onValueChange={(value: any) => {
+                    onValueChange={(value: TrailRunningSection["type"]) => {
                       const newType = value;
                       const selectedType = sectionTypes.find(
-                        (t) => t.value === newType
+                        t => t.value === newType
                       );
                       const defaultTarget = getDefaultIntensityTarget(newType);
 
@@ -1468,7 +1480,7 @@ export default function TrailRunningWorkout({
                         ? getSmartDefaults(newType)
                         : null;
 
-                      setCurrentSection((prev) => ({
+                      setCurrentSection(prev => ({
                         ...prev,
                         type: newType,
                         intensityTarget: defaultTarget,
@@ -1516,7 +1528,7 @@ export default function TrailRunningWorkout({
                         {currentSection.type &&
                           (() => {
                             const selectedType = sectionTypes.find(
-                              (t) => t.value === currentSection.type
+                              t => t.value === currentSection.type
                             );
                             if (selectedType) {
                               const Icon = selectedType.icon;
@@ -1547,7 +1559,7 @@ export default function TrailRunningWorkout({
                       <div className="px-3 py-2 text-xs font-medium text-muted-foreground bg-muted/30">
                         Basic Types
                       </div>
-                      {sectionCategories.basic.map((type) => {
+                      {sectionCategories.basic.map(type => {
                         const Icon = type.icon;
                         return (
                           <SelectItem
@@ -1578,7 +1590,7 @@ export default function TrailRunningWorkout({
                       <div className="px-3 py-2 text-xs font-medium text-muted-foreground bg-muted/30 mt-1">
                         Rest & Recovery
                       </div>
-                      {sectionCategories.rest.map((type) => {
+                      {sectionCategories.rest.map(type => {
                         const Icon = type.icon;
                         return (
                           <SelectItem
@@ -1609,7 +1621,7 @@ export default function TrailRunningWorkout({
                       <div className="px-3 py-2 text-xs font-medium text-muted-foreground bg-muted/30 mt-1">
                         Structured Types
                       </div>
-                      {sectionCategories.structured.map((type) => {
+                      {sectionCategories.structured.map(type => {
                         const Icon = type.icon;
                         return (
                           <SelectItem
@@ -1645,8 +1657,8 @@ export default function TrailRunningWorkout({
                 <Input
                   placeholder="e.g., Steep Ascent to Summit"
                   value={currentSection.name || ""}
-                  onChange={(e) =>
-                    setCurrentSection((prev) => ({
+                  onChange={e =>
+                    setCurrentSection(prev => ({
                       ...prev,
                       name: e.target.value,
                     }))
@@ -1661,8 +1673,8 @@ export default function TrailRunningWorkout({
                   <div className="flex items-center space-x-3">
                     <Switch
                       checked={currentSection.isRepeated || false}
-                      onCheckedChange={(checked) => {
-                        setCurrentSection((prev) => ({
+                      onCheckedChange={checked => {
+                        setCurrentSection(prev => ({
                           ...prev,
                           isRepeated: checked,
                         }));
@@ -1674,7 +1686,7 @@ export default function TrailRunningWorkout({
                             currentSection.type || "warm-up"
                           );
                           if (smartDefaults) {
-                            setCurrentSection((prev) => ({
+                            setCurrentSection(prev => ({
                               ...prev,
                               repeatCount: smartDefaults.repeatCount,
                             }));
@@ -1717,7 +1729,7 @@ export default function TrailRunningWorkout({
                   </div>
                 </div>
 
-                {sectionTypes.find((t) => t.value === currentSection.type)
+                {sectionTypes.find(t => t.value === currentSection.type)
                   ?.autoRepeat && (
                   <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
                     <div className="flex items-start space-x-3">
@@ -1729,9 +1741,9 @@ export default function TrailRunningWorkout({
                           Template Applied
                         </p>
                         <p className="text-xs text-blue-700 leading-relaxed">
-                          We've automatically configured this{" "}
+                          We&apos;ve automatically configured this{" "}
                           {sectionTypes
-                            .find((t) => t.value === currentSection.type)
+                            .find(t => t.value === currentSection.type)
                             ?.label.toLowerCase()}{" "}
                           with{" "}
                           {
@@ -1757,8 +1769,8 @@ export default function TrailRunningWorkout({
                         min="1"
                         max="20"
                         value={currentSection.repeatCount || 1}
-                        onChange={(e) =>
-                          setCurrentSection((prev) => ({
+                        onChange={e =>
+                          setCurrentSection(prev => ({
                             ...prev,
                             repeatCount: parseInt(e.target.value) || 1,
                           }))
@@ -1781,8 +1793,8 @@ export default function TrailRunningWorkout({
                         </div>
                       </div>
                       <p className="text-xs text-muted-foreground leading-relaxed">
-                        When enabled, the last interval will be removed if it's
-                        a rest or recovery type
+                        When enabled, the last interval will be removed if
+                        it&apos;s a rest or recovery type
                       </p>
                     </div>
 
@@ -1861,7 +1873,7 @@ export default function TrailRunningWorkout({
                             <Input
                               placeholder="Interval name"
                               value={interval.name || ""}
-                              onChange={(e) =>
+                              onChange={e =>
                                 updateRepeatInterval(
                                   index,
                                   "name",
@@ -1885,7 +1897,7 @@ export default function TrailRunningWorkout({
                             <Label className="text-xs">Type</Label>
                             <Select
                               value={interval.type || "run"}
-                              onValueChange={(value: any) =>
+                              onValueChange={(value: IntervalType) =>
                                 updateRepeatInterval(index, "type", value)
                               }
                             >
@@ -1893,7 +1905,7 @@ export default function TrailRunningWorkout({
                                 <SelectValue />
                               </SelectTrigger>
                               <SelectContent>
-                                {intervalTypes.map((type) => {
+                                {intervalTypes.map(type => {
                                   const Icon = type.icon;
                                   return (
                                     <SelectItem
@@ -1926,11 +1938,11 @@ export default function TrailRunningWorkout({
                                   type="number"
                                   placeholder="2"
                                   value={interval.duration || ""}
-                                  onChange={(e) =>
+                                  onChange={e =>
                                     updateRepeatInterval(
                                       index,
                                       "duration",
-                                      parseInt(e.target.value) || undefined
+                                      parseInt(e.target.value) || 0
                                     )
                                   }
                                 />
@@ -1949,11 +1961,11 @@ export default function TrailRunningWorkout({
                                     step="0.1"
                                     placeholder="0.5"
                                     value={interval.distance || ""}
-                                    onChange={(e) =>
+                                    onChange={e =>
                                       updateRepeatInterval(
                                         index,
                                         "distance",
-                                        parseFloat(e.target.value) || undefined
+                                        parseFloat(e.target.value) || 0
                                       )
                                     }
                                   />
@@ -1961,11 +1973,11 @@ export default function TrailRunningWorkout({
                                     type="number"
                                     placeholder="5"
                                     value={interval.duration || ""}
-                                    onChange={(e) =>
+                                    onChange={e =>
                                       updateRepeatInterval(
                                         index,
                                         "duration",
-                                        parseInt(e.target.value) || undefined
+                                        parseInt(e.target.value) || 0
                                       )
                                     }
                                   />
@@ -1973,11 +1985,11 @@ export default function TrailRunningWorkout({
                                     type="number"
                                     placeholder="30"
                                     value={interval.elevationChange || ""}
-                                    onChange={(e) =>
+                                    onChange={e =>
                                       updateRepeatInterval(
                                         index,
                                         "elevationChange",
-                                        parseInt(e.target.value) || undefined
+                                        parseInt(e.target.value) || 0
                                       )
                                     }
                                   />
@@ -1989,7 +2001,7 @@ export default function TrailRunningWorkout({
                           {interval.type !== "rest" && (
                             <IntensityTargetConfiguration
                               target={interval.intensityTarget}
-                              onChange={(newTarget) =>
+                              onChange={newTarget =>
                                 updateRepeatInterval(
                                   index,
                                   "intensityTarget",
@@ -2015,8 +2027,8 @@ export default function TrailRunningWorkout({
                         step="0.1"
                         placeholder="2.5"
                         value={currentSection.distance || ""}
-                        onChange={(e) =>
-                          setCurrentSection((prev) => ({
+                        onChange={e =>
+                          setCurrentSection(prev => ({
                             ...prev,
                             distance: parseFloat(e.target.value) || undefined,
                           }))
@@ -2030,8 +2042,8 @@ export default function TrailRunningWorkout({
                         type="number"
                         placeholder="15"
                         value={currentSection.duration || ""}
-                        onChange={(e) =>
-                          setCurrentSection((prev) => ({
+                        onChange={e =>
+                          setCurrentSection(prev => ({
                             ...prev,
                             duration: parseInt(e.target.value) || undefined,
                           }))
@@ -2046,8 +2058,8 @@ export default function TrailRunningWorkout({
                       type="number"
                       placeholder="e.g., 200 (positive for uphill)"
                       value={currentSection.elevationChange || ""}
-                      onChange={(e) =>
-                        setCurrentSection((prev) => ({
+                      onChange={e =>
+                        setCurrentSection(prev => ({
                           ...prev,
                           elevationChange:
                             parseInt(e.target.value) || undefined,
@@ -2061,8 +2073,8 @@ export default function TrailRunningWorkout({
               {!currentSection.isRepeated && currentSection.type !== "rest" && (
                 <IntensityTargetConfiguration
                   target={currentSection.intensityTarget}
-                  onChange={(newTarget) =>
-                    setCurrentSection((prev) => ({
+                  onChange={newTarget =>
+                    setCurrentSection(prev => ({
                       ...prev,
                       intensityTarget: newTarget,
                     }))
@@ -2098,13 +2110,13 @@ export default function TrailRunningWorkout({
                 </p>
               ) : (
                 <div className="space-y-3">
-                  {workoutData.sections.map((section) => {
+                  {workoutData.sections.map(section => {
                     const SectionIcon =
-                      sectionTypes.find((t) => t.value === section.type)
-                        ?.icon || Clock;
+                      sectionTypes.find(t => t.value === section.type)?.icon ||
+                      Clock;
                     const sectionColor =
-                      sectionTypes.find((t) => t.value === section.type)
-                        ?.color || "text-gray-600";
+                      sectionTypes.find(t => t.value === section.type)?.color ||
+                      "text-gray-600";
 
                     return (
                       <div
@@ -2156,7 +2168,11 @@ export default function TrailRunningWorkout({
                                   <span className="text-xs text-blue-600">
                                     {section.repeatCount} repetitions
                                   </span>
-                                  {(section as any).skipLastRest && (
+                                  {(
+                                    section as TrailRunningSection & {
+                                      skipLastRest?: boolean;
+                                    }
+                                  ).skipLastRest && (
                                     <Badge
                                       variant="outline"
                                       className="text-xs bg-orange-50 text-orange-600 border-orange-200"

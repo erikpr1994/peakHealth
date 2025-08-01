@@ -14,7 +14,7 @@ export function MuscleGroupTags({
 
   return (
     <div className={`flex flex-wrap gap-1 ${className}`}>
-      {displayGroups.map((muscle) => (
+      {displayGroups.map(muscle => (
         <span
           key={muscle}
           className="inline-block px-2 py-1 text-xs bg-blue-50 text-blue-700 rounded-md"

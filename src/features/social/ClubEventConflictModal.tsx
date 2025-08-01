@@ -1,4 +1,8 @@
+import { AlertTriangle, Users, Clock, Calendar } from "lucide-react";
 import { useState } from "react";
+
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 import {
   Dialog,
   DialogContent,
@@ -7,11 +11,8 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { AlertTriangle, Users, Clock, Calendar } from "lucide-react";
-import { Card } from "@/components/ui/card";
+import { Textarea } from "@/components/ui/textarea";
 
 interface ClubEvent {
   id: string;
@@ -241,7 +242,7 @@ export default function ClubEventConflictModal({
                       : "Add any notes about this change..."
                   }
                   value={message}
-                  onChange={(e) => setMessage(e.target.value)}
+                  onChange={e => setMessage(e.target.value)}
                   rows={3}
                 />
               </div>

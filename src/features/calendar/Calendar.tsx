@@ -1,7 +1,5 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
 import {
   ChevronLeft,
   ChevronRight,
@@ -15,9 +13,12 @@ import {
   TrendingUp,
   Users,
 } from "lucide-react";
-import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 
 interface WorkoutEvent {
   id: string;
@@ -310,7 +311,7 @@ export default function Calendar() {
         isCurrentMonth: false,
         isToday: false,
         isSelected: false,
-        workouts: workouts.filter((w) => isSameDay(w.date, workoutDate)),
+        workouts: workouts.filter(w => isSameDay(w.date, workoutDate)),
       });
     }
 
@@ -325,7 +326,7 @@ export default function Calendar() {
         isCurrentMonth: true,
         isToday,
         isSelected,
-        workouts: workouts.filter((w) => isSameDay(w.date, workoutDate)),
+        workouts: workouts.filter(w => isSameDay(w.date, workoutDate)),
       });
     }
 
@@ -338,7 +339,7 @@ export default function Calendar() {
         isCurrentMonth: false,
         isToday: false,
         isSelected: false,
-        workouts: workouts.filter((w) => isSameDay(w.date, workoutDate)),
+        workouts: workouts.filter(w => isSameDay(w.date, workoutDate)),
       });
     }
 
@@ -355,7 +356,7 @@ export default function Calendar() {
 
   const getUpcomingWorkouts = () => {
     return workouts
-      .filter((w) => w.status === "scheduled" && w.date >= today)
+      .filter(w => w.status === "scheduled" && w.date >= today)
       .sort((a, b) => {
         // First sort by date, then by time
         if (a.date.getTime() !== b.date.getTime()) {
@@ -371,7 +372,7 @@ export default function Calendar() {
 
   const convertTo24Hour = (time: string): string => {
     const [timePart, period] = time.split(" ");
-    let [hours, minutes] = timePart.split(":");
+    const [hours, minutes] = timePart.split(":");
     let hour = parseInt(hours);
 
     if (period === "PM" && hour !== 12) {
@@ -384,17 +385,20 @@ export default function Calendar() {
   };
 
   const groupWorkoutsByDay = (workoutList: WorkoutEvent[]) => {
-    const grouped = workoutList.reduce((acc, workout) => {
-      const dateKey = workout.date.toDateString();
-      if (!acc[dateKey]) {
-        acc[dateKey] = [];
-      }
-      acc[dateKey].push(workout);
-      return acc;
-    }, {} as Record<string, WorkoutEvent[]>);
+    const grouped = workoutList.reduce(
+      (acc, workout) => {
+        const dateKey = workout.date.toDateString();
+        if (!acc[dateKey]) {
+          acc[dateKey] = [];
+        }
+        acc[dateKey].push(workout);
+        return acc;
+      },
+      {} as Record<string, WorkoutEvent[]>
+    );
 
     // Sort workouts within each day by time
-    Object.keys(grouped).forEach((dateKey) => {
+    Object.keys(grouped).forEach(dateKey => {
       grouped[dateKey].sort((a, b) => {
         const timeA = convertTo24Hour(a.time);
         const timeB = convertTo24Hour(b.time);
@@ -432,7 +436,7 @@ export default function Calendar() {
   };
 
   const getWorkoutTypeConfig = (type: WorkoutEvent["type"]) => {
-    return workoutTypes.find((wt) => wt.name === type) || workoutTypes[0];
+    return workoutTypes.find(wt => wt.name === type) || workoutTypes[0];
   };
 
   const getStatusConfig = (status: WorkoutEvent["status"]) => {
@@ -494,42 +498,45 @@ export default function Calendar() {
 
   // Calculate stats
   const completedThisMonth = workouts.filter(
-    (w) =>
+    w =>
       w.status === "completed" &&
       w.date.getMonth() === today.getMonth() &&
       w.date.getFullYear() === today.getFullYear()
   ).length;
 
   const scheduledThisMonth = workouts.filter(
-    (w) =>
+    w =>
       w.date.getMonth() === today.getMonth() &&
       w.date.getFullYear() === today.getFullYear()
   ).length;
 
   const totalCaloriesBurned = workouts
-    .filter((w) => w.status === "completed" && w.actualCalories)
+    .filter(w => w.status === "completed" && w.actualCalories)
     .reduce((sum, w) => sum + (w.actualCalories || 0), 0);
 
   // Calculate days with multiple sessions this month
   const daysWithMultipleSessions = Object.values(
     workouts
       .filter(
-        (w) =>
+        w =>
           w.date.getMonth() === today.getMonth() &&
           w.date.getFullYear() === today.getFullYear()
       )
-      .reduce((acc, workout) => {
-        const dateKey = workout.date.toDateString();
-        if (!acc[dateKey]) {
-          acc[dateKey] = 0;
-        }
-        acc[dateKey]++;
-        return acc;
-      }, {} as Record<string, number>)
-  ).filter((count) => count > 1).length;
+      .reduce(
+        (acc, workout) => {
+          const dateKey = workout.date.toDateString();
+          if (!acc[dateKey]) {
+            acc[dateKey] = 0;
+          }
+          acc[dateKey]++;
+          return acc;
+        },
+        {} as Record<string, number>
+      )
+  ).filter(count => count > 1).length;
 
   // Calculate average workout duration
-  const completedWorkouts = workouts.filter((w) => w.status === "completed");
+  const completedWorkouts = workouts.filter(w => w.status === "completed");
   const totalMinutes = completedWorkouts.reduce((sum, w) => {
     const minutes = parseInt(w.duration.split(" ")[0]);
     return sum + minutes;
@@ -649,7 +656,7 @@ export default function Calendar() {
               </div>
 
               <div className="flex gap-1 bg-gray-100 rounded-lg p-1">
-                {["Month", "Week", "Day"].map((mode) => (
+                {["Month", "Week", "Day"].map(mode => (
                   <Button
                     key={mode}
                     variant={viewMode === mode ? "default" : "ghost"}
@@ -672,7 +679,7 @@ export default function Calendar() {
             {/* Workout Type Legend */}
             <div className="flex flex-wrap items-center gap-6 mb-6 pb-6 border-b border-gray-200">
               <span className="text-sm font-medium text-gray-700">Legend:</span>
-              {workoutTypes.map((type) => (
+              {workoutTypes.map(type => (
                 <div key={type.name} className="flex items-center gap-2">
                   <div className={`w-3 h-3 rounded-full ${type.color}`} />
                   <span className="text-sm text-gray-600">{type.name}</span>
@@ -683,7 +690,7 @@ export default function Calendar() {
             {/* Calendar Grid */}
             <div className="grid grid-cols-7 gap-1">
               {/* Day Headers */}
-              {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day) => (
+              {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map(day => (
                 <div key={day} className="p-2 text-center">
                   <span className="text-sm font-medium text-gray-600">
                     {day}
@@ -713,8 +720,8 @@ export default function Calendar() {
                       day.isToday
                         ? "text-indigo-600"
                         : day.isCurrentMonth
-                        ? "text-gray-900"
-                        : "text-gray-400"
+                          ? "text-gray-900"
+                          : "text-gray-400"
                     }`}
                   >
                     {day.date}
@@ -825,7 +832,7 @@ export default function Calendar() {
 
                   {/* Workouts for this day */}
                   <div className="space-y-2">
-                    {dayWorkouts.map((workout) => {
+                    {dayWorkouts.map(workout => {
                       const typeConfig = getWorkoutTypeConfig(workout.type);
                       const timeOfDay = getTimeOfDay(workout.time);
                       const isToday = isSameDay(workout.date, today);

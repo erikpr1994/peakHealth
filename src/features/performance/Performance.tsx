@@ -1,7 +1,5 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
 import {
   Activity,
   Clock,
@@ -20,18 +18,8 @@ import {
   Play,
   Zap,
 } from "lucide-react";
-import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Progress } from "@/components/ui/progress";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 import {
   LineChart,
   Line,
@@ -49,12 +37,25 @@ import {
   Cell,
   ComposedChart,
 } from "recharts";
+
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Progress } from "@/components/ui/progress";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export default function Performance() {
   const router = useRouter();
@@ -645,7 +646,7 @@ export default function Performance() {
                 </Button>
               </div>
               <div className="space-y-4">
-                {recentWorkouts.map((workout) => (
+                {recentWorkouts.map(workout => (
                   <div
                     key={workout.id}
                     className="flex items-center justify-between p-4 border rounded-lg hover:bg-gray-50"
@@ -945,7 +946,7 @@ export default function Performance() {
                         Consistency Achievement
                       </h4>
                       <p className="text-sm text-green-700">
-                        You've maintained a 15-day workout streak! This
+                        You&apos;ve maintained a 15-day workout streak! This
                         consistency is key to reaching your fitness goals.
                       </p>
                     </div>

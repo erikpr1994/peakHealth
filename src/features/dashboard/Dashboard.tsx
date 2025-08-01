@@ -1,10 +1,5 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Progress } from "@/components/ui/progress";
 import {
   Calendar,
   Clock,
@@ -18,6 +13,8 @@ import {
   Play,
   Star,
 } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 import {
   AreaChart,
   Area,
@@ -26,12 +23,27 @@ import {
   CartesianGrid,
   ResponsiveContainer,
 } from "recharts";
+
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Progress } from "@/components/ui/progress";
 import ClubEventConflictModal from "@/features/social/ClubEventConflictModal";
+
+interface ClubEvent {
+  id: string;
+  name: string;
+  club: string;
+  time: string;
+  date: string;
+  duration: string;
+  difficulty: string;
+  participants: number;
+}
 
 export default function Dashboard() {
   const router = useRouter();
   const [showConflictModal, setShowConflictModal] = useState(false);
-  const [selectedEvent, setSelectedEvent] = useState<any>(null);
+  const [selectedEvent, setSelectedEvent] = useState<ClubEvent | null>(null);
 
   // Mock data for weekly progress
   const weeklyData = [
@@ -98,40 +110,6 @@ export default function Dashboard() {
     },
   ];
 
-  // Mock club events data
-  const clubEvents = [
-    {
-      id: "event-1",
-      name: "Morning Yoga Class",
-      club: "Zen Fitness Club",
-      time: "7:00 AM",
-      date: "Tomorrow",
-      duration: "60 min",
-      difficulty: "Beginner",
-      participants: 12,
-    },
-    {
-      id: "event-2",
-      name: "HIIT Bootcamp",
-      club: "Peak Performance",
-      time: "6:30 PM",
-      date: "Wednesday",
-      duration: "45 min",
-      difficulty: "Intermediate",
-      participants: 8,
-    },
-    {
-      id: "event-3",
-      name: "Strength Training",
-      club: "Iron Warriors",
-      time: "5:00 PM",
-      date: "Friday",
-      duration: "75 min",
-      difficulty: "Advanced",
-      participants: 15,
-    },
-  ];
-
   // Mock clubs around user
   const nearbyClubs = [
     {
@@ -160,13 +138,47 @@ export default function Dashboard() {
     },
   ];
 
-  const handleJoinEvent = (event: any) => {
-    setSelectedEvent(event);
-    setShowConflictModal(true);
-  };
+  // Mock club events
+  const clubEvents: ClubEvent[] = [
+    {
+      id: "event-1",
+      name: "Morning Yoga Flow",
+      club: "Zen Fitness Club",
+      time: "7:00 AM",
+      date: "2024-01-15",
+      duration: "60 min",
+      difficulty: "Beginner",
+      participants: 12,
+    },
+    {
+      id: "event-2",
+      name: "HIIT Bootcamp",
+      club: "Peak Performance",
+      time: "6:30 AM",
+      date: "2024-01-15",
+      duration: "45 min",
+      difficulty: "Advanced",
+      participants: 8,
+    },
+    {
+      id: "event-3",
+      name: "Powerlifting Workshop",
+      club: "Iron Warriors",
+      time: "5:00 PM",
+      date: "2024-01-15",
+      duration: "90 min",
+      difficulty: "Intermediate",
+      participants: 6,
+    },
+  ];
 
   const handleStartWorkout = (routineId: string) => {
     router.push(`/workout-tracker/${routineId}`);
+  };
+
+  const handleJoinEvent = (event: ClubEvent) => {
+    setSelectedEvent(event);
+    setShowConflictModal(true);
   };
 
   // Get personalized greeting based on onboarding data
@@ -285,11 +297,11 @@ export default function Dashboard() {
         <CardHeader className="pb-3">
           <CardTitle className="flex items-center gap-2">
             <Calendar className="w-5 h-5" />
-            Today's Workout
+            Today&apos;s Workout
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
-          {activeRoutines.map((routine) => (
+          {activeRoutines.map(routine => (
             <div
               key={routine.id}
               className="p-4 border border-gray-200 rounded-lg"
@@ -365,7 +377,7 @@ export default function Dashboard() {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <TrendingUp className="w-5 h-5" />
-              This Week's Activity
+              This Week&apos;s Activity
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -396,7 +408,7 @@ export default function Dashboard() {
           </CardHeader>
           <CardContent>
             <div className="space-y-3">
-              {recentWorkouts.slice(0, 4).map((workout) => (
+              {recentWorkouts.slice(0, 4).map(workout => (
                 <div
                   key={workout.id}
                   className="grid grid-cols-2 gap-4 p-3 bg-gray-50 rounded-lg"
@@ -426,7 +438,7 @@ export default function Dashboard() {
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {nearbyClubs.map((club) => (
+            {nearbyClubs.map(club => (
               <div
                 key={club.id}
                 className="p-4 border border-gray-200 rounded-lg hover:shadow-md transition-shadow"
@@ -448,6 +460,53 @@ export default function Dashboard() {
                     View Club
                   </Button>
                 </div>
+              </div>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Upcoming Club Events */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Calendar className="w-5 h-5" />
+            Upcoming Club Events
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {clubEvents.map(event => (
+              <div
+                key={event.id}
+                className="p-4 border border-gray-200 rounded-lg hover:shadow-md transition-shadow"
+              >
+                <div className="flex items-center justify-between mb-2">
+                  <div className="flex items-center gap-1">
+                    <Users className="w-4 h-4 text-blue-500" />
+                    <span className="text-sm font-medium">
+                      {event.participants}
+                    </span>
+                  </div>
+                  <span className="text-sm text-gray-500">{event.time}</span>
+                </div>
+                <h4 className="font-semibold mb-1">{event.name}</h4>
+                <p className="text-sm text-gray-600 mb-2">{event.club}</p>
+                <div className="flex items-center justify-between mb-3">
+                  <span className="text-sm text-gray-500">
+                    {event.duration}
+                  </span>
+                  <span className="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded">
+                    {event.difficulty}
+                  </span>
+                </div>
+                <Button
+                  size="sm"
+                  onClick={() => handleJoinEvent(event)}
+                  className="w-full"
+                >
+                  Join Event
+                </Button>
               </div>
             ))}
           </div>

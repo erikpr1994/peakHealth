@@ -1,11 +1,13 @@
-import { useState } from "react";
 import { Plus, Minus, MessageCircle, Camera, Video } from "lucide-react";
-import { Card } from "@/components/ui/card";
+import { useState } from "react";
+
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Badge } from "@/components/ui/badge";
+
 import RestTimer, { RestType } from "./RestTimer";
 
 interface SetData {
@@ -28,7 +30,14 @@ interface RestViewProps {
   nextExercise?: {
     id: string;
     name: string;
-    sets: any[];
+    sets: Array<{
+      id: string;
+      type: "reps" | "time";
+      reps?: string;
+      weight?: string;
+      duration?: string;
+      restTime: string;
+    }>;
   };
   nextSetNumber: number;
   restTime: number; // in seconds
@@ -76,11 +85,11 @@ export default function RestView({
     // Mock media upload - in real app, this would handle file upload
     const mockId = Date.now().toString();
     const mockUrl = `mock-${type}-url-${mockId}`;
-    setMediaFiles((prev) => [...prev, { id: mockId, type, url: mockUrl }]);
+    setMediaFiles(prev => [...prev, { id: mockId, type, url: mockUrl }]);
   };
 
   const removeMedia = (id: string) => {
-    setMediaFiles((prev) => prev.filter((file) => file.id !== id));
+    setMediaFiles(prev => prev.filter(file => file.id !== id));
   };
 
   const getNextInfo = () => {
@@ -142,7 +151,7 @@ export default function RestView({
                       <Input
                         type="number"
                         value={actualReps}
-                        onChange={(e) =>
+                        onChange={e =>
                           setActualReps(parseInt(e.target.value) || 0)
                         }
                         className="mx-2 text-center"
@@ -180,7 +189,7 @@ export default function RestView({
                       <Input
                         type="number"
                         value={actualWeight}
-                        onChange={(e) =>
+                        onChange={e =>
                           setActualWeight(parseInt(e.target.value) || 0)
                         }
                         placeholder="Weight used"
@@ -202,7 +211,7 @@ export default function RestView({
                     <Input
                       type="number"
                       value={actualDuration}
-                      onChange={(e) =>
+                      onChange={e =>
                         setActualDuration(parseInt(e.target.value) || 0)
                       }
                       placeholder="Duration held"
@@ -225,7 +234,7 @@ export default function RestView({
             <Textarea
               placeholder="How did this set feel? Any observations or adjustments..."
               value={notes}
-              onChange={(e) => setNotes(e.target.value)}
+              onChange={e => setNotes(e.target.value)}
               className="mb-4"
               rows={3}
             />
@@ -253,7 +262,7 @@ export default function RestView({
 
             {mediaFiles.length > 0 && (
               <div className="grid grid-cols-3 gap-2">
-                {mediaFiles.map((file) => (
+                {mediaFiles.map(file => (
                   <div
                     key={file.id}
                     className="relative bg-gray-100 rounded-lg aspect-square flex items-center justify-center"
