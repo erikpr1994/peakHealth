@@ -52,7 +52,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setIsLoading(true);
 
     try {
-      const { data, error } = await supabase.auth.signInWithPassword({
+      const { error } = await supabase.auth.signInWithPassword({
         email,
         password,
       });
@@ -62,11 +62,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       }
 
       // User will be set by the onAuthStateChange listener
+      // isLoading will also be set to false by the listener
     } catch (error) {
       console.error("Error logging in:", error);
+      setIsLoading(false); // Only set loading to false on error
       throw error;
-    } finally {
-      setIsLoading(false);
     }
   };
 
@@ -75,7 +75,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setIsLoading(true);
 
     try {
-      const { data, error } = await supabase.auth.signUp({
+      const { error } = await supabase.auth.signUp({
         email,
         password,
         options: {
@@ -90,11 +90,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       }
 
       // User will be set by the onAuthStateChange listener
+      // isLoading will also be set to false by the listener
     } catch (error) {
       console.error("Error signing up:", error);
+      setIsLoading(false); // Only set loading to false on error
       throw error;
-    } finally {
-      setIsLoading(false);
     }
   };
 
@@ -109,11 +109,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       }
 
       // User will be cleared by the onAuthStateChange listener
+      // isLoading will also be set to false by the listener
     } catch (error) {
       console.error("Error logging out:", error);
+      setIsLoading(false); // Only set loading to false on error
       throw error;
-    } finally {
-      setIsLoading(false);
     }
   };
 
