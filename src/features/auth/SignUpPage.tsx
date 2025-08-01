@@ -23,13 +23,50 @@ const SignUpPage = () => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
+  const [validationErrors, setValidationErrors] = useState<{
+    name?: string;
+    email?: string;
+    password?: string;
+    confirmPassword?: string;
+  }>({});
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
+    setValidationErrors({});
 
-    if (password !== confirmPassword) {
-      setError('Passwords do not match');
+    // Validate required fields
+    const errors: {
+      name?: string;
+      email?: string;
+      password?: string;
+      confirmPassword?: string;
+    } = {};
+
+    if (!name.trim()) {
+      errors.name = 'Name is required';
+    }
+
+    if (!email.trim()) {
+      errors.email = 'Email is required';
+    } else if (!/\S+@\S+\.\S+/.test(email)) {
+      errors.email = 'Please enter a valid email address';
+    }
+
+    if (!password.trim()) {
+      errors.password = 'Password is required';
+    } else if (password.length < 6) {
+      errors.password = 'Password must be at least 6 characters long';
+    }
+
+    if (!confirmPassword.trim()) {
+      errors.confirmPassword = 'Please confirm your password';
+    } else if (password !== confirmPassword) {
+      errors.confirmPassword = 'Passwords do not match';
+    }
+
+    if (Object.keys(errors).length > 0) {
+      setValidationErrors(errors);
       return;
     }
 
@@ -54,7 +91,7 @@ const SignUpPage = () => {
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
             {error && (
-              <Alert variant="destructive">
+              <Alert variant="destructive" data-testid="signup-error">
                 <AlertDescription>{error}</AlertDescription>
               </Alert>
             )}
@@ -68,7 +105,13 @@ const SignUpPage = () => {
                 onChange={e => setName(e.target.value)}
                 placeholder="Enter your name"
                 required
+                data-testid="name-input"
               />
+              {validationErrors.name && (
+                <div className="text-sm text-red-600" data-testid="name-error">
+                  {validationErrors.name}
+                </div>
+              )}
             </div>
 
             <div className="space-y-2">
@@ -80,7 +123,13 @@ const SignUpPage = () => {
                 onChange={e => setEmail(e.target.value)}
                 placeholder="Enter your email"
                 required
+                data-testid="email-input"
               />
+              {validationErrors.email && (
+                <div className="text-sm text-red-600" data-testid="email-error">
+                  {validationErrors.email}
+                </div>
+              )}
             </div>
 
             <div className="space-y-2">
@@ -92,7 +141,16 @@ const SignUpPage = () => {
                 onChange={e => setPassword(e.target.value)}
                 placeholder="Enter your password"
                 required
+                data-testid="password-input"
               />
+              {validationErrors.password && (
+                <div
+                  className="text-sm text-red-600"
+                  data-testid="password-error"
+                >
+                  {validationErrors.password}
+                </div>
+              )}
             </div>
 
             <div className="space-y-2">
@@ -105,12 +163,21 @@ const SignUpPage = () => {
                 placeholder="Confirm your password"
                 required
               />
+              {validationErrors.confirmPassword && (
+                <div
+                  className="text-sm text-red-600"
+                  data-testid="confirm-password-error"
+                >
+                  {validationErrors.confirmPassword}
+                </div>
+              )}
             </div>
 
             <Button
               type="submit"
               className="w-full"
               disabled={isAuthOperationLoading}
+              data-testid="signup-button"
             >
               {isAuthOperationLoading ? 'Loading...' : 'Sign Up'}
             </Button>
