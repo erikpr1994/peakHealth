@@ -1179,7 +1179,7 @@ export default function TrailRunningWorkout({
   const updateRepeatInterval = (
     index: number,
     field: string,
-    value: string | number | boolean
+    value: string | number | boolean | IntensityTarget
   ) => {
     setRepeatIntervals((prev) =>
       prev.map((interval, i) => {
