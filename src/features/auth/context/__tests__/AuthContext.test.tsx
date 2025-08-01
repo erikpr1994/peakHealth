@@ -449,6 +449,35 @@ describe('AuthContext', () => {
     });
 
     it('handles missing dependencies gracefully', async () => {
+      // Create a test component that calls login without parameters
+      const TestComponentWithMissingDeps = () => {
+        const auth = useMockAuth();
+        return (
+          <div>
+            <button onClick={() => auth.login()}>Login Without Params</button>
+          </div>
+        );
+      };
+
+      render(
+        <MockAuthProvider>
+          <TestComponentWithMissingDeps />
+        </MockAuthProvider>
+      );
+
+      const loginButton = screen.getByText('Login Without Params');
+      fireEvent.click(loginButton);
+
+      // Should not throw error when dependencies are missing
+      expect(mockFetch).not.toHaveBeenCalled();
+    });
+
+    it('handles invalid email format gracefully', async () => {
+      mockFetch.mockResolvedValueOnce({
+        ok: false,
+        json: () => Promise.resolve({ error: 'Invalid email format' }),
+      } as globalThis.Response);
+
       render(
         <MockAuthProvider>
           <TestComponent />
@@ -458,21 +487,9 @@ describe('AuthContext', () => {
       const loginButton = screen.getByText('Login');
       fireEvent.click(loginButton);
 
-      // Should not throw error when dependencies are missing
-      expect(mockFetch).not.toHaveBeenCalled();
-    });
-
-    it('handles empty function calls gracefully', async () => {
-      render(
-        <MockAuthProvider>
-          <TestComponent />
-        </MockAuthProvider>
-      );
-
-      // Should not throw error when called with empty function
-      expect(() => {
-        // This is intentionally empty for testing
-      }).not.toThrow();
+      await waitFor(() => {
+        expect(mockFetch).toHaveBeenCalled();
+      });
     });
   });
 
