@@ -5,13 +5,13 @@
   gap: 1.5rem;
   margin-bottom: 1.5rem;
   padding-bottom: 1.5rem;
-  border-bottom: 1px solid #e5e7eb;
+  border-bottom: 1px solid hsl(var(--border));
 }
 
 .label {
   font-size: 0.875rem;
   font-weight: 500;
-  color: #374151;
+  color: hsl(var(--foreground));
 }
 
 .legendItem {
@@ -28,5 +28,47 @@
 
 .typeName {
   font-size: 0.875rem;
-  color: #6b7280;
+  color: hsl(var(--muted-foreground));
+}
+
+/* Workout type colors using CSS variables */
+.workout-strength {
+  background-color: hsl(var(--workout-strength));
+}
+
+.workout-cardio {
+  background-color: hsl(var(--workout-cardio));
+}
+
+.workout-hiit {
+  background-color: hsl(var(--workout-hiit));
+}
+
+.workout-flexibility {
+  background-color: hsl(var(--workout-flexibility));
+}
+
+.workout-recovery {
+  background-color: hsl(var(--workout-recovery));
+}
+
+/* Status colors using CSS variables */
+.status-completed {
+  background-color: hsl(var(--status-completed));
+}
+
+.status-scheduled {
+  background-color: hsl(var(--status-scheduled));
+}
+
+.status-missed {
+  background-color: hsl(var(--status-missed));
+}
+
+.status-active {
+  background-color: hsl(var(--status-active));
+}
+
+.status-unknown {
+  background-color: hsl(var(--status-unknown));
 }

@@ -3,33 +3,33 @@ import { WorkoutTypeConfig } from "../types";
 export const workoutTypes: WorkoutTypeConfig[] = [
   {
     name: "Strength",
-    color: "bg-indigo-500",
-    textColor: "text-indigo-700",
-    bgColor: "bg-indigo-50",
+    color: "workout-strength",
+    textColor: "workout-strength-text",
+    bgColor: "workout-strength-bg",
   },
   {
     name: "Cardio",
-    color: "bg-green-500",
-    textColor: "text-green-700",
-    bgColor: "bg-green-50",
+    color: "workout-cardio",
+    textColor: "workout-cardio-text",
+    bgColor: "workout-cardio-bg",
   },
   {
     name: "HIIT",
-    color: "bg-orange-500",
-    textColor: "text-orange-700",
-    bgColor: "bg-orange-50",
+    color: "workout-hiit",
+    textColor: "workout-hiit-text",
+    bgColor: "workout-hiit-bg",
   },
   {
     name: "Flexibility",
-    color: "bg-purple-500",
-    textColor: "text-purple-700",
-    bgColor: "bg-purple-50",
+    color: "workout-flexibility",
+    textColor: "workout-flexibility-text",
+    bgColor: "workout-flexibility-bg",
   },
   {
     name: "Recovery",
-    color: "bg-blue-500",
-    textColor: "text-blue-700",
-    bgColor: "bg-blue-50",
+    color: "workout-recovery",
+    textColor: "workout-recovery-text",
+    bgColor: "workout-recovery-bg",
   },
 ];
 

@@ -68,20 +68,20 @@ export const getTimeOfDay = (time: string): TimeOfDayConfig => {
   if (hour24 >= 5 && hour24 < 12) {
     return {
       period: "Morning",
-      color: "text-amber-700",
-      bgColor: "bg-amber-50 border-amber-200",
+      color: "time-morning-text",
+      bgColor: "time-morning-bg",
     };
   } else if (hour24 >= 12 && hour24 < 17) {
     return {
       period: "Afternoon",
-      color: "text-blue-700",
-      bgColor: "bg-blue-50 border-blue-200",
+      color: "time-afternoon-text",
+      bgColor: "time-afternoon-bg",
     };
   } else {
     return {
       period: "Evening",
-      color: "text-purple-700",
-      bgColor: "bg-purple-50 border-purple-200",
+      color: "time-evening-text",
+      bgColor: "time-evening-bg",
     };
   }
 };
@@ -98,33 +98,33 @@ export const getStatusConfig = (
   switch (status) {
     case "completed":
       return {
-        color: "bg-green-500",
+        color: "status-completed",
         text: "Completed",
-        textColor: "text-green-700",
+        textColor: "status-completed-text",
       };
     case "scheduled":
       return {
-        color: "bg-blue-500",
+        color: "status-scheduled",
         text: "Scheduled",
-        textColor: "text-blue-700",
+        textColor: "status-scheduled-text",
       };
     case "missed":
       return {
-        color: "bg-red-500",
+        color: "status-missed",
         text: "Missed",
-        textColor: "text-red-700",
+        textColor: "status-missed-text",
       };
     case "active":
       return {
-        color: "bg-yellow-500",
+        color: "status-active",
         text: "In Progress",
-        textColor: "text-yellow-700",
+        textColor: "status-active-text",
       };
     default:
       return {
-        color: "bg-gray-500",
+        color: "status-unknown",
         text: "Unknown",
-        textColor: "text-gray-700",
+        textColor: "status-unknown-text",
       };
   }
 };

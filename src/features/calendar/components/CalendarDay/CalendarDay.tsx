@@ -37,8 +37,8 @@ export const CalendarDay = ({ day, onSelect }: CalendarDayProps) => {
           day.isToday
             ? styles.todayText
             : day.isCurrentMonth
-              ? styles.currentMonthText
-              : styles.otherMonthText
+            ? styles.currentMonthText
+            : styles.otherMonthText
         }`}
       >
         {day.date}
@@ -58,8 +58,8 @@ export const CalendarDay = ({ day, onSelect }: CalendarDayProps) => {
                     key={workout.id}
                     className={`${styles.indicator} ${
                       workout.status === "completed"
-                        ? statusConfig.color
-                        : typeConfig.color
+                        ? styles[statusConfig.color]
+                        : styles[typeConfig.color]
                     }`}
                     title={`${workout.name} at ${workout.time} - ${workout.status}`}
                   />
@@ -79,8 +79,8 @@ export const CalendarDay = ({ day, onSelect }: CalendarDayProps) => {
                         key={workout.id}
                         className={`${styles.smallIndicator} ${
                           workout.status === "completed"
-                            ? statusConfig.color
-                            : typeConfig.color
+                            ? styles[statusConfig.color]
+                            : styles[typeConfig.color]
                         }`}
                         title={`${workout.name} at ${workout.time} - ${workout.status}`}
                       />

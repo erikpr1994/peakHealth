@@ -8,7 +8,7 @@ export const WorkoutTypeLegend = () => {
       <span className={styles.label}>Legend:</span>
       {workoutTypes.map(type => (
         <div key={type.name} className={styles.legendItem}>
-          <div className={`${styles.indicator} ${type.color}`} />
+          <div className={`${styles.indicator} ${styles[type.color]}`} />
           <span className={styles.typeName}>{type.name}</span>
         </div>
       ))}

@@ -2,32 +2,32 @@
   position: relative;
   min-height: 5rem;
   padding: 0.5rem;
-  border: 1px solid #f3f4f6;
+  border: 1px solid hsl(var(--border));
   cursor: pointer;
   transition: all 0.2s;
 }
 
 .day.currentMonth {
-  background-color: white;
+  background-color: hsl(var(--background));
 }
 
 .day.currentMonth:hover {
-  background-color: #f9fafb;
+  background-color: hsl(var(--muted));
 }
 
 .day.otherMonth {
-  background-color: #f9fafb;
-  color: #9ca3af;
+  background-color: hsl(var(--muted));
+  color: hsl(var(--muted-foreground));
 }
 
 .day.today {
-  background-color: #eef2ff;
-  border-color: #c7d2fe;
+  background-color: hsl(var(--accent));
+  border-color: hsl(var(--ring));
 }
 
 .day.selected {
   ring: 2px;
-  ring-color: #6366f1;
+  ring-color: hsl(var(--ring));
 }
 
 .dateNumber {
@@ -36,15 +36,15 @@
 }
 
 .currentMonthText {
-  color: #111827;
+  color: hsl(var(--foreground));
 }
 
 .otherMonthText {
-  color: #9ca3af;
+  color: hsl(var(--muted-foreground));
 }
 
 .todayText {
-  color: #4f46e5;
+  color: hsl(var(--primary));
 }
 
 .workoutIndicators {
@@ -90,13 +90,55 @@
 
 .moreIndicator {
   font-size: 0.625rem;
-  color: #6b7280;
+  color: hsl(var(--muted-foreground));
 }
 
 .sessionCount {
   font-size: 0.625rem;
-  color: #6b7280;
-  background-color: rgba(255, 255, 255, 0.8);
+  color: hsl(var(--muted-foreground));
+  background-color: hsl(var(--background) / 0.8);
   padding: 0.125rem 0.25rem;
   border-radius: 0.25rem;
+}
+
+/* Workout type colors using CSS variables */
+.workout-strength {
+  background-color: hsl(var(--workout-strength));
+}
+
+.workout-cardio {
+  background-color: hsl(var(--workout-cardio));
+}
+
+.workout-hiit {
+  background-color: hsl(var(--workout-hiit));
+}
+
+.workout-flexibility {
+  background-color: hsl(var(--workout-flexibility));
+}
+
+.workout-recovery {
+  background-color: hsl(var(--workout-recovery));
+}
+
+/* Status colors using CSS variables */
+.status-completed {
+  background-color: hsl(var(--status-completed));
+}
+
+.status-scheduled {
+  background-color: hsl(var(--status-scheduled));
+}
+
+.status-missed {
+  background-color: hsl(var(--status-missed));
+}
+
+.status-active {
+  background-color: hsl(var(--status-active));
+}
+
+.status-unknown {
+  background-color: hsl(var(--status-unknown));
 }

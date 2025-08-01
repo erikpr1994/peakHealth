@@ -50,7 +50,9 @@ export const WorkoutEventCard = ({
             <h5 className={styles.title}>{workout.name}</h5>
             <Badge
               variant="outline"
-              className={`${styles.timeBadge} ${timeOfDay.color} ${timeOfDay.bgColor}`}
+              className={`${styles.timeBadge} ${styles[timeOfDay.color]} ${
+                styles[timeOfDay.bgColor]
+              }`}
             >
               {timeOfDay.period}
             </Badge>
@@ -58,7 +60,9 @@ export const WorkoutEventCard = ({
           <div className={styles.badges}>
             <Badge
               variant="secondary"
-              className={`${styles.typeBadge} ${typeConfig.bgColor} ${typeConfig.textColor}`}
+              className={`${styles.typeBadge} ${styles[typeConfig.bgColor]} ${
+                styles[typeConfig.textColor]
+              }`}
             >
               {workout.type}
             </Badge>
