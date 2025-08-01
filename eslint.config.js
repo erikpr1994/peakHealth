@@ -52,6 +52,7 @@ module.exports = [
         // DOM globals
         HTMLButtonElement: 'readonly',
         HTMLDivElement: 'readonly',
+        HTMLInputElement: 'readonly',
         HTMLSpanElement: 'readonly',
         NodeJS: 'readonly',
         URLSearchParams: 'readonly',
