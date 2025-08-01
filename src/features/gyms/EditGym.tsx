@@ -867,7 +867,9 @@ export default function EditGym({ onNavigate, gymId }: EditGymProps) {
             <div className="text-center py-8 text-gray-500">
               <Dumbbell className="w-8 h-8 mx-auto mb-2 text-gray-300" />
               <p>No equipment configured</p>
-              <p className="text-sm">Click &quot;Add Equipment&quot; to get started</p>
+              <p className="text-sm">
+                Click &quot;Add Equipment&quot; to get started
+              </p>
             </div>
           )}
         </Card>

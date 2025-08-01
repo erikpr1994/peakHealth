@@ -1,11 +1,5 @@
 import { useState } from "react";
-import {
-  ArrowLeft,
-  Send,
-  MapPin,
-  Clock,
-  AlertCircle,
-} from "lucide-react";
+import { ArrowLeft, Send, MapPin, Clock, AlertCircle } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -333,7 +327,7 @@ export default function SuggestGym({ onNavigate }: SuggestGymProps) {
               <Label htmlFor="type">Gym Type *</Label>
               <Select
                 value={gymData.type}
-                onValueChange={(value: GymSuggestion['type']) =>
+                onValueChange={(value: GymSuggestion["type"]) =>
                   setGymData({ ...gymData, type: value })
                 }
               >
@@ -359,7 +353,7 @@ export default function SuggestGym({ onNavigate }: SuggestGymProps) {
               <Label htmlFor="priceRange">Price Range</Label>
               <Select
                 value={gymData.priceRange}
-                onValueChange={(value: GymSuggestion['priceRange']) =>
+                onValueChange={(value: GymSuggestion["priceRange"]) =>
                   setGymData({ ...gymData, priceRange: value })
                 }
               >
