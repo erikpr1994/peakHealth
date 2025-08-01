@@ -126,13 +126,16 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         throw new Error(data.error || "Sign up failed");
       }
 
-      // Check if user is immediately confirmed (no email confirmation required)
-      if (data.user && !data.user.email_confirmed_at) {
-        // Email confirmation required
-        await mutateUser(null);
-      } else if (data.user) {
+      // Check if user is immediately signed in by checking for session
+      if (data.session) {
         // User is immediately signed in - auth state change will handle redirect
         await mutateUser(data.user);
+      } else if (data.user) {
+        // User created but email confirmation required
+        await mutateUser(null);
+      } else {
+        // No user data returned, clear cache to be safe
+        await mutateUser(null);
       }
     } catch (error) {
       console.error("Error signing up:", error);
