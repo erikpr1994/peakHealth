@@ -386,8 +386,8 @@ export default function Settings({ onNavigate: _onNavigate }: SettingsProps) {
             </div>
 
             <p className="text-indigo-100 mb-8">
-              We&apos;re working on exciting new features to enhance your fitness
-              journey. Stay tuned!
+              We&apos;re working on exciting new features to enhance your
+              fitness journey. Stay tuned!
             </p>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">

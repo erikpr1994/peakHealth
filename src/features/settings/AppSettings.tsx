@@ -42,7 +42,6 @@ export default function AppSettings({
   showWelcomeScreen,
   onToggleWelcomeScreen,
 }: AppSettingsProps) {
-
   // Mock settings state
   const [settings, setSettings] = useState({
     notifications: true,
