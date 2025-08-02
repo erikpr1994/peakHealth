@@ -8,8 +8,6 @@ describe('ExerciseErrorHandlers', () => {
     vi.spyOn(console, 'error').mockImplementation(() => {});
   });
 
-
-
   describe('handleDatabaseError', () => {
     it('should log error and throw formatted error message', () => {
       const error = new Error('Database connection failed');

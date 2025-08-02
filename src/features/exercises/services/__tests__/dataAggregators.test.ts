@@ -353,7 +353,7 @@ describe('ExerciseDataAggregators', () => {
 
       const result = exerciseDataAggregators.filterVariantsByCriteria(
         variants,
-        undefined
+        {}
       );
 
       expect(result).toEqual(variants);
