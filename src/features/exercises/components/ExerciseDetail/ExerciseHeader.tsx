@@ -1,7 +1,5 @@
 import { Heart, Star, Printer } from 'lucide-react';
-import { useState } from 'react';
 
-import { useFavoriteManagement } from '../../hooks/useExercises';
 import { Exercise, ExerciseVariant } from '../../types';
 
 import { Button } from '@/components/ui/button';
@@ -9,40 +7,9 @@ import { Button } from '@/components/ui/button';
 interface ExerciseHeaderProps {
   exercise: Exercise;
   variant: ExerciseVariant;
-  userId?: string; // Add userId prop for favorite management
 }
 
-export const ExerciseHeader = ({
-  exercise,
-  variant,
-  userId,
-}: ExerciseHeaderProps) => {
-  const [isFavorite, setIsFavorite] = useState(exercise.isFavorite);
-  const [isUpdatingFavorite, setIsUpdatingFavorite] = useState(false);
-  const { addToFavorites, removeFromFavorites } = useFavoriteManagement();
-
-  const handleFavoriteClick = async () => {
-    if (!userId) return;
-
-    if (isUpdatingFavorite) return;
-
-    setIsUpdatingFavorite(true);
-    try {
-      if (isFavorite) {
-        await removeFromFavorites(userId, exercise.id);
-        setIsFavorite(false);
-      } else {
-        await addToFavorites(userId, exercise.id);
-        setIsFavorite(true);
-      }
-    } catch {
-      // Revert the state on error
-      setIsFavorite(exercise.isFavorite);
-    } finally {
-      setIsUpdatingFavorite(false);
-    }
-  };
-
+export const ExerciseHeader = ({ exercise, variant }: ExerciseHeaderProps) => {
   return (
     <div className="flex items-start justify-between mb-6">
       <div className="flex-1">
@@ -71,20 +38,15 @@ export const ExerciseHeader = ({
       </div>
 
       <div className="flex items-center gap-2">
-        {userId && (
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={handleFavoriteClick}
-            disabled={isUpdatingFavorite}
-          >
-            <Heart
-              className={`w-4 h-4 ${
-                isFavorite ? 'text-red-500 fill-red-500' : 'text-gray-400'
-              } ${isUpdatingFavorite ? 'animate-pulse' : ''}`}
-            />
-          </Button>
-        )}
+        <Button variant="ghost" size="sm">
+          <Heart
+            className={`w-4 h-4 ${
+              exercise.isFavorite
+                ? 'text-red-500 fill-red-500'
+                : 'text-gray-400'
+            }`}
+          />
+        </Button>
         <Button variant="ghost" size="sm">
           <Printer className="w-4 h-4" />
         </Button>

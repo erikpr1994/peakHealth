@@ -9,81 +9,25 @@ import { ExerciseSteps } from './components/ExerciseDetail/ExerciseSteps';
 import { ExerciseTips } from './components/ExerciseDetail/ExerciseTips';
 import { ExerciseVariants } from './components/ExerciseDetail/ExerciseVariants';
 import { ExerciseVideo } from './components/ExerciseDetail/ExerciseVideo';
-import { useExercise } from './hooks/useExercises';
+import { mockExercises } from './types';
 
 import { Card } from '@/components/ui/card';
 
 interface ExerciseDetailProps {
   exerciseId: string;
-  userId?: string; // Add userId prop for favorite management
 }
 
-const ExerciseDetail = ({ exerciseId, userId }: ExerciseDetailProps) => {
+const ExerciseDetail = ({ exerciseId: _exerciseId }: ExerciseDetailProps) => {
   const router = useRouter();
-  const { exercise, isLoading, error } = useExercise(exerciseId);
 
-  if (isLoading) {
-    return (
-      <div className="w-full px-4 sm:px-6 lg:px-8 py-6">
-        <div className="animate-pulse">
-          <div className="h-8 bg-gray-200 rounded mb-6"></div>
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <div className="lg:col-span-2">
-              <div className="h-64 bg-gray-200 rounded"></div>
-            </div>
-            <div className="lg:col-span-1">
-              <div className="h-64 bg-gray-200 rounded"></div>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  if (error || !exercise) {
-    return (
-      <div className="w-full px-4 sm:px-6 lg:px-8 py-6">
-        <div className="text-center">
-          <h1 className="text-2xl font-bold text-gray-800 mb-4">
-            Exercise Not Found
-          </h1>
-          <p className="text-gray-600 mb-6">
-            The exercise you're looking for doesn't exist or has been removed.
-          </p>
-          <button
-            onClick={() => router.push('/exercises')}
-            className="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700"
-          >
-            Back to Exercises
-          </button>
-        </div>
-      </div>
-    );
-  }
-
+  // Mock exercise data - in a real app, this would come from an API
+  const exercise = mockExercises[0]; // Get the first exercise for demo
   const mainVariant = exercise.variants.find(
     v => v.id === exercise.mainVariantId
   );
 
   if (!mainVariant) {
-    return (
-      <div className="w-full px-4 sm:px-6 lg:px-8 py-6">
-        <div className="text-center">
-          <h1 className="text-2xl font-bold text-gray-800 mb-4">
-            Exercise Variant Not Found
-          </h1>
-          <p className="text-gray-600 mb-6">
-            The main variant for this exercise is not available.
-          </p>
-          <button
-            onClick={() => router.push('/exercises')}
-            className="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700"
-          >
-            Back to Exercises
-          </button>
-        </div>
-      </div>
-    );
+    return <div>Exercise variant not found</div>;
   }
 
   return (
@@ -107,11 +51,7 @@ const ExerciseDetail = ({ exerciseId, userId }: ExerciseDetailProps) => {
         {/* Main Content */}
         <div className="lg:col-span-2">
           <Card className="p-6">
-            <ExerciseHeader
-              exercise={exercise}
-              variant={mainVariant}
-              userId={userId}
-            />
+            <ExerciseHeader exercise={exercise} variant={mainVariant} />
             <ExerciseInfo exercise={exercise} variant={mainVariant} />
           </Card>
         </div>
@@ -126,7 +66,7 @@ const ExerciseDetail = ({ exerciseId, userId }: ExerciseDetailProps) => {
       <ExerciseSteps exercise={exercise} variant={mainVariant} />
 
       {/* Variants */}
-      <ExerciseVariants exercise={exercise} userId={userId} />
+      <ExerciseVariants exercise={exercise} />
 
       {/* Pro Tips and Common Mistakes */}
       <ExerciseTips exercise={exercise} variant={mainVariant} />
