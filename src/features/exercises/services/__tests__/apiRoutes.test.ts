@@ -88,9 +88,9 @@ describe('Exercise API Routes', () => {
       expect(mockExerciseService.searchExercises).toHaveBeenCalledWith({
         searchTerm: 'push',
         category: 'strength',
-        difficulty: null,
-        equipment: null,
-        muscleGroup: null,
+        difficulty: undefined,
+        equipment: undefined,
+        muscleGroup: undefined,
       });
       expect(data).toEqual({ exercises: mockSearchResults });
     });

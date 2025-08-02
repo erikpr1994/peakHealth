@@ -13,12 +13,12 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url);
 
     const searchTerm = searchParams.get('search') || undefined;
-    const category = searchParams.get('category') as Category | undefined;
-    const difficulty = searchParams.get('difficulty') as Difficulty | undefined;
-    const equipment = searchParams.get('equipment') as Equipment | undefined;
-    const muscleGroup = searchParams.get('muscleGroup') as
-      | MuscleGroup
-      | undefined;
+    const category = (searchParams.get('category') as Category) || undefined;
+    const difficulty =
+      (searchParams.get('difficulty') as Difficulty) || undefined;
+    const equipment = (searchParams.get('equipment') as Equipment) || undefined;
+    const muscleGroup =
+      (searchParams.get('muscleGroup') as MuscleGroup) || undefined;
 
     // If any filter is present, do a filtered search
     if (searchTerm || category || difficulty || equipment || muscleGroup) {
