@@ -1,7 +1,5 @@
 import { Heart, Star, ChevronRight } from 'lucide-react';
-import { useState } from 'react';
 
-import { useFavoriteManagement } from '../../hooks/useExercises';
 import { Exercise, DIFFICULTY } from '../../types';
 
 import { CategoryBadge } from './CategoryBadge';
@@ -18,7 +16,6 @@ interface ExerciseCardProps {
   isSelected?: boolean;
   className?: string;
   size?: 'sm' | 'md' | 'lg';
-  userId?: string; // Add userId prop for favorite management
 }
 
 export const ExerciseCard = ({
@@ -29,12 +26,7 @@ export const ExerciseCard = ({
   isSelected = false,
   className = '',
   size = 'md',
-  userId,
 }: ExerciseCardProps) => {
-  const [isFavorite, setIsFavorite] = useState(exercise.isFavorite);
-  const [isUpdatingFavorite, setIsUpdatingFavorite] = useState(false);
-  const { addToFavorites, removeFromFavorites } = useFavoriteManagement();
-
   // Helper function to get the main variant
   const getMainVariant = () => {
     return exercise.variants.find(v => v.id === exercise.mainVariantId);
@@ -42,33 +34,9 @@ export const ExerciseCard = ({
 
   const mainVariant = getMainVariant();
 
-  const handleFavoriteClick = async (e: React.MouseEvent) => {
+  const handleFavoriteClick = (e: React.MouseEvent) => {
     e.stopPropagation();
-
-    if (!userId) {
-      // If no userId, just call the callback if provided
-      onFavoriteToggle?.();
-      return;
-    }
-
-    if (isUpdatingFavorite) return;
-
-    setIsUpdatingFavorite(true);
-    try {
-      if (isFavorite) {
-        await removeFromFavorites(userId, exercise.id);
-        setIsFavorite(false);
-      } else {
-        await addToFavorites(userId, exercise.id);
-        setIsFavorite(true);
-      }
-      onFavoriteToggle?.();
-    } catch {
-      // Revert the state on error
-      setIsFavorite(exercise.isFavorite);
-    } finally {
-      setIsUpdatingFavorite(false);
-    }
+    onFavoriteToggle?.();
   };
 
   const imageHeights = {
@@ -178,13 +146,14 @@ export const ExerciseCard = ({
             variant="ghost"
             size="sm"
             onClick={handleFavoriteClick}
-            disabled={isUpdatingFavorite}
             className="flex-shrink-0 ml-2"
           >
             <Heart
               className={`w-4 h-4 ${
-                isFavorite ? 'text-red-500 fill-red-500' : 'text-gray-400'
-              } ${isUpdatingFavorite ? 'animate-pulse' : ''}`}
+                exercise.isFavorite
+                  ? 'text-red-500 fill-red-500'
+                  : 'text-gray-400'
+              }`}
             />
           </Button>
         </div>
