@@ -2,6 +2,31 @@ import { NextRequest, NextResponse } from 'next/server';
 
 import { exerciseService } from '@/features/exercises/services/exerciseService';
 
+export async function GET(request: NextRequest) {
+  try {
+    const { searchParams } = new URL(request.url);
+    const userId = searchParams.get('userId');
+
+    if (!userId) {
+      return NextResponse.json(
+        { error: 'User ID is required' },
+        { status: 400 }
+      );
+    }
+
+    const favorites = await exerciseService.getUserFavoriteExercises(userId);
+
+    return NextResponse.json({ exercises: favorites });
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.error('Error fetching user favorites:', error);
+    return NextResponse.json(
+      { error: 'Failed to fetch user favorites' },
+      { status: 500 }
+    );
+  }
+}
+
 export async function POST(request: NextRequest) {
   try {
     const { userId, exerciseId } = await request.json();

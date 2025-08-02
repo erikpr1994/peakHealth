@@ -82,7 +82,7 @@ export function useExerciseSearch(params: {
 // Hook to get user's favorite exercises
 export function useUserFavorites(userId?: string) {
   const { data, error, isLoading, mutate } = useSWR<{ exercises: Exercise[] }>(
-    userId ? `/api/exercises?action=favorites&userId=${userId}` : null,
+    userId ? `/api/exercises/favorites?userId=${userId}` : null,
     fetcher
   );
 

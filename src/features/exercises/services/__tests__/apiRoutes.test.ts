@@ -215,6 +215,69 @@ describe('Exercise API Routes', () => {
     });
   });
 
+  describe('GET /api/exercises/favorites', () => {
+    it('should return user favorites successfully', async () => {
+      const mockFavorites = [
+        { id: '1', name: 'Push-up' },
+        { id: '2', name: 'Squat' },
+      ] as any;
+
+      mockExerciseService.getUserFavoriteExercises.mockResolvedValue(
+        mockFavorites
+      );
+
+      const url = new URL('http://localhost:3000/api/exercises/favorites');
+      url.searchParams.set('userId', 'user-1');
+
+      const request = new NextRequest(url, { method: 'GET' });
+
+      const { GET } = await import('@/app/api/exercises/favorites/route');
+      const response = await GET(request);
+      const data = await response.json();
+
+      expect(mockExerciseService.getUserFavoriteExercises).toHaveBeenCalledWith(
+        'user-1'
+      );
+      expect(data).toEqual({ exercises: mockFavorites });
+      expect(response.status).toBe(200);
+    });
+
+    it('should return 400 when userId is missing', async () => {
+      const request = new NextRequest(
+        'http://localhost:3000/api/exercises/favorites',
+        { method: 'GET' }
+      );
+
+      const { GET } = await import('@/app/api/exercises/favorites/route');
+      const response = await GET(request);
+      const data = await response.json();
+
+      expect(
+        mockExerciseService.getUserFavoriteExercises
+      ).not.toHaveBeenCalled();
+      expect(data).toEqual({ error: 'User ID is required' });
+      expect(response.status).toBe(400);
+    });
+
+    it('should handle service errors gracefully', async () => {
+      mockExerciseService.getUserFavoriteExercises.mockRejectedValue(
+        new Error('Database error')
+      );
+
+      const url = new URL('http://localhost:3000/api/exercises/favorites');
+      url.searchParams.set('userId', 'user-1');
+
+      const request = new NextRequest(url, { method: 'GET' });
+
+      const { GET } = await import('@/app/api/exercises/favorites/route');
+      const response = await GET(request);
+      const data = await response.json();
+
+      expect(data).toEqual({ error: 'Failed to fetch user favorites' });
+      expect(response.status).toBe(500);
+    });
+  });
+
   describe('DELETE /api/exercises/favorites', () => {
     it('should remove exercise from favorites successfully', async () => {
       mockExerciseService.removeFromFavorites.mockResolvedValue();
