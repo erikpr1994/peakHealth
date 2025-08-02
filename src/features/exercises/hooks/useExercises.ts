@@ -57,7 +57,7 @@ export function useExerciseSearch(params: {
 }) {
   const searchParams = new URLSearchParams();
 
-  if (params.searchTerm) searchParams.append('search', params.searchTerm);
+  if (params.searchTerm) searchParams.append('searchTerm', params.searchTerm);
   if (params.category) searchParams.append('category', params.category);
   if (params.difficulty) searchParams.append('difficulty', params.difficulty);
   if (params.equipment) searchParams.append('equipment', params.equipment);
@@ -66,7 +66,7 @@ export function useExerciseSearch(params: {
 
   const { data, error, isLoading, mutate } = useSWR<{ exercises: Exercise[] }>(
     searchParams.toString()
-      ? `/api/exercises?${searchParams.toString()}`
+      ? `/api/exercises/search?${searchParams.toString()}`
       : null,
     fetcher
   );
