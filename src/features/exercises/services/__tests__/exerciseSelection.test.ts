@@ -3,49 +3,63 @@ import { describe, it, expect } from 'vitest';
 
 import { useExerciseSelection } from '../../hooks/useExerciseSelection';
 import type { Exercise, ExerciseVariant } from '../../types';
+import {
+  createExerciseId,
+  createExerciseVariantId,
+  DIFFICULTY,
+  EQUIPMENT,
+  MUSCLE_GROUP,
+} from '../../types';
 
 describe('useExerciseSelection', () => {
   const mockExercise: Exercise = {
-    id: 'exercise-1',
+    id: createExerciseId('exercise-1'),
     name: 'Push-up',
     category: 'Strength',
     description: 'A classic upper body exercise',
     variants: [
       {
-        id: 'variant-1',
+        id: createExerciseVariantId('variant-1'),
         name: 'Standard Push-up',
-        difficulty: 'Beginner',
-        equipment: ['Bodyweight'],
-        muscleGroups: ['Chest', 'Triceps'],
+        description: 'A classic upper body exercise',
+        focus: 'Upper body strength',
+        difficulty: DIFFICULTY.BEGINNER,
+        equipment: [EQUIPMENT.BODYWEIGHT],
+        muscleGroups: [MUSCLE_GROUP.CHEST, MUSCLE_GROUP.TRICEPS],
         isUnilateral: false,
-        instructions: 'Perform a standard push-up',
+        instructions: ['Perform a standard push-up'],
         steps: [],
         created_at: new Date(),
         updated_at: new Date(),
       },
       {
-        id: 'variant-2',
+        id: createExerciseVariantId('variant-2'),
         name: 'Diamond Push-up',
-        difficulty: 'Advanced',
-        equipment: ['Bodyweight'],
-        muscleGroups: ['Chest', 'Triceps'],
+        description: 'An advanced push-up variation',
+        focus: 'Upper body strength and tricep isolation',
+        difficulty: DIFFICULTY.ADVANCED,
+        equipment: [EQUIPMENT.BODYWEIGHT],
+        muscleGroups: [MUSCLE_GROUP.CHEST, MUSCLE_GROUP.TRICEPS],
         isUnilateral: false,
-        instructions: 'Perform a diamond push-up',
+        instructions: ['Perform a diamond push-up'],
         steps: [],
         created_at: new Date(),
         updated_at: new Date(),
       },
     ],
-    mainVariantId: 'variant-1',
+    mainVariantId: createExerciseVariantId('variant-1'),
     icon: 'push-up-icon',
     iconColor: '#ff0000',
     isFavorite: false,
     isPopular: true,
     isNew: false,
     summary: {
-      difficultyRange: 'Beginner',
-      equipmentOptions: ['Bodyweight'],
-      primaryMuscleGroups: ['Chest', 'Triceps'],
+      difficultyRange: {
+        min: DIFFICULTY.BEGINNER,
+        max: DIFFICULTY.ADVANCED,
+      },
+      equipmentOptions: [EQUIPMENT.BODYWEIGHT],
+      primaryMuscleGroups: [MUSCLE_GROUP.CHEST, MUSCLE_GROUP.TRICEPS],
     },
     tags: ['bodyweight', 'strength'],
     relatedExercises: [],
@@ -54,13 +68,15 @@ describe('useExerciseSelection', () => {
   };
 
   const mockVariant: ExerciseVariant = {
-    id: 'variant-1',
+    id: createExerciseVariantId('variant-1'),
     name: 'Standard Push-up',
-    difficulty: 'Beginner',
-    equipment: ['Bodyweight'],
-    muscleGroups: ['Chest', 'Triceps'],
+    description: 'A classic upper body exercise',
+    focus: 'Upper body strength',
+    difficulty: DIFFICULTY.BEGINNER,
+    equipment: [EQUIPMENT.BODYWEIGHT],
+    muscleGroups: [MUSCLE_GROUP.CHEST, MUSCLE_GROUP.TRICEPS],
     isUnilateral: false,
-    instructions: 'Perform a standard push-up',
+    instructions: ['Perform a standard push-up'],
     steps: [],
     created_at: new Date(),
     updated_at: new Date(),
@@ -90,7 +106,7 @@ describe('useExerciseSelection', () => {
     it('should select an exercise without main variant and set variant to null', () => {
       const exerciseWithoutMainVariant = {
         ...mockExercise,
-        mainVariantId: undefined,
+        mainVariantId: createExerciseVariantId('non-existent-variant'),
       };
 
       const { result } = renderHook(() => useExerciseSelection());
@@ -106,7 +122,7 @@ describe('useExerciseSelection', () => {
     it('should select an exercise with main variant that exists', () => {
       const exerciseWithMainVariant = {
         ...mockExercise,
-        mainVariantId: 'variant-2',
+        mainVariantId: createExerciseVariantId('variant-2'),
       };
 
       const { result } = renderHook(() => useExerciseSelection());
@@ -124,7 +140,7 @@ describe('useExerciseSelection', () => {
     it('should select an exercise with main variant that does not exist', () => {
       const exerciseWithInvalidMainVariant = {
         ...mockExercise,
-        mainVariantId: 'non-existent-variant',
+        mainVariantId: createExerciseVariantId('non-existent-variant'),
       };
 
       const { result } = renderHook(() => useExerciseSelection());
@@ -143,7 +159,7 @@ describe('useExerciseSelection', () => {
       const exerciseWithoutVariants = {
         ...mockExercise,
         variants: [],
-        mainVariantId: undefined,
+        mainVariantId: createExerciseVariantId('non-existent-variant'),
       };
 
       const { result } = renderHook(() => useExerciseSelection());
@@ -264,9 +280,9 @@ describe('useExerciseSelection', () => {
       // Select different exercise
       const differentExercise = {
         ...mockExercise,
-        id: 'exercise-2',
+        id: createExerciseId('exercise-2'),
         name: 'Squat',
-        mainVariantId: 'variant-1',
+        mainVariantId: createExerciseVariantId('variant-1'),
       };
 
       act(() => {
@@ -285,7 +301,7 @@ describe('useExerciseSelection', () => {
       const exerciseWithUndefinedVariants = {
         ...mockExercise,
         variants: undefined as any,
-        mainVariantId: undefined,
+        mainVariantId: createExerciseVariantId('non-existent-variant'),
       };
 
       const { result } = renderHook(() => useExerciseSelection());
@@ -304,7 +320,7 @@ describe('useExerciseSelection', () => {
       const exerciseWithNullVariants = {
         ...mockExercise,
         variants: null as any,
-        mainVariantId: undefined,
+        mainVariantId: createExerciseVariantId('non-existent-variant'),
       };
 
       const { result } = renderHook(() => useExerciseSelection());
