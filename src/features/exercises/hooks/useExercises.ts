@@ -64,8 +64,6 @@ export function useExerciseSearch(params: {
   if (params.muscleGroup)
     searchParams.append('muscleGroup', params.muscleGroup);
 
-  searchParams.append('action', 'search');
-
   const { data, error, isLoading, mutate } = useSWR<{ exercises: Exercise[] }>(
     searchParams.toString()
       ? `/api/exercises?${searchParams.toString()}`
