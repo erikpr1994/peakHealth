@@ -331,7 +331,7 @@ describe('exerciseMappers', () => {
     ];
 
     it('should transform database exercise to Exercise correctly', () => {
-      const result = transformExercise(mockDbExercise, mockVariants);
+      const result = transformExercise(mockDbExercise, mockVariants as any);
 
       expect(result).toEqual({
         id: 'exercise-1',
@@ -349,8 +349,8 @@ describe('exerciseMappers', () => {
         rating: 4.5,
         summary: {
           difficultyRange: {
-            min: 1, // Beginner
-            max: 3, // Advanced
+            min: 'Beginner',
+            max: 'Advanced',
           },
           equipmentOptions: ['Bodyweight'],
           primaryMuscleGroups: ['Chest', 'Triceps'],
@@ -369,8 +369,8 @@ describe('exerciseMappers', () => {
       expect(result.mainVariantId).toBeUndefined();
       expect(result.summary).toEqual({
         difficultyRange: {
-          min: 1,
-          max: 1,
+          min: 'Beginner',
+          max: 'Beginner',
         },
         equipmentOptions: [],
         primaryMuscleGroups: [],
@@ -384,8 +384,8 @@ describe('exerciseMappers', () => {
       expect(result.variants).toEqual(singleVariant);
       expect(result.mainVariantId).toBe('variant-1');
       expect(result.summary.difficultyRange).toEqual({
-        min: 1,
-        max: 1,
+        min: 'Beginner',
+        max: 'Beginner',
       });
     });
 
@@ -439,8 +439,8 @@ describe('exerciseMappers', () => {
       const result = transformExercise(mockDbExercise, variantsWithUnknown);
 
       expect(result.summary.difficultyRange).toEqual({
-        min: 0, // Unknown
-        max: 3, // Advanced
+        min: 'Unknown',
+        max: 'Advanced',
       });
     });
 

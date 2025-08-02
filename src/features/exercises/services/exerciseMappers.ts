@@ -200,33 +200,59 @@ export function transformExercise(
       difficultyRange: {
         min:
           difficulties.length > 0
-            ? Math.min(
-                ...difficulties.map(d => {
-                  const levels = {
-                    Beginner: 1,
-                    Intermediate: 2,
-                    Advanced: 3,
-                    Unknown: 0,
-                  };
-                  return levels[d] || 0;
-                })
-              )
-            : 1,
+            ? (() => {
+                const minLevel = Math.min(
+                  ...difficulties.map(d => {
+                    const levels = {
+                      Beginner: 1,
+                      Intermediate: 2,
+                      Advanced: 3,
+                      Unknown: 0,
+                    };
+                    return levels[d] || 0;
+                  })
+                );
+                const levelToDifficulty = {
+                  0: 'Unknown' as Difficulty,
+                  1: 'Beginner' as Difficulty,
+                  2: 'Intermediate' as Difficulty,
+                  3: 'Advanced' as Difficulty,
+                };
+                return (
+                  levelToDifficulty[
+                    minLevel as keyof typeof levelToDifficulty
+                  ] || 'Unknown'
+                );
+              })()
+            : 'Beginner',
         max:
           difficulties.length > 0
-            ? Math.max(
-                ...difficulties.map(d => {
-                  const levels = {
-                    Beginner: 1,
-                    Intermediate: 2,
-                    Advanced: 3,
-                    Unknown: 0,
-                  };
-                  return levels[d] || 0;
-                })
-              )
-            : 1,
-      } as Difficulty,
+            ? (() => {
+                const maxLevel = Math.max(
+                  ...difficulties.map(d => {
+                    const levels = {
+                      Beginner: 1,
+                      Intermediate: 2,
+                      Advanced: 3,
+                      Unknown: 0,
+                    };
+                    return levels[d] || 0;
+                  })
+                );
+                const levelToDifficulty = {
+                  0: 'Unknown' as Difficulty,
+                  1: 'Beginner' as Difficulty,
+                  2: 'Intermediate' as Difficulty,
+                  3: 'Advanced' as Difficulty,
+                };
+                return (
+                  levelToDifficulty[
+                    maxLevel as keyof typeof levelToDifficulty
+                  ] || 'Unknown'
+                );
+              })()
+            : 'Beginner',
+      },
       equipmentOptions: Array.from(allEquipment),
       primaryMuscleGroups: Array.from(allMuscleGroups),
     },

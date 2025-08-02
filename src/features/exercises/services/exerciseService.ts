@@ -39,16 +39,18 @@ export class ExerciseService {
    * Get a single exercise by ID with all its variants
    */
   async getExerciseById(exerciseId: string): Promise<Exercise | null> {
-    try {
-      if (!exerciseValidators.validateExerciseId(exerciseId)) {
-        exerciseErrorHandlers.handleValidationError('Invalid exercise ID');
-      }
+    if (!exerciseValidators.validateExerciseId(exerciseId)) {
+      exerciseErrorHandlers.handleValidationError('Invalid exercise ID');
+      return null; // This line will never be reached, but satisfies TypeScript
+    }
 
+    try {
       const { exercise, variants, steps, tips, media } =
         await exerciseDatabaseQueries.fetchExerciseWithRelatedData(exerciseId);
 
       if (!exercise) {
         exerciseErrorHandlers.handleNotFoundError('Exercise', exerciseId);
+        return null; // This line will never be reached, but satisfies TypeScript
       }
 
       const exercises = exerciseDataAggregators.aggregateExerciseData(
@@ -62,6 +64,7 @@ export class ExerciseService {
       return exercises[0] || null;
     } catch (error) {
       exerciseErrorHandlers.handleDatabaseError(error, 'fetch exercise');
+      return null; // This line will never be reached, but satisfies TypeScript
     }
   }
 
@@ -75,13 +78,12 @@ export class ExerciseService {
     equipment?: Equipment;
     muscleGroup?: MuscleGroup;
   }): Promise<Exercise[]> {
-    try {
-      if (!exerciseValidators.validateSearchParams(params)) {
-        exerciseErrorHandlers.handleValidationError(
-          'Invalid search parameters'
-        );
-      }
+    if (!exerciseValidators.validateSearchParams(params)) {
+      exerciseErrorHandlers.handleValidationError('Invalid search parameters');
+      return []; // This line will never be reached, but satisfies TypeScript
+    }
 
+    try {
       const exercises = await exerciseDatabaseQueries.searchExercisesWithJoins(
         params.searchTerm,
         params.category
@@ -99,6 +101,7 @@ export class ExerciseService {
       );
     } catch (error) {
       exerciseErrorHandlers.handleDatabaseError(error, 'search exercises');
+      return []; // This line will never be reached, but satisfies TypeScript
     }
   }
 
@@ -106,16 +109,18 @@ export class ExerciseService {
    * Get user's favorite exercises
    */
   async getUserFavoriteExercises(userId: string): Promise<Exercise[]> {
-    try {
-      if (!exerciseValidators.validateUserId(userId)) {
-        exerciseErrorHandlers.handleValidationError('Invalid user ID');
-      }
+    if (!exerciseValidators.validateUserId(userId)) {
+      exerciseErrorHandlers.handleValidationError('Invalid user ID');
+      return []; // This line will never be reached, but satisfies TypeScript
+    }
 
+    try {
       const favorites =
         await exerciseDatabaseQueries.fetchUserFavorites(userId);
       return exerciseDataAggregators.transformUserFavoritesData(favorites);
     } catch (error) {
       exerciseErrorHandlers.handleDatabaseError(error, 'fetch user favorites');
+      return []; // This line will never be reached, but satisfies TypeScript
     }
   }
 
@@ -123,15 +128,17 @@ export class ExerciseService {
    * Add exercise to user favorites
    */
   async addToFavorites(userId: string, exerciseId: string): Promise<void> {
+    if (!exerciseValidators.validateUserId(userId)) {
+      exerciseErrorHandlers.handleValidationError('Invalid user ID');
+      return; // This line will never be reached, but satisfies TypeScript
+    }
+
+    if (!exerciseValidators.validateExerciseId(exerciseId)) {
+      exerciseErrorHandlers.handleValidationError('Invalid exercise ID');
+      return; // This line will never be reached, but satisfies TypeScript
+    }
+
     try {
-      if (!exerciseValidators.validateUserId(userId)) {
-        exerciseErrorHandlers.handleValidationError('Invalid user ID');
-      }
-
-      if (!exerciseValidators.validateExerciseId(exerciseId)) {
-        exerciseErrorHandlers.handleValidationError('Invalid exercise ID');
-      }
-
       await exerciseDatabaseQueries.addToFavorites(userId, exerciseId);
     } catch (error) {
       exerciseErrorHandlers.handleDatabaseError(error, 'add to favorites');
@@ -142,15 +149,17 @@ export class ExerciseService {
    * Remove exercise from user favorites
    */
   async removeFromFavorites(userId: string, exerciseId: string): Promise<void> {
+    if (!exerciseValidators.validateUserId(userId)) {
+      exerciseErrorHandlers.handleValidationError('Invalid user ID');
+      return; // This line will never be reached, but satisfies TypeScript
+    }
+
+    if (!exerciseValidators.validateExerciseId(exerciseId)) {
+      exerciseErrorHandlers.handleValidationError('Invalid exercise ID');
+      return; // This line will never be reached, but satisfies TypeScript
+    }
+
     try {
-      if (!exerciseValidators.validateUserId(userId)) {
-        exerciseErrorHandlers.handleValidationError('Invalid user ID');
-      }
-
-      if (!exerciseValidators.validateExerciseId(exerciseId)) {
-        exerciseErrorHandlers.handleValidationError('Invalid exercise ID');
-      }
-
       await exerciseDatabaseQueries.removeFromFavorites(userId, exerciseId);
     } catch (error) {
       exerciseErrorHandlers.handleDatabaseError(error, 'remove from favorites');

@@ -132,7 +132,7 @@ module.exports = [
             'sibling',
             'index',
           ],
-          'newlines-between': 'always',
+          'newlines-between': 'always-and-inside-groups',
           alphabetize: {
             order: 'asc',
             caseInsensitive: true,

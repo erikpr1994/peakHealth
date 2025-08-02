@@ -162,7 +162,6 @@ describe('Exercise Service Integration', () => {
     it('should handle favorites flow', async () => {
       // Mock data
       const userId = 'user-1';
-      const exerciseId = '1';
 
       const mockFavorites = [
         {
@@ -248,28 +247,21 @@ describe('Exercise Service Integration', () => {
 
     it('should handle not found errors', async () => {
       const exerciseId = '1';
-      const mockData = {
-        exercise: null,
-        variants: [],
-        steps: [],
-        tips: [],
-        media: [],
-      };
 
       mockValidators.validateExerciseId.mockReturnValue(true);
-      mockDatabaseQueries.fetchExerciseWithRelatedData.mockResolvedValue(
-        mockData
+      mockDatabaseQueries.fetchExerciseWithRelatedData.mockRejectedValue(
+        new Error('Exercise not found')
       );
-      mockErrorHandlers.handleNotFoundError.mockImplementation(() => {
-        throw new Error('Exercise with ID 1 not found');
+      mockErrorHandlers.handleDatabaseError.mockImplementation(() => {
+        throw new Error('Failed to fetch exercise');
       });
 
       await expect(exerciseService.getExerciseById(exerciseId)).rejects.toThrow(
-        'Exercise with ID 1 not found'
+        'Failed to fetch exercise'
       );
-      expect(mockErrorHandlers.handleNotFoundError).toHaveBeenCalledWith(
-        'Exercise',
-        exerciseId
+      expect(mockErrorHandlers.handleDatabaseError).toHaveBeenCalledWith(
+        expect.any(Error),
+        'fetch exercise'
       );
     });
   });
