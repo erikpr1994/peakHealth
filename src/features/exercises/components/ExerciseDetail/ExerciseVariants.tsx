@@ -1,5 +1,5 @@
 import { Heart } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 import { useFavoriteManagement } from '../../hooks/useExercises';
 import { Exercise } from '../../types';
@@ -16,43 +16,40 @@ export const ExerciseVariants = ({
   exercise,
   userId,
 }: ExerciseVariantsProps) => {
-  const [favoriteStates, setFavoriteStates] = useState<Record<string, boolean>>(
-    {}
-  );
-  const [updatingFavorites, setUpdatingFavorites] = useState<
-    Record<string, boolean>
-  >({});
+  const [isFavorite, setIsFavorite] = useState(exercise.isFavorite);
+  const [isUpdating, setIsUpdating] = useState(false);
   const { addToFavorites, removeFromFavorites } = useFavoriteManagement();
+
+  // Sync favorite state when exercise changes
+  useEffect(() => {
+    setIsFavorite(exercise.isFavorite);
+  }, [exercise.isFavorite]);
 
   if (!exercise.variants || exercise.variants.length === 0) {
     return null;
   }
 
-  const handleFavoriteClick = async (
-    variantId: string,
-    e: React.MouseEvent
-  ) => {
+  const handleFavoriteClick = async (e: React.MouseEvent) => {
     e.stopPropagation();
 
     if (!userId) return;
 
-    if (updatingFavorites[variantId]) return;
+    if (isUpdating) return;
 
-    const currentFavorite = favoriteStates[variantId] ?? false;
-
-    setUpdatingFavorites(prev => ({ ...prev, [variantId]: true }));
+    setIsUpdating(true);
     try {
-      if (currentFavorite) {
+      if (isFavorite) {
         await removeFromFavorites(userId, exercise.id);
-        setFavoriteStates(prev => ({ ...prev, [variantId]: false }));
+        setIsFavorite(false);
       } else {
         await addToFavorites(userId, exercise.id);
-        setFavoriteStates(prev => ({ ...prev, [variantId]: true }));
+        setIsFavorite(true);
       }
     } catch {
-      // Handle error silently
+      // Revert the state on error
+      setIsFavorite(exercise.isFavorite);
     } finally {
-      setUpdatingFavorites(prev => ({ ...prev, [variantId]: false }));
+      setIsUpdating(false);
     }
   };
 
@@ -65,54 +62,49 @@ export const ExerciseVariants = ({
         </Button>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {exercise.variants.map(variant => {
-          const isFavorite = favoriteStates[variant.id] ?? false;
-          const isUpdating = updatingFavorites[variant.id] ?? false;
-
-          return (
-            <Card
-              key={variant.id}
-              className="cursor-pointer hover:shadow-md transition-shadow"
-            >
-              <div className="bg-gray-100 h-40 relative">
-                {variant.media?.featuredImage && (
-                  <div className="w-full h-full bg-gray-200 flex items-center justify-center">
-                    <span className="text-gray-500">Image</span>
-                  </div>
+        {exercise.variants.map(variant => (
+          <Card
+            key={variant.id}
+            className="cursor-pointer hover:shadow-md transition-shadow"
+          >
+            <div className="bg-gray-100 h-40 relative">
+              {variant.media?.featuredImage && (
+                <div className="w-full h-full bg-gray-200 flex items-center justify-center">
+                  <span className="text-gray-500">Image</span>
+                </div>
+              )}
+            </div>
+            <div className="p-4">
+              <h4 className="font-semibold text-gray-800 mb-2">
+                {variant.name}
+              </h4>
+              <p className="text-sm text-gray-600 mb-3">
+                {variant.description}
+              </p>
+              <div className="flex items-center justify-between">
+                <span className="px-2 py-1 bg-indigo-100 text-indigo-700 rounded text-xs">
+                  {variant.focus}
+                </span>
+                {userId && (
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={handleFavoriteClick}
+                    disabled={isUpdating}
+                  >
+                    <Heart
+                      className={`w-4 h-4 ${
+                        isFavorite
+                          ? 'text-red-500 fill-red-500'
+                          : 'text-gray-400'
+                      } ${isUpdating ? 'animate-pulse' : ''}`}
+                    />
+                  </Button>
                 )}
               </div>
-              <div className="p-4">
-                <h4 className="font-semibold text-gray-800 mb-2">
-                  {variant.name}
-                </h4>
-                <p className="text-sm text-gray-600 mb-3">
-                  {variant.description}
-                </p>
-                <div className="flex items-center justify-between">
-                  <span className="px-2 py-1 bg-indigo-100 text-indigo-700 rounded text-xs">
-                    {variant.focus}
-                  </span>
-                  {userId && (
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={e => handleFavoriteClick(variant.id, e)}
-                      disabled={isUpdating}
-                    >
-                      <Heart
-                        className={`w-4 h-4 ${
-                          isFavorite
-                            ? 'text-red-500 fill-red-500'
-                            : 'text-gray-400'
-                        } ${isUpdating ? 'animate-pulse' : ''}`}
-                      />
-                    </Button>
-                  )}
-                </div>
-              </div>
-            </Card>
-          );
-        })}
+            </div>
+          </Card>
+        ))}
       </div>
     </Card>
   );
