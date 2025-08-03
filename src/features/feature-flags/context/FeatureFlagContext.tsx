@@ -32,7 +32,7 @@ export const FeatureFlagProvider = ({ children }: { children: ReactNode }) => {
   const [isLoading, setIsLoading] = useState(true);
 
   const loadUserData = useCallback(async () => {
-    if (!user) {
+    if (!user || !user.id) {
       setFlags({});
       setUserTypes([]);
       setUserGroups([]);
