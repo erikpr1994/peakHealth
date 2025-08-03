@@ -64,9 +64,9 @@ export class ExerciseDataAggregators {
   filterVariantsByCriteria(
     variants: unknown[],
     criteria: {
-      difficulty?: Difficulty;
-      equipment?: Equipment;
-      muscleGroup?: MuscleGroup;
+      difficulties?: Difficulty[];
+      equipment?: Equipment[];
+      muscleGroups?: MuscleGroup[];
     }
   ): unknown[] {
     return variants.filter((variant: unknown) => {
@@ -75,24 +75,36 @@ export class ExerciseDataAggregators {
         equipment?: string[];
         muscle_groups?: string[];
       };
+
+      // Check difficulty filter
       if (
-        criteria.difficulty &&
-        typedVariant.difficulty !== criteria.difficulty
+        criteria.difficulties &&
+        criteria.difficulties.length > 0 &&
+        !criteria.difficulties.includes(typedVariant.difficulty as Difficulty)
       ) {
         return false;
       }
+
+      // Check equipment filter
       if (
         criteria.equipment &&
-        !typedVariant.equipment?.includes(criteria.equipment)
+        criteria.equipment.length > 0 &&
+        !criteria.equipment.some(eq => typedVariant.equipment?.includes(eq))
       ) {
         return false;
       }
+
+      // Check muscle group filter
       if (
-        criteria.muscleGroup &&
-        !typedVariant.muscle_groups?.includes(criteria.muscleGroup)
+        criteria.muscleGroups &&
+        criteria.muscleGroups.length > 0 &&
+        !criteria.muscleGroups.some(mg =>
+          typedVariant.muscle_groups?.includes(mg)
+        )
       ) {
         return false;
       }
+
       return true;
     });
   }
@@ -103,9 +115,9 @@ export class ExerciseDataAggregators {
   transformJoinedExerciseData(
     exercises: unknown[],
     criteria?: {
-      difficulty?: Difficulty;
-      equipment?: Equipment;
-      muscleGroup?: MuscleGroup;
+      difficulties?: Difficulty[];
+      equipment?: Equipment[];
+      muscleGroups?: MuscleGroup[];
     }
   ): Exercise[] {
     const filteredExercises: Exercise[] = [];

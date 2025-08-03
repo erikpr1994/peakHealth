@@ -159,9 +159,9 @@ describe('ExerciseService', () => {
       const searchParams = {
         searchTerm: 'push',
         category: 'strength' as const,
-        difficulty: 'beginner' as const,
-        equipment: 'bodyweight' as const,
-        muscleGroup: 'chest' as const,
+        difficulties: ['beginner'] as const,
+        equipment: ['bodyweight'] as const,
+        muscleGroups: ['chest'] as const,
       };
 
       const mockExercises = [
@@ -189,9 +189,9 @@ describe('ExerciseService', () => {
       expect(
         mockDataAggregators.transformJoinedExerciseData
       ).toHaveBeenCalledWith(mockExercises, {
-        difficulty: searchParams.difficulty,
+        difficulties: searchParams.difficulties,
         equipment: searchParams.equipment,
-        muscleGroup: searchParams.muscleGroup,
+        muscleGroups: searchParams.muscleGroups,
       });
       expect(result).toEqual(expectedExercises);
     });

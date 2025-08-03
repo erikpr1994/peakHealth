@@ -74,9 +74,9 @@ export class ExerciseService {
   async searchExercises(params: {
     searchTerm?: string;
     category?: Category;
-    difficulty?: Difficulty;
-    equipment?: Equipment;
-    muscleGroup?: MuscleGroup;
+    difficulties?: Difficulty[];
+    equipment?: Equipment[];
+    muscleGroups?: MuscleGroup[];
   }): Promise<Exercise[]> {
     if (!exerciseValidators.validateSearchParams(params)) {
       exerciseErrorHandlers.handleValidationError('Invalid search parameters');
@@ -90,9 +90,9 @@ export class ExerciseService {
       );
 
       const criteria = {
-        difficulty: params.difficulty,
+        difficulties: params.difficulties,
         equipment: params.equipment,
-        muscleGroup: params.muscleGroup,
+        muscleGroups: params.muscleGroups,
       };
 
       return exerciseDataAggregators.transformJoinedExerciseData(
