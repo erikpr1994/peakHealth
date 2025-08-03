@@ -125,4 +125,59 @@ describe('Feature Flag System Integration', () => {
       expect(screen.getByTestId('feature-b-disabled')).toBeInTheDocument();
     });
   });
+
+  it('should filter flags based on user roles and groups', async () => {
+    // Mock a user with premium role and beta_testers group
+    mockedUseAuth.mockReturnValue({
+      user: {
+        id: 'test-user-id',
+        userRoles: ['premium'],
+        userGroups: ['beta_testers'],
+      },
+      isAuthenticated: true,
+      isLoading: false,
+      isAuthOperationLoading: false,
+    });
+
+    // Mock the API response to simulate role/group filtering
+    mockFetch.mockResolvedValue({
+      ok: true,
+      json: () =>
+        Promise.resolve({
+          flags: [
+            {
+              name: 'notification_system_feature',
+              is_enabled: true,
+              rollout_percentage: 100,
+            },
+            {
+              name: 'premium_feature',
+              is_enabled: true,
+              rollout_percentage: 100,
+            },
+          ],
+        }),
+    });
+
+    render(
+      <FeatureFlagProvider>
+        <TestComponent
+          featureNames={[
+            'notification_system_feature',
+            'premium_feature',
+            'basic_feature',
+          ]}
+        />
+      </FeatureFlagProvider>
+    );
+
+    await waitFor(() => {
+      // Should only show flags that match user's roles/groups
+      expect(
+        screen.getByTestId('notification_system_feature-enabled')
+      ).toBeInTheDocument();
+      expect(screen.getByTestId('premium_feature-enabled')).toBeInTheDocument();
+      expect(screen.getByTestId('basic_feature-disabled')).toBeInTheDocument();
+    });
+  });
 });

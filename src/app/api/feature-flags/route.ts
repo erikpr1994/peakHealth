@@ -27,9 +27,15 @@ export async function GET() {
 
     const environment = process.env.NEXT_PUBLIC_ENVIRONMENT || 'development';
 
+    // Extract user roles and groups from user metadata
+    const userRoles = (user as any).userRoles || ['basic'];
+    const userGroups = (user as any).userGroups || ['free'];
+
     const flagsResponse = await supabase.rpc('get_user_feature_flags', {
       user_id: user.id,
       environment_param: environment,
+      user_roles: userRoles,
+      user_groups: userGroups,
     });
 
     if (flagsResponse.error) throw flagsResponse.error;

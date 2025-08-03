@@ -170,6 +170,8 @@ export interface DatabaseFunctions {
     Args: {
       user_id: string;
       environment_param: string;
+      user_roles?: string[];
+      user_groups?: string[];
     };
     Returns: UserFeatureFlag[];
   };
@@ -181,14 +183,14 @@ export interface DatabaseFunctions {
   };
   user_has_role: {
     Args: {
-      user_id: string;
+      user_roles: string[];
       role_name: string;
     };
     Returns: boolean;
   };
   user_in_group: {
     Args: {
-      user_id: string;
+      user_groups: string[];
       group_name: string;
     };
     Returns: boolean;

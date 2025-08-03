@@ -99,16 +99,19 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
 
--- Function to get user-specific feature flags (simplified for local development)
-CREATE OR REPLACE FUNCTION get_user_feature_flags(user_id UUID, environment_param TEXT)
+-- Function to get user-specific feature flags with proper role/group filtering
+CREATE OR REPLACE FUNCTION get_user_feature_flags(
+  user_id UUID, 
+  environment_param TEXT,
+  user_roles JSONB DEFAULT '[]'::JSONB,
+  user_groups JSONB DEFAULT '[]'::JSONB
+)
 RETURNS TABLE (
   name VARCHAR(100),
   is_enabled BOOLEAN,
   rollout_percentage INTEGER
 ) AS $$
 BEGIN
-  -- For now, return all user-specific flags for the environment
-  -- The application layer will handle role/group filtering
   RETURN QUERY
   SELECT DISTINCT
     ff.name,
@@ -118,25 +121,59 @@ BEGIN
   JOIN feature_flag_environments ffe ON ff.id = ffe.feature_flag_id
   WHERE ffe.environment = environment_param
     AND ffe.is_enabled = true
-    AND ff.is_public = false;  -- Only user-specific flags
+    AND ff.is_public = false  -- Only user-specific flags
+    AND (
+      -- Flag has no role targeting (available to all authenticated users)
+      NOT EXISTS (
+        SELECT 1 FROM feature_flag_user_roles ffur
+        WHERE ffur.feature_flag_id = ff.id 
+          AND ffur.environment = environment_param
+          AND ffur.is_enabled = true
+      )
+      OR
+      -- User has a matching role
+      EXISTS (
+        SELECT 1 FROM feature_flag_user_roles ffur
+        WHERE ffur.feature_flag_id = ff.id 
+          AND ffur.environment = environment_param
+          AND ffur.is_enabled = true
+          AND ffur.role_name = ANY(SELECT jsonb_array_elements_text(user_roles))
+      )
+    )
+    AND (
+      -- Flag has no group targeting (available to all authenticated users)
+      NOT EXISTS (
+        SELECT 1 FROM feature_flag_user_groups ffug
+        WHERE ffug.feature_flag_id = ff.id 
+          AND ffug.environment = environment_param
+          AND ffug.is_enabled = true
+      )
+      OR
+      -- User has a matching group
+      EXISTS (
+        SELECT 1 FROM feature_flag_user_groups ffug
+        WHERE ffug.feature_flag_id = ff.id 
+          AND ffug.environment = environment_param
+          AND ffug.is_enabled = true
+          AND ffug.group_name = ANY(SELECT jsonb_array_elements_text(user_groups))
+      )
+    );
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
 
--- Helper functions (simplified for local development)
--- These will be handled by the application layer using Supabase's built-in metadata
-CREATE OR REPLACE FUNCTION user_has_role(user_id UUID, role_name TEXT)
+-- Helper functions for checking user roles and groups
+-- These functions work with the roles/groups passed as parameters
+CREATE OR REPLACE FUNCTION user_has_role(user_roles JSONB, role_name TEXT)
 RETURNS BOOLEAN AS $$
 BEGIN
-  -- For now, return false - application layer will handle this
-  RETURN false;
+  RETURN role_name = ANY(SELECT jsonb_array_elements_text(user_roles));
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
 
-CREATE OR REPLACE FUNCTION user_in_group(user_id UUID, group_name TEXT)
+CREATE OR REPLACE FUNCTION user_in_group(user_groups JSONB, group_name TEXT)
 RETURNS BOOLEAN AS $$
 BEGIN
-  -- For now, return false - application layer will handle this
-  RETURN false;
+  RETURN group_name = ANY(SELECT jsonb_array_elements_text(user_groups));
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
 
@@ -195,9 +232,23 @@ INSERT INTO feature_flag_environments (feature_flag_id, environment, is_enabled,
 ((SELECT id FROM feature_flags WHERE name = 'maintenance_mode'), 'staging', false, 0),
 ((SELECT id FROM feature_flags WHERE name = 'maintenance_mode'), 'production', false, 0);
 
+-- Insert sample role and group targeting rules
+INSERT INTO feature_flag_user_roles (feature_flag_id, environment, role_name, is_enabled) VALUES
+-- Notification system only for premium users
+((SELECT id FROM feature_flags WHERE name = 'notification_system_feature'), 'development', 'premium', true),
+((SELECT id FROM feature_flags WHERE name = 'notification_system_feature'), 'staging', 'premium', true),
+((SELECT id FROM feature_flags WHERE name = 'notification_system_feature'), 'production', 'premium', true);
+
+INSERT INTO feature_flag_user_groups (feature_flag_id, environment, group_name, is_enabled) VALUES
+-- Notification system only for beta testers
+((SELECT id FROM feature_flags WHERE name = 'notification_system_feature'), 'development', 'beta_testers', true),
+((SELECT id FROM feature_flags WHERE name = 'notification_system_feature'), 'staging', 'beta_testers', true);
+
 
 
 -- Add comments to explain the architecture
 COMMENT ON TABLE feature_flags IS 'Feature flags table. is_public=true for flags available to all users, is_public=false for user-specific flags.';
 COMMENT ON FUNCTION get_public_feature_flags IS 'Returns feature flags that are available to all users (no authentication required)';
-COMMENT ON FUNCTION get_user_feature_flags IS 'Returns user-specific feature flags based on user roles and groups from Supabase built-in user_metadata (requires authentication)'; 
+COMMENT ON FUNCTION get_user_feature_flags IS 'Returns user-specific feature flags filtered by user roles and groups passed as parameters (requires authentication)';
+COMMENT ON FUNCTION user_has_role IS 'Checks if a user has a specific role from the provided roles array';
+COMMENT ON FUNCTION user_in_group IS 'Checks if a user belongs to a specific group from the provided groups array'; 
