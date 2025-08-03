@@ -104,9 +104,7 @@ export const FeatureFlagProvider = ({ children }: { children: ReactNode }) => {
       }
       const { flags: userFlags } = await response.json();
 
-      // Merge public flags with user-specific flags
-      const allFlags = { ...flags };
-
+      // Create user flags map
       const userFlagsMap = userFlags.reduce(
         (
           acc: Record<string, UserFeatureFlag>,
@@ -127,7 +125,7 @@ export const FeatureFlagProvider = ({ children }: { children: ReactNode }) => {
       );
 
       // User-specific flags override public flags
-      setFlags({ ...allFlags, ...userFlagsMap });
+      setFlags(prevFlags => ({ ...prevFlags, ...userFlagsMap }));
 
       const loadTime = Date.now() - startTime;
       featureFlagMonitor.trackFeatureFlagPerformance(
@@ -145,7 +143,7 @@ export const FeatureFlagProvider = ({ children }: { children: ReactNode }) => {
     } finally {
       setIsLoading(false);
     }
-  }, [user, flags, loadPublicFlags]);
+  }, [user, loadPublicFlags]);
 
   useEffect(() => {
     // Always load public flags first
