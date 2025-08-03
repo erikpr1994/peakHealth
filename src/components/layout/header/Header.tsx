@@ -19,10 +19,14 @@ const Header = () => {
   const { logout, user } = useAuth();
   const { unreadCount } = useNotifications();
   const [isSideNavOpen, setIsSideNavOpen] = useState(false);
-  const { flags } = useFeatureFlag([FEATURE_FLAGS.NOTIFICATION_SYSTEM_FEATURE]);
+
+  // Only call useFeatureFlag if user is authenticated
+  const { flags } = useFeatureFlag(
+    user ? [FEATURE_FLAGS.NOTIFICATION_SYSTEM_FEATURE] : []
+  );
 
   const isNotificationSystemEnabled =
-    flags[FEATURE_FLAGS.NOTIFICATION_SYSTEM_FEATURE];
+    user && flags[FEATURE_FLAGS.NOTIFICATION_SYSTEM_FEATURE];
 
   const handleNavigate = (path: string) => {
     router.push(path);

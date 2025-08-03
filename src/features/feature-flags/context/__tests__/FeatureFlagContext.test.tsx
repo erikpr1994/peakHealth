@@ -93,12 +93,17 @@ describe('FeatureFlagContext', () => {
     });
   });
 
-  it('should not fetch data for unauthenticated users', async () => {
+  it('should fetch public flags for unauthenticated users', async () => {
     mockedUseAuth.mockReturnValue({
       user: null,
       isAuthenticated: false,
       isLoading: false,
       isAuthOperationLoading: false,
+    });
+
+    mockFetch.mockResolvedValue({
+      ok: true,
+      json: () => Promise.resolve({ flags: [] }),
     });
 
     render(
@@ -111,7 +116,8 @@ describe('FeatureFlagContext', () => {
       expect(screen.queryByText('Loading...')).not.toBeInTheDocument();
     });
 
-    expect(mockFetch).not.toHaveBeenCalled();
+    // Should call public feature flags endpoint
+    expect(mockFetch).toHaveBeenCalledWith('/api/feature-flags/public');
     expect(screen.getByTestId('flag-count')).toHaveTextContent('0');
   });
 });

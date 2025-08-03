@@ -13,6 +13,12 @@ import useSWR from 'swr';
 
 import { createClient } from '@/lib/supabase/client';
 
+// Extended user type with our custom properties
+interface ExtendedUser extends User {
+  userRoles?: string[];
+  userGroups?: string[];
+}
+
 interface AuthContextType {
   isAuthenticated: boolean;
   isLoading: boolean;
@@ -20,13 +26,13 @@ interface AuthContextType {
   login: (email?: string, password?: string) => Promise<void>;
   logout: () => void;
   signUp: (email?: string, password?: string, name?: string) => Promise<void>;
-  user: User | null;
+  user: ExtendedUser | null;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 // Custom fetcher for user endpoint that extracts user from response
-const userFetcher = async (url: string): Promise<User | null> => {
+const userFetcher = async (url: string): Promise<ExtendedUser | null> => {
   const response = await fetch(url);
 
   if (!response.ok) {
@@ -54,7 +60,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     data: user,
     isLoading,
     mutate: mutateUser,
-  } = useSWR<User | null>('/api/auth/user', userFetcher, {
+  } = useSWR<ExtendedUser | null>('/api/auth/user', userFetcher, {
     revalidateOnFocus: false,
     shouldRetryOnError: false,
     onError: (error: any) => {
@@ -67,8 +73,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange(async (event, session) => {
-      console.log('Auth state changed:', event, session?.user?.id);
-
       // Clear any pending fallback timeout
       if ((window as any).__authFallbackClear) {
         (window as any).__authFallbackClear();
@@ -76,16 +80,42 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       }
 
       if (event === 'SIGNED_IN' && session?.user) {
-        // Update SWR cache with new user data
-        await mutateUser(session.user);
+        // Fetch complete user data from our API to get extended properties
+        try {
+          const response = await fetch('/api/auth/user');
+          if (response.ok) {
+            const data = await response.json();
+            await mutateUser(data.user);
+          } else {
+            // Fallback to session user if API call fails
+            await mutateUser(session.user);
+          }
+        } catch (error) {
+          console.error('Error fetching extended user data:', error);
+          // Fallback to session user if API call fails
+          await mutateUser(session.user);
+        }
         router.push('/dashboard');
       } else if (event === 'SIGNED_OUT') {
         // Clear user from SWR cache and redirect
         await mutateUser(null);
         router.push('/');
       } else if (event === 'USER_UPDATED' && session?.user) {
-        // Update user data in cache
-        await mutateUser(session.user);
+        // Fetch complete user data from our API to get extended properties
+        try {
+          const response = await fetch('/api/auth/user');
+          if (response.ok) {
+            const data = await response.json();
+            await mutateUser(data.user);
+          } else {
+            // Fallback to session user if API call fails
+            await mutateUser(session.user);
+          }
+        } catch (error) {
+          console.error('Error fetching extended user data:', error);
+          // Fallback to session user if API call fails
+          await mutateUser(session.user);
+        }
       }
       // Note: TOKEN_REFRESHED events are handled automatically by Supabase
       // and don't require any manual intervention
@@ -118,6 +148,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       // Fallback: If onAuthStateChange doesn't fire within 1 second, manually update state
       const fallbackTimeout = setTimeout(async () => {
         if (data.user) {
+          // Use the extended user data from the API response
           await mutateUser(data.user);
           router.push('/dashboard');
         }
@@ -158,6 +189,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       // Fallback: If onAuthStateChange doesn't fire within 1 second, manually update state
       const fallbackTimeout = setTimeout(async () => {
         if (data.user) {
+          // Use the extended user data from the API response
           await mutateUser(data.user);
           router.push('/dashboard');
         }
@@ -179,6 +211,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const logout = async () => {
     setIsAuthOperationLoading(true);
     try {
+      // Call the logout API which handles server-side logout
       const response = await fetch('/api/auth/logout', {
         method: 'POST',
         headers: {
@@ -191,11 +224,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         throw new Error(data.error || 'Logout failed');
       }
 
-      // Fallback: If onAuthStateChange doesn't fire within 1 second, manually update state
+      // Fallback: If onAuthStateChange doesn't fire within 3 seconds, manually update state
       const fallbackTimeout = setTimeout(async () => {
         await mutateUser(null);
         router.push('/');
-      }, 1000);
+      }, 3000);
 
       // Clear timeout if onAuthStateChange fires (handled in useEffect)
       const clearFallback = () => clearTimeout(fallbackTimeout);

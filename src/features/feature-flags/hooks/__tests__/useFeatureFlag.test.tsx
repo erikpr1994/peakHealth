@@ -110,7 +110,12 @@ describe('useFeatureFlag Hook', () => {
       });
     });
 
-    it('should not fetch flags and return a map of false values', async () => {
+    it('should fetch public flags and return a map of false values for requested features', async () => {
+      mockFetch.mockResolvedValue({
+        ok: true,
+        json: () => Promise.resolve({ flags: [] }),
+      });
+
       const { result } = renderHook(
         () => useFeatureFlag(['a-feature', 'b-feature']),
         { wrapper }
@@ -118,7 +123,7 @@ describe('useFeatureFlag Hook', () => {
 
       await waitFor(() => {
         expect(result.current.isLoading).toBe(false);
-        expect(mockFetch).not.toHaveBeenCalled();
+        expect(mockFetch).toHaveBeenCalledWith('/api/feature-flags/public');
         expect(result.current.flags).toEqual({
           'a-feature': false,
           'b-feature': false,

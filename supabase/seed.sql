@@ -211,3 +211,35 @@ INSERT INTO exercise_ratings (user_id, exercise_id, rating, review) VALUES
 ((SELECT id FROM auth.users WHERE email = 'erikpastorrios1994@gmail.com'), '550e8400-e29b-41d4-a716-446655440003', 4, 'Great bodyweight exercise for building strength and endurance.'),
 ((SELECT id FROM auth.users WHERE email = 'erikpastorrios1994@gmail.com'), '550e8400-e29b-41d4-a716-446655440004', 5, 'The king of all exercises. Builds incredible strength and power.'),
 ((SELECT id FROM auth.users WHERE email = 'erikpastorrios1994@gmail.com'), '550e8400-e29b-41d4-a716-446655440005', 4, 'Challenging but very effective for back and bicep development.');
+
+-- Feature Flag System Seed Data
+
+-- Set user metadata for test user (special roles for testing)
+-- Note: Regular users will get default 'basic' role and 'free' group via auth endpoints
+UPDATE auth.users 
+SET raw_user_meta_data = jsonb_build_object(
+  'roles', ARRAY['trainer', 'admin'],
+  'groups', ARRAY['beta', 'premium']
+)
+WHERE email = 'erikpastorrios1994@gmail.com';
+
+-- Enable notification system feature for trainers in development
+INSERT INTO feature_flag_user_roles (feature_flag_id, environment, role_name, is_enabled) VALUES
+((SELECT id FROM feature_flags WHERE name = 'notification_system_feature'), 
+ 'development', 
+ 'trainer', 
+ true);
+
+-- Enable notification system feature for premium users in development
+INSERT INTO feature_flag_user_groups (feature_flag_id, environment, group_name, is_enabled) VALUES
+((SELECT id FROM feature_flags WHERE name = 'notification_system_feature'), 
+ 'development', 
+ 'premium', 
+ true);
+
+-- Enable some features for basic users (example)
+INSERT INTO feature_flag_user_roles (feature_flag_id, environment, role_name, is_enabled) VALUES
+((SELECT id FROM feature_flags WHERE name = 'notification_system_feature'), 
+ 'development', 
+ 'basic', 
+ false); -- Disabled by default for basic users
