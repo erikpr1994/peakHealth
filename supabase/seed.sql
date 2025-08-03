@@ -211,3 +211,33 @@ INSERT INTO exercise_ratings (user_id, exercise_id, rating, review) VALUES
 ((SELECT id FROM auth.users WHERE email = 'erikpastorrios1994@gmail.com'), '550e8400-e29b-41d4-a716-446655440003', 4, 'Great bodyweight exercise for building strength and endurance.'),
 ((SELECT id FROM auth.users WHERE email = 'erikpastorrios1994@gmail.com'), '550e8400-e29b-41d4-a716-446655440004', 5, 'The king of all exercises. Builds incredible strength and power.'),
 ((SELECT id FROM auth.users WHERE email = 'erikpastorrios1994@gmail.com'), '550e8400-e29b-41d4-a716-446655440005', 4, 'Challenging but very effective for back and bicep development.');
+
+-- Feature Flag System Seed Data
+
+-- Assign user types to test user
+INSERT INTO user_type_assignments (user_id, user_type_id) VALUES
+((SELECT id FROM auth.users WHERE email = 'erikpastorrios1994@gmail.com'), 
+ (SELECT id FROM user_types WHERE name = 'trainer')),
+((SELECT id FROM auth.users WHERE email = 'erikpastorrios1994@gmail.com'), 
+ (SELECT id FROM user_types WHERE name = 'admin'));
+
+-- Assign user groups to test user
+INSERT INTO user_group_assignments (user_id, group_id) VALUES
+((SELECT id FROM auth.users WHERE email = 'erikpastorrios1994@gmail.com'), 
+ (SELECT id FROM user_groups WHERE name = 'beta')),
+((SELECT id FROM auth.users WHERE email = 'erikpastorrios1994@gmail.com'), 
+ (SELECT id FROM user_groups WHERE name = 'premium'));
+
+-- Enable notification system feature for trainers in development
+INSERT INTO feature_flag_user_types (feature_flag_id, environment, user_type_id, is_enabled) VALUES
+((SELECT id FROM feature_flags WHERE name = 'notification_system_feature'), 
+ 'development', 
+ (SELECT id FROM user_types WHERE name = 'trainer'), 
+ true);
+
+-- Enable notification system feature for premium users in development
+INSERT INTO feature_flag_user_groups (feature_flag_id, environment, group_id, is_enabled) VALUES
+((SELECT id FROM feature_flags WHERE name = 'notification_system_feature'), 
+ 'development', 
+ (SELECT id FROM user_groups WHERE name = 'premium'), 
+ true);
