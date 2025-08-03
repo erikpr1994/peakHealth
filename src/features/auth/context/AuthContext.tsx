@@ -183,7 +183,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const logout = async () => {
     setIsAuthOperationLoading(true);
     try {
-      // Call the logout API
+      // Call the logout API which handles server-side logout
       const response = await fetch('/api/auth/logout', {
         method: 'POST',
         headers: {
@@ -195,9 +195,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         const data = await response.json();
         throw new Error(data.error || 'Logout failed');
       }
-
-      // Also call Supabase client logout directly to ensure session is cleared
-      await supabase.auth.signOut();
 
       // Fallback: If onAuthStateChange doesn't fire within 3 seconds, manually update state
       const fallbackTimeout = setTimeout(async () => {
