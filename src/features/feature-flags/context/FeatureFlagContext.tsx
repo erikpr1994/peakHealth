@@ -67,8 +67,7 @@ export const FeatureFlagProvider = ({ children }: { children: ReactNode }) => {
   // Load user-specific feature flags and user data
   const loadUserData = useCallback(async () => {
     if (!user || !user.id) {
-      // If no user, just load public flags
-      await loadPublicFlags();
+      // If no user, just set empty user data
       setUserTypes([]);
       setUserGroups([]);
       setIsLoading(false);
@@ -143,14 +142,23 @@ export const FeatureFlagProvider = ({ children }: { children: ReactNode }) => {
     } finally {
       setIsLoading(false);
     }
-  }, [user, loadPublicFlags]);
+  }, [user]);
 
   useEffect(() => {
-    // Always load public flags first
-    loadPublicFlags().then(() => {
-      // Then load user data if authenticated
-      loadUserData();
-    });
+    const initializeFlags = async () => {
+      try {
+        // Always load public flags first
+        await loadPublicFlags();
+
+        // Then load user data if authenticated
+        await loadUserData();
+      } catch (error) {
+        console.error('Error initializing feature flags:', error);
+        setIsLoading(false);
+      }
+    };
+
+    initializeFlags();
   }, [loadPublicFlags, loadUserData]);
 
   const isEnabled = (featureName: string): boolean => {
