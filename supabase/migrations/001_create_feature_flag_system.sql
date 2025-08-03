@@ -42,12 +42,13 @@ CREATE TABLE user_group_assignments (
   UNIQUE(user_id, group_id)
 );
 
--- Feature flags table
+-- Feature flags table with public/user-specific distinction
 CREATE TABLE feature_flags (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   name VARCHAR(100) UNIQUE NOT NULL,
   display_name VARCHAR(200) NOT NULL,
   description TEXT,
+  is_public BOOLEAN DEFAULT false,
   created_by UUID REFERENCES auth.users(id),
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
@@ -102,13 +103,44 @@ CREATE TABLE feature_flag_audit_log (
 
 -- Add indexes for performance
 CREATE INDEX idx_feature_flags_name ON feature_flags(name);
+CREATE INDEX idx_feature_flags_public ON feature_flags(is_public);
 CREATE INDEX idx_feature_flag_environments_flag_env ON feature_flag_environments(feature_flag_id, environment);
 CREATE INDEX idx_feature_flag_user_types_flag_env ON feature_flag_user_types(feature_flag_id, environment);
 CREATE INDEX idx_feature_flag_user_groups_flag_env ON feature_flag_user_groups(feature_flag_id, environment);
 CREATE INDEX idx_user_type_assignments_user ON user_type_assignments(user_id);
 CREATE INDEX idx_user_group_assignments_user ON user_group_assignments(user_id);
 
--- Stored procedure to get user's feature flags
+-- Function to get public feature flags (no user required)
+CREATE OR REPLACE FUNCTION get_public_feature_flags(environment_param TEXT)
+RETURNS TABLE (
+  name VARCHAR(100),
+  is_enabled BOOLEAN,
+  rollout_percentage INTEGER
+) AS $$
+BEGIN
+  RETURN QUERY
+  SELECT DISTINCT
+    ff.name,
+    ffe.is_enabled,
+    ffe.rollout_percentage
+  FROM feature_flags ff
+  JOIN feature_flag_environments ffe ON ff.id = ffe.feature_flag_id
+  WHERE ffe.environment = environment_param
+    AND ffe.is_enabled = true
+    AND ff.is_public = true
+    -- Public flags should not have any user type or group targeting
+    AND NOT EXISTS (
+      SELECT 1 FROM feature_flag_user_types ffut
+      WHERE ffut.feature_flag_id = ff.id AND ffut.environment = environment_param
+    )
+    AND NOT EXISTS (
+      SELECT 1 FROM feature_flag_user_groups ffug
+      WHERE ffug.feature_flag_id = ff.id AND ffug.environment = environment_param
+    );
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+-- Function to get user-specific feature flags
 CREATE OR REPLACE FUNCTION get_user_feature_flags(user_id UUID, environment_param TEXT)
 RETURNS TABLE (
   name VARCHAR(100),
@@ -125,6 +157,7 @@ BEGIN
   JOIN feature_flag_environments ffe ON ff.id = ffe.feature_flag_id
   WHERE ffe.environment = environment_param
     AND ffe.is_enabled = true
+    AND ff.is_public = false  -- Only user-specific flags
     AND (
       -- Check user type targeting (user can have multiple types)
       EXISTS (
@@ -146,7 +179,7 @@ BEGIN
           AND ffug.is_enabled = true
       )
       OR
-      -- No targeting (enabled for everyone)
+      -- No targeting (enabled for all authenticated users)
       NOT EXISTS (
         SELECT 1 FROM feature_flag_user_types ffut
         WHERE ffut.feature_flag_id = ff.id AND ffut.environment = environment_param
@@ -233,9 +266,13 @@ ALTER TABLE user_group_assignments ENABLE ROW LEVEL SECURITY;
 ALTER TABLE feature_flag_audit_log ENABLE ROW LEVEL SECURITY;
 
 -- RLS Policies
--- Users can read feature flags
-CREATE POLICY "Users can read feature flags" ON feature_flags
-  FOR SELECT USING (auth.role() = 'authenticated');
+-- Public feature flags (allow anonymous access)
+CREATE POLICY "Anyone can read public feature flags" ON feature_flags
+  FOR SELECT USING (is_public = true);
+
+-- Authenticated users can read user-specific feature flags
+CREATE POLICY "Authenticated users can read user-specific feature flags" ON feature_flags
+  FOR SELECT USING (auth.role() = 'authenticated' AND is_public = false);
 
 -- Users can read their own type and group assignments
 CREATE POLICY "Users can read their own type assignments" ON user_type_assignments
@@ -267,12 +304,31 @@ INSERT INTO user_groups (name, display_name, description) VALUES
 ('premium', 'Premium Users', 'Users with premium subscription'),
 ('early_access', 'Early Access', 'Users with early access to new features');
 
--- Insert sample feature flags
-INSERT INTO feature_flags (name, display_name, description) VALUES
-('notification_system_feature', 'Notification System', 'Real-time notifications and alerts system');
+-- Insert sample feature flags (both public and user-specific)
+INSERT INTO feature_flags (name, display_name, description, is_public) VALUES
+('notification_system_feature', 'Notification System', 'Real-time notifications and alerts system', false),
+('landing_page_ab_test', 'Landing Page A/B Test', 'A/B testing for landing page variants', true),
+('public_beta_announcement', 'Public Beta Announcement', 'Show beta announcement to all users', true),
+('maintenance_mode', 'Maintenance Mode', 'Enable maintenance mode for all users', true);
 
 -- Insert environment configurations
 INSERT INTO feature_flag_environments (feature_flag_id, environment, is_enabled, rollout_percentage) VALUES
+-- Notification system (user-specific)
 ((SELECT id FROM feature_flags WHERE name = 'notification_system_feature'), 'development', false, 0),
 ((SELECT id FROM feature_flags WHERE name = 'notification_system_feature'), 'staging', false, 0),
-((SELECT id FROM feature_flags WHERE name = 'notification_system_feature'), 'production', false, 0); 
+((SELECT id FROM feature_flags WHERE name = 'notification_system_feature'), 'production', false, 0),
+-- Public flags
+((SELECT id FROM feature_flags WHERE name = 'landing_page_ab_test'), 'development', true, 50),
+((SELECT id FROM feature_flags WHERE name = 'landing_page_ab_test'), 'staging', true, 50),
+((SELECT id FROM feature_flags WHERE name = 'landing_page_ab_test'), 'production', false, 0),
+((SELECT id FROM feature_flags WHERE name = 'public_beta_announcement'), 'development', true, 100),
+((SELECT id FROM feature_flags WHERE name = 'public_beta_announcement'), 'staging', true, 100),
+((SELECT id FROM feature_flags WHERE name = 'public_beta_announcement'), 'production', false, 0),
+((SELECT id FROM feature_flags WHERE name = 'maintenance_mode'), 'development', false, 0),
+((SELECT id FROM feature_flags WHERE name = 'maintenance_mode'), 'staging', false, 0),
+((SELECT id FROM feature_flags WHERE name = 'maintenance_mode'), 'production', false, 0);
+
+-- Add comments to explain the architecture
+COMMENT ON TABLE feature_flags IS 'Feature flags table. is_public=true for flags available to all users, is_public=false for user-specific flags.';
+COMMENT ON FUNCTION get_public_feature_flags IS 'Returns feature flags that are available to all users (no authentication required)';
+COMMENT ON FUNCTION get_user_feature_flags IS 'Returns user-specific feature flags based on user types and groups (requires authentication)'; 
