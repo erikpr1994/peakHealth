@@ -1,4 +1,5 @@
 import { Heart } from 'lucide-react';
+import Image from 'next/image';
 import { useState, useEffect } from 'react';
 
 import { useFavoriteManagement } from '../../hooks/useExercises';
@@ -68,9 +69,16 @@ export const ExerciseVariants = ({
             className="cursor-pointer hover:shadow-md transition-shadow"
           >
             <div className="bg-gray-100 h-40 relative">
-              {variant.media?.featuredImage && (
+              {variant.media?.featuredImage ? (
+                <Image
+                  src={variant.media.featuredImage}
+                  alt={variant.name}
+                  fill
+                  className="object-cover"
+                />
+              ) : (
                 <div className="w-full h-full bg-gray-200 flex items-center justify-center">
-                  <span className="text-gray-500">Image</span>
+                  <span className="text-gray-500">No Image</span>
                 </div>
               )}
             </div>
