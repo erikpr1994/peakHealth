@@ -1,6 +1,6 @@
 # Feature Flag System
 
-A comprehensive feature flag system for the Peak Health app that supports user types, user groups, and environment-based targeting.
+A comprehensive feature flag system for the Peak Health app that supports user roles, user groups, and environment-based targeting with proper security filtering.
 
 ## System Workflow
 
@@ -32,20 +32,25 @@ graph TD
 
 1.  **Component Request**: A React component initiates the process by calling the `useFeatureFlag` hook with an array of feature names it needs to check.
 2.  **Context Access**: The `useFeatureFlag` hook accesses the `FeatureFlagProvider` to get the current state and the `isEnabled` function.
-3.  **Cache Check**: The `FeatureFlagProvider` first checks the `featureFlagCache` to see if the requested data is already available and not expired. If it is, the provider immediately uses the cached data (Cache Hit).
-4.  **Cache Miss & RPC Call**: If the data is not in the cache (a "cache miss"), the provider makes an RPC call to the Supabase backend.
-5.  **Database Query**: The `get_user_feature_flags` function in the database is executed. It queries the relevant tables to determine which flags are active for the current user and environment.
-6.  **Data Return**: The database function returns the flag data to the `FeatureFlagProvider`.
-7.  **Cache Update**: The provider updates the `featureFlagCache` with the newly fetched data for future requests.
-8.  **State Provision**: The `FeatureFlagProvider` makes the latest state (flags and `isLoading` status) available to the hook.
-9.  **Hook Return**: The `useFeatureFlag` hook returns the final state to the calling component.
-10. **UI Render**: The component uses the flag's status to render the appropriate UI.
+3.  **Public Flags Load**: For all users (authenticated and unauthenticated), the system first loads public feature flags via `/api/feature-flags/public`.
+4.  **User-Specific Flags Load**: For authenticated users, the system then loads user-specific flags via `/api/feature-flags` with proper role/group filtering.
+5.  **Role/Group Filtering**: The `get_user_feature_flags` database function filters flags based on the user's roles and groups, ensuring users only see features they're authorized for.
+6.  **Cache Check**: The `FeatureFlagProvider` checks the `featureFlagCache` to see if the requested data is already available and not expired. If it is, the provider immediately uses the cached data (Cache Hit).
+7.  **Cache Miss & API Call**: If the data is not in the cache (a "cache miss"), the provider makes API calls to the backend.
+8.  **Database Query**: The database functions query the relevant tables to determine which flags are active for the current user and environment.
+9.  **Data Return**: The database functions return the filtered flag data to the `FeatureFlagProvider`.
+10. **Cache Update**: The provider updates the `featureFlagCache` with the newly fetched data for future requests.
+11. **State Provision**: The `FeatureFlagProvider` makes the latest state (flags and `isLoading` status) available to the hook.
+12. **Hook Return**: The `useFeatureFlag` hook returns the final state to the calling component.
+13. **UI Render**: The component uses the flag's status to render the appropriate UI.
 
 ## Features
 
-- **User Type Targeting**: Target features based on user types (regular, trainer, physio, admin)
-- **User Group Targeting**: Target features based on user groups (beta, premium, early_access)
+- **User Role Targeting**: Target features based on user roles (basic, premium, admin)
+- **User Group Targeting**: Target features based on user groups (free, beta_testers, premium)
 - **Environment Support**: Different configurations for development, staging, and production
+- **Security Filtering**: Database-level filtering ensures users only see features they're authorized for
+- **Public Flags**: Support for flags available to all users (no authentication required)
 - **Caching**: Built-in caching for performance optimization
 - **Monitoring Ready**: Infrastructure for future monitoring integration
 - **Audit Trail**: Track changes to feature flags
@@ -74,15 +79,18 @@ src/features/feature-flags/
 
 The system uses the following tables:
 
-- `user_types` - User type definitions
-- `user_groups` - User group definitions
-- `user_type_assignments` - User to type assignments (many-to-many)
-- `user_group_assignments` - User to group assignments (many-to-many)
-- `feature_flags` - Feature flag definitions
+- `feature_flags` - Feature flag definitions (with `is_public` flag to distinguish public vs user-specific flags)
 - `feature_flag_environments` - Environment-specific configurations
-- `feature_flag_user_types` - Type-based targeting
-- `feature_flag_user_groups` - Group-based targeting
+- `feature_flag_user_roles` - Role-based targeting rules
+- `feature_flag_user_groups` - Group-based targeting rules
 - `feature_flag_audit_log` - Change tracking
+
+### Key Functions
+
+- `get_public_feature_flags(environment_param)` - Returns public flags available to all users
+- `get_user_feature_flags(user_id, environment_param, user_roles, user_groups)` - Returns user-specific flags filtered by roles/groups
+- `user_has_role(user_roles, role_name)` - Helper function to check if user has a specific role
+- `user_in_group(user_groups, group_name)` - Helper function to check if user belongs to a specific group
 
 ## Setup
 
@@ -136,24 +144,24 @@ function MyComponent() {
 
 ### Using the useFeatureFlags Hook for More Control
 
-The `useFeatureFlags` hook gives you direct access to the context, which is useful for more complex scenarios, such as checking user types or groups.
+The `useFeatureFlags` hook gives you direct access to the context, which is useful for more complex scenarios, such as checking user roles or groups.
 
 ```tsx
 import {
   useFeatureFlags,
-  USER_TYPES,
+  USER_ROLES,
   USER_GROUPS,
 } from '@/features/feature-flags';
 
 function MyComponent() {
-  const { hasUserType, isInGroup, isEnabled } = useFeatureFlags();
+  const { hasUserRole, isInGroup, isEnabled } = useFeatureFlags();
 
-  // Check user types
-  const isTrainer = hasUserType(USER_TYPES.TRAINER);
-  const isPhysio = hasUserType(USER_TYPES.PHYSIO);
+  // Check user roles
+  const isPremium = hasUserRole(USER_ROLES.PREMIUM);
+  const isAdmin = hasUserRole(USER_ROLES.ADMIN);
 
   // Check user groups
-  const isBetaUser = isInGroup(USER_GROUPS.BETA);
+  const isBetaUser = isInGroup(USER_GROUPS.BETA_TESTERS);
   const isPremiumUser = isInGroup(USER_GROUPS.PREMIUM);
 
   // Check feature flags
@@ -161,7 +169,7 @@ function MyComponent() {
 
   return (
     <div>
-      {isTrainer && <TrainerDashboard />}
+      {isPremium && <PremiumDashboard />}
       {isPremiumUser && <PremiumFeatures />}
       {hasNotifications && <NotificationsComponent />}
     </div>
@@ -188,76 +196,81 @@ NEXT_PUBLIC_ENVIRONMENT=development
 ```tsx
 import {
   FEATURE_FLAGS,
-  USER_TYPES,
+  USER_ROLES,
   USER_GROUPS,
 } from '@/features/feature-flags';
 
 // Available feature flags
 FEATURE_FLAGS.NOTIFICATION_SYSTEM_FEATURE;
 
-// Available user types
-USER_TYPES.REGULAR;
-USER_TYPES.TRAINER;
-USER_TYPES.PHYSIO;
-USER_TYPES.ADMIN;
+// Available user roles
+USER_ROLES.BASIC;
+USER_ROLES.PREMIUM;
+USER_ROLES.ADMIN;
 
 // Available user groups
-USER_GROUPS.BETA;
+USER_GROUPS.FREE;
+USER_GROUPS.BETA_TESTERS;
 USER_GROUPS.PREMIUM;
-USER_GROUPS.EARLY_ACCESS;
 ```
 
 ## Testing
 
 ### Manual Testing
 
-1. **Assign User Types**: Use the database to assign user types to test users
-2. **Assign User Groups**: Use the database to assign user groups to test users
+1. **Set User Roles**: Update user metadata to include roles (e.g., `['premium', 'admin']`)
+2. **Set User Groups**: Update user metadata to include groups (e.g., `['beta_testers', 'premium']`)
 3. **Toggle Feature Flags**: Enable/disable feature flags in different environments
-4. **Test Targeting**: Verify that features appear/disappear based on user types and groups
+4. **Test Targeting**: Verify that features appear/disappear based on user roles and groups
+5. **Test Public Flags**: Verify that public flags are available to all users (authenticated and unauthenticated)
 
 ## Database Management
 
-### Assign User Types
+### Set User Roles and Groups
+
+User roles and groups are stored in Supabase's built-in `user_metadata` field. You can update them via the Supabase dashboard or API:
 
 ```sql
--- Assign a user as a trainer
-INSERT INTO user_type_assignments (user_id, user_type_id)
-SELECT 'user-uuid', id FROM user_types WHERE name = 'trainer';
+-- Update user metadata to include roles and groups
+UPDATE auth.users
+SET user_metadata = jsonb_set(
+  COALESCE(user_metadata, '{}'::jsonb),
+  '{roles}',
+  '["premium", "admin"]'::jsonb
+)
+WHERE id = 'user-uuid';
 
--- Assign multiple types to a user
-INSERT INTO user_type_assignments (user_id, user_type_id)
-SELECT 'user-uuid', id FROM user_types WHERE name IN ('regular', 'trainer', 'physio');
-```
-
-### Assign User Groups
-
-```sql
--- Add user to beta group
-INSERT INTO user_group_assignments (user_id, group_id)
-SELECT 'user-uuid', id FROM user_groups WHERE name = 'beta';
-
--- Add user to premium group
-INSERT INTO user_group_assignments (user_id, group_id)
-SELECT 'user-uuid', id FROM user_groups WHERE name = 'premium';
+UPDATE auth.users
+SET user_metadata = jsonb_set(
+  COALESCE(user_metadata, '{}'::jsonb),
+  '{groups}',
+  '["beta_testers", "premium"]'::jsonb
+)
+WHERE id = 'user-uuid';
 ```
 
 ### Create Feature Flags
 
 ```sql
--- Create a new feature flag
-INSERT INTO feature_flags (name, display_name, description)
-VALUES ('new_feature', 'New Feature', 'Description of the new feature');
+-- Create a new public feature flag (available to all users)
+INSERT INTO feature_flags (name, display_name, description, is_public)
+VALUES ('public_announcement', 'Public Announcement', 'Show announcement to all users', true);
 
--- Enable it for specific environment
+-- Create a new user-specific feature flag
+INSERT INTO feature_flags (name, display_name, description, is_public)
+VALUES ('premium_feature', 'Premium Feature', 'Premium users only feature', false);
+
+-- Enable flags for specific environment
 INSERT INTO feature_flag_environments (feature_flag_id, environment, is_enabled, rollout_percentage)
-SELECT id, 'production', true, 100 FROM feature_flags WHERE name = 'new_feature';
+SELECT id, 'production', true, 100 FROM feature_flags WHERE name = 'premium_feature';
 
--- Target specific user types
-INSERT INTO feature_flag_user_types (feature_flag_id, environment, user_type_id, is_enabled)
-SELECT ff.id, 'production', ut.id, true
-FROM feature_flags ff, user_types ut
-WHERE ff.name = 'new_feature' AND ut.name = 'trainer';
+-- Target specific user roles
+INSERT INTO feature_flag_user_roles (feature_flag_id, environment, role_name, is_enabled)
+SELECT id, 'production', 'premium', true FROM feature_flags WHERE name = 'premium_feature';
+
+-- Target specific user groups
+INSERT INTO feature_flag_user_groups (feature_flag_id, environment, group_name, is_enabled)
+SELECT id, 'production', 'beta_testers', true FROM feature_flags WHERE name = 'premium_feature';
 ```
 
 ## Performance
@@ -280,6 +293,8 @@ The system is designed to support monitoring integration:
 
 - **Row Level Security (RLS)**: All tables have RLS enabled
 - **User Isolation**: Users can only see their own data
+- **Role/Group Filtering**: Database-level filtering ensures users only see features they're authorized for
+- **Public vs User-Specific Flags**: Clear separation between flags available to all users vs. authenticated users only
 - **Audit Trail**: All changes are logged
 - **Type Safety**: Full TypeScript support prevents runtime errors
 
@@ -287,6 +302,10 @@ The system is designed to support monitoring integration:
 
 1. **Integration**: Add the FeatureFlagProvider to your app
 2. **Testing**: Test the notification system feature flag
-3. **User Assignment**: Assign users to types and groups
+3. **User Setup**: Set up user roles and groups in user metadata
 4. **Feature Flags**: Create and configure feature flags for your features
 5. **Monitoring**: Enable monitoring when ready
+
+## Related Documentation
+
+- [Role/Group Filtering](./ROLE_GROUP_FILTERING.md) - Detailed explanation of the role/group filtering system

@@ -31,9 +31,23 @@ export async function middleware(request: NextRequest) {
   });
 
   // Check if user is authenticated by getting the session
-  const {
-    data: { session },
-  } = await supabase.auth.getSession();
+  let session = null;
+  try {
+    const {
+      data: { session: userSession },
+    } = await supabase.auth.getSession();
+    session = userSession;
+  } catch (error) {
+    // Ignore auth session missing errors - this is expected for unauthenticated users
+    if (
+      error instanceof Error &&
+      error.message.includes('Auth session missing')
+    ) {
+      // This is expected behavior, no need to log it
+    } else {
+      console.error('Unexpected auth error in middleware:', error);
+    }
+  }
 
   // Define protected routes that require authentication
   const protectedRoutes = [

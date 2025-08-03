@@ -93,8 +93,13 @@ export const logoutUser = async (page: Page) => {
   await page.click('[data-testid="user-menu-button"]');
   await page.click('[data-testid="logout-button"]');
 
-  // Wait for logout (redirect to landing page or login)
-  await expect(page).toHaveURL(/\/login|\/$/);
+  // Wait for the user menu to disappear (indicating logout)
+  await expect(
+    page.locator('[data-testid="user-menu-button"]')
+  ).not.toBeVisible({ timeout: 10000 });
+
+  // Wait for logout (redirect to landing page)
+  await expect(page).toHaveURL('/', { timeout: 10000 });
 };
 
 export const expectToBeLoggedIn = async (page: Page) => {
@@ -105,8 +110,8 @@ export const expectToBeLoggedIn = async (page: Page) => {
 };
 
 export const expectToBeLoggedOut = async (page: Page) => {
-  // Check that we're on login page or landing page
-  await expect(page).toHaveURL(/\/login|\/$/);
+  // Check that we're on landing page
+  await expect(page).toHaveURL('/');
   // Check that user menu is not visible
   await expect(
     page.locator('[data-testid="user-menu-button"]')

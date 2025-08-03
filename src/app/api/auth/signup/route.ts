@@ -30,10 +30,24 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: error.message }, { status: 400 });
     }
 
+    // Set default roles and groups for new users
+    let userRoles = ['basic'];
+    let userGroups = ['free'];
+
+    if (data.user && data.user.user_metadata) {
+      // If user already has roles/groups (e.g., from signup with metadata), use those
+      userRoles = data.user.user_metadata.roles || userRoles;
+      userGroups = data.user.user_metadata.groups || userGroups;
+    }
+
     return NextResponse.json(
       {
         message: 'User created successfully',
-        user: data.user,
+        user: {
+          ...data.user,
+          userRoles,
+          userGroups,
+        },
       },
       { status: 201 }
     );
