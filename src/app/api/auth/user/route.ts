@@ -12,6 +12,13 @@ export async function GET() {
     } = await supabase.auth.getUser();
 
     if (error) {
+      // Don't log expected auth session missing errors
+      if (error.message.includes('Auth session missing')) {
+        return NextResponse.json(
+          { error: 'Not authenticated' },
+          { status: 401 }
+        );
+      }
       console.error('Supabase auth error:', error);
       return NextResponse.json({ error: error.message }, { status: 401 });
     }
