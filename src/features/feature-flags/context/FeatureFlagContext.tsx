@@ -76,11 +76,23 @@ export const FeatureFlagProvider = ({ children }: { children: ReactNode }) => {
     }
 
     // Set user types and groups from auth response
-    if (user.userTypes) {
-      setUserTypes(user.userTypes);
+    if (user.userRoles) {
+      setUserTypes(
+        user.userRoles.map(role => ({
+          typeName: role,
+          displayName: role,
+          description: '',
+        }))
+      );
     }
     if (user.userGroups) {
-      setUserGroups(user.userGroups);
+      setUserGroups(
+        user.userGroups.map(group => ({
+          groupName: group,
+          displayName: group,
+          description: '',
+        }))
+      );
     }
 
     const startTime = Date.now();

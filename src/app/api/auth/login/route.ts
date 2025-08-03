@@ -24,29 +24,27 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: error.message }, { status: 400 });
     }
 
-    // Get user types and groups if user exists
-    let userTypes = [];
+    // Get user roles and groups from user_metadata
+    let userRoles = [];
     let userGroups = [];
 
     if (data.user) {
-      const [typesResponse, groupsResponse] = await Promise.all([
-        supabase.rpc('get_user_types', { user_id: data.user.id }),
-        supabase.rpc('get_user_groups', { user_id: data.user.id }),
-      ]);
+      const { data: metadata } = await supabase
+        .from('user_metadata')
+        .select('roles, groups')
+        .eq('user_id', data.user.id)
+        .single();
 
-      if (!typesResponse.error) {
-        userTypes = typesResponse.data || [];
-      }
-
-      if (!groupsResponse.error) {
-        userGroups = groupsResponse.data || [];
+      if (metadata) {
+        userRoles = metadata.roles || [];
+        userGroups = metadata.groups || [];
       }
     }
 
     return NextResponse.json({
       user: {
         ...data.user,
-        userTypes,
+        userRoles,
         userGroups,
       },
       session: data.session,

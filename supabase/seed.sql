@@ -214,30 +214,26 @@ INSERT INTO exercise_ratings (user_id, exercise_id, rating, review) VALUES
 
 -- Feature Flag System Seed Data
 
--- Assign user types to test user
-INSERT INTO user_type_assignments (user_id, user_type_id) VALUES
+-- Set user metadata for test user (roles and groups)
+INSERT INTO user_metadata (user_id, roles, groups) VALUES
 ((SELECT id FROM auth.users WHERE email = 'erikpastorrios1994@gmail.com'), 
- (SELECT id FROM user_types WHERE name = 'trainer')),
-((SELECT id FROM auth.users WHERE email = 'erikpastorrios1994@gmail.com'), 
- (SELECT id FROM user_types WHERE name = 'admin'));
-
--- Assign user groups to test user
-INSERT INTO user_group_assignments (user_id, group_id) VALUES
-((SELECT id FROM auth.users WHERE email = 'erikpastorrios1994@gmail.com'), 
- (SELECT id FROM user_groups WHERE name = 'beta')),
-((SELECT id FROM auth.users WHERE email = 'erikpastorrios1994@gmail.com'), 
- (SELECT id FROM user_groups WHERE name = 'premium'));
+ ARRAY['trainer', 'admin'], 
+ ARRAY['beta', 'premium'])
+ON CONFLICT (user_id) DO UPDATE SET
+  roles = EXCLUDED.roles,
+  groups = EXCLUDED.groups,
+  updated_at = NOW();
 
 -- Enable notification system feature for trainers in development
-INSERT INTO feature_flag_user_types (feature_flag_id, environment, user_type_id, is_enabled) VALUES
+INSERT INTO feature_flag_user_roles (feature_flag_id, environment, role_name, is_enabled) VALUES
 ((SELECT id FROM feature_flags WHERE name = 'notification_system_feature'), 
  'development', 
- (SELECT id FROM user_types WHERE name = 'trainer'), 
+ 'trainer', 
  true);
 
 -- Enable notification system feature for premium users in development
-INSERT INTO feature_flag_user_groups (feature_flag_id, environment, group_id, is_enabled) VALUES
+INSERT INTO feature_flag_user_groups (feature_flag_id, environment, group_name, is_enabled) VALUES
 ((SELECT id FROM feature_flags WHERE name = 'notification_system_feature'), 
  'development', 
- (SELECT id FROM user_groups WHERE name = 'premium'), 
+ 'premium', 
  true);

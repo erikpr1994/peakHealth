@@ -55,11 +55,11 @@ export interface FeatureFlagEnvironment {
   updatedAt: string;
 }
 
-export interface FeatureFlagUserType {
+export interface FeatureFlagUserRole {
   id: string;
   featureFlagId: string;
   environment: string;
-  userTypeId: string;
+  roleName: string;
   isEnabled: boolean;
   createdAt: string;
 }
@@ -68,7 +68,7 @@ export interface FeatureFlagUserGroup {
   id: string;
   featureFlagId: string;
   environment: string;
-  groupId: string;
+  groupName: string;
   isEnabled: boolean;
   createdAt: string;
 }
@@ -173,22 +173,16 @@ export interface DatabaseFunctions {
     };
     Returns: UserFeatureFlag[];
   };
-  get_user_types: {
+  get_public_feature_flags: {
     Args: {
-      user_id: string;
+      environment_param: string;
     };
-    Returns: UserTypeInfo[];
+    Returns: UserFeatureFlag[];
   };
-  get_user_groups: {
+  user_has_role: {
     Args: {
       user_id: string;
-    };
-    Returns: UserGroupInfo[];
-  };
-  user_has_type: {
-    Args: {
-      user_id: string;
-      type_name: string;
+      role_name: string;
     };
     Returns: boolean;
   };

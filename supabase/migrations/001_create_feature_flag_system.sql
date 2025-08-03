@@ -1,45 +1,15 @@
 -- Feature Flag System Database Schema
 -- Migration: 001_create_feature_flag_system.sql
 
--- User types (trainer, physio, admin, etc.)
-CREATE TABLE user_types (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  name VARCHAR(50) UNIQUE NOT NULL,
-  display_name VARCHAR(100) NOT NULL,
-  description TEXT,
-  permissions JSONB DEFAULT '{}',
-  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-);
-
--- User groups (beta, premium, etc.)
-CREATE TABLE user_groups (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  name VARCHAR(50) UNIQUE NOT NULL,
-  display_name VARCHAR(100) NOT NULL,
-  description TEXT,
-  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-);
-
--- User type assignments (one user can have MULTIPLE types)
-CREATE TABLE user_type_assignments (
+-- User metadata table (for local development - in production this would be app_metadata)
+CREATE TABLE user_metadata (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE,
-  user_type_id UUID REFERENCES user_types(id) ON DELETE CASCADE,
-  assigned_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-  assigned_by UUID REFERENCES auth.users(id),
-  UNIQUE(user_id, user_type_id)
-);
-
--- User group assignments (one user can be in multiple groups)
-CREATE TABLE user_group_assignments (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE,
-  group_id UUID REFERENCES user_groups(id) ON DELETE CASCADE,
-  assigned_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-  assigned_by UUID REFERENCES auth.users(id),
-  UNIQUE(user_id, group_id)
+  roles TEXT[] DEFAULT '{}',
+  groups TEXT[] DEFAULT '{}',
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  UNIQUE(user_id)
 );
 
 -- Feature flags table with public/user-specific distinction
@@ -66,26 +36,26 @@ CREATE TABLE feature_flag_environments (
   UNIQUE(feature_flag_id, environment)
 );
 
--- Target by user types
-CREATE TABLE feature_flag_user_types (
+-- Target by user roles (stored in user_metadata)
+CREATE TABLE feature_flag_user_roles (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   feature_flag_id UUID REFERENCES feature_flags(id) ON DELETE CASCADE,
   environment VARCHAR(50) NOT NULL,
-  user_type_id UUID REFERENCES user_types(id) ON DELETE CASCADE,
+  role_name VARCHAR(50) NOT NULL,
   is_enabled BOOLEAN DEFAULT false,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-  UNIQUE(feature_flag_id, environment, user_type_id)
+  UNIQUE(feature_flag_id, environment, role_name)
 );
 
--- Target by user groups
+-- Target by user groups (stored in user_metadata)
 CREATE TABLE feature_flag_user_groups (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   feature_flag_id UUID REFERENCES feature_flags(id) ON DELETE CASCADE,
   environment VARCHAR(50) NOT NULL,
-  group_id UUID REFERENCES user_groups(id) ON DELETE CASCADE,
+  group_name VARCHAR(50) NOT NULL,
   is_enabled BOOLEAN DEFAULT false,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-  UNIQUE(feature_flag_id, environment, group_id)
+  UNIQUE(feature_flag_id, environment, group_name)
 );
 
 -- Audit trail for feature flag changes
@@ -105,10 +75,9 @@ CREATE TABLE feature_flag_audit_log (
 CREATE INDEX idx_feature_flags_name ON feature_flags(name);
 CREATE INDEX idx_feature_flags_public ON feature_flags(is_public);
 CREATE INDEX idx_feature_flag_environments_flag_env ON feature_flag_environments(feature_flag_id, environment);
-CREATE INDEX idx_feature_flag_user_types_flag_env ON feature_flag_user_types(feature_flag_id, environment);
+CREATE INDEX idx_feature_flag_user_roles_flag_env ON feature_flag_user_roles(feature_flag_id, environment);
 CREATE INDEX idx_feature_flag_user_groups_flag_env ON feature_flag_user_groups(feature_flag_id, environment);
-CREATE INDEX idx_user_type_assignments_user ON user_type_assignments(user_id);
-CREATE INDEX idx_user_group_assignments_user ON user_group_assignments(user_id);
+CREATE INDEX idx_user_metadata_user_id ON user_metadata(user_id);
 
 -- Function to get public feature flags (no user required)
 CREATE OR REPLACE FUNCTION get_public_feature_flags(environment_param TEXT)
@@ -128,10 +97,10 @@ BEGIN
   WHERE ffe.environment = environment_param
     AND ffe.is_enabled = true
     AND ff.is_public = true
-    -- Public flags should not have any user type or group targeting
+    -- Public flags should not have any user role or group targeting
     AND NOT EXISTS (
-      SELECT 1 FROM feature_flag_user_types ffut
-      WHERE ffut.feature_flag_id = ff.id AND ffut.environment = environment_param
+      SELECT 1 FROM feature_flag_user_roles ffur
+      WHERE ffur.feature_flag_id = ff.id AND ffur.environment = environment_param
     )
     AND NOT EXISTS (
       SELECT 1 FROM feature_flag_user_groups ffug
@@ -140,14 +109,25 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
 
--- Function to get user-specific feature flags
+-- Function to get user-specific feature flags using user_metadata
 CREATE OR REPLACE FUNCTION get_user_feature_flags(user_id UUID, environment_param TEXT)
 RETURNS TABLE (
   name VARCHAR(100),
   is_enabled BOOLEAN,
   rollout_percentage INTEGER
 ) AS $$
+DECLARE
+  user_roles TEXT[];
+  user_groups TEXT[];
 BEGIN
+  -- Get user roles and groups from user_metadata
+  SELECT 
+    COALESCE(um.roles, '{}'),
+    COALESCE(um.groups, '{}')
+  INTO user_roles, user_groups
+  FROM user_metadata um
+  WHERE um.user_id = get_user_feature_flags.user_id;
+
   RETURN QUERY
   SELECT DISTINCT
     ff.name,
@@ -159,30 +139,28 @@ BEGIN
     AND ffe.is_enabled = true
     AND ff.is_public = false  -- Only user-specific flags
     AND (
-      -- Check user type targeting (user can have multiple types)
+      -- Check user role targeting
       EXISTS (
-        SELECT 1 FROM user_type_assignments uta
-        JOIN feature_flag_user_types ffut ON uta.user_type_id = ffut.user_type_id
-        WHERE uta.user_id = get_user_feature_flags.user_id
-          AND ffut.feature_flag_id = ff.id
-          AND ffut.environment = environment_param
-          AND ffut.is_enabled = true
+        SELECT 1 FROM feature_flag_user_roles ffur
+        WHERE ffur.feature_flag_id = ff.id
+          AND ffur.environment = environment_param
+          AND ffur.is_enabled = true
+          AND ffur.role_name = ANY(user_roles)
       )
       OR
-      -- Check user group targeting (user can be in multiple groups)
+      -- Check user group targeting
       EXISTS (
-        SELECT 1 FROM user_group_assignments uga
-        JOIN feature_flag_user_groups ffug ON uga.group_id = ffug.group_id
-        WHERE uga.user_id = get_user_feature_flags.user_id
-          AND ffug.feature_flag_id = ff.id
+        SELECT 1 FROM feature_flag_user_groups ffug
+        WHERE ffug.feature_flag_id = ff.id
           AND ffug.environment = environment_param
           AND ffug.is_enabled = true
+          AND ffug.group_name = ANY(user_groups)
       )
       OR
       -- No targeting (enabled for all authenticated users)
       NOT EXISTS (
-        SELECT 1 FROM feature_flag_user_types ffut
-        WHERE ffut.feature_flag_id = ff.id AND ffut.environment = environment_param
+        SELECT 1 FROM feature_flag_user_roles ffur
+        WHERE ffur.feature_flag_id = ff.id AND ffur.environment = environment_param
       )
       AND NOT EXISTS (
         SELECT 1 FROM feature_flag_user_groups ffug
@@ -192,80 +170,43 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
 
--- Helper functions for user management
-CREATE OR REPLACE FUNCTION get_user_types(user_id UUID)
-RETURNS TABLE (
-  type_name VARCHAR(50),
-  display_name VARCHAR(100),
-  description TEXT
-) AS $$
-BEGIN
-  RETURN QUERY
-  SELECT 
-    ut.name,
-    ut.display_name,
-    ut.description
-  FROM user_types ut
-  JOIN user_type_assignments uta ON ut.id = uta.user_type_id
-  WHERE uta.user_id = get_user_types.user_id;
-END;
-$$ LANGUAGE plpgsql SECURITY DEFINER;
-
--- Function to get all user groups for a user
-CREATE OR REPLACE FUNCTION get_user_groups(user_id UUID)
-RETURNS TABLE (
-  group_name VARCHAR(50),
-  display_name VARCHAR(100),
-  description TEXT
-) AS $$
-BEGIN
-  RETURN QUERY
-  SELECT 
-    ug.name,
-    ug.display_name,
-    ug.description
-  FROM user_groups ug
-  JOIN user_group_assignments uga ON ug.id = uga.group_id
-  WHERE uga.user_id = get_user_groups.user_id;
-END;
-$$ LANGUAGE plpgsql SECURITY DEFINER;
-
--- Function to check if user has a specific type
-CREATE OR REPLACE FUNCTION user_has_type(user_id UUID, type_name TEXT)
+-- Helper function to check if user has a specific role
+CREATE OR REPLACE FUNCTION user_has_role(user_id UUID, role_name TEXT)
 RETURNS BOOLEAN AS $$
 BEGIN
   RETURN EXISTS (
-    SELECT 1 FROM user_type_assignments uta
-    JOIN user_types ut ON uta.user_type_id = ut.id
-    WHERE uta.user_id = user_has_type.user_id AND ut.name = type_name
+    SELECT 1 FROM user_metadata um
+    WHERE um.user_id = user_has_role.user_id 
+      AND role_name = ANY(um.roles)
   );
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
 
--- Function to check if user is in a specific group
+-- Helper function to check if user is in a specific group
 CREATE OR REPLACE FUNCTION user_in_group(user_id UUID, group_name TEXT)
 RETURNS BOOLEAN AS $$
 BEGIN
   RETURN EXISTS (
-    SELECT 1 FROM user_group_assignments uga
-    JOIN user_groups ug ON uga.group_id = ug.id
-    WHERE uga.user_id = user_in_group.user_id AND ug.name = group_name
+    SELECT 1 FROM user_metadata um
+    WHERE um.user_id = user_in_group.user_id 
+      AND group_name = ANY(um.groups)
   );
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
 
 -- Enable RLS on tables
-ALTER TABLE user_types ENABLE ROW LEVEL SECURITY;
-ALTER TABLE user_groups ENABLE ROW LEVEL SECURITY;
+ALTER TABLE user_metadata ENABLE ROW LEVEL SECURITY;
 ALTER TABLE feature_flags ENABLE ROW LEVEL SECURITY;
 ALTER TABLE feature_flag_environments ENABLE ROW LEVEL SECURITY;
-ALTER TABLE feature_flag_user_types ENABLE ROW LEVEL SECURITY;
+ALTER TABLE feature_flag_user_roles ENABLE ROW LEVEL SECURITY;
 ALTER TABLE feature_flag_user_groups ENABLE ROW LEVEL SECURITY;
-ALTER TABLE user_type_assignments ENABLE ROW LEVEL SECURITY;
-ALTER TABLE user_group_assignments ENABLE ROW LEVEL SECURITY;
 ALTER TABLE feature_flag_audit_log ENABLE ROW LEVEL SECURITY;
 
 -- RLS Policies
+-- Users can read their own metadata
+CREATE POLICY "Users can read their own metadata" ON user_metadata
+  FOR SELECT USING (auth.uid() = user_id);
+
 -- Public feature flags (allow anonymous access)
 CREATE POLICY "Anyone can read public feature flags" ON feature_flags
   FOR SELECT USING (is_public = true);
@@ -274,35 +215,20 @@ CREATE POLICY "Anyone can read public feature flags" ON feature_flags
 CREATE POLICY "Authenticated users can read user-specific feature flags" ON feature_flags
   FOR SELECT USING (auth.role() = 'authenticated' AND is_public = false);
 
--- Users can read their own type and group assignments
-CREATE POLICY "Users can read their own type assignments" ON user_type_assignments
-  FOR SELECT USING (auth.uid() = user_id);
-
-CREATE POLICY "Users can read their own group assignments" ON user_group_assignments
-  FOR SELECT USING (auth.uid() = user_id);
-
--- Users can read user types and groups
-CREATE POLICY "Users can read user types" ON user_types
+-- Users can read feature flag environments
+CREATE POLICY "Users can read feature flag environments" ON feature_flag_environments
   FOR SELECT USING (auth.role() = 'authenticated');
 
-CREATE POLICY "Users can read user groups" ON user_groups
+-- Users can read feature flag targeting rules
+CREATE POLICY "Users can read feature flag user roles" ON feature_flag_user_roles
+  FOR SELECT USING (auth.role() = 'authenticated');
+
+CREATE POLICY "Users can read feature flag user groups" ON feature_flag_user_groups
   FOR SELECT USING (auth.role() = 'authenticated');
 
 -- Only admins can manage feature flags (will be updated when admin role is implemented)
 CREATE POLICY "Admins can manage feature flags" ON feature_flags
   FOR ALL USING (auth.role() = 'authenticated');
-
--- Insert seed data
-INSERT INTO user_types (name, display_name, description) VALUES
-('regular', 'Regular User', 'Standard user with basic access'),
-('trainer', 'Trainer', 'Fitness trainer with training capabilities'),
-('physio', 'Physiotherapist', 'Physiotherapist with specialized access'),
-('admin', 'Administrator', 'System administrator with full access');
-
-INSERT INTO user_groups (name, display_name, description) VALUES
-('beta', 'Beta Users', 'Users with access to beta features'),
-('premium', 'Premium Users', 'Users with premium subscription'),
-('early_access', 'Early Access', 'Users with early access to new features');
 
 -- Insert sample feature flags (both public and user-specific)
 INSERT INTO feature_flags (name, display_name, description, is_public) VALUES
@@ -328,7 +254,9 @@ INSERT INTO feature_flag_environments (feature_flag_id, environment, is_enabled,
 ((SELECT id FROM feature_flags WHERE name = 'maintenance_mode'), 'staging', false, 0),
 ((SELECT id FROM feature_flags WHERE name = 'maintenance_mode'), 'production', false, 0);
 
+
+
 -- Add comments to explain the architecture
 COMMENT ON TABLE feature_flags IS 'Feature flags table. is_public=true for flags available to all users, is_public=false for user-specific flags.';
 COMMENT ON FUNCTION get_public_feature_flags IS 'Returns feature flags that are available to all users (no authentication required)';
-COMMENT ON FUNCTION get_user_feature_flags IS 'Returns user-specific feature flags based on user types and groups (requires authentication)'; 
+COMMENT ON FUNCTION get_user_feature_flags IS 'Returns user-specific feature flags based on user roles and groups from user_metadata (requires authentication)'; 

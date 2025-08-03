@@ -11,13 +11,12 @@ import React, {
 } from 'react';
 import useSWR from 'swr';
 
-import { UserTypeInfo, UserGroupInfo } from '@/features/feature-flags/types';
 import { createClient } from '@/lib/supabase/client';
 
 // Extended user type with our custom properties
 interface ExtendedUser extends User {
-  userTypes?: UserTypeInfo[];
-  userGroups?: UserGroupInfo[];
+  userRoles?: string[];
+  userGroups?: string[];
 }
 
 interface AuthContextType {
