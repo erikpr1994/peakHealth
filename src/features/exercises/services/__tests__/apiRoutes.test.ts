@@ -50,9 +50,9 @@ describe('Exercise API Routes', () => {
       const searchParams = {
         searchTerm: 'push',
         category: 'strength' as const,
-        difficulty: 'beginner' as const,
-        equipment: 'bodyweight' as const,
-        muscleGroup: 'chest' as const,
+        difficulties: ['beginner'],
+        equipment: ['bodyweight'],
+        muscleGroups: ['chest'],
       };
 
       mockExerciseService.searchExercises.mockResolvedValue(mockSearchResults);
@@ -96,9 +96,9 @@ describe('Exercise API Routes', () => {
       expect(mockExerciseService.searchExercises).toHaveBeenCalledWith({
         searchTerm: 'push',
         category: 'strength',
-        difficulty: undefined,
+        difficulties: undefined,
         equipment: undefined,
-        muscleGroup: undefined,
+        muscleGroups: undefined,
       });
       expect(data).toEqual({ exercises: mockSearchResults });
     });

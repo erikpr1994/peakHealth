@@ -1,5 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 
+import type { Difficulty, Equipment, MuscleGroup } from '../../types/constants';
 import { exerciseDataAggregators } from '../dataAggregators';
 
 // Mock the mappers
@@ -232,7 +233,7 @@ describe('ExerciseDataAggregators', () => {
         },
       ];
 
-      const criteria = { difficulty: 'beginner' as const };
+      const criteria = { difficulties: ['beginner'] as Difficulty[] };
 
       const result = exerciseDataAggregators.filterVariantsByCriteria(
         variants,
@@ -262,7 +263,7 @@ describe('ExerciseDataAggregators', () => {
         },
       ];
 
-      const criteria = { equipment: 'dumbbells' as const };
+      const criteria = { equipment: ['dumbbells'] as Equipment[] };
 
       const result = exerciseDataAggregators.filterVariantsByCriteria(
         variants,
@@ -292,7 +293,7 @@ describe('ExerciseDataAggregators', () => {
         },
       ];
 
-      const criteria = { muscleGroup: 'chest' as const };
+      const criteria = { muscleGroups: ['chest'] as MuscleGroup[] };
 
       const result = exerciseDataAggregators.filterVariantsByCriteria(
         variants,
@@ -323,9 +324,9 @@ describe('ExerciseDataAggregators', () => {
       ];
 
       const criteria = {
-        difficulty: 'beginner' as const,
-        equipment: 'bodyweight' as const,
-        muscleGroup: 'chest' as const,
+        difficulties: ['beginner'] as Difficulty[],
+        equipment: ['bodyweight'] as Equipment[],
+        muscleGroups: ['chest'] as MuscleGroup[],
       };
 
       const result = exerciseDataAggregators.filterVariantsByCriteria(
@@ -440,7 +441,7 @@ describe('ExerciseDataAggregators', () => {
         },
       ];
 
-      const criteria = { difficulty: 'beginner' as const };
+      const criteria = { difficulties: ['beginner'] as Difficulty[] };
 
       const result = exerciseDataAggregators.transformJoinedExerciseData(
         exercises,

@@ -99,9 +99,9 @@ describe('Exercise Service Integration', () => {
       const searchParams = {
         searchTerm: 'push',
         category: 'strength' as const,
-        difficulty: 'beginner' as const,
-        equipment: 'bodyweight' as const,
-        muscleGroup: 'chest' as const,
+        difficulties: ['beginner'] as const,
+        equipment: ['bodyweight'] as const,
+        muscleGroups: ['chest'] as const,
       };
 
       const mockJoinedExercises = [
@@ -152,9 +152,9 @@ describe('Exercise Service Integration', () => {
       expect(
         mockDataAggregators.transformJoinedExerciseData
       ).toHaveBeenCalledWith(mockJoinedExercises, {
-        difficulty: searchParams.difficulty,
+        difficulties: searchParams.difficulties,
         equipment: searchParams.equipment,
-        muscleGroup: searchParams.muscleGroup,
+        muscleGroups: searchParams.muscleGroups,
       });
       expect(result).toEqual([mockTransformedExercise]);
     });
@@ -410,9 +410,9 @@ describe('Exercise Service Integration', () => {
       const searchParams = {
         searchTerm: 'push',
         category: 'strength' as const,
-        difficulty: 'beginner' as const,
-        equipment: 'bodyweight' as const,
-        muscleGroup: 'chest' as const,
+        difficulties: ['beginner'] as const,
+        equipment: ['bodyweight'] as const,
+        muscleGroups: ['chest'] as const,
       };
 
       const mockJoinedExercises = [
@@ -466,9 +466,9 @@ describe('Exercise Service Integration', () => {
       expect(
         mockDataAggregators.transformJoinedExerciseData
       ).toHaveBeenCalledWith(mockJoinedExercises, {
-        difficulty: 'beginner',
-        equipment: 'bodyweight',
-        muscleGroup: 'chest',
+        difficulties: ['beginner'],
+        equipment: ['bodyweight'],
+        muscleGroups: ['chest'],
       });
       expect(result).toEqual([mockTransformedExercise]);
       // Should only include the beginner variant due to filtering
