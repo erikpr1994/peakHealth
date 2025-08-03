@@ -80,16 +80,42 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       }
 
       if (event === 'SIGNED_IN' && session?.user) {
-        // Update SWR cache with new user data
-        await mutateUser(session.user);
+        // Fetch complete user data from our API to get extended properties
+        try {
+          const response = await fetch('/api/auth/user');
+          if (response.ok) {
+            const data = await response.json();
+            await mutateUser(data.user);
+          } else {
+            // Fallback to session user if API call fails
+            await mutateUser(session.user);
+          }
+        } catch (error) {
+          console.error('Error fetching extended user data:', error);
+          // Fallback to session user if API call fails
+          await mutateUser(session.user);
+        }
         router.push('/dashboard');
       } else if (event === 'SIGNED_OUT') {
         // Clear user from SWR cache and redirect
         await mutateUser(null);
         router.push('/');
       } else if (event === 'USER_UPDATED' && session?.user) {
-        // Update user data in cache
-        await mutateUser(session.user);
+        // Fetch complete user data from our API to get extended properties
+        try {
+          const response = await fetch('/api/auth/user');
+          if (response.ok) {
+            const data = await response.json();
+            await mutateUser(data.user);
+          } else {
+            // Fallback to session user if API call fails
+            await mutateUser(session.user);
+          }
+        } catch (error) {
+          console.error('Error fetching extended user data:', error);
+          // Fallback to session user if API call fails
+          await mutateUser(session.user);
+        }
       }
       // Note: TOKEN_REFRESHED events are handled automatically by Supabase
       // and don't require any manual intervention
@@ -122,6 +148,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       // Fallback: If onAuthStateChange doesn't fire within 1 second, manually update state
       const fallbackTimeout = setTimeout(async () => {
         if (data.user) {
+          // Use the extended user data from the API response
           await mutateUser(data.user);
           router.push('/dashboard');
         }
@@ -162,6 +189,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       // Fallback: If onAuthStateChange doesn't fire within 1 second, manually update state
       const fallbackTimeout = setTimeout(async () => {
         if (data.user) {
+          // Use the extended user data from the API response
           await mutateUser(data.user);
           router.push('/dashboard');
         }
