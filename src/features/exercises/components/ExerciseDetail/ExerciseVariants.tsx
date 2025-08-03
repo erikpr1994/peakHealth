@@ -1,5 +1,8 @@
 import { Heart } from 'lucide-react';
+import Image from 'next/image';
+import { useState, useEffect } from 'react';
 
+import { useFavoriteManagement } from '../../hooks/useExercises';
 import { Exercise } from '../../types';
 
 import { Button } from '@/components/ui/button';
@@ -7,12 +10,49 @@ import { Card } from '@/components/ui/card';
 
 interface ExerciseVariantsProps {
   exercise: Exercise;
+  userId?: string; // Add userId prop for favorite management
 }
 
-export const ExerciseVariants = ({ exercise }: ExerciseVariantsProps) => {
+export const ExerciseVariants = ({
+  exercise,
+  userId,
+}: ExerciseVariantsProps) => {
+  const [isFavorite, setIsFavorite] = useState(exercise.isFavorite);
+  const [isUpdating, setIsUpdating] = useState(false);
+  const { addToFavorites, removeFromFavorites } = useFavoriteManagement();
+
+  // Sync favorite state when exercise changes
+  useEffect(() => {
+    setIsFavorite(exercise.isFavorite);
+  }, [exercise.isFavorite]);
+
   if (!exercise.variants || exercise.variants.length === 0) {
     return null;
   }
+
+  const handleFavoriteClick = async (e: React.MouseEvent) => {
+    e.stopPropagation();
+
+    if (!userId) return;
+
+    if (isUpdating) return;
+
+    setIsUpdating(true);
+    try {
+      if (isFavorite) {
+        await removeFromFavorites(userId, exercise.id);
+        setIsFavorite(false);
+      } else {
+        await addToFavorites(userId, exercise.id);
+        setIsFavorite(true);
+      }
+    } catch {
+      // Revert the state on error
+      setIsFavorite(exercise.isFavorite);
+    } finally {
+      setIsUpdating(false);
+    }
+  };
 
   return (
     <Card className="p-6 mb-8">
@@ -29,12 +69,17 @@ export const ExerciseVariants = ({ exercise }: ExerciseVariantsProps) => {
             className="cursor-pointer hover:shadow-md transition-shadow"
           >
             <div className="bg-gray-100 h-40 relative">
-              {variant.media?.featuredImage && (
-                <img
+              {variant.media?.featuredImage ? (
+                <Image
                   src={variant.media.featuredImage}
                   alt={variant.name}
-                  className="w-full h-full object-cover"
+                  fill
+                  className="object-cover"
                 />
+              ) : (
+                <div className="w-full h-full bg-gray-200 flex items-center justify-center">
+                  <span className="text-gray-500">No Image</span>
+                </div>
               )}
             </div>
             <div className="p-4">
@@ -48,9 +93,22 @@ export const ExerciseVariants = ({ exercise }: ExerciseVariantsProps) => {
                 <span className="px-2 py-1 bg-indigo-100 text-indigo-700 rounded text-xs">
                   {variant.focus}
                 </span>
-                <Button variant="ghost" size="sm">
-                  <Heart className="w-4 h-4 text-gray-400" />
-                </Button>
+                {userId && (
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={handleFavoriteClick}
+                    disabled={isUpdating}
+                  >
+                    <Heart
+                      className={`w-4 h-4 ${
+                        isFavorite
+                          ? 'text-red-500 fill-red-500'
+                          : 'text-gray-400'
+                      } ${isUpdating ? 'animate-pulse' : ''}`}
+                    />
+                  </Button>
+                )}
               </div>
             </div>
           </Card>

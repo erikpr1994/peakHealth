@@ -54,9 +54,9 @@ export class ExerciseValidators {
   validateSearchParams(params: {
     searchTerm?: string;
     category?: string;
-    difficulty?: string;
-    equipment?: string;
-    muscleGroup?: string;
+    difficulties?: string[];
+    equipment?: string[];
+    muscleGroups?: string[];
   }): boolean {
     // All parameters are optional, so any combination is valid
     // You can add more specific validation rules here if needed

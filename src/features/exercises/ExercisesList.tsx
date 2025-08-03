@@ -10,23 +10,63 @@ import { FilterDialog } from './components/ExercisesList/FilterDialog';
 import { NewExercisesCarousel } from './components/ExercisesList/NewExercisesCarousel';
 import { SearchAndFilters } from './components/ExercisesList/SearchAndFilters';
 import { ExerciseProvider } from './context/ExerciseContext';
-import { mockExercises } from './types';
+import { useExercises } from './hooks/useExercises';
 import { Exercise } from './types';
 
 import { Button } from '@/components/ui/button';
 
-const ExercisesListContent = () => {
+interface ExercisesListProps {
+  userId?: string; // Add userId prop for favorite management
+}
+
+const ExercisesListContent = ({ userId }: ExercisesListProps) => {
   const router = useRouter();
   const [activeCategory, setActiveCategory] = useState('All Exercises');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [isFilterOpen, setIsFilterOpen] = useState(false);
 
-  const exercises = mockExercises;
+  const { exercises, isLoading, error } = useExercises();
   const newExercises = exercises.filter(exercise => exercise.isNew);
 
   const handleExerciseClick = (exercise: Exercise) => {
     router.push(`/exercises/${exercise.id}`);
   };
+
+  if (isLoading) {
+    return (
+      <div className="w-full px-4 sm:px-6 lg:px-8 py-6">
+        <div className="animate-pulse">
+          <div className="h-8 bg-gray-200 rounded mb-6"></div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+            {Array.from({ length: 8 }).map((_, i) => (
+              <div key={i} className="h-64 bg-gray-200 rounded"></div>
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="w-full px-4 sm:px-6 lg:px-8 py-6">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold text-gray-800 mb-4">
+            Failed to Load Exercises
+          </h1>
+          <p className="text-gray-600 mb-6">
+            There was an error loading the exercises. Please try again.
+          </p>
+          <button
+            onClick={() => window.location.reload()}
+            className="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700"
+          >
+            Retry
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="w-full px-4 sm:px-6 lg:px-8 py-6">
@@ -61,6 +101,7 @@ const ExercisesListContent = () => {
       <NewExercisesCarousel
         newExercises={newExercises}
         onExerciseClick={handleExerciseClick}
+        userId={userId}
       />
 
       {/* Main Exercises Section */}
@@ -70,6 +111,7 @@ const ExercisesListContent = () => {
         viewMode={viewMode}
         onViewModeChange={setViewMode}
         onExerciseClick={handleExerciseClick}
+        userId={userId}
       />
 
       {/* Filter Dialog */}
@@ -81,10 +123,10 @@ const ExercisesListContent = () => {
   );
 };
 
-const ExercisesList = () => {
+const ExercisesList = ({ userId }: ExercisesListProps) => {
   return (
     <ExerciseProvider>
-      <ExercisesListContent />
+      <ExercisesListContent userId={userId} />
     </ExerciseProvider>
   );
 };
