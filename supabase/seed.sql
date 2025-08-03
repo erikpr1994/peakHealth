@@ -214,15 +214,14 @@ INSERT INTO exercise_ratings (user_id, exercise_id, rating, review) VALUES
 
 -- Feature Flag System Seed Data
 
--- Set user metadata for test user (roles and groups)
-INSERT INTO user_metadata (user_id, roles, groups) VALUES
-((SELECT id FROM auth.users WHERE email = 'erikpastorrios1994@gmail.com'), 
- ARRAY['trainer', 'admin'], 
- ARRAY['beta', 'premium'])
-ON CONFLICT (user_id) DO UPDATE SET
-  roles = EXCLUDED.roles,
-  groups = EXCLUDED.groups,
-  updated_at = NOW();
+-- Set user metadata for test user (special roles for testing)
+-- Note: Regular users will get default 'basic' role and 'free' group via auth endpoints
+UPDATE auth.users 
+SET raw_user_meta_data = jsonb_build_object(
+  'roles', ARRAY['trainer', 'admin'],
+  'groups', ARRAY['beta', 'premium']
+)
+WHERE email = 'erikpastorrios1994@gmail.com';
 
 -- Enable notification system feature for trainers in development
 INSERT INTO feature_flag_user_roles (feature_flag_id, environment, role_name, is_enabled) VALUES
@@ -237,3 +236,10 @@ INSERT INTO feature_flag_user_groups (feature_flag_id, environment, group_name, 
  'development', 
  'premium', 
  true);
+
+-- Enable some features for basic users (example)
+INSERT INTO feature_flag_user_roles (feature_flag_id, environment, role_name, is_enabled) VALUES
+((SELECT id FROM feature_flags WHERE name = 'notification_system_feature'), 
+ 'development', 
+ 'basic', 
+ false); -- Disabled by default for basic users

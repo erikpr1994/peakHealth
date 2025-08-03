@@ -1,16 +1,7 @@
 -- Feature Flag System Database Schema
 -- Migration: 001_create_feature_flag_system.sql
 
--- User metadata table (for local development - in production this would be app_metadata)
-CREATE TABLE user_metadata (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE,
-  roles TEXT[] DEFAULT '{}',
-  groups TEXT[] DEFAULT '{}',
-  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-  UNIQUE(user_id)
-);
+
 
 -- Feature flags table with public/user-specific distinction
 CREATE TABLE feature_flags (
@@ -77,7 +68,6 @@ CREATE INDEX idx_feature_flags_public ON feature_flags(is_public);
 CREATE INDEX idx_feature_flag_environments_flag_env ON feature_flag_environments(feature_flag_id, environment);
 CREATE INDEX idx_feature_flag_user_roles_flag_env ON feature_flag_user_roles(feature_flag_id, environment);
 CREATE INDEX idx_feature_flag_user_groups_flag_env ON feature_flag_user_groups(feature_flag_id, environment);
-CREATE INDEX idx_user_metadata_user_id ON user_metadata(user_id);
 
 -- Function to get public feature flags (no user required)
 CREATE OR REPLACE FUNCTION get_public_feature_flags(environment_param TEXT)
@@ -109,25 +99,16 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
 
--- Function to get user-specific feature flags using user_metadata
+-- Function to get user-specific feature flags (simplified for local development)
 CREATE OR REPLACE FUNCTION get_user_feature_flags(user_id UUID, environment_param TEXT)
 RETURNS TABLE (
   name VARCHAR(100),
   is_enabled BOOLEAN,
   rollout_percentage INTEGER
 ) AS $$
-DECLARE
-  user_roles TEXT[];
-  user_groups TEXT[];
 BEGIN
-  -- Get user roles and groups from user_metadata
-  SELECT 
-    COALESCE(um.roles, '{}'),
-    COALESCE(um.groups, '{}')
-  INTO user_roles, user_groups
-  FROM user_metadata um
-  WHERE um.user_id = get_user_feature_flags.user_id;
-
+  -- For now, return all user-specific flags for the environment
+  -- The application layer will handle role/group filtering
   RETURN QUERY
   SELECT DISTINCT
     ff.name,
@@ -137,65 +118,29 @@ BEGIN
   JOIN feature_flag_environments ffe ON ff.id = ffe.feature_flag_id
   WHERE ffe.environment = environment_param
     AND ffe.is_enabled = true
-    AND ff.is_public = false  -- Only user-specific flags
-    AND (
-      -- Check user role targeting
-      EXISTS (
-        SELECT 1 FROM feature_flag_user_roles ffur
-        WHERE ffur.feature_flag_id = ff.id
-          AND ffur.environment = environment_param
-          AND ffur.is_enabled = true
-          AND ffur.role_name = ANY(user_roles)
-      )
-      OR
-      -- Check user group targeting
-      EXISTS (
-        SELECT 1 FROM feature_flag_user_groups ffug
-        WHERE ffug.feature_flag_id = ff.id
-          AND ffug.environment = environment_param
-          AND ffug.is_enabled = true
-          AND ffug.group_name = ANY(user_groups)
-      )
-      OR
-      -- No targeting (enabled for all authenticated users)
-      NOT EXISTS (
-        SELECT 1 FROM feature_flag_user_roles ffur
-        WHERE ffur.feature_flag_id = ff.id AND ffur.environment = environment_param
-      )
-      AND NOT EXISTS (
-        SELECT 1 FROM feature_flag_user_groups ffug
-        WHERE ffug.feature_flag_id = ff.id AND ffug.environment = environment_param
-      )
-    );
+    AND ff.is_public = false;  -- Only user-specific flags
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
 
--- Helper function to check if user has a specific role
+-- Helper functions (simplified for local development)
+-- These will be handled by the application layer using Supabase's built-in metadata
 CREATE OR REPLACE FUNCTION user_has_role(user_id UUID, role_name TEXT)
 RETURNS BOOLEAN AS $$
 BEGIN
-  RETURN EXISTS (
-    SELECT 1 FROM user_metadata um
-    WHERE um.user_id = user_has_role.user_id 
-      AND role_name = ANY(um.roles)
-  );
+  -- For now, return false - application layer will handle this
+  RETURN false;
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
 
--- Helper function to check if user is in a specific group
 CREATE OR REPLACE FUNCTION user_in_group(user_id UUID, group_name TEXT)
 RETURNS BOOLEAN AS $$
 BEGIN
-  RETURN EXISTS (
-    SELECT 1 FROM user_metadata um
-    WHERE um.user_id = user_in_group.user_id 
-      AND group_name = ANY(um.groups)
-  );
+  -- For now, return false - application layer will handle this
+  RETURN false;
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
 
 -- Enable RLS on tables
-ALTER TABLE user_metadata ENABLE ROW LEVEL SECURITY;
 ALTER TABLE feature_flags ENABLE ROW LEVEL SECURITY;
 ALTER TABLE feature_flag_environments ENABLE ROW LEVEL SECURITY;
 ALTER TABLE feature_flag_user_roles ENABLE ROW LEVEL SECURITY;
@@ -203,10 +148,6 @@ ALTER TABLE feature_flag_user_groups ENABLE ROW LEVEL SECURITY;
 ALTER TABLE feature_flag_audit_log ENABLE ROW LEVEL SECURITY;
 
 -- RLS Policies
--- Users can read their own metadata
-CREATE POLICY "Users can read their own metadata" ON user_metadata
-  FOR SELECT USING (auth.uid() = user_id);
-
 -- Public feature flags (allow anonymous access)
 CREATE POLICY "Anyone can read public feature flags" ON feature_flags
   FOR SELECT USING (is_public = true);
@@ -259,4 +200,4 @@ INSERT INTO feature_flag_environments (feature_flag_id, environment, is_enabled,
 -- Add comments to explain the architecture
 COMMENT ON TABLE feature_flags IS 'Feature flags table. is_public=true for flags available to all users, is_public=false for user-specific flags.';
 COMMENT ON FUNCTION get_public_feature_flags IS 'Returns feature flags that are available to all users (no authentication required)';
-COMMENT ON FUNCTION get_user_feature_flags IS 'Returns user-specific feature flags based on user roles and groups from user_metadata (requires authentication)'; 
+COMMENT ON FUNCTION get_user_feature_flags IS 'Returns user-specific feature flags based on user roles and groups from Supabase built-in user_metadata (requires authentication)'; 

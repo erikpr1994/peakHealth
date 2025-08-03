@@ -73,8 +73,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange(async (event, session) => {
-      console.log('Auth state changed:', event, session?.user?.id);
-
       // Clear any pending fallback timeout
       if ((window as any).__authFallbackClear) {
         (window as any).__authFallbackClear();
@@ -185,6 +183,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const logout = async () => {
     setIsAuthOperationLoading(true);
     try {
+      // Call the logout API
       const response = await fetch('/api/auth/logout', {
         method: 'POST',
         headers: {
@@ -197,11 +196,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         throw new Error(data.error || 'Logout failed');
       }
 
-      // Fallback: If onAuthStateChange doesn't fire within 1 second, manually update state
+      // Also call Supabase client logout directly to ensure session is cleared
+      await supabase.auth.signOut();
+
+      // Fallback: If onAuthStateChange doesn't fire within 3 seconds, manually update state
       const fallbackTimeout = setTimeout(async () => {
         await mutateUser(null);
         router.push('/');
-      }, 1000);
+      }, 3000);
 
       // Clear timeout if onAuthStateChange fires (handled in useEffect)
       const clearFallback = () => clearTimeout(fallbackTimeout);
