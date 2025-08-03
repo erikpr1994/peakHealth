@@ -11,7 +11,14 @@ import React, {
 } from 'react';
 import useSWR from 'swr';
 
+import { UserTypeInfo, UserGroupInfo } from '@/features/feature-flags/types';
 import { createClient } from '@/lib/supabase/client';
+
+// Extended user type with our custom properties
+interface ExtendedUser extends User {
+  userTypes?: UserTypeInfo[];
+  userGroups?: UserGroupInfo[];
+}
 
 interface AuthContextType {
   isAuthenticated: boolean;
@@ -20,13 +27,13 @@ interface AuthContextType {
   login: (email?: string, password?: string) => Promise<void>;
   logout: () => void;
   signUp: (email?: string, password?: string, name?: string) => Promise<void>;
-  user: User | null;
+  user: ExtendedUser | null;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 // Custom fetcher for user endpoint that extracts user from response
-const userFetcher = async (url: string): Promise<User | null> => {
+const userFetcher = async (url: string): Promise<ExtendedUser | null> => {
   const response = await fetch(url);
 
   if (!response.ok) {
@@ -54,7 +61,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     data: user,
     isLoading,
     mutate: mutateUser,
-  } = useSWR<User | null>('/api/auth/user', userFetcher, {
+  } = useSWR<ExtendedUser | null>('/api/auth/user', userFetcher, {
     revalidateOnFocus: false,
     shouldRetryOnError: false,
     onError: (error: any) => {

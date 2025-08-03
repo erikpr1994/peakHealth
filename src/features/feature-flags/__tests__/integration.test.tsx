@@ -108,6 +108,11 @@ describe('Feature Flag System Integration', () => {
       isAuthOperationLoading: false,
     });
 
+    mockFetch.mockResolvedValue({
+      ok: true,
+      json: () => Promise.resolve({ flags: [] }),
+    });
+
     render(
       <FeatureFlagProvider>
         <TestComponent featureNames={['feature-a', 'feature-b']} />
@@ -115,7 +120,7 @@ describe('Feature Flag System Integration', () => {
     );
 
     await waitFor(() => {
-      expect(mockFetch).not.toHaveBeenCalled();
+      expect(mockFetch).toHaveBeenCalledWith('/api/feature-flags/public');
       expect(screen.getByTestId('feature-a-disabled')).toBeInTheDocument();
       expect(screen.getByTestId('feature-b-disabled')).toBeInTheDocument();
     });
