@@ -12,6 +12,17 @@ export async function GET() {
     } = await supabase.auth.getUser();
 
     if (userError || !user) {
+      // Don't log expected auth session missing errors
+      if (userError && userError.message.includes('Auth session missing')) {
+        return NextResponse.json(
+          {
+            flags: {},
+            userTypes: [],
+            userGroups: [],
+          },
+          { status: 200 }
+        );
+      }
       return NextResponse.json(
         {
           flags: {},
