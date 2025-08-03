@@ -3,13 +3,7 @@ import { Grid, List } from 'lucide-react';
 import { useExerciseFilters } from '../../hooks/useExerciseFilters';
 import { useExerciseSearch as useExerciseSearchService } from '../../hooks/useExercises';
 import { useExerciseSearch } from '../../hooks/useExerciseSearch';
-import {
-  Exercise,
-  Category,
-  Difficulty,
-  Equipment,
-  MuscleGroup,
-} from '../../types';
+import { Exercise, Category } from '../../types';
 import { filterExercises } from '../../utils/filterUtils';
 import { ExerciseCard } from '../shared/ExerciseCard';
 
@@ -49,9 +43,11 @@ export const ExerciseGrid = ({
         activeCategory === 'All Exercises'
           ? undefined
           : (activeCategory as Category),
-      difficulty: filters.difficulties[0] as Difficulty,
-      equipment: filters.equipment[0] as Equipment,
-      muscleGroup: filters.muscleGroups[0] as MuscleGroup,
+      difficulties:
+        filters.difficulties.length > 0 ? filters.difficulties : undefined,
+      equipment: filters.equipment.length > 0 ? filters.equipment : undefined,
+      muscleGroups:
+        filters.muscleGroups.length > 0 ? filters.muscleGroups : undefined,
     });
 
   // Use search results if we have search parameters, otherwise use the passed exercises

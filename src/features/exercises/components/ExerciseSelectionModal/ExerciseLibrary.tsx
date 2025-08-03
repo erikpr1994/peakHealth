@@ -2,13 +2,7 @@ import { Info } from 'lucide-react';
 
 import { useExerciseFilters } from '../../hooks/useExerciseFilters';
 import { useExerciseSearch } from '../../hooks/useExercises';
-import {
-  Exercise,
-  Category,
-  Difficulty,
-  Equipment,
-  MuscleGroup,
-} from '../../types';
+import { Exercise, Category } from '../../types';
 import { filterExercises } from '../../utils/filterUtils';
 import { ExerciseCard } from '../shared/ExerciseCard';
 
@@ -51,9 +45,9 @@ export const ExerciseLibrary = ({
       searchTerm: searchTerm || undefined,
       category:
         selectedCategory === 'All' ? undefined : (selectedCategory as Category),
-      difficulty: filters.difficulties[0] as Difficulty,
-      equipment: filters.equipment[0] as Equipment,
-      muscleGroup: filters.muscleGroups[0] as MuscleGroup,
+      difficulties: filters.difficulties,
+      equipment: filters.equipment,
+      muscleGroups: filters.muscleGroups,
     });
 
   // Use search results if we have search parameters, otherwise use the passed exercises

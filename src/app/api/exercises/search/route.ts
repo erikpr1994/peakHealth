@@ -14,18 +14,18 @@ export async function GET(request: NextRequest) {
 
     const searchTerm = searchParams.get('searchTerm') || undefined;
     const category = (searchParams.get('category') as Category) || undefined;
-    const difficulty =
-      (searchParams.get('difficulty') as Difficulty) || undefined;
-    const equipment = (searchParams.get('equipment') as Equipment) || undefined;
-    const muscleGroup =
-      (searchParams.get('muscleGroup') as MuscleGroup) || undefined;
+
+    // Handle multiple values for filters
+    const difficulties = searchParams.getAll('difficulty') as Difficulty[];
+    const equipment = searchParams.getAll('equipment') as Equipment[];
+    const muscleGroups = searchParams.getAll('muscleGroup') as MuscleGroup[];
 
     const exercises = await exerciseService.searchExercises({
       searchTerm,
       category,
-      difficulty,
-      equipment,
-      muscleGroup,
+      difficulties: difficulties.length > 0 ? difficulties : undefined,
+      equipment: equipment.length > 0 ? equipment : undefined,
+      muscleGroups: muscleGroups.length > 0 ? muscleGroups : undefined,
     });
 
     return NextResponse.json({ exercises });

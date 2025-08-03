@@ -51,18 +51,31 @@ export function useExercise(exerciseId: string) {
 export function useExerciseSearch(params: {
   searchTerm?: string;
   category?: Category;
-  difficulty?: Difficulty;
-  equipment?: Equipment;
-  muscleGroup?: MuscleGroup;
+  difficulties?: Difficulty[];
+  equipment?: Equipment[];
+  muscleGroups?: MuscleGroup[];
 }) {
   const searchParams = new URLSearchParams();
 
   if (params.searchTerm) searchParams.append('searchTerm', params.searchTerm);
   if (params.category) searchParams.append('category', params.category);
-  if (params.difficulty) searchParams.append('difficulty', params.difficulty);
-  if (params.equipment) searchParams.append('equipment', params.equipment);
-  if (params.muscleGroup)
-    searchParams.append('muscleGroup', params.muscleGroup);
+
+  // Handle multiple values for each filter type
+  if (params.difficulties) {
+    params.difficulties.forEach(difficulty => {
+      searchParams.append('difficulty', difficulty);
+    });
+  }
+  if (params.equipment) {
+    params.equipment.forEach(eq => {
+      searchParams.append('equipment', eq);
+    });
+  }
+  if (params.muscleGroups) {
+    params.muscleGroups.forEach(mg => {
+      searchParams.append('muscleGroup', mg);
+    });
+  }
 
   const { data, error, isLoading, mutate } = useSWR<{ exercises: Exercise[] }>(
     searchParams.toString()
