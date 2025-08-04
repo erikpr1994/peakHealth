@@ -15,7 +15,11 @@ export async function GET() {
 
     if (flagsResponse.error) {
       // If the function doesn't exist, return empty flags
-      if (flagsResponse.error.message.includes('function "get_public_feature_flags" does not exist')) {
+      if (
+        flagsResponse.error.message.includes(
+          'function "get_public_feature_flags" does not exist'
+        )
+      ) {
         return NextResponse.json({
           flags: [],
         });
@@ -35,4 +39,4 @@ export async function GET() {
       { status: 500 }
     );
   }
-} 
+}

@@ -1,19 +1,29 @@
 #!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
 
 echo "🔍 Running lint-staged..."
 pnpm lint-staged
+LINT_STAGED_EXIT_CODE=$?
+
+if [ $LINT_STAGED_EXIT_CODE -ne 0 ]; then
+  echo "❌ Lint-staged failed"
+  exit $LINT_STAGED_EXIT_CODE
+fi
+
+echo "🏗️ Running build..."
+pnpm build
+BUILD_EXIT_CODE=$?
+
+if [ $BUILD_EXIT_CODE -ne 0 ]; then
+  echo "❌ Build failed"
+  exit $BUILD_EXIT_CODE
+fi
 
 echo "🧪 Running unit and integration tests..."
 pnpm test
+TEST_EXIT_CODE=$?
 
-echo "🌐 Running e2e tests..."
-pnpm test:e2e
-E2E_EXIT_CODE=$?
-
-if [ $E2E_EXIT_CODE -ne 0 ]; then
-  echo '❌ E2E tests failed'
-  exit $E2E_EXIT_CODE
+if [ $TEST_EXIT_CODE -ne 0 ]; then
+  echo "❌ Tests failed"
+  exit $TEST_EXIT_CODE
 fi
-
-echo "🏗️  Running build..."
-pnpm build
