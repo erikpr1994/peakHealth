@@ -1,6 +1,6 @@
 'use client';
 
-import { ArrowLeft, ChevronRight } from 'lucide-react';
+import { ChevronRight } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
 import { ExerciseHeader } from './components/ExerciseDetail/ExerciseHeader';
@@ -15,10 +15,15 @@ import { Card } from '@/components/ui/card';
 
 interface ExerciseDetailProps {
   exerciseId: string;
+  variantId: string; // Required - all exercises are variants
   userId?: string; // Add userId prop for favorite management
 }
 
-const ExerciseDetail = ({ exerciseId, userId }: ExerciseDetailProps) => {
+const ExerciseDetail = ({
+  exerciseId,
+  variantId,
+  userId,
+}: ExerciseDetailProps) => {
   const router = useRouter();
   const { exercise, isLoading, error } = useExercise(exerciseId);
 
@@ -61,11 +66,10 @@ const ExerciseDetail = ({ exerciseId, userId }: ExerciseDetailProps) => {
     );
   }
 
-  const mainVariant = exercise.variants.find(
-    v => v.id === exercise.mainVariantId
-  );
+  // Find the specified variant
+  const selectedVariant = exercise.variants.find(v => v.id === variantId);
 
-  if (!mainVariant) {
+  if (!selectedVariant) {
     return (
       <div className="w-full px-4 sm:px-6 lg:px-8 py-6">
         <div className="text-center">
@@ -73,7 +77,7 @@ const ExerciseDetail = ({ exerciseId, userId }: ExerciseDetailProps) => {
             Exercise Variant Not Found
           </h1>
           <p className="text-gray-600 mb-6">
-            The main variant for this exercise is not available.
+            The variant "{variantId}" for this exercise is not available.
           </p>
           <button
             onClick={() => router.push('/exercises')}
@@ -90,9 +94,6 @@ const ExerciseDetail = ({ exerciseId, userId }: ExerciseDetailProps) => {
     <div className="w-full px-4 sm:px-6 lg:px-8 py-6">
       {/* Breadcrumb */}
       <div className="flex items-center text-sm text-gray-500 mb-6">
-        <ArrowLeft className="w-4 h-4 mr-2" />
-        <span>Exercise Details</span>
-        <ChevronRight className="w-4 h-4 mx-2" />
         <button
           onClick={() => router.push('/exercises')}
           className="hover:text-gray-700"
@@ -100,7 +101,17 @@ const ExerciseDetail = ({ exerciseId, userId }: ExerciseDetailProps) => {
           Exercises
         </button>
         <ChevronRight className="w-4 h-4 mx-2" />
-        <span className="text-indigo-600">{exercise.name}</span>
+        <span className="text-indigo-600 flex items-center">
+          {exercise.name === selectedVariant.name ? (
+            exercise.name
+          ) : (
+            <>
+              {exercise.name}
+              <ChevronRight className="w-4 h-4 mx-2" />
+              {selectedVariant.name}
+            </>
+          )}
+        </span>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
@@ -109,27 +120,31 @@ const ExerciseDetail = ({ exerciseId, userId }: ExerciseDetailProps) => {
           <Card className="p-6">
             <ExerciseHeader
               exercise={exercise}
-              variant={mainVariant}
+              variant={selectedVariant}
               userId={userId}
             />
-            <ExerciseInfo exercise={exercise} variant={mainVariant} />
+            <ExerciseInfo exercise={exercise} variant={selectedVariant} />
           </Card>
         </div>
 
         {/* Video Demo */}
         <div className="lg:col-span-1">
-          <ExerciseVideo exercise={exercise} variant={mainVariant} />
+          <ExerciseVideo exercise={exercise} variant={selectedVariant} />
         </div>
       </div>
 
       {/* Step-by-Step Instructions */}
-      <ExerciseSteps exercise={exercise} variant={mainVariant} />
+      <ExerciseSteps exercise={exercise} variant={selectedVariant} />
 
       {/* Variants */}
-      <ExerciseVariants exercise={exercise} userId={userId} />
+      <ExerciseVariants
+        exercise={exercise}
+        currentVariantId={variantId}
+        userId={userId}
+      />
 
       {/* Pro Tips and Common Mistakes */}
-      <ExerciseTips exercise={exercise} variant={mainVariant} />
+      <ExerciseTips exercise={exercise} variant={selectedVariant} />
     </div>
   );
 };
