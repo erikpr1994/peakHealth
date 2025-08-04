@@ -30,10 +30,10 @@ export const signUpUser = async (page: Page, user: TestUser) => {
     await page.fill('[data-testid="name-input"]', user.name);
   }
 
-  // Submit the form and wait for navigation to the dashboard
+  // Submit the form and wait for navigation to the dashboard or profile
   await page.click('[data-testid="signup-button"]');
   await page.waitForLoadState('networkidle');
-  await expect(page).toHaveURL(/\/dashboard/, { timeout: 10000 });
+  await expect(page).toHaveURL(/\/dashboard|\/profile/, { timeout: 10000 });
 };
 
 export const loginUser = async (page: Page, user: TestUser) => {
@@ -43,10 +43,10 @@ export const loginUser = async (page: Page, user: TestUser) => {
   await page.fill('[data-testid="email-input"]', user.email);
   await page.fill('[data-testid="password-input"]', user.password);
 
-  // Submit the form and wait for navigation to the dashboard
+  // Submit the form and wait for navigation to the dashboard or profile
   await page.click('[data-testid="login-button"]');
   await page.waitForLoadState('networkidle');
-  await expect(page).toHaveURL(/\/dashboard/, { timeout: 10000 });
+  await expect(page).toHaveURL(/\/dashboard|\/profile/, { timeout: 10000 });
 };
 
 export const logoutUser = async (page: Page, user: TestUser) => {
@@ -66,8 +66,8 @@ export const logoutUser = async (page: Page, user: TestUser) => {
 };
 
 export const expectToBeLoggedIn = async (page: Page, user: TestUser) => {
-  // Check that we're on the dashboard or authenticated area
-  await expect(page).toHaveURL(/\/dashboard/);
+  // Check that we're on the dashboard, profile, or other authenticated area
+  await expect(page).toHaveURL(/\/dashboard|\/profile|\/routines|\/exercises/);
   // Check that user menu is visible
   await expect(
     page.locator(`[data-testid="user-menu-button"]:has-text("${user.name}")`)

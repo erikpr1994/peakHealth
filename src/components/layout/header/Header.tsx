@@ -5,7 +5,12 @@ import { useState, Suspense } from 'react';
 
 import { DesktopNavigation } from './DesktopNavigation';
 import styles from './Header.module.css';
-import { navigationItems } from './menuItems';
+import {
+  getNavigationItems,
+  getUserMenuItems,
+  getSettingsMenuItems,
+  getSupportMenuItems,
+} from './menuItems';
 import { SideNav } from './SideNav';
 import { UserMenu } from './UserMenu';
 import UserMenuSkeleton from './UserMenuSkeleton';
@@ -13,6 +18,7 @@ import UserMenuSkeleton from './UserMenuSkeleton';
 import { useAuth } from '@/features/auth/context/AuthContext';
 import { FEATURE_FLAGS, useFeatureFlag } from '@/features/feature-flags';
 import { useNotifications, NotificationsBell } from '@/features/notifications';
+import { useNavigationFeatureFlags } from '@/hooks/useNavigationFeatureFlags';
 
 const Header = () => {
   const router = useRouter();
@@ -28,6 +34,32 @@ const Header = () => {
 
   const isNotificationSystemEnabled =
     user && flags[FEATURE_FLAGS.NOTIFICATION_SYSTEM_FEATURE];
+
+  // Get navigation feature flags
+  const navigationFeatureFlags = useNavigationFeatureFlags();
+
+  // Get filtered menu items
+  const navigationItems = getNavigationItems({
+    isCalendarEnabled: navigationFeatureFlags.isCalendarEnabled,
+    isPerformanceEnabled: navigationFeatureFlags.isPerformanceEnabled,
+    isHealthEnabled: navigationFeatureFlags.isHealthEnabled,
+  });
+
+  const userMenuItems = getUserMenuItems({
+    isTrainerAndClubsEnabled: navigationFeatureFlags.isTrainerAndClubsEnabled,
+    isGymsEnabled: navigationFeatureFlags.isGymsEnabled,
+    isEquipmentEnabled: navigationFeatureFlags.isEquipmentEnabled,
+    isSuggestionsEnabled: navigationFeatureFlags.isSuggestionsEnabled,
+  });
+
+  const settingsMenuItems = getSettingsMenuItems({
+    isAccountSettingsEnabled: navigationFeatureFlags.isAccountSettingsEnabled,
+    isAppSettingsEnabled: navigationFeatureFlags.isAppSettingsEnabled,
+  });
+
+  const supportMenuItems = getSupportMenuItems({
+    isHelpSupportEnabled: navigationFeatureFlags.isHelpSupportEnabled,
+  });
 
   const handleNavigate = (path: string) => {
     router.push(path);
@@ -65,7 +97,13 @@ const Header = () => {
               <NotificationsBell unreadCount={unreadCount} />
             )}
             <Suspense fallback={<UserMenuSkeleton />}>
-              <UserMenu user={user} onLogout={logout} />
+              <UserMenu
+                user={user}
+                onLogout={logout}
+                userMenuItems={userMenuItems}
+                settingsMenuItems={settingsMenuItems}
+                supportMenuItems={supportMenuItems}
+              />
             </Suspense>
           </div>
         </div>

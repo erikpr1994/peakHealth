@@ -52,6 +52,17 @@ export const getCurrentEnvironment = ():
 // Feature flag names constants
 export const FEATURE_FLAGS = {
   NOTIFICATION_SYSTEM_FEATURE: 'notification_system_feature',
+  CALENDAR_FEATURE: 'calendar_feature',
+  PERFORMANCE_FEATURE: 'performance_feature',
+  HEALTH_FEATURE: 'health_feature',
+  TRAINER_AND_CLUBS_FEATURE: 'trainer_and_clubs_feature',
+  GYMS_FEATURE: 'gyms_feature',
+  EQUIPMENT_FEATURE: 'equipment_feature',
+  SUGGESTIONS_FEATURE: 'suggestions_feature',
+  ACCOUNT_SETTINGS_FEATURE: 'account_settings_feature',
+  APP_SETTINGS_FEATURE: 'app_settings_feature',
+  HELP_SUPPORT_FEATURE: 'help_support_feature',
+  DASHBOARD_FEATURE: 'dashboard_feature',
 } as const;
 
 // User types constants

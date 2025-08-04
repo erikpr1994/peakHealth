@@ -4,13 +4,7 @@ import type { User } from '@supabase/supabase-js';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
-import {
-  userMenuItems,
-  settingsMenuItems,
-  supportMenuItems,
-  LogOut,
-  ChevronDown,
-} from './menuItems';
+import { LogOut, ChevronDown } from './menuItems';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
@@ -22,9 +16,19 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 
+interface MenuItem {
+  id: string;
+  label: string;
+  icon: React.ComponentType<{ className?: string }>;
+  path: string;
+}
+
 interface UserMenuProps {
   user: User | null;
   onLogout: () => void;
+  userMenuItems: MenuItem[];
+  settingsMenuItems: MenuItem[];
+  supportMenuItems: MenuItem[];
 }
 
 const getInitials = (email: string | undefined) => {
@@ -32,7 +36,13 @@ const getInitials = (email: string | undefined) => {
   return email.substring(0, 2).toUpperCase();
 };
 
-export const UserMenu = ({ user, onLogout }: UserMenuProps) => {
+export const UserMenu = ({
+  user,
+  onLogout,
+  userMenuItems,
+  settingsMenuItems,
+  supportMenuItems,
+}: UserMenuProps) => {
   const router = useRouter();
   const [userDropdownOpen, setUserDropdownOpen] = useState(false);
 
