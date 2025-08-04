@@ -1,7 +1,14 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 
-import { Exercise } from '../../../types';
+import {
+  Exercise,
+  CATEGORY,
+  DIFFICULTY,
+  MUSCLE_GROUP,
+  createExerciseId,
+  createExerciseVariantId,
+} from '../../../types';
 import { ExerciseVariants } from '../ExerciseVariants';
 
 // Mock Next.js router
@@ -22,37 +29,37 @@ vi.mock('../../../hooks/useExercises', () => ({
 
 describe('ExerciseVariants', () => {
   const mockExercise: Exercise = {
-    id: 'exercise-1',
+    id: createExerciseId('exercise-1'),
     name: 'Push-up',
-    category: 'strength',
+    category: CATEGORY.STRENGTH,
     description: 'A basic push-up exercise',
     variants: [
       {
-        id: 'variant-1',
+        id: createExerciseVariantId('variant-1'),
         name: 'Standard Push-up',
         description: 'Basic push-up on the floor',
         focus: 'chest',
-        difficulty: 'beginner',
+        difficulty: DIFFICULTY.BEGINNER,
         equipment: [],
-        muscleGroups: ['chest'],
+        muscleGroups: [MUSCLE_GROUP.CHEST],
         instructions: ['Start in plank position'],
         steps: [{ title: 'Step 1', description: 'Get in plank position' }],
       },
       {
-        id: 'variant-2',
+        id: createExerciseVariantId('variant-2'),
         name: 'Incline Push-up',
         description: 'Push-up with hands elevated',
         focus: 'chest',
-        difficulty: 'beginner',
+        difficulty: DIFFICULTY.BEGINNER,
         equipment: [],
-        muscleGroups: ['chest'],
+        muscleGroups: [MUSCLE_GROUP.CHEST],
         instructions: ['Place hands on elevated surface'],
         steps: [
           { title: 'Step 1', description: 'Place hands on elevated surface' },
         ],
       },
     ],
-    mainVariantId: 'variant-1',
+    mainVariantId: createExerciseVariantId('variant-1'),
     icon: 'push-up',
     iconColor: 'blue',
     isFavorite: false,
@@ -96,10 +103,7 @@ describe('ExerciseVariants', () => {
 
   it('filters out current variant from the list', () => {
     render(
-      <ExerciseVariants 
-        exercise={mockExercise} 
-        currentVariantId="variant-1" 
-      />
+      <ExerciseVariants exercise={mockExercise} currentVariantId="variant-1" />
     );
 
     // Should not show the current variant (Standard Push-up)
