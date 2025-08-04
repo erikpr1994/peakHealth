@@ -1,7 +1,12 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 
-import type { Exercise, ExerciseVariant } from '../../../types';
+import type {
+  Exercise,
+  ExerciseVariant,
+  ExerciseId,
+  ExerciseVariantId,
+} from '../../../types';
 import { ExerciseHeader } from '../ExerciseHeader';
 
 // Mock hooks
@@ -18,12 +23,12 @@ vi.mock('@/features/auth/context/AuthContext', () => ({
 }));
 
 const mockExercise: Exercise = {
-  id: '1',
+  id: '1' as ExerciseId,
   name: 'Push-up',
   category: 'Strength',
   description: 'A basic push-up',
   variants: [],
-  mainVariantId: 'v1',
+  mainVariantId: 'v1' as ExerciseVariantId,
   icon: '💪',
   iconColor: 'blue',
   isFavorite: false,
@@ -31,7 +36,7 @@ const mockExercise: Exercise = {
   rating: 4.5,
 };
 const mockVariant: ExerciseVariant = {
-  id: 'v1',
+  id: 'v1' as ExerciseVariantId,
   name: 'Standard Push-up',
   description: 'Standard form',
   focus: 'chest',
