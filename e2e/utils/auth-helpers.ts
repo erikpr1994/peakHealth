@@ -31,14 +31,8 @@ export const signUpUser = async (page: Page, user: TestUser) => {
   }
 
   // Submit the form and wait for navigation to the dashboard
-  console.log(`[WebKit] Before signup click, URL is ${page.url()}`);
-  await Promise.all([
-    page.waitForURL(/\/dashboard/),
-    page.click('[data-testid="signup-button"]'),
-  ]);
-  console.log(`[WebKit] After signup click, URL is ${page.url()}`);
-
-  // Use a longer timeout for WebKit which can be slower
+  await page.click('[data-testid="signup-button"]');
+  await page.waitForLoadState('networkidle');
   await expect(page).toHaveURL(/\/dashboard/, { timeout: 10000 });
 };
 
@@ -50,42 +44,41 @@ export const loginUser = async (page: Page, user: TestUser) => {
   await page.fill('[data-testid="password-input"]', user.password);
 
   // Submit the form and wait for navigation to the dashboard
-  await Promise.all([
-    page.waitForURL(/\/dashboard/),
-    page.click('[data-testid="login-button"]'),
-  ]);
-
-  // Wait for successful login (redirect to dashboard)
-  // Use a longer timeout for WebKit which can be slower
+  await page.click('[data-testid="login-button"]');
+  await page.waitForLoadState('networkidle');
   await expect(page).toHaveURL(/\/dashboard/, { timeout: 10000 });
 };
 
-export const logoutUser = async (page: Page) => {
+export const logoutUser = async (page: Page, user: TestUser) => {
   // Navigate to user menu and click logout
-  await page.click('[data-testid="user-menu-button"]');
+  await page
+    .locator(`[data-testid="user-menu-button"]:has-text("${user.name}")`)
+    .click();
   await page.click('[data-testid="logout-button"]');
 
   // Wait for the user menu to disappear (indicating logout)
   await expect(
-    page.locator('[data-testid="user-menu-button"]')
+    page.locator(`[data-testid="user-menu-button"]:has-text("${user.name}")`)
   ).not.toBeVisible({ timeout: 10000 });
 
   // Wait for logout (redirect to landing page)
   await expect(page).toHaveURL('/', { timeout: 10000 });
 };
 
-export const expectToBeLoggedIn = async (page: Page) => {
+export const expectToBeLoggedIn = async (page: Page, user: TestUser) => {
   // Check that we're on the dashboard or authenticated area
   await expect(page).toHaveURL(/\/dashboard/);
   // Check that user menu is visible
-  await expect(page.locator('[data-testid="user-menu-button"]')).toBeVisible();
+  await expect(
+    page.locator(`[data-testid="user-menu-button"]:has-text("${user.name}")`)
+  ).toBeVisible();
 };
 
-export const expectToBeLoggedOut = async (page: Page) => {
+export const expectToBeLoggedOut = async (page: Page, user: TestUser) => {
   // Check that we're on landing page
   await expect(page).toHaveURL('/');
   // Check that user menu is not visible
   await expect(
-    page.locator('[data-testid="user-menu-button"]')
+    page.locator(`[data-testid="user-menu-button"]:has-text("${user.name}")`)
   ).not.toBeVisible();
 };

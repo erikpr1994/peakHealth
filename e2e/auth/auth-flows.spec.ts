@@ -18,11 +18,11 @@ test.describe('Authentication Flows', () => {
 
       // First signup the user
       await signUpUser(page, user);
-      await logoutUser(page);
+      await logoutUser(page, user);
 
       // Then login
       await loginUser(page, user);
-      await expectToBeLoggedIn(page);
+      await expectToBeLoggedIn(page, user);
     });
 
     test('should successfully logout user', async ({ page }) => {
@@ -30,11 +30,11 @@ test.describe('Authentication Flows', () => {
 
       // First signup and login
       await signUpUser(page, user);
-      await expectToBeLoggedIn(page);
+      await expectToBeLoggedIn(page, user);
 
       // Then logout
-      await logoutUser(page);
-      await expectToBeLoggedOut(page);
+      await logoutUser(page, user);
+      await expectToBeLoggedOut(page, user);
     });
   });
 
@@ -74,7 +74,7 @@ test.describe('Authentication Flows', () => {
       await signUpUser(page, user);
 
       // Try to access protected route after logout
-      await logoutUser(page);
+      await logoutUser(page, user);
       await page.goto('/dashboard');
 
       // Should redirect to login
@@ -88,11 +88,11 @@ test.describe('Authentication Flows', () => {
 
       // Signup and login
       await signUpUser(page, user);
-      await expectToBeLoggedIn(page);
+      await expectToBeLoggedIn(page, user);
 
       // Refresh the page
       await page.reload();
-      await expectToBeLoggedIn(page);
+      await expectToBeLoggedIn(page, user);
     });
 
     test('should maintain session across different pages', async ({ page }) => {
@@ -100,7 +100,7 @@ test.describe('Authentication Flows', () => {
 
       // Signup and login
       await signUpUser(page, user);
-      await expectToBeLoggedIn(page);
+      await expectToBeLoggedIn(page, user);
 
       // Navigate to different pages
       await page.goto('/profile');
