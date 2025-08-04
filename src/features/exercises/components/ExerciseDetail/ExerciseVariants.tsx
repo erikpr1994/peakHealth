@@ -1,5 +1,6 @@
 import { Heart } from 'lucide-react';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
 
 import { useFavoriteManagement } from '../../hooks/useExercises';
@@ -17,6 +18,7 @@ export const ExerciseVariants = ({
   exercise,
   userId,
 }: ExerciseVariantsProps) => {
+  const router = useRouter();
   const [isFavorite, setIsFavorite] = useState(exercise.isFavorite);
   const [isUpdating, setIsUpdating] = useState(false);
   const { addToFavorites, removeFromFavorites } = useFavoriteManagement();
@@ -54,6 +56,10 @@ export const ExerciseVariants = ({
     }
   };
 
+  const handleVariantClick = (variantId: string) => {
+    router.push(`/exercises/${exercise.id}/variants/${variantId}`);
+  };
+
   return (
     <Card className="p-6 mb-8">
       <div className="flex items-center justify-between mb-6">
@@ -67,6 +73,7 @@ export const ExerciseVariants = ({
           <Card
             key={variant.id}
             className="cursor-pointer hover:shadow-md transition-shadow"
+            onClick={() => handleVariantClick(variant.id)}
           >
             <div className="bg-gray-100 h-40 relative">
               {variant.media?.featuredImage ? (
