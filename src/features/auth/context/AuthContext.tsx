@@ -15,12 +15,12 @@ import useSWR from 'swr';
 import { createClient } from '@/lib/supabase/client';
 
 // Extended user type with our custom properties
-interface ExtendedUser extends User {
+export interface ExtendedUser extends User {
   userRoles?: string[];
   userGroups?: string[];
 }
 
-interface AuthContextType {
+export interface AuthContextType {
   isAuthenticated: boolean;
   isAuthOperationLoading: boolean;
   login: (email?: string, password?: string) => Promise<void>;

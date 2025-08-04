@@ -5,13 +5,12 @@ import {
   waitFor,
   act,
 } from '@testing-library/react';
-import { Response } from 'node-fetch';
 import React from 'react';
 import useSWR from 'swr';
 import { vi, describe, it, expect, beforeEach, afterEach, Mock } from 'vitest';
 
 import { AuthProvider, useAuth } from '../AuthContext';
-import { AuthContextType } from '../AuthContext';
+import { AuthContextType, ExtendedUser } from '../AuthContext';
 
 // Mock external dependencies
 vi.mock('next/navigation', () => ({
@@ -35,7 +34,8 @@ vi.mock('swr');
 const mockUseSWR = useSWR as Mock;
 
 // Mock fetch globally
-global.fetch = vi.fn();
+const mockFetch = vi.fn();
+global.fetch = mockFetch;
 
 // Test component to access context
 const TestComponent = () => {
@@ -61,7 +61,6 @@ const TestComponent = () => {
 };
 
 describe('AuthContext', () => {
-  const mockFetch = vi.mocked(global.fetch);
   let mutateUser: Mock;
 
   beforeEach(() => {
@@ -77,7 +76,7 @@ describe('AuthContext', () => {
     vi.resetAllMocks();
   });
 
-  const renderWithAuthProvider = (user = null) => {
+  const renderWithAuthProvider = (user: ExtendedUser | null = null) => {
     mockUseSWR.mockReturnValue({
       data: user,
       mutate: mutateUser,
@@ -97,7 +96,14 @@ describe('AuthContext', () => {
     });
 
     it('shows authenticated state correctly', () => {
-      renderWithAuthProvider({ id: '123', email: 'test@example.com' });
+      renderWithAuthProvider({
+        id: '123',
+        email: 'test@example.com',
+        created_at: '',
+        app_metadata: {},
+        user_metadata: {},
+        aud: '',
+      });
       expect(screen.getByTestId('isAuthenticated')).toHaveTextContent('true');
       expect(screen.getByTestId('user')).toHaveTextContent('test@example.com');
     });
@@ -109,7 +115,7 @@ describe('AuthContext', () => {
       mockFetch.mockResolvedValueOnce({
         ok: true,
         json: () => Promise.resolve({ user }),
-      } as Response);
+      });
 
       renderWithAuthProvider();
 
@@ -125,7 +131,7 @@ describe('AuthContext', () => {
       mockFetch.mockResolvedValueOnce({
         ok: true,
         json: () => Promise.resolve({ user }),
-      } as Response);
+      });
 
       renderWithAuthProvider();
 
@@ -140,9 +146,16 @@ describe('AuthContext', () => {
       mockFetch.mockResolvedValueOnce({
         ok: true,
         json: () => Promise.resolve({}),
-      } as Response);
+      });
 
-      renderWithAuthProvider({ id: '123', email: 'test@example.com' });
+      renderWithAuthProvider({
+        id: '123',
+        email: 'test@example.com',
+        created_at: '',
+        app_metadata: {},
+        user_metadata: {},
+        aud: '',
+      });
 
       fireEvent.click(screen.getByText('Logout'));
 
@@ -155,9 +168,8 @@ describe('AuthContext', () => {
       mockFetch.mockResolvedValueOnce({
         ok: false,
         json: () => Promise.resolve({ error: 'Invalid credentials' }),
-      } as Response);
+      });
 
-      // This is a bit of a hack to get the auth context from the component
       let auth: AuthContextType;
       const TestComponentWithAuth = () => {
         auth = useAuth();
