@@ -1,4 +1,10 @@
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import {
+  render,
+  screen,
+  fireEvent,
+  waitFor,
+  act,
+} from '@testing-library/react';
 import { Response } from 'node-fetch';
 import React from 'react';
 import useSWR from 'swr';
@@ -37,7 +43,6 @@ const TestComponent = () => {
   return (
     <div>
       <div data-testid="isAuthenticated">{auth.isAuthenticated.toString()}</div>
-      <div data-testid="isLoading">{auth.isLoading.toString()}</div>
       <div data-testid="isAuthOperationLoading">
         {auth.isAuthOperationLoading.toString()}
       </div>
@@ -64,7 +69,6 @@ describe('AuthContext', () => {
     mutateUser = vi.fn();
     mockUseSWR.mockReturnValue({
       data: null,
-      isLoading: true,
       mutate: mutateUser,
     });
   });
@@ -73,10 +77,9 @@ describe('AuthContext', () => {
     vi.resetAllMocks();
   });
 
-  const renderWithAuthProvider = (user = null, isLoading = false) => {
+  const renderWithAuthProvider = (user = null) => {
     mockUseSWR.mockReturnValue({
       data: user,
-      isLoading: isLoading,
       mutate: mutateUser,
     });
 
@@ -91,11 +94,6 @@ describe('AuthContext', () => {
     it('renders children and provides context', () => {
       renderWithAuthProvider();
       expect(screen.getByTestId('isAuthenticated')).toBeInTheDocument();
-    });
-
-    it('shows loading state correctly', () => {
-      renderWithAuthProvider(null, true);
-      expect(screen.getByTestId('isLoading')).toHaveTextContent('true');
     });
 
     it('shows authenticated state correctly', () => {
@@ -172,9 +170,11 @@ describe('AuthContext', () => {
         </AuthProvider>
       );
 
-      await expect(auth.login('test@test.com', 'password')).rejects.toThrow(
-        'Invalid credentials'
-      );
+      await act(async () => {
+        await expect(auth.login('test@test.com', 'password')).rejects.toThrow(
+          'Invalid credentials'
+        );
+      });
     });
   });
 

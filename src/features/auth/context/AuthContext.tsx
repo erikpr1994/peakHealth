@@ -22,7 +22,6 @@ interface ExtendedUser extends User {
 
 interface AuthContextType {
   isAuthenticated: boolean;
-  isLoading: boolean;
   isAuthOperationLoading: boolean;
   login: (email?: string, password?: string) => Promise<void>;
   logout: () => Promise<void>;
@@ -66,14 +65,16 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [isAuthOperationLoading, setIsAuthOperationLoading] = useState(false);
 
   // Use SWR to manage user state with custom fetcher
-  const {
-    data: user,
-    isLoading,
-    mutate: mutateUser,
-  } = useSWR<ExtendedUser | null>('/api/auth/user', userFetcher, {
-    revalidateOnFocus: true,
-    shouldRetryOnError: false,
-  });
+  const { data: user, mutate: mutateUser } = useSWR<ExtendedUser | null>(
+    '/api/auth/user',
+    userFetcher,
+    {
+      revalidateOnFocus: true,
+      shouldRetryOnError: false,
+      suspense: true,
+      fallbackData: null,
+    }
+  );
 
   const handleAuthChange = useCallback(
     async (event: string, session: { user: ExtendedUser } | null) => {
@@ -177,7 +178,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     <AuthContext.Provider
       value={{
         isAuthenticated: !!user,
-        isLoading,
         isAuthOperationLoading,
         login,
         logout,

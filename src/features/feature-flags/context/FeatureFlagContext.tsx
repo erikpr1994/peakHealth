@@ -26,7 +26,7 @@ const FeatureFlagContext = createContext<FeatureFlagContextType | undefined>(
 );
 
 export const FeatureFlagProvider = ({ children }: { children: ReactNode }) => {
-  const { user, isLoading: isAuthLoading } = useAuth();
+  const { user } = useAuth();
   const [publicFlags, setPublicFlags] = useState<
     Record<string, UserFeatureFlag>
   >({});
@@ -145,10 +145,8 @@ export const FeatureFlagProvider = ({ children }: { children: ReactNode }) => {
       }
     };
 
-    if (!isAuthLoading) {
-      loadUserData();
-    }
-  }, [user, isAuthLoading]);
+    loadUserData();
+  }, [user]);
 
   const flags = useMemo(
     () => ({ ...publicFlags, ...userFlags }),
@@ -199,7 +197,7 @@ export const FeatureFlagProvider = ({ children }: { children: ReactNode }) => {
     flags,
     userTypes,
     userGroups,
-    isLoading: isLoading || isAuthLoading,
+    isLoading,
     isEnabled,
     hasUserType,
     isInGroup,

@@ -31,10 +31,12 @@ export const signUpUser = async (page: Page, user: TestUser) => {
   }
 
   // Submit the form and wait for navigation to the dashboard
+  console.log(`[WebKit] Before signup click, URL is ${page.url()}`);
   await Promise.all([
     page.waitForURL(/\/dashboard/),
     page.click('[data-testid="signup-button"]'),
   ]);
+  console.log(`[WebKit] After signup click, URL is ${page.url()}`);
 
   // Use a longer timeout for WebKit which can be slower
   await expect(page).toHaveURL(/\/dashboard/, { timeout: 10000 });

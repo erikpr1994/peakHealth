@@ -111,7 +111,9 @@ test.describe('Authentication Flows', () => {
 
       // Should still be logged in
       await expect(
-        page.locator('[data-testid="user-menu-button"]')
+        page.locator(
+          `[data-testid="user-menu-button"]:has-text("${user.name}")`
+        )
       ).toBeVisible();
     });
   });
