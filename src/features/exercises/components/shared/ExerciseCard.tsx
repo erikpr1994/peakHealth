@@ -9,6 +9,7 @@ import { DifficultyBadge } from './DifficultyBadge';
 
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
+import { useAuth } from '@/features/auth/context/AuthContext';
 
 interface ExerciseCardProps {
   exercise: Exercise;
@@ -18,7 +19,6 @@ interface ExerciseCardProps {
   isSelected?: boolean;
   className?: string;
   size?: 'sm' | 'md' | 'lg';
-  userId?: string; // Add userId prop for favorite management
 }
 
 export const ExerciseCard = ({
@@ -29,11 +29,11 @@ export const ExerciseCard = ({
   isSelected = false,
   className = '',
   size = 'md',
-  userId,
 }: ExerciseCardProps) => {
   const [isFavorite, setIsFavorite] = useState(exercise.isFavorite);
   const [isUpdatingFavorite, setIsUpdatingFavorite] = useState(false);
   const { addToFavorites, removeFromFavorites } = useFavoriteManagement();
+  const { userId } = useAuth();
 
   // Helper function to get the main variant
   const getMainVariant = () => {

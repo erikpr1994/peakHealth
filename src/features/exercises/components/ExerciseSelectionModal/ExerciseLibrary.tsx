@@ -18,7 +18,6 @@ interface ExerciseLibraryProps {
   onExerciseSelect: (exercise: Exercise) => void;
   onSearchChange: (value: string) => void;
   onCategoryChange: (category: string) => void;
-  userId?: string; // Add userId prop for favorite management
 }
 
 export const ExerciseLibrary = ({
@@ -29,7 +28,6 @@ export const ExerciseLibrary = ({
   onExerciseSelect,
   onSearchChange,
   onCategoryChange,
-  userId,
 }: ExerciseLibraryProps) => {
   const { filters } = useExerciseFilters();
 
@@ -94,7 +92,6 @@ export const ExerciseLibrary = ({
                     onClick={() => onExerciseSelect(exercise)}
                     isSelected={selectedExercise?.id === exercise.id}
                     showChevron={true}
-                    userId={userId}
                   />
                 ))}
               </div>

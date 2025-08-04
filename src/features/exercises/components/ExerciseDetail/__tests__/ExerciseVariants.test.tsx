@@ -27,6 +27,26 @@ vi.mock('../../../hooks/useExercises', () => ({
   }),
 }));
 
+// Mock the useAuth hook
+vi.mock('@/features/auth/context/AuthContext', () => ({
+  useAuth: () => ({
+    userId: 'user-1',
+    user: { id: 'user-1' },
+    isAuthenticated: true,
+    isLoading: false,
+    isAuthOperationLoading: false,
+    login: vi.fn(),
+    logout: vi.fn(),
+    signUp: vi.fn(),
+    userRoles: [],
+    userGroups: [],
+    hasRole: vi.fn(),
+    hasGroup: vi.fn(),
+    hasAnyRole: vi.fn(),
+    hasAnyGroup: vi.fn(),
+  }),
+}));
+
 describe('ExerciseVariants', () => {
   const mockExercise: Exercise = {
     id: createExerciseId('exercise-1'),
@@ -70,20 +90,27 @@ describe('ExerciseVariants', () => {
   });
 
   it('renders variants correctly', () => {
-    render(<ExerciseVariants exercise={mockExercise} />);
+    render(
+      <ExerciseVariants exercise={mockExercise} currentVariantId="variant-1" />
+    );
 
     expect(screen.getByText('Variants')).toBeInTheDocument();
-    expect(screen.getByText('Standard Push-up')).toBeInTheDocument();
+    // Since currentVariantId is "variant-1", it should be filtered out
+    expect(screen.queryByText('Standard Push-up')).not.toBeInTheDocument();
     expect(screen.getByText('Incline Push-up')).toBeInTheDocument();
   });
 
   it('navigates to variant page when variant card is clicked', () => {
-    render(<ExerciseVariants exercise={mockExercise} />);
+    render(
+      <ExerciseVariants exercise={mockExercise} currentVariantId="variant-1" />
+    );
 
     const variantCard = screen
       .getByText('Incline Push-up')
       .closest('.cursor-pointer');
-    fireEvent.click(variantCard!);
+    if (variantCard) {
+      fireEvent.click(variantCard);
+    }
 
     expect(mockPush).toHaveBeenCalledWith(
       '/exercises/exercise-1/variants/variant-2'
@@ -96,7 +123,12 @@ describe('ExerciseVariants', () => {
       variants: [],
     };
 
-    render(<ExerciseVariants exercise={exerciseWithoutVariants} />);
+    render(
+      <ExerciseVariants
+        exercise={exerciseWithoutVariants}
+        currentVariantId="variant-1"
+      />
+    );
 
     expect(screen.queryByText('Variants')).not.toBeInTheDocument();
   });
@@ -113,7 +145,9 @@ describe('ExerciseVariants', () => {
   });
 
   it('handles favorite button click without stopping propagation', () => {
-    render(<ExerciseVariants exercise={mockExercise} userId="user-1" />);
+    render(
+      <ExerciseVariants exercise={mockExercise} currentVariantId="variant-1" />
+    );
 
     // Get the first favorite button (heart icon)
     const favoriteButtons = screen.getAllByRole('button');
@@ -121,7 +155,9 @@ describe('ExerciseVariants', () => {
       button.querySelector('svg[class*="lucide-heart"]')
     );
 
-    fireEvent.click(heartButton!);
+    if (heartButton) {
+      fireEvent.click(heartButton);
+    }
 
     // Should not navigate to variant page when favorite button is clicked
     expect(mockPush).not.toHaveBeenCalled();

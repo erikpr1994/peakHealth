@@ -16,14 +16,9 @@ import { Card } from '@/components/ui/card';
 interface ExerciseDetailProps {
   exerciseId: string;
   variantId: string; // Required - all exercises are variants
-  userId?: string; // Add userId prop for favorite management
 }
 
-const ExerciseDetail = ({
-  exerciseId,
-  variantId,
-  userId,
-}: ExerciseDetailProps) => {
+const ExerciseDetail = ({ exerciseId, variantId }: ExerciseDetailProps) => {
   const router = useRouter();
   const { exercise, isLoading, error } = useExercise(exerciseId);
 
@@ -118,11 +113,7 @@ const ExerciseDetail = ({
         {/* Main Content */}
         <div className="lg:col-span-2">
           <Card className="p-6">
-            <ExerciseHeader
-              exercise={exercise}
-              variant={selectedVariant}
-              userId={userId}
-            />
+            <ExerciseHeader exercise={exercise} variant={selectedVariant} />
             <ExerciseInfo exercise={exercise} variant={selectedVariant} />
           </Card>
         </div>
@@ -137,11 +128,7 @@ const ExerciseDetail = ({
       <ExerciseSteps exercise={exercise} variant={selectedVariant} />
 
       {/* Variants */}
-      <ExerciseVariants
-        exercise={exercise}
-        currentVariantId={variantId}
-        userId={userId}
-      />
+      <ExerciseVariants exercise={exercise} currentVariantId={variantId} />
 
       {/* Pro Tips and Common Mistakes */}
       <ExerciseTips exercise={exercise} variant={selectedVariant} />

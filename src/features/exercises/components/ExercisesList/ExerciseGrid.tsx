@@ -15,7 +15,6 @@ interface ExerciseGridProps {
   viewMode: 'grid' | 'list';
   onViewModeChange: (mode: 'grid' | 'list') => void;
   onExerciseClick: (exercise: Exercise) => void;
-  userId?: string; // Add userId prop for favorite management
 }
 
 export const ExerciseGrid = ({
@@ -24,7 +23,6 @@ export const ExerciseGrid = ({
   viewMode,
   onViewModeChange,
   onExerciseClick,
-  userId,
 }: ExerciseGridProps) => {
   const { searchTerm } = useExerciseSearch();
   const { filters } = useExerciseFilters();
@@ -136,7 +134,6 @@ export const ExerciseGrid = ({
             key={exercise.id}
             exercise={exercise}
             onClick={() => onExerciseClick(exercise)}
-            userId={userId}
           />
         ))}
       </div>
