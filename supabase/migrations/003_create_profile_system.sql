@@ -65,7 +65,7 @@ BEGIN
       '{}'::jsonb
     ) as stats_data,
     COALESCE(
-      (SELECT jsonb_agg(to_jsonb(ua.*)) FROM user_achievements ua WHERE ua.user_id = user_id_param ORDER BY ua.earned_at DESC),
+      (SELECT jsonb_agg(to_jsonb(ua.*)) FROM user_achievements ua WHERE ua.user_id = user_id_param),
       '[]'::jsonb
     ) as achievements_data;
 END;
