@@ -208,12 +208,21 @@ CREATE POLICY "Users can read feature flag user groups" ON feature_flag_user_gro
 CREATE POLICY "Admins can manage feature flags" ON feature_flags
   FOR ALL USING (auth.role() = 'authenticated');
 
--- Insert sample feature flags (both public and user-specific)
+-- Insert feature flags (both public and user-specific)
 INSERT INTO feature_flags (name, display_name, description, is_public) VALUES
 ('notification_system_feature', 'Notification System', 'Real-time notifications and alerts system', false),
-('landing_page_ab_test', 'Landing Page A/B Test', 'A/B testing for landing page variants', true),
-('public_beta_announcement', 'Public Beta Announcement', 'Show beta announcement to all users', true),
-('maintenance_mode', 'Maintenance Mode', 'Enable maintenance mode for all users', true);
+-- Page feature flags (all user-specific)
+('calendar_feature', 'Calendar Feature', 'Calendar and scheduling functionality', false),
+('performance_feature', 'Performance Feature', 'Performance tracking and analytics', false),
+('health_feature', 'Health Feature', 'Health monitoring and tracking', false),
+('trainer_and_clubs_feature', 'Trainer & Clubs Feature', 'Trainer and fitness clubs functionality', false),
+('gyms_feature', 'Gyms Feature', 'Gym management and discovery', false),
+('equipment_feature', 'Equipment Feature', 'Equipment tracking and management', false),
+('suggestions_feature', 'Suggestions Feature', 'Exercise and workout suggestions', false),
+('account_settings_feature', 'Account Settings Feature', 'User account settings and preferences', false),
+('app_settings_feature', 'App Settings Feature', 'Application settings and configuration', false),
+('help_support_feature', 'Help & Support Feature', 'Help and support functionality', false),
+('dashboard_feature', 'Dashboard Feature', 'Main dashboard functionality', false);
 
 -- Insert environment configurations
 INSERT INTO feature_flag_environments (feature_flag_id, environment, is_enabled, rollout_percentage) VALUES
@@ -221,16 +230,40 @@ INSERT INTO feature_flag_environments (feature_flag_id, environment, is_enabled,
 ((SELECT id FROM feature_flags WHERE name = 'notification_system_feature'), 'development', false, 0),
 ((SELECT id FROM feature_flags WHERE name = 'notification_system_feature'), 'staging', false, 0),
 ((SELECT id FROM feature_flags WHERE name = 'notification_system_feature'), 'production', false, 0),
--- Public flags
-((SELECT id FROM feature_flags WHERE name = 'landing_page_ab_test'), 'development', true, 50),
-((SELECT id FROM feature_flags WHERE name = 'landing_page_ab_test'), 'staging', true, 50),
-((SELECT id FROM feature_flags WHERE name = 'landing_page_ab_test'), 'production', false, 0),
-((SELECT id FROM feature_flags WHERE name = 'public_beta_announcement'), 'development', true, 100),
-((SELECT id FROM feature_flags WHERE name = 'public_beta_announcement'), 'staging', true, 100),
-((SELECT id FROM feature_flags WHERE name = 'public_beta_announcement'), 'production', false, 0),
-((SELECT id FROM feature_flags WHERE name = 'maintenance_mode'), 'development', false, 0),
-((SELECT id FROM feature_flags WHERE name = 'maintenance_mode'), 'staging', false, 0),
-((SELECT id FROM feature_flags WHERE name = 'maintenance_mode'), 'production', false, 0);
+-- Page feature flags (all disabled by default)
+((SELECT id FROM feature_flags WHERE name = 'calendar_feature'), 'development', false, 0),
+((SELECT id FROM feature_flags WHERE name = 'calendar_feature'), 'staging', false, 0),
+((SELECT id FROM feature_flags WHERE name = 'calendar_feature'), 'production', false, 0),
+((SELECT id FROM feature_flags WHERE name = 'performance_feature'), 'development', false, 0),
+((SELECT id FROM feature_flags WHERE name = 'performance_feature'), 'staging', false, 0),
+((SELECT id FROM feature_flags WHERE name = 'performance_feature'), 'production', false, 0),
+((SELECT id FROM feature_flags WHERE name = 'health_feature'), 'development', false, 0),
+((SELECT id FROM feature_flags WHERE name = 'health_feature'), 'staging', false, 0),
+((SELECT id FROM feature_flags WHERE name = 'health_feature'), 'production', false, 0),
+((SELECT id FROM feature_flags WHERE name = 'trainer_and_clubs_feature'), 'development', false, 0),
+((SELECT id FROM feature_flags WHERE name = 'trainer_and_clubs_feature'), 'staging', false, 0),
+((SELECT id FROM feature_flags WHERE name = 'trainer_and_clubs_feature'), 'production', false, 0),
+((SELECT id FROM feature_flags WHERE name = 'gyms_feature'), 'development', false, 0),
+((SELECT id FROM feature_flags WHERE name = 'gyms_feature'), 'staging', false, 0),
+((SELECT id FROM feature_flags WHERE name = 'gyms_feature'), 'production', false, 0),
+((SELECT id FROM feature_flags WHERE name = 'equipment_feature'), 'development', false, 0),
+((SELECT id FROM feature_flags WHERE name = 'equipment_feature'), 'staging', false, 0),
+((SELECT id FROM feature_flags WHERE name = 'equipment_feature'), 'production', false, 0),
+((SELECT id FROM feature_flags WHERE name = 'suggestions_feature'), 'development', false, 0),
+((SELECT id FROM feature_flags WHERE name = 'suggestions_feature'), 'staging', false, 0),
+((SELECT id FROM feature_flags WHERE name = 'suggestions_feature'), 'production', false, 0),
+((SELECT id FROM feature_flags WHERE name = 'account_settings_feature'), 'development', false, 0),
+((SELECT id FROM feature_flags WHERE name = 'account_settings_feature'), 'staging', false, 0),
+((SELECT id FROM feature_flags WHERE name = 'account_settings_feature'), 'production', false, 0),
+((SELECT id FROM feature_flags WHERE name = 'app_settings_feature'), 'development', false, 0),
+((SELECT id FROM feature_flags WHERE name = 'app_settings_feature'), 'staging', false, 0),
+((SELECT id FROM feature_flags WHERE name = 'app_settings_feature'), 'production', false, 0),
+((SELECT id FROM feature_flags WHERE name = 'help_support_feature'), 'development', false, 0),
+((SELECT id FROM feature_flags WHERE name = 'help_support_feature'), 'staging', false, 0),
+((SELECT id FROM feature_flags WHERE name = 'help_support_feature'), 'production', false, 0),
+((SELECT id FROM feature_flags WHERE name = 'dashboard_feature'), 'development', true, 100),
+((SELECT id FROM feature_flags WHERE name = 'dashboard_feature'), 'staging', true, 100),
+((SELECT id FROM feature_flags WHERE name = 'dashboard_feature'), 'production', true, 100);
 
 -- Insert sample role and group targeting rules
 INSERT INTO feature_flag_user_roles (feature_flag_id, environment, role_name, is_enabled) VALUES

@@ -49,11 +49,11 @@ test.describe('Authentication Flows', () => {
 
       // Try to access login page while authenticated
       await page.goto('/login');
-      await expect(page).toHaveURL(/\/dashboard/);
+      await expect(page).toHaveURL(/\/dashboard|\/profile/);
 
       // Try to access signup page while authenticated
       await page.goto('/signup');
-      await expect(page).toHaveURL(/\/dashboard/);
+      await expect(page).toHaveURL(/\/dashboard|\/profile/);
     });
 
     test('should redirect unauthenticated user to login for protected routes', async ({

@@ -100,6 +100,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     };
   }, [supabase, handleAuthChange]);
 
+  const getAuthRedirectPath = () => {
+    // Default to profile as a safe fallback that doesn't depend on feature flags
+    // In a real app, you might want to check feature flags here
+    return '/profile';
+  };
+
   const login = async (email?: string, password?: string) => {
     if (!email || !password) return;
 
@@ -121,7 +127,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
       // Optimistically update the user and redirect
       await mutateUser(data.user, false); // `false` to prevent re-fetching
-      router.push('/dashboard');
+      router.push(getAuthRedirectPath());
     } finally {
       setIsAuthOperationLoading(false);
     }
@@ -148,7 +154,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
       // Optimistically update the user and redirect
       await mutateUser(data.user, false); // `false` to prevent re-fetching
-      router.push('/dashboard');
+      router.push(getAuthRedirectPath());
     } finally {
       setIsAuthOperationLoading(false);
     }
