@@ -19,6 +19,7 @@ interface PersonalInfoCardProps {
     id: string;
     email?: string;
     user_metadata: UserMetadata;
+    created_at?: string;
   };
   onUpdateMetadata: (metadata: Record<string, unknown>) => Promise<boolean>;
   isUpdating?: boolean;
@@ -127,7 +128,10 @@ export const PersonalInfoCard = ({
               <div>
                 <h3 className={styles.displayName}>{displayName}</h3>
                 <p className={styles.memberSince}>
-                  Peak Health Member since 2024
+                  Peak Health Member since{' '}
+                  {user.created_at
+                    ? new Date(user.created_at).getFullYear()
+                    : '2024'}
                 </p>
               </div>
             )}
