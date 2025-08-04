@@ -39,12 +39,25 @@ CREATE TABLE user_achievements (
   earned_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
+-- Workout sessions table (placeholder for profile system)
+CREATE TABLE workout_sessions (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE,
+  started_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  completed_at TIMESTAMP WITH TIME ZONE,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
 -- Add indexes for performance
 CREATE INDEX idx_profiles_user_id ON profiles(id);
 CREATE INDEX idx_user_stats_user_id ON user_stats(user_id);
 CREATE INDEX idx_user_achievements_user_id ON user_achievements(user_id);
 CREATE INDEX idx_user_achievements_type ON user_achievements(achievement_type);
 CREATE INDEX idx_user_achievements_earned_at ON user_achievements(earned_at);
+CREATE INDEX idx_workout_sessions_user_id ON workout_sessions(user_id);
+CREATE INDEX idx_workout_sessions_started_at ON workout_sessions(started_at);
+CREATE INDEX idx_workout_sessions_completed_at ON workout_sessions(completed_at);
 
 -- Function to get user profile with stats and achievements
 CREATE OR REPLACE FUNCTION get_user_profile(user_id_param UUID)
@@ -170,6 +183,7 @@ CREATE TRIGGER update_user_stats_trigger
 ALTER TABLE profiles ENABLE ROW LEVEL SECURITY;
 ALTER TABLE user_stats ENABLE ROW LEVEL SECURITY;
 ALTER TABLE user_achievements ENABLE ROW LEVEL SECURITY;
+ALTER TABLE workout_sessions ENABLE ROW LEVEL SECURITY;
 
 -- Profiles policies
 CREATE POLICY "Users can view their own profile" ON profiles
@@ -190,4 +204,17 @@ CREATE POLICY "Users can view their own achievements" ON user_achievements
   FOR SELECT USING (auth.uid() = user_id);
 
 CREATE POLICY "System can insert achievements" ON user_achievements
-  FOR INSERT WITH CHECK (true); 
+  FOR INSERT WITH CHECK (true);
+
+-- Workout sessions policies
+CREATE POLICY "Users can view their own workout sessions" ON workout_sessions
+  FOR SELECT USING (auth.uid() = user_id);
+
+CREATE POLICY "Users can insert their own workout sessions" ON workout_sessions
+  FOR INSERT WITH CHECK (auth.uid() = user_id);
+
+CREATE POLICY "Users can update their own workout sessions" ON workout_sessions
+  FOR UPDATE USING (auth.uid() = user_id);
+
+CREATE POLICY "Users can delete their own workout sessions" ON workout_sessions
+  FOR DELETE USING (auth.uid() = user_id); 
