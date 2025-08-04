@@ -30,47 +30,12 @@ export const signUpUser = async (page: Page, user: TestUser) => {
     await page.fill('[data-testid="name-input"]', user.name);
   }
 
-  // Submit the form
-  await page.click('[data-testid="signup-button"]');
+  // Submit the form and wait for navigation to the dashboard
+  await Promise.all([
+    page.waitForURL(/\/dashboard/),
+    page.click('[data-testid="signup-button"]'),
+  ]);
 
-  // Wait for response and check for errors
-  await page.waitForTimeout(2000);
-
-  // Check if there are any validation errors
-  const emailError = await page
-    .locator('[data-testid="email-error"]')
-    .isVisible();
-  const passwordError = await page
-    .locator('[data-testid="password-error"]')
-    .isVisible();
-  const nameError = await page
-    .locator('[data-testid="name-error"]')
-    .isVisible();
-  const confirmPasswordError = await page
-    .locator('[data-testid="confirm-password-error"]')
-    .isVisible();
-  const signupError = await page
-    .locator('[data-testid="signup-error"]')
-    .isVisible();
-
-  if (
-    emailError ||
-    passwordError ||
-    nameError ||
-    confirmPasswordError ||
-    signupError
-  ) {
-    console.log('Validation errors found:', {
-      emailError,
-      passwordError,
-      nameError,
-      confirmPasswordError,
-      signupError,
-    });
-    throw new Error('Signup form has validation errors');
-  }
-
-  // Wait for successful signup (redirect to dashboard or success message)
   // Use a longer timeout for WebKit which can be slower
   await expect(page).toHaveURL(/\/dashboard/, { timeout: 10000 });
 };
@@ -82,8 +47,11 @@ export const loginUser = async (page: Page, user: TestUser) => {
   await page.fill('[data-testid="email-input"]', user.email);
   await page.fill('[data-testid="password-input"]', user.password);
 
-  // Submit the form
-  await page.click('[data-testid="login-button"]');
+  // Submit the form and wait for navigation to the dashboard
+  await Promise.all([
+    page.waitForURL(/\/dashboard/),
+    page.click('[data-testid="login-button"]'),
+  ]);
 
   // Wait for successful login (redirect to dashboard)
   // Use a longer timeout for WebKit which can be slower

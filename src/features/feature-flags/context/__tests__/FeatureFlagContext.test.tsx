@@ -24,8 +24,11 @@ describe('FeatureFlagContext', () => {
     return (
       <div>
         <div data-testid="flag-count">{Object.keys(flags).length}</div>
-        <div data-testid="test-feature-enabled">
-          {isEnabled('test-feature') ? 'true' : 'false'}
+        <div data-testid="public-feature-enabled">
+          {isEnabled('public-feature') ? 'true' : 'false'}
+        </div>
+        <div data-testid="user-feature-enabled">
+          {isEnabled('user-feature') ? 'true' : 'false'}
         </div>
       </div>
     );
@@ -33,29 +36,20 @@ describe('FeatureFlagContext', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
-    mockedUseAuth.mockReturnValue({
-      user: { id: 'test-user-id' },
-      isAuthenticated: true,
-      isLoading: false,
-      isAuthOperationLoading: false,
-    });
-    mockFetch.mockResolvedValue({
-      ok: true,
-      json: () => Promise.resolve({ flags: [], userTypes: [], userGroups: [] }),
-    });
   });
 
-  it('should load and provide feature flags data', async () => {
-    mockFetch.mockResolvedValue({
+  const mockPublicFlags = [
+    { name: 'public-feature', is_enabled: true, rollout_percentage: 100 },
+  ];
+  const mockUserFlags = [
+    { name: 'user-feature', is_enabled: true, rollout_percentage: 100 },
+  ];
+
+  it('should load only public flags for unauthenticated users', async () => {
+    mockedUseAuth.mockReturnValue({ user: null, isLoading: false });
+    mockFetch.mockResolvedValueOnce({
       ok: true,
-      json: () =>
-        Promise.resolve({
-          flags: [
-            { name: 'test-feature', is_enabled: true, rollout_percentage: 100 },
-          ],
-          userTypes: [],
-          userGroups: [],
-        }),
+      json: () => Promise.resolve({ flags: mockPublicFlags }),
     });
 
     render(
@@ -64,21 +58,59 @@ describe('FeatureFlagContext', () => {
       </FeatureFlagProvider>
     );
 
-    expect(screen.getByText('Loading...')).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.queryByText('Loading...')).not.toBeInTheDocument();
+      expect(mockFetch).toHaveBeenCalledWith('/api/feature-flags/public');
+      expect(mockFetch).not.toHaveBeenCalledWith('/api/feature-flags');
+      expect(screen.getByTestId('flag-count')).toHaveTextContent('1');
+      expect(screen.getByTestId('public-feature-enabled')).toHaveTextContent(
+        'true'
+      );
+      expect(screen.getByTestId('user-feature-enabled')).toHaveTextContent(
+        'false'
+      );
+    });
+  });
+
+  it('should load public and user flags for authenticated users', async () => {
+    mockedUseAuth.mockReturnValue({
+      user: { id: 'test-user' },
+      isLoading: false,
+    });
+
+    mockFetch
+      .mockResolvedValueOnce({
+        ok: true,
+        json: () => Promise.resolve({ flags: mockPublicFlags }),
+      })
+      .mockResolvedValueOnce({
+        ok: true,
+        json: () => Promise.resolve({ flags: mockUserFlags }),
+      });
+
+    render(
+      <FeatureFlagProvider>
+        <TestComponent />
+      </FeatureFlagProvider>
+    );
 
     await waitFor(() => {
       expect(screen.queryByText('Loading...')).not.toBeInTheDocument();
-      expect(screen.getByTestId('flag-count')).toHaveTextContent('1');
-      expect(screen.getByTestId('test-feature-enabled')).toHaveTextContent(
+      expect(mockFetch).toHaveBeenCalledWith('/api/feature-flags/public');
+      expect(mockFetch).toHaveBeenCalledWith('/api/feature-flags');
+      expect(screen.getByTestId('flag-count')).toHaveTextContent('2');
+      expect(screen.getByTestId('public-feature-enabled')).toHaveTextContent(
+        'true'
+      );
+      expect(screen.getByTestId('user-feature-enabled')).toHaveTextContent(
         'true'
       );
     });
   });
 
   it('should handle API errors gracefully', async () => {
-    mockFetch.mockResolvedValue({
-      ok: false,
-    });
+    mockedUseAuth.mockReturnValue({ user: null, isLoading: false });
+    mockFetch.mockResolvedValue({ ok: false });
 
     render(
       <FeatureFlagProvider>
@@ -88,36 +120,7 @@ describe('FeatureFlagContext', () => {
 
     await waitFor(() => {
       expect(screen.queryByText('Loading...')).not.toBeInTheDocument();
-      // Should default to no flags on error
       expect(screen.getByTestId('flag-count')).toHaveTextContent('0');
     });
-  });
-
-  it('should fetch public flags for unauthenticated users', async () => {
-    mockedUseAuth.mockReturnValue({
-      user: null,
-      isAuthenticated: false,
-      isLoading: false,
-      isAuthOperationLoading: false,
-    });
-
-    mockFetch.mockResolvedValue({
-      ok: true,
-      json: () => Promise.resolve({ flags: [] }),
-    });
-
-    render(
-      <FeatureFlagProvider>
-        <TestComponent />
-      </FeatureFlagProvider>
-    );
-
-    await waitFor(() => {
-      expect(screen.queryByText('Loading...')).not.toBeInTheDocument();
-    });
-
-    // Should call public feature flags endpoint
-    expect(mockFetch).toHaveBeenCalledWith('/api/feature-flags/public');
-    expect(screen.getByTestId('flag-count')).toHaveTextContent('0');
   });
 });

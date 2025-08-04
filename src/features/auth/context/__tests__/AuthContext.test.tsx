@@ -1,6 +1,11 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import React, { createContext, useContext, ReactNode, useState } from 'react';
-import { vi, describe, it, expect, beforeEach, afterEach } from 'vitest';
+import { Response } from 'node-fetch';
+import React from 'react';
+import useSWR from 'swr';
+import { vi, describe, it, expect, beforeEach, afterEach, Mock } from 'vitest';
+
+import { AuthProvider, useAuth } from '../AuthContext';
+import { AuthContextType } from '../AuthContext';
 
 // Mock external dependencies
 vi.mock('next/navigation', () => ({
@@ -19,147 +24,16 @@ vi.mock('@/lib/supabase/client', () => ({
   }),
 }));
 
-vi.mock('swr', () => ({
-  default: vi.fn(),
-}));
+vi.mock('swr');
+
+const mockUseSWR = useSWR as Mock;
 
 // Mock fetch globally
 global.fetch = vi.fn();
 
-// Create a mock AuthContext for testing
-interface AuthContextType {
-  isAuthenticated: boolean;
-  isLoading: boolean;
-  isAuthOperationLoading: boolean;
-  login: (email?: string, password?: string) => Promise<void>;
-  logout: () => Promise<void>;
-  signUp: (email?: string, password?: string, name?: string) => Promise<void>;
-  user: {
-    id: string;
-    email: string;
-    name?: string;
-  } | null;
-}
-
-const MockAuthContext = createContext<AuthContextType | undefined>(undefined);
-
-const MockAuthProvider = ({ children }: { children: ReactNode }) => {
-  const [isAuthOperationLoading, _setIsAuthOperationLoading] = useState(false);
-  const [user, setUser] = useState<{
-    id: string;
-    email: string;
-    name?: string;
-  } | null>(null);
-  const [_isLoading, _setIsLoading] = useState(false);
-
-  const login = async (email?: string, password?: string) => {
-    if (!email || !password) return;
-
-    _setIsAuthOperationLoading(true);
-    try {
-      const response = await fetch('/api/auth/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email, password }),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.error || 'Login failed');
-      }
-
-      setUser({ id: '123', email });
-    } catch (error) {
-      console.error('Error logging in:', error);
-      throw error;
-    } finally {
-      _setIsAuthOperationLoading(false);
-    }
-  };
-
-  const signUp = async (email?: string, password?: string, name?: string) => {
-    if (!email || !password || !name) return;
-
-    _setIsAuthOperationLoading(true);
-    try {
-      const response = await fetch('/api/auth/signup', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email, password, name }),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.error || 'Sign up failed');
-      }
-
-      setUser({ id: '123', email, name });
-    } catch (error) {
-      console.error('Error signing up:', error);
-      throw error;
-    } finally {
-      _setIsAuthOperationLoading(false);
-    }
-  };
-
-  const logout = async () => {
-    _setIsAuthOperationLoading(true);
-    try {
-      const response = await fetch('/api/auth/logout', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-
-      if (!response.ok) {
-        const data = await response.json();
-        throw new Error(data.error || 'Logout failed');
-      }
-
-      setUser(null);
-    } catch (error) {
-      console.error('Error logging out:', error);
-      throw error;
-    } finally {
-      _setIsAuthOperationLoading(false);
-    }
-  };
-
-  return (
-    <MockAuthContext.Provider
-      value={{
-        isAuthenticated: !!user,
-        isLoading: _isLoading,
-        isAuthOperationLoading,
-        login,
-        logout,
-        signUp,
-        user: user || null,
-      }}
-    >
-      {children}
-    </MockAuthContext.Provider>
-  );
-};
-
-const useMockAuth = () => {
-  const context = useContext(MockAuthContext);
-  if (context === undefined) {
-    throw new Error('useAuth must be used within an AuthProvider');
-  }
-  return context;
-};
-
 // Test component to access context
 const TestComponent = () => {
-  const auth = useMockAuth();
+  const auth = useAuth();
   return (
     <div>
       <div data-testid="isAuthenticated">{auth.isAuthenticated.toString()}</div>
@@ -167,7 +41,7 @@ const TestComponent = () => {
       <div data-testid="isAuthOperationLoading">
         {auth.isAuthOperationLoading.toString()}
       </div>
-      <div data-testid="user">{auth.user ? 'user' : 'no-user'}</div>
+      <div data-testid="user">{auth.user ? auth.user.email : 'no-user'}</div>
       <button onClick={() => auth.login('test@example.com', 'password')}>
         Login
       </button>
@@ -183,241 +57,132 @@ const TestComponent = () => {
 
 describe('AuthContext', () => {
   const mockFetch = vi.mocked(global.fetch);
+  let mutateUser: Mock;
 
   beforeEach(() => {
     vi.clearAllMocks();
+    mutateUser = vi.fn();
+    mockUseSWR.mockReturnValue({
+      data: null,
+      isLoading: true,
+      mutate: mutateUser,
+    });
   });
 
   afterEach(() => {
     vi.resetAllMocks();
   });
 
+  const renderWithAuthProvider = (user = null, isLoading = false) => {
+    mockUseSWR.mockReturnValue({
+      data: user,
+      isLoading: isLoading,
+      mutate: mutateUser,
+    });
+
+    return render(
+      <AuthProvider>
+        <TestComponent />
+      </AuthProvider>
+    );
+  };
+
   describe('AuthProvider', () => {
-    it('renders children without crashing', () => {
-      render(
-        <MockAuthProvider>
-          <div data-testid="child">Test Child</div>
-        </MockAuthProvider>
-      );
-
-      expect(screen.getByTestId('child')).toBeInTheDocument();
-    });
-
-    it('provides auth context to children', () => {
-      render(
-        <MockAuthProvider>
-          <TestComponent />
-        </MockAuthProvider>
-      );
-
+    it('renders children and provides context', () => {
+      renderWithAuthProvider();
       expect(screen.getByTestId('isAuthenticated')).toBeInTheDocument();
-      expect(screen.getByTestId('isLoading')).toBeInTheDocument();
-      expect(screen.getByTestId('isAuthOperationLoading')).toBeInTheDocument();
-      expect(screen.getByTestId('user')).toBeInTheDocument();
-    });
-  });
-
-  describe('useAuth hook', () => {
-    it('provides auth context with default values when not authenticated', () => {
-      render(
-        <MockAuthProvider>
-          <TestComponent />
-        </MockAuthProvider>
-      );
-
-      expect(screen.getByTestId('isAuthenticated')).toHaveTextContent('false');
-      expect(screen.getByTestId('isLoading')).toHaveTextContent('false');
-      expect(screen.getByTestId('isAuthOperationLoading')).toHaveTextContent(
-        'false'
-      );
-      expect(screen.getByTestId('user')).toHaveTextContent('no-user');
     });
 
-    it('provides auth methods', () => {
-      render(
-        <MockAuthProvider>
-          <TestComponent />
-        </MockAuthProvider>
-      );
+    it('shows loading state correctly', () => {
+      renderWithAuthProvider(null, true);
+      expect(screen.getByTestId('isLoading')).toHaveTextContent('true');
+    });
 
-      expect(screen.getByText('Login')).toBeInTheDocument();
-      expect(screen.getByText('Sign Up')).toBeInTheDocument();
-      expect(screen.getByText('Logout')).toBeInTheDocument();
+    it('shows authenticated state correctly', () => {
+      renderWithAuthProvider({ id: '123', email: 'test@example.com' });
+      expect(screen.getByTestId('isAuthenticated')).toHaveTextContent('true');
+      expect(screen.getByTestId('user')).toHaveTextContent('test@example.com');
     });
   });
 
   describe('Auth operations', () => {
-    it('calls login API when login method is invoked', async () => {
+    it('optimistically updates user on successful login', async () => {
+      const user = { id: '123', email: 'test@example.com' };
       mockFetch.mockResolvedValueOnce({
         ok: true,
-        json: () => Promise.resolve({ user: { id: '123' } }),
-      } as globalThis.Response);
+        json: () => Promise.resolve({ user }),
+      } as Response);
 
-      render(
-        <MockAuthProvider>
-          <TestComponent />
-        </MockAuthProvider>
-      );
+      renderWithAuthProvider();
 
-      const loginButton = screen.getByText('Login');
-      fireEvent.click(loginButton);
+      fireEvent.click(screen.getByText('Login'));
 
       await waitFor(() => {
-        expect(mockFetch).toHaveBeenCalledWith('/api/auth/login', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            email: 'test@example.com',
-            password: 'password',
-          }),
-        });
+        expect(mutateUser).toHaveBeenCalledWith(user, false);
       });
     });
 
-    it('calls signup API when signUp method is invoked', async () => {
+    it('optimistically updates user on successful signup', async () => {
+      const user = { id: '123', email: 'test@example.com', name: 'Test User' };
       mockFetch.mockResolvedValueOnce({
         ok: true,
-        json: () => Promise.resolve({ user: { id: '123' } }),
-      } as globalThis.Response);
+        json: () => Promise.resolve({ user }),
+      } as Response);
 
-      render(
-        <MockAuthProvider>
-          <TestComponent />
-        </MockAuthProvider>
-      );
+      renderWithAuthProvider();
 
-      const signUpButton = screen.getByText('Sign Up');
-      fireEvent.click(signUpButton);
+      fireEvent.click(screen.getByText('Sign Up'));
 
       await waitFor(() => {
-        expect(mockFetch).toHaveBeenCalledWith('/api/auth/signup', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            email: 'test@example.com',
-            password: 'password',
-            name: 'Test User',
-          }),
-        });
+        expect(mutateUser).toHaveBeenCalledWith(user, false);
       });
     });
 
-    it('calls logout API when logout method is invoked', async () => {
+    it('clears user on successful logout', async () => {
       mockFetch.mockResolvedValueOnce({
         ok: true,
         json: () => Promise.resolve({}),
-      } as globalThis.Response);
+      } as Response);
 
-      render(
-        <MockAuthProvider>
-          <TestComponent />
-        </MockAuthProvider>
-      );
+      renderWithAuthProvider({ id: '123', email: 'test@example.com' });
 
-      const logoutButton = screen.getByText('Logout');
-      fireEvent.click(logoutButton);
+      fireEvent.click(screen.getByText('Logout'));
 
       await waitFor(() => {
-        expect(mockFetch).toHaveBeenCalledWith('/api/auth/logout', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        });
+        expect(mutateUser).toHaveBeenCalledWith(null, false);
       });
     });
 
-    it('updates user state after successful login', async () => {
+    it('handles login failure', async () => {
       mockFetch.mockResolvedValueOnce({
-        ok: true,
-        json: () => Promise.resolve({ user: { id: '123' } }),
-      } as globalThis.Response);
+        ok: false,
+        json: () => Promise.resolve({ error: 'Invalid credentials' }),
+      } as Response);
+
+      // This is a bit of a hack to get the auth context from the component
+      let auth: AuthContextType;
+      const TestComponentWithAuth = () => {
+        auth = useAuth();
+        return <TestComponent />;
+      };
 
       render(
-        <MockAuthProvider>
-          <TestComponent />
-        </MockAuthProvider>
+        <AuthProvider>
+          <TestComponentWithAuth />
+        </AuthProvider>
       );
 
-      const loginButton = screen.getByText('Login');
-      fireEvent.click(loginButton);
-
-      await waitFor(() => {
-        expect(screen.getByTestId('isAuthenticated')).toHaveTextContent('true');
-        expect(screen.getByTestId('user')).toHaveTextContent('user');
-      });
-    });
-
-    it('updates user state after successful signup', async () => {
-      mockFetch.mockResolvedValueOnce({
-        ok: true,
-        json: () => Promise.resolve({ user: { id: '123' } }),
-      } as globalThis.Response);
-
-      render(
-        <MockAuthProvider>
-          <TestComponent />
-        </MockAuthProvider>
+      await expect(auth.login('test@test.com', 'password')).rejects.toThrow(
+        'Invalid credentials'
       );
-
-      const signUpButton = screen.getByText('Sign Up');
-      fireEvent.click(signUpButton);
-
-      await waitFor(() => {
-        expect(screen.getByTestId('isAuthenticated')).toHaveTextContent('true');
-        expect(screen.getByTestId('user')).toHaveTextContent('user');
-      });
-    });
-
-    it('clears user state after successful logout', async () => {
-      // First login to set user state
-      mockFetch
-        .mockResolvedValueOnce({
-          ok: true,
-          json: () => Promise.resolve({ user: { id: '123' } }),
-        } as globalThis.Response)
-        .mockResolvedValueOnce({
-          ok: true,
-          json: () => Promise.resolve({}),
-        } as globalThis.Response);
-
-      render(
-        <MockAuthProvider>
-          <TestComponent />
-        </MockAuthProvider>
-      );
-
-      // Login first
-      const loginButton = screen.getByText('Login');
-      fireEvent.click(loginButton);
-
-      await waitFor(() => {
-        expect(screen.getByTestId('isAuthenticated')).toHaveTextContent('true');
-      });
-
-      // Then logout
-      const logoutButton = screen.getByText('Logout');
-      fireEvent.click(logoutButton);
-
-      await waitFor(() => {
-        expect(screen.getByTestId('isAuthenticated')).toHaveTextContent(
-          'false'
-        );
-        expect(screen.getByTestId('user')).toHaveTextContent('no-user');
-      });
     });
   });
 
   describe('useAuth hook error handling', () => {
     it('throws error when used outside AuthProvider', () => {
-      // Suppress console.error for this test
-      const consoleSpy = vi
-        .spyOn(console, 'error')
-        .mockImplementation(() => {});
+      const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {
+        /* do nothing */
+      });
 
       expect(() => {
         render(<TestComponent />);

@@ -8,6 +8,7 @@ import React, {
   ReactNode,
   useEffect,
   useState,
+  useCallback,
 } from 'react';
 import useSWR from 'swr';
 
@@ -24,7 +25,7 @@ interface AuthContextType {
   isLoading: boolean;
   isAuthOperationLoading: boolean;
   login: (email?: string, password?: string) => Promise<void>;
-  logout: () => void;
+  logout: () => Promise<void>;
   signUp: (email?: string, password?: string, name?: string) => Promise<void>;
   user: ExtendedUser | null;
   // Add convenience properties
@@ -50,8 +51,8 @@ const userFetcher = async (url: string): Promise<ExtendedUser | null> => {
       return null;
     }
     const error = new Error('An error occurred while fetching the user.');
-    (error as any).info = await response.json();
-    (error as any).status = response.status;
+    (error as unknown as { info: unknown }).info = await response.json();
+    (error as unknown as { status: number }).status = response.status;
     throw error;
   }
 
@@ -70,70 +71,33 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     isLoading,
     mutate: mutateUser,
   } = useSWR<ExtendedUser | null>('/api/auth/user', userFetcher, {
-    revalidateOnFocus: false,
+    revalidateOnFocus: true,
     shouldRetryOnError: false,
-    onError: (error: any) => {
-      console.error('Error fetching user:', error);
-    },
   });
+
+  const handleAuthChange = useCallback(
+    async (event: string, session: { user: ExtendedUser } | null) => {
+      if (event === 'SIGNED_IN' || event === 'USER_UPDATED') {
+        await mutateUser();
+      } else if (event === 'SIGNED_OUT') {
+        await mutateUser(null, false);
+      }
+    },
+    [mutateUser]
+  );
 
   // Set up real-time auth state synchronization
   useEffect(() => {
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange(async (event, session) => {
-      // Clear any pending fallback timeout
-      if ((window as any).__authFallbackClear) {
-        (window as any).__authFallbackClear();
-        (window as any).__authFallbackClear = null;
-      }
-
-      if (event === 'SIGNED_IN' && session?.user) {
-        // Fetch complete user data from our API to get extended properties
-        try {
-          const response = await fetch('/api/auth/user');
-          if (response.ok) {
-            const data = await response.json();
-            await mutateUser(data.user);
-          } else {
-            // Fallback to session user if API call fails
-            await mutateUser(session.user);
-          }
-        } catch (error) {
-          console.error('Error fetching extended user data:', error);
-          // Fallback to session user if API call fails
-          await mutateUser(session.user);
-        }
-        router.push('/dashboard');
-      } else if (event === 'SIGNED_OUT') {
-        // Clear user from SWR cache and redirect
-        await mutateUser(null);
-        router.push('/');
-      } else if (event === 'USER_UPDATED' && session?.user) {
-        // Fetch complete user data from our API to get extended properties
-        try {
-          const response = await fetch('/api/auth/user');
-          if (response.ok) {
-            const data = await response.json();
-            await mutateUser(data.user);
-          } else {
-            // Fallback to session user if API call fails
-            await mutateUser(session.user);
-          }
-        } catch (error) {
-          console.error('Error fetching extended user data:', error);
-          // Fallback to session user if API call fails
-          await mutateUser(session.user);
-        }
-      }
-      // Note: TOKEN_REFRESHED events are handled automatically by Supabase
-      // and don't require any manual intervention
+    } = supabase.auth.onAuthStateChange((event, session) => {
+      handleAuthChange(event, session);
     });
 
     return () => {
       subscription.unsubscribe();
     };
-  }, [router, supabase, mutateUser]);
+  }, [supabase, handleAuthChange]);
 
   const login = async (email?: string, password?: string) => {
     if (!email || !password) return;
@@ -154,23 +118,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         throw new Error(data.error || 'Login failed');
       }
 
-      // Fallback: If onAuthStateChange doesn't fire within 1 second, manually update state
-      const fallbackTimeout = setTimeout(async () => {
-        if (data.user) {
-          // Use the extended user data from the API response
-          await mutateUser(data.user);
-          router.push('/dashboard');
-        }
-      }, 1000);
-
-      // Clear timeout if onAuthStateChange fires (handled in useEffect)
-      const clearFallback = () => clearTimeout(fallbackTimeout);
-
-      // Store the clear function to be called when auth state changes
-      (window as any).__authFallbackClear = clearFallback;
-    } catch (error) {
-      console.error('Error logging in:', error);
-      throw error;
+      // Optimistically update the user and redirect
+      await mutateUser(data.user, false); // `false` to prevent re-fetching
+      router.push('/dashboard');
     } finally {
       setIsAuthOperationLoading(false);
     }
@@ -195,23 +145,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         throw new Error(data.error || 'Sign up failed');
       }
 
-      // Fallback: If onAuthStateChange doesn't fire within 1 second, manually update state
-      const fallbackTimeout = setTimeout(async () => {
-        if (data.user) {
-          // Use the extended user data from the API response
-          await mutateUser(data.user);
-          router.push('/dashboard');
-        }
-      }, 1000);
-
-      // Clear timeout if onAuthStateChange fires (handled in useEffect)
-      const clearFallback = () => clearTimeout(fallbackTimeout);
-
-      // Store the clear function to be called when auth state changes
-      (window as any).__authFallbackClear = clearFallback;
-    } catch (error) {
-      console.error('Error signing up:', error);
-      throw error;
+      // Optimistically update the user and redirect
+      await mutateUser(data.user, false); // `false` to prevent re-fetching
+      router.push('/dashboard');
     } finally {
       setIsAuthOperationLoading(false);
     }
@@ -220,12 +156,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const logout = async () => {
     setIsAuthOperationLoading(true);
     try {
-      // Call the logout API which handles server-side logout
       const response = await fetch('/api/auth/logout', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
       });
 
       if (!response.ok) {
@@ -233,20 +165,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         throw new Error(data.error || 'Logout failed');
       }
 
-      // Fallback: If onAuthStateChange doesn't fire within 3 seconds, manually update state
-      const fallbackTimeout = setTimeout(async () => {
-        await mutateUser(null);
-        router.push('/');
-      }, 3000);
-
-      // Clear timeout if onAuthStateChange fires (handled in useEffect)
-      const clearFallback = () => clearTimeout(fallbackTimeout);
-
-      // Store the clear function to be called when auth state changes
-      (window as any).__authFallbackClear = clearFallback;
-    } catch (error) {
-      console.error('Error logging out:', error);
-      throw error;
+      // Clear user from SWR cache and redirect immediately
+      await mutateUser(null, false);
+      router.push('/');
     } finally {
       setIsAuthOperationLoading(false);
     }
