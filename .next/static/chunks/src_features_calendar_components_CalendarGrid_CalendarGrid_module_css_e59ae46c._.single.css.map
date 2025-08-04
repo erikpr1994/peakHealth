@@ -1,6 +1,0 @@
-{
-  "version": 3,
-  "sources": [],
-  "sections": [
-    {"offset": {"line": 1, "column": 0}, "map": {"version":3,"sources":["turbopack:///[project]/src/features/calendar/components/CalendarGrid/CalendarGrid.module.css"],"sourcesContent":[".grid {\n  display: flex;\n  flex-direction: column;\n}\n\n.dayHeaders {\n  display: grid;\n  grid-template-columns: repeat(7, 1fr);\n  gap: 0.25rem;\n}\n\n.dayHeader {\n  padding: 0.5rem;\n  text-align: center;\n}\n\n.dayHeaderText {\n  font-size: 0.875rem;\n  font-weight: 500;\n  color: #6b7280;\n}\n\n.calendarDays {\n  display: grid;\n  grid-template-columns: repeat(7, 1fr);\n  gap: 0.25rem;\n}\n"],"names":[],"mappings":"AAAA;;;;;AAKA;;;;;;AAMA;;;;;AAKA;;;;;;AAMA"}}]
-}
