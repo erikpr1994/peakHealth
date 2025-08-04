@@ -7,6 +7,7 @@ import React, {
   useEffect,
   useCallback,
   ReactNode,
+  useMemo,
 } from 'react';
 
 import { featureFlagCache } from '../lib/cache';
@@ -26,85 +27,87 @@ const FeatureFlagContext = createContext<FeatureFlagContextType | undefined>(
 
 export const FeatureFlagProvider = ({ children }: { children: ReactNode }) => {
   const { user } = useAuth();
-  const [flags, setFlags] = useState<Record<string, UserFeatureFlag>>({});
+  const [publicFlags, setPublicFlags] = useState<
+    Record<string, UserFeatureFlag>
+  >({});
+  const [userFlags, setUserFlags] = useState<Record<string, UserFeatureFlag>>(
+    {}
+  );
   const [userTypes, setUserTypes] = useState<UserTypeInfo[]>([]);
   const [userGroups, setUserGroups] = useState<UserGroupInfo[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Load public feature flags (no auth required)
-  const loadPublicFlags = useCallback(async () => {
-    try {
-      const response = await fetch('/api/feature-flags/public');
-      if (response.ok) {
-        const { flags } = await response.json();
-
-        const flagsMap = flags.reduce(
-          (
-            acc: Record<string, UserFeatureFlag>,
-            flag: {
-              name: string;
-              is_enabled: boolean;
-              rollout_percentage: number;
-            }
-          ) => {
-            acc[flag.name] = {
-              name: flag.name,
-              isEnabled: flag.is_enabled,
-              rolloutPercentage: flag.rollout_percentage,
-            };
-            return acc;
-          },
-          {}
-        );
-
-        setFlags(flagsMap);
+  // Load public flags once on mount
+  useEffect(() => {
+    const loadPublicFlags = async () => {
+      try {
+        const response = await fetch('/api/feature-flags/public');
+        if (response.ok) {
+          const { flags } = await response.json();
+          const flagsMap = flags.reduce(
+            (
+              acc: Record<string, UserFeatureFlag>,
+              flag: {
+                name: string;
+                is_enabled: boolean;
+                rollout_percentage: number;
+              }
+            ) => {
+              acc[flag.name] = {
+                name: flag.name,
+                isEnabled: flag.is_enabled,
+                rolloutPercentage: flag.rollout_percentage,
+              };
+              return acc;
+            },
+            {}
+          );
+          setPublicFlags(flagsMap);
+        }
+      } catch {
+        // Errors are handled by not setting flags, no need to log
       }
-    } catch (error) {
-      console.error('Error loading public feature flags:', error);
-    }
+    };
+
+    loadPublicFlags();
   }, []);
 
-  // Load user-specific feature flags and user data
+  // Load user-specific flags when user authentication state changes
   const loadUserData = useCallback(async () => {
     if (!user || !user.id) {
-      // If no user, just set empty user data
+      // Clear user-specific data on logout
+      setUserFlags({});
       setUserTypes([]);
       setUserGroups([]);
       setIsLoading(false);
       return;
     }
 
+    setIsLoading(true);
     // Set user types and groups from auth response
-    if (user.userRoles) {
-      setUserTypes(
-        user.userRoles.map(role => ({
-          typeName: role,
-          displayName: role,
-          description: '',
-        }))
-      );
-    }
-    if (user.userGroups) {
-      setUserGroups(
-        user.userGroups.map(group => ({
-          groupName: group,
-          displayName: group,
-          description: '',
-        }))
-      );
-    }
+    setUserTypes(
+      (user.userRoles || []).map(role => ({
+        typeName: role,
+        displayName: role,
+        description: '',
+      }))
+    );
+    setUserGroups(
+      (user.userGroups || []).map(group => ({
+        groupName: group,
+        displayName: group,
+        description: '',
+      }))
+    );
 
     const startTime = Date.now();
     try {
-      // Load user-specific feature flags
       const response = await fetch('/api/feature-flags');
       if (!response.ok) {
         throw new Error('Failed to fetch user feature flags');
       }
-      const { flags: userFlags } = await response.json();
-
-      // Create user flags map
-      const userFlagsMap = userFlags.reduce(
+      const { flags: fetchedUserFlags } = await response.json();
+      const userFlagsMap = fetchedUserFlags.reduce(
         (
           acc: Record<string, UserFeatureFlag>,
           flag: {
@@ -122,9 +125,7 @@ export const FeatureFlagProvider = ({ children }: { children: ReactNode }) => {
         },
         {}
       );
-
-      // User-specific flags override public flags
-      setFlags(prevFlags => ({ ...prevFlags, ...userFlagsMap }));
+      setUserFlags(userFlagsMap);
 
       const loadTime = Date.now() - startTime;
       featureFlagMonitor.trackFeatureFlagPerformance(
@@ -133,7 +134,6 @@ export const FeatureFlagProvider = ({ children }: { children: ReactNode }) => {
         user.id
       );
     } catch (error) {
-      console.error('Error loading user feature flag data:', error);
       featureFlagMonitor.trackFeatureFlagError(
         'feature_flags_load',
         error as Error,
@@ -145,51 +145,48 @@ export const FeatureFlagProvider = ({ children }: { children: ReactNode }) => {
   }, [user]);
 
   useEffect(() => {
-    const initializeFlags = async () => {
-      try {
-        // Always load public flags first
-        await loadPublicFlags();
+    loadUserData();
+  }, [loadUserData]);
 
-        // Then load user data if authenticated
-        await loadUserData();
-      } catch (error) {
-        console.error('Error initializing feature flags:', error);
-        setIsLoading(false);
+  const flags = useMemo(
+    () => ({ ...publicFlags, ...userFlags }),
+    [publicFlags, userFlags]
+  );
+
+  const isEnabled = useCallback(
+    (featureName: string): boolean => {
+      const flag = flags[featureName];
+      const enabled = flag ? flag.isEnabled : false;
+
+      if (user) {
+        featureFlagMonitor.trackFeatureFlagUsage(featureName, enabled, user.id);
       }
-    };
 
-    initializeFlags();
-  }, [loadPublicFlags, loadUserData]);
+      return enabled;
+    },
+    [flags, user]
+  );
 
-  const isEnabled = (featureName: string): boolean => {
-    const flag = flags[featureName];
-    if (!flag) return false;
+  const hasUserType = useCallback(
+    (typeName: string): boolean => {
+      return userTypes.some(type => type.typeName === typeName);
+    },
+    [userTypes]
+  );
 
-    const enabled = flag.isEnabled;
+  const isInGroup = useCallback(
+    (groupName: string): boolean => {
+      return userGroups.some(group => group.groupName === groupName);
+    },
+    [userGroups]
+  );
 
-    // Track usage metric
+  const refreshFlags = useCallback(async (): Promise<void> => {
     if (user) {
-      featureFlagMonitor.trackFeatureFlagUsage(featureName, enabled, user.id);
-    }
-
-    return enabled;
-  };
-
-  const hasUserType = (typeName: string): boolean => {
-    return userTypes.some(type => type.typeName === typeName);
-  };
-
-  const isInGroup = (groupName: string): boolean => {
-    return userGroups.some(group => group.groupName === groupName);
-  };
-
-  const refreshFlags = async (): Promise<void> => {
-    if (user) {
-      // Invalidate user cache
       featureFlagCache.invalidateUser(user.id);
+      await loadUserData();
     }
-    await loadUserData();
-  };
+  }, [user, loadUserData]);
 
   const value: FeatureFlagContextType = {
     flags,
