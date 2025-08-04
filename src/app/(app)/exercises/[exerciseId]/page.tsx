@@ -8,7 +8,7 @@ import { useExercise } from '@/features/exercises/hooks/useExercises';
 const ExerciseRedirectPage = () => {
   const { exerciseId } = useParams();
   const router = useRouter();
-  const { exercise, isLoading } = useExercise(exerciseId as string);
+  const { exercise, isLoading, error } = useExercise(exerciseId as string);
 
   useEffect(() => {
     if (exercise && exercise.mainVariantId) {
@@ -31,6 +31,74 @@ const ExerciseRedirectPage = () => {
               <div className="h-64 bg-gray-200 rounded"></div>
             </div>
           </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Handle error state
+  if (error) {
+    return (
+      <div className="w-full px-4 sm:px-6 lg:px-8 py-6">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold text-gray-900 mb-4">
+            Exercise Not Found
+          </h1>
+          <p className="text-gray-600 mb-6">
+            Sorry, we couldn't load the exercise you're looking for. It may have
+            been removed or doesn't exist.
+          </p>
+          <button
+            onClick={() => router.push('/exercises')}
+            className="bg-indigo-600 text-white px-6 py-2 rounded-md hover:bg-indigo-700 transition-colors"
+          >
+            Browse All Exercises
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  // Handle case where exercise exists but has no mainVariantId
+  if (exercise && !exercise.mainVariantId) {
+    return (
+      <div className="w-full px-4 sm:px-6 lg:px-8 py-6">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold text-gray-900 mb-4">
+            Exercise Configuration Error
+          </h1>
+          <p className="text-gray-600 mb-6">
+            This exercise doesn't have a main variant configured. Please contact
+            support if this issue persists.
+          </p>
+          <button
+            onClick={() => router.push('/exercises')}
+            className="bg-indigo-600 text-white px-6 py-2 rounded-md hover:bg-indigo-700 transition-colors"
+          >
+            Browse All Exercises
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  // Handle case where exercise exists but has no variants
+  if (exercise && (!exercise.variants || exercise.variants.length === 0)) {
+    return (
+      <div className="w-full px-4 sm:px-6 lg:px-8 py-6">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold text-gray-900 mb-4">
+            No Exercise Variants Available
+          </h1>
+          <p className="text-gray-600 mb-6">
+            This exercise doesn't have any variants configured yet.
+          </p>
+          <button
+            onClick={() => router.push('/exercises')}
+            className="bg-indigo-600 text-white px-6 py-2 rounded-md hover:bg-indigo-700 transition-colors"
+          >
+            Browse All Exercises
+          </button>
         </div>
       </div>
     );
