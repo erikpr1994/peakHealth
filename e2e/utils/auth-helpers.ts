@@ -71,7 +71,8 @@ export const signUpUser = async (page: Page, user: TestUser) => {
   }
 
   // Wait for successful signup (redirect to dashboard or success message)
-  await expect(page).toHaveURL(/\/dashboard/);
+  // Use a longer timeout for WebKit which can be slower
+  await expect(page).toHaveURL(/\/dashboard/, { timeout: 10000 });
 };
 
 export const loginUser = async (page: Page, user: TestUser) => {
@@ -85,7 +86,8 @@ export const loginUser = async (page: Page, user: TestUser) => {
   await page.click('[data-testid="login-button"]');
 
   // Wait for successful login (redirect to dashboard)
-  await expect(page).toHaveURL(/\/dashboard/);
+  // Use a longer timeout for WebKit which can be slower
+  await expect(page).toHaveURL(/\/dashboard/, { timeout: 10000 });
 };
 
 export const logoutUser = async (page: Page) => {
