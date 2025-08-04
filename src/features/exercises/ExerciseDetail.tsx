@@ -101,7 +101,7 @@ const ExerciseDetail = ({
           Exercises
         </button>
         <ChevronRight className="w-4 h-4 mx-2" />
-        <span className="text-indigo-600">
+        <span className="text-indigo-600 flex items-center">
           {exercise.name === selectedVariant.name ? (
             exercise.name
           ) : (
