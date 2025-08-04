@@ -27,6 +27,15 @@ interface AuthContextType {
   logout: () => void;
   signUp: (email?: string, password?: string, name?: string) => Promise<void>;
   user: ExtendedUser | null;
+  // Add convenience properties
+  userId: string | null;
+  userRoles: string[];
+  userGroups: string[];
+  // Add utility functions
+  hasRole: (role: string) => boolean;
+  hasGroup: (group: string) => boolean;
+  hasAnyRole: (roles: string[]) => boolean;
+  hasAnyGroup: (groups: string[]) => boolean;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -253,6 +262,17 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         logout,
         signUp,
         user: user || null,
+        // Add convenience properties
+        userId: user?.id || null,
+        userRoles: user?.userRoles || [],
+        userGroups: user?.userGroups || [],
+        // Add utility functions
+        hasRole: role => user?.userRoles?.includes(role) || false,
+        hasGroup: group => user?.userGroups?.includes(group) || false,
+        hasAnyRole: roles =>
+          roles.some(role => user?.userRoles?.includes(role)),
+        hasAnyGroup: groups =>
+          groups.some(group => user?.userGroups?.includes(group)),
       }}
     >
       {children}

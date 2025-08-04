@@ -16,21 +16,21 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
+import { useAuth } from '@/features/auth/context/AuthContext';
 
 interface ExerciseSelectionModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSelectExercise: (exercise: Exercise, variant?: ExerciseVariant) => void;
-  userId?: string; // Add userId prop for favorite management
 }
 
 const ExerciseSelectionModalContent = ({
   isOpen,
   onClose,
   onSelectExercise,
-  userId,
 }: ExerciseSelectionModalProps) => {
   const [searchTerm, setSearchTerm] = useState('');
+  const { userId } = useAuth();
   const {
     selectedExercise,
     selectedVariant,

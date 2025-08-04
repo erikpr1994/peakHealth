@@ -14,13 +14,11 @@ import { useExercises } from './hooks/useExercises';
 import { Exercise } from './types';
 
 import { Button } from '@/components/ui/button';
+import { useAuth } from '@/features/auth/context/AuthContext';
 
-interface ExercisesListProps {
-  userId?: string; // Add userId prop for favorite management
-}
-
-const ExercisesListContent = ({ userId }: ExercisesListProps) => {
+const ExercisesListContent = () => {
   const router = useRouter();
+  const { userId } = useAuth();
   const [activeCategory, setActiveCategory] = useState('All Exercises');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [isFilterOpen, setIsFilterOpen] = useState(false);
@@ -123,10 +121,10 @@ const ExercisesListContent = ({ userId }: ExercisesListProps) => {
   );
 };
 
-const ExercisesList = ({ userId }: ExercisesListProps) => {
+const ExercisesList = () => {
   return (
     <ExerciseProvider>
-      <ExercisesListContent userId={userId} />
+      <ExercisesListContent />
     </ExerciseProvider>
   );
 };

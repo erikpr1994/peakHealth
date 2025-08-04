@@ -12,13 +12,11 @@ import {
 interface NewExercisesCarouselProps {
   newExercises: Exercise[];
   onExerciseClick: (exercise: Exercise) => void;
-  userId?: string; // Add userId prop for favorite management
 }
 
 export const NewExercisesCarousel = ({
   newExercises,
   onExerciseClick,
-  userId,
 }: NewExercisesCarouselProps) => {
   const isMobile = useIsMobile();
 
@@ -45,7 +43,6 @@ export const NewExercisesCarousel = ({
                   exercise={exercise}
                   size="sm"
                   onClick={() => onExerciseClick(exercise)}
-                  userId={userId}
                 />
               </CarouselItem>
             ))}
@@ -60,7 +57,6 @@ export const NewExercisesCarousel = ({
                 exercise={exercise}
                 size="sm"
                 onClick={() => onExerciseClick(exercise)}
-                userId={userId}
               />
             </div>
           ))}

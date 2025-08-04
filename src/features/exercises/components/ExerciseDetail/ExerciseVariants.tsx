@@ -8,22 +8,22 @@ import { Exercise } from '../../types';
 
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
+import { useAuth } from '@/features/auth/context/AuthContext';
 
 interface ExerciseVariantsProps {
   exercise: Exercise;
-  currentVariantId?: string; // Current variant to exclude from the list
-  userId?: string; // Add userId prop for favorite management
+  currentVariantId: string;
 }
 
 export const ExerciseVariants = ({
   exercise,
   currentVariantId,
-  userId,
 }: ExerciseVariantsProps) => {
   const router = useRouter();
   const [isFavorite, setIsFavorite] = useState(exercise.isFavorite);
   const [isUpdating, setIsUpdating] = useState(false);
   const { addToFavorites, removeFromFavorites } = useFavoriteManagement();
+  const { userId } = useAuth();
 
   // Sync favorite state when exercise changes
   useEffect(() => {
