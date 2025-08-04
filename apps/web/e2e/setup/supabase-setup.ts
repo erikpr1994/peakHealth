@@ -38,6 +38,7 @@ export class SupabaseManager {
       const supabaseConfigPath = join(
         process.cwd(),
         '..',
+        '..',
         'supabase',
         'config.toml'
       );
@@ -50,7 +51,7 @@ export class SupabaseManager {
       // Start Supabase
       execSync('supabase start', {
         stdio: 'inherit',
-        cwd: join(process.cwd(), '..'),
+        cwd: join(process.cwd(), '..', '..'),
       });
 
       this.isRunning = true;
@@ -78,7 +79,7 @@ export class SupabaseManager {
 
       execSync('supabase stop', {
         stdio: 'inherit',
-        cwd: join(process.cwd(), '..'),
+        cwd: join(process.cwd(), '..', '..'),
       });
 
       this.isRunning = false;
