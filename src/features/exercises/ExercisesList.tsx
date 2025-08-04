@@ -15,11 +15,7 @@ import { Exercise } from './types';
 
 import { Button } from '@/components/ui/button';
 
-interface ExercisesListProps {
-  userId?: string; // Add userId prop for favorite management
-}
-
-const ExercisesListContent = ({ userId }: ExercisesListProps) => {
+const ExercisesListContent = () => {
   const router = useRouter();
   const [activeCategory, setActiveCategory] = useState('All Exercises');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
@@ -101,7 +97,6 @@ const ExercisesListContent = ({ userId }: ExercisesListProps) => {
       <NewExercisesCarousel
         newExercises={newExercises}
         onExerciseClick={handleExerciseClick}
-        userId={userId}
       />
 
       {/* Main Exercises Section */}
@@ -111,7 +106,6 @@ const ExercisesListContent = ({ userId }: ExercisesListProps) => {
         viewMode={viewMode}
         onViewModeChange={setViewMode}
         onExerciseClick={handleExerciseClick}
-        userId={userId}
       />
 
       {/* Filter Dialog */}
@@ -123,10 +117,10 @@ const ExercisesListContent = ({ userId }: ExercisesListProps) => {
   );
 };
 
-const ExercisesList = ({ userId }: ExercisesListProps) => {
+const ExercisesList = () => {
   return (
     <ExerciseProvider>
-      <ExercisesListContent userId={userId} />
+      <ExercisesListContent />
     </ExerciseProvider>
   );
 };

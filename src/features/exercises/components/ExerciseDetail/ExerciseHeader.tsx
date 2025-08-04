@@ -5,21 +5,18 @@ import { useFavoriteManagement } from '../../hooks/useExercises';
 import { Exercise, ExerciseVariant } from '../../types';
 
 import { Button } from '@/components/ui/button';
+import { useAuth } from '@/features/auth/context/AuthContext';
 
 interface ExerciseHeaderProps {
   exercise: Exercise;
   variant: ExerciseVariant;
-  userId?: string; // Add userId prop for favorite management
 }
 
-export const ExerciseHeader = ({
-  exercise,
-  variant,
-  userId,
-}: ExerciseHeaderProps) => {
+export const ExerciseHeader = ({ exercise, variant }: ExerciseHeaderProps) => {
   const [isFavorite, setIsFavorite] = useState(exercise.isFavorite);
   const [isUpdatingFavorite, setIsUpdatingFavorite] = useState(false);
   const { addToFavorites, removeFromFavorites } = useFavoriteManagement();
+  const { userId } = useAuth();
 
   const handleFavoriteClick = async () => {
     if (!userId) return;

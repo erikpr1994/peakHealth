@@ -21,14 +21,12 @@ interface ExerciseSelectionModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSelectExercise: (exercise: Exercise, variant?: ExerciseVariant) => void;
-  userId?: string; // Add userId prop for favorite management
 }
 
 const ExerciseSelectionModalContent = ({
   isOpen,
   onClose,
   onSelectExercise,
-  userId,
 }: ExerciseSelectionModalProps) => {
   const [searchTerm, setSearchTerm] = useState('');
   const {
@@ -158,7 +156,6 @@ const ExerciseSelectionModalContent = ({
             onExerciseSelect={selectExercise}
             onSearchChange={handleSearchChange}
             onCategoryChange={setSelectedCategory}
-            userId={userId}
           />
 
           {/* Exercise Preview */}
