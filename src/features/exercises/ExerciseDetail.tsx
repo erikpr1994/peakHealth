@@ -104,9 +104,11 @@ const ExerciseDetail = ({
           Exercises
         </button>
         <ChevronRight className="w-4 h-4 mx-2" />
-        <span className="text-indigo-600">{exercise.name}</span>
-        <ChevronRight className="w-4 h-4 mx-2" />
-        <span className="text-indigo-600">{selectedVariant.name}</span>
+        <span className="text-indigo-600">
+          {exercise.name === selectedVariant.name
+            ? exercise.name
+            : `${exercise.name} <ChevronRight className="w-4 h-4 mx-2" /> ${selectedVariant.name}`}
+        </span>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
@@ -132,7 +134,11 @@ const ExerciseDetail = ({
       <ExerciseSteps exercise={exercise} variant={selectedVariant} />
 
       {/* Variants */}
-      <ExerciseVariants exercise={exercise} userId={userId} />
+      <ExerciseVariants
+        exercise={exercise}
+        currentVariantId={variantId}
+        userId={userId}
+      />
 
       {/* Pro Tips and Common Mistakes */}
       <ExerciseTips exercise={exercise} variant={selectedVariant} />

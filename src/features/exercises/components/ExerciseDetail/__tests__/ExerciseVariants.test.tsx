@@ -1,5 +1,5 @@
 import { render, screen, fireEvent } from '@testing-library/react';
-import { vi } from 'vitest';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 
 import { Exercise } from '../../../types';
 import { ExerciseVariants } from '../ExerciseVariants';
@@ -92,6 +92,20 @@ describe('ExerciseVariants', () => {
     render(<ExerciseVariants exercise={exerciseWithoutVariants} />);
 
     expect(screen.queryByText('Variants')).not.toBeInTheDocument();
+  });
+
+  it('filters out current variant from the list', () => {
+    render(
+      <ExerciseVariants 
+        exercise={mockExercise} 
+        currentVariantId="variant-1" 
+      />
+    );
+
+    // Should not show the current variant (Standard Push-up)
+    expect(screen.queryByText('Standard Push-up')).not.toBeInTheDocument();
+    // Should still show other variants
+    expect(screen.getByText('Incline Push-up')).toBeInTheDocument();
   });
 
   it('handles favorite button click without stopping propagation', () => {
