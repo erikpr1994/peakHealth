@@ -1,6 +1,6 @@
 'use client';
 
-import { ArrowLeft, ChevronRight } from 'lucide-react';
+import { ChevronRight } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
 import { ExerciseHeader } from './components/ExerciseDetail/ExerciseHeader';
@@ -94,9 +94,6 @@ const ExerciseDetail = ({
     <div className="w-full px-4 sm:px-6 lg:px-8 py-6">
       {/* Breadcrumb */}
       <div className="flex items-center text-sm text-gray-500 mb-6">
-        <ArrowLeft className="w-4 h-4 mr-2" />
-        <span>Exercise Details</span>
-        <ChevronRight className="w-4 h-4 mx-2" />
         <button
           onClick={() => router.push('/exercises')}
           className="hover:text-gray-700"
@@ -105,9 +102,15 @@ const ExerciseDetail = ({
         </button>
         <ChevronRight className="w-4 h-4 mx-2" />
         <span className="text-indigo-600">
-          {exercise.name === selectedVariant.name
-            ? exercise.name
-            : `${exercise.name} <ChevronRight className="w-4 h-4 mx-2" /> ${selectedVariant.name}`}
+          {exercise.name === selectedVariant.name ? (
+            exercise.name
+          ) : (
+            <>
+              {exercise.name}
+              <ChevronRight className="w-4 h-4 mx-2" />
+              {selectedVariant.name}
+            </>
+          )}
         </span>
       </div>
 
