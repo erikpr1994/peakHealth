@@ -1,0 +1,49 @@
+/* [project]/src/features/profile/components/ActivityStatsCard/ActivityStatsCard.module.css [app-client] (css) */
+.ActivityStatsCard-module__XMRtyG__content {
+  flex-direction: column;
+  gap: 1rem;
+  display: flex;
+}
+
+.ActivityStatsCard-module__XMRtyG__statItem {
+  background-color: #f9fafb;
+  border-radius: .5rem;
+  justify-content: space-between;
+  align-items: center;
+  padding: .75rem;
+  display: flex;
+}
+
+.ActivityStatsCard-module__XMRtyG__statInfo {
+  align-items: center;
+  gap: .75rem;
+  display: flex;
+}
+
+.ActivityStatsCard-module__XMRtyG__statIcon {
+  background-color: hsl(var(--primary) / .1);
+  border-radius: .5rem;
+  justify-content: center;
+  align-items: center;
+  width: 2rem;
+  height: 2rem;
+  display: flex;
+}
+
+.ActivityStatsCard-module__XMRtyG__icon {
+  width: 1rem;
+  height: 1rem;
+  color: hsl(var(--primary));
+}
+
+.ActivityStatsCard-module__XMRtyG__statLabel {
+  color: #6b7280;
+  font-size: .875rem;
+}
+
+.ActivityStatsCard-module__XMRtyG__statValue {
+  color: #111827;
+  font-weight: 600;
+}
+
+/*# sourceMappingURL=3bf3c_profile_components_ActivityStatsCard_ActivityStatsCard_module_css_e59ae46c._.single.css.map*/

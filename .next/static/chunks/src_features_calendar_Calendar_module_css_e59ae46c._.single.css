@@ -1,0 +1,75 @@
+/* [project]/src/features/calendar/Calendar.module.css [app-client] (css) */
+.Calendar-module__1Ob42q__container {
+  width: 100%;
+  max-width: none;
+  padding: 1.5rem;
+}
+
+@media (min-width: 640px) {
+  .Calendar-module__1Ob42q__container {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .Calendar-module__1Ob42q__container {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+}
+
+.Calendar-module__1Ob42q__header {
+  margin-bottom: 2rem;
+}
+
+.Calendar-module__1Ob42q__title {
+  color: #1f2937;
+  font-size: 1.875rem;
+  font-weight: 700;
+}
+
+.Calendar-module__1Ob42q__subtitle {
+  color: #6b7280;
+  margin-top: .5rem;
+}
+
+.Calendar-module__1Ob42q__mainContent {
+  grid-template-columns: 1fr;
+  gap: 2rem;
+  display: grid;
+}
+
+@media (min-width: 1024px) {
+  .Calendar-module__1Ob42q__mainContent {
+    grid-template-columns: 2fr 1fr;
+  }
+}
+
+.Calendar-module__1Ob42q__calendarSection {
+  grid-column: 1;
+}
+
+@media (min-width: 1024px) {
+  .Calendar-module__1Ob42q__calendarSection {
+    grid-column: 1;
+  }
+}
+
+.Calendar-module__1Ob42q__calendarCard {
+  padding: 1.5rem;
+}
+
+.Calendar-module__1Ob42q__sidebar {
+  flex-direction: column;
+  gap: 1.5rem;
+  display: flex;
+}
+
+@media (min-width: 1024px) {
+  .Calendar-module__1Ob42q__sidebar {
+    grid-column: 2;
+  }
+}
+
+/*# sourceMappingURL=src_features_calendar_Calendar_module_css_e59ae46c._.single.css.map*/

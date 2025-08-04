@@ -1,0 +1,69 @@
+/* [project]/src/features/profile/Profile.module.css [app-client] (css) */
+.Profile-module__9RN9_q__container {
+  width: 100%;
+  padding: 1.5rem 1rem;
+}
+
+@media (min-width: 640px) {
+  .Profile-module__9RN9_q__container {
+    padding: 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .Profile-module__9RN9_q__container {
+    padding: 1.5rem 2rem;
+  }
+}
+
+.Profile-module__9RN9_q__header {
+  flex-direction: column;
+  gap: .5rem;
+  margin-bottom: 1.5rem;
+  display: flex;
+}
+
+.Profile-module__9RN9_q__title {
+  color: #111827;
+  margin: 0;
+  font-size: 1.875rem;
+  font-weight: 700;
+}
+
+.Profile-module__9RN9_q__errorMessage {
+  color: #dc2626;
+  background-color: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: .375rem;
+  padding: .5rem .75rem;
+  font-size: .875rem;
+}
+
+.Profile-module__9RN9_q__content {
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+  display: grid;
+}
+
+@media (min-width: 1024px) {
+  .Profile-module__9RN9_q__content {
+    grid-template-columns: 2fr 1fr;
+  }
+}
+
+.Profile-module__9RN9_q__mainContent, .Profile-module__9RN9_q__sidebar {
+  flex-direction: column;
+  gap: 1.5rem;
+  display: flex;
+}
+
+.Profile-module__9RN9_q__loadingState, .Profile-module__9RN9_q__errorState {
+  color: #6b7280;
+  justify-content: center;
+  align-items: center;
+  min-height: 200px;
+  font-size: .875rem;
+  display: flex;
+}
+
+/*# sourceMappingURL=src_features_profile_Profile_module_b2801924.css.map*/

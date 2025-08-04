@@ -1,0 +1,6 @@
+{
+  "version": 3,
+  "sources": [],
+  "sections": [
+    {"offset": {"line": 7, "column": 0}, "map": {"version":3,"sources":["file:///Users/erikpr94/Documents/peakHealth/src/app/%28app%29/routines/create/page.tsx"],"sourcesContent":["'use client';\n\nimport RoutineCreation from '@/features/routines/RoutineCreation';\n\nconst CreateRoutinePage = () => {\n  return <RoutineCreation />;\n};\n\nexport default CreateRoutinePage;\n"],"names":[],"mappings":";;;;AAEA;AAFA;;;AAIA,MAAM,oBAAoB;IACxB,qBAAO,qYAAC,kJAAA,CAAA,UAAe;;;;;AACzB;KAFM;uCAIS","debugId":null}}]
+}

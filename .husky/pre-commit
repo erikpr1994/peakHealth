@@ -2,7 +2,7 @@
 . "$(dirname -- "$0")/_/husky.sh"
 
 echo "🔍 Running lint-staged..."
-pnpm lint-staged
+npx lint-staged
 LINT_STAGED_EXIT_CODE=$?
 
 if [ $LINT_STAGED_EXIT_CODE -ne 0 ]; then

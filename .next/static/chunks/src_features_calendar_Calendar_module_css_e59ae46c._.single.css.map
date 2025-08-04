@@ -1,0 +1,6 @@
+{
+  "version": 3,
+  "sources": [],
+  "sections": [
+    {"offset": {"line": 1, "column": 0}, "map": {"version":3,"sources":["turbopack:///[project]/src/features/calendar/Calendar.module.css"],"sourcesContent":[".container {\n  width: 100%;\n  padding: 1.5rem;\n  max-width: none;\n}\n\n@media (min-width: 640px) {\n  .container {\n    padding-left: 1.5rem;\n    padding-right: 1.5rem;\n  }\n}\n\n@media (min-width: 1024px) {\n  .container {\n    padding-left: 2rem;\n    padding-right: 2rem;\n  }\n}\n\n.header {\n  margin-bottom: 2rem;\n}\n\n.title {\n  font-size: 1.875rem;\n  font-weight: 700;\n  color: #1f2937;\n}\n\n.subtitle {\n  color: #6b7280;\n  margin-top: 0.5rem;\n}\n\n.mainContent {\n  display: grid;\n  grid-template-columns: 1fr;\n  gap: 2rem;\n}\n\n@media (min-width: 1024px) {\n  .mainContent {\n    grid-template-columns: 2fr 1fr;\n  }\n}\n\n.calendarSection {\n  grid-column: 1;\n}\n\n@media (min-width: 1024px) {\n  .calendarSection {\n    grid-column: 1;\n  }\n}\n\n.calendarCard {\n  padding: 1.5rem;\n}\n\n.sidebar {\n  display: flex;\n  flex-direction: column;\n  gap: 1.5rem;\n}\n\n@media (min-width: 1024px) {\n  .sidebar {\n    grid-column: 2;\n  }\n}\n"],"names":[],"mappings":"AAAA;;;;;;AAMA;EACE;;;;;;AAMF;EACE;;;;;;AAMF;;;;AAIA;;;;;;AAMA;;;;;AAKA;;;;;;AAMA;EACE;;;;;AAKF;;;;AAIA;EACE;;;;;AAKF;;;;AAIA;;;;;;AAMA;EACE"}}]
+}
