@@ -20,13 +20,18 @@ import { Separator } from '@/components/ui/separator';
 
 interface FitnessProfileCardProps {
   profile: UserProfile;
-  onRetakeOnboarding?: () => void;
 }
 
-export const FitnessProfileCard = ({
-  profile,
-  onRetakeOnboarding,
-}: FitnessProfileCardProps) => {
+export const FitnessProfileCard = ({ profile }: FitnessProfileCardProps) => {
+  const handleRetakeOnboarding = () => {
+    // Clear onboarding data to trigger onboarding flow again
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem('peak-health-onboarding-complete');
+      localStorage.removeItem('peak-health-onboarding-data');
+      window.location.reload(); // Reload to trigger onboarding
+    }
+  };
+
   const formatDate = (date: Date) => {
     return new Date(date).toLocaleDateString('en-US', {
       year: 'numeric',
@@ -47,17 +52,15 @@ export const FitnessProfileCard = ({
             No fitness profile data available. Complete the onboarding to get
             personalized recommendations.
           </p>
-          {onRetakeOnboarding && (
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={onRetakeOnboarding}
-              className={styles.retakeButton}
-            >
-              <RefreshCw className={styles.buttonIcon} />
-              Take Onboarding Quiz
-            </Button>
-          )}
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={handleRetakeOnboarding}
+            className={styles.retakeButton}
+          >
+            <RefreshCw className={styles.buttonIcon} />
+            Take Onboarding Quiz
+          </Button>
         </CardContent>
       </Card>
     );
@@ -67,17 +70,15 @@ export const FitnessProfileCard = ({
     <Card>
       <CardHeader className={styles.header}>
         <CardTitle>Fitness Profile</CardTitle>
-        {onRetakeOnboarding && (
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={onRetakeOnboarding}
-            className={styles.retakeButton}
-          >
-            <RefreshCw className={styles.buttonIcon} />
-            Retake Quiz
-          </Button>
-        )}
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={handleRetakeOnboarding}
+          className={styles.retakeButton}
+        >
+          <RefreshCw className={styles.buttonIcon} />
+          Retake Quiz
+        </Button>
       </CardHeader>
       <CardContent className={styles.content}>
         <div className={styles.grid}>

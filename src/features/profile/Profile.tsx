@@ -15,41 +15,16 @@ import {
 
 import { useAuth } from '@/features/auth/context/AuthContext';
 
-interface ProfileProps {
-  onboardingData?: unknown | null;
-}
-
-const Profile = ({ onboardingData }: ProfileProps) => {
+const Profile = () => {
   const { user } = useAuth();
-  const { profile, stats, achievements, isLoading, error } = useUserProfile();
+  const { profile, stats, achievements, error } = useUserProfile();
   const {
     updateUserMetadata,
     isUpdating,
     error: updateError,
   } = useProfileUpdate();
 
-  const handleRetakeOnboarding = () => {
-    // Clear onboarding data to trigger onboarding flow again
-    if (typeof window !== 'undefined') {
-      localStorage.removeItem('peak-health-onboarding-complete');
-      localStorage.removeItem('peak-health-onboarding-data');
-      window.location.reload(); // Reload to trigger onboarding
-    }
-  };
-
-  // Loading state
-  if (isLoading) {
-    return (
-      <div className={styles.container}>
-        <div className={styles.header}>
-          <h1 className={styles.title}>Profile</h1>
-        </div>
-        <div className={styles.loadingState}>
-          <p>Loading profile data...</p>
-        </div>
-      </div>
-    );
-  }
+  // Note: Loading state is now handled by loading.tsx file convention
 
   // Error state
   if (error) {
@@ -65,18 +40,9 @@ const Profile = ({ onboardingData }: ProfileProps) => {
     );
   }
 
-  // No user state
+  // Note: Route protection is handled by middleware - authenticated users only
   if (!user) {
-    return (
-      <div className={styles.container}>
-        <div className={styles.header}>
-          <h1 className={styles.title}>Profile</h1>
-        </div>
-        <div className={styles.errorState}>
-          <p>Please log in to view your profile.</p>
-        </div>
-      </div>
-    );
+    return null; // This shouldn't happen due to middleware, but TypeScript safety
   }
 
   // Default stats if none available
@@ -111,12 +77,7 @@ const Profile = ({ onboardingData }: ProfileProps) => {
           />
 
           {/* Fitness Profile */}
-          {profile && (
-            <FitnessProfileCard
-              profile={profile}
-              onRetakeOnboarding={handleRetakeOnboarding}
-            />
-          )}
+          {profile && <FitnessProfileCard profile={profile} />}
         </div>
 
         {/* Stats Sidebar */}
