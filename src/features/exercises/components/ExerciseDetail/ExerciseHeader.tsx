@@ -74,6 +74,7 @@ export const ExerciseHeader = ({ exercise, variant }: ExerciseHeaderProps) => {
             size="sm"
             onClick={handleFavoriteClick}
             disabled={isUpdatingFavorite}
+            data-testid="favorite-button"
           >
             <Heart
               className={`w-4 h-4 ${
@@ -82,7 +83,7 @@ export const ExerciseHeader = ({ exercise, variant }: ExerciseHeaderProps) => {
             />
           </Button>
         )}
-        <Button variant="ghost" size="sm">
+        <Button variant="ghost" size="sm" data-testid="printer-button">
           <Printer className="w-4 h-4" />
         </Button>
       </div>

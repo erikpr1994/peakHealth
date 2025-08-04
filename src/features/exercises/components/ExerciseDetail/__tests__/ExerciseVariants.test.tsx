@@ -1,4 +1,4 @@
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, act } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 
 import {
@@ -144,7 +144,7 @@ describe('ExerciseVariants', () => {
     expect(screen.getByText('Incline Push-up')).toBeInTheDocument();
   });
 
-  it('handles favorite button click without stopping propagation', () => {
+  it('handles favorite button click without stopping propagation', async () => {
     render(
       <ExerciseVariants exercise={mockExercise} currentVariantId="variant-1" />
     );
@@ -156,7 +156,9 @@ describe('ExerciseVariants', () => {
     );
 
     if (heartButton) {
-      fireEvent.click(heartButton);
+      await act(async () => {
+        fireEvent.click(heartButton);
+      });
     }
 
     // Should not navigate to variant page when favorite button is clicked
