@@ -5,12 +5,12 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 interface UnderConstructionProps {
   featureName: string;
-  onGoToDashboard?: () => void;
+  onGoToFallback?: () => void;
 }
 
 const UnderConstruction = ({
   featureName,
-  onGoToDashboard,
+  onGoToFallback,
 }: UnderConstructionProps) => {
   return (
     <div className="flex items-center justify-center min-h-[60vh] px-4">
@@ -33,9 +33,9 @@ const UnderConstruction = ({
           <p className="text-sm text-gray-500">
             We're working hard to bring you the best experience possible.
           </p>
-          {onGoToDashboard && (
-            <Button onClick={onGoToDashboard} className="w-full">
-              Go to Dashboard
+          {onGoToFallback && (
+            <Button onClick={onGoToFallback} className="w-full">
+              Go to Profile
             </Button>
           )}
         </CardContent>

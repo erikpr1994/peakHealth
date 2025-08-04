@@ -11,12 +11,14 @@ interface FeatureFlagProtectedProps {
   featureName: string;
   children: React.ReactNode;
   showUnderConstruction?: boolean;
+  fallbackPath?: string;
 }
 
 const FeatureFlagProtected = ({
   featureName,
   children,
   showUnderConstruction = false,
+  fallbackPath = '/profile',
 }: FeatureFlagProtectedProps) => {
   const router = useRouter();
   const { flags, isLoading } = useFeatureFlag([featureName]);
@@ -24,12 +26,12 @@ const FeatureFlagProtected = ({
 
   useEffect(() => {
     if (!isLoading && !isEnabled && !showUnderConstruction) {
-      router.push('/dashboard');
+      router.push(fallbackPath);
     }
-  }, [isLoading, isEnabled, showUnderConstruction, router]);
+  }, [isLoading, isEnabled, showUnderConstruction, router, fallbackPath]);
 
-  const handleGoToDashboard = () => {
-    router.push('/dashboard');
+  const handleGoToFallback = () => {
+    router.push(fallbackPath);
   };
 
   if (isLoading) {
@@ -45,11 +47,11 @@ const FeatureFlagProtected = ({
       return (
         <UnderConstruction
           featureName={featureName}
-          onGoToDashboard={handleGoToDashboard}
+          onGoToFallback={handleGoToFallback}
         />
       );
     }
-    return null; // Will redirect to dashboard
+    return null; // Will redirect to fallback path
   }
 
   return <>{children}</>;

@@ -9,6 +9,7 @@ const DashboardPage = () => {
     <FeatureFlagProtected
       featureName={FEATURE_FLAGS.DASHBOARD_FEATURE}
       showUnderConstruction={true}
+      fallbackPath="/profile"
     >
       <Dashboard />
     </FeatureFlagProtected>
