@@ -1,13 +1,14 @@
 'use client';
 
 import { usePathname, useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useState, Suspense } from 'react';
 
 import { DesktopNavigation } from './DesktopNavigation';
 import styles from './Header.module.css';
 import { navigationItems } from './menuItems';
 import { SideNav } from './SideNav';
 import { UserMenu } from './UserMenu';
+import UserMenuSkeleton from './UserMenuSkeleton';
 
 import { useAuth } from '@/features/auth/context/AuthContext';
 import { FEATURE_FLAGS, useFeatureFlag } from '@/features/feature-flags';
@@ -63,7 +64,9 @@ const Header = () => {
             {isNotificationSystemEnabled && (
               <NotificationsBell unreadCount={unreadCount} />
             )}
-            <UserMenu user={user} onLogout={logout} />
+            <Suspense fallback={<UserMenuSkeleton />}>
+              <UserMenu user={user} onLogout={logout} />
+            </Suspense>
           </div>
         </div>
       </div>

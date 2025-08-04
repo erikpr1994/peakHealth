@@ -30,48 +30,9 @@ export const signUpUser = async (page: Page, user: TestUser) => {
     await page.fill('[data-testid="name-input"]', user.name);
   }
 
-  // Submit the form
+  // Submit the form and wait for navigation to the dashboard
   await page.click('[data-testid="signup-button"]');
-
-  // Wait for response and check for errors
-  await page.waitForTimeout(2000);
-
-  // Check if there are any validation errors
-  const emailError = await page
-    .locator('[data-testid="email-error"]')
-    .isVisible();
-  const passwordError = await page
-    .locator('[data-testid="password-error"]')
-    .isVisible();
-  const nameError = await page
-    .locator('[data-testid="name-error"]')
-    .isVisible();
-  const confirmPasswordError = await page
-    .locator('[data-testid="confirm-password-error"]')
-    .isVisible();
-  const signupError = await page
-    .locator('[data-testid="signup-error"]')
-    .isVisible();
-
-  if (
-    emailError ||
-    passwordError ||
-    nameError ||
-    confirmPasswordError ||
-    signupError
-  ) {
-    console.log('Validation errors found:', {
-      emailError,
-      passwordError,
-      nameError,
-      confirmPasswordError,
-      signupError,
-    });
-    throw new Error('Signup form has validation errors');
-  }
-
-  // Wait for successful signup (redirect to dashboard or success message)
-  // Use a longer timeout for WebKit which can be slower
+  await page.waitForLoadState('networkidle');
   await expect(page).toHaveURL(/\/dashboard/, { timeout: 10000 });
 };
 
@@ -82,40 +43,42 @@ export const loginUser = async (page: Page, user: TestUser) => {
   await page.fill('[data-testid="email-input"]', user.email);
   await page.fill('[data-testid="password-input"]', user.password);
 
-  // Submit the form
+  // Submit the form and wait for navigation to the dashboard
   await page.click('[data-testid="login-button"]');
-
-  // Wait for successful login (redirect to dashboard)
-  // Use a longer timeout for WebKit which can be slower
+  await page.waitForLoadState('networkidle');
   await expect(page).toHaveURL(/\/dashboard/, { timeout: 10000 });
 };
 
-export const logoutUser = async (page: Page) => {
+export const logoutUser = async (page: Page, user: TestUser) => {
   // Navigate to user menu and click logout
-  await page.click('[data-testid="user-menu-button"]');
+  await page
+    .locator(`[data-testid="user-menu-button"]:has-text("${user.name}")`)
+    .click();
   await page.click('[data-testid="logout-button"]');
 
   // Wait for the user menu to disappear (indicating logout)
   await expect(
-    page.locator('[data-testid="user-menu-button"]')
+    page.locator(`[data-testid="user-menu-button"]:has-text("${user.name}")`)
   ).not.toBeVisible({ timeout: 10000 });
 
   // Wait for logout (redirect to landing page)
   await expect(page).toHaveURL('/', { timeout: 10000 });
 };
 
-export const expectToBeLoggedIn = async (page: Page) => {
+export const expectToBeLoggedIn = async (page: Page, user: TestUser) => {
   // Check that we're on the dashboard or authenticated area
   await expect(page).toHaveURL(/\/dashboard/);
   // Check that user menu is visible
-  await expect(page.locator('[data-testid="user-menu-button"]')).toBeVisible();
+  await expect(
+    page.locator(`[data-testid="user-menu-button"]:has-text("${user.name}")`)
+  ).toBeVisible();
 };
 
-export const expectToBeLoggedOut = async (page: Page) => {
+export const expectToBeLoggedOut = async (page: Page, user: TestUser) => {
   // Check that we're on landing page
   await expect(page).toHaveURL('/');
   // Check that user menu is not visible
   await expect(
-    page.locator('[data-testid="user-menu-button"]')
+    page.locator(`[data-testid="user-menu-button"]:has-text("${user.name}")`)
   ).not.toBeVisible();
 };
