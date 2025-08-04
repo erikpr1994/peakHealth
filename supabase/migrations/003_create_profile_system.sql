@@ -39,15 +39,7 @@ CREATE TABLE user_achievements (
   earned_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
--- Workout sessions table (placeholder for profile system)
-CREATE TABLE workout_sessions (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE,
-  started_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-  completed_at TIMESTAMP WITH TIME ZONE,
-  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-);
+
 
 -- Add indexes for performance
 CREATE INDEX idx_profiles_user_id ON profiles(id);
@@ -55,9 +47,7 @@ CREATE INDEX idx_user_stats_user_id ON user_stats(user_id);
 CREATE INDEX idx_user_achievements_user_id ON user_achievements(user_id);
 CREATE INDEX idx_user_achievements_type ON user_achievements(achievement_type);
 CREATE INDEX idx_user_achievements_earned_at ON user_achievements(earned_at);
-CREATE INDEX idx_workout_sessions_user_id ON workout_sessions(user_id);
-CREATE INDEX idx_workout_sessions_started_at ON workout_sessions(started_at);
-CREATE INDEX idx_workout_sessions_completed_at ON workout_sessions(completed_at);
+
 
 -- Function to get user profile with stats and achievements
 CREATE OR REPLACE FUNCTION get_user_profile(user_id_param UUID)
@@ -160,30 +150,13 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
 
--- Trigger to update stats when workout sessions are completed
-CREATE OR REPLACE FUNCTION trigger_update_user_stats()
-RETURNS TRIGGER AS $$
-BEGIN
-  -- Update stats when workout session is completed
-  IF NEW.completed_at IS NOT NULL AND OLD.completed_at IS NULL THEN
-    PERFORM update_user_stats_from_workouts();
-    PERFORM calculate_user_achievements(NEW.user_id);
-  END IF;
-  RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
 
--- Create trigger on workout_sessions table
-CREATE TRIGGER update_user_stats_trigger
-  AFTER UPDATE ON workout_sessions
-  FOR EACH ROW
-  EXECUTE FUNCTION trigger_update_user_stats();
 
 -- Row Level Security (RLS) policies
 ALTER TABLE profiles ENABLE ROW LEVEL SECURITY;
 ALTER TABLE user_stats ENABLE ROW LEVEL SECURITY;
 ALTER TABLE user_achievements ENABLE ROW LEVEL SECURITY;
-ALTER TABLE workout_sessions ENABLE ROW LEVEL SECURITY;
+
 
 -- Profiles policies
 CREATE POLICY "Users can view their own profile" ON profiles
@@ -206,15 +179,4 @@ CREATE POLICY "Users can view their own achievements" ON user_achievements
 CREATE POLICY "System can insert achievements" ON user_achievements
   FOR INSERT WITH CHECK (true);
 
--- Workout sessions policies
-CREATE POLICY "Users can view their own workout sessions" ON workout_sessions
-  FOR SELECT USING (auth.uid() = user_id);
-
-CREATE POLICY "Users can insert their own workout sessions" ON workout_sessions
-  FOR INSERT WITH CHECK (auth.uid() = user_id);
-
-CREATE POLICY "Users can update their own workout sessions" ON workout_sessions
-  FOR UPDATE USING (auth.uid() = user_id);
-
-CREATE POLICY "Users can delete their own workout sessions" ON workout_sessions
-  FOR DELETE USING (auth.uid() = user_id); 
+ 
