@@ -14,11 +14,9 @@ import { useExercises } from './hooks/useExercises';
 import { Exercise } from './types';
 
 import { Button } from '@/components/ui/button';
-import { useAuth } from '@/features/auth/context/AuthContext';
 
 const ExercisesListContent = () => {
   const router = useRouter();
-  const { userId } = useAuth();
   const [activeCategory, setActiveCategory] = useState('All Exercises');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [isFilterOpen, setIsFilterOpen] = useState(false);
@@ -99,7 +97,6 @@ const ExercisesListContent = () => {
       <NewExercisesCarousel
         newExercises={newExercises}
         onExerciseClick={handleExerciseClick}
-        userId={userId}
       />
 
       {/* Main Exercises Section */}
@@ -109,7 +106,6 @@ const ExercisesListContent = () => {
         viewMode={viewMode}
         onViewModeChange={setViewMode}
         onExerciseClick={handleExerciseClick}
-        userId={userId}
       />
 
       {/* Filter Dialog */}

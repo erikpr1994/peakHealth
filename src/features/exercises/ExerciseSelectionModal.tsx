@@ -16,7 +16,6 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
-import { useAuth } from '@/features/auth/context/AuthContext';
 
 interface ExerciseSelectionModalProps {
   isOpen: boolean;
@@ -30,7 +29,6 @@ const ExerciseSelectionModalContent = ({
   onSelectExercise,
 }: ExerciseSelectionModalProps) => {
   const [searchTerm, setSearchTerm] = useState('');
-  const { userId } = useAuth();
   const {
     selectedExercise,
     selectedVariant,
@@ -158,7 +156,6 @@ const ExerciseSelectionModalContent = ({
             onExerciseSelect={selectExercise}
             onSearchChange={handleSearchChange}
             onCategoryChange={setSelectedCategory}
-            userId={userId}
           />
 
           {/* Exercise Preview */}

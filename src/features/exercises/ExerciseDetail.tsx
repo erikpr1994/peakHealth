@@ -12,7 +12,6 @@ import { ExerciseVideo } from './components/ExerciseDetail/ExerciseVideo';
 import { useExercise } from './hooks/useExercises';
 
 import { Card } from '@/components/ui/card';
-import { useAuth } from '@/features/auth/context/AuthContext';
 
 interface ExerciseDetailProps {
   exerciseId: string;
@@ -21,7 +20,6 @@ interface ExerciseDetailProps {
 
 const ExerciseDetail = ({ exerciseId, variantId }: ExerciseDetailProps) => {
   const router = useRouter();
-  const { userId } = useAuth();
   const { exercise, isLoading, error } = useExercise(exerciseId);
 
   if (isLoading) {
@@ -115,11 +113,7 @@ const ExerciseDetail = ({ exerciseId, variantId }: ExerciseDetailProps) => {
         {/* Main Content */}
         <div className="lg:col-span-2">
           <Card className="p-6">
-            <ExerciseHeader
-              exercise={exercise}
-              variant={selectedVariant}
-              userId={userId || undefined}
-            />
+            <ExerciseHeader exercise={exercise} variant={selectedVariant} />
             <ExerciseInfo exercise={exercise} variant={selectedVariant} />
           </Card>
         </div>
@@ -134,11 +128,7 @@ const ExerciseDetail = ({ exerciseId, variantId }: ExerciseDetailProps) => {
       <ExerciseSteps exercise={exercise} variant={selectedVariant} />
 
       {/* Variants */}
-      <ExerciseVariants
-        exercise={exercise}
-        currentVariantId={variantId}
-        userId={userId || undefined}
-      />
+      <ExerciseVariants exercise={exercise} currentVariantId={variantId} />
 
       {/* Pro Tips and Common Mistakes */}
       <ExerciseTips exercise={exercise} variant={selectedVariant} />
