@@ -19,7 +19,7 @@ test.describe('Exercise Selection Modal', () => {
 
       // Navigate to routine creation page
       await page.goto('/routines/create');
-      
+
       // Wait for page to be fully loaded
       await page.waitForLoadState('networkidle');
 
@@ -36,7 +36,10 @@ test.describe('Exercise Selection Modal', () => {
       }
     });
 
-    test('should close modal without selecting', async ({ page, browserName }) => {
+    test('should close modal without selecting', async ({
+      page,
+      browserName,
+    }) => {
       // Skip this test for WebKit due to authentication timing issues
       if (browserName === 'webkit') {
         test.skip();
@@ -48,7 +51,7 @@ test.describe('Exercise Selection Modal', () => {
 
       // Navigate to routine creation and open modal
       await page.goto('/routines/create');
-      
+
       // Wait for page to be fully loaded
       await page.waitForLoadState('networkidle');
 
@@ -87,7 +90,7 @@ test.describe('Exercise Selection Modal', () => {
 
       // Navigate to routine creation and open modal
       await page.goto('/routines/create');
-      
+
       // Wait for page to be fully loaded
       await page.waitForLoadState('networkidle');
 
@@ -119,7 +122,7 @@ test.describe('Exercise Selection Modal', () => {
 
       // Navigate to routine creation and open modal
       await page.goto('/routines/create');
-      
+
       // Wait for page to be fully loaded
       await page.waitForLoadState('networkidle');
 

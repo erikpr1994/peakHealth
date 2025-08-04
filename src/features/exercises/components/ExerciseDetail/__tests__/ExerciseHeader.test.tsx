@@ -1,4 +1,4 @@
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, act } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 
 import type {
@@ -61,28 +61,26 @@ describe('ExerciseHeader', () => {
 
   it('shows favorite button and toggles state', async () => {
     render(<ExerciseHeader exercise={mockExercise} variant={mockVariant} />);
-    const heart = screen.getByRole('button');
+    const heart = screen.getByTestId('favorite-button');
     expect(heart.querySelector('svg')).toBeInTheDocument();
-    fireEvent.click(heart);
+    await act(async () => {
+      fireEvent.click(heart);
+    });
     // No error thrown, state updates
   });
 
   it('disables favorite button when updating', () => {
     render(<ExerciseHeader exercise={mockExercise} variant={mockVariant} />);
-    const heart = screen.getByRole('button');
+    const heart = screen.getByTestId('favorite-button');
     expect(heart).not.toBeDisabled();
   });
 
-  it('does not show favorite button if no user', () => {
-    vi.mock('@/features/auth/context/AuthContext', () => ({
-      useAuth: () => ({ userId: undefined }),
-    }));
-    render(<ExerciseHeader exercise={mockExercise} variant={mockVariant} />);
-    expect(screen.queryByRole('button')).toBeInTheDocument(); // Only printer button
-  });
+  // Note: Testing the "no user" scenario is done in a separate test file
+  // (ExerciseHeader.noUser.test.tsx) because it requires a different mock setup
+  // where useAuth returns { userId: undefined }
 
   it('shows printer button', () => {
     render(<ExerciseHeader exercise={mockExercise} variant={mockVariant} />);
-    expect(screen.getByRole('button')).toBeInTheDocument();
+    expect(screen.getByTestId('printer-button')).toBeInTheDocument();
   });
 });
