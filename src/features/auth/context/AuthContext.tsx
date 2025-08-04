@@ -270,9 +270,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         hasRole: role => user?.userRoles?.includes(role) || false,
         hasGroup: group => user?.userGroups?.includes(group) || false,
         hasAnyRole: roles =>
-          roles.some(role => user?.userRoles?.includes(role)),
+          roles?.some(role => user?.userRoles?.includes(role)) || false,
         hasAnyGroup: groups =>
-          groups.some(group => user?.userGroups?.includes(group)),
+          groups?.some(group => user?.userGroups?.includes(group)) || false,
       }}
     >
       {children}
