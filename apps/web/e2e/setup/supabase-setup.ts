@@ -35,7 +35,12 @@ export class SupabaseManager {
       }
 
       // Check if we're in a Supabase project
-      const supabaseConfigPath = join(process.cwd(), 'supabase', 'config.toml');
+      const supabaseConfigPath = join(
+        process.cwd(),
+        '..',
+        'supabase',
+        'config.toml'
+      );
       if (!existsSync(supabaseConfigPath)) {
         throw new Error(
           'Not in a Supabase project. Please run "supabase init" first.'
@@ -45,7 +50,7 @@ export class SupabaseManager {
       // Start Supabase
       execSync('supabase start', {
         stdio: 'inherit',
-        cwd: process.cwd(),
+        cwd: join(process.cwd(), '..'),
       });
 
       this.isRunning = true;
@@ -73,7 +78,7 @@ export class SupabaseManager {
 
       execSync('supabase stop', {
         stdio: 'inherit',
-        cwd: process.cwd(),
+        cwd: join(process.cwd(), '..'),
       });
 
       this.isRunning = false;
