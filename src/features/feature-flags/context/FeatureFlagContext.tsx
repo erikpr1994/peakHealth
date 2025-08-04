@@ -73,80 +73,80 @@ export const FeatureFlagProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   // Load user-specific flags when user authentication state changes
-  useEffect(() => {
-    const loadUserData = async () => {
-      if (!user || !user.id) {
-        // Clear user-specific data on logout
-        setUserFlags({});
-        setUserTypes([]);
-        setUserGroups([]);
-        setIsLoading(false);
-        return;
+  const loadUserData = useCallback(async () => {
+    if (!user || !user.id) {
+      // Clear user-specific data on logout
+      setUserFlags({});
+      setUserTypes([]);
+      setUserGroups([]);
+      setIsLoading(false);
+      return;
+    }
+
+    setIsLoading(true);
+    // Set user types and groups from auth response
+    setUserTypes(
+      (user.userRoles || []).map(role => ({
+        typeName: role,
+        displayName: role,
+        description: '',
+      }))
+    );
+    setUserGroups(
+      (user.userGroups || []).map(group => ({
+        groupName: group,
+        displayName: group,
+        description: '',
+      }))
+    );
+
+    const startTime = Date.now();
+    try {
+      const response = await fetch('/api/feature-flags');
+      if (!response.ok) {
+        throw new Error('Failed to fetch user feature flags');
       }
-
-      setIsLoading(true);
-      // Set user types and groups from auth response
-      setUserTypes(
-        (user.userRoles || []).map(role => ({
-          typeName: role,
-          displayName: role,
-          description: '',
-        }))
+      const { flags: fetchedUserFlags } = await response.json();
+      const userFlagsMap = fetchedUserFlags.reduce(
+        (
+          acc: Record<string, UserFeatureFlag>,
+          flag: {
+            name: string;
+            is_enabled: boolean;
+            rollout_percentage: number;
+          }
+        ) => {
+          acc[flag.name] = {
+            name: flag.name,
+            isEnabled: flag.is_enabled,
+            rolloutPercentage: flag.rollout_percentage,
+          };
+          return acc;
+        },
+        {}
       );
-      setUserGroups(
-        (user.userGroups || []).map(group => ({
-          groupName: group,
-          displayName: group,
-          description: '',
-        }))
+      setUserFlags(userFlagsMap);
+
+      const loadTime = Date.now() - startTime;
+      featureFlagMonitor.trackFeatureFlagPerformance(
+        'feature_flags_load',
+        loadTime,
+        user.id
       );
-
-      const startTime = Date.now();
-      try {
-        const response = await fetch('/api/feature-flags');
-        if (!response.ok) {
-          throw new Error('Failed to fetch user feature flags');
-        }
-        const { flags: fetchedUserFlags } = await response.json();
-        const userFlagsMap = fetchedUserFlags.reduce(
-          (
-            acc: Record<string, UserFeatureFlag>,
-            flag: {
-              name: string;
-              is_enabled: boolean;
-              rollout_percentage: number;
-            }
-          ) => {
-            acc[flag.name] = {
-              name: flag.name,
-              isEnabled: flag.is_enabled,
-              rolloutPercentage: flag.rollout_percentage,
-            };
-            return acc;
-          },
-          {}
-        );
-        setUserFlags(userFlagsMap);
-
-        const loadTime = Date.now() - startTime;
-        featureFlagMonitor.trackFeatureFlagPerformance(
-          'feature_flags_load',
-          loadTime,
-          user.id
-        );
-      } catch (error) {
-        featureFlagMonitor.trackFeatureFlagError(
-          'feature_flags_load',
-          error as Error,
-          user.id
-        );
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    loadUserData();
+    } catch (error) {
+      featureFlagMonitor.trackFeatureFlagError(
+        'feature_flags_load',
+        error as Error,
+        user.id
+      );
+    } finally {
+      setIsLoading(false);
+    }
   }, [user]);
+
+  useEffect(() => {
+    loadUserData();
+  }, [loadUserData]);
 
   const flags = useMemo(
     () => ({ ...publicFlags, ...userFlags }),
@@ -184,14 +184,9 @@ export const FeatureFlagProvider = ({ children }: { children: ReactNode }) => {
   const refreshFlags = useCallback(async (): Promise<void> => {
     if (user) {
       featureFlagCache.invalidateUser(user.id);
-      // Re-trigger the user data load effect
-      const loadUserData = async () => {
-        setIsLoading(true);
-        // Logic from useEffect to reload user data
-      };
       await loadUserData();
     }
-  }, [user]);
+  }, [user, loadUserData]);
 
   const value: FeatureFlagContextType = {
     flags,
