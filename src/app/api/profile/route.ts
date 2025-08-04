@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 
 import { ProfileUpdateData } from '@/features/profile/types/profile';
 import { createClient } from '@/lib/supabase/server';
+import { safeDateConversion } from '@/lib/utils';
 
 export async function GET() {
   try {
@@ -41,15 +42,11 @@ export async function GET() {
       profile: {
         id: user.id,
         ...profile,
-        created_at: profile.created_at
-          ? new Date(profile.created_at)
-          : undefined,
-        updated_at: profile.updated_at
-          ? new Date(profile.updated_at)
-          : undefined,
-        onboarding_completed_at: profile.onboarding_completed_at
-          ? new Date(profile.onboarding_completed_at)
-          : undefined,
+        created_at: safeDateConversion(profile.created_at),
+        updated_at: safeDateConversion(profile.updated_at),
+        onboarding_completed_at: safeDateConversion(
+          profile.onboarding_completed_at
+        ),
       },
       stats: {
         user_id: user.id,
@@ -57,15 +54,13 @@ export async function GET() {
         days_active: stats.days_active || 0,
         hours_trained: stats.hours_trained || 0,
         achievements_count: stats.achievements_count || 0,
-        last_updated: stats.last_updated
-          ? new Date(stats.last_updated)
-          : new Date(),
+        last_updated: safeDateConversion(stats.last_updated) || new Date(),
       },
       achievements: achievements.map((achievement: unknown) => {
         const achievementObj = achievement as Record<string, unknown>;
         return {
           ...achievementObj,
-          earned_at: new Date(achievementObj.earned_at as string),
+          earned_at: safeDateConversion(achievementObj.earned_at),
         };
       }),
     });
@@ -127,15 +122,11 @@ export async function PUT(request: NextRequest) {
         workout_types: profile.workout_types,
         limitations: profile.limitations,
         motivation: profile.motivation,
-        onboarding_completed_at: profile.onboarding_completed_at
-          ? new Date(profile.onboarding_completed_at)
-          : undefined,
-        created_at: profile.created_at
-          ? new Date(profile.created_at)
-          : undefined,
-        updated_at: profile.updated_at
-          ? new Date(profile.updated_at)
-          : undefined,
+        onboarding_completed_at: safeDateConversion(
+          profile.onboarding_completed_at
+        ),
+        created_at: safeDateConversion(profile.created_at),
+        updated_at: safeDateConversion(profile.updated_at),
       },
       message: 'Profile updated successfully',
     });
