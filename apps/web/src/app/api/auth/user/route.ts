@@ -27,22 +27,18 @@ export async function GET() {
       return NextResponse.json({ error: 'Not authenticated' }, { status: 401 });
     }
 
-    // Extract user roles and groups from Supabase's built-in user_metadata
-    // Default to basic user if no roles/groups are set
-    let userRoles = ['basic'];
-    let userGroups = ['free'];
-
-    if (user.user_metadata) {
-      userRoles = user.user_metadata.roles || userRoles;
-      userGroups = user.user_metadata.groups || userGroups;
-    }
+    // Add fallback values for backward compatibility
+    const userWithFallbacks = {
+      ...user,
+      app_metadata: {
+        ...user.app_metadata,
+        roles: user.app_metadata?.roles || ['basic'],
+        groups: user.app_metadata?.groups || ['free'],
+      },
+    };
 
     return NextResponse.json({
-      user: {
-        ...user,
-        userRoles,
-        userGroups,
-      },
+      user: userWithFallbacks,
     });
   } catch (error) {
     console.error('Error fetching user:', error);

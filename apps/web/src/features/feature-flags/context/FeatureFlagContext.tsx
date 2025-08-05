@@ -12,12 +12,7 @@ import React, {
 
 import { featureFlagCache } from '../lib/cache';
 import { featureFlagMonitor } from '../lib/monitoring';
-import {
-  FeatureFlagContextType,
-  UserFeatureFlag,
-  UserTypeInfo,
-  UserGroupInfo,
-} from '../types';
+import { FeatureFlagContextType, UserFeatureFlag } from '../types';
 
 import { useAuth } from '@/features/auth/context/AuthContext';
 
@@ -26,15 +21,13 @@ const FeatureFlagContext = createContext<FeatureFlagContextType | undefined>(
 );
 
 export const FeatureFlagProvider = ({ children }: { children: ReactNode }) => {
-  const { user } = useAuth();
+  const { user, userRoles, userGroups } = useAuth();
   const [publicFlags, setPublicFlags] = useState<
     Record<string, UserFeatureFlag>
   >({});
   const [userFlags, setUserFlags] = useState<Record<string, UserFeatureFlag>>(
     {}
   );
-  const [userTypes, setUserTypes] = useState<UserTypeInfo[]>([]);
-  const [userGroups, setUserGroups] = useState<UserGroupInfo[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   // Load public flags once on mount
@@ -77,28 +70,11 @@ export const FeatureFlagProvider = ({ children }: { children: ReactNode }) => {
     if (!user || !user.id) {
       // Clear user-specific data on logout
       setUserFlags({});
-      setUserTypes([]);
-      setUserGroups([]);
       setIsLoading(false);
       return;
     }
 
     setIsLoading(true);
-    // Set user types and groups from auth response
-    setUserTypes(
-      (user.userRoles || []).map(role => ({
-        typeName: role,
-        displayName: role,
-        description: '',
-      }))
-    );
-    setUserGroups(
-      (user.userGroups || []).map(group => ({
-        groupName: group,
-        displayName: group,
-        description: '',
-      }))
-    );
 
     const startTime = Date.now();
     try {
@@ -169,14 +145,14 @@ export const FeatureFlagProvider = ({ children }: { children: ReactNode }) => {
 
   const hasUserType = useCallback(
     (typeName: string): boolean => {
-      return userTypes.some(type => type.typeName === typeName);
+      return userRoles.includes(typeName);
     },
-    [userTypes]
+    [userRoles]
   );
 
   const isInGroup = useCallback(
     (groupName: string): boolean => {
-      return userGroups.some(group => group.groupName === groupName);
+      return userGroups.includes(groupName);
     },
     [userGroups]
   );
@@ -190,8 +166,6 @@ export const FeatureFlagProvider = ({ children }: { children: ReactNode }) => {
 
   const value: FeatureFlagContextType = {
     flags,
-    userTypes,
-    userGroups,
     isLoading,
     isEnabled,
     hasUserType,

@@ -24,22 +24,23 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: error.message }, { status: 400 });
     }
 
-    // Extract user roles and groups from Supabase's built-in user_metadata
+    // Extract user roles and groups from app_metadata with fallback values
     // Default to basic user if no roles/groups are set
-    let userRoles = ['basic'];
-    let userGroups = ['free'];
+    const userRoles = data.user?.app_metadata?.roles || ['basic'];
+    const userGroups = data.user?.app_metadata?.groups || ['free'];
 
-    if (data.user && data.user.user_metadata) {
-      userRoles = data.user.user_metadata.roles || userRoles;
-      userGroups = data.user.user_metadata.groups || userGroups;
-    }
+    // Add fallback values to app_metadata for backward compatibility
+    const userWithFallbacks = {
+      ...data.user,
+      app_metadata: {
+        ...data.user?.app_metadata,
+        roles: userRoles,
+        groups: userGroups,
+      },
+    };
 
     return NextResponse.json({
-      user: {
-        ...data.user,
-        userRoles,
-        userGroups,
-      },
+      user: userWithFallbacks,
       session: data.session,
     });
   } catch (error) {

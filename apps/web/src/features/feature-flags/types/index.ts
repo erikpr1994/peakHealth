@@ -92,23 +92,9 @@ export interface UserFeatureFlag {
   rolloutPercentage: number;
 }
 
-export interface UserTypeInfo {
-  typeName: string;
-  displayName: string;
-  description?: string;
-}
-
-export interface UserGroupInfo {
-  groupName: string;
-  displayName: string;
-  description?: string;
-}
-
 // Context Types
 export interface FeatureFlagContextType {
   flags: Record<string, UserFeatureFlag>;
-  userTypes: UserTypeInfo[];
-  userGroups: UserGroupInfo[];
   isLoading: boolean;
   isEnabled: (featureName: string) => boolean;
   hasUserType: (typeName: string) => boolean;
@@ -145,8 +131,6 @@ export interface UseFeatureFlagReturn {
 
 export interface UseFeatureFlagsReturn {
   flags: Record<string, UserFeatureFlag>;
-  userTypes: UserTypeInfo[];
-  userGroups: UserGroupInfo[];
   isLoading: boolean;
   isEnabled: (featureName: string) => boolean;
   hasUserType: (typeName: string) => boolean;
