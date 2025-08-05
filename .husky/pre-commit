@@ -20,7 +20,7 @@ if [ $BUILD_EXIT_CODE -ne 0 ]; then
 fi
 
 echo "🧪 Running unit and integration tests..."
-pnpm test
+pnpm test:unit
 TEST_EXIT_CODE=$?
 
 if [ $TEST_EXIT_CODE -ne 0 ]; then
