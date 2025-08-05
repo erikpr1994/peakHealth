@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 
+import { createAdminClient } from '@/lib/supabase/admin';
 import { createClient } from '@/lib/supabase/server';
 
 export async function POST(request: NextRequest) {
@@ -15,32 +16,50 @@ export async function POST(request: NextRequest) {
 
     const supabase = await createClient();
 
-    const { data, error } = await supabase.auth.signUp({
+    const {
+      data: { user },
+      error: signUpError,
+    } = await supabase.auth.signUp({
       email,
       password,
       options: {
         data: {
           name,
-          roles: ['basic'],
-          groups: ['free'],
         },
       },
     });
 
-    if (error) {
-      console.error('Supabase auth error:', error);
-      return NextResponse.json({ error: error.message }, { status: 400 });
+    if (signUpError) {
+      return NextResponse.json({ error: signUpError.message }, { status: 400 });
+    }
+
+    if (!user) {
+      return NextResponse.json({ error: 'User not created' }, { status: 500 });
+    }
+
+    const supabaseAdmin = createAdminClient();
+    const { error: adminError } = await supabaseAdmin.auth.admin.updateUserById(
+      user.id,
+      {
+        app_metadata: {
+          roles: ['basic'],
+          groups: ['free'],
+        },
+      }
+    );
+
+    if (adminError) {
+      return NextResponse.json({ error: adminError.message }, { status: 400 });
     }
 
     return NextResponse.json(
       {
         message: 'User created successfully',
-        user: data.user,
+        user,
       },
       { status: 201 }
     );
-  } catch (error) {
-    console.error('Signup error:', error);
+  } catch {
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }
