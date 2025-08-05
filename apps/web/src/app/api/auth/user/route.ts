@@ -27,22 +27,8 @@ export async function GET() {
       return NextResponse.json({ error: 'Not authenticated' }, { status: 401 });
     }
 
-    // Extract user roles and groups from Supabase's built-in user_metadata
-    // Default to basic user if no roles/groups are set
-    let userRoles = ['basic'];
-    let userGroups = ['free'];
-
-    if (user.user_metadata) {
-      userRoles = user.user_metadata.roles || userRoles;
-      userGroups = user.user_metadata.groups || userGroups;
-    }
-
     return NextResponse.json({
-      user: {
-        ...user,
-        userRoles,
-        userGroups,
-      },
+      user,
     });
   } catch (error) {
     console.error('Error fetching user:', error);

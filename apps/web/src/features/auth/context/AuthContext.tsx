@@ -15,10 +15,7 @@ import useSWR from 'swr';
 import { createClient } from '@/lib/supabase/client';
 
 // Extended user type with our custom properties
-export interface ExtendedUser extends User {
-  userRoles?: string[];
-  userGroups?: string[];
-}
+export type ExtendedUser = User;
 
 export interface AuthContextType {
   isAuthenticated: boolean;
@@ -191,15 +188,17 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         user: user || null,
         // Add convenience properties
         userId: user?.id || null,
-        userRoles: user?.userRoles || [],
-        userGroups: user?.userGroups || [],
+        userRoles: user?.app_metadata?.roles || [],
+        userGroups: user?.app_metadata?.groups || [],
         // Add utility functions
-        hasRole: role => user?.userRoles?.includes(role) || false,
-        hasGroup: group => user?.userGroups?.includes(group) || false,
+        hasRole: role => user?.app_metadata?.roles?.includes(role) || false,
+        hasGroup: group => user?.app_metadata?.groups?.includes(group) || false,
         hasAnyRole: roles =>
-          roles?.some(role => user?.userRoles?.includes(role)) || false,
+          roles?.some(role => user?.app_metadata?.roles?.includes(role)) ||
+          false,
         hasAnyGroup: groups =>
-          groups?.some(group => user?.userGroups?.includes(group)) || false,
+          groups?.some(group => user?.app_metadata?.groups?.includes(group)) ||
+          false,
       }}
     >
       {children}
