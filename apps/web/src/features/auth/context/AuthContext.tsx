@@ -188,8 +188,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         user: user || null,
         // Add convenience properties
         userId: user?.id || null,
-        userRoles: user?.app_metadata?.roles || [],
-        userGroups: user?.app_metadata?.groups || [],
+        userRoles: user?.app_metadata?.roles || ['basic'],
+        userGroups: user?.app_metadata?.groups || ['free'],
         // Add utility functions
         hasRole: role => user?.app_metadata?.roles?.includes(role) || false,
         hasGroup: group => user?.app_metadata?.groups?.includes(group) || false,

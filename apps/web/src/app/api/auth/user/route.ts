@@ -27,8 +27,18 @@ export async function GET() {
       return NextResponse.json({ error: 'Not authenticated' }, { status: 401 });
     }
 
+    // Add fallback values for backward compatibility
+    const userWithFallbacks = {
+      ...user,
+      app_metadata: {
+        roles: user.app_metadata?.roles || ['basic'],
+        groups: user.app_metadata?.groups || ['free'],
+        ...user.app_metadata,
+      },
+    };
+
     return NextResponse.json({
-      user,
+      user: userWithFallbacks,
     });
   } catch (error) {
     console.error('Error fetching user:', error);
