@@ -1,6 +1,5 @@
 'use client';
 
-import { useAuth } from '@peakhealth/auth';
 import React, {
   createContext,
   useContext,
@@ -19,6 +18,8 @@ import {
   UserTypeInfo,
   UserGroupInfo,
 } from '../types';
+
+import { useAuth } from '@/features/auth/context/AuthContext';
 
 const FeatureFlagContext = createContext<FeatureFlagContextType | undefined>(
   undefined

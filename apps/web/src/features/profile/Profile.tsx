@@ -1,6 +1,5 @@
 'use client';
 
-import { useAuth } from '@peakhealth/auth';
 import React from 'react';
 
 import styles from './Profile.module.css';
@@ -13,6 +12,8 @@ import {
   useUserProfile,
   useProfileUpdate,
 } from './index';
+
+import { useAuth } from '@/features/auth/context/AuthContext';
 
 const Profile = () => {
   const { user } = useAuth();

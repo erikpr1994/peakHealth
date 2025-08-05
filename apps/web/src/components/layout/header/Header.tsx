@@ -1,6 +1,5 @@
 'use client';
 
-import { useAuth } from '@peakhealth/auth';
 import { usePathname, useRouter } from 'next/navigation';
 import { useState, Suspense } from 'react';
 
@@ -15,6 +14,8 @@ import {
 import { SideNav } from './SideNav';
 import { UserMenu } from './UserMenu';
 import UserMenuSkeleton from './UserMenuSkeleton';
+
+import { useAuth } from '@/features/auth/context/AuthContext';
 
 import { FEATURE_FLAGS, useFeatureFlag } from '@/features/feature-flags';
 import { useNotifications, NotificationsBell } from '@/features/notifications';
