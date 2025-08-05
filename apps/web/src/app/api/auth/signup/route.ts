@@ -49,13 +49,26 @@ export async function POST(request: NextRequest) {
     );
 
     if (adminError) {
+      // Clean up the created user if admin update fails
+      await supabaseAdmin.auth.admin.deleteUser(user.id);
       return NextResponse.json({ error: adminError.message }, { status: 400 });
+    }
+
+    // Fetch the updated user with the new app_metadata
+    const { data: updatedUser, error: fetchError } =
+      await supabaseAdmin.auth.admin.getUserById(user.id);
+
+    if (fetchError || !updatedUser.user) {
+      return NextResponse.json(
+        { error: 'Failed to fetch updated user data' },
+        { status: 500 }
+      );
     }
 
     return NextResponse.json(
       {
         message: 'User created successfully',
-        user,
+        user: updatedUser.user,
       },
       { status: 201 }
     );
