@@ -11,6 +11,10 @@ export interface AuthUser {
     name?: string;
     roles?: string[];
     groups?: string[];
+    avatar_url?: string;
+    display_name?: string;
+    full_name?: string;
+    email?: string;
   };
   aud: string;
   userRoles?: string[];
