@@ -27,9 +27,9 @@ export async function GET() {
 
     const environment = process.env.NEXT_PUBLIC_ENVIRONMENT || 'development';
 
-    // Extract user roles and groups from user metadata
-    const userRoles = user.user_metadata?.roles || ['basic'];
-    const userGroups = user.user_metadata?.groups || ['free'];
+    // Extract user roles and groups from app_metadata with fallback values
+    const userRoles = user.app_metadata?.roles || ['basic'];
+    const userGroups = user.app_metadata?.groups || ['free'];
 
     const flagsResponse = await supabase.rpc('get_user_feature_flags', {
       user_id: user.id,
