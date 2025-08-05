@@ -1,6 +1,6 @@
 'use client';
 
-import { User } from '@supabase/supabase-js';
+import { AuthUser, AuthContextType } from '@peakhealth/auth';
 import { useRouter } from 'next/navigation';
 import React, {
   createContext,
@@ -14,34 +14,12 @@ import useSWR from 'swr';
 
 import { createClient } from '@/lib/supabase/client';
 
-// Extended user type with our custom properties
-export interface ExtendedUser extends User {
-  userRoles?: string[];
-  userGroups?: string[];
-}
-
-export interface AuthContextType {
-  isAuthenticated: boolean;
-  isAuthOperationLoading: boolean;
-  login: (email?: string, password?: string) => Promise<void>;
-  logout: () => Promise<void>;
-  signUp: (email?: string, password?: string, name?: string) => Promise<void>;
-  user: ExtendedUser | null;
-  // Add convenience properties
-  userId: string | null;
-  userRoles: string[];
-  userGroups: string[];
-  // Add utility functions
-  hasRole: (role: string) => boolean;
-  hasGroup: (group: string) => boolean;
-  hasAnyRole: (roles: string[]) => boolean;
-  hasAnyGroup: (groups: string[]) => boolean;
-}
+// Use the shared AuthUser type
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 // Custom fetcher for user endpoint that extracts user from response
-const userFetcher = async (url: string): Promise<ExtendedUser | null> => {
+const userFetcher = async (url: string): Promise<AuthUser | null> => {
   const response = await fetch(url);
 
   if (!response.ok) {
@@ -65,7 +43,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [isAuthOperationLoading, setIsAuthOperationLoading] = useState(false);
 
   // Use SWR to manage user state with custom fetcher
-  const { data: user, mutate: mutateUser } = useSWR<ExtendedUser | null>(
+  const { data: user, mutate: mutateUser } = useSWR<AuthUser | null>(
     '/api/auth/user',
     userFetcher,
     {
@@ -77,7 +55,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   );
 
   const handleAuthChange = useCallback(
-    async (event: string, session: { user: ExtendedUser } | null) => {
+    async (event: string, session: { user: any } | null) => {
       if (event === 'SIGNED_IN' || event === 'USER_UPDATED') {
         await mutateUser();
       } else if (event === 'SIGNED_OUT') {

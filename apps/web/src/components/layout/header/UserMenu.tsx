@@ -1,6 +1,6 @@
 'use client';
 
-import type { User } from '@supabase/supabase-js';
+import type { AuthUser } from '@peakhealth/auth';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
@@ -24,7 +24,7 @@ interface MenuItem {
 }
 
 interface UserMenuProps {
-  user: User | null;
+  user: AuthUser | null;
   onLogout: () => void;
   userMenuItems: MenuItem[];
   settingsMenuItems: MenuItem[];
@@ -63,7 +63,7 @@ export const UserMenu = ({
         >
           <Avatar className="w-8 h-8">
             <AvatarImage
-              src={user?.user_metadata.avatar_url}
+              src={user?.user_metadata?.avatar_url}
               alt={user?.email ?? ''}
             />
             <AvatarFallback className="text-xs">
@@ -72,13 +72,13 @@ export const UserMenu = ({
           </Avatar>
           <div className="hidden sm:flex flex-col text-left">
             <span className="text-sm font-medium text-gray-700 truncate max-w-[150px]">
-              {user?.user_metadata.name ??
-                user?.user_metadata.display_name ??
-                user?.user_metadata.full_name ??
+              {user?.user_metadata?.name ??
+                user?.user_metadata?.display_name ??
+                user?.user_metadata?.full_name ??
                 user?.email}
             </span>
             <span className="text-xs text-gray-500 truncate max-w-[150px]">
-              {user?.user_metadata.email}
+              {user?.user_metadata?.email}
             </span>
           </div>
           <ChevronDown className="w-4 h-4 text-gray-500" />

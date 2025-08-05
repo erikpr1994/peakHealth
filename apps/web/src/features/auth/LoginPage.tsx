@@ -1,5 +1,6 @@
 'use client';
 
+import { useAuth } from '@peakhealth/auth';
 import NextLink from 'next/link';
 import React, { useState } from 'react';
 
@@ -14,7 +15,6 @@ import {
 } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { useAuth } from '@/features/auth/context/AuthContext';
 
 const LoginPage = () => {
   const { login, isAuthOperationLoading } = useAuth();
