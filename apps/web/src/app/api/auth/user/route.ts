@@ -31,9 +31,9 @@ export async function GET() {
     const userWithFallbacks = {
       ...user,
       app_metadata: {
+        ...user.app_metadata,
         roles: user.app_metadata?.roles || ['basic'],
         groups: user.app_metadata?.groups || ['free'],
-        ...user.app_metadata,
       },
     };
 

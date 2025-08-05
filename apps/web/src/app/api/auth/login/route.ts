@@ -33,9 +33,9 @@ export async function POST(request: NextRequest) {
     const userWithFallbacks = {
       ...data.user,
       app_metadata: {
+        ...data.user?.app_metadata,
         roles: userRoles,
         groups: userGroups,
-        ...data.user?.app_metadata,
       },
     };
 
