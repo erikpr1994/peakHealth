@@ -1,3 +1,5 @@
+'use client';
+
 import {
   LayoutDashboard,
   BarChart3,
@@ -27,26 +29,26 @@ import {
 } from 'lucide-react';
 import React, { useState } from 'react';
 
-import { Analytics } from './components/Analytics';
-import { CommunicationLogs } from './components/CommunicationLogs';
-import { ContentManagement } from './components/ContentManagement';
-import { Dashboard } from './components/Dashboard';
-import { EmailTemplates } from './components/EmailTemplates';
-import { FeatureFlags } from './components/FeatureFlags';
-import { KnowledgeBase } from './components/KnowledgeBase';
-import { NotificationManagement } from './components/NotificationManagement';
-import { PlatformAnnouncements } from './components/PlatformAnnouncements';
-import { ProductRoadmap } from './components/ProductRoadmap';
-import { SuggestionsManagement } from './components/SuggestionsManagement';
-import { SupportTicketing } from './components/SupportTicketing';
-import { TrainerList } from './components/TrainerList';
-import { TrainerManagement } from './components/TrainerManagement';
-import { Avatar, AvatarFallback, AvatarImage } from './components/ui/avatar';
-import { Badge } from './components/ui/badge';
-import { Button } from './components/ui/button';
+import { Analytics } from './Analytics';
+import { CommunicationLogs } from './CommunicationLogs';
+import { ContentManagement } from './ContentManagement';
+import { Dashboard } from './Dashboard';
+import { EmailTemplates } from './EmailTemplates';
+import { FeatureFlags } from './FeatureFlags';
+import { KnowledgeBase } from './KnowledgeBase';
+import { NotificationManagement } from './NotificationManagement';
+import { PlatformAnnouncements } from './PlatformAnnouncements';
+import { ProductRoadmap } from './ProductRoadmap';
+import { SuggestionsManagement } from './SuggestionsManagement';
+import { SupportTicketing } from './SupportTicketing';
+import { TrainerList } from './TrainerList';
+import { TrainerManagement } from './TrainerManagement';
+import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
+import { Badge } from './ui/badge';
+import { Button } from './ui/button';
 
-import { UserEngagement } from './components/UserEngagement';
-import { UserFeedback } from './components/UserFeedback';
+import { UserEngagement } from './UserEngagement';
+import { UserFeedback } from './UserFeedback';
 
 // Extended admin menu with Customer Success and Communication sections
 const menuSections = {
@@ -479,7 +481,9 @@ const App = () => {
         <div className="flex-1 px-4 space-y-6">
           {/* Overview Section */}
           <div>
-            <h3 className="text-sm font-medium text-muted-foreground mb-2">Overview</h3>
+            <h3 className="text-sm font-medium text-muted-foreground mb-2">
+              Overview
+            </h3>
             <div className="space-y-1">
               {menuSections.overview.map(item => (
                 <button
@@ -500,7 +504,9 @@ const App = () => {
 
           {/* Analytics & Business Section */}
           <div>
-            <h3 className="text-sm font-medium text-muted-foreground mb-2">Analytics & Business</h3>
+            <h3 className="text-sm font-medium text-muted-foreground mb-2">
+              Analytics & Business
+            </h3>
             <div className="space-y-1">
               {menuSections.analytics.map(item => (
                 <button
@@ -515,10 +521,14 @@ const App = () => {
                   <item.icon className="h-4 w-4" />
                   <span>{item.label}</span>
                   {item.id === 'analytics' && (
-                    <Badge variant="secondary" className="ml-auto text-xs">$124K</Badge>
+                    <Badge variant="secondary" className="ml-auto text-xs">
+                      $124K
+                    </Badge>
                   )}
                   {item.id === 'reports' && (
-                    <Badge variant="secondary" className="ml-auto text-xs">15</Badge>
+                    <Badge variant="secondary" className="ml-auto text-xs">
+                      15
+                    </Badge>
                   )}
                 </button>
               ))}
@@ -527,7 +537,9 @@ const App = () => {
 
           {/* Partners & Network Section */}
           <div>
-            <h3 className="text-sm font-medium text-muted-foreground mb-2">Partners & Network</h3>
+            <h3 className="text-sm font-medium text-muted-foreground mb-2">
+              Partners & Network
+            </h3>
             <div className="space-y-1">
               {menuSections.partners.map(item => (
                 <button
@@ -542,10 +554,14 @@ const App = () => {
                   <item.icon className="h-4 w-4" />
                   <span>{item.label}</span>
                   {item.id === 'trainers' && (
-                    <Badge variant="secondary" className="ml-auto">48</Badge>
+                    <Badge variant="secondary" className="ml-auto">
+                      48
+                    </Badge>
                   )}
                   {item.id === 'gyms' && (
-                    <Badge variant="secondary" className="ml-auto">12</Badge>
+                    <Badge variant="secondary" className="ml-auto">
+                      12
+                    </Badge>
                   )}
                 </button>
               ))}
@@ -554,7 +570,9 @@ const App = () => {
 
           {/* Content & Operations Section */}
           <div>
-            <h3 className="text-sm font-medium text-muted-foreground mb-2">Content & Operations</h3>
+            <h3 className="text-sm font-medium text-muted-foreground mb-2">
+              Content & Operations
+            </h3>
             <div className="space-y-1">
               {menuSections.content.map(item => (
                 <button
@@ -569,10 +587,14 @@ const App = () => {
                   <item.icon className="h-4 w-4" />
                   <span>{item.label}</span>
                   {item.id === 'suggestions' && (
-                    <Badge variant="destructive" className="ml-auto text-xs">3</Badge>
+                    <Badge variant="destructive" className="ml-auto text-xs">
+                      3
+                    </Badge>
                   )}
                   {item.id === 'content' && (
-                    <Badge variant="secondary" className="ml-auto text-xs">1.2K</Badge>
+                    <Badge variant="secondary" className="ml-auto text-xs">
+                      1.2K
+                    </Badge>
                   )}
                 </button>
               ))}
@@ -581,7 +603,9 @@ const App = () => {
 
           {/* Customer Success & Support Section */}
           <div>
-            <h3 className="text-sm font-medium text-muted-foreground mb-2">Customer Success & Support</h3>
+            <h3 className="text-sm font-medium text-muted-foreground mb-2">
+              Customer Success & Support
+            </h3>
             <div className="space-y-1">
               {menuSections.customer_success.map(item => (
                 <button
@@ -596,16 +620,24 @@ const App = () => {
                   <item.icon className="h-4 w-4" />
                   <span>{item.label}</span>
                   {item.id === 'support' && (
-                    <Badge variant="destructive" className="ml-auto text-xs">12</Badge>
+                    <Badge variant="destructive" className="ml-auto text-xs">
+                      12
+                    </Badge>
                   )}
                   {item.id === 'engagement' && (
-                    <Badge variant="secondary" className="ml-auto text-xs">85%</Badge>
+                    <Badge variant="secondary" className="ml-auto text-xs">
+                      85%
+                    </Badge>
                   )}
                   {item.id === 'knowledge' && (
-                    <Badge variant="secondary" className="ml-auto text-xs">124</Badge>
+                    <Badge variant="secondary" className="ml-auto text-xs">
+                      124
+                    </Badge>
                   )}
                   {item.id === 'feedback' && (
-                    <Badge variant="secondary" className="ml-auto text-xs">4.8</Badge>
+                    <Badge variant="secondary" className="ml-auto text-xs">
+                      4.8
+                    </Badge>
                   )}
                 </button>
               ))}
@@ -614,7 +646,9 @@ const App = () => {
 
           {/* Communication & Notifications Section */}
           <div>
-            <h3 className="text-sm font-medium text-muted-foreground mb-2">Communication & Notifications</h3>
+            <h3 className="text-sm font-medium text-muted-foreground mb-2">
+              Communication & Notifications
+            </h3>
             <div className="space-y-1">
               {menuSections.communications.map(item => (
                 <button
@@ -629,16 +663,24 @@ const App = () => {
                   <item.icon className="h-4 w-4" />
                   <span>{item.label}</span>
                   {item.id === 'announcements' && (
-                    <Badge variant="secondary" className="ml-auto text-xs">5</Badge>
+                    <Badge variant="secondary" className="ml-auto text-xs">
+                      5
+                    </Badge>
                   )}
                   {item.id === 'notifications' && (
-                    <Badge variant="secondary" className="ml-auto text-xs">89%</Badge>
+                    <Badge variant="secondary" className="ml-auto text-xs">
+                      89%
+                    </Badge>
                   )}
                   {item.id === 'emails' && (
-                    <Badge variant="secondary" className="ml-auto text-xs">18</Badge>
+                    <Badge variant="secondary" className="ml-auto text-xs">
+                      18
+                    </Badge>
                   )}
                   {item.id === 'comm_logs' && (
-                    <Badge variant="secondary" className="ml-auto text-xs">2.3K</Badge>
+                    <Badge variant="secondary" className="ml-auto text-xs">
+                      2.3K
+                    </Badge>
                   )}
                 </button>
               ))}
@@ -647,7 +689,9 @@ const App = () => {
 
           {/* Product & Development Section */}
           <div>
-            <h3 className="text-sm font-medium text-muted-foreground mb-2">Product & Development</h3>
+            <h3 className="text-sm font-medium text-muted-foreground mb-2">
+              Product & Development
+            </h3>
             <div className="space-y-1">
               {menuSections.product.map(item => (
                 <button
@@ -662,10 +706,14 @@ const App = () => {
                   <item.icon className="h-4 w-4" />
                   <span>{item.label}</span>
                   {item.id === 'roadmap' && (
-                    <Badge variant="secondary" className="ml-auto text-xs">8</Badge>
+                    <Badge variant="secondary" className="ml-auto text-xs">
+                      8
+                    </Badge>
                   )}
                   {item.id === 'features' && (
-                    <Badge variant="secondary" className="ml-auto text-xs">23</Badge>
+                    <Badge variant="secondary" className="ml-auto text-xs">
+                      23
+                    </Badge>
                   )}
                 </button>
               ))}
@@ -674,7 +722,9 @@ const App = () => {
 
           {/* System Administration Section */}
           <div>
-            <h3 className="text-sm font-medium text-muted-foreground mb-2">System Administration</h3>
+            <h3 className="text-sm font-medium text-muted-foreground mb-2">
+              System Administration
+            </h3>
             <div className="space-y-1">
               {menuSections.system.map(item => (
                 <button
@@ -703,7 +753,9 @@ const App = () => {
             </Avatar>
             <div className="flex-1 min-w-0">
               <p className="text-sm truncate">John Doe</p>
-              <p className="text-xs text-muted-foreground truncate">System Administrator</p>
+              <p className="text-xs text-muted-foreground truncate">
+                System Administrator
+              </p>
             </div>
             <Button variant="ghost" size="sm">
               <LogOut className="h-4 w-4" />
@@ -712,58 +764,58 @@ const App = () => {
         </div>
       </div>
 
-             {/* Main content area */}
-       <div className="flex-1 flex flex-col">
-         <header className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-           <div className="flex h-14 items-center justify-between px-4">
-             <div className="flex items-center gap-4">
-               {/* Data Context Indicator */}
-               <div className="flex items-center gap-2">
-                 {(() => {
-                   const scopeInfo = getDataScopeInfo(activeView);
-                   const IconComponent = scopeInfo.icon;
-                   return (
-                     <Badge
-                       variant={
-                         scopeInfo.color as
-                           | 'default'
-                           | 'secondary'
-                           | 'destructive'
-                           | 'outline'
-                       }
-                     >
-                       <IconComponent className="h-3 w-3 mr-1" />
-                       {scopeInfo.label}
-                     </Badge>
-                   );
-                 })()}
-               </div>
+      {/* Main content area */}
+      <div className="flex-1 flex flex-col">
+        <header className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+          <div className="flex h-14 items-center justify-between px-4">
+            <div className="flex items-center gap-4">
+              {/* Data Context Indicator */}
+              <div className="flex items-center gap-2">
+                {(() => {
+                  const scopeInfo = getDataScopeInfo(activeView);
+                  const IconComponent = scopeInfo.icon;
+                  return (
+                    <Badge
+                      variant={
+                        scopeInfo.color as
+                          | 'default'
+                          | 'secondary'
+                          | 'destructive'
+                          | 'outline'
+                      }
+                    >
+                      <IconComponent className="h-3 w-3 mr-1" />
+                      {scopeInfo.label}
+                    </Badge>
+                  );
+                })()}
+              </div>
 
-               <h1 className="font-medium">{getCurrentPageTitle()}</h1>
-             </div>
+              <h1 className="font-medium">{getCurrentPageTitle()}</h1>
+            </div>
 
-             <div className="flex items-center gap-2">
-               <Button variant="ghost" size="sm">
-                 <Bell className="h-4 w-4" />
-               </Button>
-               <Button variant="ghost" size="sm" onClick={toggleDarkMode}>
-                 {isDarkMode ? (
-                   <Sun className="h-4 w-4" />
-                 ) : (
-                   <Moon className="h-4 w-4" />
-                 )}
-               </Button>
-               <Badge variant="default">
-                 <Shield className="h-3 w-3 mr-1" />
-                 Admin
-               </Badge>
-             </div>
-           </div>
-         </header>
+            <div className="flex items-center gap-2">
+              <Button variant="ghost" size="sm">
+                <Bell className="h-4 w-4" />
+              </Button>
+              <Button variant="ghost" size="sm" onClick={toggleDarkMode}>
+                {isDarkMode ? (
+                  <Sun className="h-4 w-4" />
+                ) : (
+                  <Moon className="h-4 w-4" />
+                )}
+              </Button>
+              <Badge variant="default">
+                <Shield className="h-3 w-3 mr-1" />
+                Admin
+              </Badge>
+            </div>
+          </div>
+        </header>
 
-                   <main className="flex-1 overflow-auto">{renderContent()}</main>
-        </div>
+        <main className="flex-1 overflow-auto">{renderContent()}</main>
       </div>
+    </div>
   );
 };
 
