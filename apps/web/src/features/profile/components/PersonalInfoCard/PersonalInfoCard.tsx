@@ -1,6 +1,14 @@
 'use client';
 
-import { Mail, Phone, MapPin, Calendar, Edit2, Save } from 'lucide-react';
+import {
+  Mail,
+  Phone,
+  MapPin,
+  Calendar,
+  Edit2,
+  Save,
+  Shield,
+} from 'lucide-react';
 import React, { useState } from 'react';
 
 import { UserMetadata } from '../../types/profile';
@@ -31,7 +39,7 @@ export const PersonalInfoCard = ({
   onUpdateMetadata,
   isUpdating = false,
 }: PersonalInfoCardProps) => {
-  const { mutateUser } = useAuth();
+  const { mutateUser, userRoles, userGroups } = useAuth();
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState({
     name: user.user_metadata.name || '',
@@ -238,6 +246,43 @@ export const PersonalInfoCard = ({
           ) : (
             <p className={styles.value}>{formData.bio || 'No bio provided'}</p>
           )}
+        </div>
+
+        {/* Roles and Groups Section */}
+        <div>
+          <Label className={styles.label}>
+            <Shield className={styles.icon} />
+            Roles & Groups
+          </Label>
+          <div className={styles.rolesGroupsContainer}>
+            {userRoles.length > 0 && (
+              <div className={styles.roleGroupSection}>
+                <span className={styles.roleGroupLabel}>Roles:</span>
+                <div className={styles.roleGroupTags}>
+                  {userRoles.map((role, index) => (
+                    <span key={index} className={styles.roleGroupTag}>
+                      {role}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
+            {userGroups.length > 0 && (
+              <div className={styles.roleGroupSection}>
+                <span className={styles.roleGroupLabel}>Groups:</span>
+                <div className={styles.roleGroupTags}>
+                  {userGroups.map((group, index) => (
+                    <span key={index} className={styles.roleGroupTag}>
+                      {group}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
+            {userRoles.length === 0 && userGroups.length === 0 && (
+              <p className={styles.value}>No roles or groups assigned</p>
+            )}
+          </div>
         </div>
 
         <div className={styles.actions}>
