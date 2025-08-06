@@ -193,9 +193,9 @@ describe('ExerciseValidators', () => {
       const searchParams = {
         searchTerm: 'push',
         category: 'strength',
-        difficulty: 'beginner',
-        equipment: 'bodyweight',
-        muscleGroup: 'chest',
+        difficulties: ['beginner'],
+        equipment: ['bodyweight'],
+        muscleGroups: ['chest'],
       };
 
       const result = exerciseValidators.validateSearchParams(searchParams);
