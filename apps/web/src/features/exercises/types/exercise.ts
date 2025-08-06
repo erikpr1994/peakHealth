@@ -69,7 +69,7 @@ export interface Exercise {
 
   // Variants Management
   variants: ExerciseVariant[];
-  mainVariantId: ExerciseVariantId; // ID of the main/default variant
+  mainVariantId?: ExerciseVariantId; // ID of the main/default variant
 
   // Display Properties
   icon: string;

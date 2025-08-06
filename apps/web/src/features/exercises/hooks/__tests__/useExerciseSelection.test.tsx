@@ -106,7 +106,7 @@ describe('useExerciseSelection', () => {
   it('should select an exercise with variants but no main variant', () => {
     const exerciseWithoutMainVariant = {
       ...mockExercise,
-      mainVariantId: createExerciseVariantId('non-existent'),
+      mainVariantId: undefined,
     };
     const { result } = renderHook(() => useExerciseSelection());
 
