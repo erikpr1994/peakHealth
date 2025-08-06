@@ -40,6 +40,10 @@
   --radius-lg: var(--radius);
   --radius-md: calc(var(--radius) - 2px);
   --radius-sm: calc(var(--radius) - 4px);
+
+  --spacing-sidebar-width: 16rem;
+  --spacing-sidebar-width-mobile: 18rem;
+  --spacing-sidebar-width-icon: 3rem;
 }
 
 /*
