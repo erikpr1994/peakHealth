@@ -102,18 +102,37 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       suspense: true,
       fallbackData: null,
       onError: async error => {
-        // Handle USER_NOT_FOUND errors with proper cleanup
+        // Handle all 401 errors to prevent stale user data
         if (error?.status === 401) {
           try {
             const errorData = error.info as {
               code?: string;
               shouldRedirect?: boolean;
             };
+
+            // For USER_NOT_FOUND, do full cleanup with redirect
             if (
               errorData.code === 'USER_NOT_FOUND' &&
               errorData.shouldRedirect
             ) {
               await handleUserNotFoundCleanup();
+            } else {
+              // For other 401s (expired tokens, etc.), clear user state
+              // but don't redirect to avoid aggressive behavior
+              await mutateUser(null, false);
+
+              // Clear auth tokens for expired sessions
+              try {
+                const supabase = createClient();
+                if (supabase) {
+                  await supabase.auth.signOut();
+                }
+              } catch (signOutError) {
+                console.error(
+                  'Error signing out expired session:',
+                  signOutError
+                );
+              }
             }
           } catch (cleanupError) {
             console.error('Error during cleanup:', cleanupError);
