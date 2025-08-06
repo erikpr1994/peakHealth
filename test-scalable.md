@@ -1,1 +1,0 @@
-# Test scalable pre-commit

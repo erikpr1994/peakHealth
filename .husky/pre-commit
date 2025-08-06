@@ -9,9 +9,14 @@ if [ $LINT_STAGED_EXIT_CODE -ne 0 ]; then
   exit $LINT_STAGED_EXIT_CODE
 fi
 
-# Get list of changed files and determine which projects have changes
+# Get list of changed files
 echo "📋 Analyzing changed projects..."
 CHANGED_FILES=$(git diff --cached --name-only)
+
+# Function to get all workspace packages
+get_workspace_packages() {
+  find apps packages -name "package.json" -type f 2>/dev/null | sed 's|/package.json||' | grep -v "/\.next"
+}
 
 # Function to check if a project has changes
 has_project_changes() {
@@ -19,39 +24,91 @@ has_project_changes() {
   echo "$CHANGED_FILES" | grep -q "^$project_path/"
 }
 
-# Run build only for projects with changes
-if has_project_changes "apps/web" || has_project_changes "apps/admin"; then
-  echo "🏗️ Building changed projects..."
-  pnpm build --filter=./apps/web --filter=./apps/admin
-  BUILD_EXIT_CODE=$?
+# Function to check if a project has a specific script
+has_script() {
+  local project_path=$1
+  local script_name=$2
+  if [ -f "$project_path/package.json" ]; then
+    jq -e ".scripts.$script_name" "$project_path/package.json" >/dev/null 2>&1
+  else
+    return 1
+  fi
+}
 
-  if [ $BUILD_EXIT_CODE -ne 0 ]; then
-    echo "❌ Build failed"
-    exit $BUILD_EXIT_CODE
+# Get all workspace packages
+WORKSPACE_PACKAGES=$(get_workspace_packages)
+CHANGED_PROJECTS=""
+
+echo "🔍 Detecting workspace packages:"
+echo "$WORKSPACE_PACKAGES" | while read -r package; do
+  if [ -n "$package" ]; then
+    echo "  - $package"
+    if has_project_changes "$package"; then
+      CHANGED_PROJECTS="$CHANGED_PROJECTS $package"
+    fi
+  fi
+done
+
+# Build changed projects that have build script
+if [ -n "$CHANGED_PROJECTS" ]; then
+  echo "🏗️ Building changed projects..."
+  BUILD_FILTERS=""
+  for project in $CHANGED_PROJECTS; do
+    if has_script "$project" "build"; then
+      BUILD_FILTERS="$BUILD_FILTERS --filter=./$project"
+    fi
+  done
+  
+  if [ -n "$BUILD_FILTERS" ]; then
+    pnpm build $BUILD_FILTERS
+    BUILD_EXIT_CODE=$?
+    
+    if [ $BUILD_EXIT_CODE -ne 0 ]; then
+      echo "❌ Build failed"
+      exit $BUILD_EXIT_CODE
+    fi
   fi
 fi
 
-# Run type checking only if there are TypeScript changes
+# Type check changed projects that have type-check script and TypeScript changes
 if echo "$CHANGED_FILES" | grep -q "\.ts$" || echo "$CHANGED_FILES" | grep -q "\.tsx$"; then
   echo "🔍 Type checking changed TypeScript files..."
-  pnpm type-check --filter=./apps/web --filter=./apps/admin
-  TYPE_CHECK_EXIT_CODE=$?
-
-  if [ $TYPE_CHECK_EXIT_CODE -ne 0 ]; then
-    echo "❌ Type check failed"
-    exit $TYPE_CHECK_EXIT_CODE
+  TYPE_CHECK_FILTERS=""
+  for project in $CHANGED_PROJECTS; do
+    if has_script "$project" "type-check"; then
+      TYPE_CHECK_FILTERS="$TYPE_CHECK_FILTERS --filter=./$project"
+    fi
+  done
+  
+  if [ -n "$TYPE_CHECK_FILTERS" ]; then
+    pnpm type-check $TYPE_CHECK_FILTERS
+    TYPE_CHECK_EXIT_CODE=$?
+    
+    if [ $TYPE_CHECK_EXIT_CODE -ne 0 ]; then
+      echo "❌ Type check failed"
+      exit $TYPE_CHECK_EXIT_CODE
+    fi
   fi
 fi
 
 # Run tests only if there are changes in test-related files
 if echo "$CHANGED_FILES" | grep -q "\.test\." || echo "$CHANGED_FILES" | grep -q "\.spec\." || echo "$CHANGED_FILES" | grep -q "src/"; then
   echo "🧪 Running unit tests..."
-  pnpm test:unit
-  TEST_EXIT_CODE=$?
-
-  if [ $TEST_EXIT_CODE -ne 0 ]; then
-    echo "❌ Tests failed"
-    exit $TEST_EXIT_CODE
+  TEST_FILTERS=""
+  for project in $CHANGED_PROJECTS; do
+    if has_script "$project" "test"; then
+      TEST_FILTERS="$TEST_FILTERS --filter=./$project"
+    fi
+  done
+  
+  if [ -n "$TEST_FILTERS" ]; then
+    pnpm test:unit $TEST_FILTERS
+    TEST_EXIT_CODE=$?
+    
+    if [ $TEST_EXIT_CODE -ne 0 ]; then
+      echo "❌ Tests failed"
+      exit $TEST_EXIT_CODE
+    fi
   fi
 fi
 
