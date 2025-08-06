@@ -37,7 +37,37 @@ export interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-// Custom fetcher for user endpoint that extracts user from response
+// Separate cleanup function to handle USER_NOT_FOUND scenario
+const handleUserNotFoundCleanup = async (): Promise<void> => {
+  if (typeof window === 'undefined') {
+    return;
+  }
+
+  try {
+    // Clear Supabase session properly
+    const supabase = createClient();
+    if (supabase) {
+      await supabase.auth.signOut();
+    }
+  } catch (error) {
+    // Log error but continue with cleanup even if signOut fails
+    console.error('Error during signOut cleanup:', error);
+  }
+
+  try {
+    // Clear any stored auth data
+    localStorage.removeItem('supabase.auth.token');
+    sessionStorage.removeItem('supabase.auth.token');
+  } catch (error) {
+    // Log error but continue with redirect
+    console.error('Error clearing storage:', error);
+  }
+
+  // Redirect to login page
+  window.location.href = '/login';
+};
+
+// Pure fetcher function - no side effects
 const userFetcher = async (url: string): Promise<ExtendedUser | null> => {
   const response = await fetch(url);
 
@@ -45,23 +75,11 @@ const userFetcher = async (url: string): Promise<ExtendedUser | null> => {
     if (response.status === 401) {
       const errorData = await response.json();
 
-      // Check if this is a "user not found" error that requires redirect
+      // Check if this is a "user not found" error that requires cleanup
       if (errorData.code === 'USER_NOT_FOUND' && errorData.shouldRedirect) {
-        // Clear any existing auth state and redirect to login
-        if (typeof window !== 'undefined') {
-          // Clear Supabase session properly
-          const supabase = createClient();
-          if (supabase) {
-            await supabase.auth.signOut();
-          }
-
-          // Clear any stored auth data
-          localStorage.removeItem('supabase.auth.token');
-          sessionStorage.removeItem('supabase.auth.token');
-
-          // Redirect to login page
-          window.location.href = '/login';
-        }
+        // Don't perform side effects here - let SWR onError handle it
+        // Just return null to indicate not authenticated
+        return null;
       }
 
       // Not authenticated, return null (don't throw error to prevent infinite loops)
@@ -93,10 +111,23 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       shouldRetryOnError: false,
       suspense: true,
       fallbackData: null,
-      onError: error => {
-        // Prevent infinite loops on 401 errors
+      onError: async error => {
+        // Handle USER_NOT_FOUND errors with proper cleanup
         if (error?.status === 401) {
-          // Don't retry on 401 errors
+          try {
+            const response = await fetch('/api/auth/user');
+            if (response.status === 401) {
+              const errorData = await response.json();
+              if (
+                errorData.code === 'USER_NOT_FOUND' &&
+                errorData.shouldRedirect
+              ) {
+                await handleUserNotFoundCleanup();
+              }
+            }
+          } catch (cleanupError) {
+            console.error('Error during cleanup:', cleanupError);
+          }
         }
       },
     }
