@@ -1,9 +1,38 @@
-import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
-import { Button } from "./ui/button";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, PieChart, Pie, Cell, AreaChart, Area } from "recharts";
-import { TrendingUp, TrendingDown, Users, Target, Clock, Calendar } from "lucide-react";
+import {
+  TrendingUp,
+  TrendingDown,
+  Users,
+  Target,
+  Clock,
+  Calendar,
+} from 'lucide-react';
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+  BarChart,
+  Bar,
+  PieChart,
+  Pie,
+  Cell,
+  AreaChart,
+  Area,
+} from 'recharts';
+
+import { Button } from './ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from './ui/select';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
 
 const weeklyData = [
   { name: 'Week 1', workouts: 65, completed: 55, clients: 120 },
@@ -40,13 +69,15 @@ const clientRetention = [
   { month: 'Jun', retention: 95 },
 ];
 
-export function Analytics() {
+export const Analytics = () => {
   return (
     <div className="p-6 space-y-6">
       <div className="flex justify-between items-center">
         <div>
           <h1>Analytics Dashboard</h1>
-          <p className="text-muted-foreground">Track performance and client progress across your fitness programs</p>
+          <p className="text-muted-foreground">
+            Track performance and client progress across your fitness programs
+          </p>
         </div>
         <div className="flex gap-2">
           <Select defaultValue="30">
@@ -81,7 +112,9 @@ export function Analytics() {
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Workout Completion</CardTitle>
+            <CardTitle className="text-sm font-medium">
+              Workout Completion
+            </CardTitle>
             <Target className="h-4 w-4 text-blue-600" />
           </CardHeader>
           <CardContent>
@@ -94,7 +127,9 @@ export function Analytics() {
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Client Retention</CardTitle>
+            <CardTitle className="text-sm font-medium">
+              Client Retention
+            </CardTitle>
             <Users className="h-4 w-4 text-purple-600" />
           </CardHeader>
           <CardContent>
@@ -107,7 +142,9 @@ export function Analytics() {
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Avg Session Time</CardTitle>
+            <CardTitle className="text-sm font-medium">
+              Avg Session Time
+            </CardTitle>
             <Clock className="h-4 w-4 text-orange-600" />
           </CardHeader>
           <CardContent>
@@ -140,8 +177,20 @@ export function Analytics() {
                     <XAxis dataKey="name" />
                     <YAxis />
                     <Tooltip />
-                    <Line type="monotone" dataKey="workouts" stroke="#8884d8" strokeWidth={2} name="Scheduled" />
-                    <Line type="monotone" dataKey="completed" stroke="#82ca9d" strokeWidth={2} name="Completed" />
+                    <Line
+                      type="monotone"
+                      dataKey="workouts"
+                      stroke="#8884d8"
+                      strokeWidth={2}
+                      name="Scheduled"
+                    />
+                    <Line
+                      type="monotone"
+                      dataKey="completed"
+                      stroke="#82ca9d"
+                      strokeWidth={2}
+                      name="Completed"
+                    />
                   </LineChart>
                 </ResponsiveContainer>
               </CardContent>
@@ -159,7 +208,9 @@ export function Analytics() {
                       cx="50%"
                       cy="50%"
                       labelLine={false}
-                      label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
+                      label={({ name, percent }) =>
+                        `${name}: ${(percent * 100).toFixed(0)}%`
+                      }
                       outerRadius={80}
                       fill="#8884d8"
                       dataKey="value"
@@ -186,7 +237,13 @@ export function Analytics() {
                   <XAxis dataKey="name" />
                   <YAxis />
                   <Tooltip />
-                  <Area type="monotone" dataKey="clients" stroke="#8884d8" fill="#8884d8" fillOpacity={0.6} />
+                  <Area
+                    type="monotone"
+                    dataKey="clients"
+                    stroke="#8884d8"
+                    fill="#8884d8"
+                    fillOpacity={0.6}
+                  />
                 </AreaChart>
               </ResponsiveContainer>
             </CardContent>
@@ -206,7 +263,12 @@ export function Analytics() {
                     <XAxis dataKey="month" />
                     <YAxis domain={[80, 100]} />
                     <Tooltip />
-                    <Line type="monotone" dataKey="retention" stroke="#82ca9d" strokeWidth={2} />
+                    <Line
+                      type="monotone"
+                      dataKey="retention"
+                      stroke="#82ca9d"
+                      strokeWidth={2}
+                    />
                   </LineChart>
                 </ResponsiveContainer>
               </CardContent>
@@ -261,8 +323,14 @@ export function Analytics() {
                   <CartesianGrid strokeDasharray="3 3" />
                   <XAxis dataKey="month" />
                   <YAxis />
-                  <Tooltip formatter={(value) => [`$${value}`, 'Revenue']} />
-                  <Area type="monotone" dataKey="revenue" stroke="#82ca9d" fill="#82ca9d" fillOpacity={0.6} />
+                  <Tooltip formatter={value => [`$${value}`, 'Revenue']} />
+                  <Area
+                    type="monotone"
+                    dataKey="revenue"
+                    stroke="#82ca9d"
+                    fill="#82ca9d"
+                    fillOpacity={0.6}
+                  />
                 </AreaChart>
               </ResponsiveContainer>
             </CardContent>
@@ -271,4 +339,4 @@ export function Analytics() {
       </Tabs>
     </div>
   );
-}
+};

@@ -1,37 +1,3 @@
-import React, { useState } from 'react';
-import { Badge } from './components/ui/badge';
-import { Button } from './components/ui/button';
-import {
-  Sidebar,
-  SidebarContent,
-  SidebarFooter,
-  SidebarHeader,
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
-  SidebarProvider,
-  SidebarTrigger,
-  SidebarGroup,
-  SidebarGroupContent,
-  SidebarGroupLabel,
-} from './components/ui/sidebar';
-import { Avatar, AvatarFallback, AvatarImage } from './components/ui/avatar';
-import { Analytics } from './components/Analytics';
-import { CommunicationLogs } from './components/CommunicationLogs';
-import { ContentManagement } from './components/ContentManagement';
-import { Dashboard } from './components/Dashboard';
-import { EmailTemplates } from './components/EmailTemplates';
-import { FeatureFlags } from './components/FeatureFlags';
-import { KnowledgeBase } from './components/KnowledgeBase';
-import { NotificationManagement } from './components/NotificationManagement';
-import { PlatformAnnouncements } from './components/PlatformAnnouncements';
-import { ProductRoadmap } from './components/ProductRoadmap';
-import { SuggestionsManagement } from './components/SuggestionsManagement';
-import { SupportTicketing } from './components/SupportTicketing';
-import { TrainerList } from './components/TrainerList';
-import { TrainerManagement } from './components/TrainerManagement';
-import { UserEngagement } from './components/UserEngagement';
-import { UserFeedback } from './components/UserFeedback';
 import {
   LayoutDashboard,
   BarChart3,
@@ -59,6 +25,42 @@ import {
   Mail,
   Activity,
 } from 'lucide-react';
+import { useState } from 'react';
+
+import { Analytics } from './components/Analytics';
+import { CommunicationLogs } from './components/CommunicationLogs';
+import { ContentManagement } from './components/ContentManagement';
+import { Dashboard } from './components/Dashboard';
+import { EmailTemplates } from './components/EmailTemplates';
+import { FeatureFlags } from './components/FeatureFlags';
+import { KnowledgeBase } from './components/KnowledgeBase';
+import { NotificationManagement } from './components/NotificationManagement';
+import { PlatformAnnouncements } from './components/PlatformAnnouncements';
+import { ProductRoadmap } from './components/ProductRoadmap';
+import { SuggestionsManagement } from './components/SuggestionsManagement';
+import { SupportTicketing } from './components/SupportTicketing';
+import { TrainerList } from './components/TrainerList';
+import { TrainerManagement } from './components/TrainerManagement';
+import { Avatar, AvatarFallback, AvatarImage } from './components/ui/avatar';
+import { Badge } from './components/ui/badge';
+import { Button } from './components/ui/button';
+import {
+  Sidebar,
+  SidebarContent,
+  SidebarFooter,
+  SidebarHeader,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+  SidebarProvider,
+  SidebarTrigger,
+  SidebarGroup,
+  SidebarGroupContent,
+  SidebarGroupLabel,
+  SidebarInset,
+} from './components/ui/sidebar';
+import { UserEngagement } from './components/UserEngagement';
+import { UserFeedback } from './components/UserFeedback';
 
 // Extended admin menu with Customer Success and Communication sections
 const menuSections = {
@@ -803,7 +805,7 @@ const App = () => {
           </SidebarFooter>
         </Sidebar>
 
-        <div className="flex-1 flex flex-col">
+        <SidebarInset className="flex-1 flex flex-col">
           <header className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
             <div className="flex h-14 items-center justify-between px-4">
               <div className="flex items-center gap-4">
@@ -815,7 +817,15 @@ const App = () => {
                     const scopeInfo = getDataScopeInfo(activeView);
                     const IconComponent = scopeInfo.icon;
                     return (
-                      <Badge variant={scopeInfo.color}>
+                      <Badge
+                        variant={
+                          scopeInfo.color as
+                            | 'default'
+                            | 'secondary'
+                            | 'destructive'
+                            | 'outline'
+                        }
+                      >
                         <IconComponent className="h-3 w-3 mr-1" />
                         {scopeInfo.label}
                       </Badge>
@@ -846,7 +856,7 @@ const App = () => {
           </header>
 
           <main className="flex-1 overflow-auto">{renderContent()}</main>
-        </div>
+        </SidebarInset>
       </div>
     </SidebarProvider>
   );
