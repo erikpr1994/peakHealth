@@ -22,11 +22,24 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Validate that user_metadata contains a name field
+    if (
+      !user_metadata ||
+      !user_metadata.name ||
+      typeof user_metadata.name !== 'string' ||
+      user_metadata.name.trim() === ''
+    ) {
+      return NextResponse.json(
+        { error: 'Name is required in user_metadata' },
+        { status: 400 }
+      );
+    }
+
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
       options: {
-        data: user_metadata || {},
+        data: user_metadata,
       },
     });
 
