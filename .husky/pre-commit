@@ -48,67 +48,47 @@ while read -r package; do
   fi
 done <<< "$WORKSPACE_PACKAGES"
 
-# Build changed projects that have build script
-if [ -n "$CHANGED_PROJECTS" ]; then
-  echo "🏗️ Building changed projects..."
-  BUILD_FILTERS=""
-  for project in $CHANGED_PROJECTS; do
-    if has_script "$project" "build"; then
-      BUILD_FILTERS="$BUILD_FILTERS --filter=./$project"
-    fi
-  done
-  
-  if [ -n "$BUILD_FILTERS" ]; then
-    pnpm build $BUILD_FILTERS
-    BUILD_EXIT_CODE=$?
-    
-    if [ $BUILD_EXIT_CODE -ne 0 ]; then
-      echo "❌ Build failed"
-      exit $BUILD_EXIT_CODE
-    fi
-  fi
-fi
+# Define the build matrix - tasks to run for each project
+BUILD_MATRIX=(
+  "build:🏗️ Building"
+  "type-check:🔍 Type checking"
+  "test:🧪 Running unit tests"
+)
 
-# Type check changed projects that have type-check script
-if [ -n "$CHANGED_PROJECTS" ]; then
-  echo "🔍 Type checking changed projects..."
-  TYPE_CHECK_FILTERS=""
-  for project in $CHANGED_PROJECTS; do
-    if has_script "$project" "type-check"; then
-      TYPE_CHECK_FILTERS="$TYPE_CHECK_FILTERS --filter=./$project"
-    fi
-  done
+# Function to run a specific task for changed projects
+run_task() {
+  local task=$1
+  local task_name=$2
   
-  if [ -n "$TYPE_CHECK_FILTERS" ]; then
-    pnpm type-check $TYPE_CHECK_FILTERS
-    TYPE_CHECK_EXIT_CODE=$?
+  if [ -n "$CHANGED_PROJECTS" ]; then
+    echo "$task_name changed projects..."
+    local filters=""
+    for project in $CHANGED_PROJECTS; do
+      if has_script "$project" "$task"; then
+        filters="$filters --filter=./$project"
+      fi
+    done
     
-    if [ $TYPE_CHECK_EXIT_CODE -ne 0 ]; then
-      echo "❌ Type check failed"
-      exit $TYPE_CHECK_EXIT_CODE
+    if [ -n "$filters" ]; then
+      if [ "$task" = "test" ]; then
+        pnpm test:unit $filters
+      else
+        pnpm $task $filters
+      fi
+      local exit_code=$?
+      
+      if [ $exit_code -ne 0 ]; then
+        echo "❌ $task_name failed"
+        exit $exit_code
+      fi
     fi
   fi
-fi
+}
 
-# Run tests for changed projects that have test script
-if [ -n "$CHANGED_PROJECTS" ]; then
-  echo "🧪 Running unit tests..."
-  TEST_FILTERS=""
-  for project in $CHANGED_PROJECTS; do
-    if has_script "$project" "test"; then
-      TEST_FILTERS="$TEST_FILTERS --filter=./$project"
-    fi
-  done
-  
-  if [ -n "$TEST_FILTERS" ]; then
-    pnpm test:unit $TEST_FILTERS
-    TEST_EXIT_CODE=$?
-    
-    if [ $TEST_EXIT_CODE -ne 0 ]; then
-      echo "❌ Tests failed"
-      exit $TEST_EXIT_CODE
-    fi
-  fi
-fi
+# Execute the build matrix
+for matrix_item in "${BUILD_MATRIX[@]}"; do
+  IFS=':' read -r task task_name <<< "$matrix_item"
+  run_task "$task" "$task_name"
+done
 
 echo "✅ Pre-commit checks passed!"
