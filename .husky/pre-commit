@@ -42,15 +42,11 @@ CHANGED_PROJECTS=""
 echo "🔍 Detecting workspace packages:"
 while read -r package; do
   if [ -n "$package" ]; then
-    echo "  - $package"
     if has_project_changes "$package"; then
       CHANGED_PROJECTS="$CHANGED_PROJECTS $package"
-      echo "    → Has changes"
     fi
   fi
 done <<< "$WORKSPACE_PACKAGES"
-
-echo "📋 Changed projects: $CHANGED_PROJECTS"
 
 # Build changed projects that have build script
 if [ -n "$CHANGED_PROJECTS" ]; then
