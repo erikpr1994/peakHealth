@@ -21,7 +21,15 @@ export async function POST() {
       return NextResponse.json({ error: error.message }, { status: 400 });
     }
 
-    return NextResponse.json({ success: true });
+    // Create response with cleared cookies
+    const response = NextResponse.json({ success: true });
+
+    // Clear all Supabase auth cookies
+    response.cookies.delete('sb-access-token');
+    response.cookies.delete('sb-refresh-token');
+    response.cookies.delete('supabase-auth-token');
+
+    return response;
   } catch (error) {
     // eslint-disable-next-line no-console
     console.error('Logout API error:', error);

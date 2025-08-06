@@ -20,13 +20,14 @@ vi.mock('next/navigation', () => ({
 }));
 
 vi.mock('@/lib/supabase/client', () => ({
-  createClient: () => ({
+  createClient: vi.fn(() => ({
     auth: {
       onAuthStateChange: vi.fn(() => ({
         data: { subscription: { unsubscribe: vi.fn() } },
       })),
+      signOut: vi.fn(),
     },
-  }),
+  })),
 }));
 
 vi.mock('swr');
@@ -99,11 +100,12 @@ describe('AuthContext', () => {
       renderWithAuthProvider({
         id: '123',
         email: 'test@example.com',
-        created_at: '',
-        app_metadata: {},
+        app_metadata: { roles: ['basic'], groups: ['free'] },
         user_metadata: {},
         aud: '',
-      });
+        created_at: '',
+      } as ExtendedUser);
+
       expect(screen.getByTestId('isAuthenticated')).toHaveTextContent('true');
       expect(screen.getByTestId('user')).toHaveTextContent('test@example.com');
     });

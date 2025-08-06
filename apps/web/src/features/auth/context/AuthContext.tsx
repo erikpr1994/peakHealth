@@ -39,33 +39,49 @@ export interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-// Custom fetcher for user endpoint that extracts user from response
+// Separate cleanup function to handle USER_NOT_FOUND scenario
+const handleUserNotFoundCleanup = async (): Promise<void> => {
+  if (typeof window === 'undefined') {
+    return;
+  }
+
+  try {
+    // Clear Supabase session properly
+    const supabase = createClient();
+    if (supabase) {
+      await supabase.auth.signOut();
+    }
+  } catch (error) {
+    // Log error but continue with cleanup even if signOut fails
+    console.error('Error during signOut cleanup:', error);
+  }
+
+  try {
+    // Clear any stored auth data
+    localStorage.removeItem('supabase.auth.token');
+    sessionStorage.removeItem('supabase.auth.token');
+  } catch (error) {
+    // Log error but continue with redirect
+    console.error('Error clearing storage:', error);
+  }
+
+  // Redirect to login page
+  window.location.href = '/login';
+};
+
+// Pure fetcher function - throws errors for proper SWR error handling
 const userFetcher = async (url: string): Promise<ExtendedUser | null> => {
   const response = await fetch(url);
 
   if (!response.ok) {
-    if (response.status === 401) {
-      const errorData = await response.json();
+    const errorData = await response.json();
 
-      // Check if this is a "user not found" error that requires redirect
-      if (errorData.code === 'USER_NOT_FOUND' && errorData.shouldRedirect) {
-        // Clear any existing auth state and redirect to login
-        if (typeof window !== 'undefined') {
-          // Clear any stored auth data
-          localStorage.removeItem('supabase.auth.token');
-          sessionStorage.removeItem('supabase.auth.token');
-
-          // Redirect to login page
-          window.location.href = '/login';
-        }
-      }
-
-      // Not authenticated, return null
-      return null;
-    }
+    // Create error with response data for proper handling
     const error = new Error('An error occurred while fetching the user.');
-    (error as unknown as { info: unknown }).info = await response.json();
+    (error as unknown as { info: unknown }).info = errorData;
     (error as unknown as { status: number }).status = response.status;
+
+    // Always throw errors so SWR onError can handle them properly
     throw error;
   }
 
@@ -87,6 +103,44 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       shouldRetryOnError: false,
       suspense: true,
       fallbackData: null,
+      onError: async error => {
+        // Handle all 401 errors to prevent stale user data
+        if (error?.status === 401) {
+          try {
+            const errorData = error.info as {
+              code?: string;
+              shouldRedirect?: boolean;
+            };
+
+            // For USER_NOT_FOUND, do full cleanup with redirect
+            if (
+              errorData.code === 'USER_NOT_FOUND' &&
+              errorData.shouldRedirect
+            ) {
+              await handleUserNotFoundCleanup();
+            } else {
+              // For other 401s (expired tokens, etc.), clear user state
+              // but don't redirect to avoid aggressive behavior
+              await mutateUser(null, false);
+
+              // Clear auth tokens for expired sessions
+              try {
+                const supabase = createClient();
+                if (supabase) {
+                  await supabase.auth.signOut();
+                }
+              } catch (signOutError) {
+                console.error(
+                  'Error signing out expired session:',
+                  signOutError
+                );
+              }
+            }
+          } catch (cleanupError) {
+            console.error('Error during cleanup:', cleanupError);
+          }
+        }
+      },
     }
   );
 
