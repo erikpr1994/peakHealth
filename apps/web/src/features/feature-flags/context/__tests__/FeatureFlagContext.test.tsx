@@ -49,7 +49,7 @@ describe('FeatureFlagContext', () => {
     mockedUseAuth.mockReturnValue({ user: null, isLoading: false });
     mockFetch.mockResolvedValueOnce({
       ok: true,
-      json: () => Promise.resolve({ flags: mockPublicFlags }),
+      json: () => Promise.resolve({ featureFlags: mockPublicFlags }),
     });
 
     render(
@@ -81,11 +81,11 @@ describe('FeatureFlagContext', () => {
     mockFetch
       .mockResolvedValueOnce({
         ok: true,
-        json: () => Promise.resolve({ flags: mockPublicFlags }),
+        json: () => Promise.resolve({ featureFlags: mockPublicFlags }),
       })
       .mockResolvedValueOnce({
         ok: true,
-        json: () => Promise.resolve({ flags: mockUserFlags }),
+        json: () => Promise.resolve({ featureFlags: mockUserFlags }),
       });
 
     render(

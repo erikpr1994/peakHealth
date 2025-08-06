@@ -43,13 +43,13 @@ const TestComponent = ({ featureNames }: { featureNames: string[] }) => {
 const renderWithFlags = (
   ui: React.ReactElement,
   apiResponse: {
-    flags: Array<{
+    featureFlags: Array<{
       name: string;
       is_enabled: boolean;
       rollout_percentage: number;
     }>;
-    userTypes: Array<{ typeName: string; displayName: string }>;
-    userGroups: Array<{ groupName: string; displayName: string }>;
+    userTypes?: Array<{ typeName: string; displayName: string }>;
+    userGroups?: Array<{ groupName: string; displayName: string }>;
   }
 ) => {
   mockFetch.mockResolvedValue({
@@ -74,7 +74,7 @@ describe('Feature Flag System Integration', () => {
     renderWithFlags(
       <TestComponent featureNames={['feature-a', 'feature-b', 'feature-c']} />,
       {
-        flags: [
+        featureFlags: [
           { name: 'feature-a', is_enabled: true, rollout_percentage: 100 },
           { name: 'feature-b', is_enabled: false, rollout_percentage: 0 },
         ],
@@ -110,7 +110,7 @@ describe('Feature Flag System Integration', () => {
 
     mockFetch.mockResolvedValue({
       ok: true,
-      json: () => Promise.resolve({ flags: [] }),
+      json: () => Promise.resolve({ featureFlags: [] }),
     });
 
     render(
@@ -144,7 +144,7 @@ describe('Feature Flag System Integration', () => {
       ok: true,
       json: () =>
         Promise.resolve({
-          flags: [
+          featureFlags: [
             {
               name: 'notification_system_feature',
               is_enabled: true,

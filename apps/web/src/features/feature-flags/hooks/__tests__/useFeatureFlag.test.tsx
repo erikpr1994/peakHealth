@@ -33,13 +33,13 @@ describe('useFeatureFlag Hook', () => {
 
   const setupHook = (
     apiResponse: {
-      flags: Array<{
+      featureFlags: Array<{
         name: string;
         is_enabled: boolean;
         rollout_percentage: number;
       }>;
-      userTypes: Array<{ typeName: string; displayName: string }>;
-      userGroups: Array<{ groupName: string; displayName: string }>;
+      userTypes?: Array<{ typeName: string; displayName: string }>;
+      userGroups?: Array<{ groupName: string; displayName: string }>;
     },
     hookArg: string[]
   ) => {
@@ -51,9 +51,10 @@ describe('useFeatureFlag Hook', () => {
   };
 
   it('should return isLoading as true initially, then false', async () => {
-    const { result } = setupHook({ flags: [], userTypes: [], userGroups: [] }, [
-      'any-feature',
-    ]);
+    const { result } = setupHook(
+      { featureFlags: [], userTypes: [], userGroups: [] },
+      ['any-feature']
+    );
     expect(result.current.isLoading).toBe(true);
     await waitFor(() => {
       expect(result.current.isLoading).toBe(false);
@@ -63,7 +64,7 @@ describe('useFeatureFlag Hook', () => {
   it('should return a map of flags with their correct statuses', async () => {
     const { result } = setupHook(
       {
-        flags: [
+        featureFlags: [
           { name: 'feature-a', is_enabled: true, rollout_percentage: 100 },
           { name: 'feature-b', is_enabled: false, rollout_percentage: 0 },
         ],
@@ -86,7 +87,7 @@ describe('useFeatureFlag Hook', () => {
   it('should return an empty map if no flags are requested', async () => {
     const { result } = setupHook(
       {
-        flags: [
+        featureFlags: [
           { name: 'any-feature', is_enabled: true, rollout_percentage: 100 },
         ],
         userTypes: [],
@@ -113,7 +114,7 @@ describe('useFeatureFlag Hook', () => {
     it('should fetch public flags and return a map of false values for requested features', async () => {
       mockFetch.mockResolvedValue({
         ok: true,
-        json: () => Promise.resolve({ flags: [] }),
+        json: () => Promise.resolve({ featureFlags: [] }),
       });
 
       const { result } = renderHook(
