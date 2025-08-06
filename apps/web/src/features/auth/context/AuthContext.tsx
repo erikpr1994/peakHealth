@@ -33,6 +33,8 @@ export interface AuthContextType {
   hasGroup: (group: string) => boolean;
   hasAnyRole: (roles: string[]) => boolean;
   hasAnyGroup: (groups: string[]) => boolean;
+  // Add mutate function for refreshing user data
+  mutateUser: () => Promise<ExtendedUser | null | undefined>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -218,6 +220,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         hasAnyGroup: groups =>
           groups?.some(group => user?.app_metadata?.groups?.includes(group)) ||
           false,
+        // Add mutate function for refreshing user data
+        mutateUser,
       }}
     >
       {children}

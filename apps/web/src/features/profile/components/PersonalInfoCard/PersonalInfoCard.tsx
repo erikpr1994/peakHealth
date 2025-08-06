@@ -13,6 +13,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
+import { useAuth } from '@/features/auth/context/AuthContext';
 
 interface PersonalInfoCardProps {
   user: {
@@ -30,6 +31,7 @@ export const PersonalInfoCard = ({
   onUpdateMetadata,
   isUpdating = false,
 }: PersonalInfoCardProps) => {
+  const { mutateUser } = useAuth();
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState({
     name: user.user_metadata.name || '',
@@ -39,6 +41,18 @@ export const PersonalInfoCard = ({
     birth_date: user.user_metadata.birth_date || '',
     bio: user.user_metadata.bio || '',
   });
+
+  // Update form data when user data changes
+  React.useEffect(() => {
+    setFormData({
+      name: user.user_metadata.name || '',
+      display_name: user.user_metadata.display_name || '',
+      phone: user.user_metadata.phone || '',
+      location: user.user_metadata.location || '',
+      birth_date: user.user_metadata.birth_date || '',
+      bio: user.user_metadata.bio || '',
+    });
+  }, [user.user_metadata]);
 
   const handleSave = async () => {
     const success = await onUpdateMetadata({
@@ -51,6 +65,8 @@ export const PersonalInfoCard = ({
     });
 
     if (success) {
+      // Refresh user data to reflect the updated metadata
+      await mutateUser();
       setIsEditing(false);
     }
   };

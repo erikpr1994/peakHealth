@@ -86,7 +86,8 @@ export async function PUT(request: NextRequest) {
       return NextResponse.json({ error: 'Not authenticated' }, { status: 401 });
     }
 
-    const { email, password, data, roles, groups } = await request.json();
+    const { email, password, data, user_metadata, roles, groups } =
+      await request.json();
 
     // Check if roles or groups are being updated (not supported via this endpoint for existing users)
     if (roles || groups) {
@@ -104,6 +105,7 @@ export async function PUT(request: NextRequest) {
     if (email) updateData.email = email;
     if (password) updateData.password = password;
     if (data) updateData.data = data;
+    if (user_metadata) updateData.data = user_metadata;
 
     const { data: updatedUser, error } =
       await supabase.auth.updateUser(updateData);
