@@ -13,8 +13,8 @@ vi.mock('@/lib/supabase/admin', () => ({
 }));
 
 import { POST } from '../route';
+
 import { createClient } from '@/lib/supabase/server';
-import { createAdminClient } from '@/lib/supabase/admin';
 
 describe('POST /api/auth/signup', () => {
   beforeEach(() => {
@@ -228,4 +228,4 @@ describe('POST /api/auth/signup', () => {
     expect(response.status).toBe(503);
     expect(data.error).toBe('Database connection not available');
   });
-}); 
+});

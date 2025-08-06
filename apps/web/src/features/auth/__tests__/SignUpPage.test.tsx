@@ -256,10 +256,6 @@ describe('SignUpPage', () => {
     const submitButton = screen.getByTestId('signup-button');
     await user.click(submitButton);
 
-    expect(mockSignUp).toHaveBeenCalledWith(
-      testEmail,
-      testPassword,
-      testName
-    );
+    expect(mockSignUp).toHaveBeenCalledWith(testEmail, testPassword, testName);
   });
 });
