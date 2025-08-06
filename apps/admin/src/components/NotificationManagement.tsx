@@ -1,26 +1,43 @@
-"use client";
-import { useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
-import { Button } from "./ui/button";
-import { Badge } from "./ui/badge";
-import { Input } from "./ui/input";
-import { Switch } from "./ui/switch";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
-import { Bell, ChevronRight, Search, Plus, Send, Users, Smartphone } from "lucide-react";
+'use client';
+import { useState } from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
+import { Button } from './ui/button';
+import { Badge } from './ui/badge';
+import { Input } from './ui/input';
+import { Switch } from './ui/switch';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from './ui/select';
+import {
+  Bell,
+  ChevronRight,
+  Search,
+  Plus,
+  Send,
+  Users,
+  Smartphone,
+  Settings,
+} from 'lucide-react';
 
 interface NotificationManagementProps {
   scopeInfo: any;
 }
 
-export function NotificationManagement({ scopeInfo }: NotificationManagementProps) {
-  const [searchQuery, setSearchQuery] = useState("");
+export function NotificationManagement({
+  scopeInfo,
+}: NotificationManagementProps) {
+  const [searchQuery, setSearchQuery] = useState('');
 
   return (
     <div className="p-6 space-y-6">
       <div className="flex items-center justify-between border-b pb-4">
         <div className="flex items-center gap-3">
           <Badge variant={scopeInfo.color}>
-            <scopeInfo.icon className="h-3 w-3 mr-1" />
+            <Settings className="h-3 w-3 mr-1" />
             {scopeInfo.label}
           </Badge>
           <ChevronRight className="h-4 w-4 text-muted-foreground" />
@@ -71,7 +88,9 @@ export function NotificationManagement({ scopeInfo }: NotificationManagementProp
             <div className="flex items-center gap-2">
               <Bell className="h-4 w-4 text-orange-500" />
               <div>
-                <p className="text-sm text-muted-foreground">Active Campaigns</p>
+                <p className="text-sm text-muted-foreground">
+                  Active Campaigns
+                </p>
                 <p className="text-xl font-semibold">5</p>
               </div>
             </div>
@@ -83,7 +102,8 @@ export function NotificationManagement({ scopeInfo }: NotificationManagementProp
         <Bell className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
         <h3>Push Notification Management</h3>
         <p className="text-sm text-muted-foreground">
-          Create, schedule, and monitor push notifications to engage users across mobile and web platforms.
+          Create, schedule, and monitor push notifications to engage users
+          across mobile and web platforms.
         </p>
       </div>
     </div>

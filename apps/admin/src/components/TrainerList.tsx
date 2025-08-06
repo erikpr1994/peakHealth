@@ -26,6 +26,8 @@ import {
   Star,
   MapPin,
   Briefcase,
+  Settings,
+  ChevronRight,
 } from 'lucide-react';
 
 // Mock trainers data
@@ -225,13 +227,15 @@ export function TrainerList({ scopeInfo, onViewTrainer }: TrainerListProps) {
 
   return (
     <div className="p-6 space-y-6">
-      {/* Action Bar */}
-      <div className="flex items-center justify-between">
-        <div>
-          <p className="text-muted-foreground">
-            Manage trainer profiles, monitor performance, and oversee service
-            offerings across your platform.
-          </p>
+      {/* Header */}
+      <div className="flex items-center justify-between border-b pb-4">
+        <div className="flex items-center gap-3">
+          <Badge variant={scopeInfo.color}>
+            <Settings className="h-3 w-3 mr-1" />
+            {scopeInfo.label}
+          </Badge>
+          <ChevronRight className="h-4 w-4 text-muted-foreground" />
+          <h1>Trainer Management</h1>
         </div>
         <div className="flex gap-2">
           <Button variant="outline">
@@ -243,6 +247,13 @@ export function TrainerList({ scopeInfo, onViewTrainer }: TrainerListProps) {
             Add New Trainer
           </Button>
         </div>
+      </div>
+
+      <div>
+        <p className="text-muted-foreground">
+          Manage trainer profiles, monitor performance, and oversee service
+          offerings across your platform.
+        </p>
       </div>
 
       {/* Platform Metrics */}
@@ -327,15 +338,14 @@ export function TrainerList({ scopeInfo, onViewTrainer }: TrainerListProps) {
           </SelectContent>
         </Select>
         <Select value={selectedStatus} onValueChange={setSelectedStatus}>
-          <SelectTrigger className="w-48">
+          <SelectTrigger className="w-32">
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
-            {statuses.map(status => (
-              <SelectItem key={status.value} value={status.value}>
-                {status.label}
-              </SelectItem>
-            ))}
+            <SelectItem value="all">All Status</SelectItem>
+            <SelectItem value="active">Active</SelectItem>
+            <SelectItem value="inactive">Inactive</SelectItem>
+            <SelectItem value="pending">Pending</SelectItem>
           </SelectContent>
         </Select>
       </div>
@@ -343,36 +353,38 @@ export function TrainerList({ scopeInfo, onViewTrainer }: TrainerListProps) {
       {/* Trainers Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {filteredTrainers.map(trainer => (
-          <Card key={trainer.id} className="hover:shadow-lg transition-shadow">
+          <Card key={trainer.id} className="hover:shadow-md transition-shadow">
             <CardHeader className="pb-3">
-              <div className="flex items-start gap-3">
-                <Avatar className="h-12 w-12">
-                  <AvatarImage src={trainer.avatar} alt={trainer.name} />
-                  <AvatarFallback>
-                    {trainer.name
-                      .split(' ')
-                      .map(n => n[0])
-                      .join('')}
-                  </AvatarFallback>
-                </Avatar>
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2 mb-1">
-                    <h3 className="font-medium truncate">{trainer.name}</h3>
-                    <Badge
-                      variant={getStatusColor(trainer.status) as any}
-                      className="text-xs"
-                    >
-                      {trainer.status}
-                    </Badge>
-                  </div>
-                  <p className="text-sm text-muted-foreground truncate">
-                    {trainer.email}
-                  </p>
-                  <div className="flex items-center gap-1 mt-1">
-                    <MapPin className="h-3 w-3 text-muted-foreground" />
-                    <span className="text-xs text-muted-foreground">
-                      {trainer.location}
-                    </span>
+              <div className="flex items-start justify-between">
+                <div className="flex items-center gap-3">
+                  <Avatar className="h-12 w-12">
+                    <AvatarImage src={trainer.avatar} alt={trainer.name} />
+                    <AvatarFallback className="text-sm">
+                      {trainer.name
+                        .split(' ')
+                        .map(n => n[0])
+                        .join('')}
+                    </AvatarFallback>
+                  </Avatar>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2 mb-1">
+                      <h3 className="font-medium truncate">{trainer.name}</h3>
+                      <Badge
+                        variant={getStatusColor(trainer.status) as any}
+                        className="text-xs"
+                      >
+                        {trainer.status}
+                      </Badge>
+                    </div>
+                    <p className="text-sm text-muted-foreground truncate">
+                      {trainer.email}
+                    </p>
+                    <div className="flex items-center gap-1 mt-1">
+                      <MapPin className="h-3 w-3 text-muted-foreground" />
+                      <span className="text-xs text-muted-foreground">
+                        {trainer.location}
+                      </span>
+                    </div>
                   </div>
                 </div>
               </div>

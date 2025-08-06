@@ -1,27 +1,24 @@
+'use client';
+
+import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 import { Button } from './ui/button';
 import { Badge } from './ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
+import { Progress } from './ui/progress';
 import {
-  Users,
-  Dumbbell,
   TrendingUp,
+  Users,
+  DollarSign,
+  Activity,
+  BarChart3,
+  Plus,
+  Search,
+  Filter,
+  Download,
   Calendar,
   Target,
-  AlertCircle,
-  CheckCircle,
-  Activity,
-  Clock,
   Zap,
-  Award,
-  ArrowRight,
-  Plus,
-  User,
-  Building2,
-  Database,
-  BarChart3,
-  TrendingDown,
-  DollarSign,
 } from 'lucide-react';
 
 // Mock data for platform activities (admin view)
@@ -79,13 +76,13 @@ export function Dashboard({ scopeInfo, userRole }: DashboardProps) {
   const getActivityIcon = (type: string) => {
     switch (type) {
       case 'trainer_joined':
-        return <User className="h-4 w-4 text-green-500" />;
+        return <Users className="h-4 w-4 text-green-500" />;
       case 'gym_partnership':
-        return <Building2 className="h-4 w-4 text-blue-500" />;
+        return <Users className="h-4 w-4 text-blue-500" />;
       case 'revenue_milestone':
-        return <TrendingUp className="h-4 w-4 text-green-500" />;
+        return <DollarSign className="h-4 w-4 text-green-500" />;
       case 'trainer_performance':
-        return <Award className="h-4 w-4 text-purple-500" />;
+        return <Activity className="h-4 w-4 text-purple-500" />;
       case 'corporate_upgrade':
         return <DollarSign className="h-4 w-4 text-green-500" />;
       default:
@@ -148,7 +145,7 @@ export function Dashboard({ scopeInfo, userRole }: DashboardProps) {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Gym Partners</CardTitle>
-            <Building2 className="h-4 w-4 text-purple-600" />
+            <Users className="h-4 w-4 text-purple-600" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-semibold">12</div>
@@ -261,7 +258,7 @@ export function Dashboard({ scopeInfo, userRole }: DashboardProps) {
                   <div className="w-6 h-6 rounded-full bg-blue-500 text-white flex items-center justify-center text-sm font-medium">
                     2
                   </div>
-                  <Building2 className="h-8 w-8 p-1 bg-green-100 rounded-lg text-green-600" />
+                  <Users className="h-8 w-8 p-1 bg-green-100 rounded-lg text-green-600" />
                 </div>
                 <div className="flex-1">
                   <p className="font-medium text-sm">Corporate Plans</p>
@@ -277,7 +274,7 @@ export function Dashboard({ scopeInfo, userRole }: DashboardProps) {
                   <div className="w-6 h-6 rounded-full bg-purple-500 text-white flex items-center justify-center text-sm font-medium">
                     3
                   </div>
-                  <User className="h-8 w-8 p-1 bg-purple-100 rounded-lg text-purple-600" />
+                  <Users className="h-8 w-8 p-1 bg-purple-100 rounded-lg text-purple-600" />
                 </div>
                 <div className="flex-1">
                   <p className="font-medium text-sm">Trainer Subscriptions</p>
@@ -292,7 +289,7 @@ export function Dashboard({ scopeInfo, userRole }: DashboardProps) {
             <div className="mt-4 pt-4 border-t">
               <Button variant="outline" className="w-full">
                 View Revenue Analytics
-                <ArrowRight className="h-4 w-4 ml-2" />
+                <Users className="h-4 w-4 ml-2" />
               </Button>
             </div>
           </CardContent>
@@ -341,11 +338,11 @@ export function Dashboard({ scopeInfo, userRole }: DashboardProps) {
           <CardContent>
             <div className="space-y-2">
               <Button variant="outline" className="w-full justify-start">
-                <User className="h-4 w-4 mr-2" />
+                <Users className="h-4 w-4 mr-2" />
                 Add New Trainer
               </Button>
               <Button variant="outline" className="w-full justify-start">
-                <Building2 className="h-4 w-4 mr-2" />
+                <Users className="h-4 w-4 mr-2" />
                 Add Gym Partner
               </Button>
               <Button variant="outline" className="w-full justify-start">
@@ -353,7 +350,7 @@ export function Dashboard({ scopeInfo, userRole }: DashboardProps) {
                 Revenue Analytics
               </Button>
               <Button variant="outline" className="w-full justify-start">
-                <Database className="h-4 w-4 mr-2" />
+                <Users className="h-4 w-4 mr-2" />
                 Manage Content
               </Button>
               <Button variant="outline" className="w-full justify-start">
@@ -368,7 +365,7 @@ export function Dashboard({ scopeInfo, userRole }: DashboardProps) {
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <AlertCircle className="h-5 w-5 text-orange-500" />
+              <Users className="h-5 w-5 text-orange-500" />
               Attention Required
             </CardTitle>
           </CardHeader>
@@ -376,7 +373,7 @@ export function Dashboard({ scopeInfo, userRole }: DashboardProps) {
             <div className="space-y-4">
               <div className="flex items-center gap-3 p-3 rounded-lg border border-orange-200 bg-orange-50">
                 <div className="h-10 w-10 rounded-full bg-orange-100 flex items-center justify-center">
-                  <AlertCircle className="h-5 w-5 text-orange-600" />
+                  <Users className="h-5 w-5 text-orange-600" />
                 </div>
                 <div className="flex-1">
                   <p className="font-medium">Low Revenue Trainer</p>
@@ -398,7 +395,7 @@ export function Dashboard({ scopeInfo, userRole }: DashboardProps) {
               </div>
               <div className="flex items-center gap-3 p-3 rounded-lg border border-yellow-200 bg-yellow-50">
                 <div className="h-10 w-10 rounded-full bg-yellow-100 flex items-center justify-center">
-                  <TrendingDown className="h-5 w-5 text-yellow-600" />
+                  <TrendingUp className="h-5 w-5 text-yellow-600" />
                 </div>
                 <div className="flex-1">
                   <p className="font-medium">Churn Alert</p>
@@ -425,7 +422,7 @@ export function Dashboard({ scopeInfo, userRole }: DashboardProps) {
             <div className="mt-4 pt-4 border-t">
               <Button variant="outline" className="w-full">
                 View All Alerts
-                <ArrowRight className="h-4 w-4 ml-2" />
+                <Users className="h-4 w-4 ml-2" />
               </Button>
             </div>
           </CardContent>

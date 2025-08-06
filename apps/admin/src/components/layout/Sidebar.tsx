@@ -1,0 +1,102 @@
+'use client';
+
+import { Bell, LogOut, Moon, Sun, Shield } from 'lucide-react';
+import { usePathname, useRouter } from 'next/navigation';
+import { useState } from 'react';
+
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+
+import { navigationSections } from '@/lib/navigation-config';
+
+export const Sidebar = () => {
+  const router = useRouter();
+  const pathname = usePathname();
+  const [isDarkMode, setIsDarkMode] = useState(false);
+
+  const toggleDarkMode = () => {
+    setIsDarkMode(!isDarkMode);
+    document.documentElement.classList.toggle('dark');
+  };
+
+  const handleNavigation = (path: string) => {
+    router.push(path);
+  };
+
+  return (
+    <div className="w-64 bg-sidebar border-r border-sidebar-border flex flex-col h-full">
+      {/* Sidebar header - fixed */}
+      <div className="p-4 space-y-3 flex-shrink-0">
+        <div className="flex items-center gap-2">
+          <div className="h-8 w-8 bg-primary rounded-lg flex items-center justify-center">
+            <Shield className="h-5 w-5 text-primary-foreground" />
+          </div>
+          <div>
+            <h2>Peak Health</h2>
+            <p className="text-xs text-muted-foreground">Admin Dashboard</p>
+          </div>
+        </div>
+      </div>
+
+      {/* Navigation menu - scrollable */}
+      <div className="flex-1 px-4 space-y-6 overflow-y-auto">
+        {navigationSections.map(section => (
+          <div key={section.id}>
+            <h3 className="text-sm font-medium text-muted-foreground mb-2">
+              {section.title}
+            </h3>
+            <div className="space-y-1">
+              {section.items.map(item => {
+                const Icon = item.icon;
+                const isActive = pathname === item.path;
+
+                return (
+                  <button
+                    key={item.id}
+                    onClick={() => handleNavigation(item.path)}
+                    className={`w-full flex items-center gap-3 px-3 py-2 rounded-md text-sm transition-colors ${
+                      isActive
+                        ? 'bg-primary text-primary-foreground'
+                        : 'hover:bg-muted'
+                    }`}
+                  >
+                    <Icon className="h-4 w-4" />
+                    <span>{item.label}</span>
+                    {item.badge && (
+                      <Badge
+                        variant={item.badge.variant}
+                        className="ml-auto text-xs"
+                      >
+                        {item.badge.text}
+                      </Badge>
+                    )}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* User profile at bottom - fixed */}
+      <div className="p-4 border-t border-sidebar-border flex-shrink-0">
+        <div className="flex items-center gap-3 p-2 rounded-lg border">
+          <Avatar className="h-8 w-8">
+            <AvatarImage src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face" />
+            <AvatarFallback>JD</AvatarFallback>
+          </Avatar>
+          <div className="flex-1 min-w-0">
+            <p className="text-sm truncate">John Doe</p>
+            <p className="text-xs text-muted-foreground truncate">
+              System Administrator
+            </p>
+          </div>
+          <Button variant="ghost" size="sm">
+            <LogOut className="h-4 w-4" />
+          </Button>
+        </div>
+      </div>
+    </div>
+  );
+};
