@@ -88,7 +88,7 @@ export async function PUT(request: NextRequest) {
 
     const { email, password, data, roles, groups } = await request.json();
 
-    // Check if roles or groups are being updated (not supported via this endpoint)
+    // Check if roles or groups are being updated (not supported via this endpoint for existing users)
     if (roles || groups) {
       return NextResponse.json(
         {
