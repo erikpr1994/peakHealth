@@ -173,9 +173,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   }, [supabase, handleAuthChange]);
 
   const getAuthRedirectPath = () => {
-    // Default to profile as a safe fallback that doesn't depend on feature flags
+    // Default to dashboard as the main landing page after authentication
     // In a real app, you might want to check feature flags here
-    return '/profile';
+    return '/dashboard';
   };
 
   const login = async (email?: string, password?: string) => {
