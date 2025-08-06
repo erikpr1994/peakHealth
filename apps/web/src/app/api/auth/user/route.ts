@@ -73,12 +73,23 @@ export async function PUT(request: NextRequest) {
       return NextResponse.json({ error: 'Not authenticated' }, { status: 401 });
     }
 
-    const { email, password, data } = await request.json();
+    const { email, password, data, roles, groups } = await request.json();
 
     const updateData: Record<string, unknown> = {};
     if (email) updateData.email = email;
     if (password) updateData.password = password;
     if (data) updateData.data = data;
+
+    // Handle roles and groups updates
+    if (roles || groups) {
+      const currentMetadata = user.app_metadata || {};
+      const updatedMetadata = {
+        ...currentMetadata,
+        ...(roles && { roles }),
+        ...(groups && { groups }),
+      };
+      updateData.data = updatedMetadata;
+    }
 
     const { data: updatedUser, error } =
       await supabase.auth.updateUser(updateData);

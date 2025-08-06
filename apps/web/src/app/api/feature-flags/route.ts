@@ -30,59 +30,50 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    // Get user roles and groups from app_metadata
+    // Get user roles and groups from app_metadata (JWT claims)
     const userRoles = user?.app_metadata?.roles || ['basic'];
     const userGroups = user?.app_metadata?.groups || ['free'];
 
-    // Get feature flags for the environment
-    const { data: featureFlags, error } = await supabase
-      .from('feature_flags')
-      .select(
-        `
-        *,
-        feature_flag_environments!inner(*),
-        feature_flag_user_roles(*),
-        feature_flag_user_groups(*)
-      `
-      )
-      .eq('feature_flag_environments.environment', environment)
-      .eq('feature_flag_environments.enabled', true);
+    // Use the database function to get user-specific feature flags with JWT claims filtering
+    const { data: userFeatureFlags, error: userFlagsError } =
+      await supabase.rpc('get_user_feature_flags', {
+        user_id: user!.id,
+        environment_param: environment,
+        user_roles: userRoles,
+        user_groups: userGroups,
+      });
 
-    if (error) {
+    if (userFlagsError) {
       // eslint-disable-next-line no-console
-      console.error('Error fetching feature flags:', error);
+      console.error('Error fetching user feature flags:', userFlagsError);
       return NextResponse.json(
-        { error: 'Failed to fetch feature flags' },
+        { error: 'Failed to fetch user feature flags' },
         { status: 500 }
       );
     }
 
-    // Filter feature flags based on user roles and groups
-    const filteredFlags =
-      featureFlags?.filter(flag => {
-        // Check if user has required role
-        const hasRequiredRole = flag.feature_flag_user_roles?.some(
-          (role: Record<string, unknown>) =>
-            userRoles.includes(role.role as string)
-        );
+    // Get public feature flags (available to all users)
+    const { data: publicFeatureFlags, error: publicFlagsError } = await supabase
+      .from('feature_flags')
+      .select('*')
+      .eq('is_public', true);
 
-        // Check if user has required group
-        const hasRequiredGroup = flag.feature_flag_user_groups?.some(
-          (group: Record<string, unknown>) =>
-            userGroups.includes(group.group as string)
-        );
+    if (publicFlagsError) {
+      // eslint-disable-next-line no-console
+      console.error('Error fetching public feature flags:', publicFlagsError);
+      return NextResponse.json(
+        { error: 'Failed to fetch public feature flags' },
+        { status: 500 }
+      );
+    }
 
-        // If no specific roles or groups are set, allow access
-        const noRoleRestrictions = !flag.feature_flag_user_roles?.length;
-        const noGroupRestrictions = !flag.feature_flag_user_groups?.length;
+    // Combine user-specific and public feature flags
+    const allFeatureFlags = [
+      ...(userFeatureFlags || []),
+      ...(publicFeatureFlags || []),
+    ];
 
-        return (
-          (noRoleRestrictions || hasRequiredRole) &&
-          (noGroupRestrictions || hasRequiredGroup)
-        );
-      }) || [];
-
-    return NextResponse.json({ featureFlags: filteredFlags });
+    return NextResponse.json({ featureFlags: allFeatureFlags });
   } catch (error) {
     // eslint-disable-next-line no-console
     console.error('Feature flags API error:', error);
