@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useSWRConfig } from 'swr';
 
 import { userProfileService } from '../services/userProfileService';
 import { ProfileUpdateData, ProfileUpdateResponse } from '../types/profile';
@@ -6,6 +7,7 @@ import { ProfileUpdateData, ProfileUpdateResponse } from '../types/profile';
 export function useProfileUpdate() {
   const [isUpdating, setIsUpdating] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const { mutate } = useSWRConfig();
 
   const updateProfile = async (
     data: ProfileUpdateData
@@ -15,6 +17,8 @@ export function useProfileUpdate() {
 
     try {
       const response = await userProfileService.updateUserProfile(data);
+      // Invalidate profile cache after successful update
+      await mutate('/api/profile');
       return response;
     } catch (err) {
       const errorMessage =
@@ -34,6 +38,8 @@ export function useProfileUpdate() {
 
     try {
       await userProfileService.updateUserMetadata(metadata);
+      // Invalidate profile cache after successful metadata update
+      await mutate('/api/profile');
       return true;
     } catch (err) {
       const errorMessage =

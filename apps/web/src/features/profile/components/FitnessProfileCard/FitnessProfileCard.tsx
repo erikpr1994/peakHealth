@@ -84,10 +84,10 @@ export const FitnessProfileCard = ({ profile }: FitnessProfileCardProps) => {
         <div className={styles.grid}>
           {profile.fitness_level && (
             <div>
-              <Label className={styles.label}>
+              <CustomLabel className={styles.label}>
                 <Award className={styles.icon} />
                 Fitness Level
-              </Label>
+              </CustomLabel>
               <Badge variant="secondary" className={styles.badge}>
                 {profile.fitness_level}
               </Badge>
@@ -96,10 +96,10 @@ export const FitnessProfileCard = ({ profile }: FitnessProfileCardProps) => {
 
           {profile.time_available && (
             <div>
-              <Label className={styles.label}>
+              <CustomLabel className={styles.label}>
                 <Clock className={styles.icon} />
                 Time Available
-              </Label>
+              </CustomLabel>
               <Badge variant="outline" className={styles.badge}>
                 {profile.time_available}
               </Badge>
@@ -108,10 +108,10 @@ export const FitnessProfileCard = ({ profile }: FitnessProfileCardProps) => {
 
           {profile.equipment_access && (
             <div>
-              <Label className={styles.label}>
+              <CustomLabel className={styles.label}>
                 <Dumbbell className={styles.icon} />
                 Equipment Access
-              </Label>
+              </CustomLabel>
               <Badge variant="outline" className={styles.badge}>
                 {profile.equipment_access}
               </Badge>
@@ -120,10 +120,10 @@ export const FitnessProfileCard = ({ profile }: FitnessProfileCardProps) => {
 
           {profile.experience && (
             <div>
-              <Label className={styles.label}>
+              <CustomLabel className={styles.label}>
                 <User className={styles.icon} />
                 Experience
-              </Label>
+              </CustomLabel>
               <Badge variant="outline" className={styles.badge}>
                 {profile.experience}
               </Badge>
@@ -135,10 +135,10 @@ export const FitnessProfileCard = ({ profile }: FitnessProfileCardProps) => {
 
         {profile.goals && profile.goals.length > 0 && (
           <div>
-            <Label className={styles.label}>
+            <CustomLabel className={styles.label}>
               <Target className={styles.icon} />
               Fitness Goals
-            </Label>
+            </CustomLabel>
             <div className={styles.badgeContainer}>
               {profile.goals.map((goal, index) => (
                 <Badge key={index} className={styles.badge}>
@@ -151,10 +151,10 @@ export const FitnessProfileCard = ({ profile }: FitnessProfileCardProps) => {
 
         {profile.workout_types && profile.workout_types.length > 0 && (
           <div>
-            <Label className={styles.label}>
+            <CustomLabel className={styles.label}>
               <Sparkles className={styles.icon} />
               Preferred Workout Types
-            </Label>
+            </CustomLabel>
             <div className={styles.badgeContainer}>
               {profile.workout_types.map((type, index) => (
                 <Badge key={index} variant="secondary" className={styles.badge}>
@@ -167,14 +167,16 @@ export const FitnessProfileCard = ({ profile }: FitnessProfileCardProps) => {
 
         {profile.limitations && (
           <div>
-            <Label className={styles.label}>Physical Considerations</Label>
+            <CustomLabel className={styles.label}>
+              Physical Considerations
+            </CustomLabel>
             <p className={styles.textBox}>{profile.limitations}</p>
           </div>
         )}
 
         {profile.motivation && (
           <div>
-            <Label className={styles.label}>Motivation</Label>
+            <CustomLabel className={styles.label}>Motivation</CustomLabel>
             <p className={styles.textBox}>{profile.motivation}</p>
           </div>
         )}
@@ -189,8 +191,8 @@ export const FitnessProfileCard = ({ profile }: FitnessProfileCardProps) => {
   );
 };
 
-// Label component for consistency
-const Label = ({
+// Custom Label component for consistency
+const CustomLabel = ({
   children,
   className,
 }: {
