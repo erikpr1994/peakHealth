@@ -88,21 +88,22 @@ export async function PUT(request: NextRequest) {
 
     const { email, password, data, roles, groups } = await request.json();
 
+    // Check if roles or groups are being updated (not supported via this endpoint)
+    if (roles || groups) {
+      return NextResponse.json(
+        {
+          error:
+            'Roles and groups cannot be updated via this endpoint. Admin privileges required.',
+          code: 'ADMIN_REQUIRED',
+        },
+        { status: 403 }
+      );
+    }
+
     const updateData: Record<string, unknown> = {};
     if (email) updateData.email = email;
     if (password) updateData.password = password;
     if (data) updateData.data = data;
-
-    // Handle roles and groups updates
-    if (roles || groups) {
-      const currentMetadata = user.app_metadata || {};
-      const updatedMetadata = {
-        ...currentMetadata,
-        ...(roles && { roles }),
-        ...(groups && { groups }),
-      };
-      updateData.data = updatedMetadata;
-    }
 
     const { data: updatedUser, error } =
       await supabase.auth.updateUser(updateData);
