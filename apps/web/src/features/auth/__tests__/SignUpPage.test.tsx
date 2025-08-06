@@ -237,4 +237,29 @@ describe('SignUpPage', () => {
     });
     expect(loginLink).toHaveAttribute('href', '/login');
   });
+
+  it('calls signUp with correct parameters including name', async () => {
+    const user = userEvent.setup();
+    mockSignUp.mockResolvedValueOnce(undefined);
+
+    render(<SignUpPage />);
+
+    const testName = 'John Doe';
+    const testEmail = 'john@example.com';
+    const testPassword = 'Password123';
+
+    await user.type(screen.getByTestId('name-input'), testName);
+    await user.type(screen.getByTestId('email-input'), testEmail);
+    await user.type(screen.getByTestId('password-input'), testPassword);
+    await user.type(screen.getByTestId('confirm-password-input'), testPassword);
+
+    const submitButton = screen.getByTestId('signup-button');
+    await user.click(submitButton);
+
+    expect(mockSignUp).toHaveBeenCalledWith(
+      testEmail,
+      testPassword,
+      testName
+    );
+  });
 });
