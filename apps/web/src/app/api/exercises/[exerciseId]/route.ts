@@ -9,9 +9,6 @@ export async function GET(
   try {
     const { exerciseId } = await params;
 
-    // eslint-disable-next-line no-console
-    console.log('Fetching exercise:', exerciseId);
-
     const exercise = await exerciseService.getExerciseById(exerciseId);
 
     if (!exercise) {

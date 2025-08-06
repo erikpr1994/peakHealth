@@ -4,9 +4,6 @@ import { exerciseService } from '@/features/exercises/services/exerciseService';
 
 export async function GET() {
   try {
-    // eslint-disable-next-line no-console
-    console.log('Fetching exercises...');
-
     const exercises = await exerciseService.getAllExercises();
 
     return NextResponse.json({ exercises: exercises || [] });
