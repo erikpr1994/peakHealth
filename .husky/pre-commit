@@ -29,7 +29,9 @@ has_script() {
   local project_path=$1
   local script_name=$2
   if [ -f "$project_path/package.json" ]; then
-    jq -e ".scripts.$script_name" "$project_path/package.json" >/dev/null 2>&1
+    # Use grep to check if the script exists in package.json
+    # This avoids the dependency on jq
+    grep -q "\"$script_name\":" "$project_path/package.json" 2>/dev/null
   else
     return 1
   fi
