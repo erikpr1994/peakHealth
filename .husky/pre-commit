@@ -40,14 +40,17 @@ WORKSPACE_PACKAGES=$(get_workspace_packages)
 CHANGED_PROJECTS=""
 
 echo "🔍 Detecting workspace packages:"
-echo "$WORKSPACE_PACKAGES" | while read -r package; do
+while read -r package; do
   if [ -n "$package" ]; then
     echo "  - $package"
     if has_project_changes "$package"; then
       CHANGED_PROJECTS="$CHANGED_PROJECTS $package"
+      echo "    → Has changes"
     fi
   fi
-done
+done <<< "$WORKSPACE_PACKAGES"
+
+echo "📋 Changed projects: $CHANGED_PROJECTS"
 
 # Build changed projects that have build script
 if [ -n "$CHANGED_PROJECTS" ]; then
@@ -70,9 +73,9 @@ if [ -n "$CHANGED_PROJECTS" ]; then
   fi
 fi
 
-# Type check changed projects that have type-check script and TypeScript changes
-if echo "$CHANGED_FILES" | grep -q "\.ts$" || echo "$CHANGED_FILES" | grep -q "\.tsx$"; then
-  echo "🔍 Type checking changed TypeScript files..."
+# Type check changed projects that have type-check script
+if [ -n "$CHANGED_PROJECTS" ]; then
+  echo "🔍 Type checking changed projects..."
   TYPE_CHECK_FILTERS=""
   for project in $CHANGED_PROJECTS; do
     if has_script "$project" "type-check"; then
@@ -91,8 +94,8 @@ if echo "$CHANGED_FILES" | grep -q "\.ts$" || echo "$CHANGED_FILES" | grep -q "\
   fi
 fi
 
-# Run tests only if there are changes in test-related files
-if echo "$CHANGED_FILES" | grep -q "\.test\." || echo "$CHANGED_FILES" | grep -q "\.spec\." || echo "$CHANGED_FILES" | grep -q "src/"; then
+# Run tests for changed projects that have test script
+if [ -n "$CHANGED_PROJECTS" ]; then
   echo "🧪 Running unit tests..."
   TEST_FILTERS=""
   for project in $CHANGED_PROJECTS; do
