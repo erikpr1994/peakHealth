@@ -1,5 +1,4 @@
 #!/usr/bin/env sh
-. "$(dirname -- "$0")/_/husky.sh"
 
 echo "🔍 Running lint-staged..."
 pnpm lint-staged
@@ -20,7 +19,7 @@ has_project_changes() {
   echo "$CHANGED_FILES" | grep -q "^$project_path/"
 }
 
-# Run commands only for projects with changes
+# Run build only for projects with changes
 if has_project_changes "apps/web" || has_project_changes "apps/admin"; then
   echo "🏗️ Building changed projects..."
   pnpm build --filter=./apps/web --filter=./apps/admin
@@ -30,8 +29,11 @@ if has_project_changes "apps/web" || has_project_changes "apps/admin"; then
     echo "❌ Build failed"
     exit $BUILD_EXIT_CODE
   fi
+fi
 
-  echo "🔍 Type checking changed projects..."
+# Run type checking only if there are TypeScript changes
+if echo "$CHANGED_FILES" | grep -q "\.ts$" || echo "$CHANGED_FILES" | grep -q "\.tsx$"; then
+  echo "🔍 Type checking changed TypeScript files..."
   pnpm type-check --filter=./apps/web --filter=./apps/admin
   TYPE_CHECK_EXIT_CODE=$?
 
