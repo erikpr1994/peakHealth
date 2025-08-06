@@ -36,8 +36,19 @@ export const FeatureFlagProvider = ({ children }: { children: ReactNode }) => {
       try {
         const response = await fetch('/api/feature-flags/public');
         if (response.ok) {
-          const { flags } = await response.json();
-          const flagsMap = flags.reduce(
+          const { featureFlags } = await response.json();
+
+          // Ensure featureFlags is an array before processing
+          if (!Array.isArray(featureFlags)) {
+            console.warn(
+              'Expected featureFlags to be an array, got:',
+              featureFlags
+            );
+            setPublicFlags({});
+            return;
+          }
+
+          const flagsMap = featureFlags.reduce(
             (
               acc: Record<string, UserFeatureFlag>,
               flag: {
@@ -80,9 +91,29 @@ export const FeatureFlagProvider = ({ children }: { children: ReactNode }) => {
     try {
       const response = await fetch('/api/feature-flags');
       if (!response.ok) {
+        const errorData = await response.json();
+
+        // If user not found, clear flags and return early
+        if (errorData.code === 'USER_NOT_FOUND') {
+          setUserFlags({});
+          setIsLoading(false);
+          return;
+        }
+
         throw new Error('Failed to fetch user feature flags');
       }
-      const { flags: fetchedUserFlags } = await response.json();
+      const { featureFlags: fetchedUserFlags } = await response.json();
+
+      // Ensure fetchedUserFlags is an array before processing
+      if (!Array.isArray(fetchedUserFlags)) {
+        console.warn(
+          'Expected featureFlags to be an array, got:',
+          fetchedUserFlags
+        );
+        setUserFlags({});
+        return;
+      }
+
       const userFlagsMap = fetchedUserFlags.reduce(
         (
           acc: Record<string, UserFeatureFlag>,

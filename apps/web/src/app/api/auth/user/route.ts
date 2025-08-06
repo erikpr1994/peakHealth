@@ -21,6 +21,19 @@ export async function GET() {
     if (error) {
       // eslint-disable-next-line no-console
       console.error('Get user error:', error);
+
+      // If user doesn't exist in database, return a specific error code
+      if (error.message.includes('User from sub claim in JWT does not exist')) {
+        return NextResponse.json(
+          {
+            error: 'User not found in database',
+            code: 'USER_NOT_FOUND',
+            shouldRedirect: true,
+          },
+          { status: 401 }
+        );
+      }
+
       return NextResponse.json({ error: error.message }, { status: 400 });
     }
 

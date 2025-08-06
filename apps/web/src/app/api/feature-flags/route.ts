@@ -24,6 +24,21 @@ export async function GET(request: NextRequest) {
     if (authError) {
       // eslint-disable-next-line no-console
       console.error('Auth error in feature flags API:', authError);
+
+      // If user doesn't exist in database, return a specific error code
+      if (
+        authError.message.includes('User from sub claim in JWT does not exist')
+      ) {
+        return NextResponse.json(
+          {
+            error: 'User not found in database',
+            code: 'USER_NOT_FOUND',
+            shouldRedirect: true,
+          },
+          { status: 401 }
+        );
+      }
+
       return NextResponse.json(
         { error: 'Authentication error' },
         { status: 401 }

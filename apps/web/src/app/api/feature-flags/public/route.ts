@@ -15,16 +15,11 @@ export async function GET() {
 
     const environment = process.env.NEXT_PUBLIC_ENVIRONMENT || 'development';
 
-    // Get public feature flags (no authentication required)
-    const { data: featureFlags, error } = await supabase
-      .from('feature_flags')
-      .select(`
-        *,
-        feature_flag_environments!inner(*)
-      `)
-      .eq('feature_flag_environments.environment', environment)
-      .eq('feature_flag_environments.enabled', true)
-      .eq('is_public', true);
+    // Get public feature flags using the database function
+    const { data: featureFlags, error } = await supabase.rpc(
+      'get_public_feature_flags',
+      { environment_param: environment }
+    );
 
     if (error) {
       // eslint-disable-next-line no-console
