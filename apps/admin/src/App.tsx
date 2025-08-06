@@ -25,7 +25,7 @@ import {
   Mail,
   Activity,
 } from 'lucide-react';
-import { useState } from 'react';
+import React, { useState } from 'react';
 
 import { Analytics } from './components/Analytics';
 import { CommunicationLogs } from './components/CommunicationLogs';
@@ -44,21 +44,7 @@ import { TrainerManagement } from './components/TrainerManagement';
 import { Avatar, AvatarFallback, AvatarImage } from './components/ui/avatar';
 import { Badge } from './components/ui/badge';
 import { Button } from './components/ui/button';
-import {
-  Sidebar,
-  SidebarContent,
-  SidebarFooter,
-  SidebarHeader,
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
-  SidebarProvider,
-  SidebarTrigger,
-  SidebarGroup,
-  SidebarGroupContent,
-  SidebarGroupLabel,
-  SidebarInset,
-} from './components/ui/sidebar';
+
 import { UserEngagement } from './components/UserEngagement';
 import { UserFeedback } from './components/UserFeedback';
 
@@ -473,392 +459,311 @@ const App = () => {
   };
 
   return (
-    <SidebarProvider>
-      <div className="min-h-screen flex w-full bg-background">
-        <Sidebar>
-          <SidebarHeader className="p-4 space-y-3">
-            <div className="flex items-center gap-2">
-              <div className="h-8 w-8 bg-primary rounded-lg flex items-center justify-center">
-                <DollarSign className="h-5 w-5 text-primary-foreground" />
-              </div>
-              <div>
-                <h2>Peak Health</h2>
-                <p className="text-xs text-muted-foreground">Admin Dashboard</p>
-              </div>
+    <div className="min-h-screen flex w-full bg-background">
+      {/* Simple two-column layout */}
+      <div className="w-64 bg-sidebar border-r border-sidebar-border flex flex-col">
+        {/* Sidebar content */}
+        <div className="p-4 space-y-3">
+          <div className="flex items-center gap-2">
+            <div className="h-8 w-8 bg-primary rounded-lg flex items-center justify-center">
+              <DollarSign className="h-5 w-5 text-primary-foreground" />
             </div>
-          </SidebarHeader>
-
-          <SidebarContent>
-            {/* Overview Section */}
-            <SidebarGroup>
-              <SidebarGroupLabel>Overview</SidebarGroupLabel>
-              <SidebarGroupContent>
-                <SidebarMenu>
-                  {menuSections.overview.map(item => (
-                    <SidebarMenuItem key={item.id}>
-                      <SidebarMenuButton
-                        onClick={() => setActiveView(item.id)}
-                        isActive={activeView === item.id}
-                        className="w-full"
-                      >
-                        <item.icon className="h-4 w-4" />
-                        <span>{item.label}</span>
-                        <Badge variant="secondary" className="ml-auto text-xs">
-                          <Globe className="h-3 w-3 mr-1" />
-                          Platform
-                        </Badge>
-                      </SidebarMenuButton>
-                    </SidebarMenuItem>
-                  ))}
-                </SidebarMenu>
-              </SidebarGroupContent>
-            </SidebarGroup>
-
-            {/* Analytics & Business Section */}
-            <SidebarGroup>
-              <SidebarGroupLabel>Analytics & Business</SidebarGroupLabel>
-              <SidebarGroupContent>
-                <SidebarMenu>
-                  {menuSections.analytics.map(item => (
-                    <SidebarMenuItem key={item.id}>
-                      <SidebarMenuButton
-                        onClick={() => setActiveView(item.id)}
-                        isActive={activeView === item.id}
-                        className="w-full"
-                      >
-                        <item.icon className="h-4 w-4" />
-                        <span>{item.label}</span>
-                        {item.id === 'analytics' && (
-                          <Badge
-                            variant="secondary"
-                            className="ml-auto text-xs"
-                          >
-                            $124K
-                          </Badge>
-                        )}
-                        {item.id === 'reports' && (
-                          <Badge
-                            variant="secondary"
-                            className="ml-auto text-xs"
-                          >
-                            15
-                          </Badge>
-                        )}
-                      </SidebarMenuButton>
-                    </SidebarMenuItem>
-                  ))}
-                </SidebarMenu>
-              </SidebarGroupContent>
-            </SidebarGroup>
-
-            {/* Partners & Network Section */}
-            <SidebarGroup>
-              <SidebarGroupLabel>Partners & Network</SidebarGroupLabel>
-              <SidebarGroupContent>
-                <SidebarMenu>
-                  {menuSections.partners.map(item => (
-                    <SidebarMenuItem key={item.id}>
-                      <SidebarMenuButton
-                        onClick={() => setActiveView(item.id)}
-                        isActive={activeView === item.id}
-                        className="w-full"
-                      >
-                        <item.icon className="h-4 w-4" />
-                        <span>{item.label}</span>
-                        {item.id === 'trainers' && (
-                          <Badge variant="secondary" className="ml-auto">
-                            48
-                          </Badge>
-                        )}
-                        {item.id === 'gyms' && (
-                          <Badge variant="secondary" className="ml-auto">
-                            12
-                          </Badge>
-                        )}
-                      </SidebarMenuButton>
-                    </SidebarMenuItem>
-                  ))}
-                </SidebarMenu>
-              </SidebarGroupContent>
-            </SidebarGroup>
-
-            {/* Content & Operations Section */}
-            <SidebarGroup>
-              <SidebarGroupLabel>Content & Operations</SidebarGroupLabel>
-              <SidebarGroupContent>
-                <SidebarMenu>
-                  {menuSections.content.map(item => (
-                    <SidebarMenuItem key={item.id}>
-                      <SidebarMenuButton
-                        onClick={() => setActiveView(item.id)}
-                        isActive={activeView === item.id}
-                        className="w-full"
-                      >
-                        <item.icon className="h-4 w-4" />
-                        <span>{item.label}</span>
-                        {item.id === 'suggestions' && (
-                          <Badge
-                            variant="destructive"
-                            className="ml-auto text-xs"
-                          >
-                            3
-                          </Badge>
-                        )}
-                        {item.id === 'content' && (
-                          <Badge
-                            variant="secondary"
-                            className="ml-auto text-xs"
-                          >
-                            1.2K
-                          </Badge>
-                        )}
-                      </SidebarMenuButton>
-                    </SidebarMenuItem>
-                  ))}
-                </SidebarMenu>
-              </SidebarGroupContent>
-            </SidebarGroup>
-
-            {/* Customer Success & Support Section */}
-            <SidebarGroup>
-              <SidebarGroupLabel>Customer Success & Support</SidebarGroupLabel>
-              <SidebarGroupContent>
-                <SidebarMenu>
-                  {menuSections.customer_success.map(item => (
-                    <SidebarMenuItem key={item.id}>
-                      <SidebarMenuButton
-                        onClick={() => setActiveView(item.id)}
-                        isActive={activeView === item.id}
-                        className="w-full"
-                      >
-                        <item.icon className="h-4 w-4" />
-                        <span>{item.label}</span>
-                        {item.id === 'support' && (
-                          <Badge
-                            variant="destructive"
-                            className="ml-auto text-xs"
-                          >
-                            12
-                          </Badge>
-                        )}
-                        {item.id === 'engagement' && (
-                          <Badge
-                            variant="secondary"
-                            className="ml-auto text-xs"
-                          >
-                            85%
-                          </Badge>
-                        )}
-                        {item.id === 'knowledge' && (
-                          <Badge
-                            variant="secondary"
-                            className="ml-auto text-xs"
-                          >
-                            124
-                          </Badge>
-                        )}
-                        {item.id === 'feedback' && (
-                          <Badge
-                            variant="secondary"
-                            className="ml-auto text-xs"
-                          >
-                            4.8
-                          </Badge>
-                        )}
-                      </SidebarMenuButton>
-                    </SidebarMenuItem>
-                  ))}
-                </SidebarMenu>
-              </SidebarGroupContent>
-            </SidebarGroup>
-
-            {/* Communication & Notifications Section */}
-            <SidebarGroup>
-              <SidebarGroupLabel>
-                Communication & Notifications
-              </SidebarGroupLabel>
-              <SidebarGroupContent>
-                <SidebarMenu>
-                  {menuSections.communications.map(item => (
-                    <SidebarMenuItem key={item.id}>
-                      <SidebarMenuButton
-                        onClick={() => setActiveView(item.id)}
-                        isActive={activeView === item.id}
-                        className="w-full"
-                      >
-                        <item.icon className="h-4 w-4" />
-                        <span>{item.label}</span>
-                        {item.id === 'announcements' && (
-                          <Badge
-                            variant="secondary"
-                            className="ml-auto text-xs"
-                          >
-                            5
-                          </Badge>
-                        )}
-                        {item.id === 'notifications' && (
-                          <Badge
-                            variant="secondary"
-                            className="ml-auto text-xs"
-                          >
-                            89%
-                          </Badge>
-                        )}
-                        {item.id === 'emails' && (
-                          <Badge
-                            variant="secondary"
-                            className="ml-auto text-xs"
-                          >
-                            18
-                          </Badge>
-                        )}
-                        {item.id === 'comm_logs' && (
-                          <Badge
-                            variant="secondary"
-                            className="ml-auto text-xs"
-                          >
-                            2.3K
-                          </Badge>
-                        )}
-                      </SidebarMenuButton>
-                    </SidebarMenuItem>
-                  ))}
-                </SidebarMenu>
-              </SidebarGroupContent>
-            </SidebarGroup>
-
-            {/* Product & Development Section */}
-            <SidebarGroup>
-              <SidebarGroupLabel>Product & Development</SidebarGroupLabel>
-              <SidebarGroupContent>
-                <SidebarMenu>
-                  {menuSections.product.map(item => (
-                    <SidebarMenuItem key={item.id}>
-                      <SidebarMenuButton
-                        onClick={() => setActiveView(item.id)}
-                        isActive={activeView === item.id}
-                        className="w-full"
-                      >
-                        <item.icon className="h-4 w-4" />
-                        <span>{item.label}</span>
-                        {item.id === 'roadmap' && (
-                          <Badge
-                            variant="secondary"
-                            className="ml-auto text-xs"
-                          >
-                            8
-                          </Badge>
-                        )}
-                        {item.id === 'features' && (
-                          <Badge
-                            variant="secondary"
-                            className="ml-auto text-xs"
-                          >
-                            23
-                          </Badge>
-                        )}
-                      </SidebarMenuButton>
-                    </SidebarMenuItem>
-                  ))}
-                </SidebarMenu>
-              </SidebarGroupContent>
-            </SidebarGroup>
-
-            {/* System Administration Section */}
-            <SidebarGroup>
-              <SidebarGroupLabel>System Administration</SidebarGroupLabel>
-              <SidebarGroupContent>
-                <SidebarMenu>
-                  {menuSections.system.map(item => (
-                    <SidebarMenuItem key={item.id}>
-                      <SidebarMenuButton
-                        onClick={() => setActiveView(item.id)}
-                        isActive={activeView === item.id}
-                        className="w-full"
-                      >
-                        <item.icon className="h-4 w-4" />
-                        <span>{item.label}</span>
-                      </SidebarMenuButton>
-                    </SidebarMenuItem>
-                  ))}
-                </SidebarMenu>
-              </SidebarGroupContent>
-            </SidebarGroup>
-          </SidebarContent>
-
-          <SidebarFooter className="p-4">
-            <div className="flex items-center gap-3 p-2 rounded-lg border">
-              <Avatar className="h-8 w-8">
-                <AvatarImage src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face" />
-                <AvatarFallback>JD</AvatarFallback>
-              </Avatar>
-              <div className="flex-1 min-w-0">
-                <p className="text-sm truncate">John Doe</p>
-                <p className="text-xs text-muted-foreground truncate">
-                  System Administrator
-                </p>
-              </div>
-              <Button variant="ghost" size="sm">
-                <LogOut className="h-4 w-4" />
-              </Button>
+            <div>
+              <h2>Peak Health</h2>
+              <p className="text-xs text-muted-foreground">Admin Dashboard</p>
             </div>
-          </SidebarFooter>
-        </Sidebar>
+          </div>
+        </div>
 
-        <SidebarInset className="flex-1 flex flex-col">
-          <header className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-            <div className="flex h-14 items-center justify-between px-4">
-              <div className="flex items-center gap-4">
-                <SidebarTrigger />
+        {/* Navigation menu */}
+        <div className="flex-1 px-4 space-y-6">
+          {/* Overview Section */}
+          <div>
+            <h3 className="text-sm font-medium text-muted-foreground mb-2">Overview</h3>
+            <div className="space-y-1">
+              {menuSections.overview.map(item => (
+                <button
+                  key={item.id}
+                  onClick={() => setActiveView(item.id)}
+                  className={`w-full flex items-center gap-3 px-3 py-2 rounded-md text-sm transition-colors ${
+                    activeView === item.id
+                      ? 'bg-primary text-primary-foreground'
+                      : 'hover:bg-muted'
+                  }`}
+                >
+                  <item.icon className="h-4 w-4" />
+                  <span>{item.label}</span>
+                </button>
+              ))}
+            </div>
+          </div>
 
-                {/* Data Context Indicator */}
-                <div className="flex items-center gap-2">
-                  {(() => {
-                    const scopeInfo = getDataScopeInfo(activeView);
-                    const IconComponent = scopeInfo.icon;
-                    return (
-                      <Badge
-                        variant={
-                          scopeInfo.color as
-                            | 'default'
-                            | 'secondary'
-                            | 'destructive'
-                            | 'outline'
-                        }
-                      >
-                        <IconComponent className="h-3 w-3 mr-1" />
-                        {scopeInfo.label}
-                      </Badge>
-                    );
-                  })()}
-                </div>
-
-                <h1 className="font-medium">{getCurrentPageTitle()}</h1>
-              </div>
-
-              <div className="flex items-center gap-2">
-                <Button variant="ghost" size="sm">
-                  <Bell className="h-4 w-4" />
-                </Button>
-                <Button variant="ghost" size="sm" onClick={toggleDarkMode}>
-                  {isDarkMode ? (
-                    <Sun className="h-4 w-4" />
-                  ) : (
-                    <Moon className="h-4 w-4" />
+          {/* Analytics & Business Section */}
+          <div>
+            <h3 className="text-sm font-medium text-muted-foreground mb-2">Analytics & Business</h3>
+            <div className="space-y-1">
+              {menuSections.analytics.map(item => (
+                <button
+                  key={item.id}
+                  onClick={() => setActiveView(item.id)}
+                  className={`w-full flex items-center gap-3 px-3 py-2 rounded-md text-sm transition-colors ${
+                    activeView === item.id
+                      ? 'bg-primary text-primary-foreground'
+                      : 'hover:bg-muted'
+                  }`}
+                >
+                  <item.icon className="h-4 w-4" />
+                  <span>{item.label}</span>
+                  {item.id === 'analytics' && (
+                    <Badge variant="secondary" className="ml-auto text-xs">$124K</Badge>
                   )}
-                </Button>
-                <Badge variant="default">
-                  <Shield className="h-3 w-3 mr-1" />
-                  Admin
-                </Badge>
-              </div>
+                  {item.id === 'reports' && (
+                    <Badge variant="secondary" className="ml-auto text-xs">15</Badge>
+                  )}
+                </button>
+              ))}
             </div>
-          </header>
+          </div>
 
-          <main className="flex-1 overflow-auto">{renderContent()}</main>
-        </SidebarInset>
+          {/* Partners & Network Section */}
+          <div>
+            <h3 className="text-sm font-medium text-muted-foreground mb-2">Partners & Network</h3>
+            <div className="space-y-1">
+              {menuSections.partners.map(item => (
+                <button
+                  key={item.id}
+                  onClick={() => setActiveView(item.id)}
+                  className={`w-full flex items-center gap-3 px-3 py-2 rounded-md text-sm transition-colors ${
+                    activeView === item.id
+                      ? 'bg-primary text-primary-foreground'
+                      : 'hover:bg-muted'
+                  }`}
+                >
+                  <item.icon className="h-4 w-4" />
+                  <span>{item.label}</span>
+                  {item.id === 'trainers' && (
+                    <Badge variant="secondary" className="ml-auto">48</Badge>
+                  )}
+                  {item.id === 'gyms' && (
+                    <Badge variant="secondary" className="ml-auto">12</Badge>
+                  )}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Content & Operations Section */}
+          <div>
+            <h3 className="text-sm font-medium text-muted-foreground mb-2">Content & Operations</h3>
+            <div className="space-y-1">
+              {menuSections.content.map(item => (
+                <button
+                  key={item.id}
+                  onClick={() => setActiveView(item.id)}
+                  className={`w-full flex items-center gap-3 px-3 py-2 rounded-md text-sm transition-colors ${
+                    activeView === item.id
+                      ? 'bg-primary text-primary-foreground'
+                      : 'hover:bg-muted'
+                  }`}
+                >
+                  <item.icon className="h-4 w-4" />
+                  <span>{item.label}</span>
+                  {item.id === 'suggestions' && (
+                    <Badge variant="destructive" className="ml-auto text-xs">3</Badge>
+                  )}
+                  {item.id === 'content' && (
+                    <Badge variant="secondary" className="ml-auto text-xs">1.2K</Badge>
+                  )}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Customer Success & Support Section */}
+          <div>
+            <h3 className="text-sm font-medium text-muted-foreground mb-2">Customer Success & Support</h3>
+            <div className="space-y-1">
+              {menuSections.customer_success.map(item => (
+                <button
+                  key={item.id}
+                  onClick={() => setActiveView(item.id)}
+                  className={`w-full flex items-center gap-3 px-3 py-2 rounded-md text-sm transition-colors ${
+                    activeView === item.id
+                      ? 'bg-primary text-primary-foreground'
+                      : 'hover:bg-muted'
+                  }`}
+                >
+                  <item.icon className="h-4 w-4" />
+                  <span>{item.label}</span>
+                  {item.id === 'support' && (
+                    <Badge variant="destructive" className="ml-auto text-xs">12</Badge>
+                  )}
+                  {item.id === 'engagement' && (
+                    <Badge variant="secondary" className="ml-auto text-xs">85%</Badge>
+                  )}
+                  {item.id === 'knowledge' && (
+                    <Badge variant="secondary" className="ml-auto text-xs">124</Badge>
+                  )}
+                  {item.id === 'feedback' && (
+                    <Badge variant="secondary" className="ml-auto text-xs">4.8</Badge>
+                  )}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Communication & Notifications Section */}
+          <div>
+            <h3 className="text-sm font-medium text-muted-foreground mb-2">Communication & Notifications</h3>
+            <div className="space-y-1">
+              {menuSections.communications.map(item => (
+                <button
+                  key={item.id}
+                  onClick={() => setActiveView(item.id)}
+                  className={`w-full flex items-center gap-3 px-3 py-2 rounded-md text-sm transition-colors ${
+                    activeView === item.id
+                      ? 'bg-primary text-primary-foreground'
+                      : 'hover:bg-muted'
+                  }`}
+                >
+                  <item.icon className="h-4 w-4" />
+                  <span>{item.label}</span>
+                  {item.id === 'announcements' && (
+                    <Badge variant="secondary" className="ml-auto text-xs">5</Badge>
+                  )}
+                  {item.id === 'notifications' && (
+                    <Badge variant="secondary" className="ml-auto text-xs">89%</Badge>
+                  )}
+                  {item.id === 'emails' && (
+                    <Badge variant="secondary" className="ml-auto text-xs">18</Badge>
+                  )}
+                  {item.id === 'comm_logs' && (
+                    <Badge variant="secondary" className="ml-auto text-xs">2.3K</Badge>
+                  )}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Product & Development Section */}
+          <div>
+            <h3 className="text-sm font-medium text-muted-foreground mb-2">Product & Development</h3>
+            <div className="space-y-1">
+              {menuSections.product.map(item => (
+                <button
+                  key={item.id}
+                  onClick={() => setActiveView(item.id)}
+                  className={`w-full flex items-center gap-3 px-3 py-2 rounded-md text-sm transition-colors ${
+                    activeView === item.id
+                      ? 'bg-primary text-primary-foreground'
+                      : 'hover:bg-muted'
+                  }`}
+                >
+                  <item.icon className="h-4 w-4" />
+                  <span>{item.label}</span>
+                  {item.id === 'roadmap' && (
+                    <Badge variant="secondary" className="ml-auto text-xs">8</Badge>
+                  )}
+                  {item.id === 'features' && (
+                    <Badge variant="secondary" className="ml-auto text-xs">23</Badge>
+                  )}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* System Administration Section */}
+          <div>
+            <h3 className="text-sm font-medium text-muted-foreground mb-2">System Administration</h3>
+            <div className="space-y-1">
+              {menuSections.system.map(item => (
+                <button
+                  key={item.id}
+                  onClick={() => setActiveView(item.id)}
+                  className={`w-full flex items-center gap-3 px-3 py-2 rounded-md text-sm transition-colors ${
+                    activeView === item.id
+                      ? 'bg-primary text-primary-foreground'
+                      : 'hover:bg-muted'
+                  }`}
+                >
+                  <item.icon className="h-4 w-4" />
+                  <span>{item.label}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* User profile at bottom */}
+        <div className="p-4 border-t border-sidebar-border">
+          <div className="flex items-center gap-3 p-2 rounded-lg border">
+            <Avatar className="h-8 w-8">
+              <AvatarImage src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face" />
+              <AvatarFallback>JD</AvatarFallback>
+            </Avatar>
+            <div className="flex-1 min-w-0">
+              <p className="text-sm truncate">John Doe</p>
+              <p className="text-xs text-muted-foreground truncate">System Administrator</p>
+            </div>
+            <Button variant="ghost" size="sm">
+              <LogOut className="h-4 w-4" />
+            </Button>
+          </div>
+        </div>
       </div>
-    </SidebarProvider>
+
+             {/* Main content area */}
+       <div className="flex-1 flex flex-col">
+         <header className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+           <div className="flex h-14 items-center justify-between px-4">
+             <div className="flex items-center gap-4">
+               {/* Data Context Indicator */}
+               <div className="flex items-center gap-2">
+                 {(() => {
+                   const scopeInfo = getDataScopeInfo(activeView);
+                   const IconComponent = scopeInfo.icon;
+                   return (
+                     <Badge
+                       variant={
+                         scopeInfo.color as
+                           | 'default'
+                           | 'secondary'
+                           | 'destructive'
+                           | 'outline'
+                       }
+                     >
+                       <IconComponent className="h-3 w-3 mr-1" />
+                       {scopeInfo.label}
+                     </Badge>
+                   );
+                 })()}
+               </div>
+
+               <h1 className="font-medium">{getCurrentPageTitle()}</h1>
+             </div>
+
+             <div className="flex items-center gap-2">
+               <Button variant="ghost" size="sm">
+                 <Bell className="h-4 w-4" />
+               </Button>
+               <Button variant="ghost" size="sm" onClick={toggleDarkMode}>
+                 {isDarkMode ? (
+                   <Sun className="h-4 w-4" />
+                 ) : (
+                   <Moon className="h-4 w-4" />
+                 )}
+               </Button>
+               <Badge variant="default">
+                 <Shield className="h-3 w-3 mr-1" />
+                 Admin
+               </Badge>
+             </div>
+           </div>
+         </header>
+
+                   <main className="flex-1 overflow-auto">{renderContent()}</main>
+        </div>
+      </div>
   );
 };
 
