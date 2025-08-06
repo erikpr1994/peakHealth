@@ -382,19 +382,19 @@ describe('ExerciseDataAggregators', () => {
     it('should filter variants by difficulty', () => {
       const variants = [
         {
-          difficulty: 'beginner',
-          equipment: ['bodyweight'],
-          muscle_groups: ['chest'],
+          difficulty: DIFFICULTY.BEGINNER,
+          equipment: [EQUIPMENT.BODYWEIGHT],
+          muscle_groups: [MUSCLE_GROUP.CHEST],
         },
         {
-          difficulty: 'intermediate',
-          equipment: ['bodyweight'],
-          muscle_groups: ['chest'],
+          difficulty: DIFFICULTY.INTERMEDIATE,
+          equipment: [EQUIPMENT.BODYWEIGHT],
+          muscle_groups: [MUSCLE_GROUP.CHEST],
         },
         {
-          difficulty: 'advanced',
-          equipment: ['bodyweight'],
-          muscle_groups: ['chest'],
+          difficulty: DIFFICULTY.ADVANCED,
+          equipment: [EQUIPMENT.BODYWEIGHT],
+          muscle_groups: [MUSCLE_GROUP.CHEST],
         },
       ];
 
@@ -412,19 +412,19 @@ describe('ExerciseDataAggregators', () => {
     it('should filter variants by equipment', () => {
       const variants = [
         {
-          difficulty: 'beginner',
-          equipment: ['bodyweight'],
-          muscle_groups: ['chest'],
+          difficulty: DIFFICULTY.BEGINNER,
+          equipment: [EQUIPMENT.BODYWEIGHT],
+          muscle_groups: [MUSCLE_GROUP.CHEST],
         },
         {
-          difficulty: 'beginner',
-          equipment: ['dumbbells'],
-          muscle_groups: ['chest'],
+          difficulty: DIFFICULTY.BEGINNER,
+          equipment: [EQUIPMENT.DUMBBELL],
+          muscle_groups: [MUSCLE_GROUP.CHEST],
         },
         {
-          difficulty: 'beginner',
-          equipment: ['barbell'],
-          muscle_groups: ['chest'],
+          difficulty: DIFFICULTY.BEGINNER,
+          equipment: [EQUIPMENT.BARBELL],
+          muscle_groups: [MUSCLE_GROUP.CHEST],
         },
       ];
 
@@ -442,19 +442,19 @@ describe('ExerciseDataAggregators', () => {
     it('should filter variants by muscle group', () => {
       const variants = [
         {
-          difficulty: 'beginner',
-          equipment: ['bodyweight'],
-          muscle_groups: ['chest'],
+          difficulty: DIFFICULTY.BEGINNER,
+          equipment: [EQUIPMENT.BODYWEIGHT],
+          muscle_groups: [MUSCLE_GROUP.CHEST],
         },
         {
-          difficulty: 'beginner',
-          equipment: ['bodyweight'],
-          muscle_groups: ['back'],
+          difficulty: DIFFICULTY.BEGINNER,
+          equipment: [EQUIPMENT.BODYWEIGHT],
+          muscle_groups: [MUSCLE_GROUP.BACK],
         },
         {
-          difficulty: 'beginner',
-          equipment: ['bodyweight'],
-          muscle_groups: ['legs'],
+          difficulty: DIFFICULTY.BEGINNER,
+          equipment: [EQUIPMENT.BODYWEIGHT],
+          muscle_groups: [MUSCLE_GROUP.LEGS],
         },
       ];
 
@@ -472,19 +472,19 @@ describe('ExerciseDataAggregators', () => {
     it('should filter by multiple criteria', () => {
       const variants = [
         {
-          difficulty: 'beginner',
-          equipment: ['bodyweight'],
-          muscle_groups: ['chest'],
+          difficulty: DIFFICULTY.BEGINNER,
+          equipment: [EQUIPMENT.BODYWEIGHT],
+          muscle_groups: [MUSCLE_GROUP.CHEST],
         },
         {
-          difficulty: 'intermediate',
-          equipment: ['dumbbells'],
-          muscle_groups: ['chest'],
+          difficulty: DIFFICULTY.INTERMEDIATE,
+          equipment: [EQUIPMENT.DUMBBELL],
+          muscle_groups: [MUSCLE_GROUP.CHEST],
         },
         {
-          difficulty: 'beginner',
-          equipment: ['bodyweight'],
-          muscle_groups: ['back'],
+          difficulty: DIFFICULTY.BEGINNER,
+          equipment: [EQUIPMENT.BODYWEIGHT],
+          muscle_groups: [MUSCLE_GROUP.BACK],
         },
       ];
 
@@ -536,9 +536,9 @@ describe('ExerciseDataAggregators', () => {
             {
               id: '1',
               name: 'Standard Push-up',
-              difficulty: 'beginner',
-              equipment: ['bodyweight'],
-              muscle_groups: ['chest'],
+              difficulty: DIFFICULTY.BEGINNER,
+              equipment: [EQUIPMENT.BODYWEIGHT],
+              muscle_groups: [MUSCLE_GROUP.CHEST],
               exercise_instruction_steps: [
                 {
                   id: '1',
@@ -618,9 +618,9 @@ describe('ExerciseDataAggregators', () => {
             {
               id: '1',
               name: 'Standard Push-up',
-              difficulty: 'intermediate',
-              equipment: ['bodyweight'],
-              muscle_groups: ['chest'],
+              difficulty: DIFFICULTY.INTERMEDIATE,
+              equipment: [EQUIPMENT.BODYWEIGHT],
+              muscle_groups: [MUSCLE_GROUP.CHEST],
               exercise_instruction_steps: [],
               exercise_tips: [],
               exercise_media: [],

@@ -178,7 +178,7 @@ describe('exerciseMappers', () => {
         muscleGroups: ['Chest', 'Triceps'],
         secondaryMuscles: ['Shoulders'],
         isUnilateral: false,
-        instructions: 'Perform a standard push-up',
+        instructions: ['Perform a standard push-up'],
         steps: [
           {
             title: 'Starting Position',

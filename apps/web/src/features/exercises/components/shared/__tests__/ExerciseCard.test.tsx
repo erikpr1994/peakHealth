@@ -95,8 +95,8 @@ describe('ExerciseCard', () => {
     render(<ExerciseCard exercise={mockExercise} />);
 
     expect(screen.getByText('Push-up')).toBeInTheDocument();
-    expect(screen.getByText('chest, shoulders')).toBeInTheDocument();
-    expect(screen.getByText('strength')).toBeInTheDocument();
+    expect(screen.getByText('Chest, Shoulders')).toBeInTheDocument();
+    expect(screen.getByText('Strength')).toBeInTheDocument();
     expect(screen.getByText('2 variants')).toBeInTheDocument();
     expect(screen.getByText('4.5')).toBeInTheDocument();
   });

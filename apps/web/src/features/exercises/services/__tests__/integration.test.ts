@@ -799,9 +799,9 @@ describe('Exercise Service Integration', () => {
       expect(
         mockDataAggregators.transformJoinedExerciseData
       ).toHaveBeenCalledWith(mockJoinedExercises, {
-        difficulties: ['beginner'],
-        equipment: ['bodyweight'],
-        muscleGroups: ['chest'],
+        difficulties: [DIFFICULTY.BEGINNER],
+        equipment: [EQUIPMENT.BODYWEIGHT],
+        muscleGroups: [MUSCLE_GROUP.CHEST],
       });
       expect(result).toEqual([mockTransformedExercise]);
       // Should only include the beginner variant due to filtering
