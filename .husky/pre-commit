@@ -10,20 +10,47 @@ if [ $LINT_STAGED_EXIT_CODE -ne 0 ]; then
   exit $LINT_STAGED_EXIT_CODE
 fi
 
-echo "🏗️ Running build..."
-pnpm build
-BUILD_EXIT_CODE=$?
+# Get list of changed files and determine which projects have changes
+echo "📋 Analyzing changed projects..."
+CHANGED_FILES=$(git diff --cached --name-only)
 
-if [ $BUILD_EXIT_CODE -ne 0 ]; then
-  echo "❌ Build failed"
-  exit $BUILD_EXIT_CODE
+# Function to check if a project has changes
+has_project_changes() {
+  local project_path=$1
+  echo "$CHANGED_FILES" | grep -q "^$project_path/"
+}
+
+# Run commands only for projects with changes
+if has_project_changes "apps/web" || has_project_changes "apps/admin"; then
+  echo "🏗️ Building changed projects..."
+  pnpm build --filter=./apps/web --filter=./apps/admin
+  BUILD_EXIT_CODE=$?
+
+  if [ $BUILD_EXIT_CODE -ne 0 ]; then
+    echo "❌ Build failed"
+    exit $BUILD_EXIT_CODE
+  fi
+
+  echo "🔍 Type checking changed projects..."
+  pnpm type-check --filter=./apps/web --filter=./apps/admin
+  TYPE_CHECK_EXIT_CODE=$?
+
+  if [ $TYPE_CHECK_EXIT_CODE -ne 0 ]; then
+    echo "❌ Type check failed"
+    exit $TYPE_CHECK_EXIT_CODE
+  fi
 fi
 
-echo "🧪 Running unit and integration tests..."
-pnpm test:unit
-TEST_EXIT_CODE=$?
+# Run tests only if there are changes in test-related files
+if echo "$CHANGED_FILES" | grep -q "\.test\." || echo "$CHANGED_FILES" | grep -q "\.spec\." || echo "$CHANGED_FILES" | grep -q "src/"; then
+  echo "🧪 Running unit tests..."
+  pnpm test:unit
+  TEST_EXIT_CODE=$?
 
-if [ $TEST_EXIT_CODE -ne 0 ]; then
-  echo "❌ Tests failed"
-  exit $TEST_EXIT_CODE
+  if [ $TEST_EXIT_CODE -ne 0 ]; then
+    echo "❌ Tests failed"
+    exit $TEST_EXIT_CODE
+  fi
 fi
+
+echo "✅ Pre-commit checks passed!"

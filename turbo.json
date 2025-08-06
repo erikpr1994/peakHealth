@@ -6,7 +6,20 @@
       "dependsOn": ["^build"],
       "outputs": [".next/**", "!.next/cache/**"]
     },
-    "lint": {},
+    "lint": {
+      "inputs": [
+        "src/**/*.{ts,tsx,js,jsx}",
+        "**/*.config.{ts,js,mjs}",
+        "**/*.config.{ts,js,mjs}.json"
+      ]
+    },
+    "type-check": {
+      "inputs": [
+        "src/**/*.{ts,tsx}",
+        "**/*.config.{ts,js,mjs}",
+        "tsconfig.json"
+      ]
+    },
     "supabase:start": {
       "cache": false
     },
