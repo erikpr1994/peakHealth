@@ -2,6 +2,7 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 
 import type { Exercise } from '../../../types';
+import { createExerciseId, createExerciseVariantId } from '../../../types/ids';
 import { ExercisePreview } from '../ExercisePreview';
 
 // Mock hooks
@@ -25,13 +26,13 @@ vi.mock('next/navigation', () => ({
 }));
 
 const mockExercise: Exercise = {
-  id: '1',
+  id: createExerciseId('1'),
   name: 'Push-up',
   category: 'Strength',
   description: 'A basic push-up',
   variants: [
     {
-      id: 'v1',
+      id: createExerciseVariantId('v1'),
       name: 'Standard Push-up',
       description: 'Standard form',
       focus: 'chest',
@@ -42,7 +43,7 @@ const mockExercise: Exercise = {
       steps: [{ title: 'Step 1', description: 'Do it' }],
     },
     {
-      id: 'v2',
+      id: createExerciseVariantId('v2'),
       name: 'Wide Push-up',
       description: 'Wide stance',
       focus: 'chest',
@@ -53,7 +54,7 @@ const mockExercise: Exercise = {
       steps: [{ title: 'Step 1', description: 'Do it wide' }],
     },
   ],
-  mainVariantId: 'v1',
+  mainVariantId: createExerciseVariantId('v1'),
   icon: '💪',
   iconColor: 'blue',
   isFavorite: false,

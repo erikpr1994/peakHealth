@@ -11,6 +11,7 @@ import {
   DollarSign,
   Camera,
 } from 'lucide-react';
+import Image from 'next/image';
 import { useState } from 'react';
 
 import { Button } from '@/components/ui/button';
@@ -180,9 +181,11 @@ export default function Settings({ onNavigate: _onNavigate }: SettingsProps) {
             <div className="flex items-center gap-6 mb-8">
               <div className="relative">
                 <div className="w-24 h-24 rounded-full bg-gray-200 overflow-hidden">
-                  <img
+                  <Image
                     src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=96&h=96&fit=crop&crop=face"
                     alt="Profile"
+                    width={96}
+                    height={96}
                     className="w-full h-full object-cover"
                   />
                 </div>

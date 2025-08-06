@@ -2,21 +2,22 @@ import { render, screen } from '@testing-library/react';
 import { describe, it, expect } from 'vitest';
 
 import type { Exercise, ExerciseVariant } from '../../../types';
+import { createExerciseId, createExerciseVariantId } from '../../../types/ids';
 import { ExerciseInfo } from '../ExerciseInfo';
 
 const mockExercise: Exercise = {
-  id: '1',
+  id: createExerciseId('1'),
   name: 'Push-up',
   category: 'Strength',
   description: 'A basic push-up',
   variants: [],
-  mainVariantId: 'v1',
+  mainVariantId: createExerciseVariantId('v1'),
   icon: '💪',
   iconColor: 'blue',
   isFavorite: false,
 };
 const mockVariant: ExerciseVariant = {
-  id: 'v1',
+  id: createExerciseVariantId('v1'),
   name: 'Standard Push-up',
   description: 'Standard form',
   focus: 'chest',

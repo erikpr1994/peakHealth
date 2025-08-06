@@ -8,6 +8,13 @@ import {
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 
 import type { Exercise } from '../../../types';
+import {
+  CATEGORY,
+  DIFFICULTY,
+  EQUIPMENT,
+  MUSCLE_GROUP,
+} from '../../../types/constants';
+import { createExerciseId, createExerciseVariantId } from '../../../types/ids';
 import { ExerciseCard } from '../ExerciseCard';
 
 // Mock the hooks
@@ -25,30 +32,59 @@ vi.mock('@/features/auth/context/AuthContext', () => ({
 }));
 
 const mockExercise: Exercise = {
-  id: '1',
+  id: createExerciseId('1'),
   name: 'Push-up',
-  category: 'strength',
+  category: CATEGORY.STRENGTH,
+  description: 'A classic bodyweight exercise',
   icon: '💪',
+  iconColor: '#3B82F6',
   isFavorite: false,
   isPopular: false,
   isNew: false,
   rating: 4.5,
-  mainVariantId: 'variant-1',
+  mainVariantId: createExerciseVariantId('variant-1'),
   variants: [
     {
-      id: 'variant-1',
+      id: createExerciseVariantId('variant-1'),
       name: 'Standard Push-up',
-      difficulty: 'beginner',
-      muscleGroups: ['chest', 'shoulders'],
+      description: 'Basic push-up variation',
+      focus: 'Upper body strength',
+      difficulty: DIFFICULTY.BEGINNER,
+      equipment: [EQUIPMENT.BODYWEIGHT],
+      muscleGroups: [MUSCLE_GROUP.CHEST, MUSCLE_GROUP.SHOULDERS],
+      instructions: [
+        'Start in plank position',
+        'Lower your body',
+        'Push back up',
+      ],
+      steps: [
+        { title: 'Start Position', description: 'Get into a plank position' },
+        { title: 'Lower', description: 'Lower your body to the ground' },
+        { title: 'Push Up', description: 'Push back up to starting position' },
+      ],
     },
     {
-      id: 'variant-2',
+      id: createExerciseVariantId('variant-2'),
       name: 'Diamond Push-up',
-      difficulty: 'intermediate',
-      muscleGroups: ['chest', 'triceps'],
+      description: 'Advanced push-up variation',
+      focus: 'Tricep strength',
+      difficulty: DIFFICULTY.INTERMEDIATE,
+      equipment: [EQUIPMENT.BODYWEIGHT],
+      muscleGroups: [MUSCLE_GROUP.CHEST, MUSCLE_GROUP.TRICEPS],
+      instructions: ['Form diamond with hands', 'Perform push-up'],
+      steps: [
+        {
+          title: 'Diamond Position',
+          description: 'Form diamond shape with hands',
+        },
+        {
+          title: 'Perform Push-up',
+          description: 'Execute the push-up movement',
+        },
+      ],
     },
   ],
-} as Exercise;
+};
 
 describe('ExerciseCard', () => {
   beforeEach(() => {
