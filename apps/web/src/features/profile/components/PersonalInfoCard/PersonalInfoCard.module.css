@@ -104,3 +104,39 @@
   opacity: 0.6;
   cursor: not-allowed;
 }
+
+.rolesGroupsContainer {
+  margin-top: 0.25rem;
+}
+
+.roleGroupSection {
+  margin-bottom: 0.75rem;
+}
+
+.roleGroupSection:last-child {
+  margin-bottom: 0;
+}
+
+.roleGroupLabel {
+  font-weight: 500;
+  color: #374151;
+  font-size: 0.875rem;
+  margin-right: 0.5rem;
+}
+
+.roleGroupTags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.25rem;
+}
+
+.roleGroupTag {
+  background-color: #f3f4f6;
+  color: #374151;
+  padding: 0.25rem 0.75rem;
+  border-radius: 0.375rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  border: 1px solid #e5e7eb;
+}
