@@ -49,6 +49,12 @@ const userFetcher = async (url: string): Promise<ExtendedUser | null> => {
       if (errorData.code === 'USER_NOT_FOUND' && errorData.shouldRedirect) {
         // Clear any existing auth state and redirect to login
         if (typeof window !== 'undefined') {
+          // Clear Supabase session properly
+          const supabase = createClient();
+          if (supabase) {
+            await supabase.auth.signOut();
+          }
+
           // Clear any stored auth data
           localStorage.removeItem('supabase.auth.token');
           sessionStorage.removeItem('supabase.auth.token');
@@ -58,9 +64,11 @@ const userFetcher = async (url: string): Promise<ExtendedUser | null> => {
         }
       }
 
-      // Not authenticated, return null
+      // Not authenticated, return null (don't throw error to prevent infinite loops)
       return null;
     }
+
+    // For other errors, throw to let SWR handle them
     const error = new Error('An error occurred while fetching the user.');
     (error as unknown as { info: unknown }).info = await response.json();
     (error as unknown as { status: number }).status = response.status;
@@ -85,6 +93,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       shouldRetryOnError: false,
       suspense: true,
       fallbackData: null,
+      onError: error => {
+        // Prevent infinite loops on 401 errors
+        if (error?.status === 401) {
+          // Don't retry on 401 errors
+        }
+      },
     }
   );
 
