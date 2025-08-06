@@ -8,6 +8,13 @@ export async function GET() {
   try {
     const supabase = await createClient();
 
+    if (!supabase) {
+      return NextResponse.json(
+        { error: 'Database connection not available' },
+        { status: 503 }
+      );
+    }
+
     const {
       data: { user },
       error: authError,
@@ -77,6 +84,13 @@ export async function GET() {
 export async function PUT(request: NextRequest) {
   try {
     const supabase = await createClient();
+
+    if (!supabase) {
+      return NextResponse.json(
+        { error: 'Database connection not available' },
+        { status: 503 }
+      );
+    }
 
     const {
       data: { user },

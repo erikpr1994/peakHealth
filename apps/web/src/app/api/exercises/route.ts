@@ -1,15 +1,41 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 
-import { exerciseService } from '@/features/exercises/services/exerciseService';
+import { createClient } from '@/lib/supabase/server';
 
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
-    const exercises = await exerciseService.getAllExercises();
-    return NextResponse.json({ exercises });
+    const supabase = await createClient();
+
+    if (!supabase) {
+      return NextResponse.json(
+        { error: 'Database connection not available' },
+        { status: 503 }
+      );
+    }
+
+    // eslint-disable-next-line no-console
+    console.log('Fetching exercises...');
+
+    const { data: exercises, error } = await supabase
+      .from('exercises')
+      .select('*')
+      .order('name');
+
+    if (error) {
+      // eslint-disable-next-line no-console
+      console.error('Error fetching exercises:', error);
+      return NextResponse.json(
+        { error: 'Failed to fetch exercises' },
+        { status: 500 }
+      );
+    }
+
+    return NextResponse.json({ exercises: exercises || [] });
   } catch (error) {
-    console.error('Error fetching exercises:', error);
+    // eslint-disable-next-line no-console
+    console.error('Exercises API error:', error);
     return NextResponse.json(
-      { error: 'Failed to fetch exercises' },
+      { error: 'Internal server error' },
       { status: 500 }
     );
   }

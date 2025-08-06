@@ -86,6 +86,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   // Set up real-time auth state synchronization
   useEffect(() => {
+    if (!supabase) {
+      return;
+    }
+
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((event, session) => {

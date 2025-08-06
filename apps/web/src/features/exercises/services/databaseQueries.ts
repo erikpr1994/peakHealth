@@ -21,6 +21,10 @@ export class ExerciseDatabaseQueries {
   }> {
     const supabase = await createClient();
 
+    if (!supabase) {
+      throw new Error('Database connection not available');
+    }
+
     // Get all exercises
     const { data: exercises, error: exercisesError } = await supabase
       .from('exercises')
@@ -89,6 +93,10 @@ export class ExerciseDatabaseQueries {
   }> {
     const supabase = await createClient();
 
+    if (!supabase) {
+      throw new Error('Database connection not available');
+    }
+
     // Get the exercise
     const { data: exercise, error: exerciseError } = await supabase
       .from('exercises')
@@ -154,6 +162,10 @@ export class ExerciseDatabaseQueries {
   ): Promise<unknown[]> {
     const supabase = await createClient();
 
+    if (!supabase) {
+      throw new Error('Database connection not available');
+    }
+
     let query = supabase.from('exercises').select(`
         *,
         exercise_variants (
@@ -187,6 +199,10 @@ export class ExerciseDatabaseQueries {
   async fetchUserFavorites(userId: string): Promise<unknown[]> {
     const supabase = await createClient();
 
+    if (!supabase) {
+      throw new Error('Database connection not available');
+    }
+
     const { data, error } = await supabase
       .from('user_exercise_favorites')
       .select(
@@ -216,6 +232,10 @@ export class ExerciseDatabaseQueries {
   async addToFavorites(userId: string, exerciseId: string): Promise<void> {
     const supabase = await createClient();
 
+    if (!supabase) {
+      throw new Error('Database connection not available');
+    }
+
     const { error } = await supabase.from('user_exercise_favorites').insert({
       user_id: userId,
       exercise_id: exerciseId,
@@ -229,6 +249,10 @@ export class ExerciseDatabaseQueries {
    */
   async removeFromFavorites(userId: string, exerciseId: string): Promise<void> {
     const supabase = await createClient();
+
+    if (!supabase) {
+      throw new Error('Database connection not available');
+    }
 
     const { error } = await supabase
       .from('user_exercise_favorites')

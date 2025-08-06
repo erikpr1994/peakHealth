@@ -6,42 +6,47 @@ export async function GET() {
   try {
     const supabase = await createClient();
 
+    if (!supabase) {
+      return NextResponse.json(
+        { error: 'Database connection not available' },
+        { status: 503 }
+      );
+    }
+
     const {
       data: { user },
       error,
     } = await supabase.auth.getUser();
 
     if (error) {
-      // Don't log expected auth session missing errors
-      if (error.message.includes('Auth session missing')) {
-        return NextResponse.json(
-          { error: 'Not authenticated' },
-          { status: 401 }
-        );
-      }
-      console.error('Supabase auth error:', error);
-      return NextResponse.json({ error: error.message }, { status: 401 });
+      // eslint-disable-next-line no-console
+      console.error('Get user error:', error);
+      return NextResponse.json({ error: error.message }, { status: 400 });
     }
 
     if (!user) {
-      return NextResponse.json({ error: 'Not authenticated' }, { status: 401 });
+      return NextResponse.json({ user: null });
     }
 
-    // Add fallback values for backward compatibility
+    // Extract user roles and groups from app_metadata with fallback values
+    // Default to basic user if no roles/groups are set
+    const userRoles = user.app_metadata?.roles || ['basic'];
+    const userGroups = user.app_metadata?.groups || ['free'];
+
+    // Add fallback values to app_metadata for backward compatibility
     const userWithFallbacks = {
       ...user,
       app_metadata: {
         ...user.app_metadata,
-        roles: user.app_metadata?.roles || ['basic'],
-        groups: user.app_metadata?.groups || ['free'],
+        roles: userRoles,
+        groups: userGroups,
       },
     };
 
-    return NextResponse.json({
-      user: userWithFallbacks,
-    });
+    return NextResponse.json({ user: userWithFallbacks });
   } catch (error) {
-    console.error('Error fetching user:', error);
+    // eslint-disable-next-line no-console
+    console.error('Get user API error:', error);
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }
@@ -53,41 +58,41 @@ export async function PUT(request: NextRequest) {
   try {
     const supabase = await createClient();
 
-    const {
-      data: { user },
-      error: authError,
-    } = await supabase.auth.getUser();
-
-    if (authError || !user) {
-      return NextResponse.json({ error: 'Not authenticated' }, { status: 401 });
-    }
-
-    const { user_metadata } = await request.json();
-
-    if (!user_metadata || typeof user_metadata !== 'object') {
+    if (!supabase) {
       return NextResponse.json(
-        { error: 'Invalid user_metadata provided' },
-        { status: 400 }
+        { error: 'Database connection not available' },
+        { status: 503 }
       );
     }
 
-    // Update user metadata using Supabase's updateUser method
-    const { data, error } = await supabase.auth.updateUser({
-      data: user_metadata,
-    });
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
 
-    if (error) {
-      console.error('Error updating user metadata:', error);
-      return NextResponse.json({ error: error.message }, { status: 500 });
+    if (!user) {
+      return NextResponse.json({ error: 'Not authenticated' }, { status: 401 });
     }
 
-    return NextResponse.json({
-      success: true,
-      user: data.user,
-      message: 'User metadata updated successfully',
-    });
+    const { email, password, data } = await request.json();
+
+    const updateData: Record<string, unknown> = {};
+    if (email) updateData.email = email;
+    if (password) updateData.password = password;
+    if (data) updateData.data = data;
+
+    const { data: updatedUser, error } =
+      await supabase.auth.updateUser(updateData);
+
+    if (error) {
+      // eslint-disable-next-line no-console
+      console.error('Update user error:', error);
+      return NextResponse.json({ error: error.message }, { status: 400 });
+    }
+
+    return NextResponse.json({ user: updatedUser.user });
   } catch (error) {
-    console.error('Error updating user metadata:', error);
+    // eslint-disable-next-line no-console
+    console.error('Update user API error:', error);
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }

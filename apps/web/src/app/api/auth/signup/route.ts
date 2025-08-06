@@ -1,78 +1,48 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-import { createAdminClient } from '@/lib/supabase/admin';
 import { createClient } from '@/lib/supabase/server';
 
 export async function POST(request: NextRequest) {
   try {
-    const { email, password, name } = await request.json();
+    const supabase = await createClient();
 
-    if (!email || !password || !name) {
+    if (!supabase) {
       return NextResponse.json(
-        { error: 'Email, password, and name are required' },
+        { error: 'Database connection not available' },
+        { status: 503 }
+      );
+    }
+
+    const { email, password, user_metadata } = await request.json();
+
+    if (!email || !password) {
+      return NextResponse.json(
+        { error: 'Email and password are required' },
         { status: 400 }
       );
     }
 
-    const supabase = await createClient();
-
-    const {
-      data: { user },
-      error: signUpError,
-    } = await supabase.auth.signUp({
+    const { data, error } = await supabase.auth.signUp({
       email,
       password,
       options: {
-        data: {
-          name,
-        },
+        data: user_metadata || {},
       },
     });
 
-    if (signUpError) {
-      return NextResponse.json({ error: signUpError.message }, { status: 400 });
+    if (error) {
+      // eslint-disable-next-line no-console
+      console.error('Signup error:', error);
+      return NextResponse.json({ error: error.message }, { status: 400 });
     }
 
-    if (!user) {
-      return NextResponse.json({ error: 'User not created' }, { status: 500 });
-    }
-
-    const supabaseAdmin = createAdminClient();
-    const { error: adminError } = await supabaseAdmin.auth.admin.updateUserById(
-      user.id,
-      {
-        app_metadata: {
-          roles: ['basic'],
-          groups: ['free'],
-        },
-      }
-    );
-
-    if (adminError) {
-      // Clean up the created user if admin update fails
-      await supabaseAdmin.auth.admin.deleteUser(user.id);
-      return NextResponse.json({ error: adminError.message }, { status: 400 });
-    }
-
-    // Fetch the updated user with the new app_metadata
-    const { data: updatedUser, error: fetchError } =
-      await supabaseAdmin.auth.admin.getUserById(user.id);
-
-    if (fetchError || !updatedUser.user) {
-      return NextResponse.json(
-        { error: 'Failed to fetch updated user data' },
-        { status: 500 }
-      );
-    }
-
-    return NextResponse.json(
-      {
-        message: 'User created successfully',
-        user: updatedUser.user,
-      },
-      { status: 201 }
-    );
-  } catch {
+    return NextResponse.json({
+      user: data.user,
+      session: data.session,
+    });
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.error('Signup API error:', error);
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }
