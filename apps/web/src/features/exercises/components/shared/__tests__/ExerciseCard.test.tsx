@@ -206,7 +206,7 @@ describe('ExerciseCard', () => {
   it('should handle exercise without main variant', () => {
     const exerciseWithoutMainVariant = {
       ...mockExercise,
-      mainVariantId: createExerciseVariantId('non-existent'),
+      mainVariantId: undefined,
     };
     render(<ExerciseCard exercise={exerciseWithoutMainVariant} />);
 
