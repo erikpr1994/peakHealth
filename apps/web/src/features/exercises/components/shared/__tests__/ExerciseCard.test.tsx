@@ -206,7 +206,7 @@ describe('ExerciseCard', () => {
   it('should handle exercise without main variant', () => {
     const exerciseWithoutMainVariant = {
       ...mockExercise,
-      mainVariantId: undefined,
+      mainVariantId: createExerciseVariantId('non-existent'),
     };
     render(<ExerciseCard exercise={exerciseWithoutMainVariant} />);
 
@@ -272,15 +272,41 @@ describe('ExerciseCard', () => {
       ...mockExercise,
       variants: [
         {
-          ...mockExercise.variants[0],
-          muscleGroups: ['chest', 'shoulders', 'triceps', 'core'],
+          id: createExerciseVariantId('variant-1'),
+          name: 'Standard Push-up',
+          description: 'Basic push-up variation',
+          focus: 'Upper body strength',
+          difficulty: DIFFICULTY.BEGINNER,
+          equipment: [EQUIPMENT.BODYWEIGHT],
+          muscleGroups: [
+            MUSCLE_GROUP.CHEST,
+            MUSCLE_GROUP.SHOULDERS,
+            MUSCLE_GROUP.TRICEPS,
+            MUSCLE_GROUP.CORE,
+          ],
+          instructions: [
+            'Start in plank position',
+            'Lower your body',
+            'Push back up',
+          ],
+          steps: [
+            {
+              title: 'Start Position',
+              description: 'Get into a plank position',
+            },
+            { title: 'Lower', description: 'Lower your body to the ground' },
+            {
+              title: 'Push Up',
+              description: 'Push back up to starting position',
+            },
+          ],
         },
       ],
     };
     render(<ExerciseCard exercise={exerciseWithManyMuscleGroups} />);
 
     expect(
-      screen.getByText('chest, shoulders, triceps, core')
+      screen.getByText('Chest, Shoulders, Triceps, Core')
     ).toBeInTheDocument();
   });
 });
