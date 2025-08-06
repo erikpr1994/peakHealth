@@ -32,10 +32,10 @@ import { TrainerList } from './components/TrainerList';
 import { TrainerManagement } from './components/TrainerManagement';
 import { UserEngagement } from './components/UserEngagement';
 import { UserFeedback } from './components/UserFeedback';
-import { 
-  LayoutDashboard, 
-  BarChart3, 
-  Settings, 
+import {
+  LayoutDashboard,
+  BarChart3,
+  Settings,
   Bell,
   Moon,
   Sun,
@@ -57,45 +57,125 @@ import {
   Megaphone,
   Send,
   Mail,
-  Activity
-} from "lucide-react";
+  Activity,
+} from 'lucide-react';
 
 // Extended admin menu with Customer Success and Communication sections
 const menuSections = {
   overview: [
-    { id: 'dashboard', label: 'Overview', icon: LayoutDashboard, scope: 'platform' }
+    {
+      id: 'dashboard',
+      label: 'Overview',
+      icon: LayoutDashboard,
+      scope: 'platform',
+    },
   ],
   analytics: [
-    { id: 'analytics', label: 'Revenue Analytics', icon: BarChart3, scope: 'platform' },
-    { id: 'reports', label: 'Platform Reports', icon: FileText, scope: 'platform' }
+    {
+      id: 'analytics',
+      label: 'Revenue Analytics',
+      icon: BarChart3,
+      scope: 'platform',
+    },
+    {
+      id: 'reports',
+      label: 'Platform Reports',
+      icon: FileText,
+      scope: 'platform',
+    },
   ],
   partners: [
-    { id: 'trainers', label: 'Trainer Management', icon: UserCheck, scope: 'general' },
-    { id: 'gyms', label: 'Gym Partnerships', icon: Building2, scope: 'general' }
+    {
+      id: 'trainers',
+      label: 'Trainer Management',
+      icon: UserCheck,
+      scope: 'general',
+    },
+    {
+      id: 'gyms',
+      label: 'Gym Partnerships',
+      icon: Building2,
+      scope: 'general',
+    },
   ],
   content: [
-    { id: 'content', label: 'Content Management', icon: Database, scope: 'general' },
-    { id: 'suggestions', label: 'Content Suggestions', icon: MessageSquare, scope: 'general' }
+    {
+      id: 'content',
+      label: 'Content Management',
+      icon: Database,
+      scope: 'general',
+    },
+    {
+      id: 'suggestions',
+      label: 'Content Suggestions',
+      icon: MessageSquare,
+      scope: 'general',
+    },
   ],
   customer_success: [
-    { id: 'support', label: 'Support Tickets', icon: HeadphonesIcon, scope: 'general' },
-    { id: 'engagement', label: 'User Engagement', icon: Activity, scope: 'platform' },
-    { id: 'knowledge', label: 'Knowledge Base', icon: BookOpen, scope: 'general' },
-    { id: 'feedback', label: 'User Feedback', icon: ThumbsUp, scope: 'platform' }
+    {
+      id: 'support',
+      label: 'Support Tickets',
+      icon: HeadphonesIcon,
+      scope: 'general',
+    },
+    {
+      id: 'engagement',
+      label: 'User Engagement',
+      icon: Activity,
+      scope: 'platform',
+    },
+    {
+      id: 'knowledge',
+      label: 'Knowledge Base',
+      icon: BookOpen,
+      scope: 'general',
+    },
+    {
+      id: 'feedback',
+      label: 'User Feedback',
+      icon: ThumbsUp,
+      scope: 'platform',
+    },
   ],
   communications: [
-    { id: 'announcements', label: 'Platform Announcements', icon: Megaphone, scope: 'platform' },
-    { id: 'notifications', label: 'Push Notifications', icon: Bell, scope: 'general' },
+    {
+      id: 'announcements',
+      label: 'Platform Announcements',
+      icon: Megaphone,
+      scope: 'platform',
+    },
+    {
+      id: 'notifications',
+      label: 'Push Notifications',
+      icon: Bell,
+      scope: 'general',
+    },
     { id: 'emails', label: 'Email Templates', icon: Mail, scope: 'general' },
-    { id: 'comm_logs', label: 'Communication Logs', icon: Send, scope: 'platform' }
+    {
+      id: 'comm_logs',
+      label: 'Communication Logs',
+      icon: Send,
+      scope: 'platform',
+    },
   ],
   product: [
-    { id: 'roadmap', label: 'Product Roadmap', icon: Rocket, scope: 'platform' },
-    { id: 'features', label: 'Feature Flags', icon: Flag, scope: 'general' }
+    {
+      id: 'roadmap',
+      label: 'Product Roadmap',
+      icon: Rocket,
+      scope: 'platform',
+    },
+    { id: 'features', label: 'Feature Flags', icon: Flag, scope: 'general' },
   ],
   system: [
-    { id: 'settings', label: 'System Settings', icon: Settings, scope: 'general' }
-  ]
+    {
+      id: 'settings',
+      label: 'System Settings',
+      icon: Settings,
+      scope: 'general',
+    },
+  ],
 };
 
 const App = () => {
@@ -119,42 +199,67 @@ const App = () => {
   };
 
   const getDataScopeInfo = (viewId: string) => {
-    const allItems = [...menuSections.overview, ...menuSections.analytics, ...menuSections.partners, ...menuSections.content, ...menuSections.customer_success, ...menuSections.communications, ...menuSections.product, ...menuSections.system];
+    const allItems = [
+      ...menuSections.overview,
+      ...menuSections.analytics,
+      ...menuSections.partners,
+      ...menuSections.content,
+      ...menuSections.customer_success,
+      ...menuSections.communications,
+      ...menuSections.product,
+      ...menuSections.system,
+    ];
     const item = allItems.find(item => item.id === viewId);
-    
+
     if (viewId === 'trainer-view' && viewingTrainerId) {
       // For individual trainer view, show trainer-specific scope
       const mockTrainers = [
-        { id: 1, name: "John Doe" },
-        { id: 2, name: "Sarah Mitchell" },
-        { id: 3, name: "Mike Johnson" },
-        { id: 4, name: "Emily Chen" },
-        { id: 5, name: "David Rodriguez" },
-        { id: 6, name: "Lisa Thompson" }
+        { id: 1, name: 'John Doe' },
+        { id: 2, name: 'Sarah Mitchell' },
+        { id: 3, name: 'Mike Johnson' },
+        { id: 4, name: 'Emily Chen' },
+        { id: 5, name: 'David Rodriguez' },
+        { id: 6, name: 'Lisa Thompson' },
       ];
       const trainer = mockTrainers.find(t => t.id === viewingTrainerId);
-      return { 
-        scope: 'individual_trainer', 
-        label: `Trainer: ${trainer?.name || 'Unknown'}`, 
-        icon: User, 
-        color: 'default' 
+      return {
+        scope: 'individual_trainer',
+        label: `Trainer: ${trainer?.name || 'Unknown'}`,
+        icon: User,
+        color: 'default',
       };
     }
-    
-    if (!item) return { scope: 'general', label: 'General', icon: Globe, color: 'secondary' };
-    
+
+    if (!item)
+      return {
+        scope: 'general',
+        label: 'General',
+        icon: Globe,
+        color: 'secondary',
+      };
+
     switch (item.scope) {
       case 'platform':
-        return { 
-          scope: 'platform', 
-          label: 'Platform Wide', 
-          icon: Globe, 
-          color: 'default'
+        return {
+          scope: 'platform',
+          label: 'Platform Wide',
+          icon: Globe,
+          color: 'default',
         };
       case 'general':
-        return { scope: 'general', label: 'System Wide', icon: Building2, color: 'outline' };
+        return {
+          scope: 'general',
+          label: 'System Wide',
+          icon: Building2,
+          color: 'outline',
+        };
       default:
-        return { scope: 'general', label: 'General', icon: Globe, color: 'secondary' };
+        return {
+          scope: 'general',
+          label: 'General',
+          icon: Globe,
+          color: 'secondary',
+        };
     }
   };
 
@@ -169,14 +274,19 @@ const App = () => {
       case 'suggestions':
         return <SuggestionsManagement userRole="admin" scopeInfo={scopeInfo} />;
       case 'trainers':
-        return <TrainerList scopeInfo={scopeInfo} onViewTrainer={handleViewTrainer} />;
+        return (
+          <TrainerList
+            scopeInfo={scopeInfo}
+            onViewTrainer={handleViewTrainer}
+          />
+        );
       case 'trainer-view':
         return viewingTrainerId ? (
-          <TrainerManagement 
+          <TrainerManagement
             trainerId={viewingTrainerId}
             onBack={handleBackToTrainers}
-            scopeInfo={scopeInfo} 
-            userRole="admin" 
+            scopeInfo={scopeInfo}
+            userRole="admin"
           />
         ) : null;
       case 'analytics':
@@ -185,7 +295,7 @@ const App = () => {
         return <ProductRoadmap scopeInfo={scopeInfo} />;
       case 'features':
         return <FeatureFlags scopeInfo={scopeInfo} />;
-      
+
       // Customer Success & Support
       case 'support':
         return <SupportTicketing scopeInfo={scopeInfo} />;
@@ -195,7 +305,7 @@ const App = () => {
         return <KnowledgeBase scopeInfo={scopeInfo} />;
       case 'feedback':
         return <UserFeedback scopeInfo={scopeInfo} />;
-      
+
       // Communication & Notifications
       case 'announcements':
         return <PlatformAnnouncements scopeInfo={scopeInfo} />;
@@ -205,7 +315,7 @@ const App = () => {
         return <EmailTemplates scopeInfo={scopeInfo} />;
       case 'comm_logs':
         return <CommunicationLogs scopeInfo={scopeInfo} />;
-        
+
       case 'reports':
         return (
           <div className="p-6 space-y-6">
@@ -213,7 +323,8 @@ const App = () => {
               <div>
                 <h1>Platform Reports</h1>
                 <p className="text-muted-foreground">
-                  Comprehensive reports on platform performance, user engagement, and business metrics.
+                  Comprehensive reports on platform performance, user
+                  engagement, and business metrics.
                 </p>
               </div>
               <Button>
@@ -225,7 +336,8 @@ const App = () => {
               <FileText className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
               <h3>Platform Reports</h3>
               <p className="text-sm text-muted-foreground">
-                Generate and view detailed reports on platform performance and business metrics.
+                Generate and view detailed reports on platform performance and
+                business metrics.
               </p>
             </div>
           </div>
@@ -237,7 +349,8 @@ const App = () => {
               <div>
                 <h1>Gym Partnerships</h1>
                 <p className="text-muted-foreground">
-                  Manage gym partnerships, facility integrations, and location-based services.
+                  Manage gym partnerships, facility integrations, and
+                  location-based services.
                 </p>
               </div>
               <Button>
@@ -249,7 +362,8 @@ const App = () => {
               <Building2 className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
               <h3>Gym Partnerships</h3>
               <p className="text-sm text-muted-foreground">
-                Manage partnerships with fitness facilities and integrate location-based services.
+                Manage partnerships with fitness facilities and integrate
+                location-based services.
               </p>
             </div>
           </div>
@@ -259,24 +373,34 @@ const App = () => {
           <div className="p-6 space-y-6">
             <div>
               <h1>System Settings</h1>
-              <p className="text-muted-foreground">Platform configuration and administrative settings</p>
+              <p className="text-muted-foreground">
+                Platform configuration and administrative settings
+              </p>
             </div>
-            
+
             <div className="space-y-4">
               <div className="flex items-center justify-between p-4 border rounded-lg">
                 <div>
                   <h3>Dark Mode</h3>
-                  <p className="text-sm text-muted-foreground">Toggle between light and dark themes</p>
+                  <p className="text-sm text-muted-foreground">
+                    Toggle between light and dark themes
+                  </p>
                 </div>
                 <Button variant="outline" onClick={toggleDarkMode}>
-                  {isDarkMode ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+                  {isDarkMode ? (
+                    <Sun className="h-4 w-4" />
+                  ) : (
+                    <Moon className="h-4 w-4" />
+                  )}
                 </Button>
               </div>
 
               <div className="flex items-center justify-between p-4 border rounded-lg">
                 <div>
                   <h3>Platform Administration</h3>
-                  <p className="text-sm text-muted-foreground">Manage platform-wide settings and configurations</p>
+                  <p className="text-sm text-muted-foreground">
+                    Manage platform-wide settings and configurations
+                  </p>
                 </div>
                 <Badge variant="default">
                   <Shield className="h-3 w-3 mr-1" />
@@ -287,7 +411,9 @@ const App = () => {
               <div className="flex items-center justify-between p-4 border rounded-lg">
                 <div>
                   <h3>Data Management</h3>
-                  <p className="text-sm text-muted-foreground">Export reports, backup data, and manage platform resources</p>
+                  <p className="text-sm text-muted-foreground">
+                    Export reports, backup data, and manage platform resources
+                  </p>
                 </div>
                 <Button variant="outline">
                   <Database className="h-4 w-4 mr-2" />
@@ -298,7 +424,9 @@ const App = () => {
               <div className="flex items-center justify-between p-4 border rounded-lg">
                 <div>
                   <h3>API Configuration</h3>
-                  <p className="text-sm text-muted-foreground">Manage API keys, webhooks, and third-party integrations</p>
+                  <p className="text-sm text-muted-foreground">
+                    Manage API keys, webhooks, and third-party integrations
+                  </p>
                 </div>
                 <Button variant="outline">
                   <Settings className="h-4 w-4 mr-2" />
@@ -314,22 +442,31 @@ const App = () => {
   };
 
   const getCurrentPageTitle = () => {
-    const allItems = [...menuSections.overview, ...menuSections.analytics, ...menuSections.partners, ...menuSections.content, ...menuSections.customer_success, ...menuSections.communications, ...menuSections.product, ...menuSections.system];
+    const allItems = [
+      ...menuSections.overview,
+      ...menuSections.analytics,
+      ...menuSections.partners,
+      ...menuSections.content,
+      ...menuSections.customer_success,
+      ...menuSections.communications,
+      ...menuSections.product,
+      ...menuSections.system,
+    ];
     const item = allItems.find(item => item.id === activeView);
-    
+
     if (activeView === 'trainer-view' && viewingTrainerId) {
       const mockTrainers = [
-        { id: 1, name: "John Doe" },
-        { id: 2, name: "Sarah Mitchell" },
-        { id: 3, name: "Mike Johnson" },
-        { id: 4, name: "Emily Chen" },
-        { id: 5, name: "David Rodriguez" },
-        { id: 6, name: "Lisa Thompson" }
+        { id: 1, name: 'John Doe' },
+        { id: 2, name: 'Sarah Mitchell' },
+        { id: 3, name: 'Mike Johnson' },
+        { id: 4, name: 'Emily Chen' },
+        { id: 5, name: 'David Rodriguez' },
+        { id: 6, name: 'Lisa Thompson' },
       ];
       const trainer = mockTrainers.find(t => t.id === viewingTrainerId);
       return `Trainer: ${trainer?.name || 'Unknown'}`;
     }
-    
+
     return item?.label || 'Dashboard';
   };
 
@@ -344,20 +481,18 @@ const App = () => {
               </div>
               <div>
                 <h2>Peak Health</h2>
-                <p className="text-xs text-muted-foreground">
-                  Admin Dashboard
-                </p>
+                <p className="text-xs text-muted-foreground">Admin Dashboard</p>
               </div>
             </div>
           </SidebarHeader>
-          
+
           <SidebarContent>
             {/* Overview Section */}
             <SidebarGroup>
               <SidebarGroupLabel>Overview</SidebarGroupLabel>
               <SidebarGroupContent>
                 <SidebarMenu>
-                  {menuSections.overview.map((item) => (
+                  {menuSections.overview.map(item => (
                     <SidebarMenuItem key={item.id}>
                       <SidebarMenuButton
                         onClick={() => setActiveView(item.id)}
@@ -382,7 +517,7 @@ const App = () => {
               <SidebarGroupLabel>Analytics & Business</SidebarGroupLabel>
               <SidebarGroupContent>
                 <SidebarMenu>
-                  {menuSections.analytics.map((item) => (
+                  {menuSections.analytics.map(item => (
                     <SidebarMenuItem key={item.id}>
                       <SidebarMenuButton
                         onClick={() => setActiveView(item.id)}
@@ -392,12 +527,18 @@ const App = () => {
                         <item.icon className="h-4 w-4" />
                         <span>{item.label}</span>
                         {item.id === 'analytics' && (
-                          <Badge variant="secondary" className="ml-auto text-xs">
+                          <Badge
+                            variant="secondary"
+                            className="ml-auto text-xs"
+                          >
                             $124K
                           </Badge>
                         )}
                         {item.id === 'reports' && (
-                          <Badge variant="secondary" className="ml-auto text-xs">
+                          <Badge
+                            variant="secondary"
+                            className="ml-auto text-xs"
+                          >
                             15
                           </Badge>
                         )}
@@ -413,7 +554,7 @@ const App = () => {
               <SidebarGroupLabel>Partners & Network</SidebarGroupLabel>
               <SidebarGroupContent>
                 <SidebarMenu>
-                  {menuSections.partners.map((item) => (
+                  {menuSections.partners.map(item => (
                     <SidebarMenuItem key={item.id}>
                       <SidebarMenuButton
                         onClick={() => setActiveView(item.id)}
@@ -444,7 +585,7 @@ const App = () => {
               <SidebarGroupLabel>Content & Operations</SidebarGroupLabel>
               <SidebarGroupContent>
                 <SidebarMenu>
-                  {menuSections.content.map((item) => (
+                  {menuSections.content.map(item => (
                     <SidebarMenuItem key={item.id}>
                       <SidebarMenuButton
                         onClick={() => setActiveView(item.id)}
@@ -454,12 +595,18 @@ const App = () => {
                         <item.icon className="h-4 w-4" />
                         <span>{item.label}</span>
                         {item.id === 'suggestions' && (
-                          <Badge variant="destructive" className="ml-auto text-xs">
+                          <Badge
+                            variant="destructive"
+                            className="ml-auto text-xs"
+                          >
                             3
                           </Badge>
                         )}
                         {item.id === 'content' && (
-                          <Badge variant="secondary" className="ml-auto text-xs">
+                          <Badge
+                            variant="secondary"
+                            className="ml-auto text-xs"
+                          >
                             1.2K
                           </Badge>
                         )}
@@ -475,7 +622,7 @@ const App = () => {
               <SidebarGroupLabel>Customer Success & Support</SidebarGroupLabel>
               <SidebarGroupContent>
                 <SidebarMenu>
-                  {menuSections.customer_success.map((item) => (
+                  {menuSections.customer_success.map(item => (
                     <SidebarMenuItem key={item.id}>
                       <SidebarMenuButton
                         onClick={() => setActiveView(item.id)}
@@ -485,22 +632,34 @@ const App = () => {
                         <item.icon className="h-4 w-4" />
                         <span>{item.label}</span>
                         {item.id === 'support' && (
-                          <Badge variant="destructive" className="ml-auto text-xs">
+                          <Badge
+                            variant="destructive"
+                            className="ml-auto text-xs"
+                          >
                             12
                           </Badge>
                         )}
                         {item.id === 'engagement' && (
-                          <Badge variant="secondary" className="ml-auto text-xs">
+                          <Badge
+                            variant="secondary"
+                            className="ml-auto text-xs"
+                          >
                             85%
                           </Badge>
                         )}
                         {item.id === 'knowledge' && (
-                          <Badge variant="secondary" className="ml-auto text-xs">
+                          <Badge
+                            variant="secondary"
+                            className="ml-auto text-xs"
+                          >
                             124
                           </Badge>
                         )}
                         {item.id === 'feedback' && (
-                          <Badge variant="secondary" className="ml-auto text-xs">
+                          <Badge
+                            variant="secondary"
+                            className="ml-auto text-xs"
+                          >
                             4.8
                           </Badge>
                         )}
@@ -513,10 +672,12 @@ const App = () => {
 
             {/* Communication & Notifications Section */}
             <SidebarGroup>
-              <SidebarGroupLabel>Communication & Notifications</SidebarGroupLabel>
+              <SidebarGroupLabel>
+                Communication & Notifications
+              </SidebarGroupLabel>
               <SidebarGroupContent>
                 <SidebarMenu>
-                  {menuSections.communications.map((item) => (
+                  {menuSections.communications.map(item => (
                     <SidebarMenuItem key={item.id}>
                       <SidebarMenuButton
                         onClick={() => setActiveView(item.id)}
@@ -526,22 +687,34 @@ const App = () => {
                         <item.icon className="h-4 w-4" />
                         <span>{item.label}</span>
                         {item.id === 'announcements' && (
-                          <Badge variant="secondary" className="ml-auto text-xs">
+                          <Badge
+                            variant="secondary"
+                            className="ml-auto text-xs"
+                          >
                             5
                           </Badge>
                         )}
                         {item.id === 'notifications' && (
-                          <Badge variant="secondary" className="ml-auto text-xs">
+                          <Badge
+                            variant="secondary"
+                            className="ml-auto text-xs"
+                          >
                             89%
                           </Badge>
                         )}
                         {item.id === 'emails' && (
-                          <Badge variant="secondary" className="ml-auto text-xs">
+                          <Badge
+                            variant="secondary"
+                            className="ml-auto text-xs"
+                          >
                             18
                           </Badge>
                         )}
                         {item.id === 'comm_logs' && (
-                          <Badge variant="secondary" className="ml-auto text-xs">
+                          <Badge
+                            variant="secondary"
+                            className="ml-auto text-xs"
+                          >
                             2.3K
                           </Badge>
                         )}
@@ -557,7 +730,7 @@ const App = () => {
               <SidebarGroupLabel>Product & Development</SidebarGroupLabel>
               <SidebarGroupContent>
                 <SidebarMenu>
-                  {menuSections.product.map((item) => (
+                  {menuSections.product.map(item => (
                     <SidebarMenuItem key={item.id}>
                       <SidebarMenuButton
                         onClick={() => setActiveView(item.id)}
@@ -567,12 +740,18 @@ const App = () => {
                         <item.icon className="h-4 w-4" />
                         <span>{item.label}</span>
                         {item.id === 'roadmap' && (
-                          <Badge variant="secondary" className="ml-auto text-xs">
+                          <Badge
+                            variant="secondary"
+                            className="ml-auto text-xs"
+                          >
                             8
                           </Badge>
                         )}
                         {item.id === 'features' && (
-                          <Badge variant="secondary" className="ml-auto text-xs">
+                          <Badge
+                            variant="secondary"
+                            className="ml-auto text-xs"
+                          >
                             23
                           </Badge>
                         )}
@@ -588,7 +767,7 @@ const App = () => {
               <SidebarGroupLabel>System Administration</SidebarGroupLabel>
               <SidebarGroupContent>
                 <SidebarMenu>
-                  {menuSections.system.map((item) => (
+                  {menuSections.system.map(item => (
                     <SidebarMenuItem key={item.id}>
                       <SidebarMenuButton
                         onClick={() => setActiveView(item.id)}
@@ -629,7 +808,7 @@ const App = () => {
             <div className="flex h-14 items-center justify-between px-4">
               <div className="flex items-center gap-4">
                 <SidebarTrigger />
-                
+
                 {/* Data Context Indicator */}
                 <div className="flex items-center gap-2">
                   {(() => {
@@ -646,13 +825,17 @@ const App = () => {
 
                 <h1 className="font-medium">{getCurrentPageTitle()}</h1>
               </div>
-              
+
               <div className="flex items-center gap-2">
                 <Button variant="ghost" size="sm">
                   <Bell className="h-4 w-4" />
                 </Button>
                 <Button variant="ghost" size="sm" onClick={toggleDarkMode}>
-                  {isDarkMode ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+                  {isDarkMode ? (
+                    <Sun className="h-4 w-4" />
+                  ) : (
+                    <Moon className="h-4 w-4" />
+                  )}
                 </Button>
                 <Badge variant="default">
                   <Shield className="h-3 w-3 mr-1" />
@@ -662,9 +845,7 @@ const App = () => {
             </div>
           </header>
 
-          <main className="flex-1 overflow-auto">
-            {renderContent()}
-          </main>
+          <main className="flex-1 overflow-auto">{renderContent()}</main>
         </div>
       </div>
     </SidebarProvider>
