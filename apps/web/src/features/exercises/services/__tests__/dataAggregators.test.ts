@@ -1,6 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 
-import type { Difficulty, Equipment, MuscleGroup } from '../../types/constants';
+import { DIFFICULTY, EQUIPMENT, MUSCLE_GROUP } from '../../types/constants';
+import { createExerciseId, createExerciseVariantId } from '../../types/ids';
 import { exerciseDataAggregators } from '../dataAggregators';
 
 // Mock the mappers
@@ -233,7 +234,7 @@ describe('ExerciseDataAggregators', () => {
         },
       ];
 
-      const criteria = { difficulties: ['beginner'] as Difficulty[] };
+      const criteria = { difficulties: [DIFFICULTY.BEGINNER] };
 
       const result = exerciseDataAggregators.filterVariantsByCriteria(
         variants,
@@ -263,7 +264,7 @@ describe('ExerciseDataAggregators', () => {
         },
       ];
 
-      const criteria = { equipment: ['dumbbells'] as Equipment[] };
+      const criteria = { equipment: [EQUIPMENT.DUMBBELL] };
 
       const result = exerciseDataAggregators.filterVariantsByCriteria(
         variants,
@@ -293,7 +294,7 @@ describe('ExerciseDataAggregators', () => {
         },
       ];
 
-      const criteria = { muscleGroups: ['chest'] as MuscleGroup[] };
+      const criteria = { muscleGroups: [MUSCLE_GROUP.CHEST] };
 
       const result = exerciseDataAggregators.filterVariantsByCriteria(
         variants,
@@ -324,9 +325,9 @@ describe('ExerciseDataAggregators', () => {
       ];
 
       const criteria = {
-        difficulties: ['beginner'] as Difficulty[],
-        equipment: ['bodyweight'] as Equipment[],
-        muscleGroups: ['chest'] as MuscleGroup[],
+        difficulties: [DIFFICULTY.BEGINNER],
+        equipment: [EQUIPMENT.BODYWEIGHT],
+        muscleGroups: [MUSCLE_GROUP.CHEST],
       };
 
       const result = exerciseDataAggregators.filterVariantsByCriteria(
@@ -441,7 +442,7 @@ describe('ExerciseDataAggregators', () => {
         },
       ];
 
-      const criteria = { difficulties: ['beginner'] as Difficulty[] };
+      const criteria = { difficulties: [DIFFICULTY.BEGINNER] };
 
       const result = exerciseDataAggregators.transformJoinedExerciseData(
         exercises,
