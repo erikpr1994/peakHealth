@@ -2,32 +2,75 @@ import { renderHook, act } from '@testing-library/react';
 import { describe, it, expect } from 'vitest';
 
 import type { Exercise, ExerciseVariant } from '../../types';
+import { createExerciseId, createExerciseVariantId } from '../../types/ids';
 import { useExerciseSelection } from '../useExerciseSelection';
 
 const mockExercise: Exercise = {
-  id: '1',
+  id: createExerciseId('1'),
   name: 'Push-up',
-  category: 'strength',
-  mainVariantId: 'variant-1',
+  category: 'Strength',
+  description: 'A basic push-up exercise',
+  icon: '💪',
+  iconColor: '#3B82F6',
+  isFavorite: false,
+  mainVariantId: createExerciseVariantId('variant-1'),
   variants: [
     {
-      id: 'variant-1',
+      id: createExerciseVariantId('variant-1'),
       name: 'Standard Push-up',
-      difficulty: 'beginner',
-    } as ExerciseVariant,
+      description: 'Standard push-up form',
+      focus: 'Upper body strength',
+      difficulty: 'Beginner',
+      equipment: ['Bodyweight'],
+      muscleGroups: ['Chest', 'Shoulders'],
+      instructions: [
+        'Start in plank position',
+        'Lower your body',
+        'Push back up',
+      ],
+      steps: [
+        { title: 'Start Position', description: 'Get into a plank position' },
+        { title: 'Lower', description: 'Lower your body to the ground' },
+        { title: 'Push Up', description: 'Push back up to starting position' },
+      ],
+    },
     {
-      id: 'variant-2',
+      id: createExerciseVariantId('variant-2'),
       name: 'Diamond Push-up',
-      difficulty: 'intermediate',
-    } as ExerciseVariant,
+      description: 'Advanced push-up variation',
+      focus: 'Tricep strength',
+      difficulty: 'Intermediate',
+      equipment: ['Bodyweight'],
+      muscleGroups: ['Chest', 'Triceps'],
+      instructions: ['Form diamond with hands', 'Perform push-up'],
+      steps: [
+        {
+          title: 'Diamond Position',
+          description: 'Form diamond shape with hands',
+        },
+        {
+          title: 'Perform Push-up',
+          description: 'Execute the push-up movement',
+        },
+      ],
+    },
   ],
-} as Exercise;
+};
 
 const mockVariant: ExerciseVariant = {
-  id: 'variant-2',
+  id: createExerciseVariantId('variant-2'),
   name: 'Diamond Push-up',
-  difficulty: 'intermediate',
-} as ExerciseVariant;
+  description: 'Advanced push-up variation',
+  focus: 'Tricep strength',
+  difficulty: 'Intermediate',
+  equipment: ['Bodyweight'],
+  muscleGroups: ['Chest', 'Triceps'],
+  instructions: ['Form diamond with hands', 'Perform push-up'],
+  steps: [
+    { title: 'Diamond Position', description: 'Form diamond shape with hands' },
+    { title: 'Perform Push-up', description: 'Execute the push-up movement' },
+  ],
+};
 
 describe('useExerciseSelection', () => {
   it('should initialize with null selections', () => {
@@ -78,7 +121,7 @@ describe('useExerciseSelection', () => {
   it('should select an exercise with main variant that does not exist', () => {
     const exerciseWithInvalidMainVariant = {
       ...mockExercise,
-      mainVariantId: 'non-existent',
+      mainVariantId: createExerciseVariantId('non-existent'),
     };
     const { result } = renderHook(() => useExerciseSelection());
 

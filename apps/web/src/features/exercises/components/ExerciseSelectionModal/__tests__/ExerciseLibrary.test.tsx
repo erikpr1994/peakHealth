@@ -3,6 +3,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 
 import { ExerciseProvider } from '../../../context/ExerciseContext';
 import type { Exercise } from '../../../types';
+import { createExerciseId, createExerciseVariantId } from '../../../types/ids';
 import { ExerciseLibrary } from '../ExerciseLibrary';
 
 // Mock hooks
@@ -25,13 +26,13 @@ vi.mock('@/features/auth/context/AuthContext', () => ({
 
 const mockExercises: Exercise[] = [
   {
-    id: '1',
+    id: createExerciseId('1'),
     name: 'Push-up',
     category: 'Strength',
     description: 'A basic push-up',
     variants: [
       {
-        id: 'v1',
+        id: createExerciseVariantId('v1'),
         name: 'Standard Push-up',
         description: 'Standard form',
         focus: 'chest',
@@ -42,19 +43,19 @@ const mockExercises: Exercise[] = [
         steps: [{ title: 'Step 1', description: 'Do it' }],
       },
     ],
-    mainVariantId: 'v1',
+    mainVariantId: createExerciseVariantId('v1'),
     icon: '💪',
     iconColor: 'blue',
     isFavorite: false,
   },
   {
-    id: '2',
+    id: createExerciseId('2'),
     name: 'Squat',
     category: 'Strength',
     description: 'A basic squat',
     variants: [
       {
-        id: 'v2',
+        id: createExerciseVariantId('v2'),
         name: 'Standard Squat',
         description: 'Standard form',
         focus: 'legs',
@@ -65,7 +66,7 @@ const mockExercises: Exercise[] = [
         steps: [{ title: 'Step 1', description: 'Do it' }],
       },
     ],
-    mainVariantId: 'v2',
+    mainVariantId: createExerciseVariantId('v2'),
     icon: '🦵',
     iconColor: 'green',
     isFavorite: true,

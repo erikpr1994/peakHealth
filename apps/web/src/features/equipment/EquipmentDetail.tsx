@@ -10,6 +10,7 @@ import {
   TrendingUp,
   Calculator,
 } from 'lucide-react';
+import Image from 'next/image';
 
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -204,9 +205,11 @@ const EquipmentDetail = ({ onNavigate, equipmentId }: EquipmentDetailProps) => {
 
             {equipment.imageUrl && (
               <div className="mb-6">
-                <img
+                <Image
                   src={equipment.imageUrl}
                   alt={equipment.name}
+                  width={400}
+                  height={300}
                   className="w-full h-48 object-cover rounded-lg"
                 />
               </div>

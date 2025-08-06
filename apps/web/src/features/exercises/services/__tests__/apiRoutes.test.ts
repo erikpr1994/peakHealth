@@ -1,19 +1,27 @@
 import { NextRequest } from 'next/server';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 
+import { CATEGORY } from '../../types/constants';
+import { createExerciseId, createExerciseVariantId } from '../../types/ids';
+
 // Mock Exercise type for testing
 const createMockExercise = (id: string, name: string) => ({
-  id,
+  id: createExerciseId(id),
   name,
-  category: 'strength' as const,
+  category: CATEGORY.STRENGTH,
   description: 'A basic exercise',
   variants: [],
-  mainVariantId: null,
-  isNew: false,
-  createdAt: new Date().toISOString(),
+  mainVariantId: createExerciseVariantId('variant-1'),
   icon: 'dumbbell',
   iconColor: 'blue',
   isFavorite: false,
+  isPopular: false,
+  isNew: false,
+  rating: 4.5,
+  tags: [],
+  relatedExercises: [],
+  created_at: new Date().toISOString(),
+  updated_at: new Date().toISOString(),
 });
 
 // Mock the exercise service
@@ -71,7 +79,7 @@ describe('Exercise API Routes', () => {
 
   describe('GET /api/exercises/search', () => {
     it('should perform search when search parameters are provided', async () => {
-      const mockSearchResults = [{ id: '1', name: 'Push-up' }];
+      const mockSearchResults = [createMockExercise('1', 'Push-up')] as any;
       const { exerciseService } = await import(
         '@/features/exercises/services/exerciseService'
       );
@@ -105,7 +113,7 @@ describe('Exercise API Routes', () => {
     });
 
     it('should handle partial search parameters', async () => {
-      const mockSearchResults = [{ id: '1', name: 'Push-up' }];
+      const mockSearchResults = [createMockExercise('1', 'Push-up')] as any;
       const { exerciseService } = await import(
         '@/features/exercises/services/exerciseService'
       );
@@ -159,7 +167,7 @@ describe('Exercise API Routes', () => {
 
   describe('GET /api/exercises/[exerciseId]', () => {
     it('should return exercise when found', async () => {
-      const mockExercise = { id: '1', name: 'Push-up' };
+      const mockExercise = createMockExercise('1', 'Push-up') as any;
       const { exerciseService } = await import(
         '@/features/exercises/services/exerciseService'
       );
@@ -301,7 +309,7 @@ describe('Exercise API Routes', () => {
 
   describe('GET /api/exercises/favorites', () => {
     it('should return user favorites successfully', async () => {
-      const mockFavorites = [{ id: '1', name: 'Push-up' }];
+      const mockFavorites = [createMockExercise('1', 'Push-up')] as any;
       const { exerciseService } = await import(
         '@/features/exercises/services/exerciseService'
       );

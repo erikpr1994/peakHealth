@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
 
+import { EQUIPMENT, MUSCLE_GROUP } from '../../types/constants';
 import type {
   DatabaseExercise,
   DatabaseExerciseVariant,
@@ -7,6 +8,7 @@ import type {
   DatabaseExerciseTips,
   DatabaseExerciseMedia,
 } from '../../types/database';
+import { createExerciseVariantId } from '../../types/ids';
 import {
   mapCategory,
   mapDifficulty,
@@ -112,7 +114,7 @@ describe('exerciseMappers', () => {
       muscle_groups: ['Chest', 'Triceps'],
       secondary_muscles: ['Shoulders'],
       is_unilateral: false,
-      instructions: 'Perform a standard push-up',
+      instructions: ['Perform a standard push-up'],
       created_at: '2024-01-01T00:00:00Z',
       updated_at: '2024-01-01T00:00:00Z',
     };
@@ -124,6 +126,7 @@ describe('exerciseMappers', () => {
         step_order: 1,
         title: 'Starting Position',
         description: 'Get into a plank position',
+        created_at: '2024-01-01T00:00:00Z',
       },
       {
         id: 'step-2',
@@ -131,6 +134,7 @@ describe('exerciseMappers', () => {
         step_order: 2,
         title: 'Lower Body',
         description: 'Lower your body to the ground',
+        created_at: '2024-01-01T00:00:00Z',
       },
     ];
 
@@ -140,6 +144,8 @@ describe('exerciseMappers', () => {
       pro_tips: ['Keep your core tight'],
       common_mistakes: ['Letting your hips sag'],
       safety_notes: ['Stop if you feel pain'],
+      created_at: '2024-01-01T00:00:00Z',
+      updated_at: '2024-01-01T00:00:00Z',
     };
 
     const mockMedia: DatabaseExerciseMedia = {
@@ -149,6 +155,8 @@ describe('exerciseMappers', () => {
       videos: ['video1.mp4'],
       featured_image: 'featured.jpg',
       featured_video: 'featured.mp4',
+      created_at: '2024-01-01T00:00:00Z',
+      updated_at: '2024-01-01T00:00:00Z',
     };
 
     it('should transform database variant to ExerciseVariant correctly', () => {
@@ -170,7 +178,7 @@ describe('exerciseMappers', () => {
         muscleGroups: ['Chest', 'Triceps'],
         secondaryMuscles: ['Shoulders'],
         isUnilateral: false,
-        instructions: 'Perform a standard push-up',
+        instructions: ['Perform a standard push-up'],
         steps: [
           {
             title: 'Starting Position',
@@ -214,6 +222,7 @@ describe('exerciseMappers', () => {
           step_order: 2,
           title: 'Second Step',
           description: 'Second step description',
+          created_at: '2024-01-01T00:00:00Z',
         },
         {
           id: 'step-1',
@@ -221,6 +230,7 @@ describe('exerciseMappers', () => {
           step_order: 1,
           title: 'First Step',
           description: 'First step description',
+          created_at: '2024-01-01T00:00:00Z',
         },
       ];
 
@@ -259,7 +269,7 @@ describe('exerciseMappers', () => {
     it('should handle null secondary muscles', () => {
       const variantWithNullSecondary = {
         ...mockDbVariant,
-        secondary_muscles: null,
+        secondary_muscles: undefined,
       };
 
       const result = transformExerciseVariant(
@@ -291,17 +301,17 @@ describe('exerciseMappers', () => {
 
     const mockVariants = [
       {
-        id: 'variant-1',
+        id: createExerciseVariantId('variant-1'),
         name: 'Standard Push-up',
         alternativeNames: ['Regular Push-up'],
         description: 'A classic bodyweight exercise',
         focus: 'Upper body strength',
         difficulty: 'Beginner' as const,
-        equipment: ['Bodyweight'],
-        muscleGroups: ['Chest', 'Triceps'],
-        secondaryMuscles: ['Shoulders'],
+        equipment: [EQUIPMENT.BODYWEIGHT],
+        muscleGroups: [MUSCLE_GROUP.CHEST, MUSCLE_GROUP.TRICEPS],
+        secondaryMuscles: [MUSCLE_GROUP.SHOULDERS],
         isUnilateral: false,
-        instructions: 'Perform a standard push-up',
+        instructions: ['Perform a standard push-up'],
         steps: [],
         tips: undefined,
         media: undefined,
@@ -310,17 +320,17 @@ describe('exerciseMappers', () => {
         updated_at: new Date('2024-01-01T00:00:00Z'),
       },
       {
-        id: 'variant-2',
+        id: createExerciseVariantId('variant-2'),
         name: 'Diamond Push-up',
         alternativeNames: [],
         description: 'A more challenging push-up variation',
         focus: 'Tricep focus',
         difficulty: 'Advanced' as const,
-        equipment: ['Bodyweight'],
-        muscleGroups: ['Chest', 'Triceps'],
-        secondaryMuscles: ['Shoulders'],
+        equipment: [EQUIPMENT.BODYWEIGHT],
+        muscleGroups: [MUSCLE_GROUP.CHEST, MUSCLE_GROUP.TRICEPS],
+        secondaryMuscles: [MUSCLE_GROUP.SHOULDERS],
         isUnilateral: false,
-        instructions: 'Perform a diamond push-up',
+        instructions: ['Perform a diamond push-up'],
         steps: [],
         tips: undefined,
         media: undefined,
@@ -383,7 +393,7 @@ describe('exerciseMappers', () => {
 
       expect(result.variants).toEqual(singleVariant);
       expect(result.mainVariantId).toBe('variant-1');
-      expect(result.summary.difficultyRange).toEqual({
+      expect(result.summary?.difficultyRange).toEqual({
         min: 'Beginner',
         max: 'Beginner',
       });
@@ -393,20 +403,20 @@ describe('exerciseMappers', () => {
       const variantsWithDuplicates = [
         {
           ...mockVariants[0],
-          equipment: ['Bodyweight', 'Bench'],
-          muscleGroups: ['Chest', 'Triceps'],
+          equipment: [EQUIPMENT.BODYWEIGHT, EQUIPMENT.BENCH],
+          muscleGroups: [MUSCLE_GROUP.CHEST, MUSCLE_GROUP.TRICEPS],
         },
         {
           ...mockVariants[1],
-          equipment: ['Bodyweight', 'Bench'],
-          muscleGroups: ['Chest', 'Shoulders'],
+          equipment: [EQUIPMENT.BODYWEIGHT, EQUIPMENT.BENCH],
+          muscleGroups: [MUSCLE_GROUP.CHEST, MUSCLE_GROUP.SHOULDERS],
         },
       ];
 
       const result = transformExercise(mockDbExercise, variantsWithDuplicates);
 
-      expect(result.summary.equipmentOptions).toEqual(['Bodyweight', 'Bench']);
-      expect(result.summary.primaryMuscleGroups).toEqual([
+      expect(result.summary?.equipmentOptions).toEqual(['Bodyweight', 'Bench']);
+      expect(result.summary?.primaryMuscleGroups).toEqual([
         'Chest',
         'Triceps',
         'Shoulders',
@@ -416,7 +426,7 @@ describe('exerciseMappers', () => {
     it('should handle null rating', () => {
       const exerciseWithNullRating = {
         ...mockDbExercise,
-        rating: null,
+        rating: undefined,
       };
 
       const result = transformExercise(exerciseWithNullRating, mockVariants);
@@ -438,7 +448,7 @@ describe('exerciseMappers', () => {
 
       const result = transformExercise(mockDbExercise, variantsWithUnknown);
 
-      expect(result.summary.difficultyRange).toEqual({
+      expect(result.summary?.difficultyRange).toEqual({
         min: 'Unknown',
         max: 'Advanced',
       });
@@ -455,8 +465,8 @@ describe('exerciseMappers', () => {
 
       const result = transformExercise(mockDbExercise, variantsWithEmptyArrays);
 
-      expect(result.summary.equipmentOptions).toEqual([]);
-      expect(result.summary.primaryMuscleGroups).toEqual([]);
+      expect(result.summary?.equipmentOptions).toEqual([]);
+      expect(result.summary?.primaryMuscleGroups).toEqual([]);
     });
   });
 });
