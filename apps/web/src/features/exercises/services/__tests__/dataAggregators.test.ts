@@ -1,6 +1,11 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 
-import { DIFFICULTY, EQUIPMENT, MUSCLE_GROUP } from '../../types/constants';
+import {
+  CATEGORY,
+  DIFFICULTY,
+  EQUIPMENT,
+  MUSCLE_GROUP,
+} from '../../types/constants';
 import { createExerciseId, createExerciseVariantId } from '../../types/ids';
 import { exerciseDataAggregators } from '../dataAggregators';
 
@@ -31,6 +36,15 @@ describe('ExerciseDataAggregators', () => {
           name: 'Push-up',
           category: 'strength',
           description: 'A basic push-up',
+          icon: 'dumbbell',
+          icon_color: 'blue',
+          is_popular: false,
+          is_new: false,
+          rating: 4.5,
+          tags: [],
+          related_exercise_ids: [],
+          created_at: '2023-01-01',
+          updated_at: '2023-01-01',
         },
       ];
       const variants = [
@@ -38,13 +52,31 @@ describe('ExerciseDataAggregators', () => {
           id: '1',
           exercise_id: '1',
           name: 'Standard Push-up',
+          description: 'A standard push-up',
+          focus: 'strength',
           difficulty: 'beginner',
+          equipment: ['bodyweight'],
+          muscle_groups: ['chest'],
+          secondary_muscles: ['triceps'],
+          is_unilateral: false,
+          instructions: ['Perform a standard push-up'],
+          created_at: '2023-01-01',
+          updated_at: '2023-01-01',
         },
         {
           id: '2',
           exercise_id: '1',
           name: 'Diamond Push-up',
+          description: 'A diamond push-up',
+          focus: 'strength',
           difficulty: 'intermediate',
+          equipment: ['bodyweight'],
+          muscle_groups: ['chest'],
+          secondary_muscles: ['triceps'],
+          is_unilateral: false,
+          instructions: ['Perform a diamond push-up'],
+          created_at: '2023-01-01',
+          updated_at: '2023-01-01',
         },
       ];
       const steps = [
@@ -52,47 +84,112 @@ describe('ExerciseDataAggregators', () => {
           id: '1',
           exercise_variant_id: '1',
           step_order: 1,
-          instruction: 'Start in plank position',
+          title: 'Start Position',
+          description: 'Start in plank position',
+          created_at: '2023-01-01',
         },
         {
           id: '2',
           exercise_variant_id: '1',
           step_order: 2,
-          instruction: 'Lower your body',
+          title: 'Lower Body',
+          description: 'Lower your body',
+          created_at: '2023-01-01',
         },
       ];
       const tips = [
-        { id: '1', exercise_variant_id: '1', tip: 'Keep your core tight' },
+        {
+          id: '1',
+          exercise_variant_id: '1',
+          pro_tips: ['Keep your core tight'],
+          common_mistakes: ['Letting your hips sag'],
+          safety_notes: ['Maintain proper form'],
+          created_at: '2023-01-01',
+          updated_at: '2023-01-01',
+        },
         {
           id: '2',
           exercise_variant_id: '2',
-          tip: 'Form a diamond with your hands',
+          pro_tips: ['Form a diamond with your hands'],
+          common_mistakes: ['Hands too far apart'],
+          safety_notes: ['Keep elbows close to body'],
+          created_at: '2023-01-01',
+          updated_at: '2023-01-01',
         },
       ];
       const media = [
         {
           id: '1',
           exercise_variant_id: '1',
-          url: 'pushup-video.mp4',
-          type: 'video',
+          images: ['pushup-image.jpg'],
+          videos: ['pushup-video.mp4'],
+          featured_image: 'pushup-featured.jpg',
+          featured_video: 'pushup-video.mp4',
+          created_at: '2023-01-01',
+          updated_at: '2023-01-01',
         },
         {
           id: '2',
           exercise_variant_id: '2',
-          url: 'diamond-pushup-video.mp4',
-          type: 'video',
+          images: ['diamond-pushup-image.jpg'],
+          videos: ['diamond-pushup-video.mp4'],
+          featured_image: 'diamond-pushup-featured.jpg',
+          featured_video: 'diamond-pushup-video.mp4',
+          created_at: '2023-01-01',
+          updated_at: '2023-01-01',
         },
       ];
 
       const mockTransformedVariants = [
-        { id: '1', name: 'Standard Push-up', steps: [] },
-        { id: '2', name: 'Diamond Push-up', steps: [] },
+        {
+          id: createExerciseVariantId('1'),
+          name: 'Standard Push-up',
+          description: 'A standard push-up',
+          focus: 'strength',
+          difficulty: DIFFICULTY.BEGINNER,
+          equipment: [EQUIPMENT.BODYWEIGHT],
+          muscleGroups: [MUSCLE_GROUP.CHEST],
+          secondaryMuscles: [MUSCLE_GROUP.TRICEPS],
+          isUnilateral: false,
+          instructions: ['Perform a standard push-up'],
+          steps: [],
+          created_at: new Date(),
+          updated_at: new Date(),
+        },
+        {
+          id: createExerciseVariantId('2'),
+          name: 'Diamond Push-up',
+          description: 'A diamond push-up',
+          focus: 'strength',
+          difficulty: DIFFICULTY.INTERMEDIATE,
+          equipment: [EQUIPMENT.BODYWEIGHT],
+          muscleGroups: [MUSCLE_GROUP.CHEST],
+          secondaryMuscles: [MUSCLE_GROUP.TRICEPS],
+          isUnilateral: false,
+          instructions: ['Perform a diamond push-up'],
+          steps: [],
+          created_at: new Date(),
+          updated_at: new Date(),
+        },
       ] as any;
 
       const mockTransformedExercise = {
-        id: '1',
+        id: createExerciseId('1'),
         name: 'Push-up',
+        category: CATEGORY.STRENGTH,
+        description: 'A basic push-up',
         variants: mockTransformedVariants,
+        mainVariantId: createExerciseVariantId('1'),
+        icon: 'dumbbell',
+        iconColor: 'blue',
+        isFavorite: false,
+        isPopular: false,
+        isNew: false,
+        rating: 4.5,
+        tags: [],
+        relatedExercises: [],
+        created_at: new Date(),
+        updated_at: new Date(),
       } as any;
 
       mockTransformExerciseVariant
@@ -135,6 +232,15 @@ describe('ExerciseDataAggregators', () => {
           name: 'Push-up',
           category: 'strength',
           description: 'A basic push-up',
+          icon: 'dumbbell',
+          icon_color: 'blue',
+          is_popular: false,
+          is_new: false,
+          rating: 4.5,
+          tags: [],
+          related_exercise_ids: [],
+          created_at: '2023-01-01',
+          updated_at: '2023-01-01',
         },
       ] as any;
       const variants: any[] = [];
@@ -143,9 +249,22 @@ describe('ExerciseDataAggregators', () => {
       const media: any[] = [];
 
       const mockTransformedExercise = {
-        id: '1',
+        id: createExerciseId('1'),
         name: 'Push-up',
+        category: CATEGORY.STRENGTH,
+        description: 'A basic push-up',
         variants: [],
+        mainVariantId: createExerciseVariantId('1'),
+        icon: 'dumbbell',
+        iconColor: 'blue',
+        isFavorite: false,
+        isPopular: false,
+        isNew: false,
+        rating: 4.5,
+        tags: [],
+        relatedExercises: [],
+        created_at: new Date(),
+        updated_at: new Date(),
       } as any;
 
       mockTransformExercise.mockReturnValue(mockTransformedExercise);
@@ -170,6 +289,15 @@ describe('ExerciseDataAggregators', () => {
           name: 'Push-up',
           category: 'strength',
           description: 'A basic push-up',
+          icon: 'dumbbell',
+          icon_color: 'blue',
+          is_popular: false,
+          is_new: false,
+          rating: 4.5,
+          tags: [],
+          related_exercise_ids: [],
+          created_at: '2023-01-01',
+          updated_at: '2023-01-01',
         },
       ];
       const variants = [
@@ -177,7 +305,16 @@ describe('ExerciseDataAggregators', () => {
           id: '1',
           exercise_id: '1',
           name: 'Standard Push-up',
+          description: 'A standard push-up',
+          focus: 'strength',
           difficulty: 'beginner',
+          equipment: ['bodyweight'],
+          muscle_groups: ['chest'],
+          secondary_muscles: ['triceps'],
+          is_unilateral: false,
+          instructions: ['Perform a standard push-up'],
+          created_at: '2023-01-01',
+          updated_at: '2023-01-01',
         },
       ];
       const steps: any[] = [];
@@ -185,12 +322,39 @@ describe('ExerciseDataAggregators', () => {
       const media: any[] = [];
 
       const mockTransformedVariants = [
-        { id: '1', name: 'Standard Push-up', steps: [] },
+        {
+          id: createExerciseVariantId('1'),
+          name: 'Standard Push-up',
+          description: 'A standard push-up',
+          focus: 'strength',
+          difficulty: DIFFICULTY.BEGINNER,
+          equipment: [EQUIPMENT.BODYWEIGHT],
+          muscleGroups: [MUSCLE_GROUP.CHEST],
+          secondaryMuscles: [MUSCLE_GROUP.TRICEPS],
+          isUnilateral: false,
+          instructions: ['Perform a standard push-up'],
+          steps: [],
+          created_at: new Date(),
+          updated_at: new Date(),
+        },
       ];
       const mockTransformedExercise = {
-        id: '1',
+        id: createExerciseId('1'),
         name: 'Push-up',
+        category: CATEGORY.STRENGTH,
+        description: 'A basic push-up',
         variants: mockTransformedVariants,
+        mainVariantId: createExerciseVariantId('1'),
+        icon: 'dumbbell',
+        iconColor: 'blue',
+        isFavorite: false,
+        isPopular: false,
+        isNew: false,
+        rating: 4.5,
+        tags: [],
+        relatedExercises: [],
+        created_at: new Date(),
+        updated_at: new Date(),
       };
 
       mockTransformExerciseVariant.mockReturnValue(mockTransformedVariants[0]);
@@ -389,17 +553,40 @@ describe('ExerciseDataAggregators', () => {
         },
       ];
 
-      const criteria = { difficulty: 'beginner' as const };
+      const criteria = { difficulties: [DIFFICULTY.BEGINNER] };
 
       const mockTransformedVariant = {
-        id: '1',
+        id: createExerciseVariantId('1'),
         name: 'Standard Push-up',
+        description: 'A standard push-up',
+        focus: 'strength',
+        difficulty: DIFFICULTY.BEGINNER,
+        equipment: [EQUIPMENT.BODYWEIGHT],
+        muscleGroups: [MUSCLE_GROUP.CHEST],
+        secondaryMuscles: [MUSCLE_GROUP.TRICEPS],
+        isUnilateral: false,
+        instructions: ['Perform a standard push-up'],
         steps: [],
+        created_at: new Date(),
+        updated_at: new Date(),
       };
       const mockTransformedExercise = {
-        id: '1',
+        id: createExerciseId('1'),
         name: 'Push-up',
+        category: CATEGORY.STRENGTH,
+        description: 'A basic push-up',
         variants: [mockTransformedVariant],
+        mainVariantId: createExerciseVariantId('1'),
+        icon: 'dumbbell',
+        iconColor: 'blue',
+        isFavorite: false,
+        isPopular: false,
+        isNew: false,
+        rating: 4.5,
+        tags: [],
+        relatedExercises: [],
+        created_at: new Date(),
+        updated_at: new Date(),
       };
 
       mockTransformExerciseVariant.mockReturnValue(mockTransformedVariant);
@@ -500,15 +687,37 @@ describe('ExerciseDataAggregators', () => {
       ];
 
       const mockTransformedVariant = {
-        id: '1',
+        id: createExerciseVariantId('1'),
         name: 'Standard Push-up',
+        description: 'A standard push-up',
+        focus: 'strength',
+        difficulty: DIFFICULTY.BEGINNER,
+        equipment: [EQUIPMENT.BODYWEIGHT],
+        muscleGroups: [MUSCLE_GROUP.CHEST],
+        secondaryMuscles: [MUSCLE_GROUP.TRICEPS],
+        isUnilateral: false,
+        instructions: ['Perform a standard push-up'],
         steps: [],
+        created_at: new Date(),
+        updated_at: new Date(),
       };
       const mockTransformedExercise = {
-        id: '1',
+        id: createExerciseId('1'),
         name: 'Push-up',
+        category: CATEGORY.STRENGTH,
+        description: 'A basic push-up',
         variants: [mockTransformedVariant],
+        mainVariantId: createExerciseVariantId('1'),
+        icon: 'dumbbell',
+        iconColor: 'blue',
         isFavorite: true,
+        isPopular: false,
+        isNew: false,
+        rating: 4.5,
+        tags: [],
+        relatedExercises: [],
+        created_at: new Date(),
+        updated_at: new Date(),
       };
 
       mockTransformExerciseVariant.mockReturnValue(mockTransformedVariant);
@@ -544,10 +753,22 @@ describe('ExerciseDataAggregators', () => {
       ];
 
       const mockTransformedExercise = {
-        id: '3',
+        id: createExerciseId('3'),
         name: 'Valid Exercise',
+        category: CATEGORY.STRENGTH,
+        description: 'A valid exercise',
         variants: [],
+        mainVariantId: createExerciseVariantId('1'),
+        icon: 'dumbbell',
+        iconColor: 'blue',
         isFavorite: true,
+        isPopular: false,
+        isNew: false,
+        rating: 4.5,
+        tags: [],
+        relatedExercises: [],
+        created_at: new Date(),
+        updated_at: new Date(),
       };
 
       mockTransformExercise.mockReturnValue({

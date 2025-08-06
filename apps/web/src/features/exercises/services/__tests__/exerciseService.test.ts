@@ -1,5 +1,12 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 
+import {
+  CATEGORY,
+  DIFFICULTY,
+  EQUIPMENT,
+  MUSCLE_GROUP,
+} from '../../types/constants';
+import { createExerciseId, createExerciseVariantId } from '../../types/ids';
 import { exerciseDataAggregators } from '../dataAggregators';
 import { exerciseDatabaseQueries } from '../databaseQueries';
 import { exerciseErrorHandlers } from '../errorHandlers';
@@ -25,16 +32,95 @@ describe('ExerciseService', () => {
   describe('getAllExercises', () => {
     it('should return all exercises successfully', async () => {
       const mockData = {
-        exercises: [{ id: '1', name: 'Push-up' }],
-        variants: [{ id: '1', exercise_id: '1', name: 'Standard Push-up' }],
-        steps: [{ id: '1', exercise_variant_id: '1', step_order: 1 }],
-        tips: [
-          { id: '1', exercise_variant_id: '1', tip: 'Keep your core tight' },
+        exercises: [
+          {
+            id: '1',
+            name: 'Push-up',
+            category: 'Strength',
+            description: 'A classic bodyweight exercise',
+            icon: 'dumbbell',
+            icon_color: 'blue',
+            is_popular: false,
+            is_new: false,
+            rating: 4.5,
+            tags: [],
+            related_exercise_ids: [],
+            created_at: '2023-01-01',
+            updated_at: '2023-01-01',
+          },
         ],
-        media: [{ id: '1', exercise_variant_id: '1', url: 'video.mp4' }],
+        variants: [
+          {
+            id: '1',
+            exercise_id: '1',
+            name: 'Standard Push-up',
+            description: 'A standard push-up',
+            focus: 'strength',
+            difficulty: 'beginner',
+            equipment: ['bodyweight'],
+            muscle_groups: ['chest'],
+            secondary_muscles: ['triceps'],
+            is_unilateral: false,
+            instructions: ['Perform a standard push-up'],
+            created_at: '2023-01-01',
+            updated_at: '2023-01-01',
+          },
+        ],
+        steps: [
+          {
+            id: '1',
+            exercise_variant_id: '1',
+            step_order: 1,
+            title: 'Start Position',
+            description: 'Get into plank position',
+            created_at: '2023-01-01',
+          },
+        ],
+        tips: [
+          {
+            id: '1',
+            exercise_variant_id: '1',
+            pro_tips: ['Keep your core tight'],
+            common_mistakes: ['Letting your hips sag'],
+            safety_notes: ['Maintain proper form'],
+            created_at: '2023-01-01',
+            updated_at: '2023-01-01',
+          },
+        ],
+        media: [
+          {
+            id: '1',
+            exercise_variant_id: '1',
+            images: ['image1.jpg'],
+            videos: ['video.mp4'],
+            featured_image: 'featured.jpg',
+            featured_video: 'video.mp4',
+            created_at: '2023-01-01',
+            updated_at: '2023-01-01',
+          },
+        ],
       };
 
-      const expectedExercises = [{ id: '1', name: 'Push-up', variants: [] }];
+      const expectedExercises = [
+        {
+          id: createExerciseId('1'),
+          name: 'Push-up',
+          category: CATEGORY.STRENGTH,
+          description: 'A classic bodyweight exercise',
+          variants: [],
+          mainVariantId: createExerciseVariantId('1'),
+          icon: 'dumbbell',
+          iconColor: 'blue',
+          isFavorite: false,
+          isPopular: false,
+          isNew: false,
+          rating: 4.5,
+          tags: [],
+          relatedExercises: [],
+          created_at: new Date(),
+          updated_at: new Date(),
+        },
+      ];
 
       mockDatabaseQueries.fetchExercisesWithRelatedData.mockResolvedValue(
         mockData
@@ -81,16 +167,91 @@ describe('ExerciseService', () => {
     it('should return exercise by ID successfully', async () => {
       const exerciseId = '1';
       const mockData = {
-        exercise: { id: '1', name: 'Push-up' },
-        variants: [{ id: '1', exercise_id: '1', name: 'Standard Push-up' }],
-        steps: [{ id: '1', exercise_variant_id: '1', step_order: 1 }],
-        tips: [
-          { id: '1', exercise_variant_id: '1', tip: 'Keep your core tight' },
+        exercise: {
+          id: '1',
+          name: 'Push-up',
+          category: 'Strength',
+          description: 'A classic bodyweight exercise',
+          icon: 'dumbbell',
+          icon_color: 'blue',
+          is_popular: false,
+          is_new: false,
+          rating: 4.5,
+          tags: [],
+          related_exercise_ids: [],
+          created_at: '2023-01-01',
+          updated_at: '2023-01-01',
+        },
+        variants: [
+          {
+            id: '1',
+            exercise_id: '1',
+            name: 'Standard Push-up',
+            description: 'A standard push-up',
+            focus: 'strength',
+            difficulty: 'beginner',
+            equipment: ['bodyweight'],
+            muscle_groups: ['chest'],
+            secondary_muscles: ['triceps'],
+            is_unilateral: false,
+            instructions: ['Perform a standard push-up'],
+            created_at: '2023-01-01',
+            updated_at: '2023-01-01',
+          },
         ],
-        media: [{ id: '1', exercise_variant_id: '1', url: 'video.mp4' }],
+        steps: [
+          {
+            id: '1',
+            exercise_variant_id: '1',
+            step_order: 1,
+            title: 'Start Position',
+            description: 'Get into plank position',
+            created_at: '2023-01-01',
+          },
+        ],
+        tips: [
+          {
+            id: '1',
+            exercise_variant_id: '1',
+            pro_tips: ['Keep your core tight'],
+            common_mistakes: ['Letting your hips sag'],
+            safety_notes: ['Maintain proper form'],
+            created_at: '2023-01-01',
+            updated_at: '2023-01-01',
+          },
+        ],
+        media: [
+          {
+            id: '1',
+            exercise_variant_id: '1',
+            images: ['image1.jpg'],
+            videos: ['video.mp4'],
+            featured_image: 'featured.jpg',
+            featured_video: 'video.mp4',
+            created_at: '2023-01-01',
+            updated_at: '2023-01-01',
+          },
+        ],
       };
 
-      const expectedExercise = { id: '1', name: 'Push-up', variants: [] };
+      const expectedExercise = {
+        id: createExerciseId('1'),
+        name: 'Push-up',
+        category: CATEGORY.STRENGTH,
+        description: 'A classic bodyweight exercise',
+        variants: [],
+        mainVariantId: createExerciseVariantId('1'),
+        icon: 'dumbbell',
+        iconColor: 'blue',
+        isFavorite: false,
+        isPopular: false,
+        isNew: false,
+        rating: 4.5,
+        tags: [],
+        relatedExercises: [],
+        created_at: new Date(),
+        updated_at: new Date(),
+      };
 
       mockValidators.validateExerciseId.mockReturnValue(true);
       mockDatabaseQueries.fetchExerciseWithRelatedData.mockResolvedValue(
@@ -158,16 +319,35 @@ describe('ExerciseService', () => {
     it('should search exercises successfully', async () => {
       const searchParams = {
         searchTerm: 'push',
-        category: 'strength' as const,
-        difficulties: ['beginner'] as const,
-        equipment: ['bodyweight'] as const,
-        muscleGroups: ['chest'] as const,
+        category: CATEGORY.STRENGTH,
+        difficulties: [DIFFICULTY.BEGINNER],
+        equipment: [EQUIPMENT.BODYWEIGHT],
+        muscleGroups: [MUSCLE_GROUP.CHEST],
       };
 
       const mockExercises = [
         { id: '1', name: 'Push-up', exercise_variants: [] },
       ];
-      const expectedExercises = [{ id: '1', name: 'Push-up', variants: [] }];
+      const expectedExercises = [
+        {
+          id: createExerciseId('1'),
+          name: 'Push-up',
+          category: CATEGORY.STRENGTH,
+          description: 'A classic bodyweight exercise',
+          variants: [],
+          mainVariantId: createExerciseVariantId('1'),
+          icon: 'dumbbell',
+          iconColor: 'blue',
+          isFavorite: false,
+          isPopular: false,
+          isNew: false,
+          rating: 4.5,
+          tags: [],
+          relatedExercises: [],
+          created_at: new Date(),
+          updated_at: new Date(),
+        },
+      ];
 
       mockValidators.validateSearchParams.mockReturnValue(true);
       mockDatabaseQueries.searchExercisesWithJoins.mockResolvedValue(
@@ -219,7 +399,24 @@ describe('ExerciseService', () => {
         { exercise_id: '1', exercises: { id: '1', name: 'Push-up' } },
       ];
       const expectedExercises = [
-        { id: '1', name: 'Push-up', isFavorite: true },
+        {
+          id: createExerciseId('1'),
+          name: 'Push-up',
+          category: CATEGORY.STRENGTH,
+          description: 'A classic bodyweight exercise',
+          variants: [],
+          mainVariantId: createExerciseVariantId('1'),
+          icon: 'dumbbell',
+          iconColor: 'blue',
+          isFavorite: true,
+          isPopular: false,
+          isNew: false,
+          rating: 4.5,
+          tags: [],
+          relatedExercises: [],
+          created_at: new Date(),
+          updated_at: new Date(),
+        },
       ];
 
       mockValidators.validateUserId.mockReturnValue(true);
