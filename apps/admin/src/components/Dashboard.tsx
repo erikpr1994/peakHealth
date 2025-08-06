@@ -1,14 +1,14 @@
-import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
-import { Button } from "./ui/button";
-import { Badge } from "./ui/badge";
-import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
-import { 
-  Users, 
-  Dumbbell, 
-  TrendingUp, 
-  Calendar, 
-  Target, 
-  AlertCircle, 
+import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
+import { Button } from './ui/button';
+import { Badge } from './ui/badge';
+import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
+import {
+  Users,
+  Dumbbell,
+  TrendingUp,
+  Calendar,
+  Target,
+  AlertCircle,
   CheckCircle,
   Activity,
   Clock,
@@ -21,51 +21,53 @@ import {
   Database,
   BarChart3,
   TrendingDown,
-  DollarSign
-} from "lucide-react";
+  DollarSign,
+} from 'lucide-react';
 
 // Mock data for platform activities (admin view)
 const platformActivities = [
   {
     id: 1,
-    trainerName: "Sarah Mitchell",
-    trainerAvatar: "https://images.unsplash.com/photo-1494790108755-2616b96b61d4?w=150&h=150&fit=crop&crop=face",
-    action: "New trainer joined",
-    details: "Certified Personal Trainer",
-    timeAgo: "3 hours ago",
-    type: "trainer_joined"
+    trainerName: 'Sarah Mitchell',
+    trainerAvatar:
+      'https://images.unsplash.com/photo-1494790108755-2616b96b61d4?w=150&h=150&fit=crop&crop=face',
+    action: 'New trainer joined',
+    details: 'Certified Personal Trainer',
+    timeAgo: '3 hours ago',
+    type: 'trainer_joined',
   },
   {
     id: 2,
-    gymName: "FitLife Center",
-    action: "Partnership activated",
-    details: "Premium gym partnership",
-    timeAgo: "1 day ago",
-    type: "gym_partnership"
+    gymName: 'FitLife Center',
+    action: 'Partnership activated',
+    details: 'Premium gym partnership',
+    timeAgo: '1 day ago',
+    type: 'gym_partnership',
   },
   {
     id: 3,
-    action: "Revenue milestone reached",
-    details: "$125K monthly revenue",
-    timeAgo: "2 days ago",
-    type: "revenue_milestone"
+    action: 'Revenue milestone reached',
+    details: '$125K monthly revenue',
+    timeAgo: '2 days ago',
+    type: 'revenue_milestone',
   },
   {
     id: 4,
-    trainerName: "Mike Johnson",
-    trainerAvatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face",
-    action: "High performance alert",
-    details: "Top 5% trainer this month",
-    timeAgo: "3 days ago",
-    type: "trainer_performance"
+    trainerName: 'Mike Johnson',
+    trainerAvatar:
+      'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face',
+    action: 'High performance alert',
+    details: 'Top 5% trainer this month',
+    timeAgo: '3 days ago',
+    type: 'trainer_performance',
   },
   {
     id: 5,
-    action: "Corporate subscription",
-    details: "TechCorp upgraded to Enterprise",
-    timeAgo: "1 week ago",
-    type: "corporate_upgrade"
-  }
+    action: 'Corporate subscription',
+    details: 'TechCorp upgraded to Enterprise',
+    timeAgo: '1 week ago',
+    type: 'corporate_upgrade',
+  },
 ];
 
 interface DashboardProps {
@@ -115,7 +117,9 @@ export function Dashboard({ scopeInfo, userRole }: DashboardProps) {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Monthly Revenue</CardTitle>
+            <CardTitle className="text-sm font-medium">
+              Monthly Revenue
+            </CardTitle>
             <DollarSign className="h-4 w-4 text-green-600" />
           </CardHeader>
           <CardContent>
@@ -128,7 +132,9 @@ export function Dashboard({ scopeInfo, userRole }: DashboardProps) {
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Active Trainers</CardTitle>
+            <CardTitle className="text-sm font-medium">
+              Active Trainers
+            </CardTitle>
             <Users className="h-4 w-4 text-blue-600" />
           </CardHeader>
           <CardContent>
@@ -154,7 +160,9 @@ export function Dashboard({ scopeInfo, userRole }: DashboardProps) {
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Platform Users</CardTitle>
+            <CardTitle className="text-sm font-medium">
+              Platform Users
+            </CardTitle>
             <Target className="h-4 w-4 text-orange-600" />
           </CardHeader>
           <CardContent>
@@ -177,13 +185,24 @@ export function Dashboard({ scopeInfo, userRole }: DashboardProps) {
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              {platformActivities.map((activity) => (
-                <div key={activity.id} className="flex items-center gap-3 p-3 rounded-lg border">
+              {platformActivities.map(activity => (
+                <div
+                  key={activity.id}
+                  className="flex items-center gap-3 p-3 rounded-lg border"
+                >
                   {activity.trainerAvatar && (
                     <Avatar className="h-10 w-10">
-                      <AvatarImage src={activity.trainerAvatar} alt={activity.trainerName} />
+                      <AvatarImage
+                        src={activity.trainerAvatar}
+                        alt={activity.trainerName}
+                      />
                       <AvatarFallback>
-                        {activity.trainerName ? activity.trainerName.split(' ').map(n => n[0]).join('') : 'PH'}
+                        {activity.trainerName
+                          ? activity.trainerName
+                              .split(' ')
+                              .map(n => n[0])
+                              .join('')
+                          : 'PH'}
                       </AvatarFallback>
                     </Avatar>
                   )}
@@ -194,8 +213,12 @@ export function Dashboard({ scopeInfo, userRole }: DashboardProps) {
                   )}
                   <div className="flex-1">
                     <div className="flex items-center gap-2">
-                      {activity.trainerName && <p className="font-medium">{activity.trainerName}</p>}
-                      <span className="text-muted-foreground">{activity.action}</span>
+                      {activity.trainerName && (
+                        <p className="font-medium">{activity.trainerName}</p>
+                      )}
+                      <span className="text-muted-foreground">
+                        {activity.action}
+                      </span>
                     </div>
                     <p className="text-sm text-muted-foreground">
                       {activity.details} • {activity.timeAgo}
@@ -357,7 +380,9 @@ export function Dashboard({ scopeInfo, userRole }: DashboardProps) {
                 </div>
                 <div className="flex-1">
                   <p className="font-medium">Low Revenue Trainer</p>
-                  <p className="text-sm text-muted-foreground">3 trainers below $200/month</p>
+                  <p className="text-sm text-muted-foreground">
+                    3 trainers below $200/month
+                  </p>
                   <div className="flex items-center gap-2 mt-1">
                     <Badge variant="destructive" className="text-xs">
                       Requires support
@@ -377,9 +402,14 @@ export function Dashboard({ scopeInfo, userRole }: DashboardProps) {
                 </div>
                 <div className="flex-1">
                   <p className="font-medium">Churn Alert</p>
-                  <p className="text-sm text-muted-foreground">Corporate subscription renewal pending</p>
+                  <p className="text-sm text-muted-foreground">
+                    Corporate subscription renewal pending
+                  </p>
                   <div className="flex items-center gap-2 mt-1">
-                    <Badge variant="outline" className="text-xs border-yellow-500">
+                    <Badge
+                      variant="outline"
+                      className="text-xs border-yellow-500"
+                    >
                       $15K value
                     </Badge>
                     <span className="text-xs text-muted-foreground">
