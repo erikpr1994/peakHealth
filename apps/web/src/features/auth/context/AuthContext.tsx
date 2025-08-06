@@ -67,29 +67,19 @@ const handleUserNotFoundCleanup = async (): Promise<void> => {
   window.location.href = '/login';
 };
 
-// Pure fetcher function - no side effects
+// Pure fetcher function - throws errors for proper SWR error handling
 const userFetcher = async (url: string): Promise<ExtendedUser | null> => {
   const response = await fetch(url);
 
   if (!response.ok) {
-    if (response.status === 401) {
-      const errorData = await response.json();
+    const errorData = await response.json();
 
-      // Check if this is a "user not found" error that requires cleanup
-      if (errorData.code === 'USER_NOT_FOUND' && errorData.shouldRedirect) {
-        // Don't perform side effects here - let SWR onError handle it
-        // Just return null to indicate not authenticated
-        return null;
-      }
-
-      // Not authenticated, return null (don't throw error to prevent infinite loops)
-      return null;
-    }
-
-    // For other errors, throw to let SWR handle them
+    // Create error with response data for proper handling
     const error = new Error('An error occurred while fetching the user.');
-    (error as unknown as { info: unknown }).info = await response.json();
+    (error as unknown as { info: unknown }).info = errorData;
     (error as unknown as { status: number }).status = response.status;
+
+    // Always throw errors so SWR onError can handle them properly
     throw error;
   }
 
@@ -115,15 +105,15 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         // Handle USER_NOT_FOUND errors with proper cleanup
         if (error?.status === 401) {
           try {
-            const response = await fetch('/api/auth/user');
-            if (response.status === 401) {
-              const errorData = await response.json();
-              if (
-                errorData.code === 'USER_NOT_FOUND' &&
-                errorData.shouldRedirect
-              ) {
-                await handleUserNotFoundCleanup();
-              }
+            const errorData = error.info as {
+              code?: string;
+              shouldRedirect?: boolean;
+            };
+            if (
+              errorData.code === 'USER_NOT_FOUND' &&
+              errorData.shouldRedirect
+            ) {
+              await handleUserNotFoundCleanup();
             }
           } catch (cleanupError) {
             console.error('Error during cleanup:', cleanupError);
