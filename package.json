@@ -6,6 +6,7 @@
     "dev": "turbo dev",
     "build": "turbo build",
     "lint": "turbo lint",
+    "type-check": "turbo type-check",
     "test:unit": "turbo test",
     "test:e2e": "turbo test:e2e",
     "prepare": "husky",
@@ -32,5 +33,14 @@
     "turbo": "^2.5.5",
     "typescript": "^5.9.2"
   },
-  "packageManager": "pnpm@10.13.1"
+  "packageManager": "pnpm@10.13.1",
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{json,css,md}": [
+      "prettier --write"
+    ]
+  }
 }
