@@ -8,6 +8,7 @@ export async function GET(
 ) {
   try {
     const { exerciseId } = await params;
+
     const exercise = await exerciseService.getExerciseById(exerciseId);
 
     if (!exercise) {
@@ -19,7 +20,8 @@ export async function GET(
 
     return NextResponse.json({ exercise });
   } catch (error) {
-    console.error('Error fetching exercise:', error);
+    // eslint-disable-next-line no-console
+    console.error('Exercise detail API error:', error);
     return NextResponse.json(
       { error: 'Failed to fetch exercise' },
       { status: 500 }

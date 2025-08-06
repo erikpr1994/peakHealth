@@ -5,74 +5,92 @@ import { createClient } from '@/lib/supabase/server';
 
 export async function POST(request: NextRequest) {
   try {
-    const { email, password, name } = await request.json();
+    const supabase = await createClient();
 
-    if (!email || !password || !name) {
+    if (!supabase) {
       return NextResponse.json(
-        { error: 'Email, password, and name are required' },
+        { error: 'Database connection not available' },
+        { status: 503 }
+      );
+    }
+
+    const { email, password, user_metadata, roles, groups } =
+      await request.json();
+
+    if (!email || !password) {
+      return NextResponse.json(
+        { error: 'Email and password are required' },
         { status: 400 }
       );
     }
 
-    const supabase = await createClient();
-
-    const {
-      data: { user },
-      error: signUpError,
-    } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        data: {
-          name,
-        },
-      },
-    });
-
-    if (signUpError) {
-      return NextResponse.json({ error: signUpError.message }, { status: 400 });
-    }
-
-    if (!user) {
-      return NextResponse.json({ error: 'User not created' }, { status: 500 });
-    }
-
-    const supabaseAdmin = createAdminClient();
-    const { error: adminError } = await supabaseAdmin.auth.admin.updateUserById(
-      user.id,
-      {
-        app_metadata: {
-          roles: ['basic'],
-          groups: ['free'],
-        },
-      }
-    );
-
-    if (adminError) {
-      // Clean up the created user if admin update fails
-      await supabaseAdmin.auth.admin.deleteUser(user.id);
-      return NextResponse.json({ error: adminError.message }, { status: 400 });
-    }
-
-    // Fetch the updated user with the new app_metadata
-    const { data: updatedUser, error: fetchError } =
-      await supabaseAdmin.auth.admin.getUserById(user.id);
-
-    if (fetchError || !updatedUser.user) {
+    // Validate that user_metadata contains a name field
+    if (
+      !user_metadata ||
+      !user_metadata.name ||
+      typeof user_metadata.name !== 'string' ||
+      user_metadata.name.trim() === ''
+    ) {
       return NextResponse.json(
-        { error: 'Failed to fetch updated user data' },
-        { status: 500 }
+        { error: 'Name is required in user_metadata' },
+        { status: 400 }
       );
     }
 
-    return NextResponse.json(
-      {
-        message: 'User created successfully',
-        user: updatedUser.user,
+    // Create user with basic auth
+    const { data, error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        data: user_metadata,
       },
-      { status: 201 }
-    );
-  } catch {
+    });
+
+    if (error) {
+      // eslint-disable-next-line no-console
+      console.error('Signup error:', error);
+      return NextResponse.json({ error: error.message }, { status: 400 });
+    }
+
+    // If roles or groups are provided, update the user's app_metadata using admin client
+    if (data.user && (roles || groups)) {
+      try {
+        const adminClient = createAdminClient();
+
+        const app_metadata: Record<string, unknown> = {};
+        if (roles) app_metadata.roles = roles;
+        if (groups) app_metadata.groups = groups;
+
+        const { data: updatedUser, error: updateError } =
+          await adminClient.auth.admin.updateUserById(data.user.id, {
+            app_metadata,
+          });
+
+        if (updateError) {
+          // eslint-disable-next-line no-console
+          console.error('Failed to update user app_metadata:', updateError);
+          // Don't fail the signup, just log the error and continue
+        } else if (updatedUser.user) {
+          // Return the updated user with app_metadata
+          return NextResponse.json({
+            user: updatedUser.user,
+            session: data.session,
+          });
+        }
+      } catch (adminError) {
+        // eslint-disable-next-line no-console
+        console.error('Admin client error:', adminError);
+        // Don't fail the signup, just log the error and continue
+      }
+    }
+
+    return NextResponse.json({
+      user: data.user,
+      session: data.session,
+    });
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.error('Signup API error:', error);
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }

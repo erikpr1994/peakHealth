@@ -4,16 +4,16 @@ import { createClient } from '@/lib/supabase/server';
 
 export async function POST(request: NextRequest) {
   try {
-    const { email, password } = await request.json();
+    const supabase = await createClient();
 
-    if (!email || !password) {
+    if (!supabase) {
       return NextResponse.json(
-        { error: 'Email and password are required' },
-        { status: 400 }
+        { error: 'Database connection not available' },
+        { status: 503 }
       );
     }
 
-    const supabase = await createClient();
+    const { email, password } = await request.json();
 
     const { data, error } = await supabase.auth.signInWithPassword({
       email,
@@ -21,30 +21,18 @@ export async function POST(request: NextRequest) {
     });
 
     if (error) {
+      // eslint-disable-next-line no-console
+      console.error('Login error:', error);
       return NextResponse.json({ error: error.message }, { status: 400 });
     }
 
-    // Extract user roles and groups from app_metadata with fallback values
-    // Default to basic user if no roles/groups are set
-    const userRoles = data.user?.app_metadata?.roles || ['basic'];
-    const userGroups = data.user?.app_metadata?.groups || ['free'];
-
-    // Add fallback values to app_metadata for backward compatibility
-    const userWithFallbacks = {
-      ...data.user,
-      app_metadata: {
-        ...data.user?.app_metadata,
-        roles: userRoles,
-        groups: userGroups,
-      },
-    };
-
     return NextResponse.json({
-      user: userWithFallbacks,
+      user: data.user,
       session: data.session,
     });
   } catch (error) {
-    console.error('Login error:', error);
+    // eslint-disable-next-line no-console
+    console.error('Login API error:', error);
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }

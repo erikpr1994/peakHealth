@@ -10,18 +10,29 @@ import { FilterDialog } from './components/ExercisesList/FilterDialog';
 import { NewExercisesCarousel } from './components/ExercisesList/NewExercisesCarousel';
 import { SearchAndFilters } from './components/ExercisesList/SearchAndFilters';
 import { ExerciseProvider } from './context/ExerciseContext';
-import { useExercises } from './hooks/useExercises';
 import { Exercise } from './types';
 
 import { Button } from '@/components/ui/button';
 
-const ExercisesListContent = () => {
+interface ExercisesListProps {
+  initialExercises?: Exercise[];
+  initialError?: string | null;
+}
+
+const ExercisesListContent = ({
+  initialExercises = [],
+  initialError,
+}: ExercisesListProps) => {
   const router = useRouter();
   const [activeCategory, setActiveCategory] = useState('All Exercises');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [isFilterOpen, setIsFilterOpen] = useState(false);
 
-  const { exercises, isLoading, error } = useExercises();
+  // Use initial data instead of fetching client-side
+  const exercises = initialExercises;
+  const error = initialError;
+  const isLoading = false; // No longer loading since we have initial data
+
   const newExercises = exercises.filter(exercise => exercise.isNew);
 
   const handleExerciseClick = (exercise: Exercise) => {
@@ -117,10 +128,16 @@ const ExercisesListContent = () => {
   );
 };
 
-const ExercisesList = () => {
+const ExercisesList = ({
+  initialExercises,
+  initialError,
+}: ExercisesListProps) => {
   return (
     <ExerciseProvider>
-      <ExercisesListContent />
+      <ExercisesListContent
+        initialExercises={initialExercises}
+        initialError={initialError}
+      />
     </ExerciseProvider>
   );
 };

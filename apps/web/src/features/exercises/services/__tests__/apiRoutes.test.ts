@@ -1,11 +1,32 @@
 import { NextRequest } from 'next/server';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 
-import { exerciseService } from '@/features/exercises/services/exerciseService';
+// Mock Exercise type for testing
+const createMockExercise = (id: string, name: string) => ({
+  id,
+  name,
+  category: 'strength' as const,
+  description: 'A basic exercise',
+  variants: [],
+  mainVariantId: null,
+  isNew: false,
+  createdAt: new Date().toISOString(),
+  icon: 'dumbbell',
+  iconColor: 'blue',
+  isFavorite: false,
+});
 
 // Mock the exercise service
-vi.mock('@/features/exercises/services/exerciseService');
-const mockExerciseService = vi.mocked(exerciseService);
+vi.mock('@/features/exercises/services/exerciseService', () => ({
+  exerciseService: {
+    getAllExercises: vi.fn(),
+    getExerciseById: vi.fn(),
+    searchExercises: vi.fn(),
+    getUserFavoriteExercises: vi.fn(),
+    addToFavorites: vi.fn(),
+    removeFromFavorites: vi.fn(),
+  },
+}));
 
 describe('Exercise API Routes', () => {
   beforeEach(() => {
@@ -14,29 +35,33 @@ describe('Exercise API Routes', () => {
 
   describe('GET /api/exercises', () => {
     it('should return all exercises when no search parameters are provided', async () => {
-      const mockExercises = [{ id: '1', name: 'Push-up' }] as any;
-      mockExerciseService.getAllExercises.mockResolvedValue(mockExercises);
-
-      const request = new NextRequest('http://localhost:3000/api/exercises');
+      const mockExercises = [createMockExercise('1', 'Push-up')] as any;
+      const { exerciseService } = await import(
+        '@/features/exercises/services/exerciseService'
+      );
+      vi.mocked(exerciseService.getAllExercises).mockResolvedValue(
+        mockExercises
+      );
 
       const { GET } = await import('@/app/api/exercises/route');
-      const response = await GET(request);
+      const response = await GET();
       const data = await response.json();
 
-      expect(mockExerciseService.getAllExercises).toHaveBeenCalled();
+      expect(exerciseService.getAllExercises).toHaveBeenCalled();
       expect(data).toEqual({ exercises: mockExercises });
       expect(response.status).toBe(200);
     });
 
     it('should handle service errors gracefully', async () => {
-      mockExerciseService.getAllExercises.mockRejectedValue(
-        new Error('Database error')
+      const { exerciseService } = await import(
+        '@/features/exercises/services/exerciseService'
+      );
+      vi.mocked(exerciseService.getAllExercises).mockRejectedValue(
+        new Error('Service error')
       );
 
-      const request = new NextRequest('http://localhost:3000/api/exercises');
-
       const { GET } = await import('@/app/api/exercises/route');
-      const response = await GET(request);
+      const response = await GET();
       const data = await response.json();
 
       expect(data).toEqual({ error: 'Failed to fetch exercises' });
@@ -46,20 +71,17 @@ describe('Exercise API Routes', () => {
 
   describe('GET /api/exercises/search', () => {
     it('should perform search when search parameters are provided', async () => {
-      const mockSearchResults = [{ id: '1', name: 'Push-up' }] as any;
-      const searchParams = {
-        searchTerm: 'push',
-        category: 'strength' as const,
-        difficulties: ['beginner'],
-        equipment: ['bodyweight'],
-        muscleGroups: ['chest'],
-      };
-
-      mockExerciseService.searchExercises.mockResolvedValue(mockSearchResults);
+      const mockSearchResults = [{ id: '1', name: 'Push-up' }];
+      const { exerciseService } = await import(
+        '@/features/exercises/services/exerciseService'
+      );
+      vi.mocked(exerciseService.searchExercises).mockResolvedValue(
+        mockSearchResults
+      );
 
       // Create a mock request with search parameters
       const url = new URL('http://localhost:3000/api/exercises/search');
-      url.searchParams.set('searchTerm', 'push');
+      url.searchParams.set('q', 'push');
       url.searchParams.set('category', 'strength');
       url.searchParams.set('difficulty', 'beginner');
       url.searchParams.set('equipment', 'bodyweight');
@@ -71,20 +93,29 @@ describe('Exercise API Routes', () => {
       const response = await GET(request);
       const data = await response.json();
 
-      expect(mockExerciseService.searchExercises).toHaveBeenCalledWith(
-        searchParams
-      );
+      expect(exerciseService.searchExercises).toHaveBeenCalledWith({
+        searchTerm: 'push',
+        category: 'strength',
+        difficulties: ['beginner'],
+        equipment: ['bodyweight'],
+        muscleGroups: ['chest'],
+      });
       expect(data).toEqual({ exercises: mockSearchResults });
       expect(response.status).toBe(200);
     });
 
     it('should handle partial search parameters', async () => {
-      const mockSearchResults = [{ id: '1', name: 'Push-up' }] as any;
-      mockExerciseService.searchExercises.mockResolvedValue(mockSearchResults);
+      const mockSearchResults = [{ id: '1', name: 'Push-up' }];
+      const { exerciseService } = await import(
+        '@/features/exercises/services/exerciseService'
+      );
+      vi.mocked(exerciseService.searchExercises).mockResolvedValue(
+        mockSearchResults
+      );
 
       // Create a mock request with only some search parameters
       const url = new URL('http://localhost:3000/api/exercises/search');
-      url.searchParams.set('searchTerm', 'push');
+      url.searchParams.set('q', 'push');
       url.searchParams.set('category', 'strength');
 
       const request = new NextRequest(url);
@@ -93,7 +124,7 @@ describe('Exercise API Routes', () => {
       const response = await GET(request);
       const data = await response.json();
 
-      expect(mockExerciseService.searchExercises).toHaveBeenCalledWith({
+      expect(exerciseService.searchExercises).toHaveBeenCalledWith({
         searchTerm: 'push',
         category: 'strength',
         difficulties: undefined,
@@ -101,15 +132,19 @@ describe('Exercise API Routes', () => {
         muscleGroups: undefined,
       });
       expect(data).toEqual({ exercises: mockSearchResults });
+      expect(response.status).toBe(200);
     });
 
     it('should handle search service errors gracefully', async () => {
-      mockExerciseService.searchExercises.mockRejectedValue(
-        new Error('Search error')
+      const { exerciseService } = await import(
+        '@/features/exercises/services/exerciseService'
+      );
+      vi.mocked(exerciseService.searchExercises).mockRejectedValue(
+        new Error('Service error')
       );
 
       const url = new URL('http://localhost:3000/api/exercises/search');
-      url.searchParams.set('searchTerm', 'push');
+      url.searchParams.set('q', 'push');
 
       const request = new NextRequest(url);
 
@@ -122,9 +157,54 @@ describe('Exercise API Routes', () => {
     });
   });
 
+  describe('GET /api/exercises/[exerciseId]', () => {
+    it('should return exercise when found', async () => {
+      const mockExercise = { id: '1', name: 'Push-up' };
+      const { exerciseService } = await import(
+        '@/features/exercises/services/exerciseService'
+      );
+      vi.mocked(exerciseService.getExerciseById).mockResolvedValue(
+        mockExercise
+      );
+
+      const request = new NextRequest('http://localhost:3000/api/exercises/1');
+      const { GET } = await import('@/app/api/exercises/[exerciseId]/route');
+      const response = await GET(request, {
+        params: Promise.resolve({ exerciseId: '1' }),
+      });
+      const data = await response.json();
+
+      expect(exerciseService.getExerciseById).toHaveBeenCalledWith('1');
+      expect(data).toEqual({ exercise: mockExercise });
+      expect(response.status).toBe(200);
+    });
+
+    it('should return 404 when exercise not found', async () => {
+      const { exerciseService } = await import(
+        '@/features/exercises/services/exerciseService'
+      );
+      vi.mocked(exerciseService.getExerciseById).mockResolvedValue(null);
+
+      const request = new NextRequest(
+        'http://localhost:3000/api/exercises/999'
+      );
+      const { GET } = await import('@/app/api/exercises/[exerciseId]/route');
+      const response = await GET(request, {
+        params: Promise.resolve({ exerciseId: '999' }),
+      });
+      const data = await response.json();
+
+      expect(data).toEqual({ error: 'Exercise not found' });
+      expect(response.status).toBe(404);
+    });
+  });
+
   describe('POST /api/exercises/favorites', () => {
     it('should add exercise to favorites successfully', async () => {
-      mockExerciseService.addToFavorites.mockResolvedValue();
+      const { exerciseService } = await import(
+        '@/features/exercises/services/exerciseService'
+      );
+      vi.mocked(exerciseService.addToFavorites).mockResolvedValue();
 
       const requestBody = { userId: 'user-1', exerciseId: 'exercise-1' };
       const request = new NextRequest(
@@ -141,7 +221,7 @@ describe('Exercise API Routes', () => {
       const { POST } = await import('@/app/api/exercises/favorites/route');
       const response = await POST(request);
 
-      expect(mockExerciseService.addToFavorites).toHaveBeenCalledWith(
+      expect(exerciseService.addToFavorites).toHaveBeenCalledWith(
         'user-1',
         'exercise-1'
       );
@@ -191,8 +271,11 @@ describe('Exercise API Routes', () => {
     });
 
     it('should handle service errors gracefully', async () => {
-      mockExerciseService.addToFavorites.mockRejectedValue(
-        new Error('Database error')
+      const { exerciseService } = await import(
+        '@/features/exercises/services/exerciseService'
+      );
+      vi.mocked(exerciseService.addToFavorites).mockRejectedValue(
+        new Error('Service error')
       );
 
       const requestBody = { userId: 'user-1', exerciseId: 'exercise-1' };
@@ -218,8 +301,11 @@ describe('Exercise API Routes', () => {
 
   describe('GET /api/exercises/favorites', () => {
     it('should return user favorites successfully', async () => {
-      const mockFavorites = [{ id: '1', name: 'Push-up' }] as any;
-      mockExerciseService.getUserFavoriteExercises.mockResolvedValue(
+      const mockFavorites = [{ id: '1', name: 'Push-up' }];
+      const { exerciseService } = await import(
+        '@/features/exercises/services/exerciseService'
+      );
+      vi.mocked(exerciseService.getUserFavoriteExercises).mockResolvedValue(
         mockFavorites
       );
 
@@ -232,7 +318,7 @@ describe('Exercise API Routes', () => {
       const response = await GET(request);
       const data = await response.json();
 
-      expect(mockExerciseService.getUserFavoriteExercises).toHaveBeenCalledWith(
+      expect(exerciseService.getUserFavoriteExercises).toHaveBeenCalledWith(
         'user-1'
       );
       expect(data).toEqual({ exercises: mockFavorites });
@@ -253,8 +339,11 @@ describe('Exercise API Routes', () => {
     });
 
     it('should handle service errors gracefully', async () => {
-      mockExerciseService.getUserFavoriteExercises.mockRejectedValue(
-        new Error('Database error')
+      const { exerciseService } = await import(
+        '@/features/exercises/services/exerciseService'
+      );
+      vi.mocked(exerciseService.getUserFavoriteExercises).mockRejectedValue(
+        new Error('Service error')
       );
 
       const url = new URL('http://localhost:3000/api/exercises/favorites');
@@ -273,7 +362,10 @@ describe('Exercise API Routes', () => {
 
   describe('DELETE /api/exercises/favorites', () => {
     it('should remove exercise from favorites successfully', async () => {
-      mockExerciseService.removeFromFavorites.mockResolvedValue();
+      const { exerciseService } = await import(
+        '@/features/exercises/services/exerciseService'
+      );
+      vi.mocked(exerciseService.removeFromFavorites).mockResolvedValue();
 
       const url = new URL('http://localhost:3000/api/exercises/favorites');
       url.searchParams.set('userId', 'user-1');
@@ -284,7 +376,7 @@ describe('Exercise API Routes', () => {
       const { DELETE } = await import('@/app/api/exercises/favorites/route');
       const response = await DELETE(request);
 
-      expect(mockExerciseService.removeFromFavorites).toHaveBeenCalledWith(
+      expect(exerciseService.removeFromFavorites).toHaveBeenCalledWith(
         'user-1',
         'exercise-1'
       );
@@ -320,8 +412,11 @@ describe('Exercise API Routes', () => {
     });
 
     it('should handle service errors gracefully', async () => {
-      mockExerciseService.removeFromFavorites.mockRejectedValue(
-        new Error('Database error')
+      const { exerciseService } = await import(
+        '@/features/exercises/services/exerciseService'
+      );
+      vi.mocked(exerciseService.removeFromFavorites).mockRejectedValue(
+        new Error('Service error')
       );
 
       const url = new URL('http://localhost:3000/api/exercises/favorites');

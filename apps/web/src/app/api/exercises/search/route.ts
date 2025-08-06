@@ -1,36 +1,28 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 import { exerciseService } from '@/features/exercises/services/exerciseService';
-import type {
-  Category,
-  Difficulty,
-  Equipment,
-  MuscleGroup,
-} from '@/features/exercises/types/constants';
 
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
-
-    const searchTerm = searchParams.get('searchTerm') || undefined;
-    const category = (searchParams.get('category') as Category) || undefined;
-
-    // Handle multiple values for filters
-    const difficulties = searchParams.getAll('difficulty') as Difficulty[];
-    const equipment = searchParams.getAll('equipment') as Equipment[];
-    const muscleGroups = searchParams.getAll('muscleGroup') as MuscleGroup[];
+    const query = searchParams.get('q') || '';
+    const category = searchParams.get('category') || '';
+    const muscleGroup = searchParams.get('muscleGroup') || '';
+    const equipment = searchParams.get('equipment') || '';
+    const difficulty = searchParams.get('difficulty') || '';
 
     const exercises = await exerciseService.searchExercises({
-      searchTerm,
-      category,
-      difficulties: difficulties.length > 0 ? difficulties : undefined,
-      equipment: equipment.length > 0 ? equipment : undefined,
-      muscleGroups: muscleGroups.length > 0 ? muscleGroups : undefined,
+      searchTerm: query,
+      category: category as any,
+      difficulties: difficulty ? [difficulty as any] : undefined,
+      equipment: equipment ? [equipment as any] : undefined,
+      muscleGroups: muscleGroup ? [muscleGroup as any] : undefined,
     });
 
-    return NextResponse.json({ exercises });
+    return NextResponse.json({ exercises: exercises || [] });
   } catch (error) {
-    console.error('Error searching exercises:', error);
+    // eslint-disable-next-line no-console
+    console.error('Exercise search API error:', error);
     return NextResponse.json(
       { error: 'Failed to search exercises' },
       { status: 500 }

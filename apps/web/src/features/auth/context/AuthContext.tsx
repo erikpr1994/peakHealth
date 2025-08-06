@@ -43,6 +43,21 @@ const userFetcher = async (url: string): Promise<ExtendedUser | null> => {
 
   if (!response.ok) {
     if (response.status === 401) {
+      const errorData = await response.json();
+
+      // Check if this is a "user not found" error that requires redirect
+      if (errorData.code === 'USER_NOT_FOUND' && errorData.shouldRedirect) {
+        // Clear any existing auth state and redirect to login
+        if (typeof window !== 'undefined') {
+          // Clear any stored auth data
+          localStorage.removeItem('supabase.auth.token');
+          sessionStorage.removeItem('supabase.auth.token');
+
+          // Redirect to login page
+          window.location.href = '/login';
+        }
+      }
+
       // Not authenticated, return null
       return null;
     }
@@ -86,6 +101,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   // Set up real-time auth state synchronization
   useEffect(() => {
+    if (!supabase) {
+      return;
+    }
+
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((event, session) => {
