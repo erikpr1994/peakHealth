@@ -8,6 +8,7 @@ CREATE TABLE feature_flags (
   name VARCHAR(100) UNIQUE NOT NULL,
   display_name VARCHAR(200) NOT NULL,
   description TEXT,
+  category VARCHAR(50),
   is_public BOOLEAN DEFAULT false,
   is_global BOOLEAN DEFAULT false,
   created_by UUID REFERENCES auth.users(id),
@@ -95,6 +96,7 @@ CREATE TABLE feature_flag_audit_log (
 CREATE INDEX idx_feature_flags_name ON feature_flags(name);
 CREATE INDEX idx_feature_flags_public ON feature_flags(is_public);
 CREATE INDEX idx_feature_flags_global ON feature_flags(is_global);
+CREATE INDEX idx_feature_flags_category ON feature_flags(category);
 CREATE INDEX idx_feature_flag_environments_flag_env ON feature_flag_environments(feature_flag_id, environment);
 CREATE INDEX idx_feature_flag_user_roles_flag_env ON feature_flag_user_roles(feature_flag_id, environment);
 CREATE INDEX idx_feature_flag_user_groups_flag_env ON feature_flag_user_groups(feature_flag_id, environment);
@@ -358,25 +360,25 @@ CREATE POLICY "Admins can manage feature flag subscription tiers" ON feature_fla
   FOR ALL USING (auth.role() = 'authenticated');
 
 -- Insert feature flags (both public and user-specific)
-INSERT INTO feature_flags (name, display_name, description, is_public, is_global) VALUES
-('notification_system_feature', 'Notification System', 'Real-time notifications and alerts system', false, false),
+INSERT INTO feature_flags (name, display_name, description, category, is_public, is_global) VALUES
+('notification_system_feature', 'Notification System', 'Real-time notifications and alerts system', 'ui_ux', false, false),
 -- Page feature flags (all user-specific)
-('calendar_feature', 'Calendar Feature', 'Calendar and scheduling functionality', false, false),
-('performance_feature', 'Performance Feature', 'Performance tracking and analytics', false, false),
-('health_feature', 'Health Feature', 'Health monitoring and tracking', false, false),
-('trainer_and_clubs_feature', 'Trainer & Clubs Feature', 'Trainer and fitness clubs functionality', false, false),
-('gyms_feature', 'Gyms Feature', 'Gym management and discovery', false, false),
-('equipment_feature', 'Equipment Feature', 'Equipment tracking and management', false, false),
-('suggestions_feature', 'Suggestions Feature', 'Exercise and workout suggestions', false, false),
-('account_settings_feature', 'Account Settings Feature', 'User account settings and preferences', false, false),
-('app_settings_feature', 'App Settings Feature', 'Application settings and configuration', false, false),
-('help_support_feature', 'Help & Support Feature', 'Help and support functionality', false, false),
-('dashboard_feature', 'Dashboard Feature', 'Main dashboard functionality', false, true),
+('calendar_feature', 'Calendar Feature', 'Calendar and scheduling functionality', 'ui_ux', false, false),
+('performance_feature', 'Performance Feature', 'Performance tracking and analytics', 'performance', false, false),
+('health_feature', 'Health Feature', 'Health monitoring and tracking', 'ui_ux', false, false),
+('trainer_and_clubs_feature', 'Trainer & Clubs Feature', 'Trainer and fitness clubs functionality', 'ui_ux', false, false),
+('gyms_feature', 'Gyms Feature', 'Gym management and discovery', 'ui_ux', false, false),
+('equipment_feature', 'Equipment Feature', 'Equipment tracking and management', 'ui_ux', false, false),
+('suggestions_feature', 'Suggestions Feature', 'Exercise and workout suggestions', 'ui_ux', false, false),
+('account_settings_feature', 'Account Settings Feature', 'User account settings and preferences', 'ui_ux', false, false),
+('app_settings_feature', 'App Settings Feature', 'Application settings and configuration', 'ui_ux', false, false),
+('help_support_feature', 'Help & Support Feature', 'Help and support functionality', 'ui_ux', false, false),
+('dashboard_feature', 'Dashboard Feature', 'Main dashboard functionality', 'analytics', false, true),
 -- New feature flags for the roles and groups system
-('advanced_analytics', 'Advanced Analytics', 'Advanced analytics and reporting features', false, false),
-('admin_panel', 'Admin Panel', 'Administrative panel and management tools', false, false),
-('premium_features', 'Premium Features', 'Premium subscription features', false, false),
-('pro_features', 'Pro Features', 'Professional subscription features', false, false);
+('advanced_analytics', 'Advanced Analytics', 'Advanced analytics and reporting features', 'analytics', false, false),
+('admin_panel', 'Admin Panel', 'Administrative panel and management tools', 'corporate', false, false),
+('premium_features', 'Premium Features', 'Premium subscription features', 'ui_ux', false, false),
+('pro_features', 'Pro Features', 'Professional subscription features', 'ui_ux', false, false);
 
 -- Insert environment configurations
 INSERT INTO feature_flag_environments (feature_flag_id, environment, is_enabled, rollout_percentage) VALUES
