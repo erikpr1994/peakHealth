@@ -313,19 +313,36 @@ export async function PUT(request: NextRequest) {
     // Update environment configurations
     if (environments) {
       // Delete existing environment configs
-      await adminClient
+      const { error: deleteEnvError } = await adminClient
         .from('feature_flag_environments')
         .delete()
         .eq('feature_flag_id', id);
 
+      if (deleteEnvError) {
+        console.error(
+          'Error deleting existing environment configs:',
+          deleteEnvError
+        );
+        return NextResponse.json(
+          { error: 'Failed to update environment configurations' },
+          { status: 500 }
+        );
+      }
+
       // Insert new environment configs
       const environmentData = Object.entries(environments).map(
-        ([env, config]: [string, any]) => ({
-          feature_flag_id: id,
-          environment: env,
-          is_enabled: config.enabled || false,
-          rollout_percentage: config.rolloutPercentage || 0,
-        })
+        ([env, config]: [string, unknown]) => {
+          const typedConfig = config as {
+            enabled?: boolean;
+            rolloutPercentage?: number;
+          };
+          return {
+            feature_flag_id: id,
+            environment: env,
+            is_enabled: typedConfig.enabled || false,
+            rollout_percentage: typedConfig.rolloutPercentage || 0,
+          };
+        }
       );
 
       if (environmentData.length > 0) {
@@ -335,6 +352,10 @@ export async function PUT(request: NextRequest) {
 
         if (envError) {
           console.error('Error updating environment configs:', envError);
+          return NextResponse.json(
+            { error: 'Failed to update environment configurations' },
+            { status: 500 }
+          );
         }
       }
     }
@@ -342,23 +363,36 @@ export async function PUT(request: NextRequest) {
     // Update user role targeting
     if (userRoles !== undefined) {
       // Delete existing user role targeting
-      await adminClient
+      const { error: deleteRoleError } = await adminClient
         .from('feature_flag_user_roles')
         .delete()
         .eq('feature_flag_id', id);
 
+      if (deleteRoleError) {
+        console.error(
+          'Error deleting existing user role targeting:',
+          deleteRoleError
+        );
+        return NextResponse.json(
+          { error: 'Failed to update user role targeting' },
+          { status: 500 }
+        );
+      }
+
       // Insert new user role targeting
       if (userRoles.length > 0) {
-        const roleData = userRoles.flatMap((role: any) =>
-          role.environments.map(
-            (envConfig: { environment: string; isEnabled: boolean }) => ({
-              feature_flag_id: id,
-              environment: envConfig.environment,
-              role_name: role.roleName,
-              is_enabled: envConfig.isEnabled,
-            })
-          )
-        );
+        const roleData = userRoles.flatMap((role: unknown) => {
+          const typedRole = role as {
+            environments: Array<{ environment: string; isEnabled: boolean }>;
+            roleName: string;
+          };
+          return typedRole.environments.map(envConfig => ({
+            feature_flag_id: id,
+            environment: envConfig.environment,
+            role_name: typedRole.roleName,
+            is_enabled: envConfig.isEnabled,
+          }));
+        });
 
         if (roleData.length > 0) {
           const { error: roleError } = await adminClient
@@ -367,6 +401,10 @@ export async function PUT(request: NextRequest) {
 
           if (roleError) {
             console.error('Error updating user role targeting:', roleError);
+            return NextResponse.json(
+              { error: 'Failed to update user role targeting' },
+              { status: 500 }
+            );
           }
         }
       }
@@ -375,10 +413,21 @@ export async function PUT(request: NextRequest) {
     // Update user group targeting
     if (userGroups !== undefined) {
       // Delete existing user group targeting
-      await adminClient
+      const { error: deleteGroupError } = await adminClient
         .from('feature_flag_user_groups')
         .delete()
         .eq('feature_flag_id', id);
+
+      if (deleteGroupError) {
+        console.error(
+          'Error deleting existing user group targeting:',
+          deleteGroupError
+        );
+        return NextResponse.json(
+          { error: 'Failed to update user group targeting' },
+          { status: 500 }
+        );
+      }
 
       // Insert new user group targeting
       if (userGroups.length > 0) {
@@ -423,6 +472,10 @@ export async function PUT(request: NextRequest) {
 
           if (groupError) {
             console.error('Error updating user group targeting:', groupError);
+            return NextResponse.json(
+              { error: 'Failed to update user group targeting' },
+              { status: 500 }
+            );
           }
         }
       }
@@ -431,10 +484,21 @@ export async function PUT(request: NextRequest) {
     // Update user type targeting
     if (userTypes !== undefined) {
       // Delete existing user type targeting
-      await adminClient
+      const { error: deleteUserTypeError } = await adminClient
         .from('feature_flag_user_types')
         .delete()
         .eq('feature_flag_id', id);
+
+      if (deleteUserTypeError) {
+        console.error(
+          'Error deleting existing user type targeting:',
+          deleteUserTypeError
+        );
+        return NextResponse.json(
+          { error: 'Failed to update user type targeting' },
+          { status: 500 }
+        );
+      }
 
       // Insert new user type targeting
       if (userTypes.length > 0) {
@@ -449,6 +513,10 @@ export async function PUT(request: NextRequest) {
 
         if (userTypeError) {
           console.error('Error updating user type targeting:', userTypeError);
+          return NextResponse.json(
+            { error: 'Failed to update user type targeting' },
+            { status: 500 }
+          );
         }
       }
     }
@@ -456,10 +524,21 @@ export async function PUT(request: NextRequest) {
     // Update subscription tier targeting
     if (subscriptionTiers !== undefined) {
       // Delete existing subscription tier targeting
-      await adminClient
+      const { error: deleteSubscriptionError } = await adminClient
         .from('feature_flag_subscription_tiers')
         .delete()
         .eq('feature_flag_id', id);
+
+      if (deleteSubscriptionError) {
+        console.error(
+          'Error deleting existing subscription tier targeting:',
+          deleteSubscriptionError
+        );
+        return NextResponse.json(
+          { error: 'Failed to update subscription tier targeting' },
+          { status: 500 }
+        );
+      }
 
       // Insert new subscription tier targeting
       if (subscriptionTiers.length > 0) {
@@ -477,6 +556,10 @@ export async function PUT(request: NextRequest) {
             'Error updating subscription tier targeting:',
             subscriptionError
           );
+          return NextResponse.json(
+            { error: 'Failed to update subscription tier targeting' },
+            { status: 500 }
+          );
         }
       }
     }
@@ -484,10 +567,21 @@ export async function PUT(request: NextRequest) {
     // Update specific user targeting
     if (users !== undefined) {
       // Delete existing user targeting
-      await adminClient
+      const { error: deleteUserError } = await adminClient
         .from('feature_flag_users')
         .delete()
         .eq('feature_flag_id', id);
+
+      if (deleteUserError) {
+        console.error(
+          'Error deleting existing user targeting:',
+          deleteUserError
+        );
+        return NextResponse.json(
+          { error: 'Failed to update user targeting' },
+          { status: 500 }
+        );
+      }
 
       // Insert new user targeting
       if (users.length > 0) {
@@ -502,6 +596,10 @@ export async function PUT(request: NextRequest) {
 
         if (userError) {
           console.error('Error updating user targeting:', userError);
+          return NextResponse.json(
+            { error: 'Failed to update user targeting' },
+            { status: 500 }
+          );
         }
       }
     }
