@@ -1,8 +1,8 @@
-import { Analytics } from '@/components/Analytics';
+import { RevenueAnalytics } from '@/components/RevenueAnalytics';
 
-export default function AnalyticsPage() {
+export default function RevenuePage() {
   return (
-    <Analytics
+    <RevenueAnalytics
       scopeInfo={{
         scope: 'platform',
         label: 'Platform Wide',
