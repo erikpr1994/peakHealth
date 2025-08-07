@@ -153,19 +153,40 @@ export async function POST(request: NextRequest) {
 
     // Insert user group targeting
     if (userGroups && userGroups.length > 0) {
-      const groupData = userGroups.flatMap((group: unknown) => {
-        const typedGroup = group as {
-          environments: string[];
-          groupName: string;
-          isEnabled?: boolean;
-        };
-        return typedGroup.environments.map((env: string) => ({
-          feature_flag_id: featureFlag.id,
-          environment: env,
-          group_name: typedGroup.groupName,
-          is_enabled: typedGroup.isEnabled || false,
-        }));
-      });
+      let groupData: Array<{
+        feature_flag_id: string;
+        environment: string;
+        group_name: string;
+        is_enabled: boolean;
+      }> = [];
+
+      // Handle both array of strings and array of objects
+      if (typeof userGroups[0] === 'string') {
+        // If userGroups is an array of strings, convert to default object format
+        groupData = userGroups.flatMap((groupName: string) =>
+          ['development', 'staging', 'production'].map((env: string) => ({
+            feature_flag_id: featureFlag.id,
+            environment: env,
+            group_name: groupName,
+            is_enabled: true, // Default to enabled
+          }))
+        );
+      } else {
+        // If userGroups is already an array of objects with the expected structure
+        groupData = userGroups.flatMap((group: unknown) => {
+          const typedGroup = group as {
+            environments: string[];
+            groupName: string;
+            isEnabled?: boolean;
+          };
+          return typedGroup.environments.map((env: string) => ({
+            feature_flag_id: featureFlag.id,
+            environment: env,
+            group_name: typedGroup.groupName,
+            is_enabled: typedGroup.isEnabled || false,
+          }));
+        });
+      }
 
       if (groupData.length > 0) {
         const { error: groupError } = await adminClient
@@ -361,14 +382,35 @@ export async function PUT(request: NextRequest) {
 
       // Insert new user group targeting
       if (userGroups.length > 0) {
-        const groupData = userGroups.flatMap((group: any) =>
-          group.environments.map((env: string) => ({
-            feature_flag_id: id,
-            environment: env,
-            group_name: group.groupName,
-            is_enabled: group.isEnabled || false,
-          }))
-        );
+        let groupData: Array<{
+          feature_flag_id: string;
+          environment: string;
+          group_name: string;
+          is_enabled: boolean;
+        }> = [];
+
+        // Handle both array of strings and array of objects
+        if (typeof userGroups[0] === 'string') {
+          // If userGroups is an array of strings, convert to default object format
+          groupData = userGroups.flatMap((groupName: string) =>
+            ['development', 'staging', 'production'].map((env: string) => ({
+              feature_flag_id: id,
+              environment: env,
+              group_name: groupName,
+              is_enabled: true, // Default to enabled
+            }))
+          );
+        } else {
+          // If userGroups is already an array of objects with the expected structure
+          groupData = userGroups.flatMap((group: any) =>
+            group.environments.map((env: string) => ({
+              feature_flag_id: id,
+              environment: env,
+              group_name: group.groupName,
+              is_enabled: group.isEnabled || false,
+            }))
+          );
+        }
 
         if (groupData.length > 0) {
           const { error: groupError } = await adminClient
