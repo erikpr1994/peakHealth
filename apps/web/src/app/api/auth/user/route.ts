@@ -43,35 +43,47 @@ export async function GET() {
 
     // Validate and extract new JWT claims structure
     const appMetadata = user.app_metadata || {};
-    
+
     // Validate required claims structure
     const validationErrors = [];
-    
+
     if (!appMetadata.user_types || !Array.isArray(appMetadata.user_types)) {
       validationErrors.push('user_types must be an array');
     }
-    
-    if (!appMetadata.primary_user_type || typeof appMetadata.primary_user_type !== 'string') {
+
+    if (
+      !appMetadata.primary_user_type ||
+      typeof appMetadata.primary_user_type !== 'string'
+    ) {
       validationErrors.push('primary_user_type must be a string');
     }
-    
-    if (!appMetadata.subscription_tier || typeof appMetadata.subscription_tier !== 'string') {
+
+    if (
+      !appMetadata.subscription_tier ||
+      typeof appMetadata.subscription_tier !== 'string'
+    ) {
       validationErrors.push('subscription_tier must be a string');
     }
-    
+
     if (!appMetadata.groups || !Array.isArray(appMetadata.groups)) {
       validationErrors.push('groups must be an array');
     }
-    
-    if (!appMetadata.permissions || typeof appMetadata.permissions !== 'object') {
+
+    if (
+      !appMetadata.permissions ||
+      typeof appMetadata.permissions !== 'object'
+    ) {
       validationErrors.push('permissions must be an object');
     }
-    
+
     if (!appMetadata.features || !Array.isArray(appMetadata.features)) {
       validationErrors.push('features must be an array');
     }
-    
-    if (!appMetadata.data_access_rules || typeof appMetadata.data_access_rules !== 'object') {
+
+    if (
+      !appMetadata.data_access_rules ||
+      typeof appMetadata.data_access_rules !== 'object'
+    ) {
       validationErrors.push('data_access_rules must be an object');
     }
 
@@ -91,7 +103,9 @@ export async function GET() {
       app_metadata: {
         ...appMetadata,
         // Legacy support - use new claims if available, fallback to defaults
-        roles: appMetadata.user_types || [appMetadata.primary_user_type || 'regular'],
+        roles: appMetadata.user_types || [
+          appMetadata.primary_user_type || 'regular',
+        ],
         groups: appMetadata.groups || ['early_access'],
       },
     };

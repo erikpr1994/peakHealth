@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 import { ProfileUpdateData } from '@/features/profile/types/profile';
+import { canAccessOwnProfile, DATA_ACCESS_LEVELS } from '@/lib/data-access';
 import { createClient } from '@/lib/supabase/server';
 import { safeDateConversion } from '@/lib/utils';
 
@@ -22,6 +23,18 @@ export async function GET() {
 
     if (authError || !user) {
       return NextResponse.json({ error: 'Not authenticated' }, { status: 401 });
+    }
+
+    // Check data access permissions for profile data
+    const userDataAccessRules = user.app_metadata?.data_access_rules || {};
+
+    if (
+      !canAccessOwnProfile(DATA_ACCESS_LEVELS.READ_ONLY, userDataAccessRules)
+    ) {
+      return NextResponse.json(
+        { error: 'Insufficient permissions to access profile data' },
+        { status: 403 }
+      );
     }
 
     // Get user profile data using the database function
@@ -99,6 +112,16 @@ export async function PUT(request: NextRequest) {
 
     if (authError || !user) {
       return NextResponse.json({ error: 'Not authenticated' }, { status: 401 });
+    }
+
+    // Check data access permissions for profile data (need write access)
+    const userDataAccessRules = user.app_metadata?.data_access_rules || {};
+
+    if (!canAccessOwnProfile(DATA_ACCESS_LEVELS.FULL, userDataAccessRules)) {
+      return NextResponse.json(
+        { error: 'Insufficient permissions to update profile data' },
+        { status: 403 }
+      );
     }
 
     const updateData: ProfileUpdateData = await request.json();

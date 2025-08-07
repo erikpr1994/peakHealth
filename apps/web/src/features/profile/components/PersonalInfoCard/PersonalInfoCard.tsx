@@ -271,8 +271,8 @@ export const PersonalInfoCard = ({
                 <span className={styles.roleGroupLabel}>User Types:</span>
                 <div className={styles.roleGroupTags}>
                   {userTypes.map((userType, index) => (
-                    <span 
-                      key={index} 
+                    <span
+                      key={index}
                       className={`${styles.roleGroupTag} ${
                         userType === primaryUserType ? styles.primaryTag : ''
                       }`}
@@ -290,7 +290,9 @@ export const PersonalInfoCard = ({
               <div className={styles.roleGroupSection}>
                 <span className={styles.roleGroupLabel}>Subscription:</span>
                 <div className={styles.roleGroupTags}>
-                  <span className={`${styles.roleGroupTag} ${styles.subscriptionTag}`}>
+                  <span
+                    className={`${styles.roleGroupTag} ${styles.subscriptionTag}`}
+                  >
                     {subscriptionTier}
                   </span>
                 </div>
@@ -308,9 +310,11 @@ export const PersonalInfoCard = ({
                 </div>
               </div>
             )}
-            {userTypes.length === 0 && userGroups.length === 0 && !subscriptionTier && (
-              <p className={styles.value}>No user types or groups assigned</p>
-            )}
+            {userTypes.length === 0 &&
+              userGroups.length === 0 &&
+              !subscriptionTier && (
+                <p className={styles.value}>No user types or groups assigned</p>
+              )}
           </div>
         </div>
 
@@ -322,16 +326,20 @@ export const PersonalInfoCard = ({
               Permissions
             </Label>
             <div className={styles.permissionsContainer}>
-              {Object.entries(permissions).map(([permission, hasPermission]) => (
-                <span 
-                  key={permission} 
-                  className={`${styles.permissionTag} ${
-                    hasPermission ? styles.activePermission : styles.inactivePermission
-                  }`}
-                >
-                  {permission.replace(/_/g, ' ')}
-                </span>
-              ))}
+              {Object.entries(permissions).map(
+                ([permission, hasPermission]) => (
+                  <span
+                    key={permission}
+                    className={`${styles.permissionTag} ${
+                      hasPermission
+                        ? styles.activePermission
+                        : styles.inactivePermission
+                    }`}
+                  >
+                    {permission.replace(/_/g, ' ')}
+                  </span>
+                )
+              )}
             </div>
           </div>
         )}

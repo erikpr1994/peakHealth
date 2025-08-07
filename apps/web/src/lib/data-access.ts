@@ -11,7 +11,8 @@ export const DATA_ACCESS_LEVELS = {
   FULL: 'full',
 } as const;
 
-export type DataAccessLevel = typeof DATA_ACCESS_LEVELS[keyof typeof DATA_ACCESS_LEVELS];
+export type DataAccessLevel =
+  (typeof DATA_ACCESS_LEVELS)[keyof typeof DATA_ACCESS_LEVELS];
 
 /**
  * Data types that can be accessed
@@ -28,7 +29,7 @@ export const DATA_TYPES = {
   ADMIN_DATA: 'admin_data',
 } as const;
 
-export type DataType = typeof DATA_TYPES[keyof typeof DATA_TYPES];
+export type DataType = (typeof DATA_TYPES)[keyof typeof DATA_TYPES];
 
 /**
  * Check if a user can access a specific type of data at a given access level
@@ -39,7 +40,7 @@ export function canAccessData(
   userDataAccessRules: Record<string, string>
 ): boolean {
   const userLevel = userDataAccessRules[dataType];
-  
+
   if (!userLevel) {
     return false;
   }
@@ -52,7 +53,8 @@ export function canAccessData(
     [DATA_ACCESS_LEVELS.FULL]: 4,
   };
 
-  const userLevelValue = accessLevels[userLevel as keyof typeof accessLevels] || 0;
+  const userLevelValue =
+    accessLevels[userLevel as keyof typeof accessLevels] || 0;
   const requiredLevelValue = accessLevels[requiredLevel] || 0;
 
   return userLevelValue >= requiredLevelValue;
@@ -66,7 +68,7 @@ export function getDataAccessLevel(
   userDataAccessRules: Record<string, string>
 ): DataAccessLevel {
   const userLevel = userDataAccessRules[dataType];
-  
+
   if (!userLevel) {
     return DATA_ACCESS_LEVELS.NONE;
   }
@@ -87,7 +89,11 @@ export function canAccessOwnProfile(
   requiredLevel: DataAccessLevel = DATA_ACCESS_LEVELS.READ_ONLY,
   userDataAccessRules: Record<string, string>
 ): boolean {
-  return canAccessData(DATA_TYPES.OWN_PROFILE, requiredLevel, userDataAccessRules);
+  return canAccessData(
+    DATA_TYPES.OWN_PROFILE,
+    requiredLevel,
+    userDataAccessRules
+  );
 }
 
 /**
@@ -97,7 +103,11 @@ export function canAccessOwnProgress(
   requiredLevel: DataAccessLevel = DATA_ACCESS_LEVELS.READ_ONLY,
   userDataAccessRules: Record<string, string>
 ): boolean {
-  return canAccessData(DATA_TYPES.OWN_PROGRESS, requiredLevel, userDataAccessRules);
+  return canAccessData(
+    DATA_TYPES.OWN_PROGRESS,
+    requiredLevel,
+    userDataAccessRules
+  );
 }
 
 /**
@@ -107,7 +117,11 @@ export function canAccessOwnWorkouts(
   requiredLevel: DataAccessLevel = DATA_ACCESS_LEVELS.READ_ONLY,
   userDataAccessRules: Record<string, string>
 ): boolean {
-  return canAccessData(DATA_TYPES.OWN_WORKOUTS, requiredLevel, userDataAccessRules);
+  return canAccessData(
+    DATA_TYPES.OWN_WORKOUTS,
+    requiredLevel,
+    userDataAccessRules
+  );
 }
 
 /**
@@ -117,7 +131,11 @@ export function canAccessClientProfiles(
   requiredLevel: DataAccessLevel = DATA_ACCESS_LEVELS.READ_ONLY,
   userDataAccessRules: Record<string, string>
 ): boolean {
-  return canAccessData(DATA_TYPES.CLIENT_PROFILES, requiredLevel, userDataAccessRules);
+  return canAccessData(
+    DATA_TYPES.CLIENT_PROFILES,
+    requiredLevel,
+    userDataAccessRules
+  );
 }
 
 /**
@@ -127,7 +145,11 @@ export function canAccessClientProgress(
   requiredLevel: DataAccessLevel = DATA_ACCESS_LEVELS.READ_ONLY,
   userDataAccessRules: Record<string, string>
 ): boolean {
-  return canAccessData(DATA_TYPES.CLIENT_PROGRESS, requiredLevel, userDataAccessRules);
+  return canAccessData(
+    DATA_TYPES.CLIENT_PROGRESS,
+    requiredLevel,
+    userDataAccessRules
+  );
 }
 
 /**
@@ -137,7 +159,11 @@ export function canAccessClientWorkouts(
   requiredLevel: DataAccessLevel = DATA_ACCESS_LEVELS.READ_ONLY,
   userDataAccessRules: Record<string, string>
 ): boolean {
-  return canAccessData(DATA_TYPES.CLIENT_WORKOUTS, requiredLevel, userDataAccessRules);
+  return canAccessData(
+    DATA_TYPES.CLIENT_WORKOUTS,
+    requiredLevel,
+    userDataAccessRules
+  );
 }
 
 /**
@@ -147,7 +173,11 @@ export function canAccessMedicalData(
   requiredLevel: DataAccessLevel = DATA_ACCESS_LEVELS.READ_ONLY,
   userDataAccessRules: Record<string, string>
 ): boolean {
-  return canAccessData(DATA_TYPES.MEDICAL_DATA, requiredLevel, userDataAccessRules);
+  return canAccessData(
+    DATA_TYPES.MEDICAL_DATA,
+    requiredLevel,
+    userDataAccessRules
+  );
 }
 
 /**
@@ -157,7 +187,11 @@ export function canAccessTrainingData(
   requiredLevel: DataAccessLevel = DATA_ACCESS_LEVELS.READ_ONLY,
   userDataAccessRules: Record<string, string>
 ): boolean {
-  return canAccessData(DATA_TYPES.TRAINING_DATA, requiredLevel, userDataAccessRules);
+  return canAccessData(
+    DATA_TYPES.TRAINING_DATA,
+    requiredLevel,
+    userDataAccessRules
+  );
 }
 
 /**
@@ -167,7 +201,11 @@ export function canAccessAdminData(
   requiredLevel: DataAccessLevel = DATA_ACCESS_LEVELS.FULL,
   userDataAccessRules: Record<string, string>
 ): boolean {
-  return canAccessData(DATA_TYPES.ADMIN_DATA, requiredLevel, userDataAccessRules);
+  return canAccessData(
+    DATA_TYPES.ADMIN_DATA,
+    requiredLevel,
+    userDataAccessRules
+  );
 }
 
 /**
@@ -181,24 +219,33 @@ export function useDataAccess() {
       canAccessData(dataType, requiredLevel, dataAccessRules),
     getDataAccessLevel: (dataType: DataType) =>
       getDataAccessLevel(dataType, dataAccessRules),
-    canAccessOwnProfile: (requiredLevel: DataAccessLevel = DATA_ACCESS_LEVELS.READ_ONLY) =>
-      canAccessOwnProfile(requiredLevel, dataAccessRules),
-    canAccessOwnProgress: (requiredLevel: DataAccessLevel = DATA_ACCESS_LEVELS.READ_ONLY) =>
-      canAccessOwnProgress(requiredLevel, dataAccessRules),
-    canAccessOwnWorkouts: (requiredLevel: DataAccessLevel = DATA_ACCESS_LEVELS.READ_ONLY) =>
-      canAccessOwnWorkouts(requiredLevel, dataAccessRules),
-    canAccessClientProfiles: (requiredLevel: DataAccessLevel = DATA_ACCESS_LEVELS.READ_ONLY) =>
-      canAccessClientProfiles(requiredLevel, dataAccessRules),
-    canAccessClientProgress: (requiredLevel: DataAccessLevel = DATA_ACCESS_LEVELS.READ_ONLY) =>
-      canAccessClientProgress(requiredLevel, dataAccessRules),
-    canAccessClientWorkouts: (requiredLevel: DataAccessLevel = DATA_ACCESS_LEVELS.READ_ONLY) =>
-      canAccessClientWorkouts(requiredLevel, dataAccessRules),
-    canAccessMedicalData: (requiredLevel: DataAccessLevel = DATA_ACCESS_LEVELS.READ_ONLY) =>
-      canAccessMedicalData(requiredLevel, dataAccessRules),
-    canAccessTrainingData: (requiredLevel: DataAccessLevel = DATA_ACCESS_LEVELS.READ_ONLY) =>
-      canAccessTrainingData(requiredLevel, dataAccessRules),
-    canAccessAdminData: (requiredLevel: DataAccessLevel = DATA_ACCESS_LEVELS.FULL) =>
-      canAccessAdminData(requiredLevel, dataAccessRules),
+    canAccessOwnProfile: (
+      requiredLevel: DataAccessLevel = DATA_ACCESS_LEVELS.READ_ONLY
+    ) => canAccessOwnProfile(requiredLevel, dataAccessRules),
+    canAccessOwnProgress: (
+      requiredLevel: DataAccessLevel = DATA_ACCESS_LEVELS.READ_ONLY
+    ) => canAccessOwnProgress(requiredLevel, dataAccessRules),
+    canAccessOwnWorkouts: (
+      requiredLevel: DataAccessLevel = DATA_ACCESS_LEVELS.READ_ONLY
+    ) => canAccessOwnWorkouts(requiredLevel, dataAccessRules),
+    canAccessClientProfiles: (
+      requiredLevel: DataAccessLevel = DATA_ACCESS_LEVELS.READ_ONLY
+    ) => canAccessClientProfiles(requiredLevel, dataAccessRules),
+    canAccessClientProgress: (
+      requiredLevel: DataAccessLevel = DATA_ACCESS_LEVELS.READ_ONLY
+    ) => canAccessClientProgress(requiredLevel, dataAccessRules),
+    canAccessClientWorkouts: (
+      requiredLevel: DataAccessLevel = DATA_ACCESS_LEVELS.READ_ONLY
+    ) => canAccessClientWorkouts(requiredLevel, dataAccessRules),
+    canAccessMedicalData: (
+      requiredLevel: DataAccessLevel = DATA_ACCESS_LEVELS.READ_ONLY
+    ) => canAccessMedicalData(requiredLevel, dataAccessRules),
+    canAccessTrainingData: (
+      requiredLevel: DataAccessLevel = DATA_ACCESS_LEVELS.READ_ONLY
+    ) => canAccessTrainingData(requiredLevel, dataAccessRules),
+    canAccessAdminData: (
+      requiredLevel: DataAccessLevel = DATA_ACCESS_LEVELS.FULL
+    ) => canAccessAdminData(requiredLevel, dataAccessRules),
     dataAccessRules,
   };
-} 
+}
