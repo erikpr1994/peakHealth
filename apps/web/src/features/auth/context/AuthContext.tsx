@@ -230,8 +230,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const hasUserType = (userType: string) => userTypes.includes(userType);
 
-  const hasAnyUserType = (userTypes: string[]) =>
-    userTypes.some(type => userTypes.includes(type));
+  const hasAnyUserType = (typesToCheck: string[]) =>
+    typesToCheck.some(type => userTypes.includes(type));
 
   const hasSubscriptionTier = (tier: string) => subscriptionTier === tier;
 

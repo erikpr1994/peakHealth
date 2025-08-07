@@ -47,8 +47,8 @@ export async function GET(request: NextRequest) {
 
     // Get user roles and groups from app_metadata (JWT claims)
     // Provide fallback values if JWT claims are missing
-    const userRoles = user.app_metadata?.user_types || [];
-    const userGroups = user.app_metadata?.groups || [];
+    const userRoles = user?.app_metadata?.user_types || [];
+    const userGroups = user?.app_metadata?.groups || [];
 
     console.log('JWT Claims - user_types:', userRoles);
     console.log('JWT Claims - groups:', userGroups);
@@ -57,7 +57,7 @@ export async function GET(request: NextRequest) {
     const { data: featureFlags, error } = await supabase.rpc(
       'get_user_feature_flags',
       {
-        user_id: user.id,
+        user_id: user?.id || '',
         environment_param: environment,
         user_roles: userRoles,
         user_groups: userGroups,

@@ -142,17 +142,21 @@ describe('Exercise API Routes', () => {
       expect(response.status).toBe(401);
     });
 
-    it('should return 403 when user lacks workout access', async () => {
-      mockDataAccess.mockReturnValue(false);
+    it('should return exercises for all authenticated users', async () => {
+      const mockExercises = [createMockExercise('1', 'Push-up')] as any;
+      const { exerciseService } = await import(
+        '@/features/exercises/services/exerciseService'
+      );
+      vi.mocked(exerciseService.getAllExercises).mockResolvedValue(
+        mockExercises
+      );
 
       const { GET } = await import('@/app/api/exercises/route');
       const response = await GET();
       const data = await response.json();
 
-      expect(data).toEqual({
-        error: 'Insufficient permissions to access exercise data',
-      });
-      expect(response.status).toBe(403);
+      expect(data).toEqual({ exercises: mockExercises });
+      expect(response.status).toBe(200);
     });
   });
 
