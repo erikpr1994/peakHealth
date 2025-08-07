@@ -52,7 +52,69 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: error.message }, { status: 400 });
     }
 
-    // If roles or groups are provided, update the user's app_metadata using admin client
+    if (!data.user) {
+      return NextResponse.json(
+        { error: 'User creation failed' },
+        { status: 500 }
+      );
+    }
+
+    // Assign default user configuration using the new system
+    try {
+      const adminClient = createAdminClient();
+      if (adminClient) {
+        // eslint-disable-next-line no-console
+        console.log(
+          'Calling assign_default_user_config for user:',
+          data.user.id
+        );
+
+        const { data: claims, error: claimsError } = await adminClient.rpc(
+          'assign_default_user_config',
+          { user_id_param: data.user.id }
+        );
+
+        if (claimsError) {
+          // eslint-disable-next-line no-console
+          console.error('Failed to assign default config:', claimsError);
+          // Don't fail the signup, just log the error
+        } else if (claims) {
+          // eslint-disable-next-line no-console
+          console.log('Generated claims:', claims);
+
+          // Update the user's app_metadata with the generated claims
+          const { data: updatedUser, error: updateError } =
+            await adminClient.auth.admin.updateUserById(data.user.id, {
+              app_metadata: claims,
+            });
+
+          if (updateError) {
+            // eslint-disable-next-line no-console
+            console.error('Failed to update user app_metadata:', updateError);
+          } else if (updatedUser.user) {
+            // eslint-disable-next-line no-console
+            console.log('Successfully updated user with claims');
+            // Return the updated user with app_metadata
+            return NextResponse.json({
+              user: updatedUser.user,
+              session: data.session,
+            });
+          }
+        } else {
+          // eslint-disable-next-line no-console
+          console.log('No claims returned from RPC call');
+        }
+      } else {
+        // eslint-disable-next-line no-console
+        console.error('Admin client is null');
+      }
+    } catch (configError) {
+      // eslint-disable-next-line no-console
+      console.error('Default config assignment error:', configError);
+      // Don't fail the signup, just log the error
+    }
+
+    // If custom roles/groups are provided, create additional assignment
     if (data.user && (roles || groups)) {
       try {
         const adminClient = createAdminClient();
