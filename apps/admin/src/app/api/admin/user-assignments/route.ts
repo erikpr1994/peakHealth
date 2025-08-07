@@ -29,7 +29,6 @@ export async function GET(request: NextRequest) {
     );
 
     if (error) {
-      // eslint-disable-next-line no-console
       console.error('Error fetching user assignments:', error);
       return NextResponse.json(
         { error: 'Failed to fetch user assignments' },
@@ -112,7 +111,6 @@ export async function POST(request: NextRequest) {
     }
 
     if (result.error) {
-      // eslint-disable-next-line no-console
       console.error('Error creating assignment:', result.error);
       return NextResponse.json(
         { error: 'Failed to create assignment' },
@@ -190,7 +188,6 @@ export async function DELETE(request: NextRequest) {
     }
 
     if (result.error) {
-      // eslint-disable-next-line no-console
       console.error('Error deleting assignment:', result.error);
       return NextResponse.json(
         { error: 'Failed to delete assignment' },
@@ -200,7 +197,6 @@ export async function DELETE(request: NextRequest) {
 
     return NextResponse.json({ deleted: result.data[0] });
   } catch (error) {
-    // eslint-disable-next-line no-console
     console.error('User assignments API error:', error);
     return NextResponse.json(
       { error: 'Internal server error' },

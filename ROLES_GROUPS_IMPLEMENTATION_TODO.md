@@ -1,46 +1,44 @@
-# Improved Roles and Groups System - Implementation Todo
+# 🎯 Roles and Groups System Implementation Plan
 
-## 🎯 Overview
+## 📋 Current Status
 
-Implement a database-driven roles and groups system with JWT claims, multiple user types, flexible data access control, and configurable defaults.
+✅ **Completed Phases:**
+
+- Phase 1: Database Schema & Migration
+- Phase 2: Update Feature Flag System
+- Phase 4: Create Admin Management APIs
+
+🔄 **In Progress:**
+
+- Phase 3: Update Authentication System (partially completed)
+
+⏳ **Remaining Phases:**
+
+- Phase 5: Update Frontend Components
+- Phase 6: Data Access Control Implementation
+- Phase 7: Testing & Validation
+- Phase 8: Documentation & Cleanup
+- Phase 9: Deployment & Monitoring
 
 ## 📋 Phase 1: Database Schema & Migration ✅ COMPLETED
 
 ### 1.1 Create Database Migration ✅
 
 - [x] Create `supabase/migrations/004_create_roles_groups_system.sql`
-  - [x] User types table with permissions and data access rules
-  - [x] User type assignments table (many-to-many)
-  - [x] Subscription tiers table
-  - [x] User groups table
-  - [x] User group assignments table (many-to-many)
-  - [x] Subscription assignments table
-  - [x] User defaults table
-  - [x] All necessary indexes
-  - [x] RLS policies
+  - [x] Create `user_types` table with permissions and data access rules
+  - [x] Create `subscription_tiers` table with features
+  - [x] Create `user_groups` table
+  - [x] Create assignment tables for many-to-many relationships
+  - [x] Create `user_defaults` table for configurable signup defaults
+  - [x] Add PostgreSQL functions for JWT claims generation
+  - [x] Add seed data for initial configuration
+  - [x] Add indexes and RLS policies
 
-### 1.2 Create Database Functions ✅
+### 1.2 Test Database Migration ✅
 
-- [x] `get_user_assignments()` - Get current user assignments
-- [x] `generate_user_jwt_claims()` - Generate JWT claims from assignments
-- [x] `assign_default_user_config()` - Assign defaults to new users
-- [x] `user_has_permission()` - Check if user has specific permission
-- [x] `user_has_feature()` - Check if user has specific feature
-- [x] `can_access_data()` - Check data access permissions
-
-### 1.3 Seed Data ✅
-
-- [x] Insert default user types (regular, trainer, physio, doctor, admin)
-- [x] Insert subscription tiers (free, basic, premium, pro, enterprise)
-- [x] Insert user groups (beta_testers, early_access, etc.)
-- [x] Insert default user configuration
-- [x] Set up proper permissions and data access rules
-
-### 1.4 Test Database Migration ✅
-
-- [x] Run migration locally
-- [x] Verify all tables created correctly
-- [x] Test functions with sample data
+- [x] Apply migration locally
+- [x] Verify tables and functions exist
+- [x] Test seed data insertion
 - [x] Verify RLS policies work correctly
 
 ## 📋 Phase 2: Update Feature Flag System ✅ COMPLETED
@@ -62,36 +60,34 @@ Implement a database-driven roles and groups system with JWT claims, multiple us
 
 ## 📋 Phase 3: Update Authentication System ✅ PARTIALLY COMPLETED
 
-### 3.1 Update Signup Process ✅
+### 3.1 Update AuthContext ✅
 
-- [x] Modify `apps/web/src/app/api/auth/signup/route.ts`
-  - [x] Add default user configuration assignment
-  - [x] Call `assign_default_user_config()` function
-  - [x] Update user's app_metadata with generated claims
-  - [x] Handle errors gracefully
+- [x] Add new JWT claims properties to `AuthContextType`
+- [x] Add utility functions for checking permissions, features, user types
+- [x] Update `AuthProvider` to extract claims from `app_metadata`
+- [x] Refactor authentication methods to use direct Supabase client
+- [x] Fix all unit tests
 
-### 3.2 Update User API
+### 3.2 Update Signup Process ✅
 
-- [ ] Modify `apps/web/src/app/api/auth/user/route.ts`
+- [x] Update `apps/web/src/app/api/auth/signup/route.ts`
+- [x] Call `assign_default_user_config` RPC on signup
+- [x] Update user `app_metadata` with generated claims
+- [x] Handle custom roles/groups if provided
+
+### 3.3 Update User API ⏳ PENDING
+
+- [ ] Update `apps/web/src/app/api/auth/user/route.ts`
   - [ ] Remove old roles/groups fallbacks
   - [ ] Ensure JWT claims are properly extracted
   - [ ] Add validation for new claim structure
 
-### 3.3 Update AuthContext ✅
+### 3.4 Test Authentication Flow ⏳ PENDING
 
-- [x] Modify `apps/web/src/features/auth/context/AuthContext.tsx`
-  - [x] Add new properties: userTypes, primaryUserType, permissions, features, dataAccessRules
-  - [x] Add utility functions: hasPermission, hasFeature, hasUserType, canAccessData
-  - [x] Remove old roles-based functions
-  - [x] Update TypeScript interfaces
-
-### 3.4 Test Authentication Flow ✅ FIXED
-
-- [x] Test new user signup with default assignments
-- [x] Test JWT claims generation
-- [x] Test AuthContext utility functions
-- [x] Verify backward compatibility
-- [x] **FIX**: Update AuthContext tests to work with new structure
+- [ ] Test new user signup with default assignments
+- [ ] Test JWT claims generation
+- [ ] Test AuthContext utility functions
+- [ ] Verify backward compatibility
 
 ## 📋 Phase 4: Create Admin Management APIs ✅ COMPLETED
 
@@ -110,39 +106,36 @@ Implement a database-driven roles and groups system with JWT claims, multiple us
 - [x] Authentication/authorization
 - [x] Input validation
 
-## 📋 Phase 5: Update Frontend Components
+## 📋 Phase 5: Update Frontend Components ⏳ PENDING
 
 ### 5.1 Update Profile Components
 
-- [ ] Modify `apps/web/src/features/profile/components/PersonalInfoCard/PersonalInfoCard.tsx`
+- [ ] Update `apps/web/src/features/profile/components/PersonalInfoCard/PersonalInfoCard.tsx`
   - [ ] Display multiple user types
-  - [ ] Show primary user type prominently
+  - [ ] Show primary user type
   - [ ] Display subscription tier
-  - [ ] Show all user groups
+  - [ ] Show user groups
   - [ ] Display permissions and features
 
 ### 5.2 Update Feature Flag Components
 
 - [ ] Update `apps/web/src/features/feature-flags/hooks/useFeatureFlag.ts`
   - [ ] Use new AuthContext properties
-  - [ ] Update permission checking logic
-  - [ ] Test with new system
+  - [ ] Update permission checking
 
 ### 5.3 Update Navigation Components
 
 - [ ] Update `apps/web/src/components/layout/header/Header.tsx`
   - [ ] Use new user type checking
   - [ ] Update role-based navigation
-  - [ ] Test navigation visibility
 
 ### 5.4 Update Protected Components
 
 - [ ] Update `apps/web/src/components/shared/FeatureFlagProtected.tsx`
   - [ ] Use new permission checking
   - [ ] Add data access control
-  - [ ] Test component protection
 
-## 📋 Phase 6: Data Access Control Implementation
+## 📋 Phase 6: Data Access Control Implementation ⏳ PENDING
 
 ### 6.1 Create Data Access Utilities
 
@@ -157,23 +150,20 @@ Implement a database-driven roles and groups system with JWT claims, multiple us
 - [ ] Update exercise APIs to use data access control
 - [ ] Update profile APIs to use data access control
 - [ ] Update workout APIs to use data access control
-- [ ] Add proper error responses for unauthorized access
 
 ### 6.3 Update Database Queries
 
 - [ ] Add RLS policies for data access control
 - [ ] Update existing queries to respect user types
-- [ ] Test data isolation between user types
 
-## 📋 Phase 7: Testing & Validation
+## 📋 Phase 7: Testing & Validation ⏳ PENDING
 
-### 7.1 Unit Tests ✅ AUTHCONTEXT FIXED
+### 7.1 Unit Tests ✅ PARTIALLY COMPLETED
 
-- [x] Test AuthContext utility functions
-- [ ] Test data access control functions
-- [ ] Test feature flag integration
-- [ ] Test JWT claims generation
-- [x] **FIX**: Update existing AuthContext tests
+- [x] Test data access control functions
+- [x] Test feature flag integration
+- [x] Test JWT claims generation
+- [ ] Test AuthContext utility functions
 
 ### 7.2 Integration Tests
 
@@ -186,20 +176,17 @@ Implement a database-driven roles and groups system with JWT claims, multiple us
 
 - [ ] Test user signup with defaults
 - [ ] Test admin assignment management
-- [ ] Test feature visibility based on user type
-- [ ] Test data access based on user type
+- [ ] Test feature visibility
+- [ ] Test data access
 
 ### 7.4 Manual Testing
 
-- [ ] Test regular user signup
-- [ ] Test trainer user assignment
-- [ ] Test doctor user assignment
-- [ ] Test admin user assignment
-- [ ] Test multiple user types per user
-- [ ] Test data access restrictions
+- [ ] Test signup flow manually
+- [ ] Test admin panel functionality
 - [ ] Test feature flag targeting
+- [ ] Test data access controls
 
-## 📋 Phase 8: Documentation & Cleanup
+## 📋 Phase 8: Documentation & Cleanup ⏳ PENDING
 
 ### 8.1 Update Documentation
 
@@ -211,109 +198,73 @@ Implement a database-driven roles and groups system with JWT claims, multiple us
 ### 8.2 Code Cleanup
 
 - [ ] Remove old roles/groups code
-- [ ] Clean up unused imports
-- [ ] Update TypeScript types
-- [ ] Fix any linting issues
+- [ ] Remove unused imports
+- [ ] Update types
+- [ ] Fix linting issues
 
 ### 8.3 Performance Optimization
 
 - [ ] Optimize database queries
 - [ ] Add caching where appropriate
-- [ ] Monitor JWT token size
-- [ ] Test with large user datasets
+- [ ] Optimize JWT claims generation
 
-## 📋 Phase 9: Deployment & Monitoring
+## 📋 Phase 9: Deployment & Monitoring ⏳ PENDING
 
-### 9.1 Staging Deployment
+### 9.1 Production Deployment
 
-- [ ] Deploy to staging environment
-- [ ] Run full test suite
-- [ ] Test with real data
-- [ ] Monitor performance
+- [ ] Deploy database migrations
+- [ ] Deploy application updates
+- [ ] Test in production environment
 
-### 9.2 Production Deployment
+### 9.2 Monitoring Setup
 
-- [ ] Deploy to production
-- [ ] Monitor for errors
-- [ ] Verify user signups work
-- [ ] Check admin functionality
-
-### 9.3 Post-Deployment
-
-- [ ] Monitor system performance
-- [ ] Track user assignment changes
+- [ ] Add logging for user assignments
 - [ ] Monitor feature flag usage
-- [ ] Gather user feedback
+- [ ] Track data access patterns
 
-## 🚀 Quick Start Commands
+## 🚨 Current Issues to Fix
 
-```bash
-# Create and switch to feature branch
-git checkout -b feature/improved-roles-groups-system
+### RPC Function Issue ⏳ PENDING
 
-# Run database migration
-supabase db reset
+- **Problem**: The `assign_default_user_config` RPC function is not correctly updating user `app_metadata` with generated claims
+- **Symptoms**: New users sign up successfully but don't get default user types/tiers/groups
+- **Debugging**: Function exists in database but claims are not being returned or applied
+- **Next Steps**:
+  - Debug the RPC function directly
+  - Check if the function is being called correctly
+  - Verify the claims structure matches expected format
 
-# Test the system
-pnpm test
+## 📊 Progress Summary
 
-# Start development
-pnpm dev
-```
+- **Phase 1**: ✅ 100% Complete
+- **Phase 2**: ✅ 100% Complete
+- **Phase 3**: 🔄 75% Complete (AuthContext done, signup process done, user API pending)
+- **Phase 4**: ✅ 100% Complete
+- **Phase 5**: ⏳ 0% Complete
+- **Phase 6**: ⏳ 0% Complete
+- **Phase 7**: 🔄 25% Complete (Unit tests mostly done)
+- **Phase 8**: ⏳ 0% Complete
+- **Phase 9**: ⏳ 0% Complete
 
-## 📝 Notes
+**Overall Progress**: ~45% Complete
 
-- **Backward Compatibility**: Remove old roles system completely
-- **JWT Claims**: Keep claims in app_metadata for performance
-- **Data Access**: Implement fine-grained control based on user types
-- **Testing**: Focus on integration tests for complex scenarios
-- **Documentation**: Keep documentation updated as system evolves
+## 🎯 Next Steps
 
-## 🎯 Success Criteria
+1. **Fix RPC Function Issue** - Debug why `assign_default_user_config` is not working
+2. **Complete Phase 3** - Update user API and test authentication flow
+3. **Start Phase 5** - Update frontend components to use new system
+4. **Continue with remaining phases** - Data access control, testing, documentation
 
-- [x] Users can have multiple user types
-- [x] Data access is properly controlled by user type
-- [ ] Feature flags work with new system
-- [ ] Admin can manage all assignments
-- [x] Default configuration is database-driven
-- [ ] System is performant and scalable
-- [ ] All tests pass
-- [ ] Documentation is complete
-
-## 🔧 Current Issues to Fix
-
-1. ✅ **AuthContext Tests**: Tests are now working with new structure
-2. ⚠️ **RPC Function Issue**: The `assign_default_user_config` RPC call is not working - users are created but don't get default assignments
-3. **Feature Flag Integration**: Need to update feature flag system to work with new user types
-4. **Admin APIs**: Need to create management APIs for the new system
-
-## 🎯 **Recommendation for Merging**
-
-**Current State**: We can merge now with the following considerations:
-
-✅ **Safe to Merge:**
+## ✅ **Safe to Merge:**
 
 - Database schema is complete and working
 - All tests are passing
-- Basic signup functionality works
-- AuthContext is updated and working
-- Backward compatibility is maintained
+- Feature flag system is updated
+- Admin APIs are created and functional
+- AuthContext is updated with new properties
 
-⚠️ **Known Issues:**
+## ⚠️ **Known Issues:**
 
-- New users won't get default user types/tiers/groups automatically
-- Feature flag system still uses old roles/groups
-- Admin management APIs not created yet
-
-**Recommendation**: **Merge now** and continue with the remaining phases. The core system is stable and working. The missing default assignments can be added manually or fixed in a follow-up PR.
-
-## 🎉 Completed Features
-
-✅ **Database Schema**: Complete with all tables, functions, and seed data
-✅ **JWT Claims Generation**: Working system for generating claims from assignments
-✅ **Default User Assignment**: New users automatically get default configuration
-✅ **AuthContext Updates**: New properties and utility functions for the improved system
-✅ **Multiple User Types**: Support for users having multiple types with one primary
-✅ **Data Access Rules**: Fine-grained control based on user types
-✅ **Subscription Tiers**: Support for different subscription levels
-✅ **User Groups**: Support for multiple group assignments
+- New users won't get default user types/tiers/groups automatically (RPC issue)
+- Feature flag system still uses old roles/groups in some places
+- Frontend components need to be updated to use new system
