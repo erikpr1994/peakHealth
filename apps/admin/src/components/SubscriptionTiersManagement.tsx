@@ -25,6 +25,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
+import { AVAILABLE_PERMISSIONS } from '@/lib/permissions-config';
 
 interface SubscriptionTier {
   id: string;
@@ -36,13 +37,6 @@ interface SubscriptionTier {
   features: string[];
   isActive: boolean;
   userCount: number;
-}
-
-interface Permission {
-  id: string;
-  name: string;
-  description: string;
-  category: string;
 }
 
 interface SubscriptionTiersManagementProps {
@@ -110,62 +104,7 @@ export const SubscriptionTiersManagement = ({
     null
   );
 
-  const availablePermissions: Permission[] = [
-    {
-      id: 'basic_workouts',
-      name: 'Basic Workouts',
-      description: 'Access to basic workout routines',
-      category: 'Workouts',
-    },
-    {
-      id: 'advanced_workouts',
-      name: 'Advanced Workouts',
-      description: 'Access to advanced workout routines',
-      category: 'Workouts',
-    },
-    {
-      id: 'limited_analytics',
-      name: 'Limited Analytics',
-      description: 'Basic progress tracking',
-      category: 'Analytics',
-    },
-    {
-      id: 'full_analytics',
-      name: 'Full Analytics',
-      description: 'Comprehensive progress tracking and insights',
-      category: 'Analytics',
-    },
-    {
-      id: 'custom_routines',
-      name: 'Custom Routines',
-      description: 'Create and save custom workout routines',
-      category: 'Workouts',
-    },
-    {
-      id: 'personal_trainer',
-      name: 'Personal Trainer',
-      description: 'Access to personal trainer consultations',
-      category: 'Support',
-    },
-    {
-      id: 'priority_support',
-      name: 'Priority Support',
-      description: 'Priority customer support access',
-      category: 'Support',
-    },
-    {
-      id: 'api_access',
-      name: 'API Access',
-      description: 'Access to platform APIs',
-      category: 'Development',
-    },
-    {
-      id: 'white_label',
-      name: 'White Label',
-      description: 'White label branding options',
-      category: 'Business',
-    },
-  ];
+  const availablePermissions = AVAILABLE_PERMISSIONS;
 
   const handleEditPermissions = (tier: SubscriptionTier) => {
     setSelectedTier(tier);
