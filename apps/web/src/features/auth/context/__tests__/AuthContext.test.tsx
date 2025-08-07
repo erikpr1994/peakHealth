@@ -137,15 +137,21 @@ describe('AuthContext', () => {
   });
 
   describe('Auth operations', () => {
-    it('calls Supabase signInWithPassword on login', async () => {
+    it('calls login API route on login', async () => {
       renderWithAuthProvider();
 
       fireEvent.click(screen.getByText('Login'));
 
       await waitFor(() => {
-        expect(mockSupabaseAuth.signInWithPassword).toHaveBeenCalledWith({
-          email: 'test@example.com',
-          password: 'password',
+        expect(global.fetch).toHaveBeenCalledWith('/api/auth/login', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            email: 'test@example.com',
+            password: 'password',
+          }),
         });
       });
     });
@@ -164,7 +170,9 @@ describe('AuthContext', () => {
           body: JSON.stringify({
             email: 'test@example.com',
             password: 'password',
-            name: 'Test User',
+            user_metadata: {
+              name: 'Test User',
+            },
           }),
         });
       });
@@ -188,8 +196,11 @@ describe('AuthContext', () => {
     });
 
     it('handles login failure', async () => {
-      const error = new Error('Invalid credentials');
-      mockSupabaseAuth.signInWithPassword.mockResolvedValue({ error });
+      // Mock fetch to return an error response
+      global.fetch = vi.fn().mockResolvedValue({
+        ok: false,
+        json: () => Promise.resolve({ error: 'Invalid credentials' }),
+      });
 
       let auth: AuthContextType;
       const TestComponentWithAuth = () => {

@@ -148,18 +148,31 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   }, [mutateUser, router, supabase]);
 
   const login = async (email?: string, password?: string) => {
-    if (!supabase) return;
+    // Input validation
+    if (!email || !password) {
+      throw new Error('Email and password are required');
+    }
 
     setIsAuthOperationLoading(true);
     try {
-      const { error } = await supabase.auth.signInWithPassword({
-        email: email || '',
-        password: password || '',
+      const response = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email,
+          password,
+        }),
       });
 
-      if (error) {
-        throw error;
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Login failed');
       }
+
+      // Revalidate user data after successful login
+      await mutateUser();
     } catch (error) {
       console.error('Login error:', error);
       throw error;
@@ -169,7 +182,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   const signUp = async (email?: string, password?: string, name?: string) => {
-    if (!supabase) return;
+    // Input validation
+    if (!email || !password) {
+      throw new Error('Email and password are required');
+    }
 
     setIsAuthOperationLoading(true);
     try {
@@ -179,9 +195,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          email: email || '',
-          password: password || '',
-          name: name || email?.split('@')[0] || '',
+          email,
+          password,
+          user_metadata: {
+            name: name || email.split('@')[0] || '',
+          },
         }),
       });
 
