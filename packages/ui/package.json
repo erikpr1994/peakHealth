@@ -1,20 +1,19 @@
 {
   "name": "@peakhealth/ui",
   "version": "0.0.0",
-  "private": true,
-  "type": "module",
+  "description": "Peak Health Design System - A comprehensive UI component library",
   "main": "./dist/index.js",
+  "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
-  "style": "./dist/button.css",
+  "style": "./dist/index.css",
   "files": [
     "dist"
   ],
   "scripts": {
-    "build": "tsc && cp src/*.css dist/",
+    "build": "tsc && cp src/components/button/button.css dist/components/button/",
     "dev": "tsc --watch",
     "clean": "rm -rf dist",
-    "lint": "eslint src --ext .ts,.tsx,.js,.jsx",
-    "lint:fix": "eslint src --ext .ts,.tsx,.js,.jsx --fix"
+    "type-check": "tsc --noEmit"
   },
   "peerDependencies": {
     "react": "^19.0.0",
@@ -24,12 +23,20 @@
     "clsx": "^2.1.0"
   },
   "devDependencies": {
-    "@eslint/js": "^9.32.0",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
-    "@typescript-eslint/eslint-plugin": "^8.39.0",
-    "@typescript-eslint/parser": "^8.39.0",
-    "eslint": "^9.32.0",
-    "typescript": "^5.9.2"
-  }
+    "eslint": "^9.0.0",
+    "typescript": "^5.0.0"
+  },
+  "keywords": [
+    "design-system",
+    "ui-components",
+    "react",
+    "typescript",
+    "peak-health",
+    "fitness",
+    "health"
+  ],
+  "author": "Peak Health Team",
+  "license": "MIT"
 }

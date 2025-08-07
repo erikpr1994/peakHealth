@@ -1,4 +1,9 @@
-import './button.css';
+// Import all CSS files
+import './components/button/button.css';
 
-export { Button } from './button';
+// Design System Components
+export { Button } from './components/button';
+export type { ButtonProps } from './components/button';
+
+// Utilities
 export { cn } from './utils';

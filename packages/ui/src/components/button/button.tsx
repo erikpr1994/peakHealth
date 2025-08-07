@@ -1,7 +1,6 @@
 import * as React from 'react';
 
-import { cn } from './utils';
-import './button.css';
+import { cn } from '../../utils';
 
 export interface ButtonProps extends React.ComponentProps<'button'> {
   variant?:
