@@ -213,12 +213,11 @@ BEGIN
     ff.id,
     ff.name,
     ff.description,
-    ff.is_enabled,
+    true as is_enabled,
     'global'::TEXT as targeting_type,
     NULL::TEXT as targeting_value
   FROM feature_flags ff
-  WHERE ff.is_enabled = true
-    AND ff.is_global = true
+  WHERE ff.is_global = true
   
   UNION ALL
   
@@ -226,14 +225,13 @@ BEGIN
     ff.id,
     ff.name,
     ff.description,
-    ff.is_enabled,
+    true as is_enabled,
     'user'::TEXT as targeting_type,
     u.email as targeting_value
   FROM feature_flags ff
   JOIN feature_flag_users ffu ON ff.id = ffu.feature_flag_id
   JOIN auth.users u ON ffu.user_id = u.id
-  WHERE ff.is_enabled = true
-    AND u.id = user_id_param
+  WHERE u.id = user_id_param
   
   UNION ALL
   
@@ -241,15 +239,14 @@ BEGIN
     ff.id,
     ff.name,
     ff.description,
-    ff.is_enabled,
+    true as is_enabled,
     'role'::TEXT as targeting_type,
     ffr.role_name as targeting_value
   FROM feature_flags ff
   JOIN feature_flag_user_roles ffr ON ff.id = ffr.feature_flag_id
   JOIN auth.users u ON u.id = user_id_param
-  WHERE ff.is_enabled = true
-    AND ffr.is_enabled = true
-    AND (u.raw_app_meta_data->>'roles')::jsonb ? ffr.role_name
+  WHERE ffr.is_enabled = true
+    AND (u.raw_app_meta_data->'roles') ? ffr.role_name
   
   UNION ALL
   
@@ -257,15 +254,14 @@ BEGIN
     ff.id,
     ff.name,
     ff.description,
-    ff.is_enabled,
+    true as is_enabled,
     'group'::TEXT as targeting_type,
     ffg.group_name as targeting_value
   FROM feature_flags ff
   JOIN feature_flag_user_groups ffg ON ff.id = ffg.feature_flag_id
   JOIN auth.users u ON u.id = user_id_param
-  WHERE ff.is_enabled = true
-    AND ffg.is_enabled = true
-    AND (u.raw_app_meta_data->>'groups')::jsonb ? ffg.group_name
+  WHERE ffg.is_enabled = true
+    AND (u.raw_app_meta_data->'groups') ? ffg.group_name
   
   UNION ALL
   
@@ -273,14 +269,13 @@ BEGIN
     ff.id,
     ff.name,
     ff.description,
-    ff.is_enabled,
+    true as is_enabled,
     'user_type'::TEXT as targeting_type,
     fft.user_type_name as targeting_value
   FROM feature_flags ff
   JOIN feature_flag_user_types fft ON ff.id = fft.feature_flag_id
   JOIN auth.users u ON u.id = user_id_param
-  WHERE ff.is_enabled = true
-    AND (u.raw_app_meta_data->>'user_types')::jsonb ? fft.user_type_name
+  WHERE (u.raw_app_meta_data->'user_types') ? fft.user_type_name
   
   UNION ALL
   
@@ -288,14 +283,13 @@ BEGIN
     ff.id,
     ff.name,
     ff.description,
-    ff.is_enabled,
+    true as is_enabled,
     'subscription_tier'::TEXT as targeting_type,
     fft.subscription_tier_name as targeting_value
   FROM feature_flags ff
   JOIN feature_flag_subscription_tiers fft ON ff.id = fft.feature_flag_id
   JOIN auth.users u ON u.id = user_id_param
-  WHERE ff.is_enabled = true
-    AND (u.raw_app_meta_data->>'subscription_tier')::TEXT = fft.subscription_tier_name;
+  WHERE (u.raw_app_meta_data->>'subscription_tier')::TEXT = fft.subscription_tier_name;
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
 
