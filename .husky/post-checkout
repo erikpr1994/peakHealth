@@ -23,7 +23,7 @@ if [ "$CHECKOUT_TYPE" = "1" ]; then
         echo "📥 Pulling latest changes..."
         
         # Check if the branch exists on origin before pulling
-        if git ls-remote --heads origin "$CURRENT_BRANCH" | grep -q "$CURRENT_BRANCH"; then
+        if git ls-remote --heads origin "$CURRENT_BRANCH" | grep -F -q "$CURRENT_BRANCH"; then
             git pull origin "$CURRENT_BRANCH"
         else
             echo "⚠️  Branch '$CURRENT_BRANCH' does not exist on origin - skipping pull"
