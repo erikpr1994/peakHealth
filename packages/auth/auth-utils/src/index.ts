@@ -113,8 +113,10 @@ export const deleteCookie = (
 export const getUserAccessibleApps = (user: User | null): AppSelection[] => {
   if (!user) return [];
 
-  const userRoles = (user.app_metadata?.roles as string[] | undefined) ?? [];
-  const userGroups = (user.app_metadata?.groups as string[] | undefined) ?? [];
+  const userRoles: string[] =
+    (user.app_metadata?.roles as string[] | undefined) ?? [];
+  const userGroups: string[] =
+    (user.app_metadata?.groups as string[] | undefined) ?? [];
 
   return Object.entries(APP_CONFIGS).map(([appKey, config]) => {
     const hasRequiredRole = config.roles.some(role => userRoles.includes(role));

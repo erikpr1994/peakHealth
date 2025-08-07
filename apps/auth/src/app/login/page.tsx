@@ -104,14 +104,18 @@ const LoginForm = (): React.JSX.Element => {
             });
             window.location.href = appRedirectUrl;
           } else {
-            // No apps available, redirect to return URL or default
-            const redirectUrl = returnUrl ?? '/dashboard';
-            router.push(redirectUrl);
+            // No apps available, redirect to web app dashboard as default
+            const webAppUrl = buildAppRedirectUrl('web', {
+              returnUrl: returnUrl ?? undefined,
+            });
+            window.location.href = webAppUrl;
           }
         } else {
-          // Fallback to return URL
-          const redirectUrl = returnUrl ?? '/dashboard';
-          router.push(redirectUrl);
+          // Fallback to web app dashboard
+          const webAppUrl = buildAppRedirectUrl('web', {
+            returnUrl: returnUrl ?? undefined,
+          });
+          window.location.href = webAppUrl;
         }
       } catch (error) {
         setGeneralError(formatAuthError(error));
