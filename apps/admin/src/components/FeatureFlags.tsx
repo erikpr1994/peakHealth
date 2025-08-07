@@ -262,7 +262,7 @@ export const FeatureFlags = ({ scopeInfo }: FeatureFlagsProps) => {
       const data = await response.json();
       setTargetingOptions(data);
     } catch {
-      // Error handled by toast
+      toast.error('Failed to load targeting options');
     }
   };
 
