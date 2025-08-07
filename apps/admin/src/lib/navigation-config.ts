@@ -1,13 +1,11 @@
 import {
   LayoutDashboard,
-  BarChart3,
   Settings,
   Database,
   UserCheck,
   Building2,
   MessageSquare,
   HeadphonesIcon,
-  Activity,
   BookOpen,
   ThumbsUp,
   Megaphone,
@@ -19,6 +17,7 @@ import {
   Users,
   UserCog,
   Handshake,
+  DollarSign,
 } from 'lucide-react';
 
 export interface NavigationItem {
@@ -54,14 +53,14 @@ export const navigationSections: NavigationSection[] = [
     ],
   },
   {
-    id: 'analytics',
-    title: 'Analytics & Reporting',
+    id: 'revenue',
+    title: 'Revenue',
     items: [
       {
-        id: 'analytics',
+        id: 'revenue_analytics',
         label: 'Revenue Analytics',
-        icon: BarChart3,
-        path: '/analytics',
+        icon: DollarSign,
+        path: '/revenue',
         scope: 'platform',
         badge: {
           text: '$124K',
@@ -69,24 +68,13 @@ export const navigationSections: NavigationSection[] = [
         },
       },
       {
-        id: 'reports',
-        label: 'Platform Reports',
-        icon: BarChart3,
-        path: '/reports',
-        scope: 'platform',
+        id: 'subscription_tiers',
+        label: 'Subscription Tiers',
+        icon: Database,
+        path: '/subscription-tiers',
+        scope: 'general',
         badge: {
-          text: '15',
-          variant: 'secondary',
-        },
-      },
-      {
-        id: 'engagement',
-        label: 'User Engagement',
-        icon: Activity,
-        path: '/engagement',
-        scope: 'platform',
-        badge: {
-          text: '85%',
+          text: '6',
           variant: 'secondary',
         },
       },
@@ -137,17 +125,6 @@ export const navigationSections: NavigationSection[] = [
         scope: 'general',
         badge: {
           text: '12',
-          variant: 'secondary',
-        },
-      },
-      {
-        id: 'user_assignments',
-        label: 'User Assignments',
-        icon: UserCog,
-        path: '/user-assignments',
-        scope: 'general',
-        badge: {
-          text: '156',
           variant: 'secondary',
         },
       },
@@ -320,17 +297,6 @@ export const navigationSections: NavigationSection[] = [
         icon: UserCog,
         path: '/user-defaults',
         scope: 'general',
-      },
-      {
-        id: 'subscription_tiers',
-        label: 'Subscription Tiers',
-        icon: Database,
-        path: '/subscription-tiers',
-        scope: 'general',
-        badge: {
-          text: '6',
-          variant: 'secondary',
-        },
       },
     ],
   },

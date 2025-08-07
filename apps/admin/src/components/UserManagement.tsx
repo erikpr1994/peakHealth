@@ -85,8 +85,8 @@ export const UserManagement = ({ scopeInfo }: UserManagementProps) => {
           },
         ];
         setUsers(mockUsers);
-      } catch (error) {
-        console.error('Error fetching users:', error);
+      } catch {
+        // Error fetching users
       } finally {
         setLoading(false);
       }
@@ -135,10 +135,16 @@ export const UserManagement = ({ scopeInfo }: UserManagementProps) => {
           <h1 className="text-2xl font-bold">User Management</h1>
           <Badge variant="outline">{scopeInfo.label}</Badge>
         </div>
-        <Button>
-          <UserPlus className="w-4 h-4 mr-2" />
-          Add User
-        </Button>
+        <div className="flex gap-2">
+          <Button variant="outline">
+            <Filter className="w-4 h-4 mr-2" />
+            Bulk Actions
+          </Button>
+          <Button>
+            <UserPlus className="w-4 h-4 mr-2" />
+            Add User
+          </Button>
+        </div>
       </div>
 
       <div className="mt-6 space-y-6">
@@ -241,7 +247,10 @@ export const UserManagement = ({ scopeInfo }: UserManagementProps) => {
                           <DropdownMenuItem>View Profile</DropdownMenuItem>
                           <DropdownMenuItem>Edit User</DropdownMenuItem>
                           <DropdownMenuItem>
-                            Manage Assignments
+                            Manage User Types & Groups
+                          </DropdownMenuItem>
+                          <DropdownMenuItem>
+                            Manage Subscription
                           </DropdownMenuItem>
                           <DropdownMenuItem className="text-destructive">
                             Suspend User
