@@ -16,6 +16,9 @@ import {
   Send,
   Rocket,
   Flag,
+  Users,
+  UserCog,
+  Handshake,
 } from 'lucide-react';
 
 export interface NavigationItem {
@@ -94,6 +97,17 @@ export const navigationSections: NavigationSection[] = [
     title: 'User Management',
     items: [
       {
+        id: 'users',
+        label: 'Users',
+        icon: Users,
+        path: '/users',
+        scope: 'general',
+        badge: {
+          text: '2.4K',
+          variant: 'secondary',
+        },
+      },
+      {
         id: 'trainers',
         label: 'Trainer Management',
         icon: UserCheck,
@@ -104,6 +118,45 @@ export const navigationSections: NavigationSection[] = [
           variant: 'secondary',
         },
       },
+      {
+        id: 'feedback',
+        label: 'User Feedback',
+        icon: ThumbsUp,
+        path: '/feedback',
+        scope: 'platform',
+        badge: {
+          text: '4.8',
+          variant: 'secondary',
+        },
+      },
+      {
+        id: 'user_types',
+        label: 'User Types & Groups',
+        icon: UserCog,
+        path: '/user-types',
+        scope: 'general',
+        badge: {
+          text: '12',
+          variant: 'secondary',
+        },
+      },
+      {
+        id: 'user_assignments',
+        label: 'User Assignments',
+        icon: UserCog,
+        path: '/user-assignments',
+        scope: 'general',
+        badge: {
+          text: '156',
+          variant: 'secondary',
+        },
+      },
+    ],
+  },
+  {
+    id: 'partners',
+    title: 'Partners & Business',
+    items: [
       {
         id: 'gyms',
         label: 'Gym Partnerships',
@@ -116,6 +169,67 @@ export const navigationSections: NavigationSection[] = [
         },
       },
       {
+        id: 'partners',
+        label: 'Partner Management',
+        icon: Handshake,
+        path: '/partners',
+        scope: 'general',
+        badge: {
+          text: '8',
+          variant: 'secondary',
+        },
+      },
+    ],
+  },
+  {
+    id: 'content',
+    title: 'Content & Features',
+    items: [
+      {
+        id: 'content',
+        label: 'Content Management',
+        icon: Database,
+        path: '/content',
+        scope: 'general',
+        badge: {
+          text: '1.2K',
+          variant: 'secondary',
+        },
+      },
+      {
+        id: 'knowledge',
+        label: 'Knowledge Base',
+        icon: BookOpen,
+        path: '/knowledge',
+        scope: 'general',
+        badge: {
+          text: '124',
+          variant: 'secondary',
+        },
+      },
+      {
+        id: 'features',
+        label: 'Feature Flags',
+        icon: Flag,
+        path: '/features',
+        scope: 'general',
+        badge: {
+          text: '23',
+          variant: 'secondary',
+        },
+      },
+      {
+        id: 'roadmap',
+        label: 'Product Roadmap',
+        icon: Rocket,
+        path: '/roadmap',
+        scope: 'platform',
+        badge: {
+          text: '8',
+          variant: 'secondary',
+        },
+      },
+      {
         id: 'suggestions',
         label: 'Content Suggestions',
         icon: MessageSquare,
@@ -124,17 +238,6 @@ export const navigationSections: NavigationSection[] = [
         badge: {
           text: '3',
           variant: 'destructive',
-        },
-      },
-      {
-        id: 'feedback',
-        label: 'User Feedback',
-        icon: ThumbsUp,
-        path: '/feedback',
-        scope: 'platform',
-        badge: {
-          text: '4.8',
-          variant: 'secondary',
         },
       },
     ],
@@ -190,58 +293,8 @@ export const navigationSections: NavigationSection[] = [
     ],
   },
   {
-    id: 'content',
-    title: 'Content & Knowledge',
-    items: [
-      {
-        id: 'content',
-        label: 'Content Management',
-        icon: Database,
-        path: '/content',
-        scope: 'general',
-        badge: {
-          text: '1.2K',
-          variant: 'secondary',
-        },
-      },
-      {
-        id: 'knowledge',
-        label: 'Knowledge Base',
-        icon: BookOpen,
-        path: '/knowledge',
-        scope: 'general',
-        badge: {
-          text: '124',
-          variant: 'secondary',
-        },
-      },
-      {
-        id: 'roadmap',
-        label: 'Product Roadmap',
-        icon: Rocket,
-        path: '/roadmap',
-        scope: 'platform',
-        badge: {
-          text: '8',
-          variant: 'secondary',
-        },
-      },
-      {
-        id: 'features',
-        label: 'Feature Flags',
-        icon: Flag,
-        path: '/features',
-        scope: 'general',
-        badge: {
-          text: '23',
-          variant: 'secondary',
-        },
-      },
-    ],
-  },
-  {
     id: 'system',
-    title: 'System',
+    title: 'System & Support',
     items: [
       {
         id: 'support',
@@ -260,6 +313,24 @@ export const navigationSections: NavigationSection[] = [
         icon: Settings,
         path: '/settings',
         scope: 'general',
+      },
+      {
+        id: 'user_defaults',
+        label: 'User Defaults',
+        icon: UserCog,
+        path: '/user-defaults',
+        scope: 'general',
+      },
+      {
+        id: 'subscription_tiers',
+        label: 'Subscription Tiers',
+        icon: Database,
+        path: '/subscription-tiers',
+        scope: 'general',
+        badge: {
+          text: '6',
+          variant: 'secondary',
+        },
       },
     ],
   },
