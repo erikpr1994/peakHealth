@@ -62,6 +62,7 @@ interface FeatureFlag {
   name: string;
   display_name: string;
   description: string;
+  category?: string;
   is_public: boolean;
   is_global: boolean;
   created_at: string;
@@ -206,6 +207,7 @@ export const FeatureFlags = ({ scopeInfo }: FeatureFlagsProps) => {
     name: '',
     displayName: '',
     description: '',
+    category: '',
     isPublic: false,
     isGlobal: false,
     environments: {
@@ -362,6 +364,7 @@ export const FeatureFlags = ({ scopeInfo }: FeatureFlagsProps) => {
       name: '',
       displayName: '',
       description: '',
+      category: '',
       isPublic: false,
       isGlobal: false,
       environments: {
@@ -402,6 +405,7 @@ export const FeatureFlags = ({ scopeInfo }: FeatureFlagsProps) => {
       name: flag.name,
       displayName: flag.display_name,
       description: flag.description,
+      category: flag.category || '',
       isPublic: flag.is_public,
       isGlobal: flag.is_global,
       environments,
@@ -478,7 +482,11 @@ export const FeatureFlags = ({ scopeInfo }: FeatureFlagsProps) => {
       flag.display_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       flag.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
       flag.name.toLowerCase().includes(searchQuery.toLowerCase());
-    return matchesSearch;
+
+    const matchesCategory =
+      selectedCategory === 'all' || flag.category === selectedCategory;
+
+    return matchesSearch && matchesCategory;
   });
 
   if (isLoading) {
@@ -543,6 +551,32 @@ export const FeatureFlags = ({ scopeInfo }: FeatureFlagsProps) => {
                         handleFormChange('displayName', e.target.value)
                       }
                     />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="category">Category</Label>
+                    <Select
+                      value={formData.category}
+                      onValueChange={value =>
+                        handleFormChange('category', value)
+                      }
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select a category" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {categories.slice(1).map(category => (
+                          <SelectItem
+                            key={category.value}
+                            value={category.value}
+                          >
+                            {category.label}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                   </div>
                 </div>
 
@@ -1072,6 +1106,12 @@ export const FeatureFlags = ({ scopeInfo }: FeatureFlagsProps) => {
                         Global
                       </Badge>
                     )}
+                    {flag.category && (
+                      <Badge variant="outline" className="text-xs">
+                        {categories.find(c => c.value === flag.category)
+                          ?.label || flag.category}
+                      </Badge>
+                    )}
                   </div>
                   <p className="text-sm text-muted-foreground mb-3">
                     {flag.description}
@@ -1283,6 +1323,27 @@ export const FeatureFlags = ({ scopeInfo }: FeatureFlagsProps) => {
                     handleFormChange('displayName', e.target.value)
                   }
                 />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label>Category</Label>
+                <Select
+                  value={formData.category}
+                  onValueChange={value => handleFormChange('category', value)}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select a category" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {categories.slice(1).map(category => (
+                      <SelectItem key={category.value} value={category.value}>
+                        {category.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </div>
             </div>
 

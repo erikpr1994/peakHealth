@@ -58,6 +58,7 @@ export async function POST(request: NextRequest) {
       name,
       displayName,
       description,
+      category,
       isPublic,
       isGlobal,
       environments,
@@ -82,6 +83,7 @@ export async function POST(request: NextRequest) {
         name,
         display_name: displayName,
         description: description || '',
+        category: category || null,
         is_public: isPublic || false,
         is_global: isGlobal || false,
         created_by: null, // TODO: Get from auth context
@@ -249,6 +251,7 @@ export async function PUT(request: NextRequest) {
       name,
       displayName,
       description,
+      category,
       isPublic,
       isGlobal,
       environments,
@@ -268,6 +271,7 @@ export async function PUT(request: NextRequest) {
     if (name !== undefined) updateData.name = name;
     if (displayName !== undefined) updateData.display_name = displayName;
     if (description !== undefined) updateData.description = description;
+    if (category !== undefined) updateData.category = category;
     if (isPublic !== undefined) updateData.is_public = isPublic;
     if (isGlobal !== undefined) updateData.is_global = isGlobal;
     updateData.updated_at = new Date().toISOString();
