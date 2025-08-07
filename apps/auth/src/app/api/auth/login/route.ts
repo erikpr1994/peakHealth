@@ -65,15 +65,33 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       return NextResponse.json({ error: error.message }, { status: 400 });
     }
 
-    // Create base response with user data
-    const responseData = {
+    // If redirect is provided and valid, redirect there with cookies
+    if (redirect && isValidRedirectUrl(redirect)) {
+      const redirectResponse = NextResponse.redirect(redirect);
+
+      // Set auth token cookie that can be accessed across subdomains
+      if (data.session?.access_token) {
+        redirectResponse.cookies.set('auth-token', data.session.access_token, {
+          domain:
+            process.env.NODE_ENV === 'development'
+              ? 'localhost'
+              : '.peakhealth.es',
+          path: '/',
+          httpOnly: true,
+          secure: process.env.NODE_ENV === 'production',
+          sameSite: 'lax',
+          maxAge: 60 * 60 * 24 * 7, // 7 days
+        });
+      }
+
+      return redirectResponse;
+    }
+
+    // Default JSON response with user data
+    const response = NextResponse.json({
       user: data.user,
       session: data.session,
-      redirect: redirect && isValidRedirectUrl(redirect) ? redirect : undefined,
-    };
-
-    // Set cross-domain cookies for session management
-    const response = NextResponse.json(responseData);
+    });
 
     // Set auth token cookie that can be accessed across subdomains
     if (data.session?.access_token) {
