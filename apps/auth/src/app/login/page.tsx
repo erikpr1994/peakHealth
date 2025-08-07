@@ -23,6 +23,7 @@ const LoginForm = (): React.JSX.Element => {
   const searchParams = useSearchParams();
   const returnUrl =
     searchParams.get('returnUrl') ?? searchParams.get('redirect');
+  const message = searchParams.get('message');
 
   const [formData, setFormData] = useState({
     email: '',
@@ -104,18 +105,12 @@ const LoginForm = (): React.JSX.Element => {
             });
             window.location.href = appRedirectUrl;
           } else {
-            // No apps available, redirect to web app dashboard as default
-            const webAppUrl = buildAppRedirectUrl('web', {
-              returnUrl: returnUrl ?? undefined,
-            });
-            window.location.href = webAppUrl;
+            // No apps available, redirect to access denied page
+            router.push('/access-denied');
           }
         } else {
-          // Fallback to web app dashboard
-          const webAppUrl = buildAppRedirectUrl('web', {
-            returnUrl: returnUrl ?? undefined,
-          });
-          window.location.href = webAppUrl;
+          // API call failed, redirect to access denied page
+          router.push('/access-denied');
         }
       } catch (error) {
         setGeneralError(formatAuthError(error));
@@ -134,6 +129,8 @@ const LoginForm = (): React.JSX.Element => {
         subtitle="Sign in to your PeakHealth account"
       >
         <form onSubmit={handleSubmit} className={styles.form}>
+          {message && <div className={styles.successMessage}>{message}</div>}
+
           {generalError && (
             <div className={styles.errorMessage}>{generalError}</div>
           )}
