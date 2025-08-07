@@ -46,8 +46,17 @@ export async function GET(request: NextRequest) {
     }
 
     // Get user roles and groups from app_metadata (JWT claims)
+    // Provide fallback values if JWT claims are missing
     const userRoles = user?.app_metadata?.roles || ['basic'];
     const userGroups = user?.app_metadata?.groups || ['free'];
+
+    // Log the user's JWT claims for debugging
+    console.log('User JWT claims:', {
+      user_id: user?.id,
+      app_metadata: user?.app_metadata,
+      user_roles: userRoles,
+      user_groups: userGroups,
+    });
 
     // Use the database function to get user-specific feature flags with JWT claims filtering
     const { data: userFeatureFlags, error: userFlagsError } =
@@ -61,6 +70,13 @@ export async function GET(request: NextRequest) {
     if (userFlagsError) {
       // eslint-disable-next-line no-console
       console.error('Error fetching user feature flags:', userFlagsError);
+
+      // If the function doesn't exist, return empty array instead of error
+      if (userFlagsError.message.includes('Could not find the function')) {
+        console.log('Feature flags function not found, returning empty array');
+        return NextResponse.json({ featureFlags: [] });
+      }
+
       return NextResponse.json(
         { error: 'Failed to fetch user feature flags' },
         { status: 500 }
@@ -87,6 +103,12 @@ export async function GET(request: NextRequest) {
       ...(userFeatureFlags || []),
       ...(publicFeatureFlags || []),
     ];
+
+    console.log('Returning feature flags:', {
+      user_flags_count: userFeatureFlags?.length || 0,
+      public_flags_count: publicFeatureFlags?.length || 0,
+      total_flags: allFeatureFlags.length,
+    });
 
     return NextResponse.json({ featureFlags: allFeatureFlags });
   } catch (error) {

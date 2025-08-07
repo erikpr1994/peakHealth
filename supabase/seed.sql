@@ -243,3 +243,9 @@ INSERT INTO feature_flag_user_roles (feature_flag_id, environment, role_name, is
  'development', 
  'basic', 
  false); -- Disabled by default for basic users
+
+-- Roles and Groups System Seed Data
+
+-- Insert default user configuration for new signups
+INSERT INTO user_defaults (default_user_types, default_subscription_tier, default_groups, is_active) VALUES
+(ARRAY['regular'], 'free', ARRAY['early_access'], true);

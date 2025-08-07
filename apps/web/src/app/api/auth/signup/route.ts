@@ -69,6 +69,18 @@ export async function POST(request: NextRequest) {
           data.user.id
         );
 
+        // First, let's check if the user has any assignments
+        const { data: assignments, error: assignmentsError } =
+          await adminClient.rpc('get_user_assignments', {
+            user_id_param: data.user.id,
+          });
+
+        if (assignmentsError) {
+          console.error('Error getting user assignments:', assignmentsError);
+        } else {
+          console.log('Current user assignments:', assignments);
+        }
+
         const { data: claims, error: claimsError } = await adminClient.rpc(
           'assign_default_user_config',
           { user_id_param: data.user.id }
@@ -77,7 +89,38 @@ export async function POST(request: NextRequest) {
         if (claimsError) {
           // eslint-disable-next-line no-console
           console.error('Failed to assign default config:', claimsError);
-          // Don't fail the signup, just log the error
+
+          // Try to generate claims manually as fallback
+          console.log('Trying to generate claims manually...');
+          const { data: manualClaims, error: manualClaimsError } =
+            await adminClient.rpc('generate_user_jwt_claims', {
+              user_id_param: data.user.id,
+            });
+
+          if (manualClaimsError) {
+            console.error(
+              'Failed to generate claims manually:',
+              manualClaimsError
+            );
+          } else if (manualClaims) {
+            console.log('Generated claims manually:', manualClaims);
+
+            // Update the user's app_metadata with the generated claims
+            const { data: updatedUser, error: updateError } =
+              await adminClient.auth.admin.updateUserById(data.user.id, {
+                app_metadata: manualClaims,
+              });
+
+            if (updateError) {
+              console.error('Failed to update user app_metadata:', updateError);
+            } else if (updatedUser.user) {
+              console.log('Successfully updated user with manual claims');
+              return NextResponse.json({
+                user: updatedUser.user,
+                session: data.session,
+              });
+            }
+          }
         } else if (claims) {
           // eslint-disable-next-line no-console
           console.log('Generated claims:', claims);

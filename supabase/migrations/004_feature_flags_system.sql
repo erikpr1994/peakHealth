@@ -1,6 +1,6 @@
 -- Feature Flag System Database Schema
--- Migration: 001_create_feature_flag_system.sql
--- Consolidated migration including new roles and groups system support
+-- Migration: 004_feature_flags_system.sql
+-- Consolidated migration including new roles and groups system support with correct function signature
 
 -- Feature flags table with public/user-specific distinction
 CREATE TABLE feature_flags (
@@ -481,4 +481,4 @@ COMMENT ON FUNCTION get_public_feature_flags IS 'Returns feature flags that are 
 COMMENT ON FUNCTION get_user_feature_flags_legacy IS 'Legacy function for user-specific feature flags filtered by user roles and groups passed as parameters';
 COMMENT ON FUNCTION get_user_feature_flags IS 'Returns user-specific feature flags filtered by user types, subscription tiers, roles, and groups from JWT claims';
 COMMENT ON FUNCTION user_has_role IS 'Checks if a user has a specific role from the provided roles array (legacy)';
-COMMENT ON FUNCTION user_in_group IS 'Checks if a user belongs to a specific group from the provided groups array (legacy)'; 
+COMMENT ON FUNCTION user_in_group IS 'Checks if a user belongs to a specific group from the provided groups array (legacy)';

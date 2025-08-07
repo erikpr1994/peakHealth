@@ -1,5 +1,6 @@
--- Improved Roles and Groups System Database Schema
--- Migration: 004_create_roles_groups_system.sql
+-- Improved Roles and Groups System with Security Policies
+-- Migration: 004_roles_groups_and_security.sql
+-- Consolidated migration including roles, groups, RLS policies, and function fixes
 
 -- User types configuration
 CREATE TABLE user_types (
@@ -99,16 +100,14 @@ CREATE INDEX idx_user_type_assignments_effective_from ON user_type_assignments(e
 CREATE INDEX idx_user_type_assignments_primary ON user_type_assignments(user_id, is_primary) WHERE is_primary = true;
 
 CREATE INDEX idx_subscription_tiers_name ON subscription_tiers(name);
-CREATE INDEX idx_subscription_tiers_active ON subscription_tiers(is_active);
 CREATE INDEX idx_subscription_assignments_user_id ON subscription_assignments(user_id);
 CREATE INDEX idx_subscription_assignments_effective_from ON subscription_assignments(effective_from);
 
 CREATE INDEX idx_user_groups_name ON user_groups(name);
-CREATE INDEX idx_user_groups_active ON user_groups(is_active);
 CREATE INDEX idx_user_group_assignments_user_id ON user_group_assignments(user_id);
 CREATE INDEX idx_user_group_assignments_effective_from ON user_group_assignments(effective_from);
 
--- Function to get user's current assignments
+-- Function to get user's current assignments (with proper type casting)
 CREATE OR REPLACE FUNCTION get_user_assignments(user_id_param UUID)
 RETURNS TABLE (
   user_types TEXT[],
@@ -123,7 +122,7 @@ BEGIN
   RETURN QUERY
   SELECT 
     ARRAY(
-      SELECT uta.user_type_name 
+      SELECT uta.user_type_name::TEXT
       FROM user_type_assignments uta
       WHERE uta.user_id = user_id_param
         AND (uta.effective_until IS NULL OR uta.effective_until > NOW())
@@ -144,7 +143,7 @@ BEGIN
      LIMIT 1) as subscription_tier,
     
     ARRAY(
-      SELECT uga.group_name 
+      SELECT uga.group_name::TEXT
       FROM user_group_assignments uga
       WHERE uga.user_id = user_id_param
         AND (uga.effective_until IS NULL OR uga.effective_until > NOW())
@@ -229,6 +228,7 @@ BEGIN
       );
     END IF;
   ELSE
+    -- User has assignments, use them
     claims := jsonb_build_object(
       'user_types', to_jsonb(user_assignments.user_types),
       'primary_user_type', user_assignments.primary_user_type,
@@ -360,7 +360,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
 
--- Enable RLS on tables
+-- Enable RLS on all tables
 ALTER TABLE user_types ENABLE ROW LEVEL SECURITY;
 ALTER TABLE user_type_assignments ENABLE ROW LEVEL SECURITY;
 ALTER TABLE subscription_tiers ENABLE ROW LEVEL SECURITY;
@@ -402,6 +402,325 @@ CREATE POLICY "Admins can manage user group assignments" ON user_group_assignmen
 
 CREATE POLICY "Admins can manage subscription assignments" ON subscription_assignments
   FOR ALL USING (auth.role() = 'authenticated');
+
+-- Data Access RLS Policies for existing tables
+-- Enable RLS on all tables that need data access control
+ALTER TABLE profiles ENABLE ROW LEVEL SECURITY;
+ALTER TABLE workout_routines ENABLE ROW LEVEL SECURITY;
+ALTER TABLE routine_exercises ENABLE ROW LEVEL SECURITY;
+ALTER TABLE workout_sessions ENABLE ROW LEVEL SECURITY;
+ALTER TABLE workout_session_exercises ENABLE ROW LEVEL SECURITY;
+ALTER TABLE user_exercise_favorites ENABLE ROW LEVEL SECURITY;
+
+-- Drop existing policies that don't respect user types
+DROP POLICY IF EXISTS "Users can view their own profile" ON profiles;
+DROP POLICY IF EXISTS "Users can update their own profile" ON profiles;
+DROP POLICY IF EXISTS "Users can insert their own profile" ON profiles;
+
+DROP POLICY IF EXISTS "Users can view their own workout routines" ON workout_routines;
+DROP POLICY IF EXISTS "Users can create their own workout routines" ON workout_routines;
+DROP POLICY IF EXISTS "Users can update their own workout routines" ON workout_routines;
+DROP POLICY IF EXISTS "Users can delete their own workout routines" ON workout_routines;
+
+DROP POLICY IF EXISTS "Users can view exercises in their own routines" ON routine_exercises;
+DROP POLICY IF EXISTS "Users can create exercises in their own routines" ON routine_exercises;
+DROP POLICY IF EXISTS "Users can update exercises in their own routines" ON routine_exercises;
+DROP POLICY IF EXISTS "Users can delete exercises in their own routines" ON routine_exercises;
+
+DROP POLICY IF EXISTS "Users can view their own workout sessions" ON workout_sessions;
+DROP POLICY IF EXISTS "Users can create their own workout sessions" ON workout_sessions;
+DROP POLICY IF EXISTS "Users can update their own workout sessions" ON workout_sessions;
+DROP POLICY IF EXISTS "Users can delete their own workout sessions" ON workout_sessions;
+
+DROP POLICY IF EXISTS "Users can view exercises in their own workout sessions" ON workout_session_exercises;
+DROP POLICY IF EXISTS "Users can create exercises in their own workout sessions" ON workout_session_exercises;
+DROP POLICY IF EXISTS "Users can update exercises in their own workout sessions" ON workout_session_exercises;
+DROP POLICY IF EXISTS "Users can delete exercises in their own workout sessions" ON workout_session_exercises;
+
+DROP POLICY IF EXISTS "Users can view their own exercise favorites" ON user_exercise_favorites;
+DROP POLICY IF EXISTS "Users can create their own exercise favorites" ON user_exercise_favorites;
+DROP POLICY IF EXISTS "Users can delete their own exercise favorites" ON user_exercise_favorites;
+
+-- Create new policies that respect user types and data access rules
+
+-- Profiles table policies
+CREATE POLICY "Users can view their own profile" ON profiles
+  FOR SELECT USING (
+    auth.uid() = id OR 
+    user_has_permission(auth.uid(), 'can_access_client_profiles')
+  );
+
+CREATE POLICY "Users can update their own profile" ON profiles
+  FOR UPDATE USING (
+    auth.uid() = id OR 
+    user_has_permission(auth.uid(), 'can_access_client_profiles')
+  );
+
+CREATE POLICY "Users can insert their own profile" ON profiles
+  FOR INSERT WITH CHECK (
+    auth.uid() = id OR 
+    user_has_permission(auth.uid(), 'can_access_client_profiles')
+  );
+
+-- Workout routines table policies
+CREATE POLICY "Users can view workout routines based on data access" ON workout_routines
+  FOR SELECT USING (
+    -- Users can always view their own routines
+    auth.uid() = user_id OR
+    -- Trainers can view their clients' routines
+    (user_has_permission(auth.uid(), 'can_access_client_workouts') AND
+     EXISTS (
+       SELECT 1 FROM user_type_assignments uta
+       WHERE uta.user_id = workout_routines.user_id
+       AND uta.user_type_name IN ('regular', 'basic')
+     ))
+  );
+
+CREATE POLICY "Users can create workout routines based on data access" ON workout_routines
+  FOR INSERT WITH CHECK (
+    -- Users can always create their own routines
+    auth.uid() = user_id OR
+    -- Trainers can create routines for their clients
+    (user_has_permission(auth.uid(), 'can_access_client_workouts') AND
+     EXISTS (
+       SELECT 1 FROM user_type_assignments uta
+       WHERE uta.user_id = workout_routines.user_id
+       AND uta.user_type_name IN ('regular', 'basic')
+     ))
+  );
+
+CREATE POLICY "Users can update workout routines based on data access" ON workout_routines
+  FOR UPDATE USING (
+    -- Users can always update their own routines
+    auth.uid() = user_id OR
+    -- Trainers can update their clients' routines
+    (user_has_permission(auth.uid(), 'can_access_client_workouts') AND
+     EXISTS (
+       SELECT 1 FROM user_type_assignments uta
+       WHERE uta.user_id = workout_routines.user_id
+       AND uta.user_type_name IN ('regular', 'basic')
+     ))
+  );
+
+CREATE POLICY "Users can delete workout routines based on data access" ON workout_routines
+  FOR DELETE USING (
+    -- Users can always delete their own routines
+    auth.uid() = user_id OR
+    -- Trainers can delete their clients' routines
+    (user_has_permission(auth.uid(), 'can_access_client_workouts') AND
+     EXISTS (
+       SELECT 1 FROM user_type_assignments uta
+       WHERE uta.user_id = workout_routines.user_id
+       AND uta.user_type_name IN ('regular', 'basic')
+     ))
+  );
+
+-- Routine exercises table policies
+CREATE POLICY "Users can view routine exercises based on data access" ON routine_exercises
+  FOR SELECT USING (
+    EXISTS (
+      SELECT 1 FROM workout_routines wr
+      WHERE wr.id = routine_exercises.routine_id
+      AND (
+        wr.user_id = auth.uid() OR
+        (user_has_permission(auth.uid(), 'can_access_client_workouts') AND
+         EXISTS (
+           SELECT 1 FROM user_type_assignments uta
+           WHERE uta.user_id = wr.user_id
+           AND uta.user_type_name IN ('regular', 'basic')
+         ))
+      )
+    )
+  );
+
+CREATE POLICY "Users can create routine exercises based on data access" ON routine_exercises
+  FOR INSERT WITH CHECK (
+    EXISTS (
+      SELECT 1 FROM workout_routines wr
+      WHERE wr.id = routine_exercises.routine_id
+      AND (
+        wr.user_id = auth.uid() OR
+        (user_has_permission(auth.uid(), 'can_access_client_workouts') AND
+         EXISTS (
+           SELECT 1 FROM user_type_assignments uta
+           WHERE uta.user_id = wr.user_id
+           AND uta.user_type_name IN ('regular', 'basic')
+         ))
+      )
+    )
+  );
+
+CREATE POLICY "Users can update routine exercises based on data access" ON routine_exercises
+  FOR UPDATE USING (
+    EXISTS (
+      SELECT 1 FROM workout_routines wr
+      WHERE wr.id = routine_exercises.routine_id
+      AND (
+        wr.user_id = auth.uid() OR
+        (user_has_permission(auth.uid(), 'can_access_client_workouts') AND
+         EXISTS (
+           SELECT 1 FROM user_type_assignments uta
+           WHERE uta.user_id = wr.user_id
+           AND uta.user_type_name IN ('regular', 'basic')
+         ))
+      )
+    )
+  );
+
+CREATE POLICY "Users can delete routine exercises based on data access" ON routine_exercises
+  FOR DELETE USING (
+    EXISTS (
+      SELECT 1 FROM workout_routines wr
+      WHERE wr.id = routine_exercises.routine_id
+      AND (
+        wr.user_id = auth.uid() OR
+        (user_has_permission(auth.uid(), 'can_access_client_workouts') AND
+         EXISTS (
+           SELECT 1 FROM user_type_assignments uta
+           WHERE uta.user_id = wr.user_id
+           AND uta.user_type_name IN ('regular', 'basic')
+         ))
+      )
+    )
+  );
+
+-- Workout sessions table policies
+CREATE POLICY "Users can view workout sessions based on data access" ON workout_sessions
+  FOR SELECT USING (
+    -- Users can always view their own sessions
+    auth.uid() = user_id OR
+    -- Trainers can view their clients' sessions
+    (user_has_permission(auth.uid(), 'can_access_client_workouts') AND
+     EXISTS (
+       SELECT 1 FROM user_type_assignments uta
+       WHERE uta.user_id = workout_sessions.user_id
+       AND uta.user_type_name IN ('regular', 'basic')
+     ))
+  );
+
+CREATE POLICY "Users can create workout sessions based on data access" ON workout_sessions
+  FOR INSERT WITH CHECK (
+    -- Users can always create their own sessions
+    auth.uid() = user_id OR
+    -- Trainers can create sessions for their clients
+    (user_has_permission(auth.uid(), 'can_access_client_workouts') AND
+     EXISTS (
+       SELECT 1 FROM user_type_assignments uta
+       WHERE uta.user_id = workout_sessions.user_id
+       AND uta.user_type_name IN ('regular', 'basic')
+     ))
+  );
+
+CREATE POLICY "Users can update workout sessions based on data access" ON workout_sessions
+  FOR UPDATE USING (
+    -- Users can always update their own sessions
+    auth.uid() = user_id OR
+    -- Trainers can update their clients' sessions
+    (user_has_permission(auth.uid(), 'can_access_client_workouts') AND
+     EXISTS (
+       SELECT 1 FROM user_type_assignments uta
+       WHERE uta.user_id = workout_sessions.user_id
+       AND uta.user_type_name IN ('regular', 'basic')
+     ))
+  );
+
+CREATE POLICY "Users can delete workout sessions based on data access" ON workout_sessions
+  FOR DELETE USING (
+    -- Users can always delete their own sessions
+    auth.uid() = user_id OR
+    -- Trainers can delete their clients' sessions
+    (user_has_permission(auth.uid(), 'can_access_client_workouts') AND
+     EXISTS (
+       SELECT 1 FROM user_type_assignments uta
+       WHERE uta.user_id = workout_sessions.user_id
+       AND uta.user_type_name IN ('regular', 'basic')
+     ))
+  );
+
+-- Workout session exercises table policies
+CREATE POLICY "Users can view workout session exercises based on data access" ON workout_session_exercises
+  FOR SELECT USING (
+    EXISTS (
+      SELECT 1 FROM workout_sessions ws
+      WHERE ws.id = workout_session_exercises.workout_session_id
+      AND (
+        ws.user_id = auth.uid() OR
+        (user_has_permission(auth.uid(), 'can_access_client_workouts') AND
+         EXISTS (
+           SELECT 1 FROM user_type_assignments uta
+           WHERE uta.user_id = ws.user_id
+           AND uta.user_type_name IN ('regular', 'basic')
+         ))
+      )
+    )
+  );
+
+CREATE POLICY "Users can create workout session exercises based on data access" ON workout_session_exercises
+  FOR INSERT WITH CHECK (
+    EXISTS (
+      SELECT 1 FROM workout_sessions ws
+      WHERE ws.id = workout_session_exercises.workout_session_id
+      AND (
+        ws.user_id = auth.uid() OR
+        (user_has_permission(auth.uid(), 'can_access_client_workouts') AND
+         EXISTS (
+           SELECT 1 FROM user_type_assignments uta
+           WHERE uta.user_id = ws.user_id
+           AND uta.user_type_name IN ('regular', 'basic')
+         ))
+      )
+    )
+  );
+
+CREATE POLICY "Users can update workout session exercises based on data access" ON workout_session_exercises
+  FOR UPDATE USING (
+    EXISTS (
+      SELECT 1 FROM workout_sessions ws
+      WHERE ws.id = workout_session_exercises.workout_session_id
+      AND (
+        ws.user_id = auth.uid() OR
+        (user_has_permission(auth.uid(), 'can_access_client_workouts') AND
+         EXISTS (
+           SELECT 1 FROM user_type_assignments uta
+           WHERE uta.user_id = ws.user_id
+           AND uta.user_type_name IN ('regular', 'basic')
+         ))
+      )
+    )
+  );
+
+CREATE POLICY "Users can delete workout session exercises based on data access" ON workout_session_exercises
+  FOR DELETE USING (
+    EXISTS (
+      SELECT 1 FROM workout_sessions ws
+      WHERE ws.id = workout_session_exercises.workout_session_id
+      AND (
+        ws.user_id = auth.uid() OR
+        (user_has_permission(auth.uid(), 'can_access_client_workouts') AND
+         EXISTS (
+           SELECT 1 FROM user_type_assignments uta
+           WHERE uta.user_id = ws.user_id
+           AND uta.user_type_name IN ('regular', 'basic')
+         ))
+      )
+    )
+  );
+
+-- User exercise favorites table policies
+CREATE POLICY "Users can view their own exercise favorites" ON user_exercise_favorites
+  FOR SELECT USING (
+    auth.uid() = user_id
+  );
+
+CREATE POLICY "Users can create their own exercise favorites" ON user_exercise_favorites
+  FOR INSERT WITH CHECK (
+    auth.uid() = user_id
+  );
+
+CREATE POLICY "Users can delete their own exercise favorites" ON user_exercise_favorites
+  FOR DELETE USING (
+    auth.uid() = user_id
+  );
 
 -- Insert seed data
 INSERT INTO user_types (name, display_name, description, permissions, data_access_rules) VALUES
@@ -460,4 +779,4 @@ COMMENT ON FUNCTION generate_user_jwt_claims IS 'Generates JWT claims for a user
 COMMENT ON FUNCTION assign_default_user_config IS 'Assigns default configuration to a new user and returns JWT claims';
 COMMENT ON FUNCTION user_has_permission IS 'Checks if a user has a specific permission';
 COMMENT ON FUNCTION user_has_feature IS 'Checks if a user has access to a specific feature';
-COMMENT ON FUNCTION can_access_data IS 'Checks if a user can access specific data at a given access level'; 
+COMMENT ON FUNCTION can_access_data IS 'Checks if a user can access specific data at a given access level';
