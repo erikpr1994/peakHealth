@@ -161,17 +161,17 @@ export async function POST(request: NextRequest) {
       }> = [];
 
       // Handle both array of strings and array of objects
-      if (typeof userGroups[0] === 'string') {
+      if (userGroups.length > 0 && typeof userGroups[0] === 'string') {
         // If userGroups is an array of strings, convert to default object format
         groupData = userGroups.flatMap((groupName: string) =>
           ['development', 'staging', 'production'].map((env: string) => ({
             feature_flag_id: featureFlag.id,
             environment: env,
             group_name: groupName,
-            is_enabled: true, // Default to enabled
+            is_enabled: true, // Default to enabled for string arrays
           }))
         );
-      } else {
+      } else if (userGroups.length > 0) {
         // If userGroups is already an array of objects with the expected structure
         groupData = userGroups.flatMap((group: unknown) => {
           const typedGroup = group as {
@@ -183,7 +183,7 @@ export async function POST(request: NextRequest) {
             feature_flag_id: featureFlag.id,
             environment: env,
             group_name: typedGroup.groupName,
-            is_enabled: typedGroup.isEnabled || false,
+            is_enabled: typedGroup.isEnabled ?? true, // Default to true for consistency
           }));
         });
       }
@@ -397,7 +397,7 @@ export async function PUT(request: NextRequest) {
               feature_flag_id: id,
               environment: env,
               group_name: groupName,
-              is_enabled: true, // Default to enabled
+              is_enabled: true, // Default to enabled for string arrays
             }))
           );
         } else {
@@ -407,7 +407,7 @@ export async function PUT(request: NextRequest) {
               feature_flag_id: id,
               environment: env,
               group_name: group.groupName,
-              is_enabled: group.isEnabled || false,
+              is_enabled: group.isEnabled ?? true, // Default to true for consistency
             }))
           );
         }
