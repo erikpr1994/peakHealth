@@ -73,9 +73,35 @@ export const setCrossDomainCookie = (
     ...options,
   };
 
-  const cookieString = `${name}=${value}; ${Object.entries(cookieOptions)
-    .map(([key, val]) => `${key}=${val}`)
-    .join('; ')}`;
+  // Build cookie string with proper formatting
+  const cookieParts = [`${name}=${value}`];
+
+  // Add cookie options with proper formatting
+  if (cookieOptions.domain) {
+    cookieParts.push(`Domain=${cookieOptions.domain}`);
+  }
+
+  if (cookieOptions.path) {
+    cookieParts.push(`Path=${cookieOptions.path}`);
+  }
+
+  if (cookieOptions.maxAge !== undefined) {
+    cookieParts.push(`Max-Age=${cookieOptions.maxAge}`);
+  }
+
+  if (cookieOptions.sameSite) {
+    cookieParts.push(`SameSite=${cookieOptions.sameSite}`);
+  }
+
+  if (cookieOptions.secure) {
+    cookieParts.push('Secure');
+  }
+
+  if (cookieOptions.httpOnly) {
+    cookieParts.push('HttpOnly');
+  }
+
+  const cookieString = cookieParts.join('; ');
 
   if (typeof document !== 'undefined') {
     document.cookie = cookieString;
@@ -113,10 +139,12 @@ export const deleteCookie = (
 export const getUserAccessibleApps = (user: User | null): AppSelection[] => {
   if (!user) return [];
 
-  const userRoles: string[] =
-    (user.app_metadata?.roles as string[] | undefined) ?? [];
-  const userGroups: string[] =
-    (user.app_metadata?.groups as string[] | undefined) ?? [];
+  const userRoles: string[] = Array.isArray(user.app_metadata?.roles)
+    ? user.app_metadata?.roles
+    : [];
+  const userGroups: string[] = Array.isArray(user.app_metadata?.groups)
+    ? user.app_metadata?.groups
+    : [];
 
   return Object.entries(APP_CONFIGS).map(([appKey, config]) => {
     const hasRequiredRole = config.roles.some(role => userRoles.includes(role));
@@ -199,14 +227,15 @@ export const validatePassword = (
 // Role and permission utilities
 export const hasRole = (user: User | null, role: string): boolean => {
   return (
-    (user?.app_metadata?.roles as string[] | undefined)?.includes(role) ?? false
+    Array.isArray(user?.app_metadata?.roles) &&
+    user.app_metadata.roles.includes(role)
   );
 };
 
 export const hasGroup = (user: User | null, group: string): boolean => {
   return (
-    (user?.app_metadata?.groups as string[] | undefined)?.includes(group) ??
-    false
+    Array.isArray(user?.app_metadata?.groups) &&
+    user.app_metadata.groups.includes(group)
   );
 };
 
