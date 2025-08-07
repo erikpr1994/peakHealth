@@ -3,6 +3,7 @@ import './globals.css';
 
 import { Header } from '@/components/layout/Header';
 import { Sidebar } from '@/components/layout/Sidebar';
+import { Toaster } from '@/components/ui/sonner';
 import { AuthProvider } from '@/contexts/AuthContext';
 
 export const metadata: Metadata = {
@@ -26,6 +27,7 @@ const RootLayout = ({
               <main className="flex-1 overflow-auto p-6">{children}</main>
             </div>
           </div>
+          <Toaster />
         </AuthProvider>
       </body>
     </html>

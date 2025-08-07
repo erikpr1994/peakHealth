@@ -1,12 +1,39 @@
 'use client';
-import { useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
-import { Button } from './ui/button';
+import {
+  Flag,
+  Search,
+  Plus,
+  Edit,
+  Trash2,
+  Users,
+  Calendar,
+  BarChart3,
+  Target,
+  Globe,
+  Loader2,
+  Code,
+  TestTube,
+  Rocket,
+} from 'lucide-react';
+import { useState, useEffect } from 'react';
+
+import { toast } from 'sonner';
+
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from './ui/alert-dialog';
 import { Badge } from './ui/badge';
-import { Input } from './ui/input';
-import { Label } from './ui/label';
-import { Switch } from './ui/switch';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
+import { Button } from './ui/button';
+import { Card, CardContent, CardHeader } from './ui/card';
+import { Checkbox } from './ui/checkbox';
 import {
   Dialog,
   DialogContent,
@@ -15,6 +42,8 @@ import {
   DialogTitle,
   DialogTrigger,
 } from './ui/dialog';
+import { Input } from './ui/input';
+import { Label } from './ui/label';
 import {
   Select,
   SelectContent,
@@ -22,241 +51,88 @@ import {
   SelectTrigger,
   SelectValue,
 } from './ui/select';
-import { Textarea } from './ui/textarea';
 import { Slider } from './ui/slider';
-import { Checkbox } from './ui/checkbox';
-import {
-  Flag,
-  Search,
-  Plus,
-  Edit,
-  Trash2,
-  Eye,
-  Users,
-  Calendar,
-  Settings,
-  BarChart3,
-  Target,
-  Globe,
-  Smartphone,
-  Monitor,
-  Code,
-  TestTube,
-  Rocket,
-  AlertCircle,
-  CheckCircle2,
-  Clock,
-  Zap,
-} from 'lucide-react';
+import { Switch } from './ui/switch';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
+import { Textarea } from './ui/textarea';
 
-// Updated feature flags data structure with environment-specific configurations
-const featureFlags = [
-  {
-    id: 1,
-    name: 'advanced_analytics_dashboard',
-    displayName: 'Advanced Analytics Dashboard',
-    description:
-      'Enhanced analytics with predictive insights and custom reports for trainers and administrators',
-    category: 'analytics',
-    createdAt: '2024-11-15T10:00:00Z',
-    updatedAt: '2024-12-20T14:30:00Z',
-    createdBy: 'Product Team',
-    dependencies: [],
-    environments: {
-      development: {
-        enabled: true,
-        rolloutPercentage: 100,
-        targetAudiences: ['all_users'],
-        conditions: {
-          userTypes: ['all'],
-          platforms: ['web', 'mobile'],
-        },
-      },
-      staging: {
-        enabled: true,
-        rolloutPercentage: 100,
-        targetAudiences: ['beta_users', 'internal_staff'],
-        conditions: {
-          userTypes: ['premium', 'corporate'],
-          platforms: ['web', 'mobile'],
-        },
-      },
-      production: {
-        enabled: true,
-        rolloutPercentage: 100,
-        targetAudiences: ['trainers', 'admins'],
-        conditions: {
-          userTypes: ['premium', 'corporate'],
-          platforms: ['web', 'mobile'],
-        },
-      },
-    },
-  },
-  {
-    id: 2,
-    name: 'dark_mode_mobile',
-    displayName: 'Dark Mode for Mobile',
-    description:
-      'Dark theme support for mobile applications to improve user experience in low light conditions',
-    category: 'ui_ux',
-    createdAt: '2024-12-01T09:15:00Z',
-    updatedAt: '2024-12-22T11:20:00Z',
-    createdBy: 'Mobile Team',
-    dependencies: ['theme_system_v2'],
-    environments: {
-      development: {
-        enabled: true,
-        rolloutPercentage: 100,
-        targetAudiences: ['all_users'],
-        conditions: {
-          userTypes: ['all'],
-          platforms: ['mobile'],
-        },
-      },
-      staging: {
-        enabled: true,
-        rolloutPercentage: 50,
-        targetAudiences: ['beta_users'],
-        conditions: {
-          userTypes: ['all'],
-          platforms: ['mobile'],
-        },
-      },
-      production: {
-        enabled: false,
-        rolloutPercentage: 0,
-        targetAudiences: [],
-        conditions: {
-          userTypes: ['all'],
-          platforms: ['mobile'],
-        },
-      },
-    },
-  },
-  {
-    id: 3,
-    name: 'ai_workout_recommendations',
-    displayName: 'AI Workout Recommendations',
-    description:
-      'Machine learning powered workout suggestions based on user performance and goals',
-    category: 'ai_ml',
-    createdAt: '2024-12-10T16:45:00Z',
-    updatedAt: '2024-12-22T09:30:00Z',
-    createdBy: 'AI Team',
-    dependencies: ['user_analytics_v3', 'recommendation_engine'],
-    environments: {
-      development: {
-        enabled: true,
-        rolloutPercentage: 100,
-        targetAudiences: ['internal_staff'],
-        conditions: {
-          userTypes: ['premium'],
-          platforms: ['web', 'mobile'],
-        },
-      },
-      staging: {
-        enabled: false,
-        rolloutPercentage: 0,
-        targetAudiences: [],
-        conditions: {
-          userTypes: ['premium'],
-          platforms: ['web', 'mobile'],
-        },
-      },
-      production: {
-        enabled: false,
-        rolloutPercentage: 0,
-        targetAudiences: [],
-        conditions: {
-          userTypes: ['premium'],
-          platforms: ['web', 'mobile'],
-        },
-      },
-    },
-  },
-  {
-    id: 4,
-    name: 'corporate_team_challenges',
-    displayName: 'Corporate Team Challenges',
-    description:
-      'Team-based fitness challenges and competitions for corporate wellness programs',
-    category: 'corporate',
-    createdAt: '2024-11-20T11:00:00Z',
-    updatedAt: '2024-12-18T13:45:00Z',
-    createdBy: 'Enterprise Team',
-    dependencies: ['team_management_v2'],
-    environments: {
-      development: {
-        enabled: true,
-        rolloutPercentage: 100,
-        targetAudiences: ['internal_staff'],
-        conditions: {
-          userTypes: ['corporate'],
-          platforms: ['web'],
-        },
-      },
-      staging: {
-        enabled: true,
-        rolloutPercentage: 100,
-        targetAudiences: ['corporate_beta'],
-        conditions: {
-          userTypes: ['corporate'],
-          platforms: ['web'],
-        },
-      },
-      production: {
-        enabled: true,
-        rolloutPercentage: 75,
-        targetAudiences: ['corporate_users'],
-        conditions: {
-          userTypes: ['corporate'],
-          platforms: ['web'],
-        },
-      },
-    },
-  },
-  {
-    id: 5,
-    name: 'voice_workout_coaching',
-    displayName: 'Voice Workout Coaching',
-    description:
-      'Real-time voice guidance and coaching during workouts with personalized instructions',
-    category: 'ai_ml',
-    createdAt: '2024-12-05T14:20:00Z',
-    updatedAt: '2024-12-15T10:15:00Z',
-    createdBy: 'Voice Team',
-    dependencies: ['speech_recognition', 'tts_engine'],
-    environments: {
-      development: {
-        enabled: true,
-        rolloutPercentage: 100,
-        targetAudiences: ['internal_staff'],
-        conditions: {
-          userTypes: ['premium'],
-          platforms: ['mobile'],
-        },
-      },
-      staging: {
-        enabled: true,
-        rolloutPercentage: 25,
-        targetAudiences: ['beta_users'],
-        conditions: {
-          userTypes: ['premium'],
-          platforms: ['mobile'],
-        },
-      },
-      production: {
-        enabled: false,
-        rolloutPercentage: 0,
-        targetAudiences: [],
-        conditions: {
-          userTypes: ['premium'],
-          platforms: ['mobile'],
-        },
-      },
-    },
-  },
-];
+// Types
+interface FeatureFlag {
+  id: string;
+  name: string;
+  display_name: string;
+  description: string;
+  is_public: boolean;
+  is_global: boolean;
+  created_at: string;
+  updated_at: string;
+  created_by: string | null;
+  feature_flag_environments: FeatureFlagEnvironment[];
+  feature_flag_user_roles: FeatureFlagUserRole[];
+  feature_flag_user_groups: FeatureFlagUserGroup[];
+  feature_flag_user_types: FeatureFlagUserType[];
+  feature_flag_subscription_tiers: FeatureFlagSubscriptionTier[];
+  feature_flag_users: FeatureFlagUser[];
+}
+
+interface FeatureFlagEnvironment {
+  id: string;
+  feature_flag_id: string;
+  environment: string;
+  is_enabled: boolean;
+  rollout_percentage: number;
+  created_at: string;
+  updated_at: string;
+}
+
+interface FeatureFlagUserRole {
+  id: string;
+  feature_flag_id: string;
+  environment: string;
+  role_name: string;
+  is_enabled: boolean;
+  created_at: string;
+}
+
+interface FeatureFlagUserGroup {
+  id: string;
+  feature_flag_id: string;
+  environment: string;
+  group_name: string;
+  is_enabled: boolean;
+  created_at: string;
+}
+
+interface FeatureFlagUserType {
+  id: string;
+  feature_flag_id: string;
+  user_type_name: string;
+  created_at: string;
+  updated_at: string;
+}
+
+interface FeatureFlagSubscriptionTier {
+  id: string;
+  feature_flag_id: string;
+  subscription_tier_name: string;
+  created_at: string;
+  updated_at: string;
+}
+
+interface FeatureFlagUser {
+  id: string;
+  feature_flag_id: string;
+  user_id: string;
+  created_at: string;
+}
+
+interface TargetingOptions {
+  userTypes: Array<{ name: string; display_name: string }>;
+  subscriptionTiers: Array<{ name: string; display_name: string }>;
+  userGroups: Array<{ name: string; displayName: string }>;
+  userRoles: Array<{ name: string; displayName: string }>;
+  users: Array<{ id: string; email: string; displayName: string }>;
+}
 
 const categories = [
   { value: 'all', label: 'All Categories' },
@@ -268,78 +144,14 @@ const categories = [
   { value: 'performance', label: 'Performance' },
 ];
 
-const audiences = [
-  {
-    value: 'all_users',
-    label: 'All Users',
-    count: 18456,
-    description: 'Every registered user',
-  },
-  {
-    value: 'internal_staff',
-    label: 'Internal Staff',
-    count: 25,
-    description: 'Peak Health employees',
-  },
-  {
-    value: 'beta_users',
-    label: 'Beta Users',
-    count: 234,
-    description: 'Users in beta programs',
-  },
-  {
-    value: 'trainers',
-    label: 'Trainers',
-    count: 48,
-    description: 'Certified fitness trainers',
-  },
-  {
-    value: 'admins',
-    label: 'Administrators',
-    count: 12,
-    description: 'Platform administrators',
-  },
-  {
-    value: 'corporate_users',
-    label: 'Corporate Users',
-    count: 1456,
-    description: 'Corporate wellness program users',
-  },
-  {
-    value: 'corporate_beta',
-    label: 'Corporate Beta',
-    count: 89,
-    description: 'Corporate beta testers',
-  },
-  {
-    value: 'premium_users',
-    label: 'Premium Users',
-    count: 4567,
-    description: 'Paid subscription users',
-  },
-  {
-    value: 'free_users',
-    label: 'Free Users',
-    count: 13889,
-    description: 'Free tier users',
-  },
-];
-
-const userTypes = [
-  { value: 'all', label: 'All User Types' },
-  { value: 'free', label: 'Free Tier' },
-  { value: 'premium', label: 'Premium' },
-  { value: 'corporate', label: 'Corporate' },
-];
-
-const platforms = [
-  { value: 'web', label: 'Web App' },
-  { value: 'mobile', label: 'Mobile App' },
-  { value: 'api', label: 'API' },
-];
+// const platforms = [
+//   { value: 'web', label: 'Web App' },
+//   { value: 'mobile', label: 'Mobile App' },
+//   { value: 'api', label: 'API' },
+// ];
 
 interface FeatureFlagsProps {
-  scopeInfo: any;
+  scopeInfo: unknown;
 }
 
 const getEnvironmentIcon = (env: string) => {
@@ -376,78 +188,261 @@ const formatDate = (dateString: string) => {
   });
 };
 
-export function FeatureFlags({ scopeInfo }: FeatureFlagsProps) {
+export const FeatureFlags = ({ scopeInfo }: FeatureFlagsProps) => {
+  const [featureFlags, setFeatureFlags] = useState<FeatureFlag[]>([]);
+  const [targetingOptions, setTargetingOptions] =
+    useState<TargetingOptions | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [selectedEnvironment, setSelectedEnvironment] = useState('all');
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
-  const [editingFlag, setEditingFlag] = useState<any>(null);
+  const [editingFlag, setEditingFlag] = useState<FeatureFlag | null>(null);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
 
-  // Form state for editing
-  const [editForm, setEditForm] = useState({
+  // Form state for creating/editing
+  const [formData, setFormData] = useState({
+    name: '',
     displayName: '',
     description: '',
-    category: '',
-    environments: {},
+    isPublic: false,
+    isGlobal: false,
+    environments: {
+      development: { enabled: false, rolloutPercentage: 0 },
+      staging: { enabled: false, rolloutPercentage: 0 },
+      production: { enabled: false, rolloutPercentage: 0 },
+    },
+    userTypes: [] as string[],
+    subscriptionTiers: [] as string[],
+    userRoles: [] as string[],
+    userGroups: [] as string[],
+    users: [] as string[],
   });
 
-  const filteredFlags = featureFlags.filter(flag => {
-    const matchesSearch =
-      flag.displayName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      flag.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      flag.name.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesCategory =
-      selectedCategory === 'all' || flag.category === selectedCategory;
-    return matchesSearch && matchesCategory;
-  });
+  // Load feature flags and targeting options
+  useEffect(() => {
+    loadFeatureFlags();
+    loadTargetingOptions();
+  }, []);
 
-  const handleEditFlag = (flag: any) => {
-    setEditingFlag({ ...flag });
-    setEditForm({
-      displayName: flag.displayName,
-      description: flag.description,
-      category: flag.category,
-      environments: { ...flag.environments },
+  const loadFeatureFlags = async () => {
+    try {
+      const response = await fetch('/api/admin/feature-flags');
+      if (!response.ok) {
+        throw new Error('Failed to fetch feature flags');
+      }
+      const data = await response.json();
+      setFeatureFlags(data.featureFlags || []);
+    } catch {
+      toast.error('Failed to load feature flags');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const loadTargetingOptions = async () => {
+    try {
+      const response = await fetch(
+        '/api/admin/feature-flags/targeting-options'
+      );
+      if (!response.ok) {
+        throw new Error('Failed to fetch targeting options');
+      }
+      const data = await response.json();
+      setTargetingOptions(data);
+    } catch {
+      // Error handled by toast
+    }
+  };
+
+  const createFeatureFlag = async () => {
+    try {
+      const response = await fetch('/api/admin/feature-flags', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          displayName: formData.displayName,
+          description: formData.description,
+          isPublic: formData.isPublic,
+          isGlobal: formData.isGlobal,
+          environments: formData.environments,
+          userTypes: formData.userTypes,
+          subscriptionTiers: formData.subscriptionTiers,
+          userRoles: formData.userRoles,
+          userGroups: formData.userGroups,
+          users: formData.users,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to create feature flag');
+      }
+
+      toast.success('Feature flag created successfully');
+      setIsCreateDialogOpen(false);
+      resetForm();
+      loadFeatureFlags();
+    } catch {
+      toast.error('Failed to create feature flag');
+    }
+  };
+
+  const updateFeatureFlag = async () => {
+    if (!editingFlag) return;
+
+    try {
+      const response = await fetch('/api/admin/feature-flags', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          id: editingFlag.id,
+          name: formData.name,
+          displayName: formData.displayName,
+          description: formData.description,
+          isPublic: formData.isPublic,
+          isGlobal: formData.isGlobal,
+          environments: formData.environments,
+          userTypes: formData.userTypes,
+          subscriptionTiers: formData.subscriptionTiers,
+          userRoles: formData.userRoles,
+          userGroups: formData.userGroups,
+          users: formData.users,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to update feature flag');
+      }
+
+      toast.success('Feature flag updated successfully');
+      setIsEditDialogOpen(false);
+      resetForm();
+      loadFeatureFlags();
+    } catch {
+      toast.error('Failed to update feature flag');
+    }
+  };
+
+  const deleteFeatureFlag = async (id: string) => {
+    try {
+      setIsDeleting(true);
+      const response = await fetch(`/api/admin/feature-flags?id=${id}`, {
+        method: 'DELETE',
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to delete feature flag');
+      }
+
+      toast.success('Feature flag deleted successfully');
+      loadFeatureFlags();
+    } catch {
+      toast.error('Failed to delete feature flag');
+    } finally {
+      setIsDeleting(false);
+    }
+  };
+
+  const resetForm = () => {
+    setFormData({
+      name: '',
+      displayName: '',
+      description: '',
+      isPublic: false,
+      isGlobal: false,
+      environments: {
+        development: { enabled: false, rolloutPercentage: 0 },
+        staging: { enabled: false, rolloutPercentage: 0 },
+        production: { enabled: false, rolloutPercentage: 0 },
+      },
+      userTypes: [],
+      subscriptionTiers: [],
+      userRoles: [],
+      userGroups: [],
+      users: [],
     });
+  };
+
+  const handleEditFlag = (flag: FeatureFlag) => {
+    setEditingFlag(flag);
+
+    // Convert database structure to form structure
+    const environments = {
+      development: { enabled: false, rolloutPercentage: 0 },
+      staging: { enabled: false, rolloutPercentage: 0 },
+      production: { enabled: false, rolloutPercentage: 0 },
+    };
+    flag.feature_flag_environments.forEach(env => {
+      (environments as any)[env.environment] = {
+        enabled: env.is_enabled,
+        rolloutPercentage: env.rollout_percentage,
+      };
+    });
+
+    setFormData({
+      name: flag.name,
+      displayName: flag.display_name,
+      description: flag.description,
+      isPublic: flag.is_public,
+      isGlobal: flag.is_global,
+      environments,
+      userTypes: flag.feature_flag_user_types.map(ut => ut.user_type_name),
+      subscriptionTiers: flag.feature_flag_subscription_tiers.map(
+        st => st.subscription_tier_name
+      ),
+      userRoles: flag.feature_flag_user_roles.map(ur => ur.role_name),
+      userGroups: flag.feature_flag_user_groups.map(ug => ug.group_name),
+      users: flag.feature_flag_users.map(uu => uu.user_id),
+    });
+
     setIsEditDialogOpen(true);
   };
 
-  const toggleEnvironmentStatus = (flagId: number, environment: string) => {
-    // In a real app, this would update the backend
-    console.log(`Toggling ${environment} status for flag ${flagId}`);
-  };
-
-  const updateRolloutPercentage = (
-    flagId: number,
-    environment: string,
-    percentage: number
-  ) => {
-    // In a real app, this would update the backend
-    console.log(
-      `Updating ${environment} rollout to ${percentage}% for flag ${flagId}`
-    );
-  };
-
-  const handleEditFormChange = (field: string, value: any) => {
-    setEditForm(prev => ({
+  const handleFormChange = (field: string, value: unknown) => {
+    setFormData(prev => ({
       ...prev,
       [field]: value,
     }));
   };
 
-  const handleEnvironmentChange = (env: string, field: string, value: any) => {
-    setEditForm(prev => ({
+  const handleEnvironmentChange = (
+    env: string,
+    field: string,
+    value: unknown
+  ) => {
+    setFormData(prev => ({
       ...prev,
       environments: {
         ...prev.environments,
         [env]: {
-          ...(prev.environments as any)[env],
+          ...prev.environments[env as keyof typeof prev.environments],
           [field]: value,
         },
       },
     }));
   };
+
+  const filteredFlags = featureFlags.filter(flag => {
+    const matchesSearch =
+      flag.display_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      flag.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      flag.name.toLowerCase().includes(searchQuery.toLowerCase());
+    return matchesSearch;
+  });
+
+  if (isLoading) {
+    return (
+      <div className="p-6 flex items-center justify-center">
+        <Loader2 className="h-8 w-8 animate-spin" />
+      </div>
+    );
+  }
 
   return (
     <div className="p-6 space-y-6">
@@ -489,6 +484,8 @@ export function FeatureFlags({ scopeInfo }: FeatureFlagsProps) {
                     <Input
                       id="flag-name"
                       placeholder="feature_name_identifier"
+                      value={formData.name}
+                      onChange={e => handleFormChange('name', e.target.value)}
                     />
                   </div>
                   <div className="space-y-2">
@@ -496,6 +493,10 @@ export function FeatureFlags({ scopeInfo }: FeatureFlagsProps) {
                     <Input
                       id="display-name"
                       placeholder="User-friendly feature name"
+                      value={formData.displayName}
+                      onChange={e =>
+                        handleFormChange('displayName', e.target.value)
+                      }
                     />
                   </div>
                 </div>
@@ -506,23 +507,34 @@ export function FeatureFlags({ scopeInfo }: FeatureFlagsProps) {
                     id="description"
                     placeholder="Describe what this feature does and its purpose..."
                     rows={3}
+                    value={formData.description}
+                    onChange={e =>
+                      handleFormChange('description', e.target.value)
+                    }
                   />
                 </div>
 
-                <div className="space-y-2">
-                  <Label htmlFor="category">Category</Label>
-                  <Select>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select category" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {categories.slice(1).map(category => (
-                        <SelectItem key={category.value} value={category.value}>
-                          {category.label}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                <div className="flex gap-4">
+                  <div className="flex items-center space-x-2">
+                    <Checkbox
+                      id="is-public"
+                      checked={formData.isPublic}
+                      onCheckedChange={checked =>
+                        handleFormChange('isPublic', checked)
+                      }
+                    />
+                    <Label htmlFor="is-public">Public Flag</Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Checkbox
+                      id="is-global"
+                      checked={formData.isGlobal}
+                      onCheckedChange={checked =>
+                        handleFormChange('isGlobal', checked)
+                      }
+                    />
+                    <Label htmlFor="is-global">Global Flag</Label>
+                  </div>
                 </div>
 
                 {/* Environment Configurations */}
@@ -561,103 +573,136 @@ export function FeatureFlags({ scopeInfo }: FeatureFlagsProps) {
                       >
                         <div className="flex items-center justify-between">
                           <Label>Enable in {env}</Label>
-                          <Switch />
+                          <Switch
+                            checked={
+                              formData.environments[
+                                env as keyof typeof formData.environments
+                              ].enabled
+                            }
+                            onCheckedChange={checked =>
+                              handleEnvironmentChange(env, 'enabled', checked)
+                            }
+                          />
                         </div>
 
                         <div className="space-y-2">
                           <Label>Rollout Percentage</Label>
                           <div className="px-3">
-                            <Slider defaultValue={[0]} max={100} step={1} />
+                            <Slider
+                              value={[
+                                formData.environments[
+                                  env as keyof typeof formData.environments
+                                ].rolloutPercentage,
+                              ]}
+                              max={100}
+                              step={1}
+                              onValueChange={value =>
+                                handleEnvironmentChange(
+                                  env,
+                                  'rolloutPercentage',
+                                  value[0]
+                                )
+                              }
+                            />
                           </div>
                           <p className="text-xs text-muted-foreground">
-                            0% of users will see this feature
+                            {
+                              formData.environments[
+                                env as keyof typeof formData.environments
+                              ].rolloutPercentage
+                            }
+                            % of users will see this feature
                           </p>
-                        </div>
-
-                        {env === 'production' && (
-                          <div className="space-y-3">
-                            <Label>Target Audiences (Production Only)</Label>
-                            <div className="grid grid-cols-1 gap-3 max-h-48 overflow-y-auto">
-                              {audiences.map(audience => (
-                                <div
-                                  key={audience.value}
-                                  className="flex items-center space-x-3 p-3 border rounded-lg"
-                                >
-                                  <Checkbox id={`${env}-${audience.value}`} />
-                                  <div className="flex-1">
-                                    <Label
-                                      htmlFor={`${env}-${audience.value}`}
-                                      className="text-sm"
-                                    >
-                                      {audience.label}
-                                    </Label>
-                                    <p className="text-xs text-muted-foreground">
-                                      {audience.count.toLocaleString()} users •{' '}
-                                      {audience.description}
-                                    </p>
-                                  </div>
-                                </div>
-                              ))}
-                            </div>
-                          </div>
-                        )}
-
-                        <div className="space-y-3">
-                          <Label>Platform Targeting</Label>
-                          <div className="flex flex-wrap gap-2">
-                            {platforms.map(platform => (
-                              <div
-                                key={platform.value}
-                                className="flex items-center space-x-2"
-                              >
-                                <Checkbox
-                                  id={`${env}-platform-${platform.value}`}
-                                />
-                                <Label
-                                  htmlFor={`${env}-platform-${platform.value}`}
-                                  className="text-sm"
-                                >
-                                  {platform.label}
-                                </Label>
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-
-                        <div className="space-y-3">
-                          <Label>User Type Targeting</Label>
-                          <div className="flex flex-wrap gap-2">
-                            {userTypes.slice(1).map(userType => (
-                              <div
-                                key={userType.value}
-                                className="flex items-center space-x-2"
-                              >
-                                <Checkbox
-                                  id={`${env}-usertype-${userType.value}`}
-                                />
-                                <Label
-                                  htmlFor={`${env}-usertype-${userType.value}`}
-                                  className="text-sm"
-                                >
-                                  {userType.label}
-                                </Label>
-                              </div>
-                            ))}
-                          </div>
                         </div>
                       </TabsContent>
                     ))}
                   </Tabs>
                 </div>
 
+                {/* Targeting Options */}
+                {targetingOptions && (
+                  <div className="space-y-4">
+                    <Label>Targeting Options</Label>
+
+                    <div className="space-y-3">
+                      <Label>User Types</Label>
+                      <div className="grid grid-cols-2 gap-3 max-h-32 overflow-y-auto">
+                        {targetingOptions.userTypes.map(userType => (
+                          <div
+                            key={userType.name}
+                            className="flex items-center space-x-3 p-3 border rounded-lg"
+                          >
+                            <Checkbox
+                              id={`usertype-${userType.name}`}
+                              checked={formData.userTypes.includes(
+                                userType.name
+                              )}
+                              onCheckedChange={checked => {
+                                const newUserTypes = checked
+                                  ? [...formData.userTypes, userType.name]
+                                  : formData.userTypes.filter(
+                                      t => t !== userType.name
+                                    );
+                                handleFormChange('userTypes', newUserTypes);
+                              }}
+                            />
+                            <Label
+                              htmlFor={`usertype-${userType.name}`}
+                              className="text-sm"
+                            >
+                              {userType.display_name}
+                            </Label>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div className="space-y-3">
+                      <Label>Subscription Tiers</Label>
+                      <div className="grid grid-cols-2 gap-3 max-h-32 overflow-y-auto">
+                        {targetingOptions.subscriptionTiers.map(tier => (
+                          <div
+                            key={tier.name}
+                            className="flex items-center space-x-3 p-3 border rounded-lg"
+                          >
+                            <Checkbox
+                              id={`tier-${tier.name}`}
+                              checked={formData.subscriptionTiers.includes(
+                                tier.name
+                              )}
+                              onCheckedChange={checked => {
+                                const newTiers = checked
+                                  ? [...formData.subscriptionTiers, tier.name]
+                                  : formData.subscriptionTiers.filter(
+                                      t => t !== tier.name
+                                    );
+                                handleFormChange('subscriptionTiers', newTiers);
+                              }}
+                            />
+                            <Label
+                              htmlFor={`tier-${tier.name}`}
+                              className="text-sm"
+                            >
+                              {tier.display_name}
+                            </Label>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                )}
+
                 <div className="flex justify-end gap-2">
                   <Button
                     variant="outline"
-                    onClick={() => setIsCreateDialogOpen(false)}
+                    onClick={() => {
+                      setIsCreateDialogOpen(false);
+                      resetForm();
+                    }}
                   >
-                    Save as Draft
+                    Cancel
                   </Button>
-                  <Button onClick={() => setIsCreateDialogOpen(false)}>
+                  <Button onClick={createFeatureFlag}>
                     Create Feature Flag
                   </Button>
                 </div>
@@ -714,10 +759,15 @@ export function FeatureFlags({ scopeInfo }: FeatureFlagsProps) {
               <div className="flex items-start justify-between">
                 <div className="flex-1">
                   <div className="flex items-center gap-3 mb-2">
-                    <h3 className="font-medium">{flag.displayName}</h3>
+                    <h3 className="font-medium">{flag.display_name}</h3>
                     <Badge variant="outline" className="text-xs">
-                      {categories.find(c => c.value === flag.category)?.label}
+                      {flag.is_public ? 'Public' : 'Private'}
                     </Badge>
+                    {flag.is_global && (
+                      <Badge variant="secondary" className="text-xs">
+                        Global
+                      </Badge>
+                    )}
                   </div>
                   <p className="text-sm text-muted-foreground mb-3">
                     {flag.description}
@@ -731,19 +781,16 @@ export function FeatureFlags({ scopeInfo }: FeatureFlagsProps) {
                         {flag.name}
                       </span>
                     </div>
-
-                    {flag.dependencies.length > 0 && (
-                      <div className="flex items-center gap-2">
-                        <AlertCircle className="h-4 w-4 text-muted-foreground" />
-                        <span>{flag.dependencies.length} dependencies</span>
-                      </div>
-                    )}
                   </div>
 
                   {/* Environment Status Grid */}
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    {Object.entries(flag.environments).map(([env, config]) => {
+                    {['development', 'staging', 'production'].map(env => {
+                      const envConfig = flag.feature_flag_environments.find(
+                        e => e.environment === env
+                      );
                       const EnvIcon = getEnvironmentIcon(env);
+
                       return (
                         <div
                           key={env}
@@ -759,15 +806,9 @@ export function FeatureFlags({ scopeInfo }: FeatureFlagsProps) {
                                 variant={getEnvironmentColor(env)}
                                 className="text-xs"
                               >
-                                {config.enabled ? 'Enabled' : 'Disabled'}
+                                {envConfig?.is_enabled ? 'Enabled' : 'Disabled'}
                               </Badge>
                             </div>
-                            <Switch
-                              checked={config.enabled}
-                              onCheckedChange={() =>
-                                toggleEnvironmentStatus(flag.id, env)
-                              }
-                            />
                           </div>
 
                           <div className="space-y-2">
@@ -775,46 +816,8 @@ export function FeatureFlags({ scopeInfo }: FeatureFlagsProps) {
                               <span className="text-muted-foreground">
                                 Rollout:
                               </span>
-                              <span>{config.rolloutPercentage}%</span>
+                              <span>{envConfig?.rollout_percentage || 0}%</span>
                             </div>
-
-                            <div className="flex items-center justify-between text-sm">
-                              <span className="text-muted-foreground">
-                                Audiences:
-                              </span>
-                              <span>{config.targetAudiences.length}</span>
-                            </div>
-
-                            {env === 'production' && config.enabled && (
-                              <div className="pt-2 border-t">
-                                <div className="flex flex-wrap gap-1">
-                                  {config.targetAudiences
-                                    .slice(0, 2)
-                                    .map(audienceValue => {
-                                      const audience = audiences.find(
-                                        a => a.value === audienceValue
-                                      );
-                                      return (
-                                        <Badge
-                                          key={audienceValue}
-                                          variant="secondary"
-                                          className="text-xs"
-                                        >
-                                          {audience?.label}
-                                        </Badge>
-                                      );
-                                    })}
-                                  {config.targetAudiences.length > 2 && (
-                                    <Badge
-                                      variant="outline"
-                                      className="text-xs"
-                                    >
-                                      +{config.targetAudiences.length - 2} more
-                                    </Badge>
-                                  )}
-                                </div>
-                              </div>
-                            )}
                           </div>
                         </div>
                       );
@@ -830,12 +833,35 @@ export function FeatureFlags({ scopeInfo }: FeatureFlagsProps) {
                   >
                     <Edit className="h-4 w-4" />
                   </Button>
-                  <Button variant="ghost" size="sm">
-                    <Eye className="h-4 w-4" />
-                  </Button>
-                  <Button variant="ghost" size="sm">
-                    <Settings className="h-4 w-4" />
-                  </Button>
+                  <AlertDialog>
+                    <AlertDialogTrigger asChild>
+                      <Button variant="ghost" size="sm">
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                      <AlertDialogHeader>
+                        <AlertDialogTitle>Delete Feature Flag</AlertDialogTitle>
+                        <AlertDialogDescription>
+                          Are you sure you want to delete "{flag.display_name}"?
+                          This action cannot be undone.
+                        </AlertDialogDescription>
+                      </AlertDialogHeader>
+                      <AlertDialogFooter>
+                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                        <AlertDialogAction
+                          onClick={() => deleteFeatureFlag(flag.id)}
+                          disabled={isDeleting}
+                        >
+                          {isDeleting ? (
+                            <Loader2 className="h-4 w-4 animate-spin" />
+                          ) : (
+                            'Delete'
+                          )}
+                        </AlertDialogAction>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialog>
                 </div>
               </div>
             </CardHeader>
@@ -843,14 +869,13 @@ export function FeatureFlags({ scopeInfo }: FeatureFlagsProps) {
             <CardContent className="pt-0">
               <div className="flex items-center justify-between text-xs text-muted-foreground">
                 <div className="flex items-center gap-4">
-                  <span>Created by {flag.createdBy}</span>
                   <div className="flex items-center gap-1">
                     <Calendar className="h-3 w-3" />
-                    <span>Created {formatDate(flag.createdAt)}</span>
+                    <span>Created {formatDate(flag.created_at)}</span>
                   </div>
                   <div className="flex items-center gap-1">
                     <Calendar className="h-3 w-3" />
-                    <span>Updated {formatDate(flag.updatedAt)}</span>
+                    <span>Updated {formatDate(flag.updated_at)}</span>
                   </div>
                 </div>
               </div>
@@ -882,8 +907,11 @@ export function FeatureFlags({ scopeInfo }: FeatureFlagsProps) {
                 </p>
                 <p className="text-xl font-semibold">
                   {
-                    featureFlags.filter(f => f.environments.production.enabled)
-                      .length
+                    featureFlags.filter(f =>
+                      f.feature_flag_environments.some(
+                        e => e.environment === 'production' && e.is_enabled
+                      )
+                    ).length
                   }
                 </p>
               </div>
@@ -898,8 +926,11 @@ export function FeatureFlags({ scopeInfo }: FeatureFlagsProps) {
                 <p className="text-sm text-muted-foreground">Staging Tests</p>
                 <p className="text-xl font-semibold">
                   {
-                    featureFlags.filter(f => f.environments.staging.enabled)
-                      .length
+                    featureFlags.filter(f =>
+                      f.feature_flag_environments.some(
+                        e => e.environment === 'staging' && e.is_enabled
+                      )
+                    ).length
                   }
                 </p>
               </div>
@@ -911,18 +942,9 @@ export function FeatureFlags({ scopeInfo }: FeatureFlagsProps) {
             <div className="flex items-center gap-2">
               <Users className="h-4 w-4 text-orange-500" />
               <div>
-                <p className="text-sm text-muted-foreground">
-                  Avg Production Rollout
-                </p>
+                <p className="text-sm text-muted-foreground">Public Flags</p>
                 <p className="text-xl font-semibold">
-                  {Math.round(
-                    featureFlags.reduce(
-                      (sum, f) =>
-                        sum + f.environments.production.rolloutPercentage,
-                      0
-                    ) / featureFlags.length
-                  )}
-                  %
+                  {featureFlags.filter(f => f.is_public).length}
                 </p>
               </div>
             </div>
@@ -940,179 +962,234 @@ export function FeatureFlags({ scopeInfo }: FeatureFlagsProps) {
               feature flag.
             </DialogDescription>
           </DialogHeader>
-          {editingFlag && (
-            <div className="space-y-6">
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label>Feature Name</Label>
-                  <Input
-                    value={editingFlag.name}
-                    readOnly
-                    className="bg-muted"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label>Display Name</Label>
-                  <Input
-                    value={editForm.displayName}
-                    onChange={e =>
-                      handleEditFormChange('displayName', e.target.value)
-                    }
-                  />
-                </div>
-              </div>
-
+          <div className="space-y-6">
+            <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label>Description</Label>
-                <Textarea
-                  value={editForm.description}
-                  onChange={e =>
-                    handleEditFormChange('description', e.target.value)
-                  }
-                  rows={3}
+                <Label>Feature Name</Label>
+                <Input
+                  value={formData.name}
+                  onChange={e => handleFormChange('name', e.target.value)}
                 />
               </div>
-
-              {/* Environment Configurations */}
-              <div className="space-y-4">
-                <Label>Environment Configurations</Label>
-                <Tabs defaultValue="production" className="space-y-4">
-                  <TabsList className="grid w-full grid-cols-3">
-                    <TabsTrigger
-                      value="development"
-                      className="flex items-center gap-2"
-                    >
-                      <Code className="h-4 w-4" />
-                      Development
-                    </TabsTrigger>
-                    <TabsTrigger
-                      value="staging"
-                      className="flex items-center gap-2"
-                    >
-                      <TestTube className="h-4 w-4" />
-                      Staging
-                    </TabsTrigger>
-                    <TabsTrigger
-                      value="production"
-                      className="flex items-center gap-2"
-                    >
-                      <Rocket className="h-4 w-4" />
-                      Production
-                    </TabsTrigger>
-                  </TabsList>
-
-                  {Object.entries(editForm.environments).map(
-                    ([env, config]) => (
-                      <TabsContent
-                        key={env}
-                        value={env}
-                        className="space-y-4 border rounded-lg p-4"
-                      >
-                        <div className="flex items-center justify-between">
-                          <Label>Enable in {env}</Label>
-                          <Switch
-                            checked={(config as any).enabled}
-                            onCheckedChange={checked =>
-                              handleEnvironmentChange(env, 'enabled', checked)
-                            }
-                          />
-                        </div>
-
-                        <div className="space-y-2">
-                          <Label>
-                            Rollout Percentage:{' '}
-                            {(config as any).rolloutPercentage}%
-                          </Label>
-                          <div className="px-3">
-                            <Slider
-                              value={[(config as any).rolloutPercentage]}
-                              max={100}
-                              step={1}
-                              onValueChange={value =>
-                                handleEnvironmentChange(
-                                  env,
-                                  'rolloutPercentage',
-                                  value[0]
-                                )
-                              }
-                            />
-                          </div>
-                          <p className="text-xs text-muted-foreground">
-                            {(config as any).rolloutPercentage}% of targeted
-                            users will see this feature
-                          </p>
-                        </div>
-
-                        {env === 'production' && (
-                          <div className="space-y-3">
-                            <Label>Target Audiences (Production Only)</Label>
-                            <div className="grid grid-cols-1 gap-3 max-h-48 overflow-y-auto">
-                              {audiences.map(audience => (
-                                <div
-                                  key={audience.value}
-                                  className="flex items-center space-x-3 p-3 border rounded-lg"
-                                >
-                                  <Checkbox
-                                    id={`edit-${env}-${audience.value}`}
-                                    checked={(
-                                      config as any
-                                    ).targetAudiences.includes(audience.value)}
-                                    onCheckedChange={checked => {
-                                      const newAudiences = checked
-                                        ? [
-                                            ...(config as any).targetAudiences,
-                                            audience.value,
-                                          ]
-                                        : (
-                                            config as any
-                                          ).targetAudiences.filter(
-                                            (a: string) => a !== audience.value
-                                          );
-                                      handleEnvironmentChange(
-                                        env,
-                                        'targetAudiences',
-                                        newAudiences
-                                      );
-                                    }}
-                                  />
-                                  <div className="flex-1">
-                                    <Label
-                                      htmlFor={`edit-${env}-${audience.value}`}
-                                      className="text-sm"
-                                    >
-                                      {audience.label}
-                                    </Label>
-                                    <p className="text-xs text-muted-foreground">
-                                      {audience.count.toLocaleString()} users •{' '}
-                                      {audience.description}
-                                    </p>
-                                  </div>
-                                </div>
-                              ))}
-                            </div>
-                          </div>
-                        )}
-                      </TabsContent>
-                    )
-                  )}
-                </Tabs>
-              </div>
-
-              <div className="flex justify-end gap-2">
-                <Button
-                  variant="outline"
-                  onClick={() => setIsEditDialogOpen(false)}
-                >
-                  Cancel
-                </Button>
-                <Button onClick={() => setIsEditDialogOpen(false)}>
-                  Save Changes
-                </Button>
+              <div className="space-y-2">
+                <Label>Display Name</Label>
+                <Input
+                  value={formData.displayName}
+                  onChange={e =>
+                    handleFormChange('displayName', e.target.value)
+                  }
+                />
               </div>
             </div>
-          )}
+
+            <div className="space-y-2">
+              <Label>Description</Label>
+              <Textarea
+                value={formData.description}
+                onChange={e => handleFormChange('description', e.target.value)}
+                rows={3}
+              />
+            </div>
+
+            <div className="flex gap-4">
+              <div className="flex items-center space-x-2">
+                <Checkbox
+                  id="edit-is-public"
+                  checked={formData.isPublic}
+                  onCheckedChange={checked =>
+                    handleFormChange('isPublic', checked)
+                  }
+                />
+                <Label htmlFor="edit-is-public">Public Flag</Label>
+              </div>
+              <div className="flex items-center space-x-2">
+                <Checkbox
+                  id="edit-is-global"
+                  checked={formData.isGlobal}
+                  onCheckedChange={checked =>
+                    handleFormChange('isGlobal', checked)
+                  }
+                />
+                <Label htmlFor="edit-is-global">Global Flag</Label>
+              </div>
+            </div>
+
+            {/* Environment Configurations */}
+            <div className="space-y-4">
+              <Label>Environment Configurations</Label>
+              <Tabs defaultValue="production" className="space-y-4">
+                <TabsList className="grid w-full grid-cols-3">
+                  <TabsTrigger
+                    value="development"
+                    className="flex items-center gap-2"
+                  >
+                    <Code className="h-4 w-4" />
+                    Development
+                  </TabsTrigger>
+                  <TabsTrigger
+                    value="staging"
+                    className="flex items-center gap-2"
+                  >
+                    <TestTube className="h-4 w-4" />
+                    Staging
+                  </TabsTrigger>
+                  <TabsTrigger
+                    value="production"
+                    className="flex items-center gap-2"
+                  >
+                    <Rocket className="h-4 w-4" />
+                    Production
+                  </TabsTrigger>
+                </TabsList>
+
+                {['development', 'staging', 'production'].map(env => (
+                  <TabsContent
+                    key={env}
+                    value={env}
+                    className="space-y-4 border rounded-lg p-4"
+                  >
+                    <div className="flex items-center justify-between">
+                      <Label>Enable in {env}</Label>
+                      <Switch
+                        checked={
+                          formData.environments[
+                            env as keyof typeof formData.environments
+                          ].enabled
+                        }
+                        onCheckedChange={checked =>
+                          handleEnvironmentChange(env, 'enabled', checked)
+                        }
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label>
+                        Rollout Percentage:{' '}
+                        {
+                          formData.environments[
+                            env as keyof typeof formData.environments
+                          ].rolloutPercentage
+                        }
+                        %
+                      </Label>
+                      <div className="px-3">
+                        <Slider
+                          value={[
+                            formData.environments[
+                              env as keyof typeof formData.environments
+                            ].rolloutPercentage,
+                          ]}
+                          max={100}
+                          step={1}
+                          onValueChange={value =>
+                            handleEnvironmentChange(
+                              env,
+                              'rolloutPercentage',
+                              value[0]
+                            )
+                          }
+                        />
+                      </div>
+                      <p className="text-xs text-muted-foreground">
+                        {
+                          formData.environments[
+                            env as keyof typeof formData.environments
+                          ].rolloutPercentage
+                        }
+                        % of targeted users will see this feature
+                      </p>
+                    </div>
+                  </TabsContent>
+                ))}
+              </Tabs>
+            </div>
+
+            {/* Targeting Options */}
+            {targetingOptions && (
+              <div className="space-y-4">
+                <Label>Targeting Options</Label>
+
+                <div className="space-y-3">
+                  <Label>User Types</Label>
+                  <div className="grid grid-cols-2 gap-3 max-h-32 overflow-y-auto">
+                    {targetingOptions.userTypes.map(userType => (
+                      <div
+                        key={userType.name}
+                        className="flex items-center space-x-3 p-3 border rounded-lg"
+                      >
+                        <Checkbox
+                          id={`edit-usertype-${userType.name}`}
+                          checked={formData.userTypes.includes(userType.name)}
+                          onCheckedChange={checked => {
+                            const newUserTypes = checked
+                              ? [...formData.userTypes, userType.name]
+                              : formData.userTypes.filter(
+                                  t => t !== userType.name
+                                );
+                            handleFormChange('userTypes', newUserTypes);
+                          }}
+                        />
+                        <Label
+                          htmlFor={`edit-usertype-${userType.name}`}
+                          className="text-sm"
+                        >
+                          {userType.display_name}
+                        </Label>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="space-y-3">
+                  <Label>Subscription Tiers</Label>
+                  <div className="grid grid-cols-2 gap-3 max-h-32 overflow-y-auto">
+                    {targetingOptions.subscriptionTiers.map(tier => (
+                      <div
+                        key={tier.name}
+                        className="flex items-center space-x-3 p-3 border rounded-lg"
+                      >
+                        <Checkbox
+                          id={`edit-tier-${tier.name}`}
+                          checked={formData.subscriptionTiers.includes(
+                            tier.name
+                          )}
+                          onCheckedChange={checked => {
+                            const newTiers = checked
+                              ? [...formData.subscriptionTiers, tier.name]
+                              : formData.subscriptionTiers.filter(
+                                  t => t !== tier.name
+                                );
+                            handleFormChange('subscriptionTiers', newTiers);
+                          }}
+                        />
+                        <Label
+                          htmlFor={`edit-tier-${tier.name}`}
+                          className="text-sm"
+                        >
+                          {tier.display_name}
+                        </Label>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
+
+            <div className="flex justify-end gap-2">
+              <Button
+                variant="outline"
+                onClick={() => {
+                  setIsEditDialogOpen(false);
+                  resetForm();
+                }}
+              >
+                Cancel
+              </Button>
+              <Button onClick={updateFeatureFlag}>Save Changes</Button>
+            </div>
+          </div>
         </DialogContent>
       </Dialog>
     </div>
   );
-}
+};
