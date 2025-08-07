@@ -1,7 +1,7 @@
 import { validateEmail, validatePassword } from '@peakhealth/auth-utils';
 import { NextRequest, NextResponse } from 'next/server';
 
-import { createClient } from '@/lib/supabase/server';
+import { createAdminClient } from '@/lib/supabase/admin';
 
 export async function POST(request: NextRequest): Promise<NextResponse> {
   try {
@@ -38,7 +38,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       );
     }
 
-    const supabase = await createClient();
+    const supabase = createAdminClient();
     if (!supabase) {
       return NextResponse.json(
         { error: 'Database connection failed' },
