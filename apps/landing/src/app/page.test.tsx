@@ -2,28 +2,30 @@ import { render, screen } from '@testing-library/react';
 
 import HomePage from './page';
 
+/* eslint-disable no-undef */
+
 // Mock the components to avoid complex testing setup
-jest.mock('@/components/shared/Header', () => ({
+vi.mock('@/components/shared/Header', () => ({
   Header: () => <div data-testid="header">Header</div>,
 }));
 
-jest.mock('@/components/shared/Footer', () => ({
+vi.mock('@/components/shared/Footer', () => ({
   Footer: () => <div data-testid="footer">Footer</div>,
 }));
 
-jest.mock('@/components/landing/HeroSection', () => ({
+vi.mock('@/components/landing/HeroSection', () => ({
   HeroSection: () => <div data-testid="hero">Hero</div>,
 }));
 
-jest.mock('@/components/landing/FeatureSection', () => ({
+vi.mock('@/components/landing/FeatureSection', () => ({
   FeatureSection: () => <div data-testid="features">Features</div>,
 }));
 
-jest.mock('@/components/landing/TestimonialSection', () => ({
+vi.mock('@/components/landing/TestimonialSection', () => ({
   TestimonialSection: () => <div data-testid="testimonials">Testimonials</div>,
 }));
 
-jest.mock('@/components/landing/CTASection', () => ({
+vi.mock('@/components/landing/CTASection', () => ({
   CTASection: () => <div data-testid="cta">CTA</div>,
 }));
 
