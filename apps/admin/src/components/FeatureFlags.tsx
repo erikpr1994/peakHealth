@@ -215,8 +215,16 @@ export const FeatureFlags = ({ scopeInfo }: FeatureFlagsProps) => {
     },
     userTypes: [] as string[],
     subscriptionTiers: [] as string[],
-    userRoles: [] as string[],
-    userGroups: [] as string[],
+    userRoles: [] as Array<{
+      roleName: string;
+      environments: string[];
+      isEnabled: boolean;
+    }>,
+    userGroups: [] as Array<{
+      groupName: string;
+      environments: string[];
+      isEnabled: boolean;
+    }>,
     users: [] as string[],
   });
 
@@ -379,7 +387,12 @@ export const FeatureFlags = ({ scopeInfo }: FeatureFlagsProps) => {
       production: { enabled: false, rolloutPercentage: 0 },
     };
     flag.feature_flag_environments.forEach(env => {
-      (environments as any)[env.environment] = {
+      (
+        environments as Record<
+          string,
+          { enabled: boolean; rolloutPercentage: number }
+        >
+      )[env.environment] = {
         enabled: env.is_enabled,
         rolloutPercentage: env.rollout_percentage,
       };
@@ -396,8 +409,40 @@ export const FeatureFlags = ({ scopeInfo }: FeatureFlagsProps) => {
       subscriptionTiers: flag.feature_flag_subscription_tiers.map(
         st => st.subscription_tier_name
       ),
-      userRoles: flag.feature_flag_user_roles.map(ur => ur.role_name),
-      userGroups: flag.feature_flag_user_groups.map(ug => ug.group_name),
+      userRoles: (() => {
+        const roleMap = new Map<
+          string,
+          { roleName: string; environments: string[]; isEnabled: boolean }
+        >();
+        flag.feature_flag_user_roles.forEach(ur => {
+          if (!roleMap.has(ur.role_name)) {
+            roleMap.set(ur.role_name, {
+              roleName: ur.role_name,
+              environments: [],
+              isEnabled: ur.is_enabled,
+            });
+          }
+          roleMap.get(ur.role_name)!.environments.push(ur.environment);
+        });
+        return Array.from(roleMap.values());
+      })(),
+      userGroups: (() => {
+        const groupMap = new Map<
+          string,
+          { groupName: string; environments: string[]; isEnabled: boolean }
+        >();
+        flag.feature_flag_user_groups.forEach(ug => {
+          if (!groupMap.has(ug.group_name)) {
+            groupMap.set(ug.group_name, {
+              groupName: ug.group_name,
+              environments: [],
+              isEnabled: ug.is_enabled,
+            });
+          }
+          groupMap.get(ug.group_name)!.environments.push(ug.environment);
+        });
+        return Array.from(groupMap.values());
+      })(),
       users: flag.feature_flag_users.map(uu => uu.user_id),
     });
 
@@ -687,6 +732,265 @@ export const FeatureFlags = ({ scopeInfo }: FeatureFlagsProps) => {
                             </Label>
                           </div>
                         ))}
+                      </div>
+                    </div>
+
+                    <div className="space-y-3">
+                      <Label>User Roles</Label>
+                      <div className="space-y-3 max-h-32 overflow-y-auto">
+                        {targetingOptions.userRoles.map(role => {
+                          const existingRole = formData.userRoles.find(
+                            r => r.roleName === role.name
+                          );
+                          return (
+                            <div
+                              key={role.name}
+                              className="border rounded-lg p-3 space-y-3"
+                            >
+                              <div className="flex items-center space-x-3">
+                                <Checkbox
+                                  id={`role-${role.name}`}
+                                  checked={!!existingRole}
+                                  onCheckedChange={checked => {
+                                    if (checked) {
+                                      const newRoles = [
+                                        ...formData.userRoles,
+                                        {
+                                          roleName: role.name,
+                                          environments: [
+                                            'development',
+                                            'staging',
+                                            'production',
+                                          ],
+                                          isEnabled: true,
+                                        },
+                                      ];
+                                      handleFormChange('userRoles', newRoles);
+                                    } else {
+                                      const newRoles =
+                                        formData.userRoles.filter(
+                                          r => r.roleName !== role.name
+                                        );
+                                      handleFormChange('userRoles', newRoles);
+                                    }
+                                  }}
+                                />
+                                <Label
+                                  htmlFor={`role-${role.name}`}
+                                  className="text-sm font-medium"
+                                >
+                                  {role.displayName}
+                                </Label>
+                              </div>
+                              {existingRole && (
+                                <div className="ml-6 space-y-2">
+                                  <div className="flex items-center space-x-4">
+                                    <Label className="text-xs">
+                                      Environments:
+                                    </Label>
+                                    {[
+                                      'development',
+                                      'staging',
+                                      'production',
+                                    ].map(env => (
+                                      <div
+                                        key={env}
+                                        className="flex items-center space-x-2"
+                                      >
+                                        <Checkbox
+                                          id={`role-${role.name}-${env}`}
+                                          checked={existingRole.environments.includes(
+                                            env
+                                          )}
+                                          onCheckedChange={checked => {
+                                            const newRoles =
+                                              formData.userRoles.map(r =>
+                                                r.roleName === role.name
+                                                  ? {
+                                                      ...r,
+                                                      environments: checked
+                                                        ? [
+                                                            ...r.environments,
+                                                            env,
+                                                          ]
+                                                        : r.environments.filter(
+                                                            e => e !== env
+                                                          ),
+                                                    }
+                                                  : r
+                                              );
+                                            handleFormChange(
+                                              'userRoles',
+                                              newRoles
+                                            );
+                                          }}
+                                        />
+                                        <Label
+                                          htmlFor={`role-${role.name}-${env}`}
+                                          className="text-xs capitalize"
+                                        >
+                                          {env}
+                                        </Label>
+                                      </div>
+                                    ))}
+                                  </div>
+                                  <div className="flex items-center space-x-2">
+                                    <Checkbox
+                                      id={`role-${role.name}-enabled`}
+                                      checked={existingRole.isEnabled}
+                                      onCheckedChange={checked => {
+                                        const newRoles = formData.userRoles.map(
+                                          r =>
+                                            r.roleName === role.name
+                                              ? { ...r, isEnabled: checked }
+                                              : r
+                                        );
+                                        handleFormChange('userRoles', newRoles);
+                                      }}
+                                    />
+                                    <Label
+                                      htmlFor={`role-${role.name}-enabled`}
+                                      className="text-xs"
+                                    >
+                                      Enabled
+                                    </Label>
+                                  </div>
+                                </div>
+                              )}
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+
+                    <div className="space-y-3">
+                      <Label>User Groups</Label>
+                      <div className="space-y-3 max-h-32 overflow-y-auto">
+                        {targetingOptions.userGroups.map(group => {
+                          const existingGroup = formData.userGroups.find(
+                            g => g.groupName === group.name
+                          );
+                          return (
+                            <div
+                              key={group.name}
+                              className="border rounded-lg p-3 space-y-3"
+                            >
+                              <div className="flex items-center space-x-3">
+                                <Checkbox
+                                  id={`group-${group.name}`}
+                                  checked={!!existingGroup}
+                                  onCheckedChange={checked => {
+                                    if (checked) {
+                                      const newGroups = [
+                                        ...formData.userGroups,
+                                        {
+                                          groupName: group.name,
+                                          environments: [
+                                            'development',
+                                            'staging',
+                                            'production',
+                                          ],
+                                          isEnabled: true,
+                                        },
+                                      ];
+                                      handleFormChange('userGroups', newGroups);
+                                    } else {
+                                      const newGroups =
+                                        formData.userGroups.filter(
+                                          g => g.groupName !== group.name
+                                        );
+                                      handleFormChange('userGroups', newGroups);
+                                    }
+                                  }}
+                                />
+                                <Label
+                                  htmlFor={`group-${group.name}`}
+                                  className="text-sm font-medium"
+                                >
+                                  {group.displayName}
+                                </Label>
+                              </div>
+                              {existingGroup && (
+                                <div className="ml-6 space-y-2">
+                                  <div className="flex items-center space-x-4">
+                                    <Label className="text-xs">
+                                      Environments:
+                                    </Label>
+                                    {[
+                                      'development',
+                                      'staging',
+                                      'production',
+                                    ].map(env => (
+                                      <div
+                                        key={env}
+                                        className="flex items-center space-x-2"
+                                      >
+                                        <Checkbox
+                                          id={`group-${group.name}-${env}`}
+                                          checked={existingGroup.environments.includes(
+                                            env
+                                          )}
+                                          onCheckedChange={checked => {
+                                            const newGroups =
+                                              formData.userGroups.map(g =>
+                                                g.groupName === group.name
+                                                  ? {
+                                                      ...g,
+                                                      environments: checked
+                                                        ? [
+                                                            ...g.environments,
+                                                            env,
+                                                          ]
+                                                        : g.environments.filter(
+                                                            e => e !== env
+                                                          ),
+                                                    }
+                                                  : g
+                                              );
+                                            handleFormChange(
+                                              'userGroups',
+                                              newGroups
+                                            );
+                                          }}
+                                        />
+                                        <Label
+                                          htmlFor={`group-${group.name}-${env}`}
+                                          className="text-xs capitalize"
+                                        >
+                                          {env}
+                                        </Label>
+                                      </div>
+                                    ))}
+                                  </div>
+                                  <div className="flex items-center space-x-2">
+                                    <Checkbox
+                                      id={`group-${group.name}-enabled`}
+                                      checked={existingGroup.isEnabled}
+                                      onCheckedChange={checked => {
+                                        const newGroups =
+                                          formData.userGroups.map(g =>
+                                            g.groupName === group.name
+                                              ? { ...g, isEnabled: checked }
+                                              : g
+                                          );
+                                        handleFormChange(
+                                          'userGroups',
+                                          newGroups
+                                        );
+                                      }}
+                                    />
+                                    <Label
+                                      htmlFor={`group-${group.name}-enabled`}
+                                      className="text-xs"
+                                    >
+                                      Enabled
+                                    </Label>
+                                  </div>
+                                </div>
+                              )}
+                            </div>
+                          );
+                        })}
                       </div>
                     </div>
                   </div>
@@ -1170,6 +1474,246 @@ export const FeatureFlags = ({ scopeInfo }: FeatureFlagsProps) => {
                         </Label>
                       </div>
                     ))}
+                  </div>
+                </div>
+
+                <div className="space-y-3">
+                  <Label>User Roles</Label>
+                  <div className="space-y-3 max-h-32 overflow-y-auto">
+                    {targetingOptions.userRoles.map(role => {
+                      const existingRole = formData.userRoles.find(
+                        r => r.roleName === role.name
+                      );
+                      return (
+                        <div
+                          key={role.name}
+                          className="border rounded-lg p-3 space-y-3"
+                        >
+                          <div className="flex items-center space-x-3">
+                            <Checkbox
+                              id={`edit-role-${role.name}`}
+                              checked={!!existingRole}
+                              onCheckedChange={checked => {
+                                if (checked) {
+                                  const newRoles = [
+                                    ...formData.userRoles,
+                                    {
+                                      roleName: role.name,
+                                      environments: [
+                                        'development',
+                                        'staging',
+                                        'production',
+                                      ],
+                                      isEnabled: true,
+                                    },
+                                  ];
+                                  handleFormChange('userRoles', newRoles);
+                                } else {
+                                  const newRoles = formData.userRoles.filter(
+                                    r => r.roleName !== role.name
+                                  );
+                                  handleFormChange('userRoles', newRoles);
+                                }
+                              }}
+                            />
+                            <Label
+                              htmlFor={`edit-role-${role.name}`}
+                              className="text-sm font-medium"
+                            >
+                              {role.displayName}
+                            </Label>
+                          </div>
+                          {existingRole && (
+                            <div className="ml-6 space-y-2">
+                              <div className="flex items-center space-x-4">
+                                <Label className="text-xs">Environments:</Label>
+                                {['development', 'staging', 'production'].map(
+                                  env => (
+                                    <div
+                                      key={env}
+                                      className="flex items-center space-x-2"
+                                    >
+                                      <Checkbox
+                                        id={`edit-role-${role.name}-${env}`}
+                                        checked={existingRole.environments.includes(
+                                          env
+                                        )}
+                                        onCheckedChange={checked => {
+                                          const newRoles =
+                                            formData.userRoles.map(r =>
+                                              r.roleName === role.name
+                                                ? {
+                                                    ...r,
+                                                    environments: checked
+                                                      ? [...r.environments, env]
+                                                      : r.environments.filter(
+                                                          e => e !== env
+                                                        ),
+                                                  }
+                                                : r
+                                            );
+                                          handleFormChange(
+                                            'userRoles',
+                                            newRoles
+                                          );
+                                        }}
+                                      />
+                                      <Label
+                                        htmlFor={`edit-role-${role.name}-${env}`}
+                                        className="text-xs capitalize"
+                                      >
+                                        {env}
+                                      </Label>
+                                    </div>
+                                  )
+                                )}
+                              </div>
+                              <div className="flex items-center space-x-2">
+                                <Checkbox
+                                  id={`edit-role-${role.name}-enabled`}
+                                  checked={existingRole.isEnabled}
+                                  onCheckedChange={checked => {
+                                    const newRoles = formData.userRoles.map(
+                                      r =>
+                                        r.roleName === role.name
+                                          ? { ...r, isEnabled: checked }
+                                          : r
+                                    );
+                                    handleFormChange('userRoles', newRoles);
+                                  }}
+                                />
+                                <Label
+                                  htmlFor={`edit-role-${role.name}-enabled`}
+                                  className="text-xs"
+                                >
+                                  Enabled
+                                </Label>
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                <div className="space-y-3">
+                  <Label>User Groups</Label>
+                  <div className="space-y-3 max-h-32 overflow-y-auto">
+                    {targetingOptions.userGroups.map(group => {
+                      const existingGroup = formData.userGroups.find(
+                        g => g.groupName === group.name
+                      );
+                      return (
+                        <div
+                          key={group.name}
+                          className="border rounded-lg p-3 space-y-3"
+                        >
+                          <div className="flex items-center space-x-3">
+                            <Checkbox
+                              id={`edit-group-${group.name}`}
+                              checked={!!existingGroup}
+                              onCheckedChange={checked => {
+                                if (checked) {
+                                  const newGroups = [
+                                    ...formData.userGroups,
+                                    {
+                                      groupName: group.name,
+                                      environments: [
+                                        'development',
+                                        'staging',
+                                        'production',
+                                      ],
+                                      isEnabled: true,
+                                    },
+                                  ];
+                                  handleFormChange('userGroups', newGroups);
+                                } else {
+                                  const newGroups = formData.userGroups.filter(
+                                    g => g.groupName !== group.name
+                                  );
+                                  handleFormChange('userGroups', newGroups);
+                                }
+                              }}
+                            />
+                            <Label
+                              htmlFor={`edit-group-${group.name}`}
+                              className="text-sm font-medium"
+                            >
+                              {group.displayName}
+                            </Label>
+                          </div>
+                          {existingGroup && (
+                            <div className="ml-6 space-y-2">
+                              <div className="flex items-center space-x-4">
+                                <Label className="text-xs">Environments:</Label>
+                                {['development', 'staging', 'production'].map(
+                                  env => (
+                                    <div
+                                      key={env}
+                                      className="flex items-center space-x-2"
+                                    >
+                                      <Checkbox
+                                        id={`edit-group-${group.name}-${env}`}
+                                        checked={existingGroup.environments.includes(
+                                          env
+                                        )}
+                                        onCheckedChange={checked => {
+                                          const newGroups =
+                                            formData.userGroups.map(g =>
+                                              g.groupName === group.name
+                                                ? {
+                                                    ...g,
+                                                    environments: checked
+                                                      ? [...g.environments, env]
+                                                      : g.environments.filter(
+                                                          e => e !== env
+                                                        ),
+                                                  }
+                                                : g
+                                            );
+                                          handleFormChange(
+                                            'userGroups',
+                                            newGroups
+                                          );
+                                        }}
+                                      />
+                                      <Label
+                                        htmlFor={`edit-group-${group.name}-${env}`}
+                                        className="text-xs capitalize"
+                                      >
+                                        {env}
+                                      </Label>
+                                    </div>
+                                  )
+                                )}
+                              </div>
+                              <div className="flex items-center space-x-2">
+                                <Checkbox
+                                  id={`edit-group-${group.name}-enabled`}
+                                  checked={existingGroup.isEnabled}
+                                  onCheckedChange={checked => {
+                                    const newGroups = formData.userGroups.map(
+                                      g =>
+                                        g.groupName === group.name
+                                          ? { ...g, isEnabled: checked }
+                                          : g
+                                    );
+                                    handleFormChange('userGroups', newGroups);
+                                  }}
+                                />
+                                <Label
+                                  htmlFor={`edit-group-${group.name}-enabled`}
+                                  className="text-xs"
+                                >
+                                  Enabled
+                                </Label>
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })}
                   </div>
                 </div>
               </div>
