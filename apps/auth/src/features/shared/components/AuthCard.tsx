@@ -58,18 +58,18 @@ export const Input: React.FC<
 export const Button: React.FC<
   React.ButtonHTMLAttributes<HTMLButtonElement> & {
     variant?: 'primary' | 'secondary';
+    size?: 'sm' | 'md' | 'lg';
   }
 > = ({
   variant = 'primary',
+  size = 'md',
   className,
   children,
   ...props
 }): React.JSX.Element => {
   return (
     <button
-      className={`${styles.button} ${
-        variant === 'secondary' ? styles.secondary : ''
-      } ${className ?? ''}`}
+      className={`${styles.button} ${styles[`button--${variant}`]} ${styles[`button--${size}`]} ${className ?? ''}`}
       {...props}
     >
       {children}

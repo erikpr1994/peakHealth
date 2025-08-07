@@ -11,16 +11,31 @@ import type {
 const getAppConfigs = (): Record<string, AppConfig> => {
   const isDevelopment = process.env.NODE_ENV === 'development';
 
+  // Helper function to extract domain from URL or return as-is
+  const extractDomain = (urlOrDomain: string): string => {
+    try {
+      // If it's a full URL, extract the hostname
+      const url = new URL(urlOrDomain);
+      return url.hostname + (url.port ? `:${url.port}` : '');
+    } catch {
+      // If it's not a valid URL, return as-is (assumed to be just domain)
+      return urlOrDomain;
+    }
+  };
+
   // Use environment variables for domains, fallback to localhost for development
-  const webDomain =
+  const webDomain = extractDomain(
     process.env.NEXT_PUBLIC_WEB_APP_URL ??
-    (isDevelopment ? 'localhost:3001' : 'peakhealth.es');
-  const adminDomain =
+      (isDevelopment ? 'localhost:3001' : 'peakhealth.es')
+  );
+  const adminDomain = extractDomain(
     process.env.NEXT_PUBLIC_ADMIN_APP_URL ??
-    (isDevelopment ? 'localhost:3002' : 'admin.peakhealth.es');
-  const proDomain =
+      (isDevelopment ? 'localhost:3002' : 'admin.peakhealth.es')
+  );
+  const proDomain = extractDomain(
     process.env.NEXT_PUBLIC_PRO_APP_URL ??
-    (isDevelopment ? 'localhost:3003' : 'pro.peakhealth.es');
+      (isDevelopment ? 'localhost:3003' : 'pro.peakhealth.es')
+  );
 
   return {
     web: {
@@ -140,12 +155,12 @@ export const getUserAccessibleApps = (user: User | null): AppSelection[] => {
   if (!user) return [];
 
   const userTypes: string[] = Array.isArray(user.app_metadata?.user_types)
-    ? (user.app_metadata.user_types as string[])
+    ? (user.app_metadata?.user_types as string[])
     : [];
   const primaryUserType: string =
     (user.app_metadata?.primary_user_type as string) ?? 'regular';
   const userGroups: string[] = Array.isArray(user.app_metadata?.groups)
-    ? (user.app_metadata.groups as string[])
+    ? user.app_metadata?.groups
     : [];
 
   // Combine user types and primary user type
@@ -300,7 +315,7 @@ export const hasGroup = (user: User | null, group: string): boolean => {
   return !!(
     user?.app_metadata?.groups &&
     Array.isArray(user.app_metadata.groups) &&
-    (user.app_metadata.groups as string[]).includes(group)
+    user.app_metadata.groups.includes(group)
   );
 };
 

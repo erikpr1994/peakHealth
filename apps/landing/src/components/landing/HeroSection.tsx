@@ -2,10 +2,41 @@
 
 import { ArrowRight, Play, Star } from 'lucide-react';
 import Link from 'next/link';
+import React from 'react';
 
 import styles from './HeroSection.module.css';
 
 import { getSignupUrl } from '@/lib/auth';
+
+const Button: React.FC<
+  React.ButtonHTMLAttributes<HTMLButtonElement> & {
+    variant?: 'primary' | 'secondary' | 'outline';
+    size?: 'sm' | 'md' | 'lg';
+    asChild?: boolean;
+  }
+> = ({
+  variant = 'primary',
+  size = 'md',
+  asChild = false,
+  className,
+  children,
+  ...props
+}) => {
+  const buttonClasses = `${styles.button} ${styles[`button--${variant}`]} ${styles[`button--${size}`]} ${className ?? ''}`;
+
+  if (asChild && React.isValidElement(children)) {
+    return React.cloneElement(children as React.ReactElement<any>, {
+      className: buttonClasses,
+      ...props,
+    });
+  }
+
+  return (
+    <button className={buttonClasses} {...props}>
+      {children}
+    </button>
+  );
+};
 
 export const HeroSection = () => {
   return (
@@ -29,15 +60,17 @@ export const HeroSection = () => {
           </p>
 
           <div className={styles.actions}>
-            <Link href={getSignupUrl()} className={styles.primaryButton}>
-              Start Your Journey
-              <ArrowRight className={styles.arrowIcon} />
-            </Link>
+            <Button asChild variant="primary" size="lg">
+              <Link href={getSignupUrl()}>
+                Start Your Journey
+                <ArrowRight className={styles.arrowIcon} />
+              </Link>
+            </Button>
 
-            <button className={styles.secondaryButton}>
+            <Button variant="outline" size="lg">
               <Play className={styles.playIcon} />
               Watch Demo
-            </button>
+            </Button>
           </div>
 
           <div className={styles.stats}>
