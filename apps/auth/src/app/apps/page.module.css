@@ -83,3 +83,64 @@
   margin-top: 0.5rem;
   text-align: center;
 }
+
+.retryButton {
+  width: 100%;
+  background: #2563eb;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.retryButton:hover {
+  background: #1d4ed8;
+}
+
+.noAppsContainer {
+  text-align: center;
+}
+
+.noAppsText {
+  color: #6b7280;
+  margin-bottom: 1rem;
+}
+
+.logoutButton {
+  background: #dc2626;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.logoutButton:hover {
+  background: #b91c1c;
+}
+
+.reasonText {
+  font-size: 0.75rem;
+  color: #6b7280;
+  margin-top: 0.5rem;
+}
+
+.logoutContainer {
+  margin-top: 1.5rem;
+  text-align: center;
+}
+
+.signOutButton {
+  color: #6b7280;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.signOutButton:hover {
+  color: #374151;
+}

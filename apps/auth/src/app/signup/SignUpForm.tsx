@@ -117,8 +117,8 @@ const SignUpForm = (): React.JSX.Element => {
 
   return (
     <AuthCard title="Create Account" subtitle="Join PeakHealth today">
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div className="grid grid-cols-2 gap-4">
+      <form onSubmit={handleSubmit} className={styles.form}>
+        <div className={styles.nameGrid}>
           <div>
             <Input
               type="text"
@@ -179,8 +179,8 @@ const SignUpForm = (): React.JSX.Element => {
           {isLoading ? 'Creating Account...' : 'Create Account'}
         </Button>
 
-        <div className="text-center">
-          <span className="text-gray-600">Already have an account? </span>
+        <div className={styles.loginLinkContainer}>
+          <span className={styles.loginText}>Already have an account? </span>
           <Link href={`/login?returnUrl=${encodeURIComponent(returnUrl)}`}>
             Sign in
           </Link>

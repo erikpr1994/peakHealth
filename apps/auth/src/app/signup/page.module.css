@@ -12,3 +12,23 @@
   margin-top: 0.5rem;
   text-align: center;
 }
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.nameGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.loginLinkContainer {
+  text-align: center;
+}
+
+.loginText {
+  color: #6b7280;
+}

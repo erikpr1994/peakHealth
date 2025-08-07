@@ -107,7 +107,7 @@ const AppSelector = (): React.JSX.Element => {
           <div className={styles.error}>{error}</div>
           <button
             onClick={() => window.location.reload()}
-            className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors"
+            className={styles.retryButton}
           >
             Try Again
           </button>
@@ -125,13 +125,13 @@ const AppSelector = (): React.JSX.Element => {
         subtitle={`Welcome back, ${user?.user_metadata?.firstName ?? user?.email}!`}
       >
         {accessibleApps.length === 0 ? (
-          <div className="text-center">
-            <p className="text-gray-600 mb-4">
+          <div className={styles.noAppsContainer}>
+            <p className={styles.noAppsText}>
               You don&apos;t have access to any apps at the moment.
             </p>
             <button
               onClick={() => void handleLogout()}
-              className="bg-red-600 text-white py-2 px-4 rounded-lg hover:bg-red-700 transition-colors"
+              className={styles.logoutButton}
             >
               Logout
             </button>
@@ -156,18 +156,16 @@ const AppSelector = (): React.JSX.Element => {
                     {app.accessible ? 'Accessible' : 'No Access'}
                   </div>
                   {!app.accessible && app.reason && (
-                    <div className="text-xs text-gray-500 mt-2">
-                      {app.reason}
-                    </div>
+                    <div className={styles.reasonText}>{app.reason}</div>
                   )}
                 </div>
               ))}
             </div>
 
-            <div className="mt-6 text-center">
+            <div className={styles.logoutContainer}>
               <button
                 onClick={() => void handleLogout()}
-                className="text-gray-600 hover:text-gray-800 transition-colors"
+                className={styles.signOutButton}
               >
                 Sign out
               </button>
