@@ -19,6 +19,9 @@ vi.mock('next/navigation', () => ({
   }),
 }));
 
+// Mock fetch globally
+global.fetch = vi.fn();
+
 // Mock Supabase client with proper auth methods
 const mockSupabaseAuth = {
   onAuthStateChange: vi.fn(() => ({
@@ -79,6 +82,12 @@ describe('AuthContext', () => {
     mockSupabaseAuth.signInWithPassword.mockResolvedValue({ error: null });
     mockSupabaseAuth.signUp.mockResolvedValue({ error: null });
     mockSupabaseAuth.signOut.mockResolvedValue({ error: null });
+
+    // Reset fetch mock
+    (global.fetch as Mock).mockResolvedValue({
+      ok: true,
+      json: () => Promise.resolve({ user: null }),
+    });
   });
 
   afterEach(() => {
@@ -141,20 +150,22 @@ describe('AuthContext', () => {
       });
     });
 
-    it('calls Supabase signUp on signup', async () => {
+    it('calls signup API route on signup', async () => {
       renderWithAuthProvider();
 
       fireEvent.click(screen.getByText('Sign Up'));
 
       await waitFor(() => {
-        expect(mockSupabaseAuth.signUp).toHaveBeenCalledWith({
-          email: 'test@example.com',
-          password: 'password',
-          options: {
-            data: {
-              name: 'Test User',
-            },
+        expect(global.fetch).toHaveBeenCalledWith('/api/auth/signup', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
           },
+          body: JSON.stringify({
+            email: 'test@example.com',
+            password: 'password',
+            name: 'Test User',
+          }),
         });
       });
     });

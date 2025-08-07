@@ -173,19 +173,25 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
     setIsAuthOperationLoading(true);
     try {
-      const { error } = await supabase.auth.signUp({
-        email: email || '',
-        password: password || '',
-        options: {
-          data: {
-            name: name || email?.split('@')[0] || '',
-          },
+      const response = await fetch('/api/auth/signup', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
         },
+        body: JSON.stringify({
+          email: email || '',
+          password: password || '',
+          name: name || email?.split('@')[0] || '',
+        }),
       });
 
-      if (error) {
-        throw error;
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Signup failed');
       }
+
+      // Revalidate user data after successful signup
+      await mutateUser();
     } catch (error) {
       console.error('Signup error:', error);
       throw error;
