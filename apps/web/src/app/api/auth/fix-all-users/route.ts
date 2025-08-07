@@ -74,7 +74,7 @@ export async function POST() {
 
         if (claimsChanged) {
           // Update user's app_metadata with new claims
-          const { data: updatedUser, error: updateError } =
+          const { error: updateError } =
             await adminClient.auth.admin.updateUserById(user.id, {
               app_metadata: claims,
             });
