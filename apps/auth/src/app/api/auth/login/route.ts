@@ -45,7 +45,10 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     // Set auth token cookie that can be accessed across subdomains
     if (data.session?.access_token) {
       response.cookies.set('auth-token', data.session.access_token, {
-        domain: '.peakhealth.es',
+        domain:
+          process.env.NODE_ENV === 'development'
+            ? 'localhost'
+            : '.peakhealth.es',
         path: '/',
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',

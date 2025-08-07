@@ -27,7 +27,8 @@ export async function POST(): Promise<NextResponse> {
 
     // Clear auth token cookie
     response.cookies.set('auth-token', '', {
-      domain: '.peakhealth.es',
+      domain:
+        process.env.NODE_ENV === 'development' ? 'localhost' : '.peakhealth.es',
       path: '/',
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
