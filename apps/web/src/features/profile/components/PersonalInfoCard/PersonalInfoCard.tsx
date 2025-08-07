@@ -7,7 +7,10 @@ import {
   Calendar,
   Edit2,
   Save,
-  Shield,
+  User,
+  Crown,
+  Key,
+  Star,
 } from 'lucide-react';
 import React, { useState } from 'react';
 
@@ -39,7 +42,15 @@ export const PersonalInfoCard = ({
   onUpdateMetadata,
   isUpdating = false,
 }: PersonalInfoCardProps) => {
-  const { mutateUser, userRoles, userGroups } = useAuth();
+  const {
+    mutateUser,
+    userTypes,
+    primaryUserType,
+    subscriptionTier,
+    userGroups,
+    permissions,
+    features,
+  } = useAuth();
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState({
     name: user.user_metadata.name || '',
@@ -248,22 +259,40 @@ export const PersonalInfoCard = ({
           )}
         </div>
 
-        {/* Roles and Groups Section */}
+        {/* User Types and Subscription Section */}
         <div>
           <Label className={styles.label}>
-            <Shield className={styles.icon} />
-            Roles & Groups
+            <User className={styles.icon} />
+            User Types & Subscription
           </Label>
           <div className={styles.rolesGroupsContainer}>
-            {userRoles.length > 0 && (
+            {userTypes.length > 0 && (
               <div className={styles.roleGroupSection}>
-                <span className={styles.roleGroupLabel}>Roles:</span>
+                <span className={styles.roleGroupLabel}>User Types:</span>
                 <div className={styles.roleGroupTags}>
-                  {userRoles.map((role, index) => (
-                    <span key={index} className={styles.roleGroupTag}>
-                      {role}
+                  {userTypes.map((userType, index) => (
+                    <span 
+                      key={index} 
+                      className={`${styles.roleGroupTag} ${
+                        userType === primaryUserType ? styles.primaryTag : ''
+                      }`}
+                    >
+                      {userType}
+                      {userType === primaryUserType && (
+                        <Crown className={styles.primaryIcon} />
+                      )}
                     </span>
                   ))}
+                </div>
+              </div>
+            )}
+            {subscriptionTier && (
+              <div className={styles.roleGroupSection}>
+                <span className={styles.roleGroupLabel}>Subscription:</span>
+                <div className={styles.roleGroupTags}>
+                  <span className={`${styles.roleGroupTag} ${styles.subscriptionTag}`}>
+                    {subscriptionTier}
+                  </span>
                 </div>
               </div>
             )}
@@ -279,11 +308,50 @@ export const PersonalInfoCard = ({
                 </div>
               </div>
             )}
-            {userRoles.length === 0 && userGroups.length === 0 && (
-              <p className={styles.value}>No roles or groups assigned</p>
+            {userTypes.length === 0 && userGroups.length === 0 && !subscriptionTier && (
+              <p className={styles.value}>No user types or groups assigned</p>
             )}
           </div>
         </div>
+
+        {/* Permissions Section */}
+        {Object.keys(permissions).length > 0 && (
+          <div>
+            <Label className={styles.label}>
+              <Key className={styles.icon} />
+              Permissions
+            </Label>
+            <div className={styles.permissionsContainer}>
+              {Object.entries(permissions).map(([permission, hasPermission]) => (
+                <span 
+                  key={permission} 
+                  className={`${styles.permissionTag} ${
+                    hasPermission ? styles.activePermission : styles.inactivePermission
+                  }`}
+                >
+                  {permission.replace(/_/g, ' ')}
+                </span>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Features Section */}
+        {features.length > 0 && (
+          <div>
+            <Label className={styles.label}>
+              <Star className={styles.icon} />
+              Features
+            </Label>
+            <div className={styles.featuresContainer}>
+              {features.map((feature, index) => (
+                <span key={index} className={styles.featureTag}>
+                  {feature.replace(/_/g, ' ')}
+                </span>
+              ))}
+            </div>
+          </div>
+        )}
 
         <div className={styles.actions}>
           {isEditing ? (
