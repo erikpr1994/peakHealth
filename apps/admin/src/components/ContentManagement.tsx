@@ -189,19 +189,19 @@ export function ContentManagement({
         <div className="flex gap-2 pt-2">
           {isAdmin ? (
             <>
-              <Button size="sm" variant="outline" className="flex-1">
+              <button className="px-3 py-1 border border-gray-300 rounded-md hover:bg-gray-50 flex-1 flex items-center justify-center">
                 <Edit className="h-4 w-4 mr-1" />
                 Edit
-              </Button>
-              <Button size="sm" variant="outline" className="text-destructive">
+              </button>
+              <button className="px-3 py-1 border border-gray-300 rounded-md hover:bg-gray-50 text-red-600">
                 <Trash2 className="h-4 w-4" />
-              </Button>
+              </button>
             </>
           ) : (
-            <Button size="sm" variant="outline" className="flex-1">
+            <button className="px-3 py-1 border border-gray-300 rounded-md hover:bg-gray-50 flex-1 flex items-center justify-center">
               <AlertCircle className="h-4 w-4 mr-1" />
               Suggest Change
-            </Button>
+            </button>
           )}
         </div>
       </CardContent>
@@ -247,19 +247,19 @@ export function ContentManagement({
         <div className="flex gap-2 pt-2">
           {isAdmin ? (
             <>
-              <Button size="sm" variant="outline" className="flex-1">
+              <button className="px-3 py-1 border border-gray-300 rounded-md hover:bg-gray-50 flex-1 flex items-center justify-center">
                 <Edit className="h-4 w-4 mr-1" />
                 Edit
-              </Button>
-              <Button size="sm" variant="outline" className="text-destructive">
+              </button>
+              <button className="px-3 py-1 border border-gray-300 rounded-md hover:bg-gray-50 text-red-600">
                 <Trash2 className="h-4 w-4" />
-              </Button>
+              </button>
             </>
           ) : (
-            <Button size="sm" variant="outline" className="flex-1">
+            <button className="px-3 py-1 border border-gray-300 rounded-md hover:bg-gray-50 flex-1 flex items-center justify-center">
               <AlertCircle className="h-4 w-4 mr-1" />
               Suggest Change
-            </Button>
+            </button>
           )}
         </div>
       </CardContent>
@@ -313,19 +313,19 @@ export function ContentManagement({
         <div className="flex gap-2 pt-2">
           {isAdmin ? (
             <>
-              <Button size="sm" variant="outline" className="flex-1">
+              <button className="px-3 py-1 border border-gray-300 rounded-md hover:bg-gray-50 flex-1 flex items-center justify-center">
                 <Edit className="h-4 w-4 mr-1" />
                 Edit
-              </Button>
-              <Button size="sm" variant="outline" className="text-destructive">
+              </button>
+              <button className="px-3 py-1 border border-gray-300 rounded-md hover:bg-gray-50 text-red-600">
                 <Trash2 className="h-4 w-4" />
-              </Button>
+              </button>
             </>
           ) : (
-            <Button size="sm" variant="outline" className="flex-1">
+            <button className="px-3 py-1 border border-gray-300 rounded-md hover:bg-gray-50 flex-1 flex items-center justify-center">
               <AlertCircle className="h-4 w-4 mr-1" />
               Suggest Change
-            </Button>
+            </button>
           )}
         </div>
       </CardContent>
@@ -352,10 +352,10 @@ export function ContentManagement({
         {isAdmin && (
           <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
             <DialogTrigger asChild>
-              <Button>
+              <button className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
                 <Plus className="h-4 w-4 mr-2" />
                 Add New {activeTab.slice(0, -1)}
-              </Button>
+              </button>
             </DialogTrigger>
             <DialogContent className="max-w-2xl">
               <DialogHeader>
@@ -395,10 +395,10 @@ export function ContentManagement({
                     onClick={() => setIsAddDialogOpen(false)}
                   >
                     Cancel
-                  </Button>
-                  <Button onClick={() => setIsAddDialogOpen(false)}>
+                  </button>
+                  <button onClick={() => setIsAddDialogOpen(false)}>
                     Save {activeTab.slice(0, -1)}
-                  </Button>
+                  </button>
                 </div>
               </div>
             </DialogContent>
@@ -417,10 +417,10 @@ export function ContentManagement({
             onChange={e => setSearchTerm(e.target.value)}
           />
         </div>
-        <Button variant="outline">
+        <button className="px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-50">
           <Filter className="h-4 w-4 mr-2" />
           Filter
-        </Button>
+        </button>
       </div>
 
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
@@ -487,23 +487,19 @@ export function ContentManagement({
                   <div className="flex gap-2">
                     {isAdmin ? (
                       <>
-                        <Button size="sm" variant="outline" className="flex-1">
+                        <button className="px-3 py-1 border border-gray-300 rounded-md hover:bg-gray-50 flex-1 flex items-center justify-center">
                           <Edit className="h-4 w-4 mr-1" />
                           Edit
-                        </Button>
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          className="text-destructive"
-                        >
+                        </button>
+                        <button className="px-3 py-1 border border-gray-300 rounded-md hover:bg-gray-50 text-red-600">
                           <Trash2 className="h-4 w-4" />
-                        </Button>
+                        </button>
                       </>
                     ) : (
-                      <Button size="sm" variant="outline" className="flex-1">
+                      <button className="px-3 py-1 border border-gray-300 rounded-md hover:bg-gray-50 flex-1 flex items-center justify-center">
                         <AlertCircle className="h-4 w-4 mr-1" />
                         Suggest Change
-                      </Button>
+                      </button>
                     )}
                   </div>
                 </CardContent>

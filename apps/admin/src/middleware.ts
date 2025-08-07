@@ -12,7 +12,6 @@ export async function middleware(request: NextRequest) {
   const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
   if (!supabaseUrl || !supabaseAnonKey) {
-    // eslint-disable-next-line no-console
     console.error('Missing Supabase environment variables');
     return response;
   }
@@ -54,7 +53,6 @@ export async function middleware(request: NextRequest) {
     ) {
       // Expected for unauthenticated users
     } else {
-      // eslint-disable-next-line no-console
       console.error('Unexpected auth error in middleware:', error);
     }
   }
