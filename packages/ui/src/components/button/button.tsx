@@ -12,7 +12,11 @@ export interface ButtonProps extends React.ComponentProps<'button'> {
     | 'dashed'
     | 'secondary'
     | 'ghost'
-    | 'link';
+    | 'link'
+    | 'nav'
+    | 'nav-selected'
+    | 'nav-unselected'
+    | 'action';
   size?: 'default' | 'sm' | 'lg' | 'icon';
   asChild?: boolean;
 }
