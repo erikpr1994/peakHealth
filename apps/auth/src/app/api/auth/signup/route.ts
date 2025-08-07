@@ -49,11 +49,12 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     // Check if user already exists - we'll let Supabase handle this during signup
     // The signup will fail if the user already exists
 
-    // Create user
+    // Create user with environment-specific email confirmation
+    const isDevelopment = process.env.NODE_ENV === 'development';
     const { data, error } = await supabase.auth.admin.createUser({
       email,
       password,
-      email_confirm: true, // Auto-confirm email for development
+      email_confirm: isDevelopment, // Only auto-confirm in development
       user_metadata: {
         firstName,
         lastName,
