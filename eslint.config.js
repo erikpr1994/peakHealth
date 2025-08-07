@@ -7,6 +7,7 @@ const jsxA11yPlugin = require('eslint-plugin-jsx-a11y');
 const prettierPlugin = require('eslint-plugin-prettier');
 const reactPlugin = require('eslint-plugin-react');
 const reactHooksPlugin = require('eslint-plugin-react-hooks');
+const reactRefreshPlugin = require('eslint-plugin-react-refresh');
 
 module.exports = [
   js.configs.recommended,
@@ -64,6 +65,7 @@ module.exports = [
       import: importPlugin,
       react: reactPlugin,
       'react-hooks': reactHooksPlugin,
+      'react-refresh': reactRefreshPlugin,
       'jsx-a11y': jsxA11yPlugin,
       prettier: prettierPlugin,
       '@next/next': nextPlugin,
