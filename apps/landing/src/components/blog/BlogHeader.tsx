@@ -1,6 +1,7 @@
 'use client';
 
 import { Search, BookOpen } from 'lucide-react';
+import React from 'react';
 import { useState } from 'react';
 
 import styles from './BlogHeader.module.css';

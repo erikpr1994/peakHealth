@@ -1,5 +1,6 @@
 import { Calendar, Clock, User, Tag, ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
+import React from 'react';
 
 import styles from './BlogPost.module.css';
 
@@ -10,53 +11,88 @@ interface BlogPostProps {
 }
 
 const BlogPost = ({ post }: BlogPostProps) => {
-  // Simple markdown to HTML conversion for demo purposes
+  // Improved markdown to HTML conversion
   const renderContent = (content: string) => {
-    return content.split('\n').map((line, index) => {
+    const lines = content.split('\n');
+    const elements: React.ReactElement[] = [];
+    let currentList: React.ReactElement[] = [];
+    let inList = false;
+
+    const processInlineMarkdown = (text: string) => {
+      // Handle inline bold text
+      const parts = text.split(/(\*\*.*?\*\*)/g);
+      return parts.map((part, index) => {
+        if (part.startsWith('**') && part.endsWith('**')) {
+          return (
+            <strong key={index} className={styles.strong}>
+              {part.substring(2, part.length - 2)}
+            </strong>
+          );
+        }
+        return part;
+      });
+    };
+
+    const flushList = () => {
+      if (currentList.length > 0) {
+        elements.push(
+          <ul key={`list-${elements.length}`} className={styles.ul}>
+            {currentList}
+          </ul>
+        );
+        currentList = [];
+        inList = false;
+      }
+    };
+
+    lines.forEach((line, index) => {
       if (line.startsWith('# ')) {
-        return (
+        flushList();
+        elements.push(
           <h1 key={index} className={styles.h1}>
-            {line.substring(2)}
+            {processInlineMarkdown(line.substring(2))}
           </h1>
         );
-      }
-      if (line.startsWith('## ')) {
-        return (
+      } else if (line.startsWith('## ')) {
+        flushList();
+        elements.push(
           <h2 key={index} className={styles.h2}>
-            {line.substring(3)}
+            {processInlineMarkdown(line.substring(3))}
           </h2>
         );
-      }
-      if (line.startsWith('### ')) {
-        return (
+      } else if (line.startsWith('### ')) {
+        flushList();
+        elements.push(
           <h3 key={index} className={styles.h3}>
-            {line.substring(4)}
+            {processInlineMarkdown(line.substring(4))}
           </h3>
         );
-      }
-      if (line.startsWith('- ')) {
-        return (
-          <li key={index} className={styles.li}>
-            {line.substring(2)}
+      } else if (line.startsWith('- ')) {
+        if (!inList) {
+          inList = true;
+        }
+        currentList.push(
+          <li key={`li-${currentList.length}`} className={styles.li}>
+            {processInlineMarkdown(line.substring(2))}
           </li>
         );
-      }
-      if (line.startsWith('**') && line.endsWith('**')) {
-        return (
-          <strong key={index} className={styles.strong}>
-            {line.substring(2, line.length - 2)}
-          </strong>
+      } else if (line.trim() === '') {
+        flushList();
+        elements.push(<br key={index} />);
+      } else {
+        flushList();
+        elements.push(
+          <p key={index} className={styles.p}>
+            {processInlineMarkdown(line)}
+          </p>
         );
       }
-      if (line.trim() === '') {
-        return <br key={index} />;
-      }
-      return (
-        <p key={index} className={styles.p}>
-          {line}
-        </p>
-      );
     });
+
+    // Flush any remaining list items
+    flushList();
+
+    return elements;
   };
 
   return (
