@@ -1,0 +1,41 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+echo "🔄 Post-checkout hook: Pulling latest changes and installing dependencies..."
+
+# Get the previous and current branch
+PREVIOUS_HEAD=$1
+NEW_HEAD=$2
+CHECKOUT_TYPE=$3
+
+# Get the current branch name safely
+CURRENT_BRANCH=$(git branch --show-current 2>/dev/null || echo "")
+
+# Get the previous branch name for display
+PREVIOUS_BRANCH=$(git name-rev --name-only "$PREVIOUS_HEAD" 2>/dev/null | sed 's/^remotes\/origin\///' || echo "unknown")
+
+echo "Switched from $PREVIOUS_BRANCH to ${CURRENT_BRANCH:-detached HEAD}"
+
+# Only run for branch checkouts (not file checkouts)
+if [ "$CHECKOUT_TYPE" = "1" ]; then
+    # Only attempt to pull if we're on a branch (not detached HEAD)
+    if [ -n "$CURRENT_BRANCH" ]; then
+        echo "📥 Pulling latest changes..."
+        
+        # Check if the branch exists on origin before pulling
+        if git ls-remote --heads origin "$CURRENT_BRANCH" | grep -F -q "$CURRENT_BRANCH"; then
+            git pull origin "$CURRENT_BRANCH"
+        else
+            echo "⚠️  Branch '$CURRENT_BRANCH' does not exist on origin - skipping pull"
+        fi
+    else
+        echo "⚠️  Detached HEAD detected - skipping pull"
+    fi
+
+    echo "📦 Installing dependencies..."
+    pnpm install
+
+    echo "✅ Post-checkout hook completed successfully!"
+else
+    echo "⏭️  Skipping post-checkout hook (file checkout detected)"
+fi
