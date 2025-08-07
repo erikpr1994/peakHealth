@@ -52,7 +52,7 @@ export const navigationSections: NavigationSection[] = [
   },
   {
     id: 'analytics',
-    title: 'Analytics & Business',
+    title: 'Analytics & Reporting',
     items: [
       {
         id: 'analytics',
@@ -76,11 +76,22 @@ export const navigationSections: NavigationSection[] = [
           variant: 'secondary',
         },
       },
+      {
+        id: 'engagement',
+        label: 'User Engagement',
+        icon: Activity,
+        path: '/engagement',
+        scope: 'platform',
+        badge: {
+          text: '85%',
+          variant: 'secondary',
+        },
+      },
     ],
   },
   {
-    id: 'partners',
-    title: 'Partners & Network',
+    id: 'user_management',
+    title: 'User Management',
     items: [
       {
         id: 'trainers',
@@ -104,23 +115,6 @@ export const navigationSections: NavigationSection[] = [
           variant: 'secondary',
         },
       },
-    ],
-  },
-  {
-    id: 'content',
-    title: 'Content & Operations',
-    items: [
-      {
-        id: 'content',
-        label: 'Content Management',
-        icon: Database,
-        path: '/content',
-        scope: 'general',
-        badge: {
-          text: '1.2K',
-          variant: 'secondary',
-        },
-      },
       {
         id: 'suggestions',
         label: 'Content Suggestions',
@@ -130,45 +124,6 @@ export const navigationSections: NavigationSection[] = [
         badge: {
           text: '3',
           variant: 'destructive',
-        },
-      },
-    ],
-  },
-  {
-    id: 'customer_success',
-    title: 'Customer Success & Support',
-    items: [
-      {
-        id: 'support',
-        label: 'Support Tickets',
-        icon: HeadphonesIcon,
-        path: '/support',
-        scope: 'general',
-        badge: {
-          text: '12',
-          variant: 'destructive',
-        },
-      },
-      {
-        id: 'engagement',
-        label: 'User Engagement',
-        icon: Activity,
-        path: '/engagement',
-        scope: 'platform',
-        badge: {
-          text: '85%',
-          variant: 'secondary',
-        },
-      },
-      {
-        id: 'knowledge',
-        label: 'Knowledge Base',
-        icon: BookOpen,
-        path: '/knowledge',
-        scope: 'general',
-        badge: {
-          text: '124',
-          variant: 'secondary',
         },
       },
       {
@@ -185,8 +140,8 @@ export const navigationSections: NavigationSection[] = [
     ],
   },
   {
-    id: 'communications',
-    title: 'Communication & Notifications',
+    id: 'communication',
+    title: 'Communication',
     items: [
       {
         id: 'announcements',
@@ -235,9 +190,31 @@ export const navigationSections: NavigationSection[] = [
     ],
   },
   {
-    id: 'product',
-    title: 'Product & Development',
+    id: 'content',
+    title: 'Content & Knowledge',
     items: [
+      {
+        id: 'content',
+        label: 'Content Management',
+        icon: Database,
+        path: '/content',
+        scope: 'general',
+        badge: {
+          text: '1.2K',
+          variant: 'secondary',
+        },
+      },
+      {
+        id: 'knowledge',
+        label: 'Knowledge Base',
+        icon: BookOpen,
+        path: '/knowledge',
+        scope: 'general',
+        badge: {
+          text: '124',
+          variant: 'secondary',
+        },
+      },
       {
         id: 'roadmap',
         label: 'Product Roadmap',
@@ -264,8 +241,19 @@ export const navigationSections: NavigationSection[] = [
   },
   {
     id: 'system',
-    title: 'System Administration',
+    title: 'System',
     items: [
+      {
+        id: 'support',
+        label: 'Support Tickets',
+        icon: HeadphonesIcon,
+        path: '/support',
+        scope: 'general',
+        badge: {
+          text: '12',
+          variant: 'destructive',
+        },
+      },
       {
         id: 'settings',
         label: 'System Settings',
@@ -281,13 +269,15 @@ export const getAllNavigationItems = (): NavigationItem[] => {
   return navigationSections.flatMap(section => section.items);
 };
 
-export const getNavigationItemByPath = (path: string): NavigationItem | undefined => {
+export const getNavigationItemByPath = (
+  path: string
+): NavigationItem | undefined => {
   return getAllNavigationItems().find(item => item.path === path);
 };
 
 export const getDataScopeInfo = (path: string) => {
   const item = getNavigationItemByPath(path);
-  
+
   if (!item) {
     return {
       scope: 'general',
@@ -320,4 +310,4 @@ export const getDataScopeInfo = (path: string) => {
         color: 'secondary',
       };
   }
-}; 
+};

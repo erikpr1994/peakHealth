@@ -1,9 +1,18 @@
 'use client';
+import {
+  Search,
+  Filter,
+  Plus,
+  Edit,
+  Trash2,
+  MapPin,
+  AlertCircle,
+} from 'lucide-react';
 import { useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
+
 import { Badge } from './ui/badge';
-import { Input } from './ui/input';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
+import { Button } from './ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 import {
   Dialog,
   DialogContent,
@@ -12,8 +21,8 @@ import {
   DialogTitle,
   DialogTrigger,
 } from './ui/dialog';
+import { Input } from './ui/input';
 import { Label } from './ui/label';
-import { Textarea } from './ui/textarea';
 import {
   Select,
   SelectContent,
@@ -21,21 +30,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from './ui/select';
-import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
-import {
-  Search,
-  Filter,
-  Plus,
-  Edit,
-  Trash2,
-  MapPin,
-  Dumbbell,
-  Target,
-  Clock,
-  Users,
-  AlertCircle,
-  CheckCircle,
-} from 'lucide-react';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
+import { Textarea } from './ui/textarea';
 
 interface ContentManagementProps {
   userRole: 'admin' | 'external_trainer';
@@ -130,10 +126,10 @@ const mockCategories = [
   { id: 4, name: 'Free Weights', type: 'equipment_category', itemCount: 12 },
 ];
 
-export function ContentManagement({
+export const ContentManagement = ({
   userRole,
   scopeInfo,
-}: ContentManagementProps) {
+}: ContentManagementProps) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [activeTab, setActiveTab] = useState('exercises');
@@ -395,10 +391,10 @@ export function ContentManagement({
                     onClick={() => setIsAddDialogOpen(false)}
                   >
                     Cancel
-                  </button>
-                  <button onClick={() => setIsAddDialogOpen(false)}>
+                  </Button>
+                  <Button onClick={() => setIsAddDialogOpen(false)}>
                     Save {activeTab.slice(0, -1)}
-                  </button>
+                  </Button>
                 </div>
               </div>
             </DialogContent>
@@ -510,4 +506,4 @@ export function ContentManagement({
       </Tabs>
     </div>
   );
-}
+};
