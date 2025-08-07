@@ -89,7 +89,7 @@ const LoginForm = (): React.JSX.Element => {
 
           if (accessibleApps.length > 1) {
             // Multiple apps available, redirect to app selector
-            router.push('/apps');
+            router.push('/app-selector');
           } else if (accessibleApps.length === 1) {
             // Single app available, redirect directly
             const appKey = accessibleApps[0].appKey;

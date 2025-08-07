@@ -15,7 +15,7 @@ const AccessDeniedPage = (): React.JSX.Element => {
           application.
         </p>
         <a
-          href="/apps"
+          href="/app-selector"
           style={{
             padding: '0.5rem 1rem',
             backgroundColor: '#3b82f6',

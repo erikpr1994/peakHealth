@@ -8,7 +8,7 @@ import type { User } from '@supabase/supabase-js';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
-import styles from './apps.module.css';
+import styles from './app-selector.module.css';
 
 import { AuthCard } from '@/features/shared';
 
