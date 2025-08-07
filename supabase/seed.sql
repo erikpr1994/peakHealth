@@ -214,14 +214,8 @@ INSERT INTO exercise_ratings (user_id, exercise_id, rating, review) VALUES
 
 -- Feature Flag System Seed Data
 
--- Set user metadata for test user (special roles for testing)
--- Note: Regular users will get default 'basic' role and 'free' group via auth endpoints
-UPDATE auth.users 
-SET raw_user_meta_data = jsonb_build_object(
-  'roles', ARRAY['trainer', 'admin'],
-  'groups', ARRAY['beta', 'premium']
-)
-WHERE email = 'erikpastorrios1994@gmail.com';
+-- Note: Development admin user will be created via the reset-dev-permissions script
+-- This ensures proper user creation with all required Supabase auth fields
 
 -- Enable notification system feature for trainers in development
 INSERT INTO feature_flag_user_roles (feature_flag_id, environment, role_name, is_enabled) VALUES

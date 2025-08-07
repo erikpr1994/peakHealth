@@ -83,13 +83,11 @@ const Calendar = () => {
   };
 
   const handleEditWorkout = (workout: WorkoutEvent) => {
-    // TODO: Implement edit functionality
     // eslint-disable-next-line no-console
     console.log('Edit workout:', workout);
   };
 
   const handleDeleteWorkout = (workout: WorkoutEvent) => {
-    // TODO: Implement delete functionality
     // eslint-disable-next-line no-console
     console.log('Delete workout:', workout);
   };

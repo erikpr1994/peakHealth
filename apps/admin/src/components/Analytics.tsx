@@ -1,16 +1,5 @@
 'use client';
 
-import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
-import { Button } from './ui/button';
-import { Input } from './ui/input';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from './ui/select';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
 import { TrendingUp, Users, Calendar, Target } from 'lucide-react';
 
 import {
@@ -29,6 +18,17 @@ import {
   AreaChart,
   Area,
 } from 'recharts';
+
+import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
+import { Input } from './ui/input';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from './ui/select';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
 
 const weeklyData = [
   { name: 'Week 1', workouts: 65, completed: 55, clients: 120 },
@@ -66,7 +66,7 @@ const clientRetention = [
 ];
 
 interface AnalyticsProps {
-  scopeInfo?: any;
+  scopeInfo?: Record<string, unknown>;
 }
 
 export const Analytics = ({ scopeInfo }: AnalyticsProps) => {
@@ -91,7 +91,9 @@ export const Analytics = ({ scopeInfo }: AnalyticsProps) => {
               <SelectItem value="365">Last year</SelectItem>
             </SelectContent>
           </Select>
-          <Button variant="outline">Export Data</Button>
+          <button className="px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-50">
+            Export Data
+          </button>
         </div>
       </div>
 

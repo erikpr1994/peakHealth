@@ -79,7 +79,7 @@ const LoginForm = (): React.JSX.Element => {
           },
           body: JSON.stringify({
             ...formData,
-            redirect: returnUrl || undefined,
+            redirect: returnUrl ?? undefined,
           }),
         });
 
