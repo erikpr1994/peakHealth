@@ -36,12 +36,18 @@ export async function GET() {
     }
 
     // Get users for specific targeting
-    const { data: users, error: usersError } = await adminClient
-      .from('auth.users')
-      .select('id, email, raw_app_meta_data')
-      .limit(1000); // Limit to prevent performance issues
-
-    if (usersError) {
+    let users: any[] = [];
+    try {
+      const { data: usersData, error: usersError } =
+        await adminClient.auth.admin.listUsers();
+      if (usersError) {
+        console.error('Error fetching users:', usersError);
+        // Continue with empty array
+      } else {
+        users = usersData.users || [];
+      }
+    } catch (error) {
+      console.error('Error in listUsers:', error);
       // Continue with empty array
     }
 
@@ -49,7 +55,7 @@ export async function GET() {
     const userGroups = new Set<string>();
     if (users) {
       users.forEach(user => {
-        const groups = user.raw_app_meta_data?.groups || [];
+        const groups = user.app_metadata?.groups || [];
         groups.forEach((group: string) => userGroups.add(group));
       });
     }
@@ -58,7 +64,7 @@ export async function GET() {
     const userRoles = new Set<string>();
     if (users) {
       users.forEach(user => {
-        const roles = user.raw_app_meta_data?.roles || [];
+        const roles = user.app_metadata?.roles || [];
         roles.forEach((role: string) => userRoles.add(role));
       });
     }
