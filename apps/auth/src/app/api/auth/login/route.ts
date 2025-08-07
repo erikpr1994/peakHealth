@@ -2,6 +2,34 @@ import { NextRequest, NextResponse } from 'next/server';
 
 import { createClient } from '@/lib/supabase/server';
 
+// Helper function to validate redirect URLs
+function isValidRedirectUrl(url: string): boolean {
+  try {
+    const redirectUrl = new URL(url);
+
+    // Ensure URL is absolute (has protocol and hostname)
+    if (!redirectUrl.protocol || !redirectUrl.hostname) {
+      return false;
+    }
+
+    const allowedDomains = [
+      'localhost:3001', // web app
+      'localhost:3002', // admin app
+      'localhost:3003', // pro app
+      'peakhealth.es',
+      'admin.peakhealth.es',
+      'pro.peakhealth.es',
+    ];
+
+    return allowedDomains.some(
+      domain =>
+        redirectUrl.hostname === domain || redirectUrl.hostname.endsWith(domain)
+    );
+  } catch {
+    return false;
+  }
+}
+
 export async function POST(request: NextRequest): Promise<NextResponse> {
   try {
     const supabase = await createClient();
@@ -13,9 +41,10 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       );
     }
 
-    const { email, password } = (await request.json()) as {
+    const { email, password, redirect } = (await request.json()) as {
       email: string;
       password: string;
+      redirect?: string;
     };
 
     if (!email || !password) {
@@ -36,7 +65,29 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       return NextResponse.json({ error: error.message }, { status: 400 });
     }
 
-    // Set cross-domain cookies for session management
+    // If redirect is provided and valid, redirect there with cookies
+    if (redirect && isValidRedirectUrl(redirect)) {
+      const redirectResponse = NextResponse.redirect(redirect);
+
+      // Set auth token cookie that can be accessed across subdomains
+      if (data.session?.access_token) {
+        redirectResponse.cookies.set('auth-token', data.session.access_token, {
+          domain:
+            process.env.NODE_ENV === 'development'
+              ? 'localhost'
+              : '.peakhealth.es',
+          path: '/',
+          httpOnly: true,
+          secure: process.env.NODE_ENV === 'production',
+          sameSite: 'lax',
+          maxAge: 60 * 60 * 24 * 7, // 7 days
+        });
+      }
+
+      return redirectResponse;
+    }
+
+    // Default JSON response with user data
     const response = NextResponse.json({
       user: data.user,
       session: data.session,

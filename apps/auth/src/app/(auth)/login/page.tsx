@@ -70,7 +70,10 @@ const LoginForm = (): React.JSX.Element => {
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify(formData),
+          body: JSON.stringify({
+            ...formData,
+            redirect: returnUrl ?? undefined,
+          }),
         });
 
         const data = (await response.json()) as { error?: string };

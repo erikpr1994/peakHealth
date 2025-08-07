@@ -27,7 +27,7 @@ const getAppConfigs = (): Record<string, AppConfig> => {
       name: 'PeakHealth',
       domain: webDomain,
       path: '/dashboard',
-      roles: ['user', 'premium'],
+      roles: ['user', 'premium', 'regular'],
       groups: ['free', 'premium'],
       description: 'Main fitness platform for users',
       icon: '🏃‍♂️',
@@ -139,15 +139,22 @@ export const deleteCookie = (
 export const getUserAccessibleApps = (user: User | null): AppSelection[] => {
   if (!user) return [];
 
-  const userRoles: string[] = Array.isArray(user.app_metadata?.roles)
-    ? (user.app_metadata.roles as string[])
+  const userTypes: string[] = Array.isArray(user.app_metadata?.user_types)
+    ? (user.app_metadata.user_types as string[])
     : [];
+  const primaryUserType: string =
+    (user.app_metadata?.primary_user_type as string) ?? 'regular';
   const userGroups: string[] = Array.isArray(user.app_metadata?.groups)
     ? (user.app_metadata.groups as string[])
     : [];
 
+  // Combine user types and primary user type
+  const allUserRoles = [...userTypes, primaryUserType];
+
   return Object.entries(APP_CONFIGS).map(([appKey, config]) => {
-    const hasRequiredRole = config.roles.some(role => userRoles.includes(role));
+    const hasRequiredRole = config.roles.some(role =>
+      allUserRoles.includes(role)
+    );
     const hasRequiredGroup = config.groups.some(group =>
       userGroups.includes(group)
     );
@@ -271,11 +278,22 @@ export const validatePassword = (
 
 // Role and permission utilities
 export const hasRole = (user: User | null, role: string): boolean => {
-  return !!(
-    user?.app_metadata?.roles &&
-    Array.isArray(user.app_metadata.roles) &&
-    (user.app_metadata.roles as string[]).includes(role)
-  );
+  if (!user?.app_metadata) return false;
+
+  const userTypes = user.app_metadata.user_types as string[] | undefined;
+  const primaryUserType = user.app_metadata.primary_user_type as
+    | string
+    | undefined;
+
+  if (Array.isArray(userTypes) && userTypes.includes(role)) {
+    return true;
+  }
+
+  if (primaryUserType === role) {
+    return true;
+  }
+
+  return false;
 };
 
 export const hasGroup = (user: User | null, group: string): boolean => {
