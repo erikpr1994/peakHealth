@@ -70,7 +70,9 @@ export async function middleware(request: NextRequest) {
         ? 'localhost:3000'
         : `auth.${currentDomain.replace(/^admin\./, '')}`;
 
-    const authUrl = new URL('/', `http://${authDomain}`);
+    // Determine protocol based on environment
+    const protocol = process.env.NODE_ENV === 'development' ? 'http' : 'https';
+    const authUrl = new URL('/', `${protocol}://${authDomain}`);
     authUrl.searchParams.set('redirect', request.url);
     return NextResponse.redirect(authUrl);
   }
@@ -83,7 +85,12 @@ export async function middleware(request: NextRequest) {
         ? 'localhost:3000'
         : `auth.${currentDomain.replace(/^admin\./, '')}`;
 
-    const accessDeniedUrl = new URL('/access-denied', `http://${authDomain}`);
+    // Determine protocol based on environment
+    const protocol = process.env.NODE_ENV === 'development' ? 'http' : 'https';
+    const accessDeniedUrl = new URL(
+      '/access-denied',
+      `${protocol}://${authDomain}`
+    );
     return NextResponse.redirect(accessDeniedUrl);
   }
 
