@@ -76,7 +76,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Start a transaction
+    // Create the main feature flag
     const { data: featureFlag, error: flagError } = await adminClient
       .from('feature_flags')
       .insert({
@@ -120,7 +120,11 @@ export async function POST(request: NextRequest) {
         .insert(environmentData);
 
       if (envError) {
-        // Continue anyway, the main flag was created
+        console.error('Error creating environment configurations:', envError);
+        return NextResponse.json(
+          { error: 'Failed to create environment configurations' },
+          { status: 500 }
+        );
       }
     }
 
@@ -145,7 +149,11 @@ export async function POST(request: NextRequest) {
           .insert(roleData);
 
         if (roleError) {
-          // Continue anyway, the main flag was created
+          console.error('Error creating user role targeting:', roleError);
+          return NextResponse.json(
+            { error: 'Failed to create user role targeting' },
+            { status: 500 }
+          );
         }
       }
     }
@@ -192,7 +200,11 @@ export async function POST(request: NextRequest) {
           .insert(groupData);
 
         if (groupError) {
-          // Continue anyway, the main flag was created
+          console.error('Error creating user group targeting:', groupError);
+          return NextResponse.json(
+            { error: 'Failed to create user group targeting' },
+            { status: 500 }
+          );
         }
       }
     }
@@ -209,7 +221,11 @@ export async function POST(request: NextRequest) {
         .insert(userTypeData);
 
       if (userTypeError) {
-        // Continue anyway, the main flag was created
+        console.error('Error creating user type targeting:', userTypeError);
+        return NextResponse.json(
+          { error: 'Failed to create user type targeting' },
+          { status: 500 }
+        );
       }
     }
 
@@ -225,7 +241,14 @@ export async function POST(request: NextRequest) {
         .insert(subscriptionData);
 
       if (subscriptionError) {
-        // Continue anyway, the main flag was created
+        console.error(
+          'Error creating subscription tier targeting:',
+          subscriptionError
+        );
+        return NextResponse.json(
+          { error: 'Failed to create subscription tier targeting' },
+          { status: 500 }
+        );
       }
     }
 
@@ -241,7 +264,11 @@ export async function POST(request: NextRequest) {
         .insert(userData);
 
       if (userError) {
-        // Continue anyway, the main flag was created
+        console.error('Error creating user targeting:', userError);
+        return NextResponse.json(
+          { error: 'Failed to create user targeting' },
+          { status: 500 }
+        );
       }
     }
 
