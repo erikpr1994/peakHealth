@@ -219,13 +219,17 @@ export const FeatureFlags = ({ scopeInfo }: FeatureFlagsProps) => {
     subscriptionTiers: [] as string[],
     userRoles: [] as Array<{
       roleName: string;
-      environments: string[];
-      isEnabled: boolean;
+      environments: Array<{
+        environment: string;
+        isEnabled: boolean;
+      }>;
     }>,
     userGroups: [] as Array<{
       groupName: string;
-      environments: string[];
-      isEnabled: boolean;
+      environments: Array<{
+        environment: string;
+        isEnabled: boolean;
+      }>;
     }>,
     users: [] as string[],
   });
@@ -416,34 +420,44 @@ export const FeatureFlags = ({ scopeInfo }: FeatureFlagsProps) => {
       userRoles: (() => {
         const roleMap = new Map<
           string,
-          { roleName: string; environments: string[]; isEnabled: boolean }
+          {
+            roleName: string;
+            environments: Array<{ environment: string; isEnabled: boolean }>;
+          }
         >();
         flag.feature_flag_user_roles.forEach(ur => {
           if (!roleMap.has(ur.role_name)) {
             roleMap.set(ur.role_name, {
               roleName: ur.role_name,
               environments: [],
-              isEnabled: ur.is_enabled,
             });
           }
-          roleMap.get(ur.role_name)!.environments.push(ur.environment);
+          roleMap.get(ur.role_name)!.environments.push({
+            environment: ur.environment,
+            isEnabled: ur.is_enabled,
+          });
         });
         return Array.from(roleMap.values());
       })(),
       userGroups: (() => {
         const groupMap = new Map<
           string,
-          { groupName: string; environments: string[]; isEnabled: boolean }
+          {
+            groupName: string;
+            environments: Array<{ environment: string; isEnabled: boolean }>;
+          }
         >();
         flag.feature_flag_user_groups.forEach(ug => {
           if (!groupMap.has(ug.group_name)) {
             groupMap.set(ug.group_name, {
               groupName: ug.group_name,
               environments: [],
-              isEnabled: ug.is_enabled,
             });
           }
-          groupMap.get(ug.group_name)!.environments.push(ug.environment);
+          groupMap.get(ug.group_name)!.environments.push({
+            environment: ug.environment,
+            isEnabled: ug.is_enabled,
+          });
         });
         return Array.from(groupMap.values());
       })(),
@@ -792,11 +806,19 @@ export const FeatureFlags = ({ scopeInfo }: FeatureFlagsProps) => {
                                         {
                                           roleName: role.name,
                                           environments: [
-                                            'development',
-                                            'staging',
-                                            'production',
+                                            {
+                                              environment: 'development',
+                                              isEnabled: true,
+                                            },
+                                            {
+                                              environment: 'staging',
+                                              isEnabled: true,
+                                            },
+                                            {
+                                              environment: 'production',
+                                              isEnabled: true,
+                                            },
                                           ],
-                                          isEnabled: true,
                                         },
                                       ];
                                       handleFormChange('userRoles', newRoles);
@@ -833,23 +855,27 @@ export const FeatureFlags = ({ scopeInfo }: FeatureFlagsProps) => {
                                       >
                                         <Checkbox
                                           id={`role-${role.name}-${env}`}
-                                          checked={existingRole.environments.includes(
-                                            env
-                                          )}
+                                          checked={
+                                            existingRole.environments.find(
+                                              e => e.environment === env
+                                            )?.isEnabled || false
+                                          }
                                           onCheckedChange={checked => {
                                             const newRoles =
                                               formData.userRoles.map(r =>
                                                 r.roleName === role.name
                                                   ? {
                                                       ...r,
-                                                      environments: checked
-                                                        ? [
-                                                            ...r.environments,
-                                                            env,
-                                                          ]
-                                                        : r.environments.filter(
-                                                            e => e !== env
-                                                          ),
+                                                      environments:
+                                                        r.environments.map(e =>
+                                                          e.environment === env
+                                                            ? {
+                                                                ...e,
+                                                                isEnabled:
+                                                                  checked,
+                                                              }
+                                                            : e
+                                                        ),
                                                     }
                                                   : r
                                               );
@@ -871,12 +897,21 @@ export const FeatureFlags = ({ scopeInfo }: FeatureFlagsProps) => {
                                   <div className="flex items-center space-x-2">
                                     <Checkbox
                                       id={`role-${role.name}-enabled`}
-                                      checked={existingRole.isEnabled}
+                                      checked={existingRole.environments.every(
+                                        e => e.isEnabled
+                                      )}
                                       onCheckedChange={checked => {
                                         const newRoles = formData.userRoles.map(
                                           r =>
                                             r.roleName === role.name
-                                              ? { ...r, isEnabled: checked }
+                                              ? {
+                                                  ...r,
+                                                  environments:
+                                                    r.environments.map(e => ({
+                                                      ...e,
+                                                      isEnabled: checked,
+                                                    })),
+                                                }
                                               : r
                                         );
                                         handleFormChange('userRoles', newRoles);
@@ -886,7 +921,7 @@ export const FeatureFlags = ({ scopeInfo }: FeatureFlagsProps) => {
                                       htmlFor={`role-${role.name}-enabled`}
                                       className="text-xs"
                                     >
-                                      Enabled
+                                      Enabled in All
                                     </Label>
                                   </div>
                                 </div>
@@ -920,11 +955,19 @@ export const FeatureFlags = ({ scopeInfo }: FeatureFlagsProps) => {
                                         {
                                           groupName: group.name,
                                           environments: [
-                                            'development',
-                                            'staging',
-                                            'production',
+                                            {
+                                              environment: 'development',
+                                              isEnabled: true,
+                                            },
+                                            {
+                                              environment: 'staging',
+                                              isEnabled: true,
+                                            },
+                                            {
+                                              environment: 'production',
+                                              isEnabled: true,
+                                            },
                                           ],
-                                          isEnabled: true,
                                         },
                                       ];
                                       handleFormChange('userGroups', newGroups);
@@ -961,23 +1004,27 @@ export const FeatureFlags = ({ scopeInfo }: FeatureFlagsProps) => {
                                       >
                                         <Checkbox
                                           id={`group-${group.name}-${env}`}
-                                          checked={existingGroup.environments.includes(
-                                            env
-                                          )}
+                                          checked={
+                                            existingGroup.environments.find(
+                                              e => e.environment === env
+                                            )?.isEnabled || false
+                                          }
                                           onCheckedChange={checked => {
                                             const newGroups =
                                               formData.userGroups.map(g =>
                                                 g.groupName === group.name
                                                   ? {
                                                       ...g,
-                                                      environments: checked
-                                                        ? [
-                                                            ...g.environments,
-                                                            env,
-                                                          ]
-                                                        : g.environments.filter(
-                                                            e => e !== env
-                                                          ),
+                                                      environments:
+                                                        g.environments.map(e =>
+                                                          e.environment === env
+                                                            ? {
+                                                                ...e,
+                                                                isEnabled:
+                                                                  checked,
+                                                              }
+                                                            : e
+                                                        ),
                                                     }
                                                   : g
                                               );
@@ -999,12 +1046,21 @@ export const FeatureFlags = ({ scopeInfo }: FeatureFlagsProps) => {
                                   <div className="flex items-center space-x-2">
                                     <Checkbox
                                       id={`group-${group.name}-enabled`}
-                                      checked={existingGroup.isEnabled}
+                                      checked={existingGroup.environments.every(
+                                        e => e.isEnabled
+                                      )}
                                       onCheckedChange={checked => {
                                         const newGroups =
                                           formData.userGroups.map(g =>
                                             g.groupName === group.name
-                                              ? { ...g, isEnabled: checked }
+                                              ? {
+                                                  ...g,
+                                                  environments:
+                                                    g.environments.map(e => ({
+                                                      ...e,
+                                                      isEnabled: checked,
+                                                    })),
+                                                }
                                               : g
                                           );
                                         handleFormChange(
@@ -1017,7 +1073,7 @@ export const FeatureFlags = ({ scopeInfo }: FeatureFlagsProps) => {
                                       htmlFor={`group-${group.name}-enabled`}
                                       className="text-xs"
                                     >
-                                      Enabled
+                                      Enabled in All
                                     </Label>
                                   </div>
                                 </div>
@@ -1561,11 +1617,19 @@ export const FeatureFlags = ({ scopeInfo }: FeatureFlagsProps) => {
                                     {
                                       roleName: role.name,
                                       environments: [
-                                        'development',
-                                        'staging',
-                                        'production',
+                                        {
+                                          environment: 'development',
+                                          isEnabled: true,
+                                        },
+                                        {
+                                          environment: 'staging',
+                                          isEnabled: true,
+                                        },
+                                        {
+                                          environment: 'production',
+                                          isEnabled: true,
+                                        },
                                       ],
-                                      isEnabled: true,
                                     },
                                   ];
                                   handleFormChange('userRoles', newRoles);
@@ -1596,20 +1660,27 @@ export const FeatureFlags = ({ scopeInfo }: FeatureFlagsProps) => {
                                     >
                                       <Checkbox
                                         id={`edit-role-${role.name}-${env}`}
-                                        checked={existingRole.environments.includes(
-                                          env
-                                        )}
+                                        checked={
+                                          existingRole.environments.find(
+                                            e => e.environment === env
+                                          )?.isEnabled || false
+                                        }
                                         onCheckedChange={checked => {
                                           const newRoles =
                                             formData.userRoles.map(r =>
                                               r.roleName === role.name
                                                 ? {
                                                     ...r,
-                                                    environments: checked
-                                                      ? [...r.environments, env]
-                                                      : r.environments.filter(
-                                                          e => e !== env
-                                                        ),
+                                                    environments:
+                                                      r.environments.map(e =>
+                                                        e.environment === env
+                                                          ? {
+                                                              ...e,
+                                                              isEnabled:
+                                                                checked,
+                                                            }
+                                                          : e
+                                                      ),
                                                   }
                                                 : r
                                             );
@@ -1632,12 +1703,22 @@ export const FeatureFlags = ({ scopeInfo }: FeatureFlagsProps) => {
                               <div className="flex items-center space-x-2">
                                 <Checkbox
                                   id={`edit-role-${role.name}-enabled`}
-                                  checked={existingRole.isEnabled}
+                                  checked={existingRole.environments.every(
+                                    e => e.isEnabled
+                                  )}
                                   onCheckedChange={checked => {
                                     const newRoles = formData.userRoles.map(
                                       r =>
                                         r.roleName === role.name
-                                          ? { ...r, isEnabled: checked }
+                                          ? {
+                                              ...r,
+                                              environments: r.environments.map(
+                                                e => ({
+                                                  ...e,
+                                                  isEnabled: checked,
+                                                })
+                                              ),
+                                            }
                                           : r
                                     );
                                     handleFormChange('userRoles', newRoles);
@@ -1647,7 +1728,7 @@ export const FeatureFlags = ({ scopeInfo }: FeatureFlagsProps) => {
                                   htmlFor={`edit-role-${role.name}-enabled`}
                                   className="text-xs"
                                 >
-                                  Enabled
+                                  Enabled in All
                                 </Label>
                               </div>
                             </div>
@@ -1681,11 +1762,19 @@ export const FeatureFlags = ({ scopeInfo }: FeatureFlagsProps) => {
                                     {
                                       groupName: group.name,
                                       environments: [
-                                        'development',
-                                        'staging',
-                                        'production',
+                                        {
+                                          environment: 'development',
+                                          isEnabled: true,
+                                        },
+                                        {
+                                          environment: 'staging',
+                                          isEnabled: true,
+                                        },
+                                        {
+                                          environment: 'production',
+                                          isEnabled: true,
+                                        },
                                       ],
-                                      isEnabled: true,
                                     },
                                   ];
                                   handleFormChange('userGroups', newGroups);
@@ -1716,20 +1805,27 @@ export const FeatureFlags = ({ scopeInfo }: FeatureFlagsProps) => {
                                     >
                                       <Checkbox
                                         id={`edit-group-${group.name}-${env}`}
-                                        checked={existingGroup.environments.includes(
-                                          env
-                                        )}
+                                        checked={
+                                          existingGroup.environments.find(
+                                            e => e.environment === env
+                                          )?.isEnabled || false
+                                        }
                                         onCheckedChange={checked => {
                                           const newGroups =
                                             formData.userGroups.map(g =>
                                               g.groupName === group.name
                                                 ? {
                                                     ...g,
-                                                    environments: checked
-                                                      ? [...g.environments, env]
-                                                      : g.environments.filter(
-                                                          e => e !== env
-                                                        ),
+                                                    environments:
+                                                      g.environments.map(e =>
+                                                        e.environment === env
+                                                          ? {
+                                                              ...e,
+                                                              isEnabled:
+                                                                checked,
+                                                            }
+                                                          : e
+                                                      ),
                                                   }
                                                 : g
                                             );
@@ -1752,12 +1848,22 @@ export const FeatureFlags = ({ scopeInfo }: FeatureFlagsProps) => {
                               <div className="flex items-center space-x-2">
                                 <Checkbox
                                   id={`edit-group-${group.name}-enabled`}
-                                  checked={existingGroup.isEnabled}
+                                  checked={existingGroup.environments.every(
+                                    e => e.isEnabled
+                                  )}
                                   onCheckedChange={checked => {
                                     const newGroups = formData.userGroups.map(
                                       g =>
                                         g.groupName === group.name
-                                          ? { ...g, isEnabled: checked }
+                                          ? {
+                                              ...g,
+                                              environments: g.environments.map(
+                                                e => ({
+                                                  ...e,
+                                                  isEnabled: checked,
+                                                })
+                                              ),
+                                            }
                                           : g
                                     );
                                     handleFormChange('userGroups', newGroups);
@@ -1767,7 +1873,7 @@ export const FeatureFlags = ({ scopeInfo }: FeatureFlagsProps) => {
                                   htmlFor={`edit-group-${group.name}-enabled`}
                                   className="text-xs"
                                 >
-                                  Enabled
+                                  Enabled in All
                                 </Label>
                               </div>
                             </div>
