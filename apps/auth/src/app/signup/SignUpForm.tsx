@@ -47,8 +47,12 @@ const SignUpForm = (): React.JSX.Element => {
 
     if (!formData.password) {
       newErrors.password = 'Password is required';
-    } else if (!validatePassword(formData.password)) {
-      newErrors.password = 'Password must be at least 8 characters long';
+    } else {
+      const passwordValidation = validatePassword(formData.password);
+      if (!passwordValidation.isValid) {
+        newErrors.password =
+          passwordValidation.errors[0] || 'Password is invalid';
+      }
     }
 
     if (!formData.confirmPassword) {

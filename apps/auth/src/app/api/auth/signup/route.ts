@@ -30,9 +30,10 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       );
     }
 
-    if (!validatePassword(password)) {
+    const passwordValidation = validatePassword(password);
+    if (!passwordValidation.isValid) {
       return NextResponse.json(
-        { error: 'Password must be at least 8 characters long' },
+        { error: passwordValidation.errors[0] || 'Password is invalid' },
         { status: 400 }
       );
     }
