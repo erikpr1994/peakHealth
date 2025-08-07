@@ -128,15 +128,14 @@ export async function POST(request: NextRequest) {
     if (userRoles && userRoles.length > 0) {
       const roleData = userRoles.flatMap((role: unknown) => {
         const typedRole = role as {
-          environments: string[];
+          environments: Array<{ environment: string; isEnabled: boolean }>;
           roleName: string;
-          isEnabled?: boolean;
         };
-        return typedRole.environments.map((env: string) => ({
+        return typedRole.environments.map(envConfig => ({
           feature_flag_id: featureFlag.id,
-          environment: env,
+          environment: envConfig.environment,
           role_name: typedRole.roleName,
-          is_enabled: typedRole.isEnabled || false,
+          is_enabled: envConfig.isEnabled,
         }));
       });
 
@@ -351,12 +350,14 @@ export async function PUT(request: NextRequest) {
       // Insert new user role targeting
       if (userRoles.length > 0) {
         const roleData = userRoles.flatMap((role: any) =>
-          role.environments.map((env: string) => ({
-            feature_flag_id: id,
-            environment: env,
-            role_name: role.roleName,
-            is_enabled: role.isEnabled || false,
-          }))
+          role.environments.map(
+            (envConfig: { environment: string; isEnabled: boolean }) => ({
+              feature_flag_id: id,
+              environment: envConfig.environment,
+              role_name: role.roleName,
+              is_enabled: envConfig.isEnabled,
+            })
+          )
         );
 
         if (roleData.length > 0) {
