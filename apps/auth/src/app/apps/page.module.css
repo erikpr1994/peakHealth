@@ -1,0 +1,146 @@
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 1rem;
+}
+
+.appGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  width: 100%;
+  max-width: 800px;
+}
+
+.appCard {
+  background: white;
+  border: 2px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 1.5rem;
+  text-align: center;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.appCard:hover {
+  border-color: #3b82f6;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+.appCard.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.appCard.disabled:hover {
+  border-color: #e5e7eb;
+  transform: none;
+  box-shadow: none;
+}
+
+.appIcon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.appName {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #1f2937;
+  margin-bottom: 0.5rem;
+}
+
+.appDescription {
+  color: #6b7280;
+  font-size: 0.875rem;
+  margin-bottom: 1rem;
+  line-height: 1.4;
+}
+
+.appStatus {
+  font-size: 0.75rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-weight: 500;
+}
+
+.appStatus.accessible {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.appStatus.inaccessible {
+  background: #fef2f2;
+  color: #dc2626;
+}
+
+.error {
+  color: #ef4444;
+  font-size: 0.875rem;
+  margin-top: 0.5rem;
+  text-align: center;
+}
+
+.retryButton {
+  width: 100%;
+  background: #2563eb;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.retryButton:hover {
+  background: #1d4ed8;
+}
+
+.noAppsContainer {
+  text-align: center;
+}
+
+.noAppsText {
+  color: #6b7280;
+  margin-bottom: 1rem;
+}
+
+.logoutButton {
+  background: #dc2626;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.logoutButton:hover {
+  background: #b91c1c;
+}
+
+.reasonText {
+  font-size: 0.75rem;
+  color: #6b7280;
+  margin-top: 0.5rem;
+}
+
+.logoutContainer {
+  margin-top: 1.5rem;
+  text-align: center;
+}
+
+.signOutButton {
+  color: #6b7280;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.signOutButton:hover {
+  color: #374151;
+}
