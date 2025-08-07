@@ -491,17 +491,19 @@ export const FeatureFlags = ({ scopeInfo }: FeatureFlagsProps) => {
     }));
   };
 
-  const filteredFlags = featureFlags.filter(flag => {
-    const matchesSearch =
-      flag.display_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      flag.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      flag.name.toLowerCase().includes(searchQuery.toLowerCase());
+  const filteredFlags = featureFlags
+    .filter(flag => {
+      const matchesSearch =
+        flag.display_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        flag.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        flag.name.toLowerCase().includes(searchQuery.toLowerCase());
 
-    const matchesCategory =
-      selectedCategory === 'all' || flag.category === selectedCategory;
+      const matchesCategory =
+        selectedCategory === 'all' || flag.category === selectedCategory;
 
-    return matchesSearch && matchesCategory;
-  });
+      return matchesSearch && matchesCategory;
+    })
+    .sort((a, b) => a.display_name.localeCompare(b.display_name));
 
   if (isLoading) {
     return (
