@@ -175,15 +175,14 @@ export async function POST(request: NextRequest) {
         // If userGroups is already an array of objects with the expected structure
         groupData = userGroups.flatMap((group: unknown) => {
           const typedGroup = group as {
-            environments: string[];
+            environments: Array<{ environment: string; isEnabled: boolean }>;
             groupName: string;
-            isEnabled?: boolean;
           };
-          return typedGroup.environments.map((env: string) => ({
+          return typedGroup.environments.map(envConfig => ({
             feature_flag_id: featureFlag.id,
-            environment: env,
+            environment: envConfig.environment,
             group_name: typedGroup.groupName,
-            is_enabled: typedGroup.isEnabled ?? true, // Default to true for consistency
+            is_enabled: envConfig.isEnabled,
           }));
         });
       }
@@ -402,14 +401,18 @@ export async function PUT(request: NextRequest) {
           );
         } else {
           // If userGroups is already an array of objects with the expected structure
-          groupData = userGroups.flatMap((group: any) =>
-            group.environments.map((env: string) => ({
+          groupData = userGroups.flatMap((group: unknown) => {
+            const typedGroup = group as {
+              environments: Array<{ environment: string; isEnabled: boolean }>;
+              groupName: string;
+            };
+            return typedGroup.environments.map(envConfig => ({
               feature_flag_id: id,
-              environment: env,
-              group_name: group.groupName,
-              is_enabled: group.isEnabled ?? true, // Default to true for consistency
-            }))
-          );
+              environment: envConfig.environment,
+              group_name: typedGroup.groupName,
+              is_enabled: envConfig.isEnabled,
+            }));
+          });
         }
 
         if (groupData.length > 0) {
