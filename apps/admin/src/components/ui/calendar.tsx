@@ -39,7 +39,7 @@ const Calendar = ({
             : '[&:has([aria-selected])]:rounded-md'
         ),
         day: cn(
-          'inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all hover:bg-accent hover:text-accent-foreground size-8 p-0 font-normal aria-selected:opacity-100'
+          'inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50 size-8 p-0 font-normal aria-selected:opacity-100'
         ),
         day_range_start:
           'day-range-start aria-selected:bg-primary aria-selected:text-primary-foreground',
