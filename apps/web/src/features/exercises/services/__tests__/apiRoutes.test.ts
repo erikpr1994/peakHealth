@@ -448,7 +448,7 @@ describe('Exercise API Routes', () => {
       const url = new URL('http://localhost:3000/api/exercises/favorites');
       url.searchParams.set('userId', 'test-user-id'); // Use the same user ID as in the mock
       url.searchParams.set('exerciseId', 'exercise-1');
-      const request = new NextRequest(url);
+      const request = new NextRequest(url, { method: 'DELETE' });
 
       const { DELETE } = await import('@/app/api/exercises/favorites/route');
       const response = await DELETE(request);
@@ -463,7 +463,7 @@ describe('Exercise API Routes', () => {
     it('should return 400 when userId is missing', async () => {
       const url = new URL('http://localhost:3000/api/exercises/favorites');
       url.searchParams.set('exerciseId', 'exercise-1');
-      const request = new NextRequest(url);
+      const request = new NextRequest(url, { method: 'DELETE' });
 
       const { DELETE } = await import('@/app/api/exercises/favorites/route');
       const response = await DELETE(request);
@@ -476,7 +476,7 @@ describe('Exercise API Routes', () => {
     it('should return 400 when exerciseId is missing', async () => {
       const url = new URL('http://localhost:3000/api/exercises/favorites');
       url.searchParams.set('userId', 'test-user-id');
-      const request = new NextRequest(url);
+      const request = new NextRequest(url, { method: 'DELETE' });
 
       const { DELETE } = await import('@/app/api/exercises/favorites/route');
       const response = await DELETE(request);
@@ -497,7 +497,7 @@ describe('Exercise API Routes', () => {
       const url = new URL('http://localhost:3000/api/exercises/favorites');
       url.searchParams.set('userId', 'test-user-id');
       url.searchParams.set('exerciseId', 'exercise-1');
-      const request = new NextRequest(url);
+      const request = new NextRequest(url, { method: 'DELETE' });
 
       const { DELETE } = await import('@/app/api/exercises/favorites/route');
       const response = await DELETE(request);
