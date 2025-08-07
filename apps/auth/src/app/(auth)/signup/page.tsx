@@ -1,8 +1,8 @@
 import { Suspense } from 'react';
 
 // AuthCard is used in SignUpForm component
-import styles from './page.module.css';
-import { SignUpForm } from './SignUpForm';
+import { SignUpForm } from '@/features/auth';
+import styles from '@/features/auth/components/page.module.css';
 
 const SignUpPage = (): React.JSX.Element => {
   return (

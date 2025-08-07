@@ -8,15 +8,8 @@ import {
 import { useRouter, useSearchParams } from 'next/navigation';
 import React, { useState, Suspense } from 'react';
 
-import {
-  AuthCard,
-  FormGroup,
-  Input,
-  Button,
-  Link,
-} from '../../components/AuthCard';
-
-import styles from './page.module.css';
+import styles from '@/features/auth/components/page.module.css';
+import { AuthCard, FormGroup, Input, Button, Link } from '@/features/shared';
 
 const LoginForm = (): React.JSX.Element => {
   const router = useRouter();

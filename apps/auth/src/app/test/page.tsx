@@ -1,6 +1,6 @@
 // Suspense is used implicitly by Next.js
 
-import { AuthCard } from '../../components/AuthCard';
+import { AuthCard } from '@/features/shared';
 
 const TestPage = (): React.JSX.Element => {
   return (

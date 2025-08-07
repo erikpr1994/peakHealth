@@ -8,9 +8,9 @@ import type { User } from '@supabase/supabase-js';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
-import { AuthCard } from '../../components/AuthCard';
+import styles from './apps.module.css';
 
-import styles from './page.module.css';
+import { AuthCard } from '@/features/shared';
 
 interface AppOption {
   appKey: string;
