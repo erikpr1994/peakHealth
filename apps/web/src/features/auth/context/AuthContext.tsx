@@ -189,6 +189,16 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
     setIsAuthOperationLoading(true);
     try {
+      // Generate a fallback name that handles malformed emails
+      const generateFallbackName = (email: string): string => {
+        const nameFromEmail = email.split('@')[0];
+        // If email starts with '@' or produces empty string, use a default name
+        if (!nameFromEmail || nameFromEmail === '') {
+          return 'User';
+        }
+        return nameFromEmail;
+      };
+
       const response = await fetch('/api/auth/signup', {
         method: 'POST',
         headers: {
@@ -198,7 +208,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           email,
           password,
           user_metadata: {
-            name: name || email.split('@')[0] || '',
+            name: name || generateFallbackName(email),
           },
         }),
       });
@@ -208,8 +218,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         throw new Error(errorData.error || 'Signup failed');
       }
 
-      // Revalidate user data after successful signup
-      await mutateUser();
+      // Get the new user data from the response and pass it to mutateUser
+      const responseData = await response.json();
+      await mutateUser(responseData.user);
     } catch (error) {
       console.error('Signup error:', error);
       throw error;
