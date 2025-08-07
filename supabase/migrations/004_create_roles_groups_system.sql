@@ -262,8 +262,8 @@ BEGIN
   LIMIT 1;
   
   -- If no defaults configured, use hardcoded defaults
-  IF default_config.user_types IS NULL THEN
-    default_config.user_types := ARRAY['regular'];
+  IF default_config.default_user_types IS NULL THEN
+    default_config.default_user_types := ARRAY['regular'];
     default_config.default_subscription_tier := 'free';
     default_config.default_groups := ARRAY['early_access'];
   END IF;
@@ -278,9 +278,9 @@ BEGIN
   SELECT 
     user_id_param,
     user_type,
-    CASE WHEN user_type = default_config.user_types[1] THEN true ELSE false END,
+    CASE WHEN user_type = default_config.default_user_types[1] THEN true ELSE false END,
     'Default assignment on signup'
-  FROM unnest(default_config.user_types) AS user_type;
+  FROM unnest(default_config.default_user_types) AS user_type;
   
   -- Create subscription assignment
   INSERT INTO subscription_assignments (
@@ -298,15 +298,15 @@ BEGIN
     user_id,
     group_name,
     reason
-  )
+  ) 
   SELECT 
     user_id_param,
     group_name,
     'Default assignment on signup'
   FROM unnest(default_config.default_groups) AS group_name;
   
-  -- Generate claims
-  claims := generate_user_jwt_claims(user_id_param);
+  -- Generate and return JWT claims
+  SELECT generate_user_jwt_claims(user_id_param) INTO claims;
   
   RETURN claims;
 END;
