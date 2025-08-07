@@ -6,6 +6,8 @@ import { useState } from 'react';
 
 import styles from './Header.module.css';
 
+import { getLoginUrl, getSignupUrl } from '@/lib/auth';
+
 export const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -53,10 +55,10 @@ export const Header = () => {
         </nav>
 
         <div className={styles.actions}>
-          <Link href="/login" className={styles.loginLink}>
+          <Link href={getLoginUrl()} className={styles.loginLink}>
             Log In
           </Link>
-          <Link href="/signup" className={styles.signupLink}>
+          <Link href={getSignupUrl()} className={styles.signupLink}>
             Get Started
             <ArrowRight className={styles.arrowIcon} />
           </Link>

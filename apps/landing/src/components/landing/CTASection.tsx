@@ -3,6 +3,8 @@ import Link from 'next/link';
 
 import styles from './CTASection.module.css';
 
+import { getSignupUrl } from '@/lib/auth';
+
 export const CTASection = () => {
   return (
     <section className={styles.section}>
@@ -35,7 +37,7 @@ export const CTASection = () => {
           </div>
 
           <div className={styles.actions}>
-            <Link href="/signup" className={styles.primaryButton}>
+            <Link href={getSignupUrl()} className={styles.primaryButton}>
               Start Free Trial
               <ArrowRight className={styles.arrowIcon} />
             </Link>
