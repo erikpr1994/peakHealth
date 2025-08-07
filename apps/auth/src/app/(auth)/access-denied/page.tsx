@@ -1,32 +1,50 @@
-import { AuthCard } from '@/features/shared';
+'use client';
+
+import { useRouter } from 'next/navigation';
+import React from 'react';
+
+import styles from './page.module.css';
+
+import { AuthCard, Button, Link } from '@/features/shared';
 
 const AccessDeniedPage = (): React.JSX.Element => {
+  const router = useRouter();
+
+  const handleLogout = (): void => {
+    void (async () => {
+      try {
+        await fetch('/api/auth/logout', {
+          method: 'POST',
+        });
+        router.push('/login');
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.error('Logout error:', error);
+        router.push('/login');
+      }
+    })();
+  };
+
   return (
     <AuthCard
       title="Access Denied"
       subtitle="You don't have permission to access this resource"
     >
-      <div style={{ textAlign: 'center', padding: '1rem' }}>
-        <h3 style={{ color: '#e53e3e', marginBottom: '1rem' }}>
-          ❌ Access Denied
-        </h3>
-        <p style={{ marginBottom: '1rem' }}>
+      <div className={styles.content}>
+        <h3 className={styles.title}>❌ Access Denied</h3>
+        <p className={styles.message}>
           You don&apos;t have the necessary permissions to access this
           application.
         </p>
-        <a
-          href="/app-selector"
-          style={{
-            padding: '0.5rem 1rem',
-            backgroundColor: '#3b82f6',
-            color: 'white',
-            textDecoration: 'none',
-            borderRadius: '0.375rem',
-            fontSize: '0.875rem',
-          }}
-        >
-          Back to App Selection
-        </a>
+
+        <div className={styles.actions}>
+          <Button onClick={handleLogout} className={styles.logoutButton}>
+            Sign Out
+          </Button>
+          <Link href="/app-selector" className={styles.backLink}>
+            Back to App Selection
+          </Link>
+        </div>
       </div>
     </AuthCard>
   );
