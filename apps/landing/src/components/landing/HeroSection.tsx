@@ -5,6 +5,8 @@ import Link from 'next/link';
 
 import styles from './HeroSection.module.css';
 
+import { getSignupUrl } from '@/lib/auth';
+
 export const HeroSection = () => {
   return (
     <section className={styles.hero}>
@@ -27,7 +29,7 @@ export const HeroSection = () => {
           </p>
 
           <div className={styles.actions}>
-            <Link href="/signup" className={styles.primaryButton}>
+            <Link href={getSignupUrl()} className={styles.primaryButton}>
               Start Your Journey
               <ArrowRight className={styles.arrowIcon} />
             </Link>

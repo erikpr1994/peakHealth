@@ -9,6 +9,8 @@ import {
 
 import styles from './FeatureSection.module.css';
 
+import { getSignupUrl } from '@/lib/auth';
+
 const features = [
   {
     icon: Activity,
@@ -80,7 +82,7 @@ export const FeatureSection = () => {
           <p className={styles.ctaText}>
             Ready to start your fitness transformation?
           </p>
-          <a href="/signup" className={styles.ctaButton}>
+          <a href={getSignupUrl()} className={styles.ctaButton}>
             Get Started Free
           </a>
         </div>
