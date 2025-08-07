@@ -10,7 +10,9 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsc && cp src/components/button/button.css dist/components/button/",
+    "build": "tsc && npm run copy-css-files && npm run create-index-css",
+    "copy-css-files": "find src/components -name '*.css' -exec sh -c 'mkdir -p dist/$(dirname \"$1\" | sed \"s|^src/||\") && cp \"$1\" \"dist/$(echo \"$1\" | sed \"s|^src/||\")\"' _ {} \\;",
+    "create-index-css": "find src/components -name '*.css' -exec cat {} \\; > dist/index.css",
     "dev": "tsc --watch",
     "clean": "rm -rf dist",
     "type-check": "tsc --noEmit"
