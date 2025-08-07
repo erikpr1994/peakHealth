@@ -1,3 +1,4 @@
+import { Button } from '@peakhealth/ui';
 import {
   Activity,
   Target,
@@ -82,9 +83,9 @@ export const FeatureSection = () => {
           <p className={styles.ctaText}>
             Ready to start your fitness transformation?
           </p>
-          <a href={getSignupUrl()} className={styles.ctaButton}>
-            Get Started Free
-          </a>
+          <Button asChild variant="primary" size="lg">
+            <a href={getSignupUrl()}>Get Started Free</a>
+          </Button>
         </div>
       </div>
     </section>

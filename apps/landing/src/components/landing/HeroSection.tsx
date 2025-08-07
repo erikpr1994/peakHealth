@@ -1,5 +1,6 @@
 'use client';
 
+import { Button } from '@peakhealth/ui';
 import { ArrowRight, Play, Star } from 'lucide-react';
 import Link from 'next/link';
 
@@ -29,15 +30,17 @@ export const HeroSection = () => {
           </p>
 
           <div className={styles.actions}>
-            <Link href={getSignupUrl()} className={styles.primaryButton}>
-              Start Your Journey
-              <ArrowRight className={styles.arrowIcon} />
-            </Link>
+            <Button asChild variant="primary" size="lg">
+              <Link href={getSignupUrl()}>
+                Start Your Journey
+                <ArrowRight className={styles.arrowIcon} />
+              </Link>
+            </Button>
 
-            <button className={styles.secondaryButton}>
+            <Button variant="outline" size="lg">
               <Play className={styles.playIcon} />
               Watch Demo
-            </button>
+            </Button>
           </div>
 
           <div className={styles.stats}>

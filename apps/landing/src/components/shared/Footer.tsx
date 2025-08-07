@@ -1,4 +1,4 @@
-import { Facebook, Twitter, Instagram, Linkedin, Mail } from 'lucide-react';
+import { Button } from '@peakhealth/ui';
 import Link from 'next/link';
 
 import styles from './Footer.module.css';
@@ -7,50 +7,104 @@ export const Footer = () => {
   return (
     <footer className={styles.footer}>
       <div className={styles.container}>
-        <div className={styles.content}>
+        <div className={styles.top}>
           <div className={styles.brand}>
             <div className={styles.logo}>
-              <span className={styles.logoText}>Peak Health</span>
+              <Link href="/" className={styles.logoLink}>
+                <span className={styles.logoText}>Peak Health</span>
+              </Link>
             </div>
             <p className={styles.tagline}>
               Your ultimate fitness companion for tracking workouts, monitoring
-              progress, and achieving your fitness goals.
+              progress, and achieving your goals.
             </p>
             <div className={styles.social}>
               <a
-                href="https://facebook.com/peakhealth"
-                className={styles.socialLink}
-                aria-label="Facebook"
-              >
-                <Facebook className={styles.socialIcon} />
-              </a>
-              <a
                 href="https://twitter.com/peakhealth"
+                target="_blank"
+                rel="noopener noreferrer"
                 className={styles.socialLink}
                 aria-label="Twitter"
               >
-                <Twitter className={styles.socialIcon} />
+                <svg
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </a>
+              <a
+                href="https://facebook.com/peakhealth"
+                target="_blank"
+                rel="noopener noreferrer"
+                className={styles.socialLink}
+                aria-label="Facebook"
+              >
+                <svg
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
               </a>
               <a
                 href="https://instagram.com/peakhealth"
+                target="_blank"
+                rel="noopener noreferrer"
                 className={styles.socialLink}
                 aria-label="Instagram"
               >
-                <Instagram className={styles.socialIcon} />
-              </a>
-              <a
-                href="https://linkedin.com/company/peakhealth"
-                className={styles.socialLink}
-                aria-label="LinkedIn"
-              >
-                <Linkedin className={styles.socialIcon} />
-              </a>
-              <a
-                href="mailto:hello@peakhealth.es"
-                className={styles.socialLink}
-                aria-label="Email"
-              >
-                <Mail className={styles.socialIcon} />
+                <svg
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <rect
+                    x="2"
+                    y="2"
+                    width="20"
+                    height="20"
+                    rx="5"
+                    ry="5"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                  />
+                  <path
+                    d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                  />
+                  <line
+                    x1="17.5"
+                    y1="6.5"
+                    x2="17.51"
+                    y2="6.5"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
               </a>
             </div>
           </div>
@@ -70,13 +124,13 @@ export const Footer = () => {
                   </Link>
                 </li>
                 <li>
-                  <Link href="/pro" className={styles.link}>
-                    Pro Platform
+                  <Link href="/integrations" className={styles.link}>
+                    Integrations
                   </Link>
                 </li>
                 <li>
-                  <Link href="/enterprise" className={styles.link}>
-                    Enterprise
+                  <Link href="/changelog" className={styles.link}>
+                    Changelog
                   </Link>
                 </li>
               </ul>
@@ -174,7 +228,9 @@ export const Footer = () => {
                 placeholder="Enter your email"
                 className={styles.newsletterInput}
               />
-              <button className={styles.newsletterButton}>Subscribe</button>
+              <Button variant="primary" size="sm">
+                Subscribe
+              </Button>
             </div>
           </div>
         </div>

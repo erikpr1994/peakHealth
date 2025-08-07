@@ -1,5 +1,6 @@
 'use client';
 
+import { Button } from '@peakhealth/ui';
 import { Menu, X, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 import { useState } from 'react';
@@ -55,26 +56,30 @@ export const Header = () => {
         </nav>
 
         <div className={styles.actions}>
-          <Link href={getLoginUrl()} className={styles.loginLink}>
-            Log In
-          </Link>
-          <Link href={getSignupUrl()} className={styles.signupLink}>
-            Get Started
-            <ArrowRight className={styles.arrowIcon} />
-          </Link>
+          <Button asChild variant="ghost">
+            <Link href={getLoginUrl()}>Log In</Link>
+          </Button>
+          <Button asChild variant="primary">
+            <Link href={getSignupUrl()}>
+              Get Started
+              <ArrowRight className={styles.arrowIcon} />
+            </Link>
+          </Button>
         </div>
 
-        <button
-          className={styles.menuButton}
+        <Button
+          variant="ghost"
+          size="icon"
           onClick={toggleMenu}
           aria-label="Toggle menu"
+          className={styles.menuButton}
         >
           {isMenuOpen ? (
             <X className={styles.menuIcon} />
           ) : (
             <Menu className={styles.menuIcon} />
           )}
-        </button>
+        </Button>
       </div>
     </header>
   );

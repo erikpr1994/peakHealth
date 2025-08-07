@@ -1,5 +1,6 @@
 'use client';
 
+import { Button } from '@peakhealth/ui';
 import { Search, BookOpen } from 'lucide-react';
 import React from 'react';
 import { useState } from 'react';
@@ -39,9 +40,9 @@ export const BlogHeader = () => {
               className={styles.input}
             />
           </div>
-          <button type="submit" className={styles.searchButton}>
+          <Button type="submit" variant="primary" size="sm">
             Search
-          </button>
+          </Button>
         </form>
       </div>
     </header>

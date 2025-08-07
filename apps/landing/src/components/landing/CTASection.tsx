@@ -1,3 +1,4 @@
+import { Button } from '@peakhealth/ui';
 import { ArrowRight, Check } from 'lucide-react';
 import Link from 'next/link';
 
@@ -37,14 +38,16 @@ export const CTASection = () => {
           </div>
 
           <div className={styles.actions}>
-            <Link href={getSignupUrl()} className={styles.primaryButton}>
-              Start Free Trial
-              <ArrowRight className={styles.arrowIcon} />
-            </Link>
+            <Button asChild variant="primary" size="lg">
+              <Link href={getSignupUrl()}>
+                Start Free Trial
+                <ArrowRight className={styles.arrowIcon} />
+              </Link>
+            </Button>
 
-            <Link href="/pricing" className={styles.secondaryButton}>
-              View Pricing
-            </Link>
+            <Button asChild variant="outline" size="lg">
+              <Link href="/pricing">View Pricing</Link>
+            </Button>
           </div>
 
           <p className={styles.disclaimer}>

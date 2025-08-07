@@ -5,6 +5,7 @@ import './button.css';
 
 export interface ButtonProps extends React.ComponentProps<'button'> {
   variant?:
+    | 'primary'
     | 'default'
     | 'destructive'
     | 'outline'
@@ -13,10 +14,21 @@ export interface ButtonProps extends React.ComponentProps<'button'> {
     | 'ghost'
     | 'link';
   size?: 'default' | 'sm' | 'lg' | 'icon';
+  asChild?: boolean;
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant = 'default', size = 'default', ...props }, ref) => {
+  (
+    {
+      className,
+      variant = 'default',
+      size = 'default',
+      asChild = false,
+      children,
+      ...props
+    },
+    ref
+  ) => {
     const buttonClasses = cn(
       'peakhealth-button',
       `peakhealth-button--${variant}`,
@@ -24,13 +36,18 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       className
     );
 
+    if (asChild && React.isValidElement(children)) {
+      return React.cloneElement(children as React.ReactElement<any>, {
+        className: buttonClasses,
+        ref,
+        ...props,
+      });
+    }
+
     return (
-      <button
-        data-slot="button"
-        className={buttonClasses}
-        ref={ref}
-        {...props}
-      />
+      <button data-slot="button" className={buttonClasses} ref={ref} {...props}>
+        {children}
+      </button>
     );
   }
 );

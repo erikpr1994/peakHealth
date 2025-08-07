@@ -28,6 +28,15 @@
 }
 
 /* Variants */
+.peakhealth-button--primary {
+  background-color: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
+}
+
+.peakhealth-button--primary:hover {
+  background-color: hsl(var(--primary) / 0.9);
+}
+
 .peakhealth-button--default {
   background-color: hsl(var(--primary));
   color: hsl(var(--primary-foreground));
