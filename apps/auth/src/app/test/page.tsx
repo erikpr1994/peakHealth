@@ -1,6 +1,6 @@
 // Suspense is used implicitly by Next.js
 
-import { AuthCard } from '../../components/AuthCard';
+import { AuthCard } from '@/features/shared';
 
 const TestPage = (): React.JSX.Element => {
   return (
@@ -59,7 +59,7 @@ const TestPage = (): React.JSX.Element => {
               Test Signup
             </a>
             <a
-              href="/apps"
+              href="/app-selector"
               style={{
                 padding: '0.5rem 1rem',
                 backgroundColor: '#8b5cf6',

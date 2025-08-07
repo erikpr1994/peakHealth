@@ -8,15 +8,8 @@ import {
 import { useRouter, useSearchParams } from 'next/navigation';
 import React, { useState, Suspense } from 'react';
 
-import {
-  AuthCard,
-  FormGroup,
-  Input,
-  Button,
-  Link,
-} from '../../components/AuthCard';
-
-import styles from './page.module.css';
+import styles from '@/features/auth/components/page.module.css';
+import { AuthCard, FormGroup, Input, Button, Link } from '@/features/shared';
 
 const LoginForm = (): React.JSX.Element => {
   const router = useRouter();
@@ -99,7 +92,7 @@ const LoginForm = (): React.JSX.Element => {
 
           if (accessibleApps.length > 1) {
             // Multiple apps available, redirect to app selector
-            router.push('/apps');
+            router.push('/app-selector');
           } else if (accessibleApps.length === 1) {
             // Single app available, redirect directly
             const appKey = accessibleApps[0].appKey;

@@ -8,9 +8,9 @@ import {
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 
-import { AuthCard, Input, Button, Link } from '../../components/AuthCard';
-
 import styles from './page.module.css';
+
+import { AuthCard, Input, Button, Link } from '@/features/shared';
 
 const SignUpForm = (): React.JSX.Element => {
   const router = useRouter();
