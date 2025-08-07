@@ -52,7 +52,112 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: error.message }, { status: 400 });
     }
 
-    // If roles or groups are provided, update the user's app_metadata using admin client
+    if (!data.user) {
+      return NextResponse.json(
+        { error: 'User creation failed' },
+        { status: 500 }
+      );
+    }
+
+    // Assign default user configuration using the new system
+    try {
+      const adminClient = createAdminClient();
+      if (adminClient) {
+        // eslint-disable-next-line no-console
+        console.log(
+          'Calling assign_default_user_config for user:',
+          data.user.id
+        );
+
+        // First, let's check if the user has any assignments
+        const { data: assignments, error: assignmentsError } =
+          await adminClient.rpc('get_user_assignments', {
+            user_id_param: data.user.id,
+          });
+
+        if (assignmentsError) {
+          console.error('Error getting user assignments:', assignmentsError);
+        } else {
+          console.log('Current user assignments:', assignments);
+        }
+
+        const { data: claims, error: claimsError } = await adminClient.rpc(
+          'assign_default_user_config',
+          { user_id_param: data.user.id }
+        );
+
+        if (claimsError) {
+          // eslint-disable-next-line no-console
+          console.error('Failed to assign default config:', claimsError);
+
+          // Try to generate claims manually as fallback
+          console.log('Trying to generate claims manually...');
+          const { data: manualClaims, error: manualClaimsError } =
+            await adminClient.rpc('generate_user_jwt_claims', {
+              user_id_param: data.user.id,
+            });
+
+          if (manualClaimsError) {
+            console.error(
+              'Failed to generate claims manually:',
+              manualClaimsError
+            );
+          } else if (manualClaims) {
+            console.log('Generated claims manually:', manualClaims);
+
+            // Update the user's app_metadata with the generated claims
+            const { data: updatedUser, error: updateError } =
+              await adminClient.auth.admin.updateUserById(data.user.id, {
+                app_metadata: manualClaims,
+              });
+
+            if (updateError) {
+              console.error('Failed to update user app_metadata:', updateError);
+            } else if (updatedUser.user) {
+              console.log('Successfully updated user with manual claims');
+              return NextResponse.json({
+                user: updatedUser.user,
+                session: data.session,
+              });
+            }
+          }
+        } else if (claims) {
+          // eslint-disable-next-line no-console
+          console.log('Generated claims:', claims);
+
+          // Update the user's app_metadata with the generated claims
+          const { data: updatedUser, error: updateError } =
+            await adminClient.auth.admin.updateUserById(data.user.id, {
+              app_metadata: claims,
+            });
+
+          if (updateError) {
+            // eslint-disable-next-line no-console
+            console.error('Failed to update user app_metadata:', updateError);
+          } else if (updatedUser.user) {
+            // eslint-disable-next-line no-console
+            console.log('Successfully updated user with claims');
+            // Return the updated user with app_metadata
+            return NextResponse.json({
+              user: updatedUser.user,
+              session: data.session,
+            });
+          }
+        } else {
+          // eslint-disable-next-line no-console
+          console.log('No claims returned from RPC call');
+        }
+      } else {
+        // eslint-disable-next-line no-console
+        console.error('Admin client is null');
+      }
+    } catch (configError) {
+      // eslint-disable-next-line no-console
+      console.error('Default config assignment error:', configError);
+      // Don't fail the signup, just log the error
+    }
+
+    // If custom roles/groups are provided, create additional assignment
     if (data.user && (roles || groups)) {
       try {
         const adminClient = createAdminClient();

@@ -21,7 +21,7 @@ const FeatureFlagContext = createContext<FeatureFlagContextType | undefined>(
 );
 
 export const FeatureFlagProvider = ({ children }: { children: ReactNode }) => {
-  const { user, userRoles, userGroups } = useAuth();
+  const { user, userTypes, hasGroup: authHasGroup } = useAuth();
   const [publicFlags, setPublicFlags] = useState<
     Record<string, UserFeatureFlag>
   >({});
@@ -40,6 +40,7 @@ export const FeatureFlagProvider = ({ children }: { children: ReactNode }) => {
 
           // Ensure featureFlags is an array before processing
           if (!Array.isArray(featureFlags)) {
+            // eslint-disable-next-line no-console
             console.warn(
               'Expected featureFlags to be an array, got:',
               featureFlags
@@ -106,6 +107,7 @@ export const FeatureFlagProvider = ({ children }: { children: ReactNode }) => {
 
       // Ensure fetchedUserFlags is an array before processing
       if (!Array.isArray(fetchedUserFlags)) {
+        // eslint-disable-next-line no-console
         console.warn(
           'Expected featureFlags to be an array, got:',
           fetchedUserFlags
@@ -176,16 +178,16 @@ export const FeatureFlagProvider = ({ children }: { children: ReactNode }) => {
 
   const hasUserType = useCallback(
     (typeName: string): boolean => {
-      return userRoles.includes(typeName);
+      return userTypes.includes(typeName);
     },
-    [userRoles]
+    [userTypes]
   );
 
   const isInGroup = useCallback(
     (groupName: string): boolean => {
-      return userGroups.includes(groupName);
+      return authHasGroup(groupName);
     },
-    [userGroups]
+    [authHasGroup]
   );
 
   const refreshFlags = useCallback(async (): Promise<void> => {

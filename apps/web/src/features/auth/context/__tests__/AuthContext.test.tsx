@@ -19,24 +19,30 @@ vi.mock('next/navigation', () => ({
   }),
 }));
 
-vi.mock('@/lib/supabase/client', () => ({
-  createClient: vi.fn(() => ({
-    auth: {
-      onAuthStateChange: vi.fn(() => ({
-        data: { subscription: { unsubscribe: vi.fn() } },
-      })),
-      signOut: vi.fn(),
-    },
+// Mock fetch globally
+global.fetch = vi.fn();
+
+// Mock Supabase client with proper auth methods
+const mockSupabaseAuth = {
+  onAuthStateChange: vi.fn(() => ({
+    data: { subscription: { unsubscribe: vi.fn() } },
   })),
+  signInWithPassword: vi.fn(),
+  signUp: vi.fn(),
+  signOut: vi.fn(),
+};
+
+const mockSupabaseClient = {
+  auth: mockSupabaseAuth,
+};
+
+vi.mock('@/lib/supabase/client', () => ({
+  createClient: vi.fn(() => mockSupabaseClient),
 }));
 
 vi.mock('swr');
 
 const mockUseSWR = useSWR as Mock;
-
-// Mock fetch globally
-const mockFetch = vi.fn();
-global.fetch = mockFetch;
 
 // Test component to access context
 const TestComponent = () => {
@@ -71,6 +77,17 @@ describe('AuthContext', () => {
       data: null,
       mutate: mutateUser,
     });
+
+    // Reset Supabase auth mocks
+    mockSupabaseAuth.signInWithPassword.mockResolvedValue({ error: null });
+    mockSupabaseAuth.signUp.mockResolvedValue({ error: null });
+    mockSupabaseAuth.signOut.mockResolvedValue({ error: null });
+
+    // Reset fetch mock
+    (global.fetch as Mock).mockResolvedValue({
+      ok: true,
+      json: () => Promise.resolve({ user: null }),
+    });
   });
 
   afterEach(() => {
@@ -100,7 +117,15 @@ describe('AuthContext', () => {
       renderWithAuthProvider({
         id: '123',
         email: 'test@example.com',
-        app_metadata: { roles: ['basic'], groups: ['free'] },
+        app_metadata: {
+          user_types: ['regular'],
+          primary_user_type: 'regular',
+          subscription_tier: 'free',
+          groups: ['early_access'],
+          permissions: {},
+          features: [],
+          data_access_rules: {},
+        },
         user_metadata: {},
         aud: '',
         created_at: '',
@@ -112,44 +137,48 @@ describe('AuthContext', () => {
   });
 
   describe('Auth operations', () => {
-    it('optimistically updates user on successful login', async () => {
-      const user = { id: '123', email: 'test@example.com' };
-      mockFetch.mockResolvedValueOnce({
-        ok: true,
-        json: () => Promise.resolve({ user }),
-      });
-
+    it('calls login API route on login', async () => {
       renderWithAuthProvider();
 
       fireEvent.click(screen.getByText('Login'));
 
       await waitFor(() => {
-        expect(mutateUser).toHaveBeenCalledWith(user, false);
+        expect(global.fetch).toHaveBeenCalledWith('/api/auth/login', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            email: 'test@example.com',
+            password: 'password',
+          }),
+        });
       });
     });
 
-    it('optimistically updates user on successful signup', async () => {
-      const user = { id: '123', email: 'test@example.com', name: 'Test User' };
-      mockFetch.mockResolvedValueOnce({
-        ok: true,
-        json: () => Promise.resolve({ user }),
-      });
-
+    it('calls signup API route on signup', async () => {
       renderWithAuthProvider();
 
       fireEvent.click(screen.getByText('Sign Up'));
 
       await waitFor(() => {
-        expect(mutateUser).toHaveBeenCalledWith(user, false);
+        expect(global.fetch).toHaveBeenCalledWith('/api/auth/signup', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            email: 'test@example.com',
+            password: 'password',
+            user_metadata: {
+              name: 'Test User',
+            },
+          }),
+        });
       });
     });
 
-    it('clears user on successful logout', async () => {
-      mockFetch.mockResolvedValueOnce({
-        ok: true,
-        json: () => Promise.resolve({}),
-      });
-
+    it('calls Supabase signOut on logout', async () => {
       renderWithAuthProvider({
         id: '123',
         email: 'test@example.com',
@@ -162,12 +191,13 @@ describe('AuthContext', () => {
       fireEvent.click(screen.getByText('Logout'));
 
       await waitFor(() => {
-        expect(mutateUser).toHaveBeenCalledWith(null, false);
+        expect(mockSupabaseAuth.signOut).toHaveBeenCalled();
       });
     });
 
     it('handles login failure', async () => {
-      mockFetch.mockResolvedValueOnce({
+      // Mock fetch to return an error response
+      global.fetch = vi.fn().mockResolvedValue({
         ok: false,
         json: () => Promise.resolve({ error: 'Invalid credentials' }),
       });
@@ -203,6 +233,113 @@ describe('AuthContext', () => {
       }).toThrow('useAuth must be used within an AuthProvider');
 
       consoleSpy.mockRestore();
+    });
+  });
+
+  describe('New JWT claims properties', () => {
+    it('provides new JWT claims properties', () => {
+      const user = {
+        id: '123',
+        email: 'test@example.com',
+        app_metadata: {
+          user_types: ['regular', 'trainer'],
+          primary_user_type: 'regular',
+          subscription_tier: 'premium',
+          groups: ['early_access', 'beta_testers'],
+          permissions: { view_exercises: true, manage_clients: true },
+          features: ['advanced_analytics', 'client_management'],
+          data_access_rules: {
+            own_profile: 'full',
+            client_profiles: 'training_only',
+          },
+        },
+        user_metadata: {},
+        aud: '',
+        created_at: '',
+      } as ExtendedUser;
+
+      // Mock SWR to return our test user BEFORE rendering
+      mockUseSWR.mockReturnValue({
+        data: user,
+        mutate: mutateUser,
+      });
+
+      let auth: AuthContextType | undefined;
+      const TestComponentWithAuth = () => {
+        auth = useAuth();
+        return <TestComponent />;
+      };
+
+      render(
+        <AuthProvider>
+          <TestComponentWithAuth />
+        </AuthProvider>
+      );
+
+      expect(auth!.userTypes).toEqual(['regular', 'trainer']);
+      expect(auth!.primaryUserType).toBe('regular');
+      expect(auth!.subscriptionTier).toBe('premium');
+      expect(auth!.permissions).toEqual({
+        view_exercises: true,
+        manage_clients: true,
+      });
+      expect(auth!.features).toEqual([
+        'advanced_analytics',
+        'client_management',
+      ]);
+      expect(auth!.dataAccessRules).toEqual({
+        own_profile: 'full',
+        client_profiles: 'training_only',
+      });
+    });
+
+    it('provides utility functions for new claims', () => {
+      const user = {
+        id: '123',
+        email: 'test@example.com',
+        app_metadata: {
+          user_types: ['regular', 'trainer'],
+          primary_user_type: 'regular',
+          subscription_tier: 'premium',
+          groups: ['early_access'],
+          permissions: { view_exercises: true, manage_clients: true },
+          features: ['advanced_analytics'],
+          data_access_rules: { own_profile: 'full' },
+        },
+        user_metadata: {},
+        aud: '',
+        created_at: '',
+      } as ExtendedUser;
+
+      // Mock SWR to return our test user BEFORE rendering
+      mockUseSWR.mockReturnValue({
+        data: user,
+        mutate: mutateUser,
+      });
+
+      let auth: AuthContextType | undefined;
+      const TestComponentWithAuth = () => {
+        auth = useAuth();
+        return <TestComponent />;
+      };
+
+      render(
+        <AuthProvider>
+          <TestComponentWithAuth />
+        </AuthProvider>
+      );
+
+      expect(auth!.hasPermission('view_exercises')).toBe(true);
+      expect(auth!.hasPermission('invalid_permission')).toBe(false);
+      expect(auth!.hasFeature('advanced_analytics')).toBe(true);
+      expect(auth!.hasFeature('invalid_feature')).toBe(false);
+      expect(auth!.hasUserType('trainer')).toBe(true);
+      expect(auth!.hasUserType('doctor')).toBe(false);
+      expect(auth!.hasSubscriptionTier('premium')).toBe(true);
+      expect(auth!.hasSubscriptionTier('free')).toBe(false);
+      expect(auth!.canAccessData('own_profile', 'full')).toBe(true);
+      expect(auth!.canAccessData('own_profile', 'read_only')).toBe(true);
+      expect(auth!.canAccessData('client_profiles', 'full')).toBe(false);
     });
   });
 });

@@ -5,7 +5,6 @@ import { useRouter } from 'next/navigation';
 import React, {
   createContext,
   useContext,
-  ReactNode,
   useEffect,
   useState,
   useCallback,
@@ -35,6 +34,22 @@ export interface AuthContextType {
   hasAnyGroup: (groups: string[]) => boolean;
   // Add mutate function for refreshing user data
   mutateUser: () => Promise<ExtendedUser | null | undefined>;
+
+  // New properties from JWT claims
+  userTypes: string[];
+  primaryUserType: string;
+  subscriptionTier: string;
+  permissions: Record<string, boolean>;
+  features: string[];
+  dataAccessRules: Record<string, string>;
+
+  // New utility functions
+  hasPermission: (permission: string) => boolean;
+  hasFeature: (feature: string) => boolean;
+  hasUserType: (userType: string) => boolean;
+  hasAnyUserType: (userTypes: string[]) => boolean;
+  hasSubscriptionTier: (tier: string) => boolean;
+  canAccessData: (dataType: string, accessLevel: string) => boolean;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -89,97 +104,54 @@ const userFetcher = async (url: string): Promise<ExtendedUser | null> => {
   return data.user || null;
 };
 
-export const AuthProvider = ({ children }: { children: ReactNode }) => {
+export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const supabase = createClient();
   const router = useRouter();
   const [isAuthOperationLoading, setIsAuthOperationLoading] = useState(false);
 
-  // Use SWR to manage user state with custom fetcher
+  // Use SWR for user data fetching with proper error handling
   const { data: user, mutate: mutateUser } = useSWR<ExtendedUser | null>(
     '/api/auth/user',
     userFetcher,
     {
-      revalidateOnFocus: true,
-      shouldRetryOnError: false,
-      suspense: true,
-      fallbackData: null,
-      onError: async error => {
-        // Handle all 401 errors to prevent stale user data
-        if (error?.status === 401) {
-          try {
-            const errorData = error.info as {
-              code?: string;
-              shouldRedirect?: boolean;
-            };
-
-            // For USER_NOT_FOUND, do full cleanup with redirect
-            if (
-              errorData.code === 'USER_NOT_FOUND' &&
-              errorData.shouldRedirect
-            ) {
-              await handleUserNotFoundCleanup();
-            } else {
-              // For other 401s (expired tokens, etc.), clear user state
-              // but don't redirect to avoid aggressive behavior
-              await mutateUser(null, false);
-
-              // Clear auth tokens for expired sessions
-              try {
-                const supabase = createClient();
-                if (supabase) {
-                  await supabase.auth.signOut();
-                }
-              } catch (signOutError) {
-                console.error(
-                  'Error signing out expired session:',
-                  signOutError
-                );
-              }
-            }
-          } catch (cleanupError) {
-            console.error('Error during cleanup:', cleanupError);
-          }
+      revalidateOnFocus: false,
+      revalidateOnReconnect: true,
+      errorRetryCount: 3,
+      onError: (error: any) => {
+        // Handle USER_NOT_FOUND specifically
+        if (error?.info?.code === 'USER_NOT_FOUND') {
+          handleUserNotFoundCleanup();
         }
       },
     }
   );
 
-  const handleAuthChange = useCallback(
-    async (event: string, session: { user: ExtendedUser } | null) => {
-      if (event === 'SIGNED_IN' || event === 'USER_UPDATED') {
-        await mutateUser();
-      } else if (event === 'SIGNED_OUT') {
-        await mutateUser(null, false);
-      }
-    },
-    [mutateUser]
-  );
-
-  // Set up real-time auth state synchronization
+  // Handle auth state changes
   useEffect(() => {
-    if (!supabase) {
-      return;
-    }
+    if (!supabase) return;
 
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange((event, session) => {
-      handleAuthChange(event, session);
+    } = supabase.auth.onAuthStateChange(async (event, session) => {
+      if (event === 'SIGNED_IN' && session) {
+        // Revalidate user data when signed in
+        await mutateUser();
+        router.push('/dashboard');
+      } else if (event === 'SIGNED_OUT') {
+        // Clear user data when signed out
+        await mutateUser(null);
+        router.push('/login');
+      }
     });
 
-    return () => {
-      subscription.unsubscribe();
-    };
-  }, [supabase, handleAuthChange]);
-
-  const getAuthRedirectPath = () => {
-    // Default to dashboard as the main landing page after authentication
-    // In a real app, you might want to check feature flags here
-    return '/dashboard';
-  };
+    return () => subscription.unsubscribe();
+  }, [mutateUser, router, supabase]);
 
   const login = async (email?: string, password?: string) => {
-    if (!email || !password) return;
+    // Input validation
+    if (!email || !password) {
+      throw new Error('Email and password are required');
+    }
 
     setIsAuthOperationLoading(true);
     try {
@@ -188,28 +160,45 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({
+          email,
+          password,
+        }),
       });
 
-      const data = await response.json();
-
       if (!response.ok) {
-        throw new Error(data.error || 'Login failed');
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Login failed');
       }
 
-      // Optimistically update the user and redirect
-      await mutateUser(data.user, false); // `false` to prevent re-fetching
-      router.push(getAuthRedirectPath());
+      // Revalidate user data after successful login
+      await mutateUser();
+    } catch (error) {
+      console.error('Login error:', error);
+      throw error;
     } finally {
       setIsAuthOperationLoading(false);
     }
   };
 
   const signUp = async (email?: string, password?: string, name?: string) => {
-    if (!email || !password || !name) return;
+    // Input validation
+    if (!email || !password) {
+      throw new Error('Email and password are required');
+    }
 
     setIsAuthOperationLoading(true);
     try {
+      // Generate a fallback name that handles malformed emails
+      const generateFallbackName = (email: string): string => {
+        const nameFromEmail = email.split('@')[0];
+        // If email starts with '@' or produces empty string, use a default name
+        if (!nameFromEmail || nameFromEmail === '') {
+          return 'User';
+        }
+        return nameFromEmail;
+      };
+
       const response = await fetch('/api/auth/signup', {
         method: 'POST',
         headers: {
@@ -218,42 +207,90 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         body: JSON.stringify({
           email,
           password,
-          user_metadata: { name },
+          user_metadata: {
+            name: name || generateFallbackName(email),
+          },
         }),
       });
 
-      const data = await response.json();
-
       if (!response.ok) {
-        throw new Error(data.error || 'Sign up failed');
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Signup failed');
       }
 
-      // Optimistically update the user and redirect
-      await mutateUser(data.user, false); // `false` to prevent re-fetching
-      router.push(getAuthRedirectPath());
+      // Get the new user data from the response and pass it to mutateUser
+      const responseData = await response.json();
+      await mutateUser(responseData.user);
+    } catch (error) {
+      console.error('Signup error:', error);
+      throw error;
     } finally {
       setIsAuthOperationLoading(false);
     }
   };
 
-  const logout = async () => {
+  const logout = useCallback(async () => {
+    if (!supabase) return;
+
     setIsAuthOperationLoading(true);
     try {
-      const response = await fetch('/api/auth/logout', {
-        method: 'POST',
-      });
-
-      if (!response.ok) {
-        const data = await response.json();
-        throw new Error(data.error || 'Logout failed');
+      const { error } = await supabase.auth.signOut();
+      if (error) {
+        throw error;
       }
-
-      // Clear user from SWR cache and redirect immediately
-      await mutateUser(null, false);
-      router.push('/');
+    } catch (error) {
+      console.error('Logout error:', error);
+      throw error;
     } finally {
       setIsAuthOperationLoading(false);
     }
+  }, [supabase]);
+
+  // Extract claims from JWT
+  const userTypes = user?.app_metadata?.user_types || ['regular'];
+  const primaryUserType = user?.app_metadata?.primary_user_type || 'regular';
+  const subscriptionTier = user?.app_metadata?.subscription_tier || 'free';
+  const userGroups = user?.app_metadata?.groups || [];
+  const permissions = user?.app_metadata?.permissions || {};
+  const features = user?.app_metadata?.features || [];
+  const dataAccessRules = user?.app_metadata?.data_access_rules || {};
+
+  // Legacy support (for backward compatibility during transition)
+  const userRoles = user?.app_metadata?.roles || [primaryUserType];
+
+  const hasPermission = (permission: string) =>
+    permissions[permission] === true;
+
+  const hasFeature = (feature: string) => features.includes(feature);
+
+  const hasUserType = (userType: string) => userTypes.includes(userType);
+
+  const hasAnyUserType = (typesToCheck: string[]) =>
+    typesToCheck.some(type => userTypes.includes(type));
+
+  const hasSubscriptionTier = (tier: string) => subscriptionTier === tier;
+
+  const hasGroup = (group: string) => userGroups.includes(group);
+
+  const hasAnyGroup = (groups: string[]) =>
+    groups.some(group => userGroups.includes(group));
+
+  const canAccessData = (dataType: string, accessLevel: string) => {
+    const rule = dataAccessRules[dataType];
+    if (!rule) return false;
+
+    const accessLevels = {
+      none: 0,
+      read_only: 1,
+      training_only: 2,
+      medical_training: 3,
+      full: 4,
+    };
+
+    return (
+      (accessLevels[rule as keyof typeof accessLevels] || 0) >=
+      (accessLevels[accessLevel as keyof typeof accessLevels] || 0)
+    );
   };
 
   return (
@@ -267,19 +304,33 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         user: user || null,
         // Add convenience properties
         userId: user?.id || null,
-        userRoles: user?.app_metadata?.roles || ['basic'],
-        userGroups: user?.app_metadata?.groups || ['free'],
+        userRoles,
+        userGroups,
         // Add utility functions
         hasRole: role => user?.app_metadata?.roles?.includes(role) || false,
-        hasGroup: group => user?.app_metadata?.groups?.includes(group) || false,
+        hasGroup,
         hasAnyRole: roles =>
           roles?.some(role => user?.app_metadata?.roles?.includes(role)) ||
           false,
-        hasAnyGroup: groups =>
-          groups?.some(group => user?.app_metadata?.groups?.includes(group)) ||
-          false,
+        hasAnyGroup,
         // Add mutate function for refreshing user data
         mutateUser,
+
+        // New properties from JWT claims
+        userTypes,
+        primaryUserType,
+        subscriptionTier,
+        permissions,
+        features,
+        dataAccessRules,
+
+        // New utility functions
+        hasPermission,
+        hasFeature,
+        hasUserType,
+        hasAnyUserType,
+        hasSubscriptionTier,
+        canAccessData,
       }}
     >
       {children}

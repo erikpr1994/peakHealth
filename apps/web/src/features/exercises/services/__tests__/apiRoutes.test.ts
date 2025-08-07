@@ -4,6 +4,21 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { CATEGORY } from '../../types/constants';
 import { createExerciseId, createExerciseVariantId } from '../../types/ids';
 
+// Mock the Supabase client
+vi.mock('@/lib/supabase/server', () => ({
+  createClient: vi.fn(),
+}));
+
+// Mock the data access utilities
+vi.mock('@/lib/data-access', () => ({
+  canAccessOwnWorkouts: vi.fn(),
+  DATA_ACCESS_LEVELS: {
+    OWN: 'own',
+    GROUP: 'group',
+    ALL: 'all',
+  },
+}));
+
 // Mock Exercise type for testing
 const createMockExercise = (id: string, name: string) => ({
   id: createExerciseId(id),
@@ -37,8 +52,47 @@ vi.mock('@/features/exercises/services/exerciseService', () => ({
 }));
 
 describe('Exercise API Routes', () => {
-  beforeEach(() => {
+  let mockSupabase: any;
+  let mockAuth: any;
+  let mockDataAccess: any;
+
+  beforeEach(async () => {
     vi.clearAllMocks();
+
+    // Mock Supabase client
+    const { createClient } = await import('@/lib/supabase/server');
+    mockSupabase = {
+      auth: {
+        getUser: vi.fn(),
+      },
+    };
+    vi.mocked(createClient).mockResolvedValue(mockSupabase);
+
+    // Mock authentication
+    mockAuth = {
+      data: {
+        user: {
+          id: 'test-user-id',
+          app_metadata: {
+            user_types: ['basic'],
+            subscription_tiers: ['free'],
+            user_groups: ['default'],
+            data_access_rules: {
+              exercises: 'own',
+              workouts: 'own',
+              profiles: 'own',
+            },
+          },
+        },
+      },
+      error: null,
+    };
+    mockSupabase.auth.getUser.mockResolvedValue(mockAuth);
+
+    // Mock data access
+    const { canAccessOwnWorkouts } = await import('@/lib/data-access');
+    mockDataAccess = vi.mocked(canAccessOwnWorkouts);
+    mockDataAccess.mockReturnValue(true);
   });
 
   describe('GET /api/exercises', () => {
@@ -74,6 +128,35 @@ describe('Exercise API Routes', () => {
 
       expect(data).toEqual({ error: 'Failed to fetch exercises' });
       expect(response.status).toBe(500);
+    });
+
+    it('should return 401 when not authenticated', async () => {
+      mockAuth.error = new Error('Not authenticated');
+      mockAuth.data.user = null;
+
+      const { GET } = await import('@/app/api/exercises/route');
+      const response = await GET();
+      const data = await response.json();
+
+      expect(data).toEqual({ error: 'Not authenticated' });
+      expect(response.status).toBe(401);
+    });
+
+    it('should return exercises for all authenticated users', async () => {
+      const mockExercises = [createMockExercise('1', 'Push-up')] as any;
+      const { exerciseService } = await import(
+        '@/features/exercises/services/exerciseService'
+      );
+      vi.mocked(exerciseService.getAllExercises).mockResolvedValue(
+        mockExercises
+      );
+
+      const { GET } = await import('@/app/api/exercises/route');
+      const response = await GET();
+      const data = await response.json();
+
+      expect(data).toEqual({ exercises: mockExercises });
+      expect(response.status).toBe(200);
     });
   });
 
@@ -148,12 +231,11 @@ describe('Exercise API Routes', () => {
         '@/features/exercises/services/exerciseService'
       );
       vi.mocked(exerciseService.searchExercises).mockRejectedValue(
-        new Error('Service error')
+        new Error('Search service error')
       );
 
       const url = new URL('http://localhost:3000/api/exercises/search');
       url.searchParams.set('q', 'push');
-
       const request = new NextRequest(url);
 
       const { GET } = await import('@/app/api/exercises/search/route');
@@ -175,9 +257,8 @@ describe('Exercise API Routes', () => {
         mockExercise
       );
 
-      const request = new NextRequest('http://localhost:3000/api/exercises/1');
       const { GET } = await import('@/app/api/exercises/[exerciseId]/route');
-      const response = await GET(request, {
+      const response = await GET({} as NextRequest, {
         params: Promise.resolve({ exerciseId: '1' }),
       });
       const data = await response.json();
@@ -193,11 +274,8 @@ describe('Exercise API Routes', () => {
       );
       vi.mocked(exerciseService.getExerciseById).mockResolvedValue(null);
 
-      const request = new NextRequest(
-        'http://localhost:3000/api/exercises/999'
-      );
       const { GET } = await import('@/app/api/exercises/[exerciseId]/route');
-      const response = await GET(request, {
+      const response = await GET({} as NextRequest, {
         params: Promise.resolve({ exerciseId: '999' }),
       });
       const data = await response.json();
@@ -214,15 +292,14 @@ describe('Exercise API Routes', () => {
       );
       vi.mocked(exerciseService.addToFavorites).mockResolvedValue();
 
-      const requestBody = { userId: 'user-1', exerciseId: 'exercise-1' };
       const request = new NextRequest(
         'http://localhost:3000/api/exercises/favorites',
         {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(requestBody),
+          body: JSON.stringify({
+            userId: 'test-user-id', // Use the same user ID as in the mock
+            exerciseId: 'exercise-1',
+          }),
         }
       );
 
@@ -230,22 +307,20 @@ describe('Exercise API Routes', () => {
       const response = await POST(request);
 
       expect(exerciseService.addToFavorites).toHaveBeenCalledWith(
-        'user-1',
+        'test-user-id',
         'exercise-1'
       );
       expect(response.status).toBe(200);
     });
 
     it('should return 400 when userId is missing', async () => {
-      const requestBody = { exerciseId: 'exercise-1' };
       const request = new NextRequest(
         'http://localhost:3000/api/exercises/favorites',
         {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(requestBody),
+          body: JSON.stringify({
+            exerciseId: 'exercise-1',
+          }),
         }
       );
 
@@ -258,15 +333,13 @@ describe('Exercise API Routes', () => {
     });
 
     it('should return 400 when exerciseId is missing', async () => {
-      const requestBody = { userId: 'user-1' };
       const request = new NextRequest(
         'http://localhost:3000/api/exercises/favorites',
         {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(requestBody),
+          body: JSON.stringify({
+            userId: 'test-user-id',
+          }),
         }
       );
 
@@ -286,15 +359,14 @@ describe('Exercise API Routes', () => {
         new Error('Service error')
       );
 
-      const requestBody = { userId: 'user-1', exerciseId: 'exercise-1' };
       const request = new NextRequest(
         'http://localhost:3000/api/exercises/favorites',
         {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(requestBody),
+          body: JSON.stringify({
+            userId: 'test-user-id',
+            exerciseId: 'exercise-1',
+          }),
         }
       );
 
@@ -318,8 +390,7 @@ describe('Exercise API Routes', () => {
       );
 
       const url = new URL('http://localhost:3000/api/exercises/favorites');
-      url.searchParams.set('userId', 'user-1');
-
+      url.searchParams.set('userId', 'test-user-id'); // Use the same user ID as in the mock
       const request = new NextRequest(url);
 
       const { GET } = await import('@/app/api/exercises/favorites/route');
@@ -327,7 +398,7 @@ describe('Exercise API Routes', () => {
       const data = await response.json();
 
       expect(exerciseService.getUserFavoriteExercises).toHaveBeenCalledWith(
-        'user-1'
+        'test-user-id'
       );
       expect(data).toEqual({ exercises: mockFavorites });
       expect(response.status).toBe(200);
@@ -355,8 +426,7 @@ describe('Exercise API Routes', () => {
       );
 
       const url = new URL('http://localhost:3000/api/exercises/favorites');
-      url.searchParams.set('userId', 'user-1');
-
+      url.searchParams.set('userId', 'test-user-id');
       const request = new NextRequest(url);
 
       const { GET } = await import('@/app/api/exercises/favorites/route');
@@ -376,16 +446,15 @@ describe('Exercise API Routes', () => {
       vi.mocked(exerciseService.removeFromFavorites).mockResolvedValue();
 
       const url = new URL('http://localhost:3000/api/exercises/favorites');
-      url.searchParams.set('userId', 'user-1');
+      url.searchParams.set('userId', 'test-user-id'); // Use the same user ID as in the mock
       url.searchParams.set('exerciseId', 'exercise-1');
-
       const request = new NextRequest(url, { method: 'DELETE' });
 
       const { DELETE } = await import('@/app/api/exercises/favorites/route');
       const response = await DELETE(request);
 
       expect(exerciseService.removeFromFavorites).toHaveBeenCalledWith(
-        'user-1',
+        'test-user-id',
         'exercise-1'
       );
       expect(response.status).toBe(200);
@@ -394,7 +463,6 @@ describe('Exercise API Routes', () => {
     it('should return 400 when userId is missing', async () => {
       const url = new URL('http://localhost:3000/api/exercises/favorites');
       url.searchParams.set('exerciseId', 'exercise-1');
-
       const request = new NextRequest(url, { method: 'DELETE' });
 
       const { DELETE } = await import('@/app/api/exercises/favorites/route');
@@ -407,8 +475,7 @@ describe('Exercise API Routes', () => {
 
     it('should return 400 when exerciseId is missing', async () => {
       const url = new URL('http://localhost:3000/api/exercises/favorites');
-      url.searchParams.set('userId', 'user-1');
-
+      url.searchParams.set('userId', 'test-user-id');
       const request = new NextRequest(url, { method: 'DELETE' });
 
       const { DELETE } = await import('@/app/api/exercises/favorites/route');
@@ -428,9 +495,8 @@ describe('Exercise API Routes', () => {
       );
 
       const url = new URL('http://localhost:3000/api/exercises/favorites');
-      url.searchParams.set('userId', 'user-1');
+      url.searchParams.set('userId', 'test-user-id');
       url.searchParams.set('exerciseId', 'exercise-1');
-
       const request = new NextRequest(url, { method: 'DELETE' });
 
       const { DELETE } = await import('@/app/api/exercises/favorites/route');

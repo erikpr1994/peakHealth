@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 import { createClient } from '@/lib/supabase/server';
+import { isValidUUID } from '@/lib/utils';
 
 export async function GET(request: NextRequest) {
   try {
@@ -12,8 +13,6 @@ export async function GET(request: NextRequest) {
         { status: 503 }
       );
     }
-
-    const environment = process.env.NEXT_PUBLIC_ENVIRONMENT || 'development';
 
     // Get user session to check roles and groups
     const {
@@ -45,50 +44,40 @@ export async function GET(request: NextRequest) {
       );
     }
 
+    // Validate user exists and has a valid UUID
+    if (!user || !user.id || !isValidUUID(user.id)) {
+      return NextResponse.json(
+        { error: 'Invalid user or user ID' },
+        { status: 400 }
+      );
+    }
+
     // Get user roles and groups from app_metadata (JWT claims)
-    const userRoles = user?.app_metadata?.roles || ['basic'];
-    const userGroups = user?.app_metadata?.groups || ['free'];
+    // Provide fallback values if JWT claims are missing
+    const userRoles = user?.app_metadata?.user_types || [];
+    const userGroups = user?.app_metadata?.groups || [];
 
-    // Use the database function to get user-specific feature flags with JWT claims filtering
-    const { data: userFeatureFlags, error: userFlagsError } =
-      await supabase.rpc('get_user_feature_flags', {
-        user_id: user!.id,
-        environment_param: environment,
-        user_roles: userRoles,
-        user_groups: userGroups,
-      });
+    console.log('JWT Claims - user_types:', userRoles);
+    console.log('JWT Claims - groups:', userGroups);
 
-    if (userFlagsError) {
-      // eslint-disable-next-line no-console
-      console.error('Error fetching user feature flags:', userFlagsError);
+    // Call the database function with the correct single parameter
+    const { data: featureFlags, error } = await supabase.rpc(
+      'get_user_feature_flags',
+      {
+        user_id_param: user.id,
+      }
+    );
+
+    if (error) {
+      console.error('Database function error:', error);
       return NextResponse.json(
-        { error: 'Failed to fetch user feature flags' },
+        { error: 'Failed to fetch feature flags' },
         { status: 500 }
       );
     }
 
-    // Get public feature flags (available to all users)
-    const { data: publicFeatureFlags, error: publicFlagsError } = await supabase
-      .from('feature_flags')
-      .select('*')
-      .eq('is_public', true);
-
-    if (publicFlagsError) {
-      // eslint-disable-next-line no-console
-      console.error('Error fetching public feature flags:', publicFlagsError);
-      return NextResponse.json(
-        { error: 'Failed to fetch public feature flags' },
-        { status: 500 }
-      );
-    }
-
-    // Combine user-specific and public feature flags
-    const allFeatureFlags = [
-      ...(userFeatureFlags || []),
-      ...(publicFeatureFlags || []),
-    ];
-
-    return NextResponse.json({ featureFlags: allFeatureFlags });
+    console.log(`Found ${featureFlags?.length || 0} feature flags for user`);
+    return NextResponse.json({ featureFlags: featureFlags || [] });
   } catch (error) {
     // eslint-disable-next-line no-console
     console.error('Feature flags API error:', error);

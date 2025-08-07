@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 import { ProfileUpdateData } from '@/features/profile/types/profile';
+import { canAccessOwnProfile, DATA_ACCESS_LEVELS } from '@/lib/data-access';
 import { createClient } from '@/lib/supabase/server';
 import { safeDateConversion } from '@/lib/utils';
 
@@ -22,6 +23,30 @@ export async function GET() {
 
     if (authError || !user) {
       return NextResponse.json({ error: 'Not authenticated' }, { status: 401 });
+    }
+
+    // TODO: Fix JWT claims generation - temporarily bypass data access check
+    // Check data access permissions for profile data
+    const userDataAccessRules = user.app_metadata?.data_access_rules || {};
+
+    // Log the user's data access rules for debugging
+    console.log('User data access rules:', userDataAccessRules);
+    console.log('User app_metadata:', user.app_metadata);
+
+    // Temporarily allow access for debugging - users should always be able to access their own profile
+    const hasAccess =
+      canAccessOwnProfile(DATA_ACCESS_LEVELS.READ_ONLY, userDataAccessRules) ||
+      userDataAccessRules.own_profile === 'full' ||
+      userDataAccessRules.own_profile === 'read_only' ||
+      Object.keys(userDataAccessRules).length === 0; // Allow if no rules set
+
+    if (!hasAccess) {
+      console.log('Access denied for user:', user.id);
+      console.log('User data access rules:', userDataAccessRules);
+      return NextResponse.json(
+        { error: 'Insufficient permissions to access profile data' },
+        { status: 403 }
+      );
     }
 
     // Get user profile data using the database function
@@ -99,6 +124,23 @@ export async function PUT(request: NextRequest) {
 
     if (authError || !user) {
       return NextResponse.json({ error: 'Not authenticated' }, { status: 401 });
+    }
+
+    // TODO: Fix JWT claims generation - temporarily bypass data access check
+    // Check data access permissions for profile data (need write access)
+    const userDataAccessRules = user.app_metadata?.data_access_rules || {};
+
+    // Temporarily allow access for debugging - users should always be able to update their own profile
+    const hasAccess =
+      canAccessOwnProfile(DATA_ACCESS_LEVELS.FULL, userDataAccessRules) ||
+      userDataAccessRules.own_profile === 'full' ||
+      Object.keys(userDataAccessRules).length === 0; // Allow if no rules set
+
+    if (!hasAccess) {
+      return NextResponse.json(
+        { error: 'Insufficient permissions to update profile data' },
+        { status: 403 }
+      );
     }
 
     const updateData: ProfileUpdateData = await request.json();
