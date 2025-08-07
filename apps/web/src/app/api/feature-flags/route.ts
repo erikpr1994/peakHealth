@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 import { createClient } from '@/lib/supabase/server';
+import { isValidUUID } from '@/lib/utils';
 
 export async function GET(request: NextRequest) {
   try {
@@ -12,8 +13,6 @@ export async function GET(request: NextRequest) {
         { status: 503 }
       );
     }
-
-    const environment = process.env.NEXT_PUBLIC_ENVIRONMENT || 'development';
 
     // Get user session to check roles and groups
     const {
@@ -45,6 +44,14 @@ export async function GET(request: NextRequest) {
       );
     }
 
+    // Validate user exists and has a valid UUID
+    if (!user || !user.id || !isValidUUID(user.id)) {
+      return NextResponse.json(
+        { error: 'Invalid user or user ID' },
+        { status: 400 }
+      );
+    }
+
     // Get user roles and groups from app_metadata (JWT claims)
     // Provide fallback values if JWT claims are missing
     const userRoles = user?.app_metadata?.user_types || [];
@@ -53,14 +60,11 @@ export async function GET(request: NextRequest) {
     console.log('JWT Claims - user_types:', userRoles);
     console.log('JWT Claims - groups:', userGroups);
 
-    // Call the database function with proper parameters
+    // Call the database function with the correct single parameter
     const { data: featureFlags, error } = await supabase.rpc(
       'get_user_feature_flags',
       {
-        user_id: user?.id || '',
-        environment_param: environment,
-        user_roles: userRoles,
-        user_groups: userGroups,
+        user_id_param: user.id,
       }
     );
 
