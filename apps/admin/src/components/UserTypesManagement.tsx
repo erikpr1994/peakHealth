@@ -100,11 +100,13 @@ export const UserTypesManagement = ({
   const [selectedUserType, setSelectedUserType] = useState<UserType | null>(
     null
   );
+  const [pendingPermissions, setPendingPermissions] = useState<string[]>([]);
 
   const availablePermissions = AVAILABLE_PERMISSIONS;
 
   const handleEditPermissions = (userType: UserType) => {
     setSelectedUserType(userType);
+    setPendingPermissions(userType.permissions);
     setIsPermissionsDialogOpen(true);
   };
 
@@ -119,6 +121,25 @@ export const UserTypesManagement = ({
     );
     setIsPermissionsDialogOpen(false);
     setSelectedUserType(null);
+    setPendingPermissions([]);
+  };
+
+  const handleSavePermissions = () => {
+    if (selectedUserType) {
+      handleUpdatePermissions(selectedUserType.id, pendingPermissions);
+    }
+  };
+
+  const handleCancelPermissions = () => {
+    setIsPermissionsDialogOpen(false);
+    setSelectedUserType(null);
+    setPendingPermissions([]);
+  };
+
+  const handlePermissionToggle = (permissionId: string, checked: boolean) => {
+    setPendingPermissions(prev =>
+      checked ? [...prev, permissionId] : prev.filter(p => p !== permissionId)
+    );
   };
 
   return (
@@ -328,20 +349,10 @@ export const UserTypesManagement = ({
                     >
                       <Switch
                         id={permission.id}
-                        checked={selectedUserType.permissions.includes(
-                          permission.id
-                        )}
-                        onCheckedChange={checked => {
-                          const newPermissions = checked
-                            ? [...selectedUserType.permissions, permission.id]
-                            : selectedUserType.permissions.filter(
-                                p => p !== permission.id
-                              );
-                          handleUpdatePermissions(
-                            selectedUserType.id,
-                            newPermissions
-                          );
-                        }}
+                        checked={pendingPermissions.includes(permission.id)}
+                        onCheckedChange={checked =>
+                          handlePermissionToggle(permission.id, checked)
+                        }
                       />
                       <div className="flex-1">
                         <Label htmlFor={permission.id} className="font-medium">
@@ -360,15 +371,10 @@ export const UserTypesManagement = ({
               </div>
             )}
             <DialogFooter>
-              <Button
-                variant="outline"
-                onClick={() => setIsPermissionsDialogOpen(false)}
-              >
+              <Button variant="outline" onClick={handleCancelPermissions}>
                 Cancel
               </Button>
-              <Button onClick={() => setIsPermissionsDialogOpen(false)}>
-                Save Changes
-              </Button>
+              <Button onClick={handleSavePermissions}>Save Changes</Button>
             </DialogFooter>
           </DialogContent>
         </Dialog>
