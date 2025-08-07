@@ -10,8 +10,8 @@
     "dist"
   ],
   "scripts": {
-    "build": "npm run generate-exports && vite build",
-    "generate-exports": "node scripts/generate-exports.js > exports.json && node -e \"const pkg=require('./package.json'); const exports=require('./exports.json'); pkg.exports=exports; require('fs').writeFileSync('package.json', JSON.stringify(pkg, null, 2));\"",
+    "build": "node scripts/generate-exports.js && vite build",
+    "generate-exports": "node scripts/generate-exports.js",
     "dev": "vite build --watch",
     "clean": "rm -rf dist exports.json",
     "type-check": "tsc --noEmit",

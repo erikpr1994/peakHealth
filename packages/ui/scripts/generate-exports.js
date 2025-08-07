@@ -1,4 +1,4 @@
-import { readdirSync, existsSync } from 'fs';
+import { readdirSync, existsSync, writeFileSync, readFileSync } from 'fs';
 import { resolve, dirname } from 'path';
 import { fileURLToPath } from 'url';
 
@@ -33,4 +33,17 @@ function generateExports() {
   return exports;
 }
 
-console.log(JSON.stringify(generateExports(), null, 2));
+// Generate exports and write to exports.json
+const exports = generateExports();
+writeFileSync(
+  resolve(__dirname, '../exports.json'),
+  JSON.stringify(exports, null, 2)
+);
+
+// Update package.json exports field
+const packageJsonPath = resolve(__dirname, '../package.json');
+const packageJson = JSON.parse(readFileSync(packageJsonPath, 'utf8'));
+packageJson.exports = exports;
+writeFileSync(packageJsonPath, `${JSON.stringify(packageJson, null, 2)}\n`);
+
+console.log('Exports generated and package.json updated successfully');
