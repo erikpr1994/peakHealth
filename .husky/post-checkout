@@ -1,0 +1,24 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+echo "🔄 Post-checkout hook: Pulling latest changes and installing dependencies..."
+
+# Get the previous and current branch
+PREVIOUS_BRANCH=$1
+CURRENT_BRANCH=$2
+CHECKOUT_TYPE=$3
+
+echo "Switched from $PREVIOUS_BRANCH to $CURRENT_BRANCH"
+
+# Only run for branch checkouts (not file checkouts)
+if [ "$CHECKOUT_TYPE" = "1" ]; then
+    echo "📥 Pulling latest changes..."
+    git pull origin $CURRENT_BRANCH
+
+    echo "📦 Installing dependencies..."
+    pnpm install
+
+    echo "✅ Post-checkout hook completed successfully!"
+else
+    echo "⏭️  Skipping post-checkout hook (file checkout detected)"
+fi
