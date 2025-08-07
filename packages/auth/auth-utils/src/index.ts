@@ -140,10 +140,10 @@ export const getUserAccessibleApps = (user: User | null): AppSelection[] => {
   if (!user) return [];
 
   const userRoles: string[] = Array.isArray(user.app_metadata?.roles)
-    ? user.app_metadata?.roles
+    ? (user.app_metadata.roles as string[])
     : [];
   const userGroups: string[] = Array.isArray(user.app_metadata?.groups)
-    ? user.app_metadata?.groups
+    ? (user.app_metadata.groups as string[])
     : [];
 
   return Object.entries(APP_CONFIGS).map(([appKey, config]) => {
@@ -182,13 +182,58 @@ export const buildAppRedirectUrl = (
       ? 'https'
       : 'http';
   const baseUrl = `${protocol}://${appConfig.domain}`;
-  const path = options.returnUrl ?? appConfig.path;
+
+  // Validate returnUrl if provided
+  let path = appConfig.path;
+  if (options.returnUrl) {
+    // Get all allowed domains from app configs
+    const allowedDomains = Object.values(APP_CONFIGS).map(
+      config => config.domain
+    );
+
+    if (validateReturnUrl(options.returnUrl, allowedDomains)) {
+      path = options.returnUrl;
+    } else {
+      // If returnUrl is invalid, fall back to default path
+      // eslint-disable-next-line no-console
+      console.warn(
+        `Invalid returnUrl: ${options.returnUrl}, using default path`
+      );
+    }
+  }
 
   return `${baseUrl}${path}`;
 };
 
 export const getReturnUrl = (searchParams: URLSearchParams): string | null => {
   return searchParams.get('returnUrl') ?? searchParams.get('redirect') ?? null;
+};
+
+// URL validation utilities
+export const validateReturnUrl = (
+  url: string,
+  allowedDomains: string[]
+): boolean => {
+  try {
+    const parsedUrl = new URL(url);
+
+    // Check if the URL is relative (starts with /)
+    if (url.startsWith('/')) {
+      return true;
+    }
+
+    // Check if the domain is in the allowed list
+    return allowedDomains.some(domain => {
+      // Handle both exact domain matches and subdomain matches
+      return (
+        parsedUrl.hostname === domain ||
+        parsedUrl.hostname.endsWith(`.${domain}`)
+      );
+    });
+  } catch {
+    // Invalid URL format
+    return false;
+  }
 };
 
 // Validation utilities
@@ -226,16 +271,18 @@ export const validatePassword = (
 
 // Role and permission utilities
 export const hasRole = (user: User | null, role: string): boolean => {
-  return (
-    Array.isArray(user?.app_metadata?.roles) &&
-    user.app_metadata.roles.includes(role)
+  return !!(
+    user?.app_metadata?.roles &&
+    Array.isArray(user.app_metadata.roles) &&
+    (user.app_metadata.roles as string[]).includes(role)
   );
 };
 
 export const hasGroup = (user: User | null, group: string): boolean => {
-  return (
-    Array.isArray(user?.app_metadata?.groups) &&
-    user.app_metadata.groups.includes(group)
+  return !!(
+    user?.app_metadata?.groups &&
+    Array.isArray(user.app_metadata.groups) &&
+    (user.app_metadata.groups as string[]).includes(group)
   );
 };
 
