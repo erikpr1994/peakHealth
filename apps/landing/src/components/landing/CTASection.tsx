@@ -1,58 +1,64 @@
-import { Button } from '@peakhealth/ui';
-import { ArrowRight, Check } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import Link from 'next/link';
+import React from 'react';
 
 import styles from './CTASection.module.css';
 
 import { getSignupUrl } from '@/lib/auth';
 
+const Button: React.FC<
+  React.ButtonHTMLAttributes<HTMLButtonElement> & {
+    variant?: 'primary' | 'secondary' | 'outline';
+    size?: 'sm' | 'md' | 'lg';
+    asChild?: boolean;
+  }
+> = ({
+  variant = 'primary',
+  size = 'md',
+  asChild = false,
+  className,
+  children,
+  ...props
+}) => {
+  const buttonClasses = `${styles.button} ${styles[`button--${variant}`]} ${styles[`button--${size}`]} ${className ?? ''}`;
+
+  if (asChild && React.isValidElement(children)) {
+    return React.cloneElement(children as React.ReactElement<any>, {
+      className: buttonClasses,
+      ...props,
+    });
+  }
+
+  return (
+    <button className={buttonClasses} {...props}>
+      {children}
+    </button>
+  );
+};
+
 export const CTASection = () => {
   return (
-    <section className={styles.section}>
+    <section className={styles.cta}>
       <div className={styles.container}>
         <div className={styles.content}>
           <h2 className={styles.title}>
-            Ready to transform your
-            <span className={styles.gradientText}> fitness journey?</span>
+            Ready to transform your fitness journey?
           </h2>
-
           <p className={styles.description}>
             Join thousands of users who have already achieved their fitness
-            goals with Peak Health. Start your free trial today and experience
-            the difference.
+            goals with Peak Health. Start your transformation today.
           </p>
-
-          <div className={styles.features}>
-            <div className={styles.feature}>
-              <Check className={styles.checkIcon} />
-              <span>Free 14-day trial</span>
-            </div>
-            <div className={styles.feature}>
-              <Check className={styles.checkIcon} />
-              <span>No credit card required</span>
-            </div>
-            <div className={styles.feature}>
-              <Check className={styles.checkIcon} />
-              <span>Cancel anytime</span>
-            </div>
-          </div>
-
           <div className={styles.actions}>
             <Button asChild variant="primary" size="lg">
               <Link href={getSignupUrl()}>
-                Start Free Trial
+                Get Started Free
                 <ArrowRight className={styles.arrowIcon} />
               </Link>
             </Button>
-
-            <Button asChild variant="outline" size="lg">
-              <Link href="/pricing">View Pricing</Link>
+            <Button variant="outline" size="lg">
+              Learn More
             </Button>
           </div>
-
-          <p className={styles.disclaimer}>
-            * Free trial includes all premium features. No commitment required.
-          </p>
         </div>
       </div>
     </section>

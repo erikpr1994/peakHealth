@@ -1,77 +1,98 @@
-import { Button } from '@peakhealth/ui';
-import {
-  Activity,
-  Target,
-  Users,
-  BarChart3,
-  Calendar,
-  Award,
-} from 'lucide-react';
+import { Check, ArrowRight } from 'lucide-react';
+import Link from 'next/link';
+import React from 'react';
 
 import styles from './FeatureSection.module.css';
 
 import { getSignupUrl } from '@/lib/auth';
 
+const Button: React.FC<
+  React.ButtonHTMLAttributes<HTMLButtonElement> & {
+    variant?: 'primary' | 'secondary' | 'outline';
+    size?: 'sm' | 'md' | 'lg';
+    asChild?: boolean;
+  }
+> = ({
+  variant = 'primary',
+  size = 'md',
+  asChild = false,
+  className,
+  children,
+  ...props
+}) => {
+  const buttonClasses = `${styles.button} ${styles[`button--${variant}`]} ${styles[`button--${size}`]} ${className ?? ''}`;
+
+  if (asChild && React.isValidElement(children)) {
+    return React.cloneElement(children as React.ReactElement<any>, {
+      className: buttonClasses,
+      ...props,
+    });
+  }
+
+  return (
+    <button className={buttonClasses} {...props}>
+      {children}
+    </button>
+  );
+};
+
 const features = [
   {
-    icon: Activity,
     title: 'Workout Tracking',
     description:
-      'Track your workouts with detailed exercise logging, sets, reps, and weights. Monitor your progress over time with comprehensive analytics.',
+      'Log your exercises, sets, and reps with our intuitive interface.',
+    icon: Check,
   },
   {
-    icon: Target,
-    title: 'Goal Setting',
+    title: 'Progress Analytics',
     description:
-      'Set personalized fitness goals and track your progress. Get motivated with milestone achievements and progress visualizations.',
+      'Visualize your fitness journey with detailed charts and insights.',
+    icon: Check,
   },
   {
-    icon: Users,
+    title: 'Personalized Plans',
+    description:
+      'Get custom workout plans tailored to your goals and fitness level.',
+    icon: Check,
+  },
+  {
     title: 'Social Features',
     description:
-      'Connect with friends, join challenges, and share your achievements. Build a supportive community around your fitness journey.',
+      'Connect with friends, share achievements, and stay motivated.',
+    icon: Check,
   },
   {
-    icon: BarChart3,
-    title: 'Advanced Analytics',
+    title: 'Nutrition Tracking',
     description:
-      'Get deep insights into your performance with detailed charts, trends, and personalized recommendations based on your data.',
+      "Monitor your diet and ensure you're fueling your workouts properly.",
+    icon: Check,
   },
   {
-    icon: Calendar,
-    title: 'Smart Scheduling',
-    description:
-      'Plan your workouts with intelligent scheduling that adapts to your routine and provides optimal training recommendations.',
-  },
-  {
-    icon: Award,
-    title: 'Achievement System',
-    description:
-      'Earn badges, unlock achievements, and celebrate your milestones. Stay motivated with gamified progress tracking.',
+    title: 'Expert Guidance',
+    description: 'Access to certified trainers and fitness professionals.',
+    icon: Check,
   },
 ];
 
 export const FeatureSection = () => {
   return (
-    <section className={styles.section}>
+    <section className={styles.features}>
       <div className={styles.container}>
         <div className={styles.header}>
           <h2 className={styles.title}>
-            Everything you need to
-            <span className={styles.gradientText}> achieve your goals</span>
+            Everything you need to achieve your fitness goals
           </h2>
-          <p className={styles.subtitle}>
+          <p className={styles.description}>
             Peak Health provides all the tools and features you need to
-            transform your fitness journey and reach your goals faster than ever
-            before.
+            transform your fitness journey and reach your goals faster.
           </p>
         </div>
 
         <div className={styles.grid}>
           {features.map((feature, index) => (
             <div key={index} className={styles.feature}>
-              <div className={styles.iconContainer}>
-                <feature.icon className={styles.icon} />
+              <div className={styles.icon}>
+                <feature.icon className={styles.iconSvg} />
               </div>
               <h3 className={styles.featureTitle}>{feature.title}</h3>
               <p className={styles.featureDescription}>{feature.description}</p>
@@ -80,11 +101,11 @@ export const FeatureSection = () => {
         </div>
 
         <div className={styles.cta}>
-          <p className={styles.ctaText}>
-            Ready to start your fitness transformation?
-          </p>
           <Button asChild variant="primary" size="lg">
-            <a href={getSignupUrl()}>Get Started Free</a>
+            <Link href={getSignupUrl()}>
+              Get Started Today
+              <ArrowRight className={styles.arrowIcon} />
+            </Link>
           </Button>
         </div>
       </div>

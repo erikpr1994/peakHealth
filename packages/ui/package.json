@@ -10,12 +10,13 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsc && npm run copy-css-files && npm run create-index-css",
-    "copy-css-files": "find src/components -name '*.css' -exec sh -c 'mkdir -p dist/$(dirname \"$1\" | sed \"s|^src/||\") && cp \"$1\" \"dist/$(echo \"$1\" | sed \"s|^src/||\")\"' _ {} \\;",
-    "create-index-css": "find src/components -name '*.css' -exec cat {} \\; > dist/index.css",
-    "dev": "tsc --watch",
-    "clean": "rm -rf dist",
-    "type-check": "tsc --noEmit"
+    "build": "npm run generate-exports && vite build",
+    "generate-exports": "node scripts/generate-exports.js > exports.json && node -e \"const pkg=require('./package.json'); const exports=require('./exports.json'); pkg.exports=exports; require('fs').writeFileSync('package.json', JSON.stringify(pkg, null, 2));\"",
+    "dev": "vite build --watch",
+    "clean": "rm -rf dist exports.json",
+    "type-check": "tsc --noEmit",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build"
   },
   "peerDependencies": {
     "react": "^19.0.0",
@@ -25,10 +26,18 @@
     "clsx": "^2.1.0"
   },
   "devDependencies": {
+    "@storybook/addon-docs": "^9.1.1",
+    "@storybook/addon-onboarding": "^9.1.1",
+    "@storybook/react-vite": "^9.1.1",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
+    "@vitejs/plugin-react": "^5.0.0",
     "eslint": "^9.0.0",
-    "typescript": "^5.0.0"
+    "eslint-plugin-storybook": "^9.1.1",
+    "storybook": "^9.1.1",
+    "typescript": "^5.0.0",
+    "vite": "^7.1.0",
+    "vite-plugin-dts": "^4.5.4"
   },
   "keywords": [
     "design-system",
@@ -40,5 +49,22 @@
     "health"
   ],
   "author": "Peak Health Team",
-  "license": "MIT"
+  "license": "MIT",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.js"
+    },
+    "./button": {
+      "types": "./dist/components/button/index.d.ts",
+      "import": "./dist/components/button/index.js",
+      "require": "./dist/components/button/index.js"
+    },
+    "./input": {
+      "types": "./dist/components/input/index.d.ts",
+      "import": "./dist/components/input/index.js",
+      "require": "./dist/components/input/index.js"
+    }
+  }
 }

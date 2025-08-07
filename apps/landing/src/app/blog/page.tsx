@@ -19,7 +19,10 @@ export const metadata: Metadata = {
 const BlogPage = () => {
   return (
     <div style={{ minHeight: '100vh', backgroundColor: 'var(--secondary)' }}>
-      <BlogHeader />
+      <BlogHeader
+        title="Peak Health Blog"
+        description="Fitness tips, workout guides, and health insights from our experts"
+      />
       <BlogList />
     </div>
   );

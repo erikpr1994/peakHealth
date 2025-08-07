@@ -1,6 +1,5 @@
 'use client';
 
-import { Button } from '@peakhealth/ui';
 import React from 'react';
 
 import styles from '../styles/AuthCard.module.css';
@@ -56,7 +55,27 @@ export const Input: React.FC<
   );
 };
 
-export { Button };
+export const Button: React.FC<
+  React.ButtonHTMLAttributes<HTMLButtonElement> & {
+    variant?: 'primary' | 'secondary';
+    size?: 'sm' | 'md' | 'lg';
+  }
+> = ({
+  variant = 'primary',
+  size = 'md',
+  className,
+  children,
+  ...props
+}): React.JSX.Element => {
+  return (
+    <button
+      className={`${styles.button} ${styles[`button--${variant}`]} ${styles[`button--${size}`]} ${className ?? ''}`}
+      {...props}
+    >
+      {children}
+    </button>
+  );
+};
 
 export const Divider: React.FC<{ text?: string }> = ({
   text = 'or',
