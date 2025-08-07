@@ -6,6 +6,12 @@ import { createClient } from '@/lib/supabase/server';
 function isValidRedirectUrl(url: string): boolean {
   try {
     const redirectUrl = new URL(url);
+
+    // Ensure URL is absolute (has protocol and hostname)
+    if (!redirectUrl.protocol || !redirectUrl.hostname) {
+      return false;
+    }
+
     const allowedDomains = [
       'localhost:3001', // web app
       'localhost:3002', // admin app
@@ -59,11 +65,15 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       return NextResponse.json({ error: error.message }, { status: 400 });
     }
 
-    // Set cross-domain cookies for session management
-    const response = NextResponse.json({
+    // Create base response with user data
+    const responseData = {
       user: data.user,
       session: data.session,
-    });
+      redirect: redirect && isValidRedirectUrl(redirect) ? redirect : undefined,
+    };
+
+    // Set cross-domain cookies for session management
+    const response = NextResponse.json(responseData);
 
     // Set auth token cookie that can be accessed across subdomains
     if (data.session?.access_token) {
@@ -78,11 +88,6 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
         sameSite: 'lax',
         maxAge: 60 * 60 * 24 * 7, // 7 days
       });
-    }
-
-    // If redirect is provided and valid, redirect there
-    if (redirect && isValidRedirectUrl(redirect)) {
-      return NextResponse.redirect(redirect);
     }
 
     return response;
