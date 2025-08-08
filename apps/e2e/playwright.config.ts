@@ -35,9 +35,10 @@ export default defineConfig({
     },
   ],
   projects: [
-    { name: 'setup', testMatch: /00\.setup\.ts/ },
+    { name: 'setup', testMatch: ['tests/00.setup.ts'] },
     {
       name: 'web',
+      testMatch: ['tests/web.*.spec.ts'],
       dependencies: ['setup'],
       use: {
         baseURL: 'http://localhost:3001',
@@ -46,6 +47,7 @@ export default defineConfig({
     },
     {
       name: 'admin',
+      testMatch: ['tests/admin.*.spec.ts'],
       dependencies: ['setup'],
       use: {
         baseURL: 'http://localhost:3002',
