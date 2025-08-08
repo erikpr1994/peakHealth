@@ -86,7 +86,6 @@ export async function GET() {
 
     return NextResponse.json({ user });
   } catch (error) {
-    // eslint-disable-next-line no-console
     console.error('Get user error:', error);
     return NextResponse.json(
       { error: 'Internal server error' },
