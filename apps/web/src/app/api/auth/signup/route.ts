@@ -61,7 +61,7 @@ export async function POST(request: NextRequest) {
 
     // Assign default user configuration using the new system
     try {
-      const adminClient = createAdminClient();
+      const adminClient = await createAdminClient();
       if (adminClient) {
         // eslint-disable-next-line no-console
         console.log(
@@ -160,7 +160,7 @@ export async function POST(request: NextRequest) {
     // If custom roles/groups are provided, create additional assignment
     if (data.user && (roles || groups)) {
       try {
-        const adminClient = createAdminClient();
+        const adminClient = await createAdminClient();
 
         const app_metadata: Record<string, unknown> = {};
         if (roles) app_metadata.roles = roles;

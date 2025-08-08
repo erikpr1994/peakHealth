@@ -1,5 +1,8 @@
 import { Suspense } from 'react';
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 import ExercisesList from '@/features/exercises/ExercisesList';
 import { exerciseService } from '@/features/exercises/services/exerciseService';
 
