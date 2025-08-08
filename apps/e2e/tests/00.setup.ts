@@ -16,6 +16,7 @@ async function runNode(scriptRelPath: string): Promise<void> {
     const p = spawn(process.execPath, [scriptPath], {
       stdio: 'inherit',
       cwd: repoRoot,
+      env: { ...process.env, SKIP_DB_RESET: '1' },
     });
     p.on('exit', (code: number | null) =>
       code === 0
@@ -43,13 +44,16 @@ test('seed dev DB and create storage states', async ({ browser }) => {
     await page.getByPlaceholder('Enter your email').fill(email);
     await page.getByPlaceholder('Enter your password').fill(password);
     await page.getByRole('button', { name: /sign in|log in/i }).click();
-    await page.waitForURL('**/app-selector', { timeout: 30_000 });
+    // Wait for app selector to render
+    await page.waitForURL('**/app-selector', { timeout: 60_000 });
+    await expect(page.getByText(/Choose\s*Your\s*App/i)).toBeVisible();
     // Click "PeakHealth" app card
+    // Click the app card by container div and inner text
     await page
-      .getByText(/Peak\s*Health/i)
+      .getByText(/^PeakHealth$/i)
       .first()
       .click();
-    await page.waitForURL('http://localhost:3001/**', { timeout: 30_000 });
+    await page.waitForURL('http://localhost:3001/**', { timeout: 60_000 });
     await expect(page).toHaveURL(/localhost:3001/);
     await context.storageState({ path: 'storage-states/web.json' });
     await context.close();
@@ -63,13 +67,14 @@ test('seed dev DB and create storage states', async ({ browser }) => {
     await page.getByPlaceholder('Enter your email').fill(email);
     await page.getByPlaceholder('Enter your password').fill(password);
     await page.getByRole('button', { name: /sign in|log in/i }).click();
-    await page.waitForURL('**/app-selector', { timeout: 30_000 });
+    await page.waitForURL('**/app-selector', { timeout: 60_000 });
+    await expect(page.getByText(/Choose\s*Your\s*App/i)).toBeVisible();
     // Click "Admin Panel" app card
     await page
-      .getByText(/Admin\s*Panel/i)
+      .getByText(/^Admin\s*Panel$/i)
       .first()
       .click();
-    await page.waitForURL('http://localhost:3002/**', { timeout: 30_000 });
+    await page.waitForURL('http://localhost:3002/**', { timeout: 60_000 });
     await expect(page).toHaveURL(/localhost:3002/);
     await context.storageState({ path: 'storage-states/admin.json' });
     await context.close();

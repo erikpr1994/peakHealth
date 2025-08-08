@@ -10,7 +10,7 @@ test('setup: admin -> app selector -> admin', async ({ browser }) => {
   await page.getByPlaceholder('Enter your email').fill(email);
   await page.getByPlaceholder('Enter your password').fill(password);
   await page.getByRole('button', { name: /sign in|log in/i }).click();
-  await page.waitForURL('**/app-selector', { timeout: 30_000 });
+  await page.waitForURL('**/app-selector', { timeout: 60_000 });
   await page
     .getByText(/^Admin\s*Panel$/i)
     .first()

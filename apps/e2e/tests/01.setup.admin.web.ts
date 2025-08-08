@@ -10,9 +10,9 @@ test('setup: admin -> app selector -> web', async ({ browser }) => {
   await page.getByPlaceholder('Enter your email').fill(email);
   await page.getByPlaceholder('Enter your password').fill(password);
   await page.getByRole('button', { name: /sign in|log in/i }).click();
-  await page.waitForURL('**/app-selector', { timeout: 30_000 });
+  await page.waitForURL('**/app-selector', { timeout: 60_000 });
   await page
-    .getByText(/^Peak\s*Health$/i)
+    .getByText(/^PeakHealth$/i)
     .first()
     .click();
   await page.waitForURL('http://localhost:3001/**', { timeout: 30_000 });

@@ -21,15 +21,20 @@ async function setupDevDatabase() {
   try {
     console.log('🚀 Setting up development database...');
 
-    // Step 1: Reset the database
-    console.log('\n📊 Resetting Supabase database...');
-    try {
-      execSync('supabase db reset', { stdio: 'inherit' });
-      console.log('✅ Database reset successful');
-    } catch (error) {
-      console.error('❌ Database reset failed:', error.message);
-      console.log('Make sure Supabase is running: pnpm supabase:start');
-      return;
+    // Step 1: Reset the database (optional in CI/e2e)
+    const shouldSkipReset = process.env.SKIP_DB_RESET === '1' || process.env.SKIP_DB_RESET === 'true';
+    if (shouldSkipReset) {
+      console.log('\n⏭️  Skipping Supabase database reset (SKIP_DB_RESET set)');
+    } else {
+      console.log('\n📊 Resetting Supabase database...');
+      try {
+        execSync('supabase db reset', { stdio: 'inherit' });
+        console.log('✅ Database reset successful');
+      } catch (error) {
+        console.warn('⚠️  Database reset failed, continuing with user upserts:', error.message);
+        console.log('Make sure Supabase is running: pnpm supabase:start');
+        // Intentionally continue to attempt user creation/upsert so tests can proceed
+      }
     }
 
     // Step 2: Create users

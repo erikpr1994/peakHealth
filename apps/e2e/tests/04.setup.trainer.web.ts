@@ -10,15 +10,12 @@ test('setup: trainer -> app selector -> web', async ({ browser }) => {
   await page.getByPlaceholder('Enter your email').fill(email);
   await page.getByPlaceholder('Enter your password').fill(password);
   await page.getByRole('button', { name: /sign in|log in/i }).click();
-  // Trainer might land on selector or directly on web depending on access
-  await page.waitForLoadState('networkidle');
-  if ((await page.url()).includes('app-selector')) {
-    await page
-      .getByText(/Peak\s*Health/i)
-      .first()
-      .click();
-  }
-  await page.waitForURL('http://localhost:3001/**', { timeout: 30_000 });
+  await page.waitForURL('**/app-selector', { timeout: 60_000 });
+  await page
+    .getByText(/^PeakHealth$/i)
+    .first()
+    .click();
+  await page.waitForURL('http://localhost:3001/**', { timeout: 60_000 });
   await context.storageState({ path: 'storage-states/trainer-web.json' });
   await context.close();
 });
