@@ -35,13 +35,18 @@ export default defineConfig({
     },
     {
       command: 'pnpm -C ../landing dev',
-      url: 'http://localhost:3003',
+      url: 'http://localhost:3004',
       reuseExistingServer: true,
       timeout: 120_000,
     },
   ],
   projects: [
     { name: 'setup', testMatch: ['tests/00.setup.ts'] },
+    {
+      name: 'landing',
+      testMatch: ['tests/landing.*.spec.ts'],
+      use: { baseURL: 'http://localhost:3004' },
+    },
     {
       name: 'web',
       testMatch: ['tests/web.*.spec.ts'],
