@@ -7,8 +7,15 @@ export async function middleware(request: NextRequest) {
   });
 
   // Lightweight auth check in Edge without importing Supabase SDK
-  const accessToken = request.cookies.get('sb-access-token')?.value;
-  const isAuthenticated = Boolean(accessToken);
+  const cookies = request.cookies.getAll();
+  // Supabase chunked cookie names look like: sb-<projectRef>-auth-token.0 / .1
+  const hasSupabaseAuthToken = cookies.some(c =>
+    /^sb-[^-]+-auth-token(\.\d+)?$/.test(c.name)
+  );
+  const hasCrossDomainAuthToken = Boolean(
+    request.cookies.get('auth-token')?.value
+  );
+  const isAuthenticated = hasSupabaseAuthToken || hasCrossDomainAuthToken;
 
   // Define protected routes that require authentication
   const protectedRoutes = [
