@@ -1,5 +1,8 @@
 import { Suspense } from 'react';
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 import Dashboard from '@/features/dashboard/Dashboard';
 import { FEATURE_FLAGS } from '@/features/feature-flags';
 import { createClient } from '@/lib/supabase/server';
@@ -26,9 +29,9 @@ async function getDashboardFeatureFlag() {
       .eq('name', FEATURE_FLAGS.DASHBOARD_FEATURE)
       .eq('feature_flag_environments.environment', environment)
       .eq('feature_flag_environments.is_enabled', true)
-      .single();
+      .maybeSingle();
 
-    if (error) {
+    if (error && (error as any)?.code !== 'PGRST116') {
       console.error('Error fetching dashboard feature flag:', error);
       return { isEnabled: false, error: 'Failed to fetch feature flag' };
     }
