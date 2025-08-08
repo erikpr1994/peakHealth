@@ -65,5 +65,43 @@ export default defineConfig({
         storageState: 'storage-states/admin.json',
       },
     },
+    // Per-user setup projects
+    { name: 'setup-admin-web', testMatch: ['tests/01.setup.admin.web.ts'] },
+    { name: 'setup-admin-admin', testMatch: ['tests/02.setup.admin.admin.ts'] },
+    { name: 'setup-regular-web', testMatch: ['tests/03.setup.regular.web.ts'] },
+    { name: 'setup-trainer-web', testMatch: ['tests/04.setup.trainer.web.ts'] },
+    // Projects that consume per-user storage states
+    {
+      name: 'admin-web',
+      dependencies: ['setup-admin-web'],
+      use: {
+        baseURL: 'http://localhost:3001',
+        storageState: 'storage-states/admin-web.json',
+      },
+    },
+    {
+      name: 'admin-admin',
+      dependencies: ['setup-admin-admin'],
+      use: {
+        baseURL: 'http://localhost:3002',
+        storageState: 'storage-states/admin-admin.json',
+      },
+    },
+    {
+      name: 'regular-web',
+      dependencies: ['setup-regular-web'],
+      use: {
+        baseURL: 'http://localhost:3001',
+        storageState: 'storage-states/regular-web.json',
+      },
+    },
+    {
+      name: 'trainer-web',
+      dependencies: ['setup-trainer-web'],
+      use: {
+        baseURL: 'http://localhost:3001',
+        storageState: 'storage-states/trainer-web.json',
+      },
+    },
   ],
 });
