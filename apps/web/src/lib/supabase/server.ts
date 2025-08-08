@@ -11,30 +11,46 @@ export async function createClient() {
     return null;
   }
 
+  // Try to access request cookies; fall back to a no-op adapter (e.g., during build or SSG)
+  let cookieStore: Awaited<ReturnType<typeof cookies>> | null = null;
   try {
-    const cookieStore = await cookies();
+    // In Next.js 15, cookies() can be async in some contexts
+    cookieStore = await cookies();
+  } catch {
+    cookieStore = null;
+  }
 
-    return createServerClient(supabaseUrl, supabaseAnonKey, {
-      cookies: {
+  const cookieAdapter = cookieStore
+    ? {
         getAll() {
-          return cookieStore.getAll();
+          return cookieStore!.getAll();
         },
-        setAll(cookiesToSet) {
+        setAll(
+          cookiesToSet: {
+            name: string;
+            value: string;
+            options: any;
+          }[]
+        ) {
           try {
             cookiesToSet.forEach(({ name, value, options }) =>
-              cookieStore.set(name, value, options)
+              cookieStore!.set(name, value, options)
             );
           } catch {
-            // The `setAll` method was called from a Server Component.
-            // This can be ignored if you have middleware refreshing
-            // user sessions.
+            // Ignore set attempts from Server Components without a mutable response
           }
         },
-      },
-    });
-  } catch {
-    // If cookies() fails (e.g., during build time), return null
-    console.warn('Unable to access cookies, returning null client');
-    return null;
-  }
+      }
+    : {
+        getAll() {
+          return [] as { name: string; value: string }[];
+        },
+        setAll() {
+          // no-op when cookies API is unavailable (build/SSG)
+        },
+      };
+
+  return createServerClient(supabaseUrl, supabaseAnonKey, {
+    cookies: cookieAdapter as any,
+  });
 }

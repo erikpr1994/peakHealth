@@ -1,53 +1,14 @@
-import { createServerClient } from '@supabase/ssr';
+// Deep import to avoid bundling browser client in Edge runtime
 import { NextResponse, type NextRequest } from 'next/server';
 
 export async function middleware(request: NextRequest) {
   const response = NextResponse.next({
-    request: {
-      headers: request.headers,
-    },
+    request: { headers: request.headers },
   });
 
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-
-  if (!supabaseUrl || !supabaseAnonKey) {
-    console.error('Missing Supabase environment variables');
-    return response;
-  }
-
-  const supabase = createServerClient(supabaseUrl, supabaseAnonKey, {
-    cookies: {
-      getAll() {
-        return request.cookies.getAll();
-      },
-      setAll(cookiesToSet) {
-        cookiesToSet.forEach(({ name, value, options }) => {
-          request.cookies.set(name, value);
-          response.cookies.set(name, value, options);
-        });
-      },
-    },
-  });
-
-  // Check if user is authenticated by getting the session
-  let session = null;
-  try {
-    const {
-      data: { session: userSession },
-    } = await supabase.auth.getSession();
-    session = userSession;
-  } catch (error) {
-    // Ignore auth session missing errors - this is expected for unauthenticated users
-    if (
-      error instanceof Error &&
-      error.message.includes('Auth session missing')
-    ) {
-      // This is expected behavior, no need to log it
-    } else {
-      console.error('Unexpected auth error in middleware:', error);
-    }
-  }
+  // Lightweight auth check in Edge without importing Supabase SDK
+  const accessToken = request.cookies.get('sb-access-token')?.value;
+  const isAuthenticated = Boolean(accessToken);
 
   // Define protected routes that require authentication
   const protectedRoutes = [
@@ -79,13 +40,13 @@ export async function middleware(request: NextRequest) {
   );
 
   // Redirect unauthenticated users to login for protected routes
-  if (isProtectedRoute && !session) {
+  if (isProtectedRoute && !isAuthenticated) {
     const loginUrl = new URL('/login', request.url);
     return NextResponse.redirect(loginUrl);
   }
 
   // Redirect authenticated users away from auth routes to dashboard
-  if (isAuthRoute && session) {
+  if (isAuthRoute && isAuthenticated) {
     const dashboardUrl = new URL('/dashboard', request.url);
     return NextResponse.redirect(dashboardUrl);
   }
