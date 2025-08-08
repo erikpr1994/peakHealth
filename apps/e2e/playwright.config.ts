@@ -33,6 +33,12 @@ export default defineConfig({
       reuseExistingServer: true,
       timeout: 120_000,
     },
+    {
+      command: 'pnpm -C ../landing dev',
+      url: 'http://localhost:3003',
+      reuseExistingServer: true,
+      timeout: 120_000,
+    },
   ],
   projects: [
     { name: 'setup', testMatch: ['tests/00.setup.ts'] },

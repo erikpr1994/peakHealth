@@ -35,35 +35,41 @@ test('seed dev DB and create storage states', async ({ browser }) => {
   const password = 'password123';
   await mkdir('storage-states', { recursive: true });
 
-  // Create storageState for the web app (3001)
+  // Create storageState for the web app (3001) via App Selector
   {
     const context = await browser.newContext();
     const page = await context.newPage();
-    const webRedirect =
-      'http://localhost:3000/login?redirect=http://localhost:3001';
-    await page.goto(webRedirect);
+    await page.goto('http://localhost:3000/login');
     await page.getByPlaceholder('Enter your email').fill(email);
     await page.getByPlaceholder('Enter your password').fill(password);
     await page.getByRole('button', { name: /sign in|log in/i }).click();
-    await page.waitForLoadState('networkidle');
-    await page.goto('http://localhost:3001/dashboard');
+    await page.waitForURL('**/app-selector', { timeout: 30_000 });
+    // Click "PeakHealth" app card
+    await page
+      .getByText(/Peak\s*Health/i)
+      .first()
+      .click();
+    await page.waitForURL('http://localhost:3001/**', { timeout: 30_000 });
     await expect(page).toHaveURL(/localhost:3001/);
     await context.storageState({ path: 'storage-states/web.json' });
     await context.close();
   }
 
-  // Create storageState for the admin app (3002)
+  // Create storageState for the admin app (3002) via App Selector
   {
     const context = await browser.newContext();
     const page = await context.newPage();
-    const adminRedirect =
-      'http://localhost:3000/login?redirect=http://localhost:3002';
-    await page.goto(adminRedirect);
+    await page.goto('http://localhost:3000/login');
     await page.getByPlaceholder('Enter your email').fill(email);
     await page.getByPlaceholder('Enter your password').fill(password);
     await page.getByRole('button', { name: /sign in|log in/i }).click();
-    await page.waitForLoadState('networkidle');
-    await page.goto('http://localhost:3002/dashboard');
+    await page.waitForURL('**/app-selector', { timeout: 30_000 });
+    // Click "Admin Panel" app card
+    await page
+      .getByText(/Admin\s*Panel/i)
+      .first()
+      .click();
+    await page.waitForURL('http://localhost:3002/**', { timeout: 30_000 });
     await expect(page).toHaveURL(/localhost:3002/);
     await context.storageState({ path: 'storage-states/admin.json' });
     await context.close();
