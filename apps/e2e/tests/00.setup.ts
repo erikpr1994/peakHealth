@@ -12,7 +12,11 @@ const __dirname = path.dirname(__filename);
 async function runNode(scriptRelPath: string): Promise<void> {
   const scriptPath = path.resolve(__dirname, '../../..', scriptRelPath);
   await new Promise<void>((resolve, reject) => {
-    const p = spawn(process.execPath, [scriptPath], { stdio: 'inherit' });
+    const repoRoot = path.resolve(__dirname, '../../..');
+    const p = spawn(process.execPath, [scriptPath], {
+      stdio: 'inherit',
+      cwd: repoRoot,
+    });
     p.on('exit', (code: number | null) =>
       code === 0
         ? resolve()
