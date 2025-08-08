@@ -4,7 +4,7 @@ import path from 'node:path';
 import { setTimeout as wait } from 'node:timers/promises';
 import { fileURLToPath } from 'node:url';
 
-import { test } from '@playwright/test';
+import { test, expect } from '@playwright/test';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -26,6 +26,7 @@ async function runNode(scriptRelPath: string): Promise<void> {
 }
 
 test('seed dev DB and create storage states', async ({ browser }) => {
+  test.setTimeout(300_000);
   await wait(2000);
 
   await runNode('scripts/setup-dev-db.mjs');
@@ -46,6 +47,7 @@ test('seed dev DB and create storage states', async ({ browser }) => {
     await page.getByRole('button', { name: /sign in|log in/i }).click();
     await page.waitForLoadState('networkidle');
     await page.goto('http://localhost:3001/dashboard');
+    await expect(page).toHaveURL(/localhost:3001/);
     await context.storageState({ path: 'storage-states/web.json' });
     await context.close();
   }
@@ -62,6 +64,7 @@ test('seed dev DB and create storage states', async ({ browser }) => {
     await page.getByRole('button', { name: /sign in|log in/i }).click();
     await page.waitForLoadState('networkidle');
     await page.goto('http://localhost:3002/dashboard');
+    await expect(page).toHaveURL(/localhost:3002/);
     await context.storageState({ path: 'storage-states/admin.json' });
     await context.close();
   }
