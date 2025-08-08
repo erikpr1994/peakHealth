@@ -66,10 +66,26 @@ export default defineConfig({
       },
     },
     // Per-user setup projects
-    { name: 'setup-admin-web', testMatch: ['tests/01.setup.admin.web.ts'] },
-    { name: 'setup-admin-admin', testMatch: ['tests/02.setup.admin.admin.ts'] },
-    { name: 'setup-regular-web', testMatch: ['tests/03.setup.regular.web.ts'] },
-    { name: 'setup-trainer-web', testMatch: ['tests/04.setup.trainer.web.ts'] },
+    {
+      name: 'setup-admin-web',
+      testMatch: ['tests/01.setup.admin.web.ts'],
+      dependencies: ['setup'],
+    },
+    {
+      name: 'setup-admin-admin',
+      testMatch: ['tests/02.setup.admin.admin.ts'],
+      dependencies: ['setup'],
+    },
+    {
+      name: 'setup-regular-web',
+      testMatch: ['tests/03.setup.regular.web.ts'],
+      dependencies: ['setup'],
+    },
+    {
+      name: 'setup-trainer-web',
+      testMatch: ['tests/04.setup.trainer.web.ts'],
+      dependencies: ['setup'],
+    },
     // Projects that consume per-user storage states
     {
       name: 'admin-web',
