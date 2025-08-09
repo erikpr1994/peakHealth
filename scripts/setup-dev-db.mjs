@@ -21,19 +21,24 @@ async function setupDevDatabase() {
   try {
     console.log('🚀 Setting up development database...');
 
-    // Step 1: Reset the database
-    console.log('\n📊 Resetting Supabase database...');
-    try {
-      execSync('supabase db reset', { stdio: 'inherit' });
-      console.log('✅ Database reset successful');
-    } catch (error) {
-      console.error('❌ Database reset failed:', error.message);
-      console.log('Make sure Supabase is running: pnpm supabase:start');
-      return;
+    // Step 1: Reset the database (optional in CI/e2e)
+    const shouldSkipReset = process.env.SKIP_DB_RESET === '1' || process.env.SKIP_DB_RESET === 'true';
+    if (shouldSkipReset) {
+      console.log('\n⏭️  Skipping Supabase database reset (SKIP_DB_RESET set)');
+    } else {
+      console.log('\n📊 Resetting Supabase database...');
+      try {
+        execSync('supabase db reset', { stdio: 'inherit' });
+        console.log('✅ Database reset successful');
+      } catch (error) {
+        console.warn('⚠️  Database reset failed, continuing with user upserts:', error.message);
+        console.log('Make sure Supabase is running: pnpm supabase:start');
+        // Intentionally continue to attempt user creation/upsert so tests can proceed
+      }
     }
 
-    // Step 2: Create admin user
-    console.log('\n👤 Creating admin user...');
+    // Step 2: Create users
+    console.log('\n👤 Creating users...');
 
     // Check if user already exists
     const { data: users, error: userError } =
@@ -44,16 +49,21 @@ async function setupDevDatabase() {
       return;
     }
 
-    const existingUser = users.users.find(
-      u => u.email === 'erikpastorrios1994@gmail.com'
-    );
+    const adminEmail = 'erikpastorrios1994@gmail.com';
+    const trainerEmail = 'trainer@example.com';
+    const regularEmail = 'user@example.com';
 
-    if (existingUser) {
-      console.log('User already exists, updating permissions...');
+    const existingAdmin = users.users.find(u => u.email === adminEmail);
+    const existingTrainer = users.users.find(u => u.email === trainerEmail);
+    const existingRegular = users.users.find(u => u.email === regularEmail);
+
+    // Admin user
+    if (existingAdmin) {
+      console.log('Admin user already exists, updating permissions...');
 
       // Update existing user with admin permissions
       const { data: updatedUser, error: updateError } =
-        await supabase.auth.admin.updateUserById(existingUser.id, {
+        await supabase.auth.admin.updateUserById(existingAdmin.id, {
           app_metadata: {
             user_types: ['admin', 'trainer', 'regular'],
             primary_user_type: 'admin',
@@ -81,7 +91,7 @@ async function setupDevDatabase() {
       // Create new user with admin permissions
       const { data: newUser, error: createError } =
         await supabase.auth.admin.createUser({
-          email: 'erikpastorrios1994@gmail.com',
+          email: adminEmail,
           password: 'password123', // You can change this
           email_confirm: true,
           user_metadata: {
@@ -112,11 +122,104 @@ async function setupDevDatabase() {
       console.log('User ID:', newUser.user.id);
     }
 
+    // Trainer user (trainer + regular), accessible to Web (via groups) and Pro (via role)
+    if (existingTrainer) {
+      console.log('Trainer user already exists, updating metadata...');
+      const { error: updateTrainerError } = await supabase.auth.admin.updateUserById(
+        existingTrainer.id,
+        {
+          app_metadata: {
+            user_types: ['trainer', 'regular'],
+            primary_user_type: 'trainer',
+            groups: ['beta', 'premium', 'free'],
+          },
+          user_metadata: {
+            name: 'Taylor',
+            fullName: 'Taylor Trainer',
+          },
+        }
+      );
+      if (updateTrainerError) {
+        console.error('Error updating trainer user:', updateTrainerError);
+      } else {
+        console.log('✅ Trainer user updated');
+      }
+    } else {
+      console.log('Creating trainer user...');
+      const { data: trainerUser, error: createTrainerError } =
+        await supabase.auth.admin.createUser({
+          email: trainerEmail,
+          password: 'password123',
+          email_confirm: true,
+          user_metadata: {
+            name: 'Taylor',
+            fullName: 'Taylor Trainer',
+          },
+          app_metadata: {
+            user_types: ['trainer', 'regular'],
+            primary_user_type: 'trainer',
+            groups: ['beta', 'premium', 'free'],
+          },
+        });
+      if (createTrainerError) {
+        console.error('Error creating trainer user:', createTrainerError);
+      } else {
+        console.log('✅ Trainer user created:', trainerUser.user.id);
+      }
+    }
+
+    // Regular user (only web)
+    if (existingRegular) {
+      console.log('Regular user already exists, updating metadata...');
+      const { error: updateRegularError } = await supabase.auth.admin.updateUserById(
+        existingRegular.id,
+        {
+          app_metadata: {
+            user_types: ['regular'],
+            primary_user_type: 'regular',
+            groups: ['free'],
+          },
+          user_metadata: {
+            name: 'Riley',
+            fullName: 'Riley Regular',
+          },
+        }
+      );
+      if (updateRegularError) {
+        console.error('Error updating regular user:', updateRegularError);
+      } else {
+        console.log('✅ Regular user updated');
+      }
+    } else {
+      console.log('Creating regular user...');
+      const { data: regularUser, error: createRegularError } =
+        await supabase.auth.admin.createUser({
+          email: regularEmail,
+          password: 'password123',
+          email_confirm: true,
+          user_metadata: {
+            name: 'Riley',
+            fullName: 'Riley Regular',
+          },
+          app_metadata: {
+            user_types: ['regular'],
+            primary_user_type: 'regular',
+            groups: ['free'],
+          },
+        });
+      if (createRegularError) {
+        console.error('Error creating regular user:', createRegularError);
+      } else {
+        console.log('✅ Regular user created:', regularUser.user.id);
+      }
+    }
+
     console.log('\n🎉 Development database setup complete!');
     console.log('');
     console.log('📋 Your admin credentials:');
-    console.log('   Email: erikpastorrios1994@gmail.com');
-    console.log('   Password: password123');
+    console.log('   Admin:   ' + adminEmail + ' / password123');
+    console.log('   Trainer: ' + trainerEmail + ' / password123');
+    console.log('   Regular: ' + regularEmail + ' / password123');
     console.log('');
     console.log('🔗 Access your applications:');
     console.log('   • Auth App: http://localhost:3000');

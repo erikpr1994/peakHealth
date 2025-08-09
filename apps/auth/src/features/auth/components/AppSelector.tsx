@@ -143,7 +143,16 @@ const AppSelector = (): React.JSX.Element => {
                 <div
                   key={app.appKey}
                   className={`${styles.appCard} ${!app.accessible ? styles.disabled : ''}`}
+                  role="button"
+                  tabIndex={0}
+                  data-testid={`app-card-${app.appKey}`}
                   onClick={() => handleAppSelect(app.appKey)}
+                  onKeyDown={event => {
+                    if (event.key === 'Enter' || event.key === ' ') {
+                      event.preventDefault();
+                      handleAppSelect(app.appKey);
+                    }
+                  }}
                 >
                   <div className={styles.appIcon}>{app.appConfig.icon}</div>
                   <div className={styles.appName}>{app.appConfig.name}</div>

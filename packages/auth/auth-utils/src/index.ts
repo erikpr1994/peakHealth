@@ -24,17 +24,51 @@ const getAppConfigs = (): Record<string, AppConfig> => {
   };
 
   // Use environment variables for domains, fallback to localhost for development
-  const webDomain = extractDomain(
-    process.env.NEXT_PUBLIC_WEB_APP_URL ??
-      (isDevelopment ? 'localhost:3001' : 'peakhealth.es')
+  const normalizeEnvUrl = (
+    value: string | undefined,
+    fallback: string
+  ): string => {
+    const trimmed = value?.trim();
+    return trimmed && trimmed.length > 0 ? trimmed : fallback;
+  };
+
+  const webRaw = normalizeEnvUrl(
+    process.env.NEXT_PUBLIC_WEB_APP_URL,
+    isDevelopment ? 'localhost:3001' : 'peakhealth.es'
   );
-  const adminDomain = extractDomain(
-    process.env.NEXT_PUBLIC_ADMIN_APP_URL ??
-      (isDevelopment ? 'localhost:3002' : 'admin.peakhealth.es')
+  const adminRaw = normalizeEnvUrl(
+    process.env.NEXT_PUBLIC_ADMIN_APP_URL,
+    isDevelopment ? 'localhost:3002' : 'admin.peakhealth.es'
   );
-  const proDomain = extractDomain(
-    process.env.NEXT_PUBLIC_PRO_APP_URL ??
-      (isDevelopment ? 'localhost:3003' : 'pro.peakhealth.es')
+  const proRaw = normalizeEnvUrl(
+    process.env.NEXT_PUBLIC_PRO_APP_URL,
+    isDevelopment ? 'localhost:3003' : 'pro.peakhealth.es'
+  );
+
+  const ensureDomain = (
+    value: string,
+    devDefault: string,
+    prodDefault: string
+  ): string => {
+    const chosen = value?.trim() ?? '';
+    if (chosen.length > 0) return chosen;
+    return isDevelopment ? devDefault : prodDefault;
+  };
+
+  const webDomain = ensureDomain(
+    extractDomain(webRaw) || webRaw,
+    'localhost:3001',
+    'peakhealth.es'
+  );
+  const adminDomain = ensureDomain(
+    extractDomain(adminRaw) || adminRaw,
+    'localhost:3002',
+    'admin.peakhealth.es'
+  );
+  const proDomain = ensureDomain(
+    extractDomain(proRaw) || proRaw,
+    'localhost:3003',
+    'pro.peakhealth.es'
   );
 
   return {
@@ -203,7 +237,23 @@ export const buildAppRedirectUrl = (
     typeof process !== 'undefined' && process.env.NODE_ENV === 'production'
       ? 'https'
       : 'http';
-  const baseUrl = `${protocol}://${appConfig.domain}`;
+  const isDev =
+    typeof process !== 'undefined' && process.env.NODE_ENV === 'development';
+  const resolvedDomain =
+    appConfig.domain && appConfig.domain.trim().length > 0
+      ? appConfig.domain
+      : appKey === 'web'
+        ? isDev
+          ? 'localhost:3001'
+          : 'peakhealth.es'
+        : appKey === 'admin'
+          ? isDev
+            ? 'localhost:3002'
+            : 'admin.peakhealth.es'
+          : isDev
+            ? 'localhost:3003'
+            : 'pro.peakhealth.es';
+  const baseUrl = `${protocol}://${resolvedDomain}`;
 
   // Validate returnUrl if provided
   let path = appConfig.path;
@@ -224,7 +274,9 @@ export const buildAppRedirectUrl = (
     }
   }
 
-  return `${baseUrl}${path}`;
+  const finalUrl = `${baseUrl}${path}`;
+
+  return finalUrl;
 };
 
 export const getReturnUrl = (searchParams: URLSearchParams): string | null => {
