@@ -69,8 +69,7 @@ interface FeatureFlag {
   updated_at: string;
   created_by: string | null;
   feature_flag_environments: FeatureFlagEnvironment[];
-  // roles removed
-  feature_flag_user_groups: FeatureFlagUserGroup[];
+  // groups removed
   feature_flag_user_types: FeatureFlagUserType[];
   feature_flag_subscription_tiers: FeatureFlagSubscriptionTier[];
   feature_flag_users: FeatureFlagUser[];
@@ -84,17 +83,6 @@ interface FeatureFlagEnvironment {
   rollout_percentage: number;
   created_at: string;
   updated_at: string;
-}
-
-// roles removed
-
-interface FeatureFlagUserGroup {
-  id: string;
-  feature_flag_id: string;
-  environment: string;
-  group_name: string;
-  is_enabled: boolean;
-  created_at: string;
 }
 
 interface FeatureFlagUserType {
@@ -123,8 +111,7 @@ interface FeatureFlagUser {
 interface TargetingOptions {
   userTypes: Array<{ name: string; display_name: string }>;
   subscriptionTiers: Array<{ name: string; display_name: string }>;
-  userGroups: Array<{ name: string; displayName: string }>;
-  // roles removed from targeting options
+  // groups removed from targeting options
   users: Array<{ id: string; email: string; displayName: string }>;
 }
 
@@ -137,16 +124,6 @@ const categories = [
   { value: 'integrations', label: 'Integrations' },
   { value: 'performance', label: 'Performance' },
 ];
-
-// const platforms = [
-//   { value: 'web', label: 'Web App' },
-//   { value: 'mobile', label: 'Mobile App' },
-//   { value: 'api', label: 'API' },
-// ];
-
-interface FeatureFlagsProps {
-  scopeInfo: unknown;
-}
 
 const getEnvironmentIcon = (env: string) => {
   switch (env) {
@@ -182,7 +159,7 @@ const formatDate = (dateString: string) => {
   });
 };
 
-export const FeatureFlags = ({ scopeInfo }: FeatureFlagsProps) => {
+export const FeatureFlags = ({ scopeInfo }: { scopeInfo?: unknown }) => {
   const [featureFlags, setFeatureFlags] = useState<FeatureFlag[]>([]);
   const [targetingOptions, setTargetingOptions] =
     useState<TargetingOptions | null>(null);
@@ -211,13 +188,7 @@ export const FeatureFlags = ({ scopeInfo }: FeatureFlagsProps) => {
     userTypes: [] as string[],
     subscriptionTiers: [] as string[],
     // roles removed
-    userGroups: [] as Array<{
-      groupName: string;
-      environments: Array<{
-        environment: string;
-        isEnabled: boolean;
-      }>;
-    }>,
+    // groups removed
     users: [] as string[],
   });
 
@@ -273,8 +244,7 @@ export const FeatureFlags = ({ scopeInfo }: FeatureFlagsProps) => {
           environments: formData.environments,
           userTypes: formData.userTypes,
           subscriptionTiers: formData.subscriptionTiers,
-          // userRoles removed
-          userGroups: formData.userGroups,
+          // groups removed
           users: formData.users,
         }),
       });
@@ -311,8 +281,7 @@ export const FeatureFlags = ({ scopeInfo }: FeatureFlagsProps) => {
           environments: formData.environments,
           userTypes: formData.userTypes,
           subscriptionTiers: formData.subscriptionTiers,
-          // userRoles removed
-          userGroups: formData.userGroups,
+          // groups removed
           users: formData.users,
         }),
       });
@@ -365,8 +334,7 @@ export const FeatureFlags = ({ scopeInfo }: FeatureFlagsProps) => {
       },
       userTypes: [],
       subscriptionTiers: [],
-      // roles removed
-      userGroups: [],
+      // groups removed
       users: [],
     });
   };
@@ -405,28 +373,7 @@ export const FeatureFlags = ({ scopeInfo }: FeatureFlagsProps) => {
         st => st.subscription_tier_name
       ),
       // roles removed
-      userGroups: (() => {
-        const groupMap = new Map<
-          string,
-          {
-            groupName: string;
-            environments: Array<{ environment: string; isEnabled: boolean }>;
-          }
-        >();
-        flag.feature_flag_user_groups.forEach(ug => {
-          if (!groupMap.has(ug.group_name)) {
-            groupMap.set(ug.group_name, {
-              groupName: ug.group_name,
-              environments: [],
-            });
-          }
-          groupMap.get(ug.group_name)!.environments.push({
-            environment: ug.environment,
-            isEnabled: ug.is_enabled,
-          });
-        });
-        return Array.from(groupMap.values());
-      })(),
+      // groups removed
       users: flag.feature_flag_users.map(uu => uu.user_id),
     });
 
@@ -751,159 +698,7 @@ export const FeatureFlags = ({ scopeInfo }: FeatureFlagsProps) => {
                       </div>
                     </div>
 
-                    {/* roles removed */}
-
-                    <div className="space-y-3">
-                      <Label>User Groups</Label>
-                      <div className="space-y-3 max-h-32 overflow-y-auto">
-                        {targetingOptions.userGroups.map(group => {
-                          const existingGroup = formData.userGroups.find(
-                            g => g.groupName === group.name
-                          );
-                          return (
-                            <div
-                              key={group.name}
-                              className="border rounded-lg p-3 space-y-3"
-                            >
-                              <div className="flex items-center space-x-3">
-                                <Checkbox
-                                  id={`group-${group.name}`}
-                                  checked={!!existingGroup}
-                                  onCheckedChange={checked => {
-                                    if (checked) {
-                                      const newGroups = [
-                                        ...formData.userGroups,
-                                        {
-                                          groupName: group.name,
-                                          environments: [
-                                            {
-                                              environment: 'development',
-                                              isEnabled: true,
-                                            },
-                                            {
-                                              environment: 'staging',
-                                              isEnabled: true,
-                                            },
-                                            {
-                                              environment: 'production',
-                                              isEnabled: true,
-                                            },
-                                          ],
-                                        },
-                                      ];
-                                      handleFormChange('userGroups', newGroups);
-                                    } else {
-                                      const newGroups =
-                                        formData.userGroups.filter(
-                                          g => g.groupName !== group.name
-                                        );
-                                      handleFormChange('userGroups', newGroups);
-                                    }
-                                  }}
-                                />
-                                <Label
-                                  htmlFor={`group-${group.name}`}
-                                  className="text-sm font-medium"
-                                >
-                                  {group.displayName}
-                                </Label>
-                              </div>
-                              {existingGroup && (
-                                <div className="ml-6 space-y-2">
-                                  <div className="flex items-center space-x-4">
-                                    <Label className="text-xs">
-                                      Environments:
-                                    </Label>
-                                    {[
-                                      'development',
-                                      'staging',
-                                      'production',
-                                    ].map(env => (
-                                      <div
-                                        key={env}
-                                        className="flex items-center space-x-2"
-                                      >
-                                        <Checkbox
-                                          id={`group-${group.name}-${env}`}
-                                          checked={
-                                            existingGroup.environments.find(
-                                              e => e.environment === env
-                                            )?.isEnabled || false
-                                          }
-                                          onCheckedChange={checked => {
-                                            const newGroups =
-                                              formData.userGroups.map(g =>
-                                                g.groupName === group.name
-                                                  ? {
-                                                      ...g,
-                                                      environments:
-                                                        g.environments.map(e =>
-                                                          e.environment === env
-                                                            ? {
-                                                                ...e,
-                                                                isEnabled:
-                                                                  checked,
-                                                              }
-                                                            : e
-                                                        ),
-                                                    }
-                                                  : g
-                                              );
-                                            handleFormChange(
-                                              'userGroups',
-                                              newGroups
-                                            );
-                                          }}
-                                        />
-                                        <Label
-                                          htmlFor={`group-${group.name}-${env}`}
-                                          className="text-xs capitalize"
-                                        >
-                                          {env}
-                                        </Label>
-                                      </div>
-                                    ))}
-                                  </div>
-                                  <div className="flex items-center space-x-2">
-                                    <Checkbox
-                                      id={`group-${group.name}-enabled`}
-                                      checked={existingGroup.environments.every(
-                                        e => e.isEnabled
-                                      )}
-                                      onCheckedChange={checked => {
-                                        const newGroups =
-                                          formData.userGroups.map(g =>
-                                            g.groupName === group.name
-                                              ? {
-                                                  ...g,
-                                                  environments:
-                                                    g.environments.map(e => ({
-                                                      ...e,
-                                                      isEnabled: checked,
-                                                    })),
-                                                }
-                                              : g
-                                          );
-                                        handleFormChange(
-                                          'userGroups',
-                                          newGroups
-                                        );
-                                      }}
-                                    />
-                                    <Label
-                                      htmlFor={`group-${group.name}-enabled`}
-                                      className="text-xs"
-                                    >
-                                      Enabled in All
-                                    </Label>
-                                  </div>
-                                </div>
-                              )}
-                            </div>
-                          );
-                        })}
-                      </div>
-                    </div>
+                    {/* groups removed */}
                   </div>
                 )}
 
@@ -1415,152 +1210,7 @@ export const FeatureFlags = ({ scopeInfo }: FeatureFlagsProps) => {
                   </div>
                 </div>
 
-                {/* User roles removed */}
-
-                <div className="space-y-3">
-                  <Label>User Groups</Label>
-                  <div className="space-y-3 max-h-32 overflow-y-auto">
-                    {targetingOptions.userGroups.map(group => {
-                      const existingGroup = formData.userGroups.find(
-                        g => g.groupName === group.name
-                      );
-                      return (
-                        <div
-                          key={group.name}
-                          className="border rounded-lg p-3 space-y-3"
-                        >
-                          <div className="flex items-center space-x-3">
-                            <Checkbox
-                              id={`edit-group-${group.name}`}
-                              checked={!!existingGroup}
-                              onCheckedChange={checked => {
-                                if (checked) {
-                                  const newGroups = [
-                                    ...formData.userGroups,
-                                    {
-                                      groupName: group.name,
-                                      environments: [
-                                        {
-                                          environment: 'development',
-                                          isEnabled: true,
-                                        },
-                                        {
-                                          environment: 'staging',
-                                          isEnabled: true,
-                                        },
-                                        {
-                                          environment: 'production',
-                                          isEnabled: true,
-                                        },
-                                      ],
-                                    },
-                                  ];
-                                  handleFormChange('userGroups', newGroups);
-                                } else {
-                                  const newGroups = formData.userGroups.filter(
-                                    g => g.groupName !== group.name
-                                  );
-                                  handleFormChange('userGroups', newGroups);
-                                }
-                              }}
-                            />
-                            <Label
-                              htmlFor={`edit-group-${group.name}`}
-                              className="text-sm font-medium"
-                            >
-                              {group.displayName}
-                            </Label>
-                          </div>
-                          {existingGroup && (
-                            <div className="ml-6 space-y-2">
-                              <div className="flex items-center space-x-4">
-                                <Label className="text-xs">Environments:</Label>
-                                {['development', 'staging', 'production'].map(
-                                  env => (
-                                    <div
-                                      key={env}
-                                      className="flex items-center space-x-2"
-                                    >
-                                      <Checkbox
-                                        id={`edit-group-${group.name}-${env}`}
-                                        checked={
-                                          existingGroup.environments.find(
-                                            e => e.environment === env
-                                          )?.isEnabled || false
-                                        }
-                                        onCheckedChange={checked => {
-                                          const newGroups =
-                                            formData.userGroups.map(g =>
-                                              g.groupName === group.name
-                                                ? {
-                                                    ...g,
-                                                    environments:
-                                                      g.environments.map(e =>
-                                                        e.environment === env
-                                                          ? {
-                                                              ...e,
-                                                              isEnabled:
-                                                                checked,
-                                                            }
-                                                          : e
-                                                      ),
-                                                  }
-                                                : g
-                                            );
-                                          handleFormChange(
-                                            'userGroups',
-                                            newGroups
-                                          );
-                                        }}
-                                      />
-                                      <Label
-                                        htmlFor={`edit-group-${group.name}-${env}`}
-                                        className="text-xs capitalize"
-                                      >
-                                        {env}
-                                      </Label>
-                                    </div>
-                                  )
-                                )}
-                              </div>
-                              <div className="flex items-center space-x-2">
-                                <Checkbox
-                                  id={`edit-group-${group.name}-enabled`}
-                                  checked={existingGroup.environments.every(
-                                    e => e.isEnabled
-                                  )}
-                                  onCheckedChange={checked => {
-                                    const newGroups = formData.userGroups.map(
-                                      g =>
-                                        g.groupName === group.name
-                                          ? {
-                                              ...g,
-                                              environments: g.environments.map(
-                                                e => ({
-                                                  ...e,
-                                                  isEnabled: checked,
-                                                })
-                                              ),
-                                            }
-                                          : g
-                                    );
-                                    handleFormChange('userGroups', newGroups);
-                                  }}
-                                />
-                                <Label
-                                  htmlFor={`edit-group-${group.name}-enabled`}
-                                  className="text-xs"
-                                >
-                                  Enabled in All
-                                </Label>
-                              </div>
-                            </div>
-                          )}
-                        </div>
-                      );
-                    })}
-                  </div>
-                </div>
+                {/* groups removed */}
               </div>
             )}
 

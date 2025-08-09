@@ -21,7 +21,7 @@ const FeatureFlagContext = createContext<FeatureFlagContextType | undefined>(
 );
 
 export const FeatureFlagProvider = ({ children }: { children: ReactNode }) => {
-  const { user, userTypes, hasGroup: authHasGroup } = useAuth();
+  const { user, userTypes } = useAuth();
   const [publicFlags, setPublicFlags] = useState<
     Record<string, UserFeatureFlag>
   >({});
@@ -119,7 +119,6 @@ export const FeatureFlagProvider = ({ children }: { children: ReactNode }) => {
             targeting_type?:
               | 'global'
               | 'user'
-              | 'group'
               | 'user_type'
               | 'subscription_tier';
             targeting_value?: string | null;
@@ -195,12 +194,7 @@ export const FeatureFlagProvider = ({ children }: { children: ReactNode }) => {
     [userTypes]
   );
 
-  const isInGroup = useCallback(
-    (groupName: string): boolean => {
-      return authHasGroup(groupName);
-    },
-    [authHasGroup]
-  );
+  // groups removed
 
   const refreshFlags = useCallback(async (): Promise<void> => {
     if (user) {
@@ -214,7 +208,6 @@ export const FeatureFlagProvider = ({ children }: { children: ReactNode }) => {
     isLoading,
     isEnabled,
     hasUserType,
-    isInGroup,
     refreshFlags,
   };
 

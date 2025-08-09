@@ -110,7 +110,7 @@ The system uses the following tables:
 - `feature_flag_subscription_tiers` — Targeting by subscription tier (new system)
 - `feature_flag_users` — Explicit per-user targeting
 - [Removed] `feature_flag_user_roles` — Legacy roles are no longer supported
-- `feature_flag_user_groups` — Targeting by legacy groups (backward compatibility)
+- [Removed] `feature_flag_user_groups` — Legacy groups are no longer supported
 - `feature_flag_audit_log` — Change tracking
 
 ### Key Functions
@@ -126,7 +126,6 @@ erDiagram
   feature_flags ||--o{ feature_flag_environments : has
   feature_flags ||--o{ feature_flag_user_types : targets
   feature_flags ||--o{ feature_flag_subscription_tiers : targets
-  feature_flags ||--o{ feature_flag_user_groups : targets
   feature_flags ||--o{ feature_flag_users : targets
 ```
 

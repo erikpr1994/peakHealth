@@ -18,7 +18,7 @@ export async function GET() {
         `
         *,
         feature_flag_environments (*),
-        feature_flag_user_groups (*),
+        -- groups removed
         feature_flag_user_types (*),
         feature_flag_subscription_tiers (*),
         feature_flag_users (*)
@@ -62,7 +62,7 @@ export async function POST(request: NextRequest) {
       isGlobal,
       environments,
       // userRoles removed
-      userGroups,
+      // userGroups removed
       userTypes,
       subscriptionTiers,
       users,
@@ -129,56 +129,7 @@ export async function POST(request: NextRequest) {
 
     // user role targeting removed
 
-    // Insert user group targeting
-    if (userGroups && userGroups.length > 0) {
-      let groupData: Array<{
-        feature_flag_id: string;
-        environment: string;
-        group_name: string;
-        is_enabled: boolean;
-      }> = [];
-
-      // Handle both array of strings and array of objects
-      if (userGroups.length > 0 && typeof userGroups[0] === 'string') {
-        // If userGroups is an array of strings, convert to default object format
-        groupData = userGroups.flatMap((groupName: string) =>
-          ['development', 'staging', 'production'].map((env: string) => ({
-            feature_flag_id: featureFlag.id,
-            environment: env,
-            group_name: groupName,
-            is_enabled: true, // Default to enabled for string arrays
-          }))
-        );
-      } else if (userGroups.length > 0) {
-        // If userGroups is already an array of objects with the expected structure
-        groupData = userGroups.flatMap((group: unknown) => {
-          const typedGroup = group as {
-            environments: Array<{ environment: string; isEnabled: boolean }>;
-            groupName: string;
-          };
-          return typedGroup.environments.map(envConfig => ({
-            feature_flag_id: featureFlag.id,
-            environment: envConfig.environment,
-            group_name: typedGroup.groupName,
-            is_enabled: envConfig.isEnabled,
-          }));
-        });
-      }
-
-      if (groupData.length > 0) {
-        const { error: groupError } = await adminClient
-          .from('feature_flag_user_groups')
-          .insert(groupData);
-
-        if (groupError) {
-          console.error('Error creating user group targeting:', groupError);
-          return NextResponse.json(
-            { error: 'Failed to create user group targeting' },
-            { status: 500 }
-          );
-        }
-      }
-    }
+    // groups removed
 
     // Insert user type targeting
     if (userTypes && userTypes.length > 0) {
@@ -273,7 +224,7 @@ export async function PUT(request: NextRequest) {
       isGlobal,
       environments,
       // userRoles removed,
-      userGroups,
+      // userGroups removed,
       userTypes,
       subscriptionTiers,
       users,
@@ -360,76 +311,7 @@ export async function PUT(request: NextRequest) {
 
     // user role targeting removed
 
-    // Update user group targeting
-    if (userGroups !== undefined) {
-      // Delete existing user group targeting
-      const { error: deleteGroupError } = await adminClient
-        .from('feature_flag_user_groups')
-        .delete()
-        .eq('feature_flag_id', id);
-
-      if (deleteGroupError) {
-        console.error(
-          'Error deleting existing user group targeting:',
-          deleteGroupError
-        );
-        return NextResponse.json(
-          { error: 'Failed to update user group targeting' },
-          { status: 500 }
-        );
-      }
-
-      // Insert new user group targeting
-      if (userGroups.length > 0) {
-        let groupData: Array<{
-          feature_flag_id: string;
-          environment: string;
-          group_name: string;
-          is_enabled: boolean;
-        }> = [];
-
-        // Handle both array of strings and array of objects
-        if (typeof userGroups[0] === 'string') {
-          // If userGroups is an array of strings, convert to default object format
-          groupData = userGroups.flatMap((groupName: string) =>
-            ['development', 'staging', 'production'].map((env: string) => ({
-              feature_flag_id: id,
-              environment: env,
-              group_name: groupName,
-              is_enabled: true, // Default to enabled for string arrays
-            }))
-          );
-        } else {
-          // If userGroups is already an array of objects with the expected structure
-          groupData = userGroups.flatMap((group: unknown) => {
-            const typedGroup = group as {
-              environments: Array<{ environment: string; isEnabled: boolean }>;
-              groupName: string;
-            };
-            return typedGroup.environments.map(envConfig => ({
-              feature_flag_id: id,
-              environment: envConfig.environment,
-              group_name: typedGroup.groupName,
-              is_enabled: envConfig.isEnabled,
-            }));
-          });
-        }
-
-        if (groupData.length > 0) {
-          const { error: groupError } = await adminClient
-            .from('feature_flag_user_groups')
-            .insert(groupData);
-
-          if (groupError) {
-            console.error('Error updating user group targeting:', groupError);
-            return NextResponse.json(
-              { error: 'Failed to update user group targeting' },
-              { status: 500 }
-            );
-          }
-        }
-      }
-    }
+    // groups removed
 
     // Update user type targeting
     if (userTypes !== undefined) {
@@ -592,10 +474,7 @@ export async function DELETE(request: NextRequest) {
 
     // roles removed
 
-    await adminClient
-      .from('feature_flag_user_groups')
-      .delete()
-      .eq('feature_flag_id', id);
+    // groups removed
 
     await adminClient
       .from('feature_flag_user_types')

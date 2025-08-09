@@ -37,11 +37,7 @@ The `/api/feature-flags` route calls `get_user_feature_flags(user_id_param, envi
 
 ## Sample Data
 
-```sql
--- Notification system only for beta testers
-INSERT INTO feature_flag_user_groups (feature_flag_id, environment, group_name, is_enabled) VALUES
-((SELECT id FROM feature_flags WHERE name = 'notification_system_feature'), 'development', 'beta_testers', true);
-```
+Legacy user group targeting has been removed.
 
 ## Security Benefits
 

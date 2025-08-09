@@ -10,14 +10,7 @@ export interface UserType {
   updatedAt: string;
 }
 
-export interface UserGroup {
-  id: string;
-  name: string;
-  displayName: string;
-  description?: string;
-  createdAt: string;
-  updatedAt: string;
-}
+// groups removed
 
 export interface UserTypeAssignment {
   id: string;
@@ -64,14 +57,7 @@ export interface FeatureFlagUserRole {
   createdAt: string;
 }
 
-export interface FeatureFlagUserGroup {
-  id: string;
-  featureFlagId: string;
-  environment: string;
-  groupName: string;
-  isEnabled: boolean;
-  createdAt: string;
-}
+// groups removed
 
 export interface FeatureFlagAuditLog {
   id: string;
@@ -92,12 +78,7 @@ export interface UserFeatureFlag {
   rolloutPercentage?: number;
   description?: string;
   featureFlagId?: string;
-  targetingType?:
-    | 'global'
-    | 'user'
-    | 'group'
-    | 'user_type'
-    | 'subscription_tier';
+  targetingType?: 'global' | 'user' | 'user_type' | 'subscription_tier';
   targetingValue?: string | null;
 }
 
@@ -107,7 +88,7 @@ export interface FeatureFlagContextType {
   isLoading: boolean;
   isEnabled: (featureName: string) => boolean;
   hasUserType: (typeName: string) => boolean;
-  isInGroup: (groupName: string) => boolean;
+  // groups removed
   refreshFlags: () => Promise<void>;
 }
 
@@ -143,7 +124,7 @@ export interface UseFeatureFlagsReturn {
   isLoading: boolean;
   isEnabled: (featureName: string) => boolean;
   hasUserType: (typeName: string) => boolean;
-  isInGroup: (groupName: string) => boolean;
+  // groups removed
   refreshFlags: () => Promise<void>;
 }
 
@@ -171,12 +152,7 @@ export interface DatabaseFunctions {
       is_enabled: boolean;
       rollout_percentage: number;
       environment: string;
-      targeting_type:
-        | 'global'
-        | 'user'
-        | 'group'
-        | 'user_type'
-        | 'subscription_tier';
+      targeting_type: 'global' | 'user' | 'user_type' | 'subscription_tier';
       targeting_value: string | null;
     }>;
   };
