@@ -1,6 +1,3 @@
-#!/usr/bin/env sh
-. "$(dirname -- "$0")/_/husky.sh"
-
 echo "🔄 Post-checkout hook: Pulling latest changes and installing dependencies..."
 
 # Get the previous and current branch

@@ -1,7 +1,9 @@
 {
   "b0f589a2e145a2e0e105244783b9a6bbffea010743d0835dfea4ca7c7b1d3507": {
     "file": "eslint.config.js",
-    "rules": ["depend/ban-dependencies"]
+    "rules": [
+      "depend/ban-dependencies"
+    ]
   },
   "61796741c49da07deefd16b92e76ce8f27eb328f1024bb96320c256df83bd4db": {
     "file": "scripts/setup-dev-db.mjs",

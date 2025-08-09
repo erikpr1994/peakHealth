@@ -1,13 +1,9 @@
-import { UserManagement } from '@/components/UserManagement';
+import React from 'react';
 
-export default function UsersPage() {
-  return (
-    <UserManagement
-      scopeInfo={{
-        scope: 'general',
-        label: 'System Wide',
-        color: 'secondary',
-      }}
-    />
-  );
-}
+import { ClientManagement } from '../../../features/client-management';
+
+const UsersPage = (): React.JSX.Element => {
+  return <ClientManagement />;
+};
+
+export default UsersPage;

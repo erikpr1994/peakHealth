@@ -11,6 +11,10 @@
   },
   "fd41f762990cfb816d2af8fa4738b16f6ae9f9a3202b933a937bd1604039609e": {
     "file": "src/index.ts",
-    "rules": ["compat/compat", "perfectionist/sort-objects", "no-console"]
+    "rules": [
+      "compat/compat",
+      "perfectionist/sort-objects",
+      "no-console"
+    ]
   }
 }
