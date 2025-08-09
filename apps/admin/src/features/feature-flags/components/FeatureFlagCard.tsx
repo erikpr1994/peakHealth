@@ -38,7 +38,7 @@ export const FeatureFlagCard: React.FC<Props> = ({
   isDeleting,
 }) => {
   return (
-    <Card key={flag.id} className="hover:shadow-md transition-shadow">
+    <Card className="hover:shadow-md transition-shadow">
       <CardHeader className="pb-3">
         <div className="flex items-start justify-between">
           <div className="flex-1">
