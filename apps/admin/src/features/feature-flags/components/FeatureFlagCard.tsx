@@ -5,7 +5,7 @@ import React from 'react';
 
 import { FeatureFlag } from '../types';
 
-import { categories } from '../utils';
+import { categories, formatDate } from '../utils';
 
 import EnvironmentStatusGrid from './EnvironmentStatusGrid';
 
@@ -113,15 +113,11 @@ export const FeatureFlagCard: React.FC<Props> = ({
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-1">
               <Calendar className="h-3 w-3" />
-              <span>
-                Created {new Date(flag.created_at).toLocaleDateString()}
-              </span>
+              <span>Created {formatDate(flag.created_at)}</span>
             </div>
             <div className="flex items-center gap-1">
               <Calendar className="h-3 w-3" />
-              <span>
-                Updated {new Date(flag.updated_at).toLocaleDateString()}
-              </span>
+              <span>Updated {formatDate(flag.updated_at)}</span>
             </div>
           </div>
         </div>
