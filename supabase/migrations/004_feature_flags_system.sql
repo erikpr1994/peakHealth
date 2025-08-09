@@ -200,98 +200,183 @@ END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
 
 -- Updated function to get user feature flags with new roles and groups system
-CREATE OR REPLACE FUNCTION get_user_feature_flags(user_id_param UUID)
+CREATE OR REPLACE FUNCTION get_user_feature_flags(
+  user_id_param UUID,
+  environment_param TEXT
+)
 RETURNS TABLE (
   feature_flag_id UUID,
   name TEXT,
   description TEXT,
   is_enabled BOOLEAN,
+  rollout_percentage INTEGER,
+  environment TEXT,
   targeting_type TEXT,
   targeting_value TEXT
 ) AS $$
 BEGIN
   RETURN QUERY
+  -- Global flags enabled for all authenticated users in the given environment
   SELECT 
     ff.id,
-    ff.name,
-    ff.description,
-    true as is_enabled,
+    (ff.name)::TEXT,
+    (ff.description)::TEXT,
+    (
+      CASE 
+        WHEN COALESCE(ffe.rollout_percentage, 0) >= 100 THEN ffe.is_enabled
+        WHEN COALESCE(ffe.rollout_percentage, 0) <= 0 THEN false
+        ELSE ffe.is_enabled AND (
+          (('x' || substr(md5(user_id_param::TEXT || ff.id::TEXT), 1, 8))::bit(32)::int % 100) < ffe.rollout_percentage
+        )
+      END
+    ) AS is_enabled,
+    ffe.rollout_percentage,
+    (ffe.environment)::TEXT,
     'global'::TEXT as targeting_type,
     NULL::TEXT as targeting_value
   FROM feature_flags ff
+  JOIN feature_flag_environments ffe 
+    ON ff.id = ffe.feature_flag_id AND ffe.environment = environment_param
   WHERE ff.is_global = true
-  
+
   UNION ALL
-  
+
+  -- Flags explicitly targeted to the specific user in the given environment
   SELECT 
     ff.id,
-    ff.name,
-    ff.description,
-    true as is_enabled,
+    (ff.name)::TEXT,
+    (ff.description)::TEXT,
+    (
+      CASE 
+        WHEN COALESCE(ffe.rollout_percentage, 0) >= 100 THEN ffe.is_enabled
+        WHEN COALESCE(ffe.rollout_percentage, 0) <= 0 THEN false
+        ELSE ffe.is_enabled AND (
+          (('x' || substr(md5(user_id_param::TEXT || ff.id::TEXT), 1, 8))::bit(32)::int % 100) < ffe.rollout_percentage
+        )
+      END
+    ) AS is_enabled,
+    ffe.rollout_percentage,
+    (ffe.environment)::TEXT,
     'user'::TEXT as targeting_type,
-    u.email as targeting_value
+    (u.email)::TEXT as targeting_value
   FROM feature_flags ff
+  JOIN feature_flag_environments ffe 
+    ON ff.id = ffe.feature_flag_id AND ffe.environment = environment_param
   JOIN feature_flag_users ffu ON ff.id = ffu.feature_flag_id
   JOIN auth.users u ON ffu.user_id = u.id
   WHERE u.id = user_id_param
-  
+
   UNION ALL
-  
+
+  -- Flags enabled for users with specific legacy roles in the given environment
   SELECT 
     ff.id,
-    ff.name,
-    ff.description,
-    true as is_enabled,
+    (ff.name)::TEXT,
+    (ff.description)::TEXT,
+    (
+      CASE 
+        WHEN COALESCE(ffe.rollout_percentage, 0) >= 100 THEN ffe.is_enabled
+        WHEN COALESCE(ffe.rollout_percentage, 0) <= 0 THEN false
+        ELSE ffe.is_enabled AND (
+          (('x' || substr(md5(user_id_param::TEXT || ff.id::TEXT), 1, 8))::bit(32)::int % 100) < ffe.rollout_percentage
+        )
+      END
+    ) AS is_enabled,
+    ffe.rollout_percentage,
+    (ffe.environment)::TEXT,
     'role'::TEXT as targeting_type,
-    ffr.role_name as targeting_value
+    (ffr.role_name)::TEXT as targeting_value
   FROM feature_flags ff
-  JOIN feature_flag_user_roles ffr ON ff.id = ffr.feature_flag_id
+  JOIN feature_flag_environments ffe 
+    ON ff.id = ffe.feature_flag_id AND ffe.environment = environment_param
+  JOIN feature_flag_user_roles ffr 
+    ON ff.id = ffr.feature_flag_id AND ffr.environment = environment_param
   JOIN auth.users u ON u.id = user_id_param
   WHERE ffr.is_enabled = true
     AND (u.raw_app_meta_data->'roles') ? ffr.role_name
-  
+
   UNION ALL
-  
+
+  -- Flags enabled for users in specific legacy groups in the given environment
   SELECT 
     ff.id,
-    ff.name,
-    ff.description,
-    true as is_enabled,
+    (ff.name)::TEXT,
+    (ff.description)::TEXT,
+    (
+      CASE 
+        WHEN COALESCE(ffe.rollout_percentage, 0) >= 100 THEN ffe.is_enabled
+        WHEN COALESCE(ffe.rollout_percentage, 0) <= 0 THEN false
+        ELSE ffe.is_enabled AND (
+          (('x' || substr(md5(user_id_param::TEXT || ff.id::TEXT), 1, 8))::bit(32)::int % 100) < ffe.rollout_percentage
+        )
+      END
+    ) AS is_enabled,
+    ffe.rollout_percentage,
+    (ffe.environment)::TEXT,
     'group'::TEXT as targeting_type,
-    ffg.group_name as targeting_value
+    (ffg.group_name)::TEXT as targeting_value
   FROM feature_flags ff
-  JOIN feature_flag_user_groups ffg ON ff.id = ffg.feature_flag_id
+  JOIN feature_flag_environments ffe 
+    ON ff.id = ffe.feature_flag_id AND ffe.environment = environment_param
+  JOIN feature_flag_user_groups ffg 
+    ON ff.id = ffg.feature_flag_id AND ffg.environment = environment_param
   JOIN auth.users u ON u.id = user_id_param
   WHERE ffg.is_enabled = true
     AND (u.raw_app_meta_data->'groups') ? ffg.group_name
-  
+
   UNION ALL
-  
+
+  -- Flags enabled for users with a given user_type (new system) in the given environment
   SELECT 
     ff.id,
-    ff.name,
-    ff.description,
-    true as is_enabled,
+    (ff.name)::TEXT,
+    (ff.description)::TEXT,
+    (
+      CASE 
+        WHEN COALESCE(ffe.rollout_percentage, 0) >= 100 THEN ffe.is_enabled
+        WHEN COALESCE(ffe.rollout_percentage, 0) <= 0 THEN false
+        ELSE ffe.is_enabled AND (
+          (('x' || substr(md5(user_id_param::TEXT || ff.id::TEXT), 1, 8))::bit(32)::int % 100) < ffe.rollout_percentage
+        )
+      END
+    ) AS is_enabled,
+    ffe.rollout_percentage,
+    (ffe.environment)::TEXT,
     'user_type'::TEXT as targeting_type,
-    fft.user_type_name as targeting_value
+    (fft.user_type_name)::TEXT as targeting_value
   FROM feature_flags ff
+  JOIN feature_flag_environments ffe 
+    ON ff.id = ffe.feature_flag_id AND ffe.environment = environment_param
   JOIN feature_flag_user_types fft ON ff.id = fft.feature_flag_id
   JOIN auth.users u ON u.id = user_id_param
   WHERE (u.raw_app_meta_data->'user_types') ? fft.user_type_name
-  
+
   UNION ALL
-  
+
+  -- Flags enabled for users in a subscription tier (new system) in the given environment
   SELECT 
     ff.id,
-    ff.name,
-    ff.description,
-    true as is_enabled,
+    (ff.name)::TEXT,
+    (ff.description)::TEXT,
+    (
+      CASE 
+        WHEN COALESCE(ffe.rollout_percentage, 0) >= 100 THEN ffe.is_enabled
+        WHEN COALESCE(ffe.rollout_percentage, 0) <= 0 THEN false
+        ELSE ffe.is_enabled AND (
+          (('x' || substr(md5(user_id_param::TEXT || ff.id::TEXT), 1, 8))::bit(32)::int % 100) < ffe.rollout_percentage
+        )
+      END
+    ) AS is_enabled,
+    ffe.rollout_percentage,
+    (ffe.environment)::TEXT,
     'subscription_tier'::TEXT as targeting_type,
-    fft.subscription_tier_name as targeting_value
+    (fst.subscription_tier_name)::TEXT as targeting_value
   FROM feature_flags ff
-  JOIN feature_flag_subscription_tiers fft ON ff.id = fft.feature_flag_id
+  JOIN feature_flag_environments ffe 
+    ON ff.id = ffe.feature_flag_id AND ffe.environment = environment_param
+  JOIN feature_flag_subscription_tiers fst ON ff.id = fst.feature_flag_id
   JOIN auth.users u ON u.id = user_id_param
-  WHERE (u.raw_app_meta_data->>'subscription_tier')::TEXT = fft.subscription_tier_name;
+  WHERE (u.raw_app_meta_data->>'subscription_tier')::TEXT = fst.subscription_tier_name;
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
 
