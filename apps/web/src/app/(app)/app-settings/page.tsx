@@ -1,8 +1,10 @@
 'use client';
 
-import FeatureFlagProtected from '@/components/shared/FeatureFlagProtected';
+import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
+
 import { useAppContext } from '@/contexts/AppContext';
-import { FEATURE_FLAGS } from '@/features/feature-flags';
+import { FEATURE_FLAGS, useFeatureFlag } from '@/features/feature-flags';
 import AppSettings from '@/features/settings/AppSettings';
 
 const AppSettingsPage = () => {
@@ -15,17 +17,26 @@ const AppSettingsPage = () => {
     toggleWelcomeScreen,
   } = useAppContext();
 
+  const router = useRouter();
+  const { flags, isLoading } = useFeatureFlag([
+    FEATURE_FLAGS.APP_SETTINGS_FEATURE,
+  ]);
+  const isEnabled = flags[FEATURE_FLAGS.APP_SETTINGS_FEATURE];
+
+  useEffect(() => {
+    if (!isLoading && !isEnabled) router.push('/profile');
+  }, [isLoading, isEnabled, router]);
+
+  if (isLoading || !isEnabled) return null;
   return (
-    <FeatureFlagProtected featureName={FEATURE_FLAGS.APP_SETTINGS_FEATURE}>
-      <AppSettings
-        hasTrainer={hasTrainer}
-        onToggleTrainer={toggleTrainer}
-        isClubMember={isClubMember}
-        onToggleClubMembership={toggleClubMembership}
-        showWelcomeScreen={showWelcomeScreen}
-        onToggleWelcomeScreen={toggleWelcomeScreen}
-      />
-    </FeatureFlagProtected>
+    <AppSettings
+      hasTrainer={hasTrainer}
+      onToggleTrainer={toggleTrainer}
+      isClubMember={isClubMember}
+      onToggleClubMembership={toggleClubMembership}
+      showWelcomeScreen={showWelcomeScreen}
+      onToggleWelcomeScreen={toggleWelcomeScreen}
+    />
   );
 };
 
