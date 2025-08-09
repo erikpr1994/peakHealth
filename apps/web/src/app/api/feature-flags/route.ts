@@ -52,13 +52,7 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    // Get user roles and groups from app_metadata (JWT claims)
-    // Provide fallback values if JWT claims are missing
-    const userRoles = user?.app_metadata?.user_types || [];
-    const userGroups = user?.app_metadata?.groups || [];
-
-    console.log('JWT Claims - user_types:', userRoles);
-    console.log('JWT Claims - groups:', userGroups);
+    // Claims are read in the DB function; no need to pass or log here
 
     // Determine environment (default to development)
     const environment = process.env.NEXT_PUBLIC_ENVIRONMENT || 'development';

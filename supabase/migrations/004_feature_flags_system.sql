@@ -28,27 +28,9 @@ CREATE TABLE feature_flag_environments (
   UNIQUE(feature_flag_id, environment)
 );
 
--- Target by user roles (stored in user_metadata) - Legacy support
-CREATE TABLE feature_flag_user_roles (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  feature_flag_id UUID REFERENCES feature_flags(id) ON DELETE CASCADE,
-  environment VARCHAR(50) NOT NULL,
-  role_name VARCHAR(50) NOT NULL,
-  is_enabled BOOLEAN DEFAULT false,
-  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-  UNIQUE(feature_flag_id, environment, role_name)
-);
+-- [removed] legacy role targeting table
 
--- Target by user groups (stored in user_metadata) - Legacy support
-CREATE TABLE feature_flag_user_groups (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  feature_flag_id UUID REFERENCES feature_flags(id) ON DELETE CASCADE,
-  environment VARCHAR(50) NOT NULL,
-  group_name VARCHAR(50) NOT NULL,
-  is_enabled BOOLEAN DEFAULT false,
-  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-  UNIQUE(feature_flag_id, environment, group_name)
-);
+-- [removed] legacy user group targeting table
 
 -- Target by user types (new roles and groups system)
 CREATE TABLE feature_flag_user_types (
@@ -98,8 +80,8 @@ CREATE INDEX idx_feature_flags_public ON feature_flags(is_public);
 CREATE INDEX idx_feature_flags_global ON feature_flags(is_global);
 CREATE INDEX idx_feature_flags_category ON feature_flags(category);
 CREATE INDEX idx_feature_flag_environments_flag_env ON feature_flag_environments(feature_flag_id, environment);
-CREATE INDEX idx_feature_flag_user_roles_flag_env ON feature_flag_user_roles(feature_flag_id, environment);
-CREATE INDEX idx_feature_flag_user_groups_flag_env ON feature_flag_user_groups(feature_flag_id, environment);
+-- [removed] legacy role index
+-- [removed] legacy user group index
 CREATE INDEX idx_feature_flag_user_types_feature_flag_id ON feature_flag_user_types(feature_flag_id);
 CREATE INDEX idx_feature_flag_user_types_user_type_name ON feature_flag_user_types(user_type_name);
 CREATE INDEX idx_feature_flag_subscription_tiers_feature_flag_id ON feature_flag_subscription_tiers(feature_flag_id);
@@ -124,80 +106,11 @@ BEGIN
   JOIN feature_flag_environments ffe ON ff.id = ffe.feature_flag_id
   WHERE ffe.environment = environment_param
     AND ffe.is_enabled = true
-    AND ff.is_public = true
-    -- Public flags should not have any user role or group targeting
-    AND NOT EXISTS (
-      SELECT 1 FROM feature_flag_user_roles ffur
-      WHERE ffur.feature_flag_id = ff.id AND ffur.environment = environment_param
-    )
-    AND NOT EXISTS (
-      SELECT 1 FROM feature_flag_user_groups ffug
-      WHERE ffug.feature_flag_id = ff.id AND ffug.environment = environment_param
-    );
+    AND ff.is_public = true;
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
 
--- Function to get user-specific feature flags with proper role/group filtering (legacy)
-CREATE OR REPLACE FUNCTION get_user_feature_flags_legacy(
-  user_id UUID, 
-  environment_param TEXT,
-  user_roles JSONB DEFAULT '[]'::JSONB,
-  user_groups JSONB DEFAULT '[]'::JSONB
-)
-RETURNS TABLE (
-  name VARCHAR(100),
-  is_enabled BOOLEAN,
-  rollout_percentage INTEGER
-) AS $$
-BEGIN
-  RETURN QUERY
-  SELECT DISTINCT
-    ff.name,
-    ffe.is_enabled,
-    ffe.rollout_percentage
-  FROM feature_flags ff
-  JOIN feature_flag_environments ffe ON ff.id = ffe.feature_flag_id
-  WHERE ffe.environment = environment_param
-    AND ffe.is_enabled = true
-    AND ff.is_public = false  -- Only user-specific flags
-    AND (
-      -- Flag has no role targeting (available to all authenticated users)
-      NOT EXISTS (
-        SELECT 1 FROM feature_flag_user_roles ffur
-        WHERE ffur.feature_flag_id = ff.id 
-          AND ffur.environment = environment_param
-          AND ffur.is_enabled = true
-      )
-      OR
-      -- User has a matching role
-      EXISTS (
-        SELECT 1 FROM feature_flag_user_roles ffur
-        WHERE ffur.feature_flag_id = ff.id 
-          AND ffur.environment = environment_param
-          AND ffur.is_enabled = true
-          AND ffur.role_name = ANY(SELECT jsonb_array_elements_text(user_roles))
-      )
-    )
-    AND (
-      -- Flag has no group targeting (available to all authenticated users)
-      NOT EXISTS (
-        SELECT 1 FROM feature_flag_user_groups ffug
-        WHERE ffug.feature_flag_id = ff.id 
-          AND ffug.environment = environment_param
-          AND ffug.is_enabled = true
-      )
-      OR
-      -- User has a matching group
-      EXISTS (
-        SELECT 1 FROM feature_flag_user_groups ffug
-        WHERE ffug.feature_flag_id = ff.id 
-          AND ffug.environment = environment_param
-          AND ffug.is_enabled = true
-          AND ffug.group_name = ANY(SELECT jsonb_array_elements_text(user_groups))
-      )
-    );
-END;
-$$ LANGUAGE plpgsql SECURITY DEFINER;
+-- [removed] legacy get_user_feature_flags_legacy
 
 -- Updated function to get user feature flags with new roles and groups system
 CREATE OR REPLACE FUNCTION get_user_feature_flags(
@@ -268,63 +181,7 @@ BEGIN
 
   UNION ALL
 
-  -- Flags enabled for users with specific legacy roles in the given environment
-  SELECT 
-    ff.id,
-    (ff.name)::TEXT,
-    (ff.description)::TEXT,
-    (
-      CASE 
-        WHEN COALESCE(ffe.rollout_percentage, 0) >= 100 THEN ffe.is_enabled
-        WHEN COALESCE(ffe.rollout_percentage, 0) <= 0 THEN false
-        ELSE ffe.is_enabled AND (
-          (('x' || substr(md5(user_id_param::TEXT || ff.id::TEXT), 1, 8))::bit(32)::int % 100) < ffe.rollout_percentage
-        )
-      END
-    ) AS is_enabled,
-    ffe.rollout_percentage,
-    (ffe.environment)::TEXT,
-    'role'::TEXT as targeting_type,
-    (ffr.role_name)::TEXT as targeting_value
-  FROM feature_flags ff
-  JOIN feature_flag_environments ffe 
-    ON ff.id = ffe.feature_flag_id AND ffe.environment = environment_param
-  JOIN feature_flag_user_roles ffr 
-    ON ff.id = ffr.feature_flag_id AND ffr.environment = environment_param
-  JOIN auth.users u ON u.id = user_id_param
-  WHERE ffr.is_enabled = true
-    AND (u.raw_app_meta_data->'roles') ? ffr.role_name
-
-  UNION ALL
-
-  -- Flags enabled for users in specific legacy groups in the given environment
-  SELECT 
-    ff.id,
-    (ff.name)::TEXT,
-    (ff.description)::TEXT,
-    (
-      CASE 
-        WHEN COALESCE(ffe.rollout_percentage, 0) >= 100 THEN ffe.is_enabled
-        WHEN COALESCE(ffe.rollout_percentage, 0) <= 0 THEN false
-        ELSE ffe.is_enabled AND (
-          (('x' || substr(md5(user_id_param::TEXT || ff.id::TEXT), 1, 8))::bit(32)::int % 100) < ffe.rollout_percentage
-        )
-      END
-    ) AS is_enabled,
-    ffe.rollout_percentage,
-    (ffe.environment)::TEXT,
-    'group'::TEXT as targeting_type,
-    (ffg.group_name)::TEXT as targeting_value
-  FROM feature_flags ff
-  JOIN feature_flag_environments ffe 
-    ON ff.id = ffe.feature_flag_id AND ffe.environment = environment_param
-  JOIN feature_flag_user_groups ffg 
-    ON ff.id = ffg.feature_flag_id AND ffg.environment = environment_param
-  JOIN auth.users u ON u.id = user_id_param
-  WHERE ffg.is_enabled = true
-    AND (u.raw_app_meta_data->'groups') ? ffg.group_name
-
-  UNION ALL
+  -- [removed] legacy role and group targeting
 
   -- Flags enabled for users with a given user_type (new system) in the given environment
   SELECT 
@@ -381,12 +238,7 @@ END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
 
 -- Helper functions for checking user roles and groups (legacy)
-CREATE OR REPLACE FUNCTION user_has_role(user_roles JSONB, role_name TEXT)
-RETURNS BOOLEAN AS $$
-BEGIN
-  RETURN role_name = ANY(SELECT jsonb_array_elements_text(user_roles));
-END;
-$$ LANGUAGE plpgsql SECURITY DEFINER;
+-- [removed] legacy helper user_has_role
 
 CREATE OR REPLACE FUNCTION user_in_group(user_groups JSONB, group_name TEXT)
 RETURNS BOOLEAN AS $$
@@ -398,8 +250,8 @@ $$ LANGUAGE plpgsql SECURITY DEFINER;
 -- Enable RLS on all tables
 ALTER TABLE feature_flags ENABLE ROW LEVEL SECURITY;
 ALTER TABLE feature_flag_environments ENABLE ROW LEVEL SECURITY;
-ALTER TABLE feature_flag_user_roles ENABLE ROW LEVEL SECURITY;
-ALTER TABLE feature_flag_user_groups ENABLE ROW LEVEL SECURITY;
+-- [removed] legacy role table RLS
+-- [removed] legacy group table RLS
 ALTER TABLE feature_flag_user_types ENABLE ROW LEVEL SECURITY;
 ALTER TABLE feature_flag_subscription_tiers ENABLE ROW LEVEL SECURITY;
 ALTER TABLE feature_flag_users ENABLE ROW LEVEL SECURITY;
@@ -419,11 +271,9 @@ CREATE POLICY "Users can read feature flag environments" ON feature_flag_environ
   FOR SELECT USING (auth.role() = 'authenticated');
 
 -- Users can read feature flag targeting rules
-CREATE POLICY "Users can read feature flag user roles" ON feature_flag_user_roles
-  FOR SELECT USING (auth.role() = 'authenticated');
+-- [removed] legacy role policy
 
-CREATE POLICY "Users can read feature flag user groups" ON feature_flag_user_groups
-  FOR SELECT USING (auth.role() = 'authenticated');
+-- [removed] legacy group policy
 
 CREATE POLICY "Users can read feature flag user types" ON feature_flag_user_types
   FOR SELECT USING (auth.role() = 'authenticated');
@@ -520,16 +370,9 @@ INSERT INTO feature_flag_environments (feature_flag_id, environment, is_enabled,
 ((SELECT id FROM feature_flags WHERE name = 'pro_features'), 'production', false, 0);
 
 -- Insert sample role and group targeting rules (legacy)
-INSERT INTO feature_flag_user_roles (feature_flag_id, environment, role_name, is_enabled) VALUES
--- Notification system only for premium users
-((SELECT id FROM feature_flags WHERE name = 'notification_system_feature'), 'development', 'premium', true),
-((SELECT id FROM feature_flags WHERE name = 'notification_system_feature'), 'staging', 'premium', true),
-((SELECT id FROM feature_flags WHERE name = 'notification_system_feature'), 'production', 'premium', true);
+-- [removed] legacy role seed
 
-INSERT INTO feature_flag_user_groups (feature_flag_id, environment, group_name, is_enabled) VALUES
--- Notification system only for beta testers
-((SELECT id FROM feature_flags WHERE name = 'notification_system_feature'), 'development', 'beta_testers', true),
-((SELECT id FROM feature_flags WHERE name = 'notification_system_feature'), 'staging', 'beta_testers', true);
+-- [removed] legacy group targeting seed
 
 -- Insert sample user type and subscription tier targeting rules (new system)
 INSERT INTO feature_flag_user_types (feature_flag_id, user_type_name)
@@ -559,7 +402,5 @@ LIMIT 1;
 -- Add comments to explain the architecture
 COMMENT ON TABLE feature_flags IS 'Feature flags table. is_public=true for flags available to all users, is_public=false for user-specific flags. is_global=true for flags available to all authenticated users.';
 COMMENT ON FUNCTION get_public_feature_flags IS 'Returns feature flags that are available to all users (no authentication required)';
-COMMENT ON FUNCTION get_user_feature_flags_legacy IS 'Legacy function for user-specific feature flags filtered by user roles and groups passed as parameters';
-COMMENT ON FUNCTION get_user_feature_flags IS 'Returns user-specific feature flags filtered by user types, subscription tiers, roles, and groups from JWT claims';
-COMMENT ON FUNCTION user_has_role IS 'Checks if a user has a specific role from the provided roles array (legacy)';
-COMMENT ON FUNCTION user_in_group IS 'Checks if a user belongs to a specific group from the provided groups array (legacy)';
+COMMENT ON FUNCTION get_user_feature_flags IS 'Returns user-specific feature flags filtered by user types and subscription tiers from JWT claims';
+-- legacy helpers removed

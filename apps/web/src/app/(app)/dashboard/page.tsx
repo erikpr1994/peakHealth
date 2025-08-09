@@ -10,33 +10,45 @@ import { createClient } from '@/lib/supabase/server';
 async function getDashboardFeatureFlag() {
   try {
     const supabase = await createClient();
-
     if (!supabase) {
       return { isEnabled: false, error: 'Database connection not available' };
     }
-
     const environment = process.env.NEXT_PUBLIC_ENVIRONMENT || 'development';
+    const {
+      data: { user },
+      error: authError,
+    } = await supabase.auth.getUser();
 
-    // Check if dashboard feature is enabled in development environment
-    const { data: featureFlag, error } = await supabase
-      .from('feature_flags')
-      .select(
-        `
-        *,
-        feature_flag_environments!inner(*)
-      `
-      )
-      .eq('name', FEATURE_FLAGS.DASHBOARD_FEATURE)
-      .eq('feature_flag_environments.environment', environment)
-      .eq('feature_flag_environments.is_enabled', true)
-      .maybeSingle();
-
-    if (error && (error as any)?.code !== 'PGRST116') {
-      console.error('Error fetching dashboard feature flag:', error);
-      return { isEnabled: false, error: 'Failed to fetch feature flag' };
+    // If unauthenticated or no valid user ID, treat the feature as disabled without calling RPC
+    if (authError || !user?.id) {
+      return { isEnabled: false, error: null };
     }
 
-    return { isEnabled: !!featureFlag, error: null };
+    const { data: dbRows, error } = await supabase.rpc(
+      'get_user_feature_flags',
+      {
+        user_id_param: user.id,
+        environment_param: environment,
+      }
+    );
+    if (error) {
+      console.error('Error fetching dashboard feature flag via RPC:', error);
+      return { isEnabled: false, error: 'Failed to fetch feature flag' };
+    }
+    const merged = (Array.isArray(dbRows) ? dbRows : []).reduce(
+      (
+        acc: Record<string, boolean>,
+        row: { name: string; is_enabled: boolean }
+      ) => {
+        acc[row.name] = acc[row.name] || row.is_enabled;
+        return acc;
+      },
+      {}
+    );
+    return {
+      isEnabled: !!merged[FEATURE_FLAGS.DASHBOARD_FEATURE],
+      error: null,
+    };
   } catch (error) {
     console.error('Dashboard feature flag check error:', error);
     return { isEnabled: false, error: 'Internal server error' };

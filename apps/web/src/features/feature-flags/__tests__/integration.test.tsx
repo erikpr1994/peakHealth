@@ -126,20 +126,14 @@ describe('Feature Flag System Integration', () => {
     });
   });
 
-  it('should filter flags based on user roles and groups', async () => {
-    // Mock a user with premium role and beta_testers group
+  it('should reflect flags based on user types', async () => {
     mockedUseAuth.mockReturnValue({
-      user: {
-        id: 'test-user-id',
-        userRoles: ['premium'],
-        userGroups: ['beta_testers'],
-      },
+      user: { id: 'test-user-id' },
       isAuthenticated: true,
       isLoading: false,
       isAuthOperationLoading: false,
     });
 
-    // Mock the API response to simulate role/group filtering
     mockFetch.mockResolvedValue({
       ok: true,
       json: () =>
@@ -151,7 +145,7 @@ describe('Feature Flag System Integration', () => {
               rollout_percentage: 100,
             },
             {
-              name: 'premium_feature',
+              name: 'user_type_feature',
               is_enabled: true,
               rollout_percentage: 100,
             },
@@ -164,7 +158,7 @@ describe('Feature Flag System Integration', () => {
         <TestComponent
           featureNames={[
             'notification_system_feature',
-            'premium_feature',
+            'user_type_feature',
             'basic_feature',
           ]}
         />
@@ -172,11 +166,12 @@ describe('Feature Flag System Integration', () => {
     );
 
     await waitFor(() => {
-      // Should only show flags that match user's roles/groups
       expect(
         screen.getByTestId('notification_system_feature-enabled')
       ).toBeInTheDocument();
-      expect(screen.getByTestId('premium_feature-enabled')).toBeInTheDocument();
+      expect(
+        screen.getByTestId('user_type_feature-enabled')
+      ).toBeInTheDocument();
       expect(screen.getByTestId('basic_feature-disabled')).toBeInTheDocument();
     });
   });

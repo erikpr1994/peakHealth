@@ -72,7 +72,9 @@ module.exports = [
     },
     rules: {
       // Next.js rules
-      '@next/next/no-html-link-for-pages': 'error',
+      // In a monorepo root (no Next.js pages directory here), this rule causes false positives.
+      // Each Next.js app has its own ESLint config extending Next rules.
+      '@next/next/no-html-link-for-pages': 'off',
       '@next/next/no-img-element': 'warn',
       '@next/next/no-sync-scripts': 'error',
       '@next/next/no-unwanted-polyfillio': 'error',
