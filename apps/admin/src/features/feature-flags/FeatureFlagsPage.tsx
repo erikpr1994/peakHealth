@@ -1,6 +1,15 @@
 'use client';
 
-import { Loader2, Plus, BarChart3, Search } from 'lucide-react';
+import {
+  Loader2,
+  Plus,
+  BarChart3,
+  Search,
+  Flag,
+  Rocket,
+  TestTube,
+  Users,
+} from 'lucide-react';
 import React, { useMemo, useState } from 'react';
 
 import FeatureFlagCard from './components/FeatureFlagCard';
@@ -14,7 +23,6 @@ import {
 import { FeatureFlag, FeatureFlagFormData, EnvironmentKey } from './types';
 import { categories } from './utils';
 
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import {
@@ -230,50 +238,78 @@ export const FeatureFlagsPage: React.FC<Props> = ({ scopeInfo }) => {
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4 pt-6 border-t">
         <Card>
           <div className="p-4">
-            <div className="flex items-center gap-2">
-              <Badge className="text-xs">Total Flags</Badge>
-              <div className="text-xl font-semibold">{featureFlags.length}</div>
-            </div>
-          </div>
-        </Card>
-        <Card>
-          <div className="p-4">
-            <div className="flex items-center gap-2">
-              <Badge className="text-xs">Production Active</Badge>
-              <div className="text-xl font-semibold">
-                {
-                  featureFlags.filter(f =>
-                    f.feature_flag_environments.some(
-                      e => e.environment === 'production' && e.is_enabled
-                    )
-                  ).length
-                }
+            <div className="flex items-center gap-3">
+              <div className="p-2 bg-blue-100 rounded-lg">
+                <Flag className="h-5 w-5 text-blue-600" />
+              </div>
+              <div>
+                <p className="text-sm font-medium text-muted-foreground">
+                  Total Flags
+                </p>
+                <p className="text-2xl font-bold">{featureFlags.length}</p>
               </div>
             </div>
           </div>
         </Card>
         <Card>
           <div className="p-4">
-            <div className="flex items-center gap-2">
-              <Badge className="text-xs">Staging Tests</Badge>
-              <div className="text-xl font-semibold">
-                {
-                  featureFlags.filter(f =>
-                    f.feature_flag_environments.some(
-                      e => e.environment === 'staging' && e.is_enabled
-                    )
-                  ).length
-                }
+            <div className="flex items-center gap-3">
+              <div className="p-2 bg-green-100 rounded-lg">
+                <Rocket className="h-5 w-5 text-green-600" />
+              </div>
+              <div>
+                <p className="text-sm font-medium text-muted-foreground">
+                  Production Active
+                </p>
+                <p className="text-2xl font-bold">
+                  {
+                    featureFlags.filter(f =>
+                      f.feature_flag_environments.some(
+                        e => e.environment === 'production' && e.is_enabled
+                      )
+                    ).length
+                  }
+                </p>
               </div>
             </div>
           </div>
         </Card>
         <Card>
           <div className="p-4">
-            <div className="flex items-center gap-2">
-              <Badge className="text-xs">Public Flags</Badge>
-              <div className="text-xl font-semibold">
-                {featureFlags.filter(f => f.is_public).length}
+            <div className="flex items-center gap-3">
+              <div className="p-2 bg-yellow-100 rounded-lg">
+                <TestTube className="h-5 w-5 text-yellow-600" />
+              </div>
+              <div>
+                <p className="text-sm font-medium text-muted-foreground">
+                  Staging Tests
+                </p>
+                <p className="text-2xl font-bold">
+                  {
+                    featureFlags.filter(f =>
+                      f.feature_flag_environments.some(
+                        e => e.environment === 'staging' && e.is_enabled
+                      )
+                    ).length
+                  }
+                </p>
+              </div>
+            </div>
+          </div>
+        </Card>
+        <Card>
+          <div className="p-4">
+            <div className="flex items-center gap-3">
+              <div className="p-2 bg-purple-100 rounded-lg">
+                <Users className="h-5 w-5 text-purple-600" />
+              </div>
+              <div>
+                <p className="text-sm font-medium text-muted-foreground">
+                  Public Flags
+                </p>
+                <p className="text-2xl font-bold">
+                  {featureFlags.filter(f => f.is_public).length}
+                </p>
               </div>
             </div>
           </div>
