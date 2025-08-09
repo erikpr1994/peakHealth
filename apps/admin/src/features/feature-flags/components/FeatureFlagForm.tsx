@@ -21,6 +21,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Slider } from '@/components/ui/slider';
+import { Switch } from '@/components/ui/switch';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Textarea } from '@/components/ui/textarea';
 
@@ -145,7 +146,7 @@ export const FeatureFlagForm: React.FC<Props> = ({
               >
                 <div className="flex items-center justify-between">
                   <Label>Enable in {env}</Label>
-                  <Checkbox
+                  <Switch
                     checked={formData.environments[env].enabled}
                     onCheckedChange={checked =>
                       onEnvironmentChange(env, 'enabled', checked)
