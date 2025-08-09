@@ -1,6 +1,6 @@
 # Feature Flag System
 
-A comprehensive feature flag system for the Peak Health app that supports user roles, user groups, and environment-based targeting with proper security filtering.
+A comprehensive feature flag system for the Peak Health app that supports user types, legacy roles, user groups, subscription tiers, and environment-based targeting with database-level security filtering.
 
 ## System Workflow
 
@@ -14,14 +14,11 @@ graph TD
     end
 
     subgraph "Feature Flag Logic"
-        C -- "Is data cached?" --> D{featureFlagCache}
-        D -- "Yes (Cache Hit)" --> C
-        D -- "No (Cache Miss)" --> E(Supabase RPC Call)
-        E -- "Calls get_user_feature_flags()" --> F[Postgres Database]
-        F -- "Returns flag data" --> E
-        E -- "Returns data to provider" --> C
-        C -- "Stores result in cache" --> D
-        C -- "Provides state (flags, isLoading)" --> B
+        C -- "GET /api/feature-flags/public" --> E1(Supabase RPC)
+        E1 -- "rpc get_public_feature_flags(environment_param)" --> F1[Postgres]
+        C -- "GET /api/feature-flags (auth only)" --> E2(Supabase RPC)
+        E2 -- "rpc get_user_feature_flags(user_id_param, environment_param)" --> F2[Postgres]
+        C -- "Merge and expose state (flags, isLoading)" --> B
     end
 
     B -- "Returns { flags, isLoading }" --> A
@@ -30,38 +27,66 @@ graph TD
 
 ### Explanation of the Flow
 
-1.  **Component Request**: A React component initiates the process by calling the `useFeatureFlag` hook with an array of feature names it needs to check.
-2.  **Context Access**: The `useFeatureFlag` hook accesses the `FeatureFlagProvider` to get the current state and the `isEnabled` function.
-3.  **Public Flags Load**: For all users (authenticated and unauthenticated), the system first loads public feature flags via `/api/feature-flags/public`.
-4.  **User-Specific Flags Load**: For authenticated users, the system then loads user-specific flags via `/api/feature-flags` with proper role/group filtering.
-5.  **Role/Group Filtering**: The `get_user_feature_flags` database function filters flags based on the user's roles and groups, ensuring users only see features they're authorized for.
-6.  **Cache Check**: The `FeatureFlagProvider` checks the `featureFlagCache` to see if the requested data is already available and not expired. If it is, the provider immediately uses the cached data (Cache Hit).
-7.  **Cache Miss & API Call**: If the data is not in the cache (a "cache miss"), the provider makes API calls to the backend.
-8.  **Database Query**: The database functions query the relevant tables to determine which flags are active for the current user and environment.
-9.  **Data Return**: The database functions return the filtered flag data to the `FeatureFlagProvider`.
-10. **Cache Update**: The provider updates the `featureFlagCache` with the newly fetched data for future requests.
-11. **State Provision**: The `FeatureFlagProvider` makes the latest state (flags and `isLoading` status) available to the hook.
-12. **Hook Return**: The `useFeatureFlag` hook returns the final state to the calling component.
-13. **UI Render**: The component uses the flag's status to render the appropriate UI.
+1. **Component Request**: A React component initiates the process by calling the `useFeatureFlag` hook with an array of feature names it needs to check.
+2. **Context Access**: The `useFeatureFlag` hook accesses the `FeatureFlagProvider` to get the current state and the `isEnabled` function.
+3. **Public Flags Load**: For all users (authenticated and unauthenticated), the system first loads public feature flags via `/api/feature-flags/public`.
+4. **User-Specific Flags Load**: For authenticated users, the system then loads user-specific flags via `/api/feature-flags` with targeting derived from JWT claims.
+5. **Targeting**: The `get_user_feature_flags` function evaluates targeting based on user types, subscription tier, legacy roles, and legacy groups present in JWT claims.
+6. **Merging**: If a feature appears multiple times via different targeting rules, the system merges them by name using OR semantics (enabled if any rule enables it).
+7. **State Provision**: The `FeatureFlagProvider` exposes the latest state (flags and `isLoading`) to the hook.
+8. **Hook Return**: The `useFeatureFlag` hook returns the final state to the calling component.
+9. **UI Render**: The component uses the flag status to render the appropriate UI.
+
+Note on caching: a cache utility exists and is used for invalidation on refresh, but is not currently used to serve reads in the provider (details below).
+
+## High-Level Sequence
+
+```mermaid
+sequenceDiagram
+  participant C as Component
+  participant H as useFeatureFlag
+  participant P as FeatureFlagProvider
+  participant API1 as /api/feature-flags/public
+  participant API2 as /api/feature-flags
+  participant DB as Supabase RPC (Postgres)
+
+  C->>H: useFeatureFlag([featureNames])
+  H->>P: get { isEnabled, flags, isLoading }
+  P->>API1: GET (always)
+  API1->>DB: get_public_feature_flags(env)
+  DB-->>API1: public flags
+  API1-->>P: featureFlags[]
+  alt Authenticated user
+    P->>API2: GET
+    API2->>DB: get_user_feature_flags(user_id, env)
+    DB-->>API2: rows per targeting rule
+    API2-->>P: featureFlags[] (may contain duplicates by name)
+    P->>P: merge by name (OR semantics)
+  end
+  P-->>H: flags, isLoading
+  H-->>C: { flags, isLoading }
+```
 
 ## Features
 
-- **User Role Targeting**: Target features based on user roles (basic, premium, admin)
-- **User Group Targeting**: Target features based on user groups (free, beta_testers, premium)
-- **Environment Support**: Different configurations for development, staging, and production
+- **User Type Targeting (new)**: Target features based on user types (e.g., `regular`, `trainer`, `physio`, `admin`)
+- **Subscription Tier Targeting (new)**: Target features by subscription tier (e.g., `free`, `premium`, `pro`)
+- **Legacy Role/Group Targeting**: Backward-compatible targeting by `roles` and `groups` from JWT claims
+- **Environment Support**: Separate configurations for development, staging, and production
 - **Security Filtering**: Database-level filtering ensures users only see features they're authorized for
-- **Public Flags**: Support for flags available to all users (no authentication required)
-- **Caching**: Built-in caching for performance optimization
-- **Monitoring Ready**: Infrastructure for future monitoring integration
-- **Audit Trail**: Track changes to feature flags
-- **TypeScript Support**: Full type safety throughout the system
+- **Public Flags**: Flags available to all users (no authentication required)
+- **Merging Semantics**: Multiple targeting rules per feature are merged by name with OR semantics
+- **Rollout Percentage**: Consistent user bucketing via hash on `(user_id, flag_id)` per environment
+- **Monitoring Ready**: Built-in monitoring hooks (console-based in development)
+- **Audit Trail**: Change tracking via `feature_flag_audit_log`
+- **TypeScript Support**: Strict types across hooks, provider, and API
 
 ## Project Structure
 
-The feature flag system is organized within the `src/features/feature-flags/` directory:
+The feature flag system is organized within `apps/web/src/features/feature-flags/`:
 
-```
-src/features/feature-flags/
+```text
+apps/web/src/features/feature-flags/
 ├── types/
 │   └── index.ts                 # All TypeScript interfaces and types
 ├── lib/
@@ -79,18 +104,55 @@ src/features/feature-flags/
 
 The system uses the following tables:
 
-- `feature_flags` - Feature flag definitions (with `is_public` flag to distinguish public vs user-specific flags)
-- `feature_flag_environments` - Environment-specific configurations
-- `feature_flag_user_roles` - Role-based targeting rules
-- `feature_flag_user_groups` - Group-based targeting rules
-- `feature_flag_audit_log` - Change tracking
+- `feature_flags` — Feature flag definitions; includes `is_public` and `is_global`
+- `feature_flag_environments` — Environment-specific configuration per flag
+- `feature_flag_user_types` — Targeting by user type (new system)
+- `feature_flag_subscription_tiers` — Targeting by subscription tier (new system)
+- `feature_flag_users` — Explicit per-user targeting
+- `feature_flag_user_roles` — Targeting by legacy roles (backward compatibility)
+- `feature_flag_user_groups` — Targeting by legacy groups (backward compatibility)
+- `feature_flag_audit_log` — Change tracking
 
 ### Key Functions
 
-- `get_public_feature_flags(environment_param)` - Returns public flags available to all users
-- `get_user_feature_flags(user_id, environment_param, user_roles, user_groups)` - Returns user-specific flags filtered by roles/groups
-- `user_has_role(user_roles, role_name)` - Helper function to check if user has a specific role
-- `user_in_group(user_groups, group_name)` - Helper function to check if user belongs to a specific group
+- `get_public_feature_flags(environment_param)` — Returns public flags for all users
+- `get_user_feature_flags(user_id_param, environment_param)` — Returns user-specific flags derived from JWT claims via `auth.users.raw_app_meta_data` (user types, subscription tier, roles, groups)
+- `get_user_feature_flags_legacy(user_id, environment_param, user_roles, user_groups)` — Legacy signature taking explicit arrays (not used by current API)
+- `user_has_role(user_roles, role_name)` and `user_in_group(user_groups, group_name)` — Legacy helpers
+
+### Entity Relationships
+
+```mermaid
+erDiagram
+  feature_flags ||--o{ feature_flag_environments : has
+  feature_flags ||--o{ feature_flag_user_types : targets
+  feature_flags ||--o{ feature_flag_subscription_tiers : targets
+  feature_flags ||--o{ feature_flag_user_roles : targets
+  feature_flags ||--o{ feature_flag_user_groups : targets
+  feature_flags ||--o{ feature_flag_users : targets
+```
+
+### get_user_feature_flags logic (simplified)
+
+```mermaid
+flowchart TD
+  A[Inputs: user_id, environment] --> B{Union of targetings}
+  B --> C[Global flags (is_global=true)]
+  B --> D[Explicit user targeting]
+  B --> E[Legacy roles targeting]
+  B --> F[Legacy groups targeting]
+  B --> G[User type targeting]
+  B --> H[Subscription tier targeting]
+  C --> I[Apply rollout percentage via hash(user_id, flag_id)]
+  D --> I
+  E --> I
+  F --> I
+  G --> I
+  H --> I
+  I --> J[Return rows: name, description, is_enabled, rollout_percentage, environment, targeting_type, targeting_value]
+```
+
+Rollout calculation: enabled if `rollout_percentage = 100`, disabled if `0`, otherwise bucketed per user with a stable hash of `(user_id, flag_id)` compared to the rollout threshold.
 
 ## Setup
 
@@ -144,34 +206,36 @@ function MyComponent() {
 
 ### Using the useFeatureFlags Hook for More Control
 
-The `useFeatureFlags` hook gives you direct access to the context, which is useful for more complex scenarios, such as checking user roles or groups.
+The `useFeatureFlags` hook gives you direct access to the context, which is useful for more complex scenarios, such as checking user types or groups.
 
 ```tsx
 import {
   useFeatureFlags,
-  USER_ROLES,
+  USER_TYPES,
   USER_GROUPS,
 } from '@/features/feature-flags';
 
 function MyComponent() {
-  const { hasUserRole, isInGroup, isEnabled } = useFeatureFlags();
+  const { hasUserType, isInGroup, isEnabled } = useFeatureFlags();
 
-  // Check user roles
-  const isPremium = hasUserRole(USER_ROLES.PREMIUM);
-  const isAdmin = hasUserRole(USER_ROLES.ADMIN);
+  // Check user types (new model)
+  const isAdmin = hasUserType(USER_TYPES.ADMIN);
+  const isTrainer = hasUserType(USER_TYPES.TRAINER);
 
-  // Check user groups
-  const isBetaUser = isInGroup(USER_GROUPS.BETA_TESTERS);
-  const isPremiumUser = isInGroup(USER_GROUPS.PREMIUM);
+  // Check user groups (legacy/back-compat)
+  const isBetaUser = isInGroup(USER_GROUPS.BETA);
+  const isPremiumGroup = isInGroup(USER_GROUPS.PREMIUM);
 
   // Check feature flags
   const hasNotifications = isEnabled('notification_system_feature');
 
   return (
     <div>
-      {isPremium && <PremiumDashboard />}
-      {isPremiumUser && <PremiumFeatures />}
-      {hasNotifications && <NotificationsComponent />}
+      {isAdmin && <AdminPanel />}
+      {isTrainer && <TrainerTools />}
+      {isBetaUser && <BetaInfo />}
+      {isPremiumGroup && <PremiumFeatures />}
+      {hasNotifications && <Notifications />}
     </div>
   );
 }
@@ -196,23 +260,38 @@ NEXT_PUBLIC_ENVIRONMENT=development
 ```tsx
 import {
   FEATURE_FLAGS,
-  USER_ROLES,
+  USER_TYPES,
   USER_GROUPS,
 } from '@/features/feature-flags';
 
-// Available feature flags
+// Available feature flags (subset)
 FEATURE_FLAGS.NOTIFICATION_SYSTEM_FEATURE;
+FEATURE_FLAGS.DASHBOARD_FEATURE;
 
-// Available user roles
-USER_ROLES.BASIC;
-USER_ROLES.PREMIUM;
-USER_ROLES.ADMIN;
+// Available user types (new model)
+USER_TYPES.REGULAR;
+USER_TYPES.TRAINER;
+USER_TYPES.PHYSIO;
+USER_TYPES.ADMIN;
 
-// Available user groups
-USER_GROUPS.FREE;
-USER_GROUPS.BETA_TESTERS;
+// Available user groups (legacy/back-compat)
+USER_GROUPS.BETA;
 USER_GROUPS.PREMIUM;
+USER_GROUPS.EARLY_ACCESS;
 ```
+
+### API Routes and Return Shapes
+
+```mermaid
+flowchart LR
+  A[GET /api/feature-flags/public] -->|env| B[rpc get_public_feature_flags]
+  C[GET /api/feature-flags] -->|user_id, env| D[rpc get_user_feature_flags]
+  D --> E[Rows per targeting rule]
+  E --> F[Deduplicate by name; OR is_enabled]
+```
+
+- `/api/feature-flags/public` returns: `{ featureFlags: Array<{ name, is_enabled, rollout_percentage }> }`
+- `/api/feature-flags` returns rows that may include: `{ feature_flag_id, name, description, is_enabled, rollout_percentage, environment, targeting_type, targeting_value }` merged by name with OR semantics.
 
 ## Testing
 
@@ -275,37 +354,66 @@ SELECT id, 'production', 'beta_testers', true FROM feature_flags WHERE name = 'p
 
 ## Performance
 
-- **Caching**: Feature flags are cached for 5 minutes by default
-- **Single Query**: All user data is loaded in one query
-- **Indexes**: Database indexes for optimal query performance
-- **Lazy Loading**: Data is only loaded when needed
+- **Rollout bucketing**: Stable per-user hashing ensures consistent inclusion/exclusion across sessions
+- **Union-based query**: Single RPC consolidates multiple targeting sources
+- **Indexes**: Dedicated indexes for each table support query performance
+- **Lazy loading**: Data is fetched on demand in the provider
 
-## Monitoring (Future)
+## Monitoring (Current & Future)
 
-The system is designed to support monitoring integration:
-
-- Performance metrics tracking
-- Usage analytics
-- Error tracking
-- Health checks
+- **Current**: Console-based monitoring in development via `featureFlagMonitor`
+  - `trackFeatureFlagUsage`, `trackFeatureFlagPerformance`, `trackFeatureFlagError`, cache hit/miss hooks
+- **Future**: Optional external endpoint via `FEATURE_FLAG_MONITORING_*` envs
 
 ## Security
 
-- **Row Level Security (RLS)**: All tables have RLS enabled
-- **User Isolation**: Users can only see their own data
-- **Role/Group Filtering**: Database-level filtering ensures users only see features they're authorized for
-- **Public vs User-Specific Flags**: Clear separation between flags available to all users vs. authenticated users only
-- **Audit Trail**: All changes are logged
-- **Type Safety**: Full TypeScript support prevents runtime errors
+- **Row Level Security (RLS)**: Enabled across all feature flag tables
+- **Claim-based filtering**: User types, subscription tier, roles, and groups read from JWT claims via `auth.users.raw_app_meta_data`
+- **Public vs user-specific flags**: `is_public` separates anonymous flags from authenticated flags; `is_global` marks broad authenticated access
+- **Audit Trail**: All changes logged in `feature_flag_audit_log`
+- **Type Safety**: Strict typing for API shapes and hook returns
+
+## Caching & Refresh
+
+- A `featureFlagCache` utility exists with TTL-based `get`, and invalidation helpers
+- The provider currently uses cache for invalidation on `refreshFlags()`; reads are fetched via `fetch` without cache lookups
+- Future optimization could integrate `featureFlagCache.get` around network calls
+
+```mermaid
+sequenceDiagram
+  participant U as UI
+  participant P as FeatureFlagProvider
+  participant Cache as featureFlagCache
+  U->>P: refreshFlags()
+  P->>Cache: invalidateUser(user_id)
+  P->>P: re-fetch flags
+```
+
+## API Errors & Edge Cases
+
+- `USER_NOT_FOUND` (401): Returned by `/api/feature-flags` when JWT refers to a user not present in DB; the client clears flags and stops loading
+- Non-array responses from API are safely handled, defaulting to empty maps
+- Deduplication by name ensures multiple targeting rows do not double-count
 
 ## Next Steps
 
-1. **Integration**: Add the FeatureFlagProvider to your app
-2. **Testing**: Test the notification system feature flag
-3. **User Setup**: Set up user roles and groups in user metadata
-4. **Feature Flags**: Create and configure feature flags for your features
-5. **Monitoring**: Enable monitoring when ready
+1. **Integration**: Add the `FeatureFlagProvider` to your app layout
+2. **Configuration**: Set `NEXT_PUBLIC_ENVIRONMENT` and optional monitoring envs
+3. **Targeting**: Prefer user types and subscription tiers; keep legacy roles/groups only for back-compat
+4. **Monitoring**: Enable external monitoring if needed
+
+## Known Mismatches & Caveats (documented, not fixed)
+
+- **Function signature in docs vs code**: Previous docs referenced `get_user_feature_flags(user_id, environment, user_roles, user_groups)`; the active function is `get_user_feature_flags(user_id_param, environment_param)` that reads claims directly. A legacy function `get_user_feature_flags_legacy` exists with the extended signature.
+- **API route not passing roles/groups**: `/api/feature-flags` computes `userRoles` and `userGroups` from JWT but does not pass them to RPC; this matches the current DB function that reads claims directly.
+- **Caching narrative vs implementation**: Docs historically implied a read cache; current provider only uses cache invalidation on refresh and does not call `featureFlagCache.get` during reads.
+- **User roles vs user types**: The new model uses `USER_TYPES`; code exposes `hasUserType` and not `hasUserRole`. Any references to `USER_ROLES` are legacy.
+- **Legacy component gate**: A `FeatureFlagProtected` component exists for route gating (uses utility classes). The preferred approach is hook-driven gating; component-based gating is considered legacy.
+- **Alternate server-side pattern**: `apps/web/src/app/(app)/dashboard/page.tsx` directly queries tables to check a flag (e.g., `DASHBOARD_FEATURE`) instead of using RPC; this bypasses the consolidation/merging done by the API route.
+- **Public flags constraint**: `get_public_feature_flags` enforces no role/group targeting for public flags; ensure schema changes keep this invariant.
+
+These items are intentionally documented here for visibility and future cleanup; no code has been changed as part of this documentation update.
 
 ## Related Documentation
 
-- [Role/Group Filtering](./ROLE_GROUP_FILTERING.md) - Detailed explanation of the role/group filtering system
+- [Role/Group Filtering](./ROLE_GROUP_FILTERING.md) — Legacy role/group filtering details and examples
