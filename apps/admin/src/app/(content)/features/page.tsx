@@ -1,13 +1,9 @@
-import { FeatureFlags } from '@/components/FeatureFlags';
+import { FeatureFlagsPage } from '@/features/feature-flags';
 
 export default function FeaturesPage() {
   return (
-    <FeatureFlags
-      scopeInfo={{
-        scope: 'general',
-        label: 'System Wide',
-        color: 'secondary',
-      }}
+    <FeatureFlagsPage
+      scopeInfo={{ scope: 'general', label: 'System Wide', color: 'secondary' }}
     />
   );
 }
