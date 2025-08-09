@@ -2,106 +2,189 @@ const js = require('@eslint/js');
 const nextPlugin = require('@next/eslint-plugin-next');
 const typescriptPlugin = require('@typescript-eslint/eslint-plugin');
 const typescriptParser = require('@typescript-eslint/parser');
-const importPlugin = require('eslint-plugin-import');
+const codeCompletePlugin = require('eslint-plugin-code-complete');
+const compatPlugin = require('eslint-plugin-compat');
+const constCasePlugin = require('eslint-plugin-const-case');
+const cssModulesPlugin = require('eslint-plugin-css-modules');
+const dependPlugin = require('eslint-plugin-depend');
+const diffPlugin = require('eslint-plugin-diff');
+const githubPlugin = require('eslint-plugin-github');
+const importXPlugin = require('eslint-plugin-import-x');
 const jsxA11yPlugin = require('eslint-plugin-jsx-a11y');
+const noSecretsPlugin = require('eslint-plugin-no-secrets');
+const noUnsanitizedPlugin = require('eslint-plugin-no-unsanitized');
+const perfectionistPlugin = require('eslint-plugin-perfectionist');
+const piiPlugin = require('eslint-plugin-pii');
+const playwrightPlugin = require('eslint-plugin-playwright');
 const prettierPlugin = require('eslint-plugin-prettier');
 const reactPlugin = require('eslint-plugin-react');
 const reactHooksPlugin = require('eslint-plugin-react-hooks');
 const reactRefreshPlugin = require('eslint-plugin-react-refresh');
+const ruleAdoptionPlugin = require('eslint-plugin-rule-adoption');
+const typelintPlugin = require('eslint-plugin-typelint');
+const unicornPlugin = require('eslint-plugin-unicorn');
 
 module.exports = [
   js.configs.recommended,
   {
-    files: ['**/*.{js,jsx,ts,tsx}'],
+    files: ['**/*.{js,jsx,ts,tsx,mjs,cjs}'],
     languageOptions: {
-      parser: typescriptParser,
-      parserOptions: {
-        ecmaVersion: 2020,
-        sourceType: 'module',
-        ecmaFeatures: {
-          jsx: true,
-        },
-      },
       globals: {
-        // Browser globals
-        window: 'readonly',
-        document: 'readonly',
-        console: 'readonly',
-        localStorage: 'readonly',
-        sessionStorage: 'readonly',
-        navigator: 'readonly',
-        fetch: 'readonly',
-        setTimeout: 'readonly',
-        clearTimeout: 'readonly',
-        setInterval: 'readonly',
-        clearInterval: 'readonly',
-        alert: 'readonly',
-
-        // Node.js globals
-        process: 'readonly',
-        global: 'readonly',
-        Buffer: 'readonly',
         __dirname: 'readonly',
         __filename: 'readonly',
-        module: 'readonly',
-        require: 'readonly',
+        alert: 'readonly',
+        Buffer: 'readonly',
+        clearInterval: 'readonly',
+        clearTimeout: 'readonly',
+        console: 'readonly',
+        document: 'readonly',
         exports: 'readonly',
-        URL: 'readonly',
+        fetch: 'readonly',
+        global: 'readonly',
 
-        // React globals
-        React: 'readonly',
-
-        // DOM globals
         HTMLButtonElement: 'readonly',
+
         HTMLDivElement: 'readonly',
         HTMLInputElement: 'readonly',
         HTMLSpanElement: 'readonly',
+        KeyboardEvent: 'readonly',
+        localStorage: 'readonly',
+        module: 'readonly',
+        navigator: 'readonly',
         NodeJS: 'readonly',
+
+        process: 'readonly',
+
+        React: 'readonly',
+
+        require: 'readonly',
+        sessionStorage: 'readonly',
+        setInterval: 'readonly',
+        setTimeout: 'readonly',
+        URL: 'readonly',
         URLSearchParams: 'readonly',
+
+        window: 'readonly',
+      },
+      parser: typescriptParser,
+      parserOptions: {
+        ecmaFeatures: {
+          jsx: true,
+        },
+        ecmaVersion: 2020,
+        sourceType: 'module',
       },
     },
     plugins: {
+      '@next/next': nextPlugin,
       '@typescript-eslint': typescriptPlugin,
-      import: importPlugin,
+      'code-complete': codeCompletePlugin,
+      compat: compatPlugin,
+      'const-case': constCasePlugin,
+      'css-modules': cssModulesPlugin,
+
+      depend: dependPlugin,
+      diff: diffPlugin,
+      github: githubPlugin,
+      'import-x': importXPlugin,
+      'jsx-a11y': jsxA11yPlugin,
+      'no-secrets': noSecretsPlugin,
+      'no-unsanitized': noUnsanitizedPlugin,
+      perfectionist: perfectionistPlugin,
+      pii: piiPlugin,
+      playwright: playwrightPlugin,
+      prettier: prettierPlugin,
       react: reactPlugin,
       'react-hooks': reactHooksPlugin,
       'react-refresh': reactRefreshPlugin,
-      'jsx-a11y': jsxA11yPlugin,
-      prettier: prettierPlugin,
-      '@next/next': nextPlugin,
+      'rule-adoption': ruleAdoptionPlugin,
+      typelint: typelintPlugin,
+      unicorn: unicornPlugin,
     },
+    processor: 'rule-adoption/processor',
     rules: {
-      // Next.js rules
-      // In a monorepo root (no Next.js pages directory here), this rule causes false positives.
-      // Each Next.js app has its own ESLint config extending Next rules.
       '@next/next/no-html-link-for-pages': 'off',
-      '@next/next/no-img-element': 'warn',
+      '@next/next/no-img-element': 'error',
       '@next/next/no-sync-scripts': 'error',
       '@next/next/no-unwanted-polyfillio': 'error',
 
-      // General rules
+      '@typescript-eslint/explicit-function-return-type': 'error',
+      '@typescript-eslint/explicit-module-boundary-types': 'error',
+      '@typescript-eslint/no-empty-function': 'error',
+      '@typescript-eslint/no-explicit-any': 'error',
+      '@typescript-eslint/no-non-null-assertion': 'error',
+
+      '@typescript-eslint/no-unused-vars': [
+        'error',
+        {
+          argsIgnorePattern: '^_|^[a-z]',
+          ignoreRestSiblings: true,
+          varsIgnorePattern: '^_',
+        },
+      ],
+      '@typescript-eslint/no-var-requires': 'error',
+      'compat/compat': 'error',
+
+      'css-modules/no-unused-class': 'error',
+
+      'depend/ban-dependencies': 'error',
+      'import-x/default': 'error',
+      'import-x/named': 'error',
+
+      'import-x/namespace': 'error',
+      'import-x/no-extraneous-dependencies': 'error',
+
+      // Import correctness via import-x
+      'import-x/no-unresolved': 'error',
+      'jsx-a11y/alt-text': 'error',
+
+      'jsx-a11y/anchor-has-content': 'error',
+      'jsx-a11y/anchor-is-valid': 'error',
+      'jsx-a11y/aria-props': 'error',
+      'jsx-a11y/aria-proptypes': 'error',
+
+      'jsx-a11y/aria-unsupported-elements': 'error',
+      'jsx-a11y/role-has-required-aria-props': 'error',
+      'jsx-a11y/role-supports-aria-props': 'error',
       'no-console': 'warn',
       'no-debugger': 'error',
+      'no-duplicate-imports': 'error',
+      'no-secrets/no-secrets': 'error',
+      'no-unsanitized/method': 'error',
+      'no-unsanitized/property': 'error',
+
       'no-unused-expressions': 'error',
       'no-unused-labels': 'error',
-      'no-var': 'error',
-      'prefer-template': 'error',
+      'no-unused-vars': 'off',
+
       'no-useless-escape': 'error',
+
       'no-useless-return': 'error',
-
-      // Prettier integration
-      'prettier/prettier': 'error',
-
-      // React rules
-      'react/jsx-uses-react': 'off',
-      'react/react-in-jsx-scope': 'off',
-      'react/prop-types': 'off',
-      'react/jsx-props-no-spreading': 'off',
-      'react/require-default-props': 'off',
-      'react/jsx-filename-extension': [
+      'no-var': 'error',
+      'perfectionist/sort-imports': [
         'error',
-        { extensions: ['.jsx', '.tsx'] },
+        {
+          groups: [
+            'type',
+            'side-effect',
+            ['builtin', 'external'],
+            'internal',
+            ['parent', 'sibling', 'index'],
+            'unknown',
+          ],
+          newlinesBetween: 'always',
+          order: 'asc',
+          type: 'natural',
+        },
       ],
+      'perfectionist/sort-objects': 'error',
+      'prefer-const': 'error',
+      'prefer-template': 'error',
+
+      'prettier/prettier': 'error',
+      'react-hooks/exhaustive-deps': 'warn',
+
+      'react-hooks/rules-of-hooks': 'error',
       'react/function-component-definition': [
         'warn',
         {
@@ -109,72 +192,38 @@ module.exports = [
           unnamedComponents: 'arrow-function',
         },
       ],
+      'react/jsx-filename-extension': ['error', { extensions: ['.tsx'] }],
 
-      // React Hooks rules
-      'react-hooks/rules-of-hooks': 'error',
-      'react-hooks/exhaustive-deps': 'warn',
+      'react/jsx-props-no-spreading': 'off',
 
-      // JSX A11y rules
-      'jsx-a11y/alt-text': 'error',
-      'jsx-a11y/anchor-has-content': 'error',
-      'jsx-a11y/anchor-is-valid': 'error',
-      'jsx-a11y/aria-props': 'error',
-      'jsx-a11y/aria-proptypes': 'error',
-      'jsx-a11y/aria-unsupported-elements': 'error',
-      'jsx-a11y/role-has-required-aria-props': 'error',
-      'jsx-a11y/role-supports-aria-props': 'error',
+      'react/jsx-uses-react': 'off',
 
-      // Import rules
-      'import/order': [
-        'error',
-        {
-          groups: [
-            'builtin',
-            'external',
-            'internal',
-            'parent',
-            'sibling',
-            'index',
-          ],
-          'newlines-between': 'always-and-inside-groups',
-          alphabetize: {
-            order: 'asc',
-            caseInsensitive: true,
-          },
-        },
-      ],
-      'import/no-unresolved': 'off',
-      'import/extensions': 'off',
-
-      // Disable the base no-unused-vars rule for TypeScript files
-      'no-unused-vars': 'off',
-      // TypeScript specific rules
-      '@typescript-eslint/no-unused-vars': [
-        'error',
-        {
-          argsIgnorePattern: '^_|^[a-z]',
-          varsIgnorePattern: '^_',
-          ignoreRestSiblings: true,
-        },
-      ],
-      '@typescript-eslint/no-explicit-any': 'warn',
-      '@typescript-eslint/explicit-function-return-type': 'off',
-      '@typescript-eslint/explicit-module-boundary-types': 'off',
-      '@typescript-eslint/no-empty-function': 'warn',
-      '@typescript-eslint/no-non-null-assertion': 'warn',
-      'prefer-const': 'error',
-      '@typescript-eslint/no-var-requires': 'error',
+      'react/prop-types': 'off',
+      'react/react-in-jsx-scope': 'off',
+      'react/require-default-props': 'off',
     },
     settings: {
+      'import-x/internal-regex': '^@peakhealth/',
+      'import-x/resolver': {
+        node: true,
+        typescript: true,
+      },
       react: {
         version: 'detect',
       },
     },
   },
   {
-    files: ['**/*.config.js', '**/*.config.ts'],
+    files: [
+      '**/*.config.js',
+      '**/*.config.ts',
+      '**/*.config.mjs',
+      '**/*.config.cjs',
+      'eslint.config.*',
+    ],
     rules: {
       '@typescript-eslint/no-var-requires': 'off',
+      'import-x/extensions': 'off',
     },
   },
 ];

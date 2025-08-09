@@ -1,0 +1,16 @@
+{
+  "e1c93d358dfc64ee55c520827159d900169205882d4008c3e60b614ecbeb1c59": {
+    "file": "dist/index.js",
+    "rules": [
+      "@typescript-eslint/explicit-function-return-type",
+      "compat/compat",
+      "perfectionist/sort-objects",
+      "@typescript-eslint/explicit-module-boundary-types",
+      "no-console"
+    ]
+  },
+  "fd41f762990cfb816d2af8fa4738b16f6ae9f9a3202b933a937bd1604039609e": {
+    "file": "src/index.ts",
+    "rules": ["compat/compat", "perfectionist/sort-objects", "no-console"]
+  }
+}
