@@ -217,12 +217,7 @@ INSERT INTO exercise_ratings (user_id, exercise_id, rating, review) VALUES
 -- Note: Development admin user will be created via the reset-dev-permissions script
 -- This ensures proper user creation with all required Supabase auth fields
 
--- Enable notification system feature for trainers in development
-INSERT INTO feature_flag_user_roles (feature_flag_id, environment, role_name, is_enabled) VALUES
-((SELECT id FROM feature_flags WHERE name = 'notification_system_feature'), 
- 'development', 
- 'trainer', 
- true);
+-- Roles removed
 
 -- Enable notification system feature for premium users in development
 INSERT INTO feature_flag_user_groups (feature_flag_id, environment, group_name, is_enabled) VALUES
@@ -231,12 +226,7 @@ INSERT INTO feature_flag_user_groups (feature_flag_id, environment, group_name, 
  'premium', 
  true);
 
--- Enable some features for basic users (example)
-INSERT INTO feature_flag_user_roles (feature_flag_id, environment, role_name, is_enabled) VALUES
-((SELECT id FROM feature_flags WHERE name = 'notification_system_feature'), 
- 'development', 
- 'basic', 
- false); -- Disabled by default for basic users
+-- Roles removed
 
 -- Roles and Groups System Seed Data
 

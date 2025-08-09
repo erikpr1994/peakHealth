@@ -35,42 +35,30 @@ export const FeatureFlagProvider = ({ children }: { children: ReactNode }) => {
     const loadPublicFlags = async () => {
       try {
         const response = await fetch('/api/feature-flags/public');
-        if (response.ok) {
-          const { featureFlags } = await response.json();
-
-          // Ensure featureFlags is an array before processing
-          if (!Array.isArray(featureFlags)) {
-            // eslint-disable-next-line no-console
-            console.warn(
-              'Expected featureFlags to be an array, got:',
-              featureFlags
-            );
-            setPublicFlags({});
-            return;
-          }
-
-          const flagsMap = featureFlags.reduce(
-            (
-              acc: Record<string, UserFeatureFlag>,
-              flag: {
-                name: string;
-                is_enabled: boolean;
-                rollout_percentage: number;
-              }
-            ) => {
-              acc[flag.name] = {
-                name: flag.name,
-                isEnabled: flag.is_enabled,
-                rolloutPercentage: flag.rollout_percentage,
-              };
-              return acc;
-            },
-            {}
-          );
-          setPublicFlags(flagsMap);
+        if (!response.ok) {
+          setPublicFlags({});
+          return;
         }
+        const { featureFlags } = await response.json();
+        const data = Array.isArray(featureFlags) ? featureFlags : [];
+
+        const flagsMap = (
+          data as Array<{
+            name: string;
+            is_enabled: boolean;
+            rollout_percentage: number;
+          }>
+        ).reduce((acc: Record<string, UserFeatureFlag>, flag) => {
+          acc[flag.name] = {
+            name: flag.name,
+            isEnabled: flag.is_enabled,
+            rolloutPercentage: flag.rollout_percentage,
+          };
+          return acc;
+        }, {});
+        setPublicFlags(flagsMap);
       } catch {
-        // Errors are handled by not setting flags, no need to log
+        setPublicFlags({});
       }
     };
 
@@ -131,7 +119,6 @@ export const FeatureFlagProvider = ({ children }: { children: ReactNode }) => {
             targeting_type?:
               | 'global'
               | 'user'
-              | 'role'
               | 'group'
               | 'user_type'
               | 'subscription_tier';

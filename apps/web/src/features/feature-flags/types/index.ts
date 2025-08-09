@@ -95,7 +95,6 @@ export interface UserFeatureFlag {
   targetingType?:
     | 'global'
     | 'user'
-    | 'role'
     | 'group'
     | 'user_type'
     | 'subscription_tier';
@@ -175,7 +174,6 @@ export interface DatabaseFunctions {
       targeting_type:
         | 'global'
         | 'user'
-        | 'role'
         | 'group'
         | 'user_type'
         | 'subscription_tier';
@@ -192,18 +190,5 @@ export interface DatabaseFunctions {
       rollout_percentage: number;
     }>;
   };
-  user_has_role: {
-    Args: {
-      user_roles: string[];
-      role_name: string;
-    };
-    Returns: boolean;
-  };
-  user_in_group: {
-    Args: {
-      user_groups: string[];
-      group_name: string;
-    };
-    Returns: boolean;
-  };
+  // legacy helpers removed
 }
