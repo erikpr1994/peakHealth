@@ -60,11 +60,15 @@ export async function GET(request: NextRequest) {
     console.log('JWT Claims - user_types:', userRoles);
     console.log('JWT Claims - groups:', userGroups);
 
-    // Call the database function with the correct single parameter
-    const { data: featureFlags, error } = await supabase.rpc(
+    // Determine environment (default to development)
+    const environment = process.env.NEXT_PUBLIC_ENVIRONMENT || 'development';
+
+    // Call the database function with user and environment
+    const { data: dbRows, error } = await supabase.rpc(
       'get_user_feature_flags',
       {
         user_id_param: user.id,
+        environment_param: environment,
       }
     );
 
@@ -76,11 +80,42 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    console.log(`Found ${featureFlags?.length || 0} feature flags for user`);
-    return NextResponse.json({ featureFlags: featureFlags || [] });
-  } catch (error) {
-    // eslint-disable-next-line no-console
-    console.error('Feature flags API error:', error);
+    // Normalize and de-duplicate by feature name; treat any targeting rule enabling the flag as enabled
+    const featureFlags = Array.isArray(dbRows) ? dbRows : [];
+
+    type DbRow = {
+      feature_flag_id?: string;
+      name: string;
+      description?: string | null;
+      is_enabled: boolean;
+      rollout_percentage: number;
+      environment: string;
+      targeting_type?: string;
+      targeting_value?: string | null;
+    };
+
+    const mergedByName: Record<string, DbRow> = {};
+    for (const row of featureFlags as DbRow[]) {
+      const existing = mergedByName[row.name];
+      mergedByName[row.name] = existing
+        ? {
+            ...existing,
+            is_enabled: existing.is_enabled || row.is_enabled,
+            rollout_percentage:
+              existing.rollout_percentage ?? row.rollout_percentage,
+            environment: existing.environment ?? row.environment,
+            description: existing.description ?? row.description,
+            feature_flag_id: existing.feature_flag_id ?? row.feature_flag_id,
+            targeting_type: existing.targeting_type ?? row.targeting_type,
+            targeting_value: existing.targeting_value ?? row.targeting_value,
+          }
+        : (row as DbRow);
+    }
+
+    const result = Object.values(mergedByName);
+
+    return NextResponse.json({ featureFlags: result });
+  } catch {
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }

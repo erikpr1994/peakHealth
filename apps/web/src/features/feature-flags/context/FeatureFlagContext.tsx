@@ -116,19 +116,44 @@ export const FeatureFlagProvider = ({ children }: { children: ReactNode }) => {
         return;
       }
 
+      // Align with DB function return shape for user-specific flags
+      // Rows may include duplicates per feature due to multiple targeting rules; de-duplicate by name
       const userFlagsMap = fetchedUserFlags.reduce(
         (
           acc: Record<string, UserFeatureFlag>,
-          flag: {
+          row: {
+            feature_flag_id?: string;
             name: string;
+            description?: string | null;
             is_enabled: boolean;
-            rollout_percentage: number;
+            environment?: string;
+            rollout_percentage?: number;
+            targeting_type?:
+              | 'global'
+              | 'user'
+              | 'role'
+              | 'group'
+              | 'user_type'
+              | 'subscription_tier';
+            targeting_value?: string | null;
           }
         ) => {
-          acc[flag.name] = {
-            name: flag.name,
-            isEnabled: flag.is_enabled,
-            rolloutPercentage: flag.rollout_percentage,
+          const existing = acc[row.name];
+          const nextEnabled = Boolean(
+            (existing && existing.isEnabled) || row.is_enabled
+          );
+          acc[row.name] = {
+            name: row.name,
+            isEnabled: nextEnabled,
+            rolloutPercentage:
+              existing?.rolloutPercentage ?? row.rollout_percentage,
+            description: existing?.description ?? row.description ?? undefined,
+            featureFlagId:
+              existing?.featureFlagId ?? row.feature_flag_id ?? undefined,
+            targetingType:
+              existing?.targetingType ?? row.targeting_type ?? undefined,
+            targetingValue:
+              existing?.targetingValue ?? row.targeting_value ?? undefined,
           };
           return acc;
         },

@@ -89,7 +89,17 @@ export interface FeatureFlagAuditLog {
 export interface UserFeatureFlag {
   name: string;
   isEnabled: boolean;
-  rolloutPercentage: number;
+  rolloutPercentage?: number;
+  description?: string;
+  featureFlagId?: string;
+  targetingType?:
+    | 'global'
+    | 'user'
+    | 'role'
+    | 'group'
+    | 'user_type'
+    | 'subscription_tier';
+  targetingValue?: string | null;
 }
 
 // Context Types
@@ -152,18 +162,35 @@ export interface FeatureFlagProps {
 export interface DatabaseFunctions {
   get_user_feature_flags: {
     Args: {
-      user_id: string;
+      user_id_param: string;
       environment_param: string;
-      user_roles?: string[];
-      user_groups?: string[];
     };
-    Returns: UserFeatureFlag[];
+    Returns: Array<{
+      feature_flag_id: string;
+      name: string; // TEXT
+      description: string | null; // TEXT
+      is_enabled: boolean;
+      rollout_percentage: number;
+      environment: string;
+      targeting_type:
+        | 'global'
+        | 'user'
+        | 'role'
+        | 'group'
+        | 'user_type'
+        | 'subscription_tier';
+      targeting_value: string | null;
+    }>;
   };
   get_public_feature_flags: {
     Args: {
       environment_param: string;
     };
-    Returns: UserFeatureFlag[];
+    Returns: Array<{
+      name: string;
+      is_enabled: boolean;
+      rollout_percentage: number;
+    }>;
   };
   user_has_role: {
     Args: {
