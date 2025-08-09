@@ -1,6 +1,6 @@
 # Feature Flag System
 
-A comprehensive feature flag system for the Peak Health app that supports user types, legacy roles, user groups, subscription tiers, and environment-based targeting with database-level security filtering.
+A comprehensive feature flag system for the Peak Health app that supports user types, user groups, subscription tiers, and environment-based targeting with database-level security filtering. Legacy roles are no longer supported.
 
 ## System Workflow
 
@@ -71,7 +71,7 @@ sequenceDiagram
 
 - **User Type Targeting (new)**: Target features based on user types (e.g., `regular`, `trainer`, `physio`, `admin`)
 - **Subscription Tier Targeting (new)**: Target features by subscription tier (e.g., `free`, `premium`, `pro`)
-- **Legacy Role/Group Targeting**: Backward-compatible targeting by `roles` and `groups` from JWT claims
+- **Legacy Group Targeting (limited)**: Backward-compatible targeting by `groups` from JWT claims
 - **Environment Support**: Separate configurations for development, staging, and production
 - **Security Filtering**: Database-level filtering ensures users only see features they're authorized for
 - **Public Flags**: Flags available to all users (no authentication required)
@@ -109,16 +109,15 @@ The system uses the following tables:
 - `feature_flag_user_types` — Targeting by user type (new system)
 - `feature_flag_subscription_tiers` — Targeting by subscription tier (new system)
 - `feature_flag_users` — Explicit per-user targeting
-- `feature_flag_user_roles` — Targeting by legacy roles (backward compatibility)
+- [Removed] `feature_flag_user_roles` — Legacy roles are no longer supported
 - `feature_flag_user_groups` — Targeting by legacy groups (backward compatibility)
 - `feature_flag_audit_log` — Change tracking
 
 ### Key Functions
 
 - `get_public_feature_flags(environment_param)` — Returns public flags for all users
-- `get_user_feature_flags(user_id_param, environment_param)` — Returns user-specific flags derived from JWT claims via `auth.users.raw_app_meta_data` (user types, subscription tier, roles, groups)
-- `get_user_feature_flags_legacy(user_id, environment_param, user_roles, user_groups)` — Legacy signature taking explicit arrays (not used by current API)
-- `user_has_role(user_roles, role_name)` and `user_in_group(user_groups, group_name)` — Legacy helpers
+- `get_user_feature_flags(user_id_param, environment_param)` — Returns user-specific flags derived from JWT claims via `auth.users.raw_app_meta_data` (user types, subscription tier, groups)
+- [Removed] `get_user_feature_flags_legacy` and `user_has_role` (roles were removed)
 
 ### Entity Relationships
 
@@ -127,7 +126,6 @@ erDiagram
   feature_flags ||--o{ feature_flag_environments : has
   feature_flags ||--o{ feature_flag_user_types : targets
   feature_flags ||--o{ feature_flag_subscription_tiers : targets
-  feature_flags ||--o{ feature_flag_user_roles : targets
   feature_flags ||--o{ feature_flag_user_groups : targets
   feature_flags ||--o{ feature_flag_users : targets
 ```
@@ -291,7 +289,7 @@ flowchart LR
 ```
 
 - `/api/feature-flags/public` returns: `{ featureFlags: Array<{ name, is_enabled, rollout_percentage }> }`
-- `/api/feature-flags` returns rows that may include: `{ feature_flag_id, name, description, is_enabled, rollout_percentage, environment, targeting_type, targeting_value }` merged by name with OR semantics.
+- `/api/feature-flags` returns rows that may include: `{ feature_flag_id, name, description, is_enabled, rollout_percentage, environment, targeting_type (global|user|group|user_type|subscription_tier), targeting_value }` merged by name with OR semantics.
 
 ## Testing
 
@@ -402,15 +400,14 @@ sequenceDiagram
 3. **Targeting**: Prefer user types and subscription tiers; keep legacy roles/groups only for back-compat
 4. **Monitoring**: Enable external monitoring if needed
 
-## Known Mismatches & Caveats (documented, not fixed)
+## Known Mismatches & Caveats (resolved)
 
-- **Function signature in docs vs code**: Previous docs referenced `get_user_feature_flags(user_id, environment, user_roles, user_groups)`; the active function is `get_user_feature_flags(user_id_param, environment_param)` that reads claims directly. A legacy function `get_user_feature_flags_legacy` exists with the extended signature.
-- **API route not passing roles/groups**: `/api/feature-flags` computes `userRoles` and `userGroups` from JWT but does not pass them to RPC; this matches the current DB function that reads claims directly.
-- **Caching narrative vs implementation**: Docs historically implied a read cache; current provider only uses cache invalidation on refresh and does not call `featureFlagCache.get` during reads.
-- **User roles vs user types**: The new model uses `USER_TYPES`; code exposes `hasUserType` and not `hasUserRole`. Any references to `USER_ROLES` are legacy.
-- **Legacy component gate**: A `FeatureFlagProtected` component exists for route gating (uses utility classes). The preferred approach is hook-driven gating; component-based gating is considered legacy.
-- **Alternate server-side pattern**: `apps/web/src/app/(app)/dashboard/page.tsx` directly queries tables to check a flag (e.g., `DASHBOARD_FEATURE`) instead of using RPC; this bypasses the consolidation/merging done by the API route.
-- **Public flags constraint**: `get_public_feature_flags` enforces no role/group targeting for public flags; ensure schema changes keep this invariant.
+- Function signature is unified on `get_user_feature_flags(user_id_param, environment_param)` which reads claims directly.
+- `/api/feature-flags` does not pass roles/groups and relies on DB claims.
+- Provider now uses a lightweight cache wrapper for public flags; user flags remain fetched fresh and invalidated via `refreshFlags()`.
+- Roles have been removed; use `USER_TYPES` and optional legacy `groups` for back-compat only.
+- Component-based route gate is still available but hook-driven gating is preferred.
+- Public flags constraint remains: public flags cannot have group targeting.
 
 These items are intentionally documented here for visibility and future cleanup; no code has been changed as part of this documentation update.
 

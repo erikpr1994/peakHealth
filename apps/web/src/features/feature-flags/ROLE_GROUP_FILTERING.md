@@ -1,90 +1,43 @@
-# Feature Flag Role/Group Filtering
+# Feature Flag Group Filtering (legacy only)
 
 ## Overview
 
-The feature flag system now properly filters user-specific feature flags based on user roles and groups. This ensures that users only have access to features they are authorized to use.
+The feature flag system filters user-specific feature flags based on user groups (legacy) and the new model (user types and subscription tiers). Legacy roles have been removed.
 
 ## How It Works
 
 ### Database Function
 
-The `get_user_feature_flags` function now accepts additional parameters:
-
-- `user_roles`: JSONB array of user roles (e.g., `['basic', 'premium']`)
-- `user_groups`: JSONB array of user groups (e.g., `['free', 'beta_testers']`)
+The `get_user_feature_flags(user_id_param, environment_param)` function reads targeting claims from `auth.users.raw_app_meta_data` directly.
 
 ### Filtering Logic
 
 A user-specific feature flag is returned only if:
 
-1. **Role Filtering**: The flag either has no role targeting OR the user has a matching role
-2. **Group Filtering**: The flag either has no group targeting OR the user belongs to a matching group
+1. **Group Filtering**: The flag either has no group targeting OR the user belongs to a matching group
 
 ### Example Scenarios
 
-#### Scenario 1: Flag with Role Targeting
-
-- Flag: `notification_system_feature` (targets `premium` role)
-- User roles: `['basic']`
-- Result: ❌ Flag NOT returned (user doesn't have `premium` role)
-
-#### Scenario 2: Flag with Role Targeting
-
-- Flag: `notification_system_feature` (targets `premium` role)
-- User roles: `['premium', 'admin']`
-- Result: ✅ Flag returned (user has `premium` role)
-
-#### Scenario 3: Flag with Group Targeting
+#### Scenario 1: Flag with Group Targeting
 
 - Flag: `beta_feature` (targets `beta_testers` group)
 - User groups: `['free']`
 - Result: ❌ Flag NOT returned (user not in `beta_testers` group)
 
-#### Scenario 4: Flag with No Targeting
+#### Scenario 2: Flag with No Targeting
 
 - Flag: `general_feature` (no role/group targeting)
 - User roles: `['basic']`
 - User groups: `['free']`
 - Result: ✅ Flag returned (available to all authenticated users)
 
-## API Changes
+## API Notes
 
-### Updated Function Signature
-
-```sql
-get_user_feature_flags(
-  user_id UUID,
-  environment_param TEXT,
-  user_roles JSONB DEFAULT '[]'::JSONB,
-  user_groups JSONB DEFAULT '[]'::JSONB
-)
-```
-
-### API Route Changes
-
-The `/api/feature-flags` route now extracts user roles and groups from the user object and passes them to the database function:
-
-```typescript
-const userRoles = (user as any).userRoles || ['basic'];
-const userGroups = (user as any).userGroups || ['free'];
-
-const flagsResponse = await supabase.rpc('get_user_feature_flags', {
-  user_id: user.id,
-  environment_param: environment,
-  user_roles: userRoles,
-  user_groups: userGroups,
-});
-```
+The `/api/feature-flags` route calls `get_user_feature_flags(user_id_param, environment_param)`; roles are not supported.
 
 ## Sample Data
 
-The migration includes sample targeting rules:
-
 ```sql
--- Notification system only for premium users
-INSERT INTO feature_flag_user_roles (feature_flag_id, environment, role_name, is_enabled) VALUES
-((SELECT id FROM feature_flags WHERE name = 'notification_system_feature'), 'development', 'premium', true);
-
 -- Notification system only for beta testers
 INSERT INTO feature_flag_user_groups (feature_flag_id, environment, group_name, is_enabled) VALUES
 ((SELECT id FROM feature_flags WHERE name = 'notification_system_feature'), 'development', 'beta_testers', true);
@@ -102,5 +55,5 @@ INSERT INTO feature_flag_user_groups (feature_flag_id, environment, group_name, 
 The system includes integration tests that verify:
 
 - Unauthenticated users only get public flags
-- Authenticated users get flags filtered by their roles/groups
+- Authenticated users get flags filtered by their groups or user types
 - Flags with no targeting are available to all authenticated users
