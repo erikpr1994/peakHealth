@@ -14,11 +14,20 @@ async function getDashboardFeatureFlag() {
       return { isEnabled: false, error: 'Database connection not available' };
     }
     const environment = process.env.NEXT_PUBLIC_ENVIRONMENT || 'development';
-    const currentUser = await supabase.auth.getUser();
+    const {
+      data: { user },
+      error: authError,
+    } = await supabase.auth.getUser();
+
+    // If unauthenticated or no valid user ID, treat the feature as disabled without calling RPC
+    if (authError || !user?.id) {
+      return { isEnabled: false, error: null };
+    }
+
     const { data: dbRows, error } = await supabase.rpc(
       'get_user_feature_flags',
       {
-        user_id_param: currentUser.data.user?.id as string,
+        user_id_param: user.id,
         environment_param: environment,
       }
     );
