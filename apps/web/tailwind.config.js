@@ -8,7 +8,6 @@ export default {
     './src/**/*.{ts,tsx}',
     './index.html',
     './routes/**/*.{js,ts,jsx,tsx}',
-    './App.tsx',
   ],
   prefix: '',
   theme: {

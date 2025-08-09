@@ -1,7 +1,9 @@
 {
   "edacca77bb6d5ed49a6facb136c76785abe051dbffd501640ba446c5f2a24b86": {
     "file": "next.config.ts",
-    "rules": ["perfectionist/sort-objects"]
+    "rules": [
+      "perfectionist/sort-objects"
+    ]
   },
   "2b4378b3ec90eed7cdc25abc52f6b4783c05f19c23fab737e51c6bccf74242b0": {
     "file": "src/app/blog/[slug]/page.tsx",
@@ -9,6 +11,13 @@
       "import-x/no-unresolved",
       "@typescript-eslint/explicit-function-return-type",
       "@typescript-eslint/explicit-module-boundary-types",
+      "perfectionist/sort-objects"
+    ]
+  },
+  "9d8119faa332a3622ae382bfa596c71ce53454e2260b28624c49105030ade8cb": {
+    "file": "src/components/blog/BlogHeader.tsx",
+    "rules": [
+      "css-modules/no-unused-class",
       "perfectionist/sort-objects"
     ]
   },
@@ -29,28 +38,27 @@
       "@typescript-eslint/explicit-module-boundary-types"
     ]
   },
-  "9d8119faa332a3622ae382bfa596c71ce53454e2260b28624c49105030ade8cb": {
-    "file": "src/components/blog/BlogHeader.tsx",
-    "rules": ["css-modules/no-unused-class", "perfectionist/sort-objects"]
-  },
-  "7d39262362b8b46538aeb21c7a1ba0ddf709b508d7938558db408c5a259bc48b": {
-    "file": "src/app/layout.tsx",
-    "rules": [
-      "perfectionist/sort-imports",
-      "perfectionist/sort-objects",
-      "@typescript-eslint/explicit-function-return-type",
-      "@typescript-eslint/explicit-module-boundary-types"
-    ]
-  },
   "7cb8d87f677935c7292a67446441f0ad92751984ac67aabc81fc7c96b0544b16": {
     "file": "src/app/page.test.tsx",
-    "rules": ["no-undef", "@typescript-eslint/explicit-function-return-type"]
+    "rules": [
+      "no-undef",
+      "@typescript-eslint/explicit-function-return-type"
+    ]
   },
   "aeb504039def7b7fb6137ff1a57193197893eba928e8d145b6b96ff1ebe6f9f6": {
     "file": "src/components/blog/BlogPost.tsx",
     "rules": [
       "perfectionist/sort-imports",
       "import-x/no-unresolved",
+      "@typescript-eslint/explicit-function-return-type",
+      "@typescript-eslint/explicit-module-boundary-types"
+    ]
+  },
+  "7d39262362b8b46538aeb21c7a1ba0ddf709b508d7938558db408c5a259bc48b": {
+    "file": "src/app/layout.tsx",
+    "rules": [
+      "perfectionist/sort-imports",
+      "perfectionist/sort-objects",
       "@typescript-eslint/explicit-function-return-type",
       "@typescript-eslint/explicit-module-boundary-types"
     ]
@@ -134,10 +142,15 @@
   },
   "2bf2ccd0be962dbae113683604dae4645905263f92b875f7cf17eb47172bc1cd": {
     "file": "src/lib/blog.ts",
-    "rules": ["perfectionist/sort-objects"]
+    "rules": [
+      "perfectionist/sort-objects"
+    ]
   },
   "66bde2f84a1c50bb881ba96bb48c3451d6b8de3dd7aa13cc57e392fb48906844": {
     "file": "vitest.config.ts",
-    "rules": ["perfectionist/sort-imports", "perfectionist/sort-objects"]
+    "rules": [
+      "perfectionist/sort-imports",
+      "perfectionist/sort-objects"
+    ]
   }
 }
