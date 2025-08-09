@@ -10,10 +10,7 @@ test.describe('Admin flows', () => {
     await expect(page).toHaveURL(/localhost:3000\/login/);
     // Already authenticated by storageState; navigate to selector and choose web
     await page.goto('http://localhost:3000/app-selector');
-    await page
-      .getByText(/Peak\s*Health/i)
-      .first()
-      .click();
+    await page.getByTestId('app-card-web').click();
     await expect(page).toHaveURL(/localhost:3001/);
   });
 });
@@ -26,10 +23,7 @@ test.describe('Admin flows (admin app)', () => {
     await page.getByRole('link', { name: /sign in/i }).click();
     await expect(page).toHaveURL(/localhost:3000\/login/);
     await page.goto('http://localhost:3000/app-selector');
-    await page
-      .getByText(/Admin\s*Panel/i)
-      .first()
-      .click();
+    await page.getByTestId('app-card-admin').click();
     await expect(page).toHaveURL(/localhost:3002/);
   });
 });

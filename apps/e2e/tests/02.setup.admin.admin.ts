@@ -11,10 +11,7 @@ test('setup: admin -> app selector -> admin', async ({ browser }) => {
   await page.getByPlaceholder('Enter your password').fill(password);
   await page.getByRole('button', { name: /sign in|log in/i }).click();
   await page.waitForURL('**/app-selector', { timeout: 60_000 });
-  await page
-    .getByText(/^Admin\s*Panel$/i)
-    .first()
-    .click();
+  await page.getByTestId('app-card-admin').click();
   await page.waitForURL('http://localhost:3002/**', { timeout: 30_000 });
   await context.storageState({ path: 'storage-states/admin-admin.json' });
   await context.close();

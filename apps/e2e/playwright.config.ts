@@ -47,24 +47,7 @@ export default defineConfig({
       testMatch: ['tests/landing.*.spec.ts'],
       use: { baseURL: 'http://localhost:3004' },
     },
-    {
-      name: 'web',
-      testMatch: ['tests/web.*.spec.ts'],
-      dependencies: ['setup'],
-      use: {
-        baseURL: 'http://localhost:3001',
-        storageState: 'storage-states/web.json',
-      },
-    },
-    {
-      name: 'admin',
-      testMatch: ['tests/admin.*.spec.ts'],
-      dependencies: ['setup'],
-      use: {
-        baseURL: 'http://localhost:3002',
-        storageState: 'storage-states/admin.json',
-      },
-    },
+    // Persona-specific projects only
     // Per-user setup projects
     {
       name: 'setup-admin-web',
@@ -94,6 +77,13 @@ export default defineConfig({
         baseURL: 'http://localhost:3001',
         storageState: 'storage-states/admin-web.json',
       },
+      testMatch: [
+        'tests/web.smoke.spec.ts',
+        'tests/admin.flow.spec.ts',
+        'tests/regular.flow.spec.ts',
+        'tests/trainer.flow.spec.ts',
+        'tests/landing.redirect.spec.ts',
+      ],
     },
     {
       name: 'admin-admin',
@@ -102,6 +92,7 @@ export default defineConfig({
         baseURL: 'http://localhost:3002',
         storageState: 'storage-states/admin-admin.json',
       },
+      testMatch: ['tests/admin.flow.spec.ts', 'tests/landing.redirect.spec.ts'],
     },
     {
       name: 'regular-web',
@@ -110,6 +101,11 @@ export default defineConfig({
         baseURL: 'http://localhost:3001',
         storageState: 'storage-states/regular-web.json',
       },
+      testMatch: [
+        'tests/web.smoke.spec.ts',
+        'tests/regular.flow.spec.ts',
+        'tests/landing.redirect.spec.ts',
+      ],
     },
     {
       name: 'trainer-web',
@@ -118,6 +114,11 @@ export default defineConfig({
         baseURL: 'http://localhost:3001',
         storageState: 'storage-states/trainer-web.json',
       },
+      testMatch: [
+        'tests/web.smoke.spec.ts',
+        'tests/trainer.flow.spec.ts',
+        'tests/landing.redirect.spec.ts',
+      ],
     },
   ],
 });

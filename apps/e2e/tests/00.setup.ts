@@ -47,12 +47,8 @@ test('seed dev DB and create storage states', async ({ browser }) => {
     // Wait for app selector to render
     await page.waitForURL('**/app-selector', { timeout: 60_000 });
     await expect(page.getByText(/Choose\s*Your\s*App/i)).toBeVisible();
-    // Click "PeakHealth" app card
-    // Click the app card by container div and inner text
-    await page
-      .getByText(/^PeakHealth$/i)
-      .first()
-      .click();
+    // Click Web app card via test id
+    await page.getByTestId('app-card-web').click();
     await page.waitForURL('http://localhost:3001/**', { timeout: 60_000 });
     await expect(page).toHaveURL(/localhost:3001/);
     await context.storageState({ path: 'storage-states/web.json' });
@@ -69,11 +65,8 @@ test('seed dev DB and create storage states', async ({ browser }) => {
     await page.getByRole('button', { name: /sign in|log in/i }).click();
     await page.waitForURL('**/app-selector', { timeout: 60_000 });
     await expect(page.getByText(/Choose\s*Your\s*App/i)).toBeVisible();
-    // Click "Admin Panel" app card
-    await page
-      .getByText(/^Admin\s*Panel$/i)
-      .first()
-      .click();
+    // Click Admin app card via test id
+    await page.getByTestId('app-card-admin').click();
     await page.waitForURL('http://localhost:3002/**', { timeout: 60_000 });
     await expect(page).toHaveURL(/localhost:3002/);
     await context.storageState({ path: 'storage-states/admin.json' });
