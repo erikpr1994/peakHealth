@@ -1,0 +1,562 @@
+{
+  "092e1fc47016cf03574e6096d7806760eb368eccbc46b9b0501cf5595efdd99f": {
+    "file": "next.config.ts",
+    "rules": ["perfectionist/sort-objects"]
+  },
+  "122e731c7c1667bbf76dff4c4e8caff6fe9f279cf8e1ff764d86c811b01fd103": {
+    "file": "src/app/(communication)/announcements/page.tsx",
+    "rules": [
+      "import-x/no-unresolved",
+      "@typescript-eslint/explicit-function-return-type",
+      "@typescript-eslint/explicit-module-boundary-types",
+      "react/function-component-definition",
+      "perfectionist/sort-objects"
+    ]
+  },
+  "86e4bec9d8c3c8da4326d9f0f4d3759f466fb3f7367c6f7453421ca909d142d2": {
+    "file": "src/app/(communication)/communication-logs/page.tsx",
+    "rules": [
+      "import-x/no-unresolved",
+      "@typescript-eslint/explicit-function-return-type",
+      "@typescript-eslint/explicit-module-boundary-types",
+      "react/function-component-definition",
+      "perfectionist/sort-objects"
+    ]
+  },
+  "cd712d1bd02c3b4395672136af361ad16c4ee9c8b2d11deccd4d011c99050e62": {
+    "file": "src/app/(communication)/emails/page.tsx",
+    "rules": [
+      "import-x/no-unresolved",
+      "@typescript-eslint/explicit-function-return-type",
+      "@typescript-eslint/explicit-module-boundary-types",
+      "react/function-component-definition",
+      "perfectionist/sort-objects"
+    ]
+  },
+  "26f9ab8bd31c593320d14c27d540bfbc1f491e885bd9281dd918a4feb53b026b": {
+    "file": "src/app/(content)/content/page.tsx",
+    "rules": [
+      "import-x/no-unresolved",
+      "@typescript-eslint/explicit-function-return-type",
+      "@typescript-eslint/explicit-module-boundary-types",
+      "react/function-component-definition",
+      "perfectionist/sort-objects"
+    ]
+  },
+  "a39a35da41e581240c154be66fd3ced3c7f14bd6d43d519aa5dd1cf58795f58e": {
+    "file": "src/app/(content)/features/page.tsx",
+    "rules": [
+      "import-x/no-unresolved",
+      "@typescript-eslint/explicit-function-return-type",
+      "@typescript-eslint/explicit-module-boundary-types",
+      "react/function-component-definition",
+      "perfectionist/sort-objects"
+    ]
+  },
+  "ac146a2f47ac9e89ba550280a76fd08e6c53aaf672cf9f5ce9890fba4d327637": {
+    "file": "src/app/(content)/suggestions/page.tsx",
+    "rules": [
+      "import-x/no-unresolved",
+      "@typescript-eslint/explicit-function-return-type",
+      "@typescript-eslint/explicit-module-boundary-types",
+      "react/function-component-definition",
+      "perfectionist/sort-objects"
+    ]
+  },
+  "5b6dc21b33d2b70da4717a02f1973824d95a7988a8a6f1b8498a7849042d79dc": {
+    "file": "src/app/(communication)/notifications/page.tsx",
+    "rules": [
+      "import-x/no-unresolved",
+      "@typescript-eslint/explicit-function-return-type",
+      "@typescript-eslint/explicit-module-boundary-types",
+      "react/function-component-definition",
+      "perfectionist/sort-objects"
+    ]
+  },
+  "51aa64a757b6ba8197e5889f5b7cbc6146a86c0beab5b444e010c14e29a936ab": {
+    "file": "src/app/(content)/knowledge/page.tsx",
+    "rules": [
+      "import-x/no-unresolved",
+      "@typescript-eslint/explicit-function-return-type",
+      "@typescript-eslint/explicit-module-boundary-types",
+      "react/function-component-definition",
+      "perfectionist/sort-objects"
+    ]
+  },
+  "eebf1d32ff277ec212b53ff15d313f8a2842a465c1b613872a8979be644cd628": {
+    "file": "src/app/(content)/roadmap/page.tsx",
+    "rules": [
+      "import-x/no-unresolved",
+      "@typescript-eslint/explicit-function-return-type",
+      "@typescript-eslint/explicit-module-boundary-types",
+      "react/function-component-definition",
+      "perfectionist/sort-objects"
+    ]
+  },
+  "9778486370501d40f85bf886e1557f68662d73c77b75f2efefbb355547add8d5": {
+    "file": "src/app/(partners)/gyms/page.tsx",
+    "rules": [
+      "@typescript-eslint/explicit-function-return-type",
+      "@typescript-eslint/explicit-module-boundary-types",
+      "react/function-component-definition"
+    ]
+  },
+  "1d43629b9d3f200ca4bd600bc2449aa1e878c72c092d44ace36a27613ebb76e5": {
+    "file": "src/app/(system)/subscription-tiers/page.tsx",
+    "rules": [
+      "import-x/no-unresolved",
+      "@typescript-eslint/explicit-function-return-type",
+      "@typescript-eslint/explicit-module-boundary-types",
+      "react/function-component-definition",
+      "perfectionist/sort-objects"
+    ]
+  },
+  "82dfb992fed0e1121c4f591667a246462d775694c1d5dc342906316af350789c": {
+    "file": "src/app/(partners)/partners/page.tsx",
+    "rules": [
+      "import-x/no-unresolved",
+      "@typescript-eslint/explicit-function-return-type",
+      "@typescript-eslint/explicit-module-boundary-types",
+      "react/function-component-definition",
+      "perfectionist/sort-objects"
+    ]
+  },
+  "c6c63a5ef549019f0ff7ac14a98a1f401ef20d34f58ef1cfb89fb3561b42405f": {
+    "file": "src/app/(revenue)/revenue/page.tsx",
+    "rules": [
+      "import-x/no-unresolved",
+      "@typescript-eslint/explicit-function-return-type",
+      "@typescript-eslint/explicit-module-boundary-types",
+      "react/function-component-definition",
+      "perfectionist/sort-objects"
+    ]
+  },
+  "360dcfa9db15756f511c7badeccb0248233445ae2b08fc1d8ba64d49ca8ce038": {
+    "file": "src/app/(system)/settings/page.tsx",
+    "rules": [
+      "@typescript-eslint/explicit-function-return-type",
+      "@typescript-eslint/explicit-module-boundary-types",
+      "react/function-component-definition"
+    ]
+  },
+  "7fa8756ca029a7c85a8764d6c8336494dc7b3d275533d9c55e66563643d8ebbb": {
+    "file": "src/app/(system)/user-defaults/page.tsx",
+    "rules": [
+      "import-x/no-unresolved",
+      "@typescript-eslint/explicit-function-return-type",
+      "@typescript-eslint/explicit-module-boundary-types",
+      "react/function-component-definition",
+      "perfectionist/sort-objects"
+    ]
+  },
+  "65abfcf78784fe47358dfb2e2d7491b137323c86bdc1683109eb95d91e8e3fd0": {
+    "file": "src/app/(system)/support/page.tsx",
+    "rules": [
+      "import-x/no-unresolved",
+      "@typescript-eslint/explicit-function-return-type",
+      "@typescript-eslint/explicit-module-boundary-types",
+      "react/function-component-definition",
+      "perfectionist/sort-objects"
+    ]
+  },
+  "aab21a4861044d9e486e20a921356a8283781746d32ffcd70732c3d7522d37b8": {
+    "file": "src/app/(user-management)/trainers/page.tsx",
+    "rules": [
+      "import-x/no-unresolved",
+      "@typescript-eslint/explicit-function-return-type",
+      "@typescript-eslint/explicit-module-boundary-types",
+      "react/function-component-definition",
+      "perfectionist/sort-objects"
+    ]
+  },
+  "bb7b869a451a0661509d1e33ae6d6c8bf66f5fab7b550560492101e94e35dd43": {
+    "file": "src/app/(user-management)/feedback/page.tsx",
+    "rules": [
+      "import-x/no-unresolved",
+      "@typescript-eslint/explicit-function-return-type",
+      "@typescript-eslint/explicit-module-boundary-types",
+      "react/function-component-definition",
+      "perfectionist/sort-objects"
+    ]
+  },
+  "5e7db9000d2b48553a89a1a31e98b9b50be961bce372186a5ffebd0e5b79dbb9": {
+    "file": "src/app/api/admin/feature-flags/targeting-options/route.ts",
+    "rules": [
+      "import-x/no-unresolved",
+      "@typescript-eslint/explicit-function-return-type",
+      "@typescript-eslint/explicit-module-boundary-types",
+      "@typescript-eslint/no-explicit-any",
+      "perfectionist/sort-objects"
+    ]
+  },
+  "784abb438796d60fdbe13c7562d77e335fb69e519d3e76253ff98355c30c6ce1": {
+    "file": "src/app/(user-management)/user-types/page.tsx",
+    "rules": [
+      "import-x/no-unresolved",
+      "@typescript-eslint/explicit-function-return-type",
+      "@typescript-eslint/explicit-module-boundary-types",
+      "react/function-component-definition",
+      "perfectionist/sort-objects"
+    ]
+  },
+  "7ddc7d1fbf5f8eb48876986bb75caa0cd53981a5321d071a9bc9b250a7a421f6": {
+    "file": "src/app/(user-management)/users/page.tsx",
+    "rules": [
+      "import-x/no-unresolved",
+      "@typescript-eslint/explicit-function-return-type",
+      "@typescript-eslint/explicit-module-boundary-types",
+      "react/function-component-definition",
+      "perfectionist/sort-objects"
+    ]
+  },
+  "414b6a4d38641d8cf285b63c19a8cda568a8fce92a713d5d971ad21412d3ba6e": {
+    "file": "src/app/api/admin/subscription-tiers/route.ts",
+    "rules": [
+      "import-x/no-unresolved",
+      "@typescript-eslint/explicit-function-return-type",
+      "@typescript-eslint/explicit-module-boundary-types",
+      "no-console",
+      "perfectionist/sort-objects",
+      "compat/compat"
+    ]
+  },
+  "f0f2a84df54639a70f22426ba82e93a8a514012fbd1548ec7a3b260497749ddc": {
+    "file": "src/app/api/admin/user-assignments/route.ts",
+    "rules": [
+      "import-x/no-unresolved",
+      "@typescript-eslint/explicit-function-return-type",
+      "@typescript-eslint/explicit-module-boundary-types",
+      "compat/compat",
+      "no-console",
+      "perfectionist/sort-objects"
+    ]
+  },
+  "7d62792564442c831271236980a33cf5d691417623e514040e9eb6eb75d2b950": {
+    "file": "src/app/api/admin/feature-flags/route.ts",
+    "rules": [
+      "import-x/no-unresolved",
+      "@typescript-eslint/explicit-function-return-type",
+      "@typescript-eslint/explicit-module-boundary-types",
+      "no-console",
+      "perfectionist/sort-objects",
+      "compat/compat"
+    ]
+  },
+  "3b1440d29243592821eac96787d209779afac11d5ecb6b85e8346c1d99da6be4": {
+    "file": "src/app/api/auth/user/route.ts",
+    "rules": [
+      "@typescript-eslint/explicit-function-return-type",
+      "@typescript-eslint/explicit-module-boundary-types",
+      "perfectionist/sort-objects",
+      "no-console"
+    ]
+  },
+  "084fafd4e7c7f2f3dfa90b18c8697e945aa9d347221cefd00bb0902b0bede750": {
+    "file": "src/app/api/admin/user-defaults/route.ts",
+    "rules": [
+      "import-x/no-unresolved",
+      "@typescript-eslint/explicit-function-return-type",
+      "@typescript-eslint/explicit-module-boundary-types",
+      "no-console",
+      "perfectionist/sort-objects"
+    ]
+  },
+  "9998cb75d0f8b46d3469d8803d3d245a2198abbbd22c4cf937da4f7328b54116": {
+    "file": "src/app/api/admin/user-groups/route.ts",
+    "rules": [
+      "import-x/no-unresolved",
+      "@typescript-eslint/explicit-function-return-type",
+      "@typescript-eslint/explicit-module-boundary-types",
+      "no-console",
+      "perfectionist/sort-objects",
+      "compat/compat"
+    ]
+  },
+  "1667c63f9564d66cec99a55577140200999a713cab1a202605b07af47b57d705": {
+    "file": "src/components/Analytics.tsx",
+    "rules": [
+      "perfectionist/sort-imports",
+      "perfectionist/sort-objects",
+      "@typescript-eslint/explicit-function-return-type",
+      "@typescript-eslint/explicit-module-boundary-types"
+    ]
+  },
+  "f7c6ded90fed76efe5277382b5b3eb57cafa4809a1414847ffa4a2aaf1810ce8": {
+    "file": "src/app/api/admin/user-types/route.ts",
+    "rules": [
+      "import-x/no-unresolved",
+      "@typescript-eslint/explicit-function-return-type",
+      "@typescript-eslint/explicit-module-boundary-types",
+      "no-console",
+      "perfectionist/sort-objects",
+      "compat/compat"
+    ]
+  },
+  "958e0a4e73f3575e95347f195b5839b27f49e99d59b7afe247b62a4cbc470fa0": {
+    "file": "src/components/App.tsx",
+    "rules": [
+      "perfectionist/sort-imports",
+      "@typescript-eslint/explicit-function-return-type",
+      "@typescript-eslint/explicit-module-boundary-types"
+    ]
+  },
+  "26d99d3ffc4c90fce2ad09ab691dc1c16e7b52bc00a2bd0448a33c4e1b5a0ed2": {
+    "file": "src/components/ClientProgressTracking.tsx",
+    "rules": [
+      "prettier/prettier",
+      "perfectionist/sort-imports",
+      "@typescript-eslint/no-unused-vars",
+      "perfectionist/sort-objects",
+      "no-secrets/no-secrets",
+      "@typescript-eslint/no-explicit-any",
+      "@typescript-eslint/explicit-function-return-type",
+      "react/function-component-definition",
+      "no-console",
+      "@typescript-eslint/explicit-module-boundary-types"
+    ]
+  },
+  "6424ff07ae88f2ae6ce7c2a99b5c27372c43ec385ce4e1f24fee1c6a393201c2": {
+    "file": "src/components/ClientManagement.tsx",
+    "rules": [
+      "perfectionist/sort-imports",
+      "@typescript-eslint/no-unused-vars",
+      "perfectionist/sort-objects",
+      "no-secrets/no-secrets",
+      "@typescript-eslint/explicit-function-return-type",
+      "react/function-component-definition",
+      "no-console",
+      "@typescript-eslint/no-explicit-any",
+      "@typescript-eslint/explicit-module-boundary-types"
+    ]
+  },
+  "02757afe4e319ac8983a2ba5dd06d7f6200fc747bf4dca887ed482118a1957bd": {
+    "file": "src/app/dashboard/page.tsx",
+    "rules": [
+      "import-x/no-unresolved",
+      "@typescript-eslint/explicit-function-return-type",
+      "@typescript-eslint/explicit-module-boundary-types",
+      "react/function-component-definition",
+      "perfectionist/sort-objects"
+    ]
+  },
+  "49b08689467a9991ad78d510dee2e3df925b7ab5532ee91fc94b8531fb99446d": {
+    "file": "src/app/page.tsx",
+    "rules": [
+      "@typescript-eslint/explicit-function-return-type",
+      "@typescript-eslint/explicit-module-boundary-types"
+    ]
+  },
+  "b8f40d39f5e73cde92b778a0d0dbbeb5fe6e23262b7672f981572fa4a0febdb0": {
+    "file": "src/app/layout.tsx",
+    "rules": [
+      "perfectionist/sort-imports",
+      "import-x/no-unresolved",
+      "perfectionist/sort-objects",
+      "@typescript-eslint/explicit-function-return-type",
+      "@typescript-eslint/explicit-module-boundary-types"
+    ]
+  },
+  "f2b40e65ebca8e71d40649adf735fa70d9d676f120a74b8ad7d9faac73574ba1": {
+    "file": "src/components/CommunicationLogs.tsx",
+    "rules": [
+      "@typescript-eslint/explicit-function-return-type",
+      "@typescript-eslint/explicit-module-boundary-types"
+    ]
+  },
+  "c2c5f88635f4ccc0802be73e12e4fcad5886c33598ccc49eb811f9b8159d8050": {
+    "file": "src/components/ClientView.tsx",
+    "rules": [
+      "prettier/prettier",
+      "perfectionist/sort-imports",
+      "@typescript-eslint/no-unused-vars",
+      "perfectionist/sort-objects",
+      "no-secrets/no-secrets",
+      "@typescript-eslint/no-explicit-any",
+      "@typescript-eslint/explicit-function-return-type",
+      "@typescript-eslint/explicit-module-boundary-types",
+      "react/function-component-definition"
+    ]
+  },
+  "0c396e33a0fab80e3b393755e5fe0035a643284e9da62c5452d8a4b30ec464ad": {
+    "file": "src/components/ContentManagement.tsx",
+    "rules": [
+      "@typescript-eslint/no-explicit-any",
+      "perfectionist/sort-objects",
+      "no-secrets/no-secrets",
+      "@typescript-eslint/explicit-function-return-type",
+      "@typescript-eslint/explicit-module-boundary-types",
+      "@next/next/no-img-element"
+    ]
+  },
+  "050001c5368a9d1eec7115d4a684f9ff2e31c530f568b5569a692bad454105a9": {
+    "file": "src/components/Dashboard.tsx",
+    "rules": [
+      "@typescript-eslint/no-unused-vars",
+      "perfectionist/sort-imports",
+      "perfectionist/sort-objects",
+      "no-secrets/no-secrets",
+      "@typescript-eslint/no-explicit-any",
+      "@typescript-eslint/explicit-function-return-type",
+      "@typescript-eslint/explicit-module-boundary-types",
+      "react/function-component-definition"
+    ]
+  },
+  "dad18de3a18389b1dc3fbed2fe54899cfe43e1c4a00b97fb075e590f3a9a25d9": {
+    "file": "src/components/EmailTemplates.tsx",
+    "rules": [
+      "@typescript-eslint/no-unused-vars",
+      "perfectionist/sort-imports",
+      "@typescript-eslint/no-explicit-any",
+      "@typescript-eslint/explicit-function-return-type",
+      "@typescript-eslint/explicit-module-boundary-types",
+      "react/function-component-definition"
+    ]
+  },
+  "9c7e9c8af66b7df1232a2d6cceae889a17cbe79eec921933321fe29c64a766f0": {
+    "file": "src/components/KnowledgeBase.tsx",
+    "rules": [
+      "perfectionist/sort-imports",
+      "@typescript-eslint/no-unused-vars",
+      "perfectionist/sort-objects",
+      "@typescript-eslint/no-explicit-any",
+      "@typescript-eslint/explicit-function-return-type",
+      "@typescript-eslint/explicit-module-boundary-types",
+      "react/function-component-definition"
+    ]
+  },
+  "8b4032f5a30cfc85c0c42d5040a341473a9f1ef099acb67fa885a3a1ff4cf42f": {
+    "file": "src/components/NotificationManagement.tsx",
+    "rules": [
+      "perfectionist/sort-imports",
+      "@typescript-eslint/no-unused-vars",
+      "@typescript-eslint/no-explicit-any",
+      "@typescript-eslint/explicit-function-return-type",
+      "@typescript-eslint/explicit-module-boundary-types",
+      "react/function-component-definition"
+    ]
+  },
+  "65758e13fe4918f6ea72483171cd153c0e4b77240d37fb8df825d8d70a1f1a03": {},
+  "4c5d4dd1bd39658fb4f24b9cdcbe9b1b22649cddfdc7ed19efde637c40c675c1": {
+    "file": "src/components/FeatureFlags.tsx",
+    "rules": [
+      "perfectionist/sort-imports",
+      "perfectionist/sort-objects",
+      "@typescript-eslint/explicit-function-return-type",
+      "@typescript-eslint/explicit-module-boundary-types",
+      "compat/compat"
+    ]
+  },
+  "ff8e54ac40042cabe135bd1045a07cc3e3d548d4655efa7ba2d2039101864d36": {
+    "file": "src/components/PartnerManagement.tsx",
+    "rules": [
+      "import-x/no-unresolved",
+      "@typescript-eslint/explicit-function-return-type",
+      "@typescript-eslint/explicit-module-boundary-types"
+    ]
+  },
+  "9d4177adc9c74c73259e672b099674b470eb96f3f1d132e1558bcfbfdc12c54e": {
+    "file": "src/components/LoadingSpinner.tsx",
+    "rules": [
+      "@typescript-eslint/explicit-function-return-type",
+      "@typescript-eslint/explicit-module-boundary-types"
+    ]
+  },
+  "1b460bd366a3d3c34590570403dbd27a37cea1318a8fc00c226bdb1cd837d70e": {
+    "file": "src/components/PlatformAnnouncements.tsx",
+    "rules": [
+      "perfectionist/sort-imports",
+      "@typescript-eslint/no-unused-vars",
+      "perfectionist/sort-objects",
+      "no-secrets/no-secrets",
+      "@typescript-eslint/no-explicit-any",
+      "@typescript-eslint/explicit-function-return-type",
+      "@typescript-eslint/explicit-module-boundary-types",
+      "react/function-component-definition"
+    ]
+  },
+  "487a3df15bbd7bfcaccf8b5f13c5aee2686a1a84b9fe61e0991169a1e96f9efd": {
+    "file": "src/components/ProductRoadmap.tsx",
+    "rules": [
+      "perfectionist/sort-imports",
+      "@typescript-eslint/no-unused-vars",
+      "perfectionist/sort-objects",
+      "@typescript-eslint/no-explicit-any",
+      "@typescript-eslint/explicit-function-return-type",
+      "@typescript-eslint/explicit-module-boundary-types",
+      "react/function-component-definition"
+    ]
+  },
+  "c18e26b8f2cfbab27a1605085fc17952e11e24436ae5b7ce817b8bea5af9fd93": {
+    "file": "src/components/ProgramBuilder.tsx",
+    "rules": [
+      "prettier/prettier",
+      "perfectionist/sort-imports",
+      "@typescript-eslint/no-unused-vars",
+      "@typescript-eslint/explicit-function-return-type",
+      "@typescript-eslint/explicit-module-boundary-types",
+      "react/function-component-definition",
+      "perfectionist/sort-objects",
+      "@typescript-eslint/no-explicit-any"
+    ]
+  },
+  "ba2bbe3cca2a0a4e7d4e42235322b691251f3e2949ab8f8c0401dd0456552a96": {
+    "file": "src/components/ProgramManagement.tsx",
+    "rules": [
+      "prettier/prettier",
+      "perfectionist/sort-imports",
+      "@typescript-eslint/no-unused-vars",
+      "perfectionist/sort-objects",
+      "@typescript-eslint/explicit-function-return-type",
+      "@typescript-eslint/explicit-module-boundary-types",
+      "react/function-component-definition",
+      "@typescript-eslint/no-explicit-any"
+    ]
+  },
+  "70a46746b9cf723add0078485d0d0b4a15e322b1b12f0fb4e07f0d7e92b4d5f7": {
+    "file": "src/components/RevenueAnalytics.tsx",
+    "rules": [
+      "import-x/no-unresolved",
+      "@typescript-eslint/explicit-function-return-type",
+      "@typescript-eslint/explicit-module-boundary-types"
+    ]
+  },
+  "61bb7cd4fdedc9cd23232b80e1ee82914298d112527af0477f15c2bcc749a41f": {
+    "file": "src/components/SuggestionsManagement.tsx",
+    "rules": [
+      "perfectionist/sort-imports",
+      "@typescript-eslint/no-unused-vars",
+      "perfectionist/sort-objects",
+      "no-secrets/no-secrets",
+      "@typescript-eslint/no-explicit-any",
+      "@typescript-eslint/explicit-function-return-type",
+      "@typescript-eslint/explicit-module-boundary-types",
+      "react/function-component-definition",
+      "no-console"
+    ]
+  },
+  "f9bfe3289014e78e59aa3728faac4251cda2646b0faf6abbf726385fac0baaf7": {
+    "file": "src/components/SupportTicketing.tsx",
+    "rules": [
+      "perfectionist/sort-imports",
+      "@typescript-eslint/no-unused-vars",
+      "perfectionist/sort-objects",
+      "no-secrets/no-secrets",
+      "@typescript-eslint/no-explicit-any",
+      "@typescript-eslint/explicit-function-return-type",
+      "@typescript-eslint/explicit-module-boundary-types",
+      "react/function-component-definition"
+    ]
+  },
+  "a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0u1v2w3x4y5z6": {
+    "file": "src/components/UserEngagement.tsx",
+    "rules": [
+      "perfectionist/sort-imports",
+      "@typescript-eslint/no-unused-vars",
+      "perfectionist/sort-objects",
+      "@typescript-eslint/no-explicit-any",
+      "@typescript-eslint/explicit-function-return-type",
+      "@typescript-eslint/explicit-module-boundary-types",
+      "react/function-component-definition"
+    ]
+  }
+}
