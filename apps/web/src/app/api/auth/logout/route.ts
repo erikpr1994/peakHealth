@@ -1,8 +1,8 @@
-import { NextResponse } from 'next/server';
+import { NextResponse, type NextRequest } from 'next/server';
 
 import { createClient } from '@/lib/supabase/server';
 
-export async function POST() {
+export async function POST(request: NextRequest) {
   try {
     const supabase = await createClient();
 
@@ -21,14 +21,10 @@ export async function POST() {
       return NextResponse.json({ error: error.message }, { status: 400 });
     }
 
-    // Create response with cleared cookies
+    // Create response; Supabase SSR helper already expired its cookies via signOut.
+    // Only clear any custom app cookies here.
     const response = NextResponse.json({ success: true });
-
-    // Clear all Supabase auth cookies
-    response.cookies.delete('sb-access-token');
-    response.cookies.delete('sb-refresh-token');
-    response.cookies.delete('supabase-auth-token');
-
+    response.cookies.delete('auth-token');
     return response;
   } catch (error) {
     // eslint-disable-next-line no-console
