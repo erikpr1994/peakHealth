@@ -80,8 +80,10 @@ const handleUserNotFoundCleanup = async (): Promise<void> => {
     console.error('Error clearing storage:', error);
   }
 
-  // Redirect to login page
-  window.location.href = '/login';
+  // Redirect to external landing app
+  const landingUrl =
+    process.env.NEXT_PUBLIC_LANDING_URL || 'http://localhost:3004';
+  window.location.href = landingUrl;
 };
 
 // Pure fetcher function - throws errors for proper SWR error handling
@@ -140,7 +142,14 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       } else if (event === 'SIGNED_OUT') {
         // Clear user data when signed out
         await mutateUser(null);
-        router.push('/login');
+        const landingUrl =
+          process.env.NEXT_PUBLIC_LANDING_URL || 'http://localhost:3004';
+        // Use full redirect to landing app
+        if (typeof window !== 'undefined') {
+          window.location.href = landingUrl;
+        } else {
+          router.push(landingUrl);
+        }
       }
     });
 
@@ -234,9 +243,44 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
     setIsAuthOperationLoading(true);
     try {
+      // Sign out from Supabase client-side
       const { error } = await supabase.auth.signOut();
       if (error) {
         throw error;
+      }
+
+      // Call API to clear auth cookies (including chunked cookies)
+      try {
+        await fetch('/api/auth/logout', { method: 'POST' });
+      } catch {
+        // swallow API errors and continue client-side cleanup
+      }
+
+      // Clear any app-local storage
+      try {
+        if (typeof window !== 'undefined') {
+          // Remove known keys first
+          localStorage.removeItem('supabase.auth.token');
+          sessionStorage.removeItem('supabase.auth.token');
+          localStorage.removeItem('peak-health-notifications');
+          localStorage.removeItem('peak-health-onboarding-complete');
+          localStorage.removeItem('peak-health-onboarding-data');
+          // Best-effort full clear to catch stragglers
+          localStorage.clear();
+          sessionStorage.clear();
+        }
+      } catch {
+        // ignore storage clearing errors
+      }
+
+      // Ensure user state is reset
+      await mutateUser(null);
+
+      // Redirect to external landing app
+      const landingUrl =
+        process.env.NEXT_PUBLIC_LANDING_URL || 'http://localhost:3004';
+      if (typeof window !== 'undefined') {
+        window.location.href = landingUrl;
       }
     } catch (error) {
       console.error('Logout error:', error);
@@ -244,7 +288,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     } finally {
       setIsAuthOperationLoading(false);
     }
-  }, [supabase]);
+  }, [mutateUser, supabase]);
 
   // Extract claims from JWT
   const userTypes = user?.app_metadata?.user_types || ['regular'];

@@ -36,8 +36,8 @@ export async function middleware(request: NextRequest) {
     '/help-support',
   ];
 
-  // Define auth routes that should redirect authenticated users
-  const authRoutes = ['/login', '/signup'];
+  // No local auth routes anymore
+  const authRoutes: string[] = [];
 
   const isProtectedRoute = protectedRoutes.some(route =>
     request.nextUrl.pathname.startsWith(route)
@@ -46,13 +46,14 @@ export async function middleware(request: NextRequest) {
     request.nextUrl.pathname.startsWith(route)
   );
 
-  // Redirect unauthenticated users to login for protected routes
+  // Redirect unauthenticated users to external landing for protected routes
   if (isProtectedRoute && !isAuthenticated) {
-    const loginUrl = new URL('/login', request.url);
-    return NextResponse.redirect(loginUrl);
+    const landing =
+      process.env.NEXT_PUBLIC_LANDING_URL || 'http://localhost:3004';
+    return NextResponse.redirect(new URL(landing));
   }
 
-  // Redirect authenticated users away from auth routes to dashboard
+  // (Kept for completeness) Redirect authenticated users away from any auth routes
   if (isAuthRoute && isAuthenticated) {
     const dashboardUrl = new URL('/dashboard', request.url);
     return NextResponse.redirect(dashboardUrl);
