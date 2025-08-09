@@ -8,6 +8,29 @@ import type {
   AssignProgramData,
 } from '../types';
 
+// Browser-side function for fetching clients from the API
+export const getClientsFromBrowser = async (
+  filters: ClientFilters,
+  page: number = 1,
+  pageSize: number = 10
+): Promise<ClientListResponse> => {
+  const searchParams = new URLSearchParams();
+
+  if (filters.search) {
+    searchParams.append('search', filters.search);
+  }
+  searchParams.append('page', page.toString());
+  searchParams.append('pageSize', pageSize.toString());
+
+  const response = await fetch(`/api/admin/clients?${searchParams.toString()}`);
+
+  if (!response.ok) {
+    throw new Error('Failed to fetch clients');
+  }
+
+  return response.json();
+};
+
 export async function getClients(
   filters: ClientFilters = {},
   page: number = 1,
@@ -23,6 +46,7 @@ export async function getClients(
     await supabase.auth.admin.listUsers();
 
   if (usersError) {
+    // eslint-disable-next-line no-console
     console.error('Error fetching users:', usersError);
     throw new Error('Failed to fetch users');
   }
@@ -39,10 +63,12 @@ export async function getClients(
     .in('user_id', userIds);
 
   if (profilesResult.error) {
+    // eslint-disable-next-line no-console
     console.error('Error fetching profiles:', profilesResult.error);
   }
 
   if (statsResult.error) {
+    // eslint-disable-next-line no-console
     console.error('Error fetching user stats:', statsResult.error);
   }
 

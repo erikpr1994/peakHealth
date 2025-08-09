@@ -3,7 +3,7 @@
 import { useRouter } from 'next/navigation';
 import { useState, useEffect, useCallback } from 'react';
 
-import { getClientsClient } from '../api/clients-client';
+import { getClientsFromBrowser } from '../api/clients';
 import type { Client, ClientFilters } from '../types';
 
 export const useClientManagement = (): {
@@ -38,7 +38,7 @@ export const useClientManagement = (): {
   const fetchClients = useCallback(async () => {
     setLoading(true);
     try {
-      const response = await getClientsClient(filters);
+      const response = await getClientsFromBrowser(filters);
       setClients(response.clients);
     } catch (error) {
       console.error('Error fetching clients:', error);
@@ -52,7 +52,7 @@ export const useClientManagement = (): {
     const fetchData = async (): Promise<void> => {
       setLoading(true);
       try {
-        const response = await getClientsClient(filters);
+        const response = await getClientsFromBrowser(filters);
         setClients(response.clients);
       } catch (error) {
         console.error('Error fetching clients:', error);

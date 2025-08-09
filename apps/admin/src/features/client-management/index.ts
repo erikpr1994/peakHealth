@@ -6,5 +6,5 @@ export { AddClientDialog } from './components/AddClientDialog';
 export { AssignProgramDialog } from './components/AssignProgramDialog';
 export * from './types';
 export * from './api/clients';
-export * from './api/clients-client';
+
 export * from './hooks';
