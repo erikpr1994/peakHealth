@@ -17,7 +17,7 @@ import { CommunicationLogs } from './CommunicationLogs';
 import { ContentManagement } from './ContentManagement';
 import { Dashboard } from './Dashboard';
 import { EmailTemplates } from './EmailTemplates';
-import { FeatureFlags } from './FeatureFlags';
+
 import { KnowledgeBase } from './KnowledgeBase';
 import { NotificationManagement } from './NotificationManagement';
 import { PlatformAnnouncements } from './PlatformAnnouncements';
@@ -36,6 +36,8 @@ import { Button } from './ui/button';
 
 import { UserEngagement } from './UserEngagement';
 import { UserFeedback } from './UserFeedback';
+
+import { FeatureFlagsPage } from '@/features/feature-flags';
 
 const App = () => {
   const [activeView, setActiveView] = useState('dashboard');
@@ -88,7 +90,7 @@ const App = () => {
       case 'roadmap':
         return <ProductRoadmap scopeInfo={scopeInfo} />;
       case 'features':
-        return <FeatureFlags scopeInfo={scopeInfo} />;
+        return <FeatureFlagsPage scopeInfo={scopeInfo} />;
 
       // Customer Success & Support
       case 'support':
