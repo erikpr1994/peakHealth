@@ -60,23 +60,10 @@ export async function GET() {
       });
     }
 
-    // Get user roles (from user_metadata)
-    const userRoles = new Set<string>();
-    if (users) {
-      users.forEach(user => {
-        const roles = user.app_metadata?.roles || [];
-        roles.forEach((role: string) => userRoles.add(role));
-      });
-    }
-
     return NextResponse.json({
       userTypes: userTypes || [],
       subscriptionTiers: subscriptionTiers || [],
       userGroups: Array.from(userGroups).map(name => ({
-        name,
-        displayName: name,
-      })),
-      userRoles: Array.from(userRoles).map(name => ({
         name,
         displayName: name,
       })),

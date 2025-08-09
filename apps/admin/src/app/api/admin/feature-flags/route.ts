@@ -18,7 +18,6 @@ export async function GET() {
         `
         *,
         feature_flag_environments (*),
-        feature_flag_user_roles (*),
         feature_flag_user_groups (*),
         feature_flag_user_types (*),
         feature_flag_subscription_tiers (*),
@@ -62,7 +61,7 @@ export async function POST(request: NextRequest) {
       isPublic,
       isGlobal,
       environments,
-      userRoles,
+      // userRoles removed
       userGroups,
       userTypes,
       subscriptionTiers,
@@ -128,35 +127,7 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // Insert user role targeting
-    if (userRoles && userRoles.length > 0) {
-      const roleData = userRoles.flatMap((role: unknown) => {
-        const typedRole = role as {
-          environments: Array<{ environment: string; isEnabled: boolean }>;
-          roleName: string;
-        };
-        return typedRole.environments.map(envConfig => ({
-          feature_flag_id: featureFlag.id,
-          environment: envConfig.environment,
-          role_name: typedRole.roleName,
-          is_enabled: envConfig.isEnabled,
-        }));
-      });
-
-      if (roleData.length > 0) {
-        const { error: roleError } = await adminClient
-          .from('feature_flag_user_roles')
-          .insert(roleData);
-
-        if (roleError) {
-          console.error('Error creating user role targeting:', roleError);
-          return NextResponse.json(
-            { error: 'Failed to create user role targeting' },
-            { status: 500 }
-          );
-        }
-      }
-    }
+    // user role targeting removed
 
     // Insert user group targeting
     if (userGroups && userGroups.length > 0) {
@@ -301,7 +272,7 @@ export async function PUT(request: NextRequest) {
       isPublic,
       isGlobal,
       environments,
-      userRoles,
+      // userRoles removed,
       userGroups,
       userTypes,
       subscriptionTiers,
@@ -387,55 +358,7 @@ export async function PUT(request: NextRequest) {
       }
     }
 
-    // Update user role targeting
-    if (userRoles !== undefined) {
-      // Delete existing user role targeting
-      const { error: deleteRoleError } = await adminClient
-        .from('feature_flag_user_roles')
-        .delete()
-        .eq('feature_flag_id', id);
-
-      if (deleteRoleError) {
-        console.error(
-          'Error deleting existing user role targeting:',
-          deleteRoleError
-        );
-        return NextResponse.json(
-          { error: 'Failed to update user role targeting' },
-          { status: 500 }
-        );
-      }
-
-      // Insert new user role targeting
-      if (userRoles.length > 0) {
-        const roleData = userRoles.flatMap((role: unknown) => {
-          const typedRole = role as {
-            environments: Array<{ environment: string; isEnabled: boolean }>;
-            roleName: string;
-          };
-          return typedRole.environments.map(envConfig => ({
-            feature_flag_id: id,
-            environment: envConfig.environment,
-            role_name: typedRole.roleName,
-            is_enabled: envConfig.isEnabled,
-          }));
-        });
-
-        if (roleData.length > 0) {
-          const { error: roleError } = await adminClient
-            .from('feature_flag_user_roles')
-            .insert(roleData);
-
-          if (roleError) {
-            console.error('Error updating user role targeting:', roleError);
-            return NextResponse.json(
-              { error: 'Failed to update user role targeting' },
-              { status: 500 }
-            );
-          }
-        }
-      }
-    }
+    // user role targeting removed
 
     // Update user group targeting
     if (userGroups !== undefined) {
@@ -667,10 +590,7 @@ export async function DELETE(request: NextRequest) {
       .delete()
       .eq('feature_flag_id', id);
 
-    await adminClient
-      .from('feature_flag_user_roles')
-      .delete()
-      .eq('feature_flag_id', id);
+    // roles removed
 
     await adminClient
       .from('feature_flag_user_groups')
