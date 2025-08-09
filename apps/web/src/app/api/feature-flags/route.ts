@@ -88,6 +88,8 @@ export async function GET(request: NextRequest) {
       name: string;
       description?: string | null;
       is_enabled: boolean;
+      rollout_percentage: number;
+      environment: string;
       targeting_type?: string;
       targeting_value?: string | null;
     };
@@ -96,16 +98,24 @@ export async function GET(request: NextRequest) {
     for (const row of featureFlags as DbRow[]) {
       const existing = mergedByName[row.name];
       mergedByName[row.name] = existing
-        ? { ...existing, is_enabled: existing.is_enabled || row.is_enabled }
-        : row;
+        ? {
+            ...existing,
+            is_enabled: existing.is_enabled || row.is_enabled,
+            rollout_percentage:
+              existing.rollout_percentage ?? row.rollout_percentage,
+            environment: existing.environment ?? row.environment,
+            description: existing.description ?? row.description,
+            feature_flag_id: existing.feature_flag_id ?? row.feature_flag_id,
+            targeting_type: existing.targeting_type ?? row.targeting_type,
+            targeting_value: existing.targeting_value ?? row.targeting_value,
+          }
+        : (row as DbRow);
     }
 
     const result = Object.values(mergedByName);
-    console.log(`Found ${result.length} feature flags for user`);
+
     return NextResponse.json({ featureFlags: result });
-  } catch (error) {
-    // eslint-disable-next-line no-console
-    console.error('Feature flags API error:', error);
+  } catch {
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }
