@@ -3,11 +3,11 @@
 import { LogOut, Shield } from 'lucide-react';
 import { usePathname, useRouter } from 'next/navigation';
 
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { useAuth } from '@/contexts/AuthContext';
-import { navigationSections } from '@/lib/navigation-config';
+import { useAuth } from '../../contexts/AuthContext';
+import { navigationSections } from '../../lib/navigation-config';
+import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
+import { Badge } from '../ui/badge';
+import { Button } from '../ui/button';
 
 export const Sidebar = (): React.JSX.Element => {
   const router = useRouter();
