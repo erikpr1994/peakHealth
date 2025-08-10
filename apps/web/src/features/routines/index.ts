@@ -19,6 +19,12 @@ export { default as RoutineInfo } from './components/RoutineInfo';
 export { default as WorkoutDaysList } from './components/WorkoutDaysList';
 export { default as ExerciseList } from './components/ExerciseList';
 
+// Trail running components
+export { default as TrailRunningHeader } from './components/TrailRunningHeader';
+export { default as WorkoutStats } from './components/WorkoutStats';
+export { default as WorkoutOverview } from './components/WorkoutOverview';
+export { default as IntensityTargetConfiguration } from './components/IntensityTargetConfiguration';
+
 // Workout creation components
 export { default as WorkoutHeader } from './components/WorkoutHeader';
 export { default as WorkoutDetails } from './components/WorkoutDetails';
@@ -31,7 +37,9 @@ export * from './types';
 // Utilities
 export * from './utils';
 export * from './utils/workoutCalculations';
+export * from './utils/trailRunningUtils';
 
 // Hooks
 export * from './hooks/useRoutineOperations';
 export { useWorkoutOperations } from './hooks/useWorkoutOperations';
+export { useTrailRunningWorkout } from './hooks/useTrailRunningWorkout';
