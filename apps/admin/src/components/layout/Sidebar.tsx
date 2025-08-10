@@ -21,8 +21,8 @@ export const Sidebar = (): React.JSX.Element => {
   const handleLogout = async (): Promise<void> => {
     try {
       await logout();
-    } catch (error) {
-      console.error('Logout failed:', error);
+    } catch {
+      // Logout failed silently - user will be redirected anyway
     }
   };
 
