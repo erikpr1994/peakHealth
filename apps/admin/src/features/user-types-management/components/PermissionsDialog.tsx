@@ -41,6 +41,11 @@ export const PermissionsDialog = ({
     Record<string, boolean>
   >(userType.permissions || {});
 
+  // Reset pending permissions when userType changes
+  React.useEffect(() => {
+    setPendingPermissions(userType.permissions || {});
+  }, [userType.permissions]);
+
   const permissionsByCategory = getPermissionsByCategory();
 
   const handlePermissionToggle = (

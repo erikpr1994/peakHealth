@@ -70,6 +70,13 @@ export const UserTypesTable = ({
     setSelectedUserType(null);
   };
 
+  const handleOpenChange = (open: boolean): void => {
+    setIsPermissionsDialogOpen(open);
+    if (!open) {
+      setSelectedUserType(null);
+    }
+  };
+
   return (
     <>
       <Card>
@@ -121,26 +128,24 @@ export const UserTypesTable = ({
                         {userType.userCount} users
                       </Badge>
                     </TableCell>
-                                         <TableCell>
-                       <div className="flex flex-wrap gap-1">
-                         {enabledPermissions
-                           .slice(0, 2)
-                           .map(permission => (
-                             <Badge
-                               key={permission}
-                               variant="outline"
-                               className="text-xs"
-                             >
-                               {permission}
-                             </Badge>
-                           ))}
-                         {enabledPermissions.length > 2 && (
-                           <Badge variant="outline" className="text-xs">
-                             +{enabledPermissions.length - 2} more
-                           </Badge>
-                         )}
-                       </div>
-                     </TableCell>
+                    <TableCell>
+                      <div className="flex flex-wrap gap-1">
+                        {enabledPermissions.slice(0, 2).map(permission => (
+                          <Badge
+                            key={permission}
+                            variant="outline"
+                            className="text-xs"
+                          >
+                            {permission}
+                          </Badge>
+                        ))}
+                        {enabledPermissions.length > 2 && (
+                          <Badge variant="outline" className="text-xs">
+                            +{enabledPermissions.length - 2} more
+                          </Badge>
+                        )}
+                      </div>
+                    </TableCell>
                     <TableCell>
                       <Badge
                         variant={userType.isActive ? 'default' : 'secondary'}
@@ -184,7 +189,7 @@ export const UserTypesTable = ({
       {selectedUserType && (
         <PermissionsDialog
           open={isPermissionsDialogOpen}
-          onOpenChange={setIsPermissionsDialogOpen}
+          onOpenChange={handleOpenChange}
           userType={selectedUserType}
           onClose={handleClosePermissionsDialog}
           onSave={handleSavePermissions}
