@@ -1,10 +1,11 @@
 'use client';
 
+import type { Client, ClientFilters } from '../types';
+
 import { useRouter } from 'next/navigation';
 import { useState, useEffect, useCallback } from 'react';
 
 import { getClientsFromBrowser } from '../api/clients';
-import type { Client, ClientFilters } from '../types';
 
 export const useClientManagement = (): {
   clients: Client[];
@@ -110,27 +111,27 @@ export const useClientManagement = (): {
   );
 
   return {
-    // State
-    clients,
-    loading,
-    searchTerm,
-    addClientOpen,
-    assignProgramOpen,
-    selectedClientForAssign,
-
     // Computed values
     activeClients,
-    inactiveClients,
+    addClientOpen,
+    assignProgramOpen,
+    // State
+    clients,
     clientsWithPrograms,
+    closeAddClientDialog,
 
+    closeAssignProgramDialog,
     // Actions
     fetchClients,
-    handleSearch,
     handleAssignProgram,
+
+    handleSearch,
     handleViewClientDetails,
+    inactiveClients,
+    loading,
     openAddClientDialog,
     openAssignProgramDialog,
-    closeAddClientDialog,
-    closeAssignProgramDialog,
+    searchTerm,
+    selectedClientForAssign,
   };
 };

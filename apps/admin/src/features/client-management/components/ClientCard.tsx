@@ -1,5 +1,7 @@
 'use client';
 
+import type { Client } from '../types';
+
 import {
   Activity,
   AlertCircle,
@@ -15,7 +17,6 @@ import { Badge } from '../../../components/ui/badge';
 import { Button } from '../../../components/ui/button';
 import { Card, CardContent, CardHeader } from '../../../components/ui/card';
 import { Progress } from '../../../components/ui/progress';
-import type { Client } from '../types';
 
 interface ClientCardProps {
   client: Client;
@@ -25,10 +26,12 @@ interface ClientCardProps {
 
 export const ClientCard = ({
   client,
-  onViewClient,
   onAssignProgram,
+  onViewClient,
 }: ClientCardProps): React.JSX.Element => {
-  const getProgramStatusColor = (client: Client): 'outline' | 'destructive' | 'default' => {
+  const getProgramStatusColor = (
+    client: Client
+  ): 'outline' | 'destructive' | 'default' => {
     if (!client.profile?.onboarding_completed_at) return 'outline';
     if (client.stats?.total_workouts === 0) return 'destructive';
     return 'default';

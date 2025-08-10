@@ -6,15 +6,24 @@ import { usePathname, useRouter } from 'next/navigation';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-
+import { useAuth } from '@/contexts/AuthContext';
 import { navigationSections } from '@/lib/navigation-config';
 
-export const Sidebar = () => {
+export const Sidebar = (): React.JSX.Element => {
   const router = useRouter();
   const pathname = usePathname();
+  const { logout, user } = useAuth();
 
-  const handleNavigation = (path: string) => {
+  const handleNavigation = (path: string): void => {
     router.push(path);
+  };
+
+  const handleLogout = async (): Promise<void> => {
+    try {
+      await logout();
+    } catch {
+      // Logout failed silently - user will be redirected anyway
+    }
   };
 
   return (
@@ -76,16 +85,35 @@ export const Sidebar = () => {
       <div className="p-4 border-t border-sidebar-border flex-shrink-0">
         <div className="flex items-center gap-3 p-2 rounded-lg border">
           <Avatar className="h-8 w-8">
-            <AvatarImage src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face" />
-            <AvatarFallback>JD</AvatarFallback>
+            {user?.user_metadata?.avatar_url && (
+              <AvatarImage src={user.user_metadata.avatar_url} />
+            )}
+            <AvatarFallback>
+              {user?.user_metadata?.full_name?.charAt(0)?.toUpperCase() ||
+                user?.user_metadata?.name?.charAt(0)?.toUpperCase() ||
+                user?.user_metadata?.display_name?.charAt(0)?.toUpperCase() ||
+                user?.email?.charAt(0)?.toUpperCase() ||
+                'U'}
+            </AvatarFallback>
           </Avatar>
           <div className="flex-1 min-w-0">
-            <p className="text-sm truncate">John Doe</p>
+            <p className="text-sm truncate">
+              {user?.user_metadata?.display_name ||
+                user?.user_metadata?.full_name ||
+                user?.user_metadata?.name ||
+                user?.email ||
+                'Loading...'}
+            </p>
             <p className="text-xs text-muted-foreground truncate">
-              System Administrator
+              {user?.app_metadata?.primary_user_type || 'User'}
             </p>
           </div>
-          <Button variant="ghost" size="sm">
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={handleLogout}
+            title="Logout"
+          >
             <LogOut className="h-4 w-4" />
           </Button>
         </div>

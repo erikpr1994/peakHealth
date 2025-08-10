@@ -1,4 +1,3 @@
-import { createAdminClient } from '../../../lib/supabase/admin';
 import type {
   Client,
   ClientListResponse,
@@ -7,6 +6,8 @@ import type {
   UpdateClientData,
   AssignProgramData,
 } from '../types';
+
+import { createAdminClient } from '../../../lib/supabase/admin';
 
 // Browser-side function for fetching clients from the API
 export const getClientsFromBrowser = async (
@@ -86,12 +87,12 @@ export async function getClients(
 
   // Transform users to match our Client interface
   const clients: Client[] = users.users.map(user => ({
-    id: user.id,
-    email: user.email || '',
     created_at: user.created_at,
-    updated_at: user.updated_at,
+    email: user.email || '',
+    id: user.id,
     profile: profilesMap.get(user.id) || undefined,
     stats: statsMap.get(user.id) || undefined,
+    updated_at: user.updated_at,
   }));
 
   // Apply filters
@@ -133,13 +134,13 @@ export async function getClients(
       const assignment = assignments[0];
       clientsWithAssignments.push({
         ...client,
-        user_types: assignment.user_types || [],
-        primary_user_type: assignment.primary_user_type,
-        subscription_tier: assignment.subscription_tier,
+        data_access_rules: assignment.data_access_rules || {},
+        features: assignment.features || [],
         groups: assignment.groups || [],
         permissions: assignment.permissions || {},
-        features: assignment.features || [],
-        data_access_rules: assignment.data_access_rules || {},
+        primary_user_type: assignment.primary_user_type,
+        subscription_tier: assignment.subscription_tier,
+        user_types: assignment.user_types || [],
       });
     } else {
       clientsWithAssignments.push(client);
@@ -148,9 +149,9 @@ export async function getClients(
 
   return {
     clients: clientsWithAssignments,
-    total,
     page,
     pageSize,
+    total,
   };
 }
 
@@ -187,25 +188,25 @@ export async function getClientById(clientId: string): Promise<Client | null> {
   });
 
   const client: Client = {
-    id: user.user.id,
-    email: user.user.email || '',
     created_at: user.user.created_at,
-    updated_at: user.user.updated_at,
+    email: user.user.email || '',
+    id: user.user.id,
     profile: profileResult.data || null,
     stats: statsResult.data || null,
+    updated_at: user.user.updated_at,
   };
 
   if (assignments && assignments.length > 0) {
     const assignment = assignments[0];
     return {
       ...client,
-      user_types: assignment.user_types || [],
-      primary_user_type: assignment.primary_user_type,
-      subscription_tier: assignment.subscription_tier,
+      data_access_rules: assignment.data_access_rules || {},
+      features: assignment.features || [],
       groups: assignment.groups || [],
       permissions: assignment.permissions || {},
-      features: assignment.features || [],
-      data_access_rules: assignment.data_access_rules || {},
+      primary_user_type: assignment.primary_user_type,
+      subscription_tier: assignment.subscription_tier,
+      user_types: assignment.user_types || [],
     };
   }
 
@@ -222,8 +223,8 @@ export async function addClient(clientData: AddClientData): Promise<Client> {
   const { data: user, error: userError } = await supabase.auth.admin.createUser(
     {
       email: clientData.email,
-      password: 'temporary-password-123', // Should be changed by user
       email_confirm: true,
+      password: 'temporary-password-123', // Should be changed by user
       user_metadata: {
         fullName: clientData.profile?.bio || clientData.email,
       },
@@ -255,10 +256,10 @@ export async function addClient(clientData: AddClientData): Promise<Client> {
     const { error: typeError } = await supabase
       .from('user_type_assignments')
       .insert({
-        user_id: userId,
-        user_type_name: clientData.user_type,
         is_primary: true,
         reason: 'Admin assignment',
+        user_id: userId,
+        user_type_name: clientData.user_type,
       });
 
     if (typeError) {
@@ -272,9 +273,9 @@ export async function addClient(clientData: AddClientData): Promise<Client> {
     const { error: subscriptionError } = await supabase
       .from('subscription_assignments')
       .insert({
-        user_id: userId,
-        subscription_tier_name: clientData.subscription_tier,
         reason: 'Admin assignment',
+        subscription_tier_name: clientData.subscription_tier,
+        user_id: userId,
       });
 
     if (subscriptionError) {
@@ -286,9 +287,9 @@ export async function addClient(clientData: AddClientData): Promise<Client> {
   // Assign groups if provided
   if (clientData.groups && clientData.groups.length > 0) {
     const groupAssignments = clientData.groups.map(group => ({
-      user_id: userId,
       group_name: group,
       reason: 'Admin assignment',
+      user_id: userId,
     }));
 
     const { error: groupError } = await supabase
@@ -345,10 +346,10 @@ export async function updateClient(
     const { error: typeError } = await supabase
       .from('user_type_assignments')
       .insert({
-        user_id: clientId,
-        user_type_name: updateData.user_type,
         is_primary: true,
         reason: 'Admin update',
+        user_id: clientId,
+        user_type_name: updateData.user_type,
       });
 
     if (typeError) {
@@ -370,9 +371,9 @@ export async function updateClient(
     const { error: subscriptionError } = await supabase
       .from('subscription_assignments')
       .insert({
-        user_id: clientId,
-        subscription_tier_name: updateData.subscription_tier,
         reason: 'Admin update',
+        subscription_tier_name: updateData.subscription_tier,
+        user_id: clientId,
       });
 
     if (subscriptionError) {
@@ -393,9 +394,9 @@ export async function updateClient(
     // Add new group assignments
     if (updateData.groups.length > 0) {
       const groupAssignments = updateData.groups.map(group => ({
-        user_id: clientId,
         group_name: group,
         reason: 'Admin update',
+        user_id: clientId,
       }));
 
       const { error: groupError } = await supabase

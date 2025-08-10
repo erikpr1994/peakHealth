@@ -7,10 +7,11 @@ import {
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ): Promise<NextResponse> {
   try {
-    const client = await getClientById(params.id);
+    const { id } = await params;
+    const client = await getClientById(id);
 
     if (!client) {
       return NextResponse.json({ error: 'Client not found' }, { status: 404 });
@@ -28,10 +29,11 @@ export async function GET(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ): Promise<NextResponse> {
   try {
-    await deleteClient(params.id);
+    const { id } = await params;
+    await deleteClient(id);
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error('Error deleting client:', error);
