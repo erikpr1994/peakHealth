@@ -31,7 +31,7 @@ export class UserTypesService {
         name: item.name,
         displayName: item.display_name,
         description: item.description,
-        permissions: item.permissions || [],
+        permissions: item.permissions ? Object.keys(item.permissions) : [],
         isActive: item.is_active,
         userCount: 0, // TODO: Implement user count query separately
         isDefault: item.is_default,
@@ -64,7 +64,7 @@ export class UserTypesService {
       name: data.name,
       displayName: data.display_name,
       description: data.description,
-      permissions: data.permissions || [],
+      permissions: data.permissions ? Object.keys(data.permissions) : [],
       isActive: data.is_active,
       userCount: 0, // TODO: Implement user count query separately
       isDefault: data.is_default,
@@ -100,7 +100,7 @@ export class UserTypesService {
       name: data.name,
       displayName: data.display_name,
       description: data.description,
-      permissions: data.permissions || [],
+      permissions: data.permissions ? Object.keys(data.permissions) : [],
       isActive: data.is_active,
       userCount: 0,
       isDefault: data.is_default,
@@ -150,7 +150,7 @@ export class UserTypesService {
       name: data.name,
       displayName: data.display_name,
       description: data.description,
-      permissions: data.permissions || [],
+      permissions: data.permissions ? Object.keys(data.permissions) : [],
       isActive: data.is_active,
       userCount: 0, // Will be fetched separately if needed
       isDefault: data.is_default,
@@ -194,7 +194,7 @@ export class UserTypesService {
         name: item.name,
         displayName: item.display_name,
         description: item.description,
-        permissions: item.permissions || [],
+        permissions: item.permissions ? Object.keys(item.permissions) : [],
         isActive: item.is_active,
         userCount: 0, // TODO: Implement user count query separately
         createdAt: item.created_at,
@@ -229,7 +229,7 @@ export class UserTypesService {
       name: data.name,
       displayName: data.display_name,
       description: data.description,
-      permissions: data.permissions || [],
+      permissions: data.permissions ? Object.keys(data.permissions) : [],
       isActive: data.is_active,
       userCount: 0,
       createdAt: data.created_at,
@@ -275,7 +275,7 @@ export class UserTypesService {
       name: data.name,
       displayName: data.display_name,
       description: data.description,
-      permissions: data.permissions || [],
+      permissions: data.permissions ? Object.keys(data.permissions) : [],
       isActive: data.is_active,
       userCount: 0, // Will be fetched separately if needed
       createdAt: data.created_at,
