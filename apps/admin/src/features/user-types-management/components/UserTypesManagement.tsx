@@ -60,7 +60,7 @@ export const UserTypesManagement = ({
 
   const handleUpdateUserTypePermissions = async (
     userTypeId: string,
-    permissions: string[]
+    permissions: Record<string, boolean>
   ): Promise<void> => {
     try {
       await updateUserType(userTypeId, { permissions });

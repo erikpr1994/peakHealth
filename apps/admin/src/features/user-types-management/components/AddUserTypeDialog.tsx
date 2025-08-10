@@ -35,7 +35,7 @@ export const AddUserTypeDialog = ({
     name: '',
     displayName: '',
     description: '',
-    permissions: [],
+    permissions: {},
     isActive: true,
     isDefault: false,
   });
@@ -47,7 +47,7 @@ export const AddUserTypeDialog = ({
       name: '',
       displayName: '',
       description: '',
-      permissions: [],
+      permissions: {},
       isActive: true,
       isDefault: false,
     });

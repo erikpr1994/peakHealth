@@ -23,7 +23,7 @@ interface PermissionsDialogProps {
   onOpenChange: (open: boolean) => void;
   userType: UserType;
   onClose: () => void;
-  onSave?: (permissions: string[]) => void;
+  onSave?: (permissions: Record<string, boolean>) => void;
 }
 
 export const PermissionsDialog = ({
@@ -33,17 +33,18 @@ export const PermissionsDialog = ({
   onClose,
   onSave,
 }: PermissionsDialogProps): React.JSX.Element => {
-  const [pendingPermissions, setPendingPermissions] = useState<string[]>(
-    userType.permissions
-  );
+  const [pendingPermissions, setPendingPermissions] = useState<
+    Record<string, boolean>
+  >(userType.permissions || {});
 
   const handlePermissionToggle = (
     permissionId: string,
     checked: boolean
   ): void => {
-    setPendingPermissions(prev =>
-      checked ? [...prev, permissionId] : prev.filter(p => p !== permissionId)
-    );
+    setPendingPermissions(prev => ({
+      ...prev,
+      [permissionId]: checked,
+    }));
   };
 
   const handleSave = (): void => {
@@ -52,7 +53,7 @@ export const PermissionsDialog = ({
   };
 
   const handleCancel = (): void => {
-    setPendingPermissions(userType.permissions);
+    setPendingPermissions(userType.permissions || {});
     onClose();
   };
 
@@ -76,7 +77,7 @@ export const PermissionsDialog = ({
               >
                 <Switch
                   id={permission.id}
-                  checked={pendingPermissions.includes(permission.id)}
+                  checked={pendingPermissions[permission.id] || false}
                   onCheckedChange={checked =>
                     handlePermissionToggle(permission.id, checked)
                   }

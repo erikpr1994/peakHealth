@@ -3,7 +3,7 @@ export interface UserType {
   name: string;
   displayName: string;
   description: string;
-  permissions: string[];
+  permissions: Record<string, boolean>;
   isActive: boolean;
   userCount: number;
   isDefault: boolean;
@@ -16,7 +16,7 @@ export interface UserGroup {
   name: string;
   displayName: string;
   description: string;
-  permissions: string[];
+  permissions: Record<string, boolean>;
   isActive: boolean;
   userCount: number;
   createdAt: string;
@@ -27,7 +27,7 @@ export interface CreateUserTypeRequest {
   name: string;
   displayName: string;
   description: string;
-  permissions: string[];
+  permissions: Record<string, boolean>;
   isActive?: boolean;
   isDefault?: boolean;
 }
@@ -35,7 +35,7 @@ export interface CreateUserTypeRequest {
 export interface UpdateUserTypeRequest {
   displayName?: string;
   description?: string;
-  permissions?: string[];
+  permissions?: Record<string, boolean>;
   isActive?: boolean;
   isDefault?: boolean;
 }
@@ -44,14 +44,14 @@ export interface CreateUserGroupRequest {
   name: string;
   displayName: string;
   description: string;
-  permissions: string[];
+  permissions: Record<string, boolean>;
   isActive?: boolean;
 }
 
 export interface UpdateUserGroupRequest {
   displayName?: string;
   description?: string;
-  permissions?: string[];
+  permissions?: Record<string, boolean>;
   isActive?: boolean;
 }
 

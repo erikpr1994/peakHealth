@@ -25,7 +25,10 @@ import { PermissionsDialog } from './PermissionsDialog';
 
 interface UserTypesTableProps {
   userTypes: UserType[];
-  onEditPermissions: (userTypeId: string, permissions: string[]) => void;
+  onEditPermissions: (
+    userTypeId: string,
+    permissions: Record<string, boolean>
+  ) => void;
   onEdit: (userType: UserType) => void;
   onDelete: (userType: UserType) => void;
 }
@@ -46,7 +49,9 @@ export const UserTypesTable = ({
     setIsPermissionsDialogOpen(true);
   };
 
-  const handleSavePermissions = (permissions: string[]): void => {
+  const handleSavePermissions = (
+    permissions: Record<string, boolean>
+  ): void => {
     if (selectedUserType) {
       onEditPermissions(selectedUserType.id, permissions);
     }
@@ -103,18 +108,21 @@ export const UserTypesTable = ({
                   </TableCell>
                   <TableCell>
                     <div className="flex flex-wrap gap-1">
-                      {userType.permissions.slice(0, 2).map(permission => (
-                        <Badge
-                          key={permission}
-                          variant="outline"
-                          className="text-xs"
-                        >
-                          {permission}
-                        </Badge>
-                      ))}
-                      {userType.permissions.length > 2 && (
+                      {Object.keys(userType.permissions || {})
+                        .slice(0, 2)
+                        .map(permission => (
+                          <Badge
+                            key={permission}
+                            variant="outline"
+                            className="text-xs"
+                          >
+                            {permission}
+                          </Badge>
+                        ))}
+                      {Object.keys(userType.permissions || {}).length > 2 && (
                         <Badge variant="outline" className="text-xs">
-                          +{userType.permissions.length - 2} more
+                          +{Object.keys(userType.permissions || {}).length - 2}{' '}
+                          more
                         </Badge>
                       )}
                     </div>
