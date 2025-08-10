@@ -18,12 +18,7 @@ export class UserTypesService {
 
     const { data, error } = await this.supabase
       .from('user_types')
-      .select(
-        `
-        *,
-        user_count:users(count)
-      `
-      )
+      .select('*')
       .order('created_at', { ascending: true });
 
     if (error) {
@@ -38,7 +33,7 @@ export class UserTypesService {
         description: item.description,
         permissions: item.permissions || [],
         isActive: item.is_active,
-        userCount: item.user_count?.[0]?.count || 0,
+        userCount: 0, // TODO: Implement user count query separately
         isDefault: item.is_default,
         createdAt: item.created_at,
         updatedAt: item.updated_at,
@@ -53,12 +48,7 @@ export class UserTypesService {
 
     const { data, error } = await this.supabase
       .from('user_types')
-      .select(
-        `
-        *,
-        user_count:users(count)
-      `
-      )
+      .select('*')
       .eq('id', id)
       .single();
 
@@ -76,7 +66,7 @@ export class UserTypesService {
       description: data.description,
       permissions: data.permissions || [],
       isActive: data.is_active,
-      userCount: data.user_count?.[0]?.count || 0,
+      userCount: 0, // TODO: Implement user count query separately
       isDefault: data.is_default,
       createdAt: data.created_at,
       updatedAt: data.updated_at,
@@ -191,12 +181,7 @@ export class UserTypesService {
 
     const { data, error } = await this.supabase
       .from('user_groups')
-      .select(
-        `
-        *,
-        user_count:user_group_members(count)
-      `
-      )
+      .select('*')
       .order('created_at', { ascending: true });
 
     if (error) {
@@ -211,7 +196,7 @@ export class UserTypesService {
         description: item.description,
         permissions: item.permissions || [],
         isActive: item.is_active,
-        userCount: item.user_count?.[0]?.count || 0,
+        userCount: 0, // TODO: Implement user count query separately
         createdAt: item.created_at,
         updatedAt: item.updated_at,
       })) || []
