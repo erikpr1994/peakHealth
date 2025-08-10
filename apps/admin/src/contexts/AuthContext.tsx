@@ -21,6 +21,7 @@ interface User {
     full_name?: string;
     name?: string;
     display_name?: string;
+    avatar_url?: string;
   };
   app_metadata: {
     user_types: string[];

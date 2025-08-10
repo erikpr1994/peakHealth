@@ -85,7 +85,9 @@ export const Sidebar = (): React.JSX.Element => {
       <div className="p-4 border-t border-sidebar-border flex-shrink-0">
         <div className="flex items-center gap-3 p-2 rounded-lg border">
           <Avatar className="h-8 w-8">
-            <AvatarImage src="" />
+            {user?.user_metadata?.avatar_url && (
+              <AvatarImage src={user.user_metadata.avatar_url} />
+            )}
             <AvatarFallback>
               {user?.user_metadata?.full_name?.charAt(0)?.toUpperCase() ||
                 user?.user_metadata?.name?.charAt(0)?.toUpperCase() ||
