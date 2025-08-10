@@ -1,0 +1,6 @@
+# Target modern browsers and widely used ones
+# Exclude Opera Mini to avoid compatibility issues
+> 1%
+last 2 versions
+not dead
+not op_mini all
