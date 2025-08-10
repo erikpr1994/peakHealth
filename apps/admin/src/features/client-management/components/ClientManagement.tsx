@@ -13,7 +13,7 @@ import {
 import { useClientManagement } from '../hooks';
 import { AddClientDialog } from './AddClientDialog';
 import { AssignProgramDialog } from './AssignProgramDialog';
-import { ClientCard } from './ClientCard';
+import { ClientList } from './ClientList';
 import { ClientSearch } from './ClientSearch';
 import { ClientStats } from './ClientStats';
 
@@ -87,55 +87,35 @@ export const ClientManagement = (): React.JSX.Element => {
           </TabsList>
 
           <TabsContent value="all" className="space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-              {clients.map(client => (
-                <ClientCard
-                  key={client.id}
-                  client={client}
-                  onViewClient={handleViewClientDetails}
-                  onAssignProgram={handleAssignProgram}
-                />
-              ))}
-            </div>
+            <ClientList
+              clients={clients}
+              onViewClient={handleViewClientDetails}
+              onAssignProgram={handleAssignProgram}
+            />
           </TabsContent>
 
           <TabsContent value="active" className="space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-              {activeClients.map(client => (
-                <ClientCard
-                  key={client.id}
-                  client={client}
-                  onViewClient={handleViewClientDetails}
-                  onAssignProgram={handleAssignProgram}
-                />
-              ))}
-            </div>
+            <ClientList
+              clients={activeClients}
+              onViewClient={handleViewClientDetails}
+              onAssignProgram={handleAssignProgram}
+            />
           </TabsContent>
 
           <TabsContent value="inactive" className="space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-              {inactiveClients.map(client => (
-                <ClientCard
-                  key={client.id}
-                  client={client}
-                  onViewClient={handleViewClientDetails}
-                  onAssignProgram={handleAssignProgram}
-                />
-              ))}
-            </div>
+            <ClientList
+              clients={inactiveClients}
+              onViewClient={handleViewClientDetails}
+              onAssignProgram={handleAssignProgram}
+            />
           </TabsContent>
 
           <TabsContent value="with_programs" className="space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-              {clientsWithPrograms.map(client => (
-                <ClientCard
-                  key={client.id}
-                  client={client}
-                  onViewClient={handleViewClientDetails}
-                  onAssignProgram={handleAssignProgram}
-                />
-              ))}
-            </div>
+            <ClientList
+              clients={clientsWithPrograms}
+              onViewClient={handleViewClientDetails}
+              onAssignProgram={handleAssignProgram}
+            />
           </TabsContent>
         </Tabs>
       )}
