@@ -28,11 +28,13 @@ interface ClientListProps {
   clients: Client[];
   onViewClient: (client: Client) => void;
   onAssignProgram: (client: Client) => void;
+  onMessageClient: (client: Client) => void;
 }
 
 export const ClientList = ({
   clients,
   onAssignProgram,
+  onMessageClient,
   onViewClient,
 }: ClientListProps): React.JSX.Element => {
   const getProgramStatusColor = (
@@ -147,7 +149,12 @@ export const ClientList = ({
                     <Eye className="h-3 w-3 mr-1" />
                     View
                   </Button>
-                  <Button size="sm" variant="outline" className="h-7 px-2">
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    className="h-7 px-2"
+                    onClick={() => onMessageClient(client)}
+                  >
                     <MessageCircle className="h-3 w-3 mr-1" />
                     Message
                   </Button>

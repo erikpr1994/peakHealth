@@ -28,6 +28,7 @@ export const ClientManagement = (): React.JSX.Element => {
     closeAssignProgramDialog,
     fetchClients,
     handleAssignProgram,
+    handleMessageClient,
     handleSearch,
     handleViewClientDetails,
     inactiveClients,
@@ -91,6 +92,7 @@ export const ClientManagement = (): React.JSX.Element => {
               clients={clients}
               onViewClient={handleViewClientDetails}
               onAssignProgram={handleAssignProgram}
+              onMessageClient={handleMessageClient}
             />
           </TabsContent>
 
@@ -99,6 +101,7 @@ export const ClientManagement = (): React.JSX.Element => {
               clients={activeClients}
               onViewClient={handleViewClientDetails}
               onAssignProgram={handleAssignProgram}
+              onMessageClient={handleMessageClient}
             />
           </TabsContent>
 
@@ -107,6 +110,7 @@ export const ClientManagement = (): React.JSX.Element => {
               clients={inactiveClients}
               onViewClient={handleViewClientDetails}
               onAssignProgram={handleAssignProgram}
+              onMessageClient={handleMessageClient}
             />
           </TabsContent>
 
@@ -115,6 +119,7 @@ export const ClientManagement = (): React.JSX.Element => {
               clients={clientsWithPrograms}
               onViewClient={handleViewClientDetails}
               onAssignProgram={handleAssignProgram}
+              onMessageClient={handleMessageClient}
             />
           </TabsContent>
         </Tabs>
