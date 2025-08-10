@@ -4,12 +4,12 @@ import { Bell, Moon, Sun, Shield } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import { useState } from 'react';
 
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
 import {
   getDataScopeInfo,
   getNavigationItemByPath,
-} from '@/lib/navigation-config';
+} from '../../lib/navigation-config';
+import { Badge } from '../ui/badge';
+import { Button } from '../ui/button';
 
 export const Header = (): React.JSX.Element => {
   const pathname = usePathname();

@@ -13,7 +13,7 @@ const importXPlugin = require('eslint-plugin-import-x');
 const jsxA11yPlugin = require('eslint-plugin-jsx-a11y');
 const noSecretsPlugin = require('eslint-plugin-no-secrets');
 const noUnsanitizedPlugin = require('eslint-plugin-no-unsanitized');
-const perfectionistPlugin = require('eslint-plugin-perfectionist');
+
 const piiPlugin = require('eslint-plugin-pii');
 const playwrightPlugin = require('eslint-plugin-playwright');
 const prettierPlugin = require('eslint-plugin-prettier');
@@ -90,7 +90,6 @@ module.exports = [
       'jsx-a11y': jsxA11yPlugin,
       'no-secrets': noSecretsPlugin,
       'no-unsanitized': noUnsanitizedPlugin,
-      perfectionist: perfectionistPlugin,
       pii: piiPlugin,
       playwright: playwrightPlugin,
       prettier: prettierPlugin,
@@ -164,23 +163,7 @@ module.exports = [
 
       'no-useless-return': 'error',
       'no-var': 'error',
-      'perfectionist/sort-imports': [
-        'error',
-        {
-          groups: [
-            'type',
-            'side-effect',
-            ['builtin', 'external'],
-            'internal',
-            ['parent', 'sibling', 'index'],
-            'unknown',
-          ],
-          newlinesBetween: 'always',
-          order: 'asc',
-          type: 'natural',
-        },
-      ],
-      'perfectionist/sort-objects': 'error',
+
       'prefer-const': 'error',
       'prefer-template': 'error',
 

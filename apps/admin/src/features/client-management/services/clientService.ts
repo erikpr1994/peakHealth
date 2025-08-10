@@ -1,3 +1,5 @@
+import { createAdminClient } from '../../../lib/supabase/admin';
+
 import type {
   Client,
   ClientListResponse,
@@ -6,31 +8,6 @@ import type {
   UpdateClientData,
   AssignProgramData,
 } from '../types';
-
-import { createAdminClient } from '../../../lib/supabase/admin';
-
-// Browser-side function for fetching clients from the API
-export const getClientsFromBrowser = async (
-  filters: ClientFilters,
-  page: number = 1,
-  pageSize: number = 10
-): Promise<ClientListResponse> => {
-  const searchParams = new URLSearchParams();
-
-  if (filters.search) {
-    searchParams.append('search', filters.search);
-  }
-  searchParams.append('page', page.toString());
-  searchParams.append('pageSize', pageSize.toString());
-
-  const response = await fetch(`/api/admin/clients?${searchParams.toString()}`);
-
-  if (!response.ok) {
-    throw new Error('Failed to fetch clients');
-  }
-
-  return response.json();
-};
 
 export async function getClients(
   filters: ClientFilters = {},

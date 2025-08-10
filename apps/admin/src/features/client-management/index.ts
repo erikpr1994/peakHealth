@@ -4,7 +4,8 @@ export { ClientStats } from './components/ClientStats';
 export { ClientSearch } from './components/ClientSearch';
 export { AddClientDialog } from './components/AddClientDialog';
 export { AssignProgramDialog } from './components/AssignProgramDialog';
+export { UserDetailPage } from './components/UserDetailPage';
 export * from './types';
-export * from './api/clients';
+export * from './api/clientApi';
 
 export * from './hooks';
