@@ -92,7 +92,7 @@ export const UserDetailPage = ({
     setEditData(prev => ({
       ...prev,
       profile: {
-        ...prev.profile,
+        ...(prev.profile || {}),
         [field]: value,
       },
     }));
