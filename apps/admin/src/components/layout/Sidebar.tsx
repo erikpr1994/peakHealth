@@ -12,7 +12,7 @@ import { navigationSections } from '@/lib/navigation-config';
 export const Sidebar = (): React.JSX.Element => {
   const router = useRouter();
   const pathname = usePathname();
-  const { logout } = useAuth();
+  const { logout, user } = useAuth();
 
   const handleNavigation = (path: string): void => {
     router.push(path);
@@ -85,13 +85,15 @@ export const Sidebar = (): React.JSX.Element => {
       <div className="p-4 border-t border-sidebar-border flex-shrink-0">
         <div className="flex items-center gap-3 p-2 rounded-lg border">
           <Avatar className="h-8 w-8">
-            <AvatarImage src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face" />
-            <AvatarFallback>JD</AvatarFallback>
+            <AvatarImage src="" />
+            <AvatarFallback>
+              {user?.email?.charAt(0).toUpperCase() || 'U'}
+            </AvatarFallback>
           </Avatar>
           <div className="flex-1 min-w-0">
-            <p className="text-sm truncate">John Doe</p>
+            <p className="text-sm truncate">{user?.email || 'Loading...'}</p>
             <p className="text-xs text-muted-foreground truncate">
-              System Administrator
+              {user?.app_metadata?.primary_user_type || 'User'}
             </p>
           </div>
           <Button
