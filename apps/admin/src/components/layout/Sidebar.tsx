@@ -87,10 +87,10 @@ export const Sidebar = (): React.JSX.Element => {
           <Avatar className="h-8 w-8">
             <AvatarImage src="" />
             <AvatarFallback>
-              {user?.user_metadata?.full_name?.charAt(0).toUpperCase() ||
-                user?.user_metadata?.name?.charAt(0).toUpperCase() ||
-                user?.user_metadata?.display_name?.charAt(0).toUpperCase() ||
-                user?.email?.charAt(0).toUpperCase() ||
+              {user?.user_metadata?.full_name?.charAt(0)?.toUpperCase() ||
+                user?.user_metadata?.name?.charAt(0)?.toUpperCase() ||
+                user?.user_metadata?.display_name?.charAt(0)?.toUpperCase() ||
+                user?.email?.charAt(0)?.toUpperCase() ||
                 'U'}
             </AvatarFallback>
           </Avatar>
