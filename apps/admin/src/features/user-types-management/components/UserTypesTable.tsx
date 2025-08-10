@@ -44,6 +44,14 @@ export const UserTypesTable = ({
     null
   );
 
+  const getEnabledPermissions = (
+    permissions: Record<string, boolean> | undefined
+  ): string[] => {
+    return Object.entries(permissions || {})
+      .filter(([, value]) => value === true)
+      .map(([key]) => key);
+  };
+
   const handleEditPermissions = (userType: UserType): void => {
     setSelectedUserType(userType);
     setIsPermissionsDialogOpen(true);
@@ -81,8 +89,11 @@ export const UserTypesTable = ({
               </TableRow>
             </TableHeader>
             <TableBody>
-              {userTypes.map(userType => (
-                <TableRow key={userType.id}>
+              {userTypes.map(userType => {
+                const enabledPermissions = getEnabledPermissions(userType.permissions);
+                
+                return (
+                  <TableRow key={userType.id}>
                   <TableCell>
                     <div>
                       <div className="font-medium">{userType.displayName}</div>
@@ -108,23 +119,30 @@ export const UserTypesTable = ({
                   </TableCell>
                   <TableCell>
                     <div className="flex flex-wrap gap-1">
-                      {Object.keys(userType.permissions || {})
-                        .slice(0, 2)
-                        .map(permission => (
-                          <Badge
-                            key={permission}
-                            variant="outline"
-                            className="text-xs"
-                          >
-                            {permission}
-                          </Badge>
-                        ))}
-                      {Object.keys(userType.permissions || {}).length > 2 && (
-                        <Badge variant="outline" className="text-xs">
-                          +{Object.keys(userType.permissions || {}).length - 2}{' '}
-                          more
-                        </Badge>
-                      )}
+                      {(() => {
+                        const enabledPermissions = getEnabledPermissions(
+                          userType.permissions
+                        );
+
+                        return (
+                          <>
+                            {enabledPermissions.slice(0, 2).map(permission => (
+                              <Badge
+                                key={permission}
+                                variant="outline"
+                                className="text-xs"
+                              >
+                                {permission}
+                              </Badge>
+                            ))}
+                            {enabledPermissions.length > 2 && (
+                              <Badge variant="outline" className="text-xs">
+                                +{enabledPermissions.length - 2} more
+                              </Badge>
+                            )}
+                          </>
+                        );
+                      })()}
                     </div>
                   </TableCell>
                   <TableCell>
@@ -160,7 +178,8 @@ export const UserTypesTable = ({
                     </div>
                   </TableCell>
                 </TableRow>
-              ))}
+              );
+            })}
             </TableBody>
           </Table>
         </CardContent>
