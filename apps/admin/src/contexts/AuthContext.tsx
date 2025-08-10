@@ -17,6 +17,11 @@ const supabase = createClient(supabaseUrl, supabaseAnonKey);
 interface User {
   id: string;
   email: string;
+  user_metadata?: {
+    full_name?: string;
+    name?: string;
+    display_name?: string;
+  };
   app_metadata: {
     user_types: string[];
     primary_user_type: string;

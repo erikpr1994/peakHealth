@@ -87,11 +87,21 @@ export const Sidebar = (): React.JSX.Element => {
           <Avatar className="h-8 w-8">
             <AvatarImage src="" />
             <AvatarFallback>
-              {user?.email?.charAt(0).toUpperCase() || 'U'}
+              {user?.user_metadata?.full_name?.charAt(0).toUpperCase() ||
+                user?.user_metadata?.name?.charAt(0).toUpperCase() ||
+                user?.user_metadata?.display_name?.charAt(0).toUpperCase() ||
+                user?.email?.charAt(0).toUpperCase() ||
+                'U'}
             </AvatarFallback>
           </Avatar>
           <div className="flex-1 min-w-0">
-            <p className="text-sm truncate">{user?.email || 'Loading...'}</p>
+            <p className="text-sm truncate">
+              {user?.user_metadata?.full_name ||
+                user?.user_metadata?.name ||
+                user?.user_metadata?.display_name ||
+                user?.email ||
+                'Loading...'}
+            </p>
             <p className="text-xs text-muted-foreground truncate">
               {user?.app_metadata?.primary_user_type || 'User'}
             </p>
