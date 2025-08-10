@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 
 import { createAdminClient } from '@/lib/supabase/admin';
 
-export async function GET() {
+export async function GET(): Promise<NextResponse> {
   try {
     const adminClient = createAdminClient();
     if (!adminClient) {
@@ -18,7 +18,6 @@ export async function GET() {
         `
         *,
         feature_flag_environments (*),
-        -- groups removed
         feature_flag_user_types (*),
         feature_flag_subscription_tiers (*),
         feature_flag_users (*)
@@ -34,8 +33,7 @@ export async function GET() {
     }
 
     return NextResponse.json({ featureFlags });
-  } catch (error) {
-    console.error('Feature flags API error:', error);
+  } catch {
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }
@@ -43,7 +41,7 @@ export async function GET() {
   }
 }
 
-export async function POST(request: NextRequest) {
+export async function POST(request: NextRequest): Promise<NextResponse> {
   try {
     const adminClient = createAdminClient();
     if (!adminClient) {
@@ -61,8 +59,6 @@ export async function POST(request: NextRequest) {
       isPublic,
       isGlobal,
       environments,
-      // userRoles removed
-      // userGroups removed
       userTypes,
       subscriptionTiers,
       users,
@@ -119,17 +115,12 @@ export async function POST(request: NextRequest) {
         .insert(environmentData);
 
       if (envError) {
-        console.error('Error creating environment configurations:', envError);
         return NextResponse.json(
           { error: 'Failed to create environment configurations' },
           { status: 500 }
         );
       }
     }
-
-    // user role targeting removed
-
-    // groups removed
 
     // Insert user type targeting
     if (userTypes && userTypes.length > 0) {
@@ -143,7 +134,6 @@ export async function POST(request: NextRequest) {
         .insert(userTypeData);
 
       if (userTypeError) {
-        console.error('Error creating user type targeting:', userTypeError);
         return NextResponse.json(
           { error: 'Failed to create user type targeting' },
           { status: 500 }
@@ -163,10 +153,6 @@ export async function POST(request: NextRequest) {
         .insert(subscriptionData);
 
       if (subscriptionError) {
-        console.error(
-          'Error creating subscription tier targeting:',
-          subscriptionError
-        );
         return NextResponse.json(
           { error: 'Failed to create subscription tier targeting' },
           { status: 500 }
@@ -186,7 +172,6 @@ export async function POST(request: NextRequest) {
         .insert(userData);
 
       if (userError) {
-        console.error('Error creating user targeting:', userError);
         return NextResponse.json(
           { error: 'Failed to create user targeting' },
           { status: 500 }
@@ -195,8 +180,7 @@ export async function POST(request: NextRequest) {
     }
 
     return NextResponse.json({ featureFlag });
-  } catch (error) {
-    console.error('Feature flags API error:', error);
+  } catch {
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }
@@ -204,7 +188,7 @@ export async function POST(request: NextRequest) {
   }
 }
 
-export async function PUT(request: NextRequest) {
+export async function PUT(request: NextRequest): Promise<NextResponse> {
   try {
     const adminClient = createAdminClient();
     if (!adminClient) {
@@ -223,8 +207,6 @@ export async function PUT(request: NextRequest) {
       isPublic,
       isGlobal,
       environments,
-      // userRoles removed,
-      // userGroups removed,
       userTypes,
       subscriptionTiers,
       users,
@@ -252,7 +234,6 @@ export async function PUT(request: NextRequest) {
       .single();
 
     if (flagError) {
-      console.error('Error updating feature flag:', flagError);
       return NextResponse.json(
         { error: 'Failed to update feature flag' },
         { status: 500 }
@@ -268,10 +249,6 @@ export async function PUT(request: NextRequest) {
         .eq('feature_flag_id', id);
 
       if (deleteEnvError) {
-        console.error(
-          'Error deleting existing environment configs:',
-          deleteEnvError
-        );
         return NextResponse.json(
           { error: 'Failed to update environment configurations' },
           { status: 500 }
@@ -300,7 +277,6 @@ export async function PUT(request: NextRequest) {
           .insert(environmentData);
 
         if (envError) {
-          console.error('Error updating environment configs:', envError);
           return NextResponse.json(
             { error: 'Failed to update environment configurations' },
             { status: 500 }
@@ -308,10 +284,6 @@ export async function PUT(request: NextRequest) {
         }
       }
     }
-
-    // user role targeting removed
-
-    // groups removed
 
     // Update user type targeting
     if (userTypes !== undefined) {
@@ -322,10 +294,6 @@ export async function PUT(request: NextRequest) {
         .eq('feature_flag_id', id);
 
       if (deleteUserTypeError) {
-        console.error(
-          'Error deleting existing user type targeting:',
-          deleteUserTypeError
-        );
         return NextResponse.json(
           { error: 'Failed to update user type targeting' },
           { status: 500 }
@@ -344,7 +312,6 @@ export async function PUT(request: NextRequest) {
           .insert(userTypeData);
 
         if (userTypeError) {
-          console.error('Error updating user type targeting:', userTypeError);
           return NextResponse.json(
             { error: 'Failed to update user type targeting' },
             { status: 500 }
@@ -362,10 +329,6 @@ export async function PUT(request: NextRequest) {
         .eq('feature_flag_id', id);
 
       if (deleteSubscriptionError) {
-        console.error(
-          'Error deleting existing subscription tier targeting:',
-          deleteSubscriptionError
-        );
         return NextResponse.json(
           { error: 'Failed to update subscription tier targeting' },
           { status: 500 }
@@ -384,10 +347,6 @@ export async function PUT(request: NextRequest) {
           .insert(subscriptionData);
 
         if (subscriptionError) {
-          console.error(
-            'Error updating subscription tier targeting:',
-            subscriptionError
-          );
           return NextResponse.json(
             { error: 'Failed to update subscription tier targeting' },
             { status: 500 }
@@ -405,10 +364,6 @@ export async function PUT(request: NextRequest) {
         .eq('feature_flag_id', id);
 
       if (deleteUserError) {
-        console.error(
-          'Error deleting existing user targeting:',
-          deleteUserError
-        );
         return NextResponse.json(
           { error: 'Failed to update user targeting' },
           { status: 500 }
@@ -427,7 +382,6 @@ export async function PUT(request: NextRequest) {
           .insert(userData);
 
         if (userError) {
-          console.error('Error updating user targeting:', userError);
           return NextResponse.json(
             { error: 'Failed to update user targeting' },
             { status: 500 }
@@ -437,8 +391,7 @@ export async function PUT(request: NextRequest) {
     }
 
     return NextResponse.json({ featureFlag });
-  } catch (error) {
-    console.error('Feature flags API error:', error);
+  } catch {
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }
@@ -446,7 +399,7 @@ export async function PUT(request: NextRequest) {
   }
 }
 
-export async function DELETE(request: NextRequest) {
+export async function DELETE(request: NextRequest): Promise<NextResponse> {
   try {
     const adminClient = createAdminClient();
     if (!adminClient) {
@@ -472,10 +425,6 @@ export async function DELETE(request: NextRequest) {
       .delete()
       .eq('feature_flag_id', id);
 
-    // roles removed
-
-    // groups removed
-
     await adminClient
       .from('feature_flag_user_types')
       .delete()
@@ -498,7 +447,6 @@ export async function DELETE(request: NextRequest) {
       .eq('id', id);
 
     if (error) {
-      console.error('Error deleting feature flag:', error);
       return NextResponse.json(
         { error: 'Failed to delete feature flag' },
         { status: 500 }
@@ -506,8 +454,7 @@ export async function DELETE(request: NextRequest) {
     }
 
     return NextResponse.json({ success: true });
-  } catch (error) {
-    console.error('Feature flags API error:', error);
+  } catch {
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }
