@@ -1,7 +1,5 @@
 'use client';
 
-import type { AssignProgramData, Client } from '../types';
-
 import { Loader2 } from 'lucide-react';
 import React, { useState } from 'react';
 
@@ -23,7 +21,8 @@ import {
   SelectValue,
 } from '../../../components/ui/select';
 import { Textarea } from '../../../components/ui/textarea';
-import { assignProgram } from '../api/clients';
+import { assignProgram } from '../api/clientApi';
+import type { AssignProgramData, Client } from '../types';
 
 interface AssignProgramDialogProps {
   open: boolean;

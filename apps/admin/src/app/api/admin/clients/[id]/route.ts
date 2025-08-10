@@ -4,7 +4,7 @@ import {
   getClientById,
   deleteClient,
   updateClient,
-} from '../../../../../features/client-management/api/clients';
+} from '../../../../../features/client-management/services/clientService';
 
 export async function GET(
   request: NextRequest,

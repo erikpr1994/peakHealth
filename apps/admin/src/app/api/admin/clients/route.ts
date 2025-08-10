@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-import { getClients } from '../../../../features/client-management/api/clients';
+import {
+  addClient,
+  getClients,
+} from '../../../../features/client-management/services/clientService';
 
 export async function GET(request: NextRequest): Promise<NextResponse> {
   try {
@@ -19,6 +22,20 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     console.error('Error fetching clients:', error);
     return NextResponse.json(
       { error: 'Failed to fetch clients' },
+      { status: 500 }
+    );
+  }
+}
+
+export async function POST(request: NextRequest): Promise<NextResponse> {
+  try {
+    const clientData = await request.json();
+    const client = await addClient(clientData);
+    return NextResponse.json(client);
+  } catch (error) {
+    console.error('Error adding client:', error);
+    return NextResponse.json(
+      { error: 'Failed to add client' },
       { status: 500 }
     );
   }

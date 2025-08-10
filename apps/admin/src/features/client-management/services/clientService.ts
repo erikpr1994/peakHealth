@@ -9,65 +9,6 @@ import type {
   AssignProgramData,
 } from '../types';
 
-// Browser-side function for fetching clients from the API
-export const getClientsFromBrowser = async (
-  filters: ClientFilters,
-  page: number = 1,
-  pageSize: number = 10
-): Promise<ClientListResponse> => {
-  const searchParams = new URLSearchParams();
-
-  if (filters.search) {
-    searchParams.append('search', filters.search);
-  }
-  searchParams.append('page', page.toString());
-  searchParams.append('pageSize', pageSize.toString());
-
-  const response = await fetch(`/api/admin/clients?${searchParams.toString()}`);
-
-  if (!response.ok) {
-    throw new Error('Failed to fetch clients');
-  }
-
-  return response.json();
-};
-
-// Browser-side function for fetching a single client by ID
-export const getClientByIdFromBrowser = async (
-  clientId: string
-): Promise<Client | null> => {
-  const response = await fetch(`/api/admin/clients/${clientId}`);
-
-  if (!response.ok) {
-    if (response.status === 404) {
-      return null;
-    }
-    throw new Error('Failed to fetch client');
-  }
-
-  return response.json();
-};
-
-// Browser-side function for updating a client
-export const updateClientFromBrowser = async (
-  clientId: string,
-  updateData: UpdateClientData
-): Promise<Client> => {
-  const response = await fetch(`/api/admin/clients/${clientId}`, {
-    body: JSON.stringify(updateData),
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    method: 'PUT',
-  });
-
-  if (!response.ok) {
-    throw new Error('Failed to update client');
-  }
-
-  return response.json();
-};
-
 export async function getClients(
   filters: ClientFilters = {},
   page: number = 1,

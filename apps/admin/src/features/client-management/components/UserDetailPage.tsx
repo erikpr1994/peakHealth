@@ -17,10 +17,7 @@ import { Input } from '../../../components/ui/input';
 import { Label } from '../../../components/ui/label';
 import { Separator } from '../../../components/ui/separator';
 import { Textarea } from '../../../components/ui/textarea';
-import {
-  getClientByIdFromBrowser,
-  updateClientFromBrowser,
-} from '../api/clients';
+import { getClientById, updateClient } from '../api/clientApi';
 
 import type { Client, UpdateClientData } from '../types';
 
@@ -41,7 +38,7 @@ export const UserDetailPage = ({
   useEffect(() => {
     const fetchClient = async (): Promise<void> => {
       try {
-        const clientData = await getClientByIdFromBrowser(userId);
+        const clientData = await getClientById(userId);
         if (clientData) {
           setClient(clientData);
           setEditData({
@@ -66,7 +63,7 @@ export const UserDetailPage = ({
 
     setSaving(true);
     try {
-      const updatedClient = await updateClientFromBrowser(userId, editData);
+      const updatedClient = await updateClient(userId, editData);
       setClient(updatedClient);
       setIsEditing(false);
     } catch (error) {
