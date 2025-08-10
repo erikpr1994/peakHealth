@@ -3,6 +3,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import {
   getClientById,
   deleteClient,
+  updateClient,
 } from '../../../../../features/client-management/api/clients';
 
 export async function GET(
@@ -22,6 +23,24 @@ export async function GET(
     console.error('Error fetching client:', error);
     return NextResponse.json(
       { error: 'Failed to fetch client' },
+      { status: 500 }
+    );
+  }
+}
+
+export async function PUT(
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+): Promise<NextResponse> {
+  try {
+    const { id } = await params;
+    const updateData = await request.json();
+    const updatedClient = await updateClient(id, updateData);
+    return NextResponse.json(updatedClient);
+  } catch (error) {
+    console.error('Error updating client:', error);
+    return NextResponse.json(
+      { error: 'Failed to update client' },
       { status: 500 }
     );
   }

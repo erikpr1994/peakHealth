@@ -1,7 +1,5 @@
 'use client';
 
-import type { Client, UpdateClientData } from '../types';
-
 import { ArrowLeft, Edit, Save, User, X } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
@@ -19,7 +17,12 @@ import { Input } from '../../../components/ui/input';
 import { Label } from '../../../components/ui/label';
 import { Separator } from '../../../components/ui/separator';
 import { Textarea } from '../../../components/ui/textarea';
-import { getClientById, updateClient } from '../api/clients';
+import {
+  getClientByIdFromBrowser,
+  updateClientFromBrowser,
+} from '../api/clients';
+
+import type { Client, UpdateClientData } from '../types';
 
 interface UserDetailPageProps {
   userId: string;
@@ -38,7 +41,7 @@ export const UserDetailPage = ({
   useEffect(() => {
     const fetchClient = async (): Promise<void> => {
       try {
-        const clientData = await getClientById(userId);
+        const clientData = await getClientByIdFromBrowser(userId);
         if (clientData) {
           setClient(clientData);
           setEditData({
@@ -63,7 +66,7 @@ export const UserDetailPage = ({
 
     setSaving(true);
     try {
-      const updatedClient = await updateClient(userId, editData);
+      const updatedClient = await updateClientFromBrowser(userId, editData);
       setClient(updatedClient);
       setIsEditing(false);
     } catch (error) {
