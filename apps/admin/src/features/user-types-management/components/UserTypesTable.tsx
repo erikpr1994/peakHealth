@@ -90,96 +90,92 @@ export const UserTypesTable = ({
             </TableHeader>
             <TableBody>
               {userTypes.map(userType => {
-                const enabledPermissions = getEnabledPermissions(userType.permissions);
-                
+                const enabledPermissions = getEnabledPermissions(
+                  userType.permissions
+                );
+
                 return (
                   <TableRow key={userType.id}>
-                  <TableCell>
-                    <div>
-                      <div className="font-medium">{userType.displayName}</div>
-                      <div className="text-sm text-muted-foreground">
-                        {userType.name}
+                    <TableCell>
+                      <div>
+                        <div className="font-medium">
+                          {userType.displayName}
+                        </div>
+                        <div className="text-sm text-muted-foreground">
+                          {userType.name}
+                        </div>
+                        {userType.isDefault && (
+                          <Badge variant="secondary" className="text-xs mt-1">
+                            Default
+                          </Badge>
+                        )}
                       </div>
-                      {userType.isDefault && (
-                        <Badge variant="secondary" className="text-xs mt-1">
-                          Default
-                        </Badge>
-                      )}
-                    </div>
-                  </TableCell>
-                  <TableCell>
-                    <div className="text-sm text-muted-foreground max-w-xs">
-                      {userType.description}
-                    </div>
-                  </TableCell>
-                  <TableCell>
-                    <Badge variant="secondary">
-                      {userType.userCount} users
-                    </Badge>
-                  </TableCell>
-                  <TableCell>
-                    <div className="flex flex-wrap gap-1">
-                      {(() => {
-                        const enabledPermissions = getEnabledPermissions(
-                          userType.permissions
-                        );
-
-                        return (
-                          <>
-                            {enabledPermissions.slice(0, 2).map(permission => (
-                              <Badge
-                                key={permission}
-                                variant="outline"
-                                className="text-xs"
-                              >
-                                {permission}
-                              </Badge>
-                            ))}
-                            {enabledPermissions.length > 2 && (
-                              <Badge variant="outline" className="text-xs">
-                                +{enabledPermissions.length - 2} more
-                              </Badge>
-                            )}
-                          </>
-                        );
-                      })()}
-                    </div>
-                  </TableCell>
-                  <TableCell>
-                    <Badge
-                      variant={userType.isActive ? 'default' : 'secondary'}
-                    >
-                      {userType.isActive ? 'Active' : 'Inactive'}
-                    </Badge>
-                  </TableCell>
-                  <TableCell>
-                    <div className="flex gap-2">
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => handleEditPermissions(userType)}
+                    </TableCell>
+                    <TableCell>
+                      <div className="text-sm text-muted-foreground max-w-xs">
+                        {userType.description}
+                      </div>
+                    </TableCell>
+                    <TableCell>
+                      <Badge variant="secondary">
+                        {userType.userCount} users
+                      </Badge>
+                    </TableCell>
+                                         <TableCell>
+                       <div className="flex flex-wrap gap-1">
+                         {enabledPermissions
+                           .slice(0, 2)
+                           .map(permission => (
+                             <Badge
+                               key={permission}
+                               variant="outline"
+                               className="text-xs"
+                             >
+                               {permission}
+                             </Badge>
+                           ))}
+                         {enabledPermissions.length > 2 && (
+                           <Badge variant="outline" className="text-xs">
+                             +{enabledPermissions.length - 2} more
+                           </Badge>
+                         )}
+                       </div>
+                     </TableCell>
+                    <TableCell>
+                      <Badge
+                        variant={userType.isActive ? 'default' : 'secondary'}
                       >
-                        <Shield className="h-4 w-4" />
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => onEdit(userType)}
-                      >
-                        <Edit className="h-4 w-4" />
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => onDelete(userType)}
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
-                    </div>
-                  </TableCell>
-                </TableRow>
-              );
-            })}
+                        {userType.isActive ? 'Active' : 'Inactive'}
+                      </Badge>
+                    </TableCell>
+                    <TableCell>
+                      <div className="flex gap-2">
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => handleEditPermissions(userType)}
+                        >
+                          <Shield className="h-4 w-4" />
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => onEdit(userType)}
+                        >
+                          <Edit className="h-4 w-4" />
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => onDelete(userType)}
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
             </TableBody>
           </Table>
         </CardContent>
