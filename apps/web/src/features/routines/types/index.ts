@@ -13,18 +13,9 @@ export type ProgressionMethod =
   | 'widowmaker'
   | 'amrap';
 
-export interface WorkoutSet {
-  id: string;
-  setNumber: number;
-  setType: 'normal' | 'warmup' | 'failure';
-  repType: 'fixed' | 'range';
-  reps?: number | null;
-  repsMin?: number;
-  repsMax?: number;
-  weight?: number | null;
-  rpe?: number | null;
-  notes: string;
-}
+// Import and re-export WorkoutSet from workout module to ensure consistency
+import type { WorkoutSet } from '@/features/workout/SetManagement';
+export type { WorkoutSet };
 
 export interface Exercise {
   id: string;

@@ -10,11 +10,19 @@ export { default as WorkoutCard } from './components/WorkoutCard';
 export { default as RoutinesList } from './components/RoutinesList';
 export { default as ActiveRoutineCard } from './components/ActiveRoutineCard';
 
+// Workout creation components
+export { default as WorkoutHeader } from './components/WorkoutHeader';
+export { default as WorkoutDetails } from './components/WorkoutDetails';
+export { default as WorkoutSection } from './components/WorkoutSection';
+export { default as ExerciseManagement } from './components/ExerciseManagement';
+
 // Types
 export * from './types';
 
 // Utilities
 export * from './utils';
+export * from './utils/workoutCalculations';
 
 // Hooks
 export * from './hooks/useRoutineOperations';
+export { useWorkoutOperations } from './hooks/useWorkoutOperations';
