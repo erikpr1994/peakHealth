@@ -96,9 +96,9 @@ export const Sidebar = (): React.JSX.Element => {
           </Avatar>
           <div className="flex-1 min-w-0">
             <p className="text-sm truncate">
-              {user?.user_metadata?.full_name ||
+              {user?.user_metadata?.display_name ||
+                user?.user_metadata?.full_name ||
                 user?.user_metadata?.name ||
-                user?.user_metadata?.display_name ||
                 user?.email ||
                 'Loading...'}
             </p>
