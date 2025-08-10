@@ -1,51 +1,25 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-import { createAdminClient } from '@/lib/supabase/admin';
+import { UserTypesService } from '../../../../features/user-types-management/services/userTypesService';
 
-export async function GET() {
+const userTypesService = new UserTypesService();
+
+export async function GET(): Promise<NextResponse> {
   try {
-    const adminClient = createAdminClient();
-    if (!adminClient) {
-      return NextResponse.json(
-        { error: 'Admin client not available' },
-        { status: 503 }
-      );
-    }
-
-    const { data: userGroups, error } = await adminClient
-      .from('user_groups')
-      .select('*')
-      .order('display_name');
-
-    if (error) {
-      console.error('Error fetching user groups:', error);
-      return NextResponse.json(
-        { error: 'Failed to fetch user groups' },
-        { status: 500 }
-      );
-    }
-
+    const userGroups = await userTypesService.getUserGroups();
     return NextResponse.json({ userGroups });
   } catch (error) {
     console.error('User groups API error:', error);
     return NextResponse.json(
-      { error: 'Internal server error' },
+      { error: 'Failed to fetch user groups' },
       { status: 500 }
     );
   }
 }
 
-export async function POST(request: NextRequest) {
+export async function POST(request: NextRequest): Promise<NextResponse> {
   try {
-    const adminClient = createAdminClient();
-    if (!adminClient) {
-      return NextResponse.json(
-        { error: 'Admin client not available' },
-        { status: 503 }
-      );
-    }
-
-    const { name, displayName, description, permissions } =
+    const { name, displayName, description, permissions, isActive } =
       await request.json();
 
     if (!name || !displayName) {
@@ -55,122 +29,68 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const { data: userGroup, error } = await adminClient
-      .from('user_groups')
-      .insert({
-        name,
-        display_name: displayName,
-        description: description || '',
-        permissions: permissions || {},
-        is_active: true,
-      })
-      .select()
-      .single();
-
-    if (error) {
-      console.error('Error creating user group:', error);
-      return NextResponse.json(
-        { error: 'Failed to create user group' },
-        { status: 500 }
-      );
-    }
+    const userGroup = await userTypesService.createUserGroup({
+      name,
+      displayName,
+      description: description || '',
+      permissions: permissions || [],
+      isActive,
+    });
 
     return NextResponse.json({ userGroup });
   } catch (error) {
     console.error('User groups API error:', error);
     return NextResponse.json(
-      { error: 'Internal server error' },
+      { error: 'Failed to create user group' },
       { status: 500 }
     );
   }
 }
 
-export async function PUT(request: NextRequest) {
+export async function PUT(request: NextRequest): Promise<NextResponse> {
   try {
-    const adminClient = createAdminClient();
-    if (!adminClient) {
-      return NextResponse.json(
-        { error: 'Admin client not available' },
-        { status: 503 }
-      );
-    }
-
-    const { name, displayName, description, permissions, isActive } =
+    const { id, displayName, description, permissions, isActive } =
       await request.json();
 
-    if (!name) {
-      return NextResponse.json({ error: 'name is required' }, { status: 400 });
+    if (!id) {
+      return NextResponse.json({ error: 'id is required' }, { status: 400 });
     }
 
-    const updateData: Record<string, unknown> = {};
-    if (displayName !== undefined) updateData.display_name = displayName;
-    if (description !== undefined) updateData.description = description;
-    if (permissions !== undefined) updateData.permissions = permissions;
-    if (isActive !== undefined) updateData.is_active = isActive;
-
-    const { data: userGroup, error } = await adminClient
-      .from('user_groups')
-      .update(updateData)
-      .eq('name', name)
-      .select()
-      .single();
-
-    if (error) {
-      console.error('Error updating user group:', error);
-      return NextResponse.json(
-        { error: 'Failed to update user group' },
-        { status: 500 }
-      );
-    }
+    const userGroup = await userTypesService.updateUserGroup(id, {
+      displayName,
+      description,
+      permissions,
+      isActive,
+    });
 
     return NextResponse.json({ userGroup });
   } catch (error) {
     console.error('User groups API error:', error);
     return NextResponse.json(
-      { error: 'Internal server error' },
+      { error: 'Failed to update user group' },
       { status: 500 }
     );
   }
 }
 
-export async function DELETE(request: NextRequest) {
+export async function DELETE(request: NextRequest): Promise<NextResponse> {
   try {
-    const adminClient = createAdminClient();
-    if (!adminClient) {
-      return NextResponse.json(
-        { error: 'Admin client not available' },
-        { status: 503 }
-      );
-    }
-
     const { searchParams } = new URL(request.url);
-    const name = searchParams.get('name');
+    const id = searchParams.get('id');
 
-    if (!name) {
+    if (!id) {
       return NextResponse.json(
-        { error: 'name parameter is required' },
+        { error: 'id parameter is required' },
         { status: 400 }
       );
     }
 
-    const { error } = await adminClient
-      .from('user_groups')
-      .delete()
-      .eq('name', name);
-
-    if (error) {
-      console.error('Error deleting user group:', error);
-      return NextResponse.json(
-        { error: 'Failed to delete user group' },
-        { status: 500 }
-      );
-    }
-
+    await userTypesService.deleteUserGroup(id);
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error('User groups API error:', error);
     return NextResponse.json(
-      { error: 'Internal server error' },
+      { error: 'Failed to delete user group' },
       { status: 500 }
     );
   }
