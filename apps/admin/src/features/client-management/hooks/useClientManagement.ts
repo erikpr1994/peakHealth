@@ -21,6 +21,7 @@ export const useClientManagement = (): {
   handleSearch: (value: string) => void;
   handleAssignProgram: (client: Client) => void;
   handleViewClientDetails: (client: Client) => void;
+  handleMessageClient: (client: Client) => void;
   openAddClientDialog: () => void;
   openAssignProgramDialog: () => void;
   closeAddClientDialog: () => void;
@@ -82,6 +83,12 @@ export const useClientManagement = (): {
     [router]
   );
 
+  const handleMessageClient = useCallback((client: Client) => {
+    // TODO: Implement message functionality
+    // This could open a message dialog or navigate to a messaging interface
+    console.log('Message client:', client.email);
+  }, []);
+
   const openAddClientDialog = useCallback(() => {
     setAddClientOpen(true);
   }, []);
@@ -125,6 +132,7 @@ export const useClientManagement = (): {
     fetchClients,
     handleAssignProgram,
 
+    handleMessageClient,
     handleSearch,
     handleViewClientDetails,
     inactiveClients,
