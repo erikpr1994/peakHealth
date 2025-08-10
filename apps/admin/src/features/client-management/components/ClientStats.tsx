@@ -1,16 +1,19 @@
 'use client';
 
+import type { Client } from '../types';
+
 import { Activity, AlertCircle, UserPlus, Zap } from 'lucide-react';
 import React from 'react';
 
 import { Card, CardContent } from '../../../components/ui/card';
-import type { Client } from '../types';
 
 interface ClientStatsProps {
   clients: Client[];
 }
 
-export const ClientStats = ({ clients }: ClientStatsProps): React.JSX.Element => {
+export const ClientStats = ({
+  clients,
+}: ClientStatsProps): React.JSX.Element => {
   const activeClients = clients.filter(
     client => client.profile?.onboarding_completed_at
   );

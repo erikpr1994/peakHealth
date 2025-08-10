@@ -1,5 +1,7 @@
 'use client';
 
+import type { AddClientData } from '../types';
+
 import { Loader2 } from 'lucide-react';
 import React, { useState } from 'react';
 
@@ -22,7 +24,6 @@ import {
 } from '../../../components/ui/select';
 import { Textarea } from '../../../components/ui/textarea';
 import { addClient } from '../api/clients';
-import type { AddClientData } from '../types';
 
 interface AddClientDialogProps {
   open: boolean;
@@ -31,16 +32,16 @@ interface AddClientDialogProps {
 }
 
 export const AddClientDialog = ({
-  open,
-  onOpenChange,
   onClientAdded,
+  onOpenChange,
+  open,
 }: AddClientDialogProps): React.JSX.Element => {
   const [formData, setFormData] = useState({
     email: '',
-    user_type: '',
-    subscription_tier: '',
     goals: '',
     notes: '',
+    subscription_tier: '',
+    user_type: '',
   });
   const [isLoading, setIsLoading] = useState(false);
 
@@ -51,23 +52,23 @@ export const AddClientDialog = ({
     try {
       const clientData: AddClientData = {
         email: formData.email,
-        user_type: formData.user_type || undefined,
-        subscription_tier: formData.subscription_tier || undefined,
         profile: {
+          bio: formData.notes || undefined,
           goals: formData.goals
             ? formData.goals.split('\n').filter(g => g.trim())
             : undefined,
-          bio: formData.notes || undefined,
         },
+        subscription_tier: formData.subscription_tier || undefined,
+        user_type: formData.user_type || undefined,
       };
 
       await addClient(clientData);
       setFormData({
         email: '',
-        user_type: '',
-        subscription_tier: '',
         goals: '',
         notes: '',
+        subscription_tier: '',
+        user_type: '',
       });
       onOpenChange(false);
       onClientAdded();

@@ -10,9 +10,7 @@ import {
   TabsList,
   TabsTrigger,
 } from '../../../components/ui/tabs';
-
 import { useClientManagement } from '../hooks';
-
 import { AddClientDialog } from './AddClientDialog';
 import { AssignProgramDialog } from './AssignProgramDialog';
 import { ClientCard } from './ClientCard';
@@ -21,23 +19,23 @@ import { ClientStats } from './ClientStats';
 
 export const ClientManagement = (): React.JSX.Element => {
   const {
-    clients,
-    loading,
-    searchTerm,
+    activeClients,
     addClientOpen,
     assignProgramOpen,
-    selectedClientForAssign,
-    activeClients,
-    inactiveClients,
+    clients,
     clientsWithPrograms,
-    handleSearch,
-    handleAssignProgram,
-    handleViewClientDetails,
-    openAddClientDialog,
-    openAssignProgramDialog,
     closeAddClientDialog,
     closeAssignProgramDialog,
     fetchClients,
+    handleAssignProgram,
+    handleSearch,
+    handleViewClientDetails,
+    inactiveClients,
+    loading,
+    openAddClientDialog,
+    openAssignProgramDialog,
+    searchTerm,
+    selectedClientForAssign,
   } = useClientManagement();
 
   return (

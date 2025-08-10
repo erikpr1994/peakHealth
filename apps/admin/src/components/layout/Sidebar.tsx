@@ -6,15 +6,24 @@ import { usePathname, useRouter } from 'next/navigation';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-
+import { useAuth } from '@/contexts/AuthContext';
 import { navigationSections } from '@/lib/navigation-config';
 
-export const Sidebar = () => {
+export const Sidebar = (): React.JSX.Element => {
   const router = useRouter();
   const pathname = usePathname();
+  const { logout } = useAuth();
 
-  const handleNavigation = (path: string) => {
+  const handleNavigation = (path: string): void => {
     router.push(path);
+  };
+
+  const handleLogout = async (): Promise<void> => {
+    try {
+      await logout();
+    } catch (error) {
+      console.error('Logout failed:', error);
+    }
   };
 
   return (
@@ -85,7 +94,12 @@ export const Sidebar = () => {
               System Administrator
             </p>
           </div>
-          <Button variant="ghost" size="sm">
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={handleLogout}
+            title="Logout"
+          >
             <LogOut className="h-4 w-4" />
           </Button>
         </div>

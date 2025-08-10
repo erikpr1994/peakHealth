@@ -1,5 +1,7 @@
 'use client';
 
+import type { AssignProgramData, Client } from '../types';
+
 import { Loader2 } from 'lucide-react';
 import React, { useState } from 'react';
 
@@ -22,7 +24,6 @@ import {
 } from '../../../components/ui/select';
 import { Textarea } from '../../../components/ui/textarea';
 import { assignProgram } from '../api/clients';
-import type { AssignProgramData, Client } from '../types';
 
 interface AssignProgramDialogProps {
   open: boolean;
@@ -32,10 +33,10 @@ interface AssignProgramDialogProps {
 }
 
 export const AssignProgramDialog = ({
-  open,
   onOpenChange,
-  selectedClient,
   onProgramAssigned,
+  open,
+  selectedClient,
 }: AssignProgramDialogProps): React.JSX.Element => {
   const [selectedProgram, setSelectedProgram] = useState<string>('');
   const [startDate, setStartDate] = useState<string>('');
@@ -45,34 +46,34 @@ export const AssignProgramDialog = ({
 
   const mockPrograms = [
     {
-      id: 1,
-      name: 'Weight Loss Program',
-      duration: '8 weeks',
-      difficulty: 'Beginner',
       description:
         'Comprehensive weight loss program with cardio and strength training',
+      difficulty: 'Beginner',
+      duration: '8 weeks',
+      id: 1,
+      name: 'Weight Loss Program',
     },
     {
+      description: 'Progressive strength training program for muscle building',
+      difficulty: 'Intermediate',
+      duration: '12 weeks',
       id: 2,
       name: 'Strength Building',
-      duration: '12 weeks',
-      difficulty: 'Intermediate',
-      description: 'Progressive strength training program for muscle building',
     },
     {
+      description: 'High-intensity cardio workouts for cardiovascular health',
+      difficulty: 'Beginner',
+      duration: '6 weeks',
       id: 3,
       name: 'Cardio Focus',
-      duration: '6 weeks',
-      difficulty: 'Beginner',
-      description: 'High-intensity cardio workouts for cardiovascular health',
     },
     {
-      id: 4,
-      name: 'Full Body Transformation',
-      duration: '16 weeks',
-      difficulty: 'Advanced',
       description:
         'Complete body transformation with strength, cardio, and flexibility',
+      difficulty: 'Advanced',
+      duration: '16 weeks',
+      id: 4,
+      name: 'Full Body Transformation',
     },
   ];
 
@@ -83,10 +84,10 @@ export const AssignProgramDialog = ({
     try {
       const programData: AssignProgramData = {
         client_id: selectedClient.id,
-        program_name: selectedProgram,
-        start_date: startDate,
         goals: goals ? goals.split('\n').filter(g => g.trim()) : undefined,
         notes: notes || undefined,
+        program_name: selectedProgram,
+        start_date: startDate,
       };
 
       await assignProgram(programData);
@@ -160,9 +161,7 @@ export const AssignProgramDialog = ({
               id="goals"
               placeholder="e.g., Lose 10 lbs&#10;Improve cardiovascular health&#10;Build strength"
               value={goals}
-              onChange={(e) =>
-                setGoals(e.target.value)
-              }
+              onChange={e => setGoals(e.target.value)}
               rows={4}
             />
           </div>
@@ -173,9 +172,7 @@ export const AssignProgramDialog = ({
               id="notes"
               placeholder="Additional notes or considerations..."
               value={notes}
-              onChange={(e) =>
-                setNotes(e.target.value)
-              }
+              onChange={e => setNotes(e.target.value)}
               rows={3}
             />
           </div>

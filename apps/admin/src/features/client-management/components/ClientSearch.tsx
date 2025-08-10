@@ -12,8 +12,8 @@ interface ClientSearchProps {
 }
 
 export const ClientSearch = ({
-  searchTerm,
   onSearchChange,
+  searchTerm,
 }: ClientSearchProps): React.JSX.Element => {
   return (
     <div className="flex gap-4">

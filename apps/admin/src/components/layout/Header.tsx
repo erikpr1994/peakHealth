@@ -6,19 +6,21 @@ import { useState } from 'react';
 
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import {
+  getDataScopeInfo,
+  getNavigationItemByPath,
+} from '@/lib/navigation-config';
 
-import { getDataScopeInfo, getNavigationItemByPath } from '@/lib/navigation-config';
-
-export const Header = () => {
+export const Header = (): React.JSX.Element => {
   const pathname = usePathname();
   const [isDarkMode, setIsDarkMode] = useState(false);
 
-  const toggleDarkMode = () => {
+  const toggleDarkMode = (): void => {
     setIsDarkMode(!isDarkMode);
     document.documentElement.classList.toggle('dark');
   };
 
-  const getCurrentPageTitle = () => {
+  const getCurrentPageTitle = (): string => {
     const item = getNavigationItemByPath(pathname);
     return item?.label || 'Dashboard';
   };
@@ -68,4 +70,4 @@ export const Header = () => {
       </div>
     </header>
   );
-}; 
+};

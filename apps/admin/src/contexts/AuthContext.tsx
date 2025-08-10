@@ -35,7 +35,7 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-const userFetcher = async (url: string) => {
+const userFetcher = async (url: string): Promise<User | null> => {
   const response = await fetch(url);
   if (!response.ok) {
     throw new Error('Failed to fetch user');
@@ -44,7 +44,11 @@ const userFetcher = async (url: string) => {
   return data.user;
 };
 
-export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
+export const AuthProvider = ({
+  children,
+}: {
+  children: React.ReactNode;
+}): React.JSX.Element => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(true);
 
@@ -60,40 +64,74 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange(async (event, session) => {
-      if (event === 'SIGNED_IN' && session) {
-        await mutateUser();
-      } else if (event === 'SIGNED_OUT') {
-        await mutateUser(null);
-        router.push('/login');
+    } = supabase.auth.onAuthStateChange(
+      async (event, session): Promise<void> => {
+        if (event === 'SIGNED_IN' && session) {
+          await mutateUser();
+        } else if (event === 'SIGNED_OUT') {
+          await mutateUser(null);
+          router.push('/login');
+        }
+        setIsLoading(false);
       }
-      setIsLoading(false);
-    });
+    );
 
-    return () => subscription.unsubscribe();
+    return (): void => subscription.unsubscribe();
   }, [mutateUser, router]);
 
-  const logout = async () => {
-    await supabase.auth.signOut();
-    router.push('/login');
+  const logout = async (): Promise<void> => {
+    try {
+      // Call the logout API route
+      const response = await fetch('/api/auth/logout', {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        method: 'POST',
+      });
+
+      if (!response.ok) {
+        throw new Error('Logout failed');
+      }
+
+      // Clear the user data
+      await mutateUser(null);
+
+      // Redirect to auth app
+      const currentDomain = window.location.hostname;
+      const authDomain =
+        process.env.NODE_ENV === 'development'
+          ? 'localhost:3000'
+          : `auth.${currentDomain.replace(/^admin\./, '')}`;
+
+      const protocol =
+        process.env.NODE_ENV === 'development' ? 'http' : 'https';
+      const authUrl = `${protocol}://${authDomain}`;
+
+      window.location.href = authUrl;
+    } catch (error) {
+      console.error('Logout error:', error);
+      // Fallback: try to sign out directly and redirect
+      await supabase.auth.signOut();
+      router.push('/');
+    }
   };
 
-  const hasPermission = (permission: string) => {
+  const hasPermission = (permission: string): boolean => {
     return user?.app_metadata?.permissions?.[permission] || false;
   };
 
-  const hasUserType = (userType: string) => {
+  const hasUserType = (userType: string): boolean => {
     return user?.app_metadata?.user_types?.includes(userType) || false;
   };
 
   return (
     <AuthContext.Provider
       value={{
-        user: user || null,
-        isLoading,
-        logout,
         hasPermission,
         hasUserType,
+        isLoading,
+        logout,
+        user: user || null,
       }}
     >
       {children}
@@ -101,7 +139,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   );
 };
 
-export const useAuth = () => {
+export const useAuth = (): AuthContextType => {
   const context = useContext(AuthContext);
   if (context === undefined) {
     throw new Error('useAuth must be used within an AuthProvider');
