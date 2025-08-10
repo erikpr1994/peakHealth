@@ -127,7 +127,10 @@ module.exports = [
 
       'css-modules/no-unused-class': 'error',
 
-      'depend/ban-dependencies': 'error',
+      'depend/ban-dependencies': [
+        'error',
+        { allowed: ['eslint-plugin-react'] },
+      ],
       'import-x/default': 'error',
       'import-x/named': 'error',
 
@@ -205,8 +208,13 @@ module.exports = [
     settings: {
       'import-x/internal-regex': '^@peakhealth/',
       'import-x/resolver': {
-        node: true,
-        typescript: true,
+        node: {
+          extensions: ['.js', '.jsx', '.ts', '.tsx'],
+        },
+        typescript: {
+          alwaysTryTypes: true,
+          project: ['./apps/*/tsconfig.json', './packages/*/tsconfig.json'],
+        },
       },
       react: {
         version: 'detect',
