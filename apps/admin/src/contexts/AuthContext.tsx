@@ -98,15 +98,32 @@ export const AuthProvider = ({
         throw new Error('Logout failed');
       }
 
+      // Clear the client-side Supabase session (localStorage)
+      await supabase.auth.signOut();
+
       // Clear the user data
       await mutateUser(null);
 
-      // Redirect to auth app
+      // Redirect to auth app with improved domain logic
       const currentDomain = window.location.hostname;
-      const authDomain =
-        process.env.NODE_ENV === 'development'
-          ? 'localhost:3000'
-          : `auth.${currentDomain.replace(/^admin\./, '')}`;
+      let authDomain: string;
+
+      if (process.env.NODE_ENV === 'development') {
+        authDomain = 'localhost:3000';
+      } else {
+        // Handle various admin subdomain patterns
+        if (currentDomain.startsWith('admin.')) {
+          authDomain = `auth.${currentDomain.substring(6)}`; // Remove 'admin.'
+        } else if (currentDomain.includes('-admin.')) {
+          // Handle patterns like 'staging-admin.example.com'
+          authDomain = currentDomain.replace('-admin.', '-auth.');
+        } else if (currentDomain.startsWith('staging-admin.')) {
+          authDomain = currentDomain.replace('staging-admin.', 'staging-auth.');
+        } else {
+          // Fallback: assume auth subdomain
+          authDomain = `auth.${currentDomain}`;
+        }
+      }
 
       const protocol =
         process.env.NODE_ENV === 'development' ? 'http' : 'https';
