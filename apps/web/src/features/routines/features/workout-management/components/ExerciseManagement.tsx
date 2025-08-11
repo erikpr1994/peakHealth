@@ -19,6 +19,7 @@ import {
   getProgressionMethodLabel,
   getProgressionMethodColor,
 } from '@/features/routines/utils';
+import { generateSetsForProgression } from '@/features/routines/utils/workoutCalculations';
 import SetManagement, { WorkoutSet } from '@/features/workout/SetManagement';
 
 interface ExerciseManagementProps {
@@ -26,6 +27,7 @@ interface ExerciseManagementProps {
   workoutId: string;
   sectionId: string;
   index: number;
+  isLastExercise: boolean; // Add this prop to determine if it's the last exercise
   onUpdateEmomReps: (exerciseId: string, reps: number) => void;
   onUpdateSets: (exerciseId: string, sets: WorkoutSet[]) => void;
   onUpdateName: (exerciseId: string, name: string) => void;
@@ -49,6 +51,7 @@ const ExerciseManagement = ({
   workoutId,
   sectionId,
   index,
+  isLastExercise,
   onUpdateEmomReps,
   onUpdateSets,
   onUpdateName,
@@ -59,6 +62,15 @@ const ExerciseManagement = ({
   onUpdateProgressionMethod,
   onNotesClick,
 }: ExerciseManagementProps): React.ReactElement => {
+  // Handle progression method change with automatic set generation
+  const handleProgressionMethodChange = (method: ProgressionMethod): void => {
+    onUpdateProgressionMethod(exercise.id, method);
+
+    // Generate predefined sets for the selected progression method
+    const predefinedSets = generateSetsForProgression(method);
+    onUpdateSets(exercise.id, predefinedSets);
+  };
+
   return (
     <Card className="border border-gray-200">
       <div className="p-4 space-y-4">
@@ -103,14 +115,18 @@ const ExerciseManagement = ({
               placeholder="e.g., 90s"
             />
           </div>
-          <div>
-            <Label>Rest After Exercise</Label>
-            <Input
-              value={exercise.restAfter}
-              onChange={e => onUpdateRestAfter(exercise.id, e.target.value)}
-              placeholder="e.g., 2 min"
-            />
-          </div>
+
+          {/* Only show rest after exercise if NOT the last exercise */}
+          {!isLastExercise && (
+            <div>
+              <Label>Rest After Exercise</Label>
+              <Input
+                value={exercise.restAfter}
+                onChange={e => onUpdateRestAfter(exercise.id, e.target.value)}
+                placeholder="e.g., 2 min"
+              />
+            </div>
+          )}
 
           {exercise.emomReps !== undefined && (
             <div>
@@ -127,34 +143,27 @@ const ExerciseManagement = ({
             </div>
           )}
 
-          {exercise.progressionMethod && (
-            <div>
-              <Label>Progression Method</Label>
-              <Select
-                value={exercise.progressionMethod}
-                onValueChange={value =>
-                  onUpdateProgressionMethod(
-                    exercise.id,
-                    value as ProgressionMethod
-                  )
-                }
-              >
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="linear">Linear</SelectItem>
-                  <SelectItem value="dual">Dual</SelectItem>
-                  <SelectItem value="inverse-pyramid">
-                    Inverse Pyramid
-                  </SelectItem>
-                  <SelectItem value="myo-reps">Myo-Reps</SelectItem>
-                  <SelectItem value="widowmaker">Widowmaker</SelectItem>
-                  <SelectItem value="amrap">AMRAP</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-          )}
+          <div>
+            <Label>Progression Method</Label>
+            <Select
+              value={exercise.progressionMethod || ''}
+              onValueChange={value =>
+                handleProgressionMethodChange(value as ProgressionMethod)
+              }
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Select method" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="linear">Linear</SelectItem>
+                <SelectItem value="dual">Dual</SelectItem>
+                <SelectItem value="inverse-pyramid">Inverse Pyramid</SelectItem>
+                <SelectItem value="myo-reps">Myo-Reps</SelectItem>
+                <SelectItem value="widowmaker">Widowmaker</SelectItem>
+                <SelectItem value="amrap">AMRAP</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
         </div>
 
         {/* Progression Method Info */}

@@ -25,6 +25,7 @@ import { WorkoutSet } from '@/features/workout/SetManagement';
 interface WorkoutSectionProps {
   section: WorkoutSectionType;
   workoutId: string;
+  isLastSection: boolean; // Add this prop to determine if it's the last section
   onUpdateName: (name: string) => void;
   onUpdateType: (type: WorkoutSectionType['type']) => void;
   onUpdateRestAfter: (restAfter: string) => void;
@@ -52,6 +53,7 @@ interface WorkoutSectionProps {
 const WorkoutSection = ({
   section,
   workoutId,
+  isLastSection,
   onUpdateName,
   onUpdateType,
   onUpdateRestAfter,
@@ -126,14 +128,17 @@ const WorkoutSection = ({
             </Select>
           </div>
 
-          <div>
-            <Label>Rest After Section</Label>
-            <Input
-              value={section.restAfter}
-              onChange={e => onUpdateRestAfter(e.target.value)}
-              placeholder="e.g., 2 min"
-            />
-          </div>
+          {/* Only show rest after section if NOT the last section */}
+          {!isLastSection && (
+            <div>
+              <Label>Rest After Section</Label>
+              <Input
+                value={section.restAfter}
+                onChange={e => onUpdateRestAfter(e.target.value)}
+                placeholder="e.g., 2 min"
+              />
+            </div>
+          )}
 
           {section.type === 'emom' && (
             <div>
@@ -186,6 +191,7 @@ const WorkoutSection = ({
                   workoutId={workoutId}
                   sectionId={section.id}
                   index={index}
+                  isLastExercise={index === section.exercises.length - 1}
                   onUpdateEmomReps={onUpdateExerciseEmomReps}
                   onUpdateSets={onUpdateExerciseSets}
                   onUpdateName={onUpdateExerciseName}

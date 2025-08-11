@@ -236,11 +236,14 @@ const RunningWorkoutsSection = ({
                   </div>
                 ) : (
                   <div className="space-y-3">
-                    {workout.sections.map(section => (
+                    {workout.sections.map((section, sectionIndex) => (
                       <WorkoutSectionComponent
                         key={section.id}
                         section={section}
                         workoutId={workout.id}
+                        isLastSection={
+                          sectionIndex === workout.sections.length - 1
+                        }
                         onUpdateName={name =>
                           onUpdateSectionName(workout.id, section.id, name)
                         }
