@@ -337,8 +337,8 @@ This document provides a detailed implementation plan for the Routines feature M
 
 ### **Phase 5: Advanced Features (Months 3-4)**
 
+- Tiered routine creation (guided wizard, templates, AI-assisted)
 - Advanced progression methods
-- Routine templates
 - Enhanced progress tracking
 
 ### **Phase 6: Social Features (Months 5-6)**
@@ -350,7 +350,6 @@ This document provides a detailed implementation plan for the Routines feature M
 
 ### **Phase 7: Premium Features (Months 7-9)**
 
-- Tiered routine creation (guided wizard, templates, AI-assisted)
 - AI-assisted routine creation
 - Advanced analytics
 - Professional collaboration tools
