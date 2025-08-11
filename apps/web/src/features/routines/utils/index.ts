@@ -62,6 +62,14 @@ export const getSectionColors = (type: string): Record<string, string> => {
       headerBorder: 'border-red-200',
       icon: 'text-red-600',
     },
+    amrap: {
+      bg: 'bg-yellow-50/50',
+      border: 'border-yellow-200',
+      headerBg: 'bg-yellow-100',
+      headerText: 'text-yellow-800',
+      headerBorder: 'border-yellow-200',
+      icon: 'text-yellow-600',
+    },
   };
   return colors[type as keyof typeof colors] || colors.basic;
 };
@@ -94,7 +102,7 @@ export const progressionMethods = [
   },
   {
     value: 'amrap',
-    label: 'AMRAP',
+    label: 'AMRAP (As Many Reps As Possible)',
     description: 'Regular sets + final AMRAP set',
   },
 ];
@@ -151,6 +159,7 @@ export const getSectionIcon = (
     cooldown: Leaf,
     emom: Timer,
     tabata: Target,
+    amrap: Target,
   };
   return icons[type as keyof typeof icons] || Dumbbell;
 };

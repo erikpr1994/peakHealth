@@ -44,7 +44,7 @@ interface RunningWorkoutsSectionProps {
   onUpdateSectionType: (
     workoutId: string,
     sectionId: string,
-    type: 'warmup' | 'basic' | 'cooldown' | 'emom' | 'tabata'
+    type: 'warmup' | 'basic' | 'cooldown' | 'emom' | 'tabata' | 'amrap'
   ) => void;
   onUpdateSectionRestAfter: (
     workoutId: string,

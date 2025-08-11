@@ -124,6 +124,9 @@ const WorkoutSection = ({
                 <SelectItem value="cooldown">Cooldown</SelectItem>
                 <SelectItem value="emom">EMOM</SelectItem>
                 <SelectItem value="tabata">TABATA</SelectItem>
+                <SelectItem value="amrap">
+                  AMRAP (As Many Rounds As Possible)
+                </SelectItem>
               </SelectContent>
             </Select>
           </div>

@@ -36,7 +36,7 @@ export interface Exercise {
 export interface WorkoutSection {
   id: string;
   name: string;
-  type: 'warmup' | 'basic' | 'cooldown' | 'emom' | 'tabata';
+  type: 'warmup' | 'basic' | 'cooldown' | 'emom' | 'tabata' | 'amrap';
   exercises: Exercise[];
   restAfter: string; // rest after this section
   // EMOM specific properties
