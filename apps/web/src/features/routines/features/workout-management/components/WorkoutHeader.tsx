@@ -15,12 +15,7 @@ import {
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from '@/components/ui/tooltip';
+import { Tooltip } from '@peakhealth/ui';
 import { WorkoutType } from '@/features/routines/types';
 
 interface WorkoutHeaderProps {
@@ -79,39 +74,29 @@ const WorkoutHeader = ({
         <div className="flex items-center space-x-3">
           {/* Workout Order Controls */}
           <div className="flex flex-col space-y-1">
-            <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={onMoveUp}
-                    disabled={index === 0}
-                    className="p-1 h-6 w-6"
-                  >
-                    <ArrowUp className="h-3 w-3" />
-                  </Button>
-                </TooltipTrigger>
-                <TooltipContent>Move up</TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
+            <Tooltip content="Move up">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={onMoveUp}
+                disabled={index === 0}
+                className="p-1 h-6 w-6"
+              >
+                <ArrowUp className="h-3 w-3" />
+              </Button>
+            </Tooltip>
 
-            <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={onMoveDown}
-                    disabled={index === totalCount - 1}
-                    className="p-1 h-6 w-6"
-                  >
-                    <ArrowDown className="h-3 w-3" />
-                  </Button>
-                </TooltipTrigger>
-                <TooltipContent>Move down</TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
+            <Tooltip content="Move down">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={onMoveDown}
+                disabled={index === totalCount - 1}
+                className="p-1 h-6 w-6"
+              >
+                <ArrowDown className="h-3 w-3" />
+              </Button>
+            </Tooltip>
           </div>
 
           {/* Workout Order Number */}

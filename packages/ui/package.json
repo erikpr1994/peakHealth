@@ -65,6 +65,11 @@
       "types": "./dist/components/input/index.d.ts",
       "import": "./dist/components/input/index.js",
       "require": "./dist/components/input/index.js"
+    },
+    "./tooltip": {
+      "types": "./dist/components/tooltip/index.d.ts",
+      "import": "./dist/components/tooltip/index.js",
+      "require": "./dist/components/tooltip/index.js"
     }
   }
 }

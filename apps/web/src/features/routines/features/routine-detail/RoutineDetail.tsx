@@ -6,7 +6,6 @@ import RoutineProgress from './components/RoutineProgress';
 import WeeklySchedule from './components/WeeklySchedule';
 import RoutineInfo from './components/RoutineInfo';
 import WorkoutDaysList from './components/WorkoutDaysList';
-import ExerciseList from './components/ExerciseList';
 import { RoutineData } from '@/features/routines/types';
 
 interface RoutineDetailProps {
@@ -124,11 +123,6 @@ const RoutineDetail = ({
     console.log('Toggle favorite');
   };
 
-  const handleShare = (): void => {
-    // TODO: Implement share functionality
-    console.log('Share routine');
-  };
-
   const handleDuplicate = (): void => {
     // TODO: Implement duplicate functionality
     console.log('Duplicate routine');
@@ -139,8 +133,6 @@ const RoutineDetail = ({
     console.log('Delete routine');
   };
 
-  const allExercises = routineData.workoutDays.flatMap(day => day.exercises);
-
   return (
     <div className="w-full px-4 sm:px-6 lg:px-8 py-6">
       <RoutineDetailHeader
@@ -150,7 +142,6 @@ const RoutineDetail = ({
         isActive={routineData.isActive}
         isFavorite={routineData.isFavorite}
         onToggleFavorite={handleToggleFavorite}
-        onShare={handleShare}
       />
 
       <RoutineOverviewCards
@@ -179,7 +170,6 @@ const RoutineDetail = ({
           createdDate={routineData.createdDate}
           lastModified={routineData.lastModified}
           onDuplicate={handleDuplicate}
-          onShare={handleShare}
           onDelete={handleDelete}
         />
       </div>
@@ -188,8 +178,6 @@ const RoutineDetail = ({
         workoutDays={routineData.workoutDays}
         routineId={routineId}
       />
-
-      <ExerciseList exercises={allExercises} />
     </div>
   );
 };

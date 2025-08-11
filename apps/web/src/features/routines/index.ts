@@ -16,7 +16,6 @@ export {
   RoutineProgress,
   WeeklySchedule,
   WorkoutDaysList,
-  ExerciseList,
 } from './features/routine-detail';
 
 export {
@@ -44,7 +43,6 @@ export {
   RoutineCard,
   RoutinesList,
   ActiveRoutineCard,
-  WorkoutCard,
 } from './features/routine-list';
 
 // Types

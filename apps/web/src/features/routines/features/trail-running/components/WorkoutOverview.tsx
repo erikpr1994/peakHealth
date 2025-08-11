@@ -43,7 +43,9 @@ const WorkoutOverview = ({
       <CardContent className="space-y-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="space-y-2">
-            <Label htmlFor="name">Workout Name</Label>
+            <Label htmlFor="name" className="block mb-2">
+              Workout Name
+            </Label>
             <Input
               id="name"
               placeholder="e.g., Mountain Peak Challenge"
@@ -53,7 +55,9 @@ const WorkoutOverview = ({
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="difficulty">Difficulty Level</Label>
+            <Label htmlFor="difficulty" className="block mb-2">
+              Difficulty Level
+            </Label>
             <Select value={difficulty} onValueChange={onDifficultyChange}>
               <SelectTrigger>
                 <SelectValue />
@@ -77,7 +81,9 @@ const WorkoutOverview = ({
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="description">Description</Label>
+          <Label htmlFor="description" className="block mb-2">
+            Description
+          </Label>
           <textarea
             id="description"
             className="w-full min-h-[100px] px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-orange-500 focus:border-transparent"

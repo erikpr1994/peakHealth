@@ -1,6 +1,6 @@
 'use client';
 
-import { Copy, Share, Trash } from 'lucide-react';
+import { Copy, Trash } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -11,7 +11,6 @@ interface RoutineInfoProps {
   createdDate: string;
   lastModified: string;
   onDuplicate: () => void;
-  onShare: () => void;
   onDelete: () => void;
 }
 
@@ -20,7 +19,6 @@ const RoutineInfo = ({
   createdDate,
   lastModified,
   onDuplicate,
-  onShare,
   onDelete,
 }: RoutineInfoProps): React.ReactElement => {
   return (
@@ -52,7 +50,7 @@ const RoutineInfo = ({
             <Button
               variant="outline"
               size="sm"
-              className="w-full justify-start"
+              className="w-full justify-start whitespace-nowrap"
               onClick={onDuplicate}
             >
               <Copy className="w-4 h-4 mr-2" />
@@ -61,16 +59,7 @@ const RoutineInfo = ({
             <Button
               variant="outline"
               size="sm"
-              className="w-full justify-start"
-              onClick={onShare}
-            >
-              <Share className="w-4 h-4 mr-2" />
-              Share Routine
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              className="w-full justify-start text-red-600 hover:text-red-700"
+              className="w-full justify-start whitespace-nowrap text-red-600 hover:text-red-700"
               onClick={onDelete}
             >
               <Trash className="w-4 h-4 mr-2" />

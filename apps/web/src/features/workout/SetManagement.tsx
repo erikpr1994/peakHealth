@@ -16,6 +16,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { Tooltip } from '@peakhealth/ui';
 
 export type SetType = 'warmup' | 'normal' | 'failure' | 'dropset';
 export type RepType = 'fixed' | 'range';
@@ -44,6 +45,7 @@ interface SetManagementProps {
   sets: WorkoutSet[];
   onSetsChange: (sets: WorkoutSet[]) => void;
   onNotesClick: (setId: string) => void;
+  onAddApproachSets: () => void;
   progressionMethod?: ProgressionMethod;
 }
 
@@ -125,12 +127,27 @@ const SetManagement = ({
   sets,
   onSetsChange,
   onNotesClick,
+  onAddApproachSets,
   progressionMethod,
 }: SetManagementProps): React.ReactElement => {
   const [openPopoverId, setOpenPopoverId] = useState<string | null>(null);
   const [initialized, setInitialized] = useState(false);
 
   const config = getProgressionConfig(progressionMethod);
+
+  // Determine if Add Approach Sets button should be disabled
+  const isAddApproachSetsDisabled = sets.length === 0 || !sets[0]?.weight;
+
+  // Get hover explanation for Add Approach Sets button
+  const getAddApproachSetsHoverText = (): string => {
+    if (sets.length === 0) {
+      return 'Add at least one set before adding approach sets';
+    }
+    if (!sets[0]?.weight) {
+      return 'First set must have a weight before adding approach sets';
+    }
+    return 'Add approach sets for this exercise';
+  };
 
   // Initialize repType for any sets that don't have it defined
   useEffect(() => {
@@ -264,10 +281,28 @@ const SetManagement = ({
             </Badge>
           )}
         </div>
-        <Button onClick={addSet} size="sm" variant="outline">
-          <Plus className="w-4 h-4 mr-1" />
-          Add Set
-        </Button>
+        <div className="flex items-center gap-2">
+          <Tooltip content={getAddApproachSetsHoverText()}>
+            <Button
+              onClick={onAddApproachSets}
+              size="sm"
+              variant="outline"
+              disabled={isAddApproachSetsDisabled}
+              className={
+                isAddApproachSetsDisabled ? 'opacity-50 cursor-not-allowed' : ''
+              }
+            >
+              <Target className="w-4 h-4 mr-1" />
+              Add Approach Sets
+            </Button>
+          </Tooltip>
+          <Tooltip content="Add a new set to the workout">
+            <Button onClick={addSet} size="sm" variant="outline">
+              <Plus className="w-4 h-4 mr-1" />
+              Add Set
+            </Button>
+          </Tooltip>
+        </div>
       </div>
 
       {/* Sets Header */}
@@ -456,12 +491,34 @@ const SetManagement = ({
                 variant="ghost"
                 size="sm"
                 onClick={() => onNotesClick(set.id)}
-                className={`h-8 w-8 p-0 flex items-center justify-center ${
-                  set.notes ? 'text-blue-600' : 'text-gray-400'
+                className={`h-8 w-full p-2 flex items-center justify-center text-xs ${
+                  set.notes
+                    ? 'text-blue-600 bg-blue-50 border border-blue-200'
+                    : 'text-gray-500 border border-dashed border-gray-300 hover:border-gray-400'
                 }`}
-                title={set.notes ? 'Edit notes' : 'Add notes'}
+                title={
+                  set.notes
+                    ? `Edit set notes: ${set.notes.substring(0, 50)}${
+                        set.notes.length > 50 ? '...' : ''
+                      }`
+                    : 'Add notes for this set'
+                }
               >
-                📝
+                {set.notes ? (
+                  <div className="flex items-center gap-1 w-full">
+                    <span className="text-blue-600">📝</span>
+                    <span className="truncate text-left">
+                      {set.notes.length > 20
+                        ? `${set.notes.substring(0, 20)}...`
+                        : set.notes}
+                    </span>
+                  </div>
+                ) : (
+                  <div className="flex items-center gap-1">
+                    <span>📝</span>
+                    <span>Notes</span>
+                  </div>
+                )}
               </Button>
             </div>
 

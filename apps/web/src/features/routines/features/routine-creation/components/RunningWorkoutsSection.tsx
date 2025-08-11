@@ -32,8 +32,8 @@ interface RunningWorkoutsSectionProps {
   onUpdateObjective: (workoutId: string, objective: string) => void;
   onUpdateSchedule: (
     workoutId: string,
-    field: 'weeks' | 'day' | 'time',
-    value: string
+    field: 'repeatPattern' | 'repeatValue' | 'selectedDays' | 'time',
+    value: string | string[]
   ) => void;
   onAddSection: (workoutId: string) => void;
   onUpdateSectionName: (
@@ -44,7 +44,7 @@ interface RunningWorkoutsSectionProps {
   onUpdateSectionType: (
     workoutId: string,
     sectionId: string,
-    type: 'warmup' | 'basic' | 'cooldown' | 'emom' | 'tabata'
+    type: 'warmup' | 'basic' | 'cooldown' | 'emom' | 'tabata' | 'amrap'
   ) => void;
   onUpdateSectionRestAfter: (
     workoutId: string,

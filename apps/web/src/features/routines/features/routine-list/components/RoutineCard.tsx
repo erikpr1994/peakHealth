@@ -136,7 +136,7 @@ const RoutineCard = ({
 
   // Grid view
   return (
-    <Card className="p-6 hover:shadow-md transition-shadow">
+    <Card className="p-6 hover:shadow-md transition-shadow h-full flex flex-col">
       <div className="flex items-start justify-between mb-4">
         <div className="w-12 h-12 bg-indigo-100 rounded-lg flex items-center justify-center">
           <Activity className="w-6 h-6 text-indigo-600" />
@@ -233,7 +233,10 @@ const RoutineCard = ({
         </div>
       )}
 
-      <div className="flex space-x-2">
+      {/* Spacer to push buttons to bottom */}
+      <div className="flex-grow"></div>
+
+      <div className="flex space-x-2 mt-auto">
         <Button
           variant="outline"
           size="sm"

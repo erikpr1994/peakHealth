@@ -34,7 +34,7 @@ export const useWorkoutOperations = ({
   updateStrengthWorkoutSchedule: (
     workoutId: string,
     field: keyof StrengthWorkout['schedule'],
-    value: string
+    value: string | string[]
   ) => void;
   addRunningWorkout: () => void;
   removeRunningWorkout: (workoutId: string) => void;
@@ -44,7 +44,7 @@ export const useWorkoutOperations = ({
   updateRunningWorkoutSchedule: (
     workoutId: string,
     field: keyof RunningWorkout['schedule'],
-    value: string
+    value: string | string[]
   ) => void;
   addStrengthSection: (workoutId: string) => void;
   addRunningSection: (workoutId: string) => void;
@@ -192,8 +192,9 @@ export const useWorkoutOperations = ({
       type: 'strength',
       objective: '',
       schedule: {
-        weeks: '',
-        day: '',
+        repeatPattern: '',
+        repeatValue: '',
+        selectedDays: [],
         time: '',
       },
       sections: [],
@@ -253,7 +254,7 @@ export const useWorkoutOperations = ({
   const updateStrengthWorkoutSchedule = (
     workoutId: string,
     field: keyof StrengthWorkout['schedule'],
-    value: string
+    value: string | string[]
   ): void => {
     setStrengthWorkouts(prev =>
       prev.map(workout =>
@@ -272,8 +273,9 @@ export const useWorkoutOperations = ({
       type: 'running',
       objective: '',
       schedule: {
-        weeks: '',
-        day: '',
+        repeatPattern: '',
+        repeatValue: '',
+        selectedDays: [],
         time: '',
       },
       sections: [],
@@ -333,7 +335,7 @@ export const useWorkoutOperations = ({
   const updateRunningWorkoutSchedule = (
     workoutId: string,
     field: keyof RunningWorkout['schedule'],
-    value: string
+    value: string | string[]
   ): void => {
     setRunningWorkouts(prev =>
       prev.map(workout =>

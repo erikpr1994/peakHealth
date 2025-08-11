@@ -81,12 +81,15 @@ const WorkoutSection = ({
           <div className="flex items-center space-x-3">
             <SectionIcon className="h-5 w-5" />
             <div className="flex items-center space-x-2">
-              <Input
-                value={section.name}
-                onChange={e => onUpdateName(e.target.value)}
-                className="font-medium border-none p-0 h-auto bg-transparent focus:bg-white focus:border-gray-300 text-inherit"
-                placeholder="Section name"
-              />
+              <div className="relative group">
+                <Input
+                  value={section.name}
+                  onChange={e => onUpdateName(e.target.value)}
+                  className="font-semibold border-2 border-dashed border-gray-300 hover:border-gray-400 focus:border-blue-500 p-2 h-auto bg-white/80 backdrop-blur-sm transition-colors duration-200"
+                  placeholder="Enter section name..."
+                />
+                <div className="absolute -top-1 -right-1 w-2 h-2 bg-blue-500 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-200"></div>
+              </div>
               <Badge variant="secondary" className="bg-white/20 text-inherit">
                 {section.type.toUpperCase()}
               </Badge>
@@ -108,7 +111,7 @@ const WorkoutSection = ({
         {/* Section Configuration */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div>
-            <Label>Section Type</Label>
+            <Label className="block mb-2">Section Type</Label>
             <Select
               value={section.type}
               onValueChange={value =>
@@ -124,6 +127,9 @@ const WorkoutSection = ({
                 <SelectItem value="cooldown">Cooldown</SelectItem>
                 <SelectItem value="emom">EMOM</SelectItem>
                 <SelectItem value="tabata">TABATA</SelectItem>
+                <SelectItem value="amrap">
+                  AMRAP (As Many Rounds As Possible)
+                </SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -131,7 +137,7 @@ const WorkoutSection = ({
           {/* Only show rest after section if NOT the last section */}
           {!isLastSection && (
             <div>
-              <Label>Rest After Section</Label>
+              <Label className="block mb-2">Rest After Section</Label>
               <Input
                 value={section.restAfter}
                 onChange={e => onUpdateRestAfter(e.target.value)}
@@ -142,7 +148,7 @@ const WorkoutSection = ({
 
           {section.type === 'emom' && (
             <div>
-              <Label>EMOM Duration (minutes)</Label>
+              <Label className="block mb-2">EMOM Duration (minutes)</Label>
               <Input
                 type="number"
                 value={section.emomDuration || ''}

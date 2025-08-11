@@ -36,7 +36,7 @@ export interface Exercise {
 export interface WorkoutSection {
   id: string;
   name: string;
-  type: 'warmup' | 'basic' | 'cooldown' | 'emom' | 'tabata';
+  type: 'warmup' | 'basic' | 'cooldown' | 'emom' | 'tabata' | 'amrap';
   exercises: Exercise[];
   restAfter: string; // rest after this section
   // EMOM specific properties
@@ -50,8 +50,9 @@ export interface StrengthWorkout {
   type: 'strength';
   objective: string;
   schedule: {
-    weeks: string;
-    day: string;
+    repeatPattern: string;
+    repeatValue: string;
+    selectedDays: string[];
     time: string;
   };
   sections: WorkoutSection[];
@@ -63,8 +64,9 @@ export interface RunningWorkout {
   type: 'running' | 'trail-running' | 'swimming' | 'cycling';
   objective: string;
   schedule: {
-    weeks: string;
-    day: string;
+    repeatPattern: string;
+    repeatValue: string;
+    selectedDays: string[];
     time: string;
   };
   sections: WorkoutSection[];

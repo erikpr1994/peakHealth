@@ -27,7 +27,9 @@ const WeeklySchedule = ({
             }`}
           >
             <div className="text-xs font-medium">{dayLabels[index]}</div>
-            {isActive && <div className="text-xs mt-1">Workout</div>}
+            {isActive && (
+              <div className="text-xs mt-1 whitespace-nowrap">Workout</div>
+            )}
           </div>
         ))}
       </div>

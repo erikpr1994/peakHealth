@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
-import { Plus, Trash2, FileText } from 'lucide-react';
+import { Trash2, FileText } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -85,30 +85,51 @@ const ExerciseManagement = ({
       <div className="p-4 space-y-4">
         {/* Exercise Header */}
         <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-3">
+          <div className="flex items-center space-x-3 flex-1">
             <div className="flex items-center justify-center w-6 h-6 rounded-full bg-gray-200 text-gray-700 text-xs font-medium">
               {index + 1}
             </div>
-            <Input
-              value={exercise.name}
-              onChange={e => onUpdateName(exercise.id, e.target.value)}
-              className="font-medium border-none p-0 h-auto bg-transparent focus:bg-white focus:border-gray-300"
-              placeholder="Exercise name"
-            />
+            <div className="flex-1">
+              <h3 className="font-semibold text-gray-900 text-lg">
+                {exercise.name || 'Exercise'}
+              </h3>
+            </div>
             <Button
               variant="ghost"
               size="sm"
               onClick={() => onNotesClick('exercise', exercise.id)}
-              className="text-gray-500 hover:text-gray-700"
+              className={`text-xs px-3 py-1 rounded-md border ${
+                exercise.notes
+                  ? 'text-blue-600 bg-blue-50 border-blue-200 hover:bg-blue-100'
+                  : 'text-gray-500 border-dashed border-gray-300 hover:border-gray-400 hover:bg-gray-50'
+              }`}
+              title={
+                exercise.notes
+                  ? `Edit exercise notes: ${exercise.notes.substring(0, 50)}${
+                      exercise.notes.length > 50 ? '...' : ''
+                    }`
+                  : 'Add notes for this exercise'
+              }
             >
-              <FileText className="h-4 w-4" />
+              <div className="flex items-center gap-1">
+                <FileText className="h-3 w-3" />
+                {exercise.notes ? (
+                  <span className="truncate max-w-20">
+                    {exercise.notes.length > 15
+                      ? `${exercise.notes.substring(0, 15)}...`
+                      : exercise.notes}
+                  </span>
+                ) : (
+                  <span>Notes</span>
+                )}
+              </div>
             </Button>
           </div>
           <Button
             variant="ghost"
             size="sm"
             onClick={() => onRemove(exercise.id)}
-            className="text-red-600 hover:text-red-700"
+            className="text-red-600 hover:text-red-700 ml-2"
           >
             <Trash2 className="h-4 w-4" />
           </Button>
@@ -117,7 +138,7 @@ const ExerciseManagement = ({
         {/* Exercise Configuration */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           <div>
-            <Label>Rest Between Sets</Label>
+            <Label className="block mb-2">Rest Between Sets</Label>
             <Input
               value={exercise.restTimer}
               onChange={e => onUpdateRestTimer(exercise.id, e.target.value)}
@@ -128,7 +149,7 @@ const ExerciseManagement = ({
           {/* Only show rest after exercise if NOT the last exercise */}
           {!isLastExercise && (
             <div>
-              <Label>Rest After Exercise</Label>
+              <Label className="block mb-2">Rest After Exercise</Label>
               <Input
                 value={exercise.restAfter}
                 onChange={e => onUpdateRestAfter(exercise.id, e.target.value)}
@@ -139,7 +160,7 @@ const ExerciseManagement = ({
 
           {exercise.emomReps !== undefined && (
             <div>
-              <Label>EMOM Reps</Label>
+              <Label className="block mb-2">EMOM Reps</Label>
               <Input
                 type="number"
                 value={exercise.emomReps}
@@ -153,7 +174,7 @@ const ExerciseManagement = ({
           )}
 
           <div>
-            <Label>Progression Method</Label>
+            <Label className="block mb-2">Progression Method</Label>
             <Select
               value={exercise.progressionMethod || 'linear'}
               onValueChange={value =>
@@ -192,23 +213,13 @@ const ExerciseManagement = ({
                   progression method
                 </p>
               </div>
-              {!exercise.hasApproachSets && (
-                <Button
-                  onClick={() => onAddApproachSets(exercise.id)}
-                  size="sm"
-                  variant="outline"
-                >
-                  <Plus className="h-4 w-4 mr-2" />
-                  Add Approach Sets
-                </Button>
-              )}
             </div>
           </div>
         )}
 
         {/* Sets Management */}
         <div>
-          <Label>Sets</Label>
+          <Label className="block mb-2">Sets</Label>
           <SetManagement
             sets={exercise.sets}
             onSetsChange={(sets: WorkoutSet[]) =>
@@ -217,6 +228,7 @@ const ExerciseManagement = ({
             onNotesClick={(setId: string) =>
               onNotesClick('set', exercise.id, setId)
             }
+            onAddApproachSets={() => onAddApproachSets(exercise.id)}
           />
         </div>
       </div>

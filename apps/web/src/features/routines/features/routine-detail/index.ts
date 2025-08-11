@@ -8,4 +8,3 @@ export { default as RoutineOverviewCards } from './components/RoutineOverviewCar
 export { default as RoutineProgress } from './components/RoutineProgress';
 export { default as WeeklySchedule } from './components/WeeklySchedule';
 export { default as WorkoutDaysList } from './components/WorkoutDaysList';
-export { default as ExerciseList } from './components/ExerciseList';

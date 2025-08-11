@@ -1,6 +1,6 @@
 'use client';
 
-import { ArrowLeft, Play, Edit, Share, Heart } from 'lucide-react';
+import { ArrowLeft, Play, Edit, Heart } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
 import { Button } from '@/components/ui/button';
@@ -12,7 +12,6 @@ interface RoutineDetailHeaderProps {
   isActive: boolean;
   isFavorite: boolean;
   onToggleFavorite: () => void;
-  onShare: () => void;
 }
 
 const RoutineDetailHeader = ({
@@ -22,7 +21,6 @@ const RoutineDetailHeader = ({
   isActive,
   isFavorite,
   onToggleFavorite,
-  onShare,
 }: RoutineDetailHeaderProps): React.ReactElement => {
   const router = useRouter();
 
@@ -54,18 +52,16 @@ const RoutineDetailHeader = ({
             }`}
           />
         </Button>
-        <Button variant="ghost" size="sm" onClick={onShare}>
-          <Share className="w-4 h-4" />
-        </Button>
         <Button
           variant="outline"
           onClick={() => router.push(`/routines/${routineId}/edit`)}
+          className="whitespace-nowrap min-w-[80px]"
         >
           <Edit className="w-4 h-4 mr-2" />
           Edit
         </Button>
         <Button
-          className="bg-indigo-600 hover:bg-indigo-700"
+          className="bg-indigo-600 hover:bg-indigo-700 whitespace-nowrap min-w-[120px]"
           onClick={() => router.push(`/workout-tracker/${routineId}`)}
         >
           <Play className="w-4 h-4 mr-2" />
