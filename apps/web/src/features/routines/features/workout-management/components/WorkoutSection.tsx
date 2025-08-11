@@ -1,9 +1,9 @@
 'use client';
 
-import { Plus, Trash2, Edit, Clock, Dumbbell } from 'lucide-react';
+import { Plus, Trash2, Dumbbell } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
@@ -14,11 +14,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { Textarea } from '@/components/ui/textarea';
 import ExerciseManagement from './ExerciseManagement';
 import {
   WorkoutSection as WorkoutSectionType,
-  Exercise,
   ProgressionMethod,
 } from '@/features/routines/types';
 import { getSectionColors, getSectionIcon } from '@/features/routines/utils';

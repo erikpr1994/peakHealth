@@ -1,12 +1,6 @@
 'use client';
 
 import {
-  Play,
-  Calendar,
-  Clock,
-  Target,
-  Users,
-  Star,
   Dumbbell,
   Activity,
   MapPin,
@@ -22,15 +16,12 @@ import {
   ChevronUp,
   Trash2,
 } from 'lucide-react';
-import { useRouter } from 'next/navigation';
 
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
+import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
+import { Badge } from '@/components/ui/badge';
 import {
   Select,
   SelectContent,
@@ -38,6 +29,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { Textarea } from '@/components/ui/textarea';
 import {
   Tooltip,
   TooltipContent,
@@ -45,18 +37,12 @@ import {
   TooltipTrigger,
 } from '@/components/ui/tooltip';
 import {
-  WorkoutType,
   StrengthWorkout,
   RunningWorkout,
   WorkoutSection,
-  Exercise,
-  ProgressionMethod,
   WorkoutSet,
 } from '@/features/routines/types';
 import {
-  getDifficultyColor,
-  getGoalColor,
-  getIconColor,
   getSectionColors,
   getSectionIcon,
   getProgressionMethodLabel,

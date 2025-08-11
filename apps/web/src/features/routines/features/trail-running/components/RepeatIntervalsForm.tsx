@@ -1,11 +1,9 @@
 'use client';
 
-import { Plus, Trash2 } from 'lucide-react';
-
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Switch } from '@/components/ui/switch';
 import {
   Select,
   SelectContent,
@@ -13,8 +11,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { Switch } from '@/components/ui/switch';
-
 import IntensityTargetConfiguration from './IntensityTargetConfiguration';
 import {
   TrailRunningInterval,
