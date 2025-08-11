@@ -81,12 +81,15 @@ const WorkoutSection = ({
           <div className="flex items-center space-x-3">
             <SectionIcon className="h-5 w-5" />
             <div className="flex items-center space-x-2">
-              <Input
-                value={section.name}
-                onChange={e => onUpdateName(e.target.value)}
-                className="font-medium border-none p-0 h-auto bg-transparent focus:bg-white focus:border-gray-300 text-inherit"
-                placeholder="Section name"
-              />
+              <div className="relative group">
+                <Input
+                  value={section.name}
+                  onChange={e => onUpdateName(e.target.value)}
+                  className="font-semibold border-2 border-dashed border-gray-300 hover:border-gray-400 focus:border-blue-500 p-2 h-auto bg-white/80 backdrop-blur-sm transition-colors duration-200"
+                  placeholder="Enter section name..."
+                />
+                <div className="absolute -top-1 -right-1 w-2 h-2 bg-blue-500 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-200"></div>
+              </div>
               <Badge variant="secondary" className="bg-white/20 text-inherit">
                 {section.type.toUpperCase()}
               </Badge>

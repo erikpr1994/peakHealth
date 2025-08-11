@@ -85,16 +85,15 @@ const ExerciseManagement = ({
       <div className="p-4 space-y-4">
         {/* Exercise Header */}
         <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-3">
+          <div className="flex items-center space-x-3 flex-1">
             <div className="flex items-center justify-center w-6 h-6 rounded-full bg-gray-200 text-gray-700 text-xs font-medium">
               {index + 1}
             </div>
-            <Input
-              value={exercise.name}
-              onChange={e => onUpdateName(exercise.id, e.target.value)}
-              className="font-medium border-none p-0 h-auto bg-transparent focus:bg-white focus:border-gray-300"
-              placeholder="Exercise name"
-            />
+            <div className="flex-1">
+              <h3 className="font-semibold text-gray-900 text-lg">
+                {exercise.name || 'Exercise'}
+              </h3>
+            </div>
             <Button
               variant="ghost"
               size="sm"
@@ -130,7 +129,7 @@ const ExerciseManagement = ({
             variant="ghost"
             size="sm"
             onClick={() => onRemove(exercise.id)}
-            className="text-red-600 hover:text-red-700"
+            className="text-red-600 hover:text-red-700 ml-2"
           >
             <Trash2 className="h-4 w-4" />
           </Button>
