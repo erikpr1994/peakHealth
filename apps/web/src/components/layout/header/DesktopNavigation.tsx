@@ -21,12 +21,26 @@ export const DesktopNavigation = ({
   items,
   pathname,
   onNavigate,
-}: DesktopNavigationProps) => {
+}: DesktopNavigationProps): React.ReactElement => {
+  // Helper function to check if a navigation item should be active
+  const isNavigationItemActive = (
+    itemPath: string,
+    currentPathname: string
+  ): boolean => {
+    // Check if the current pathname starts with the item path
+    // This handles sub-routes like /routines/create, /routines/123, etc.
+    if (itemPath === '/dashboard') {
+      // Dashboard should only be active for exact match
+      return currentPathname === itemPath;
+    }
+    return currentPathname.startsWith(itemPath);
+  };
+
   return (
     <nav className="hidden md:flex space-x-1">
       {items.map(item => {
         const Icon = item.icon;
-        const isActive = pathname === item.path;
+        const isActive = isNavigationItemActive(item.path, pathname);
         return (
           <Button
             key={item.id}
