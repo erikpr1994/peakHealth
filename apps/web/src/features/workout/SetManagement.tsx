@@ -16,12 +16,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-  TooltipProvider,
-} from '@/components/ui/tooltip';
+
+import styles from './SetManagement.module.css';
 
 export type SetType = 'warmup' | 'normal' | 'failure' | 'dropset';
 export type RepType = 'fixed' | 'range';
@@ -287,29 +283,23 @@ const SetManagement = ({
           )}
         </div>
         <div className="flex items-center gap-2">
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button
-                  onClick={onAddApproachSets}
-                  size="sm"
-                  variant="outline"
-                  disabled={isAddApproachSetsDisabled}
-                  className={
-                    isAddApproachSetsDisabled
-                      ? 'opacity-50 cursor-not-allowed'
-                      : ''
-                  }
-                >
-                  <Target className="w-4 h-4 mr-1" />
-                  Add Approach Sets
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>{getAddApproachSetsHoverText()}</p>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
+          <div className={styles.tooltipContainer}>
+            <Button
+              onClick={onAddApproachSets}
+              size="sm"
+              variant="outline"
+              disabled={isAddApproachSetsDisabled}
+              className={
+                isAddApproachSetsDisabled ? 'opacity-50 cursor-not-allowed' : ''
+              }
+            >
+              <Target className="w-4 h-4 mr-1" />
+              Add Approach Sets
+            </Button>
+            <div className={styles.tooltip}>
+              {getAddApproachSetsHoverText()}
+            </div>
+          </div>
           <Button onClick={addSet} size="sm" variant="outline">
             <Plus className="w-4 h-4 mr-1" />
             Add Set
