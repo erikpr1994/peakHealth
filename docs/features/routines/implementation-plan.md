@@ -2,7 +2,7 @@
 
 ## Overview
 
-This document provides a detailed implementation plan for the Routines feature MVP, based on all resolved design decisions. The plan is organized by development phases with specific tasks, timelines, and success criteria.
+This document provides a detailed implementation plan for the Routines feature MVP, based on all resolved design decisions. The plan is organized by development phases with specific tasks and success criteria.
 
 ## 🎯 **Implementation Summary**
 
@@ -15,13 +15,13 @@ This document provides a detailed implementation plan for the Routines feature M
 - **UI/UX**: Progressive disclosure with tiered feature access
 - **Analytics**: Basic completion tracking and statistics
 
-### **Timeline**: 12 weeks (3 phases of 4 weeks each)
+### **Timeline**: 8 weeks (4 phases of 2 weeks each)
 
 ---
 
-## 📋 **Phase 1: Core Foundation (Weeks 1-4)**
+## 📋 **Phase 1: Foundation (Weeks 1-2)**
 
-### **Week 1: Database & Backend Foundation**
+### **Database & Backend Foundation**
 
 #### **Tasks**
 
@@ -48,21 +48,21 @@ This document provides a detailed implementation plan for the Routines feature M
 - Basic CRUD operations work with proper validation
 - Role-based access is functional
 
-### **Week 2: Authentication & User Management**
+### **Authentication & User Management**
 
 #### **Tasks**
 
-- [ ] **AUTH2.1**: Integrate with existing user authentication system
+- [ ] **AUTH1.1**: Integrate with existing user authentication system
   - Connect routines to user accounts
   - Implement role-based access (owner, editor, viewer)
   - Add user ownership validation
 
-- [ ] **AUTH2.2**: Create user permission system
+- [ ] **AUTH1.2**: Create user permission system
   - Implement routine ownership logic
   - Add permission checking middleware
   - Create user role management
 
-- [ ] **API2.1**: Enhance API with user context
+- [ ] **API1.2**: Enhance API with user context
   - Add user filtering to all endpoints
   - Implement proper error responses
   - Add user activity logging
@@ -74,24 +74,72 @@ This document provides a detailed implementation plan for the Routines feature M
 - All API endpoints respect user permissions
 - User activity is properly tracked
 
-### **Week 3: Exercise Library Integration**
+---
+
+## 📋 **Phase 2: Core Features (Weeks 3-4)**
+
+### **Routine Management**
 
 #### **Tasks**
 
-- [ ] **EX3.1**: Implement exercise library integration
+- [ ] **RM2.1**: Implement routine CRUD operations
+  - Create new routines with basic metadata (name, description, difficulty, goal)
+  - Edit existing routines
+  - Delete routines
+  - View routine details and progress
+  - Mark routines as active/inactive
+  - Favorite/unfavorite routines
+
+- [ ] **RM2.2**: Add routine versioning system
+  - Implement version history tracking
+  - Add version comparison functionality
+  - Create version revert capability
+
+#### **Success Criteria**
+
+- All routine CRUD operations work correctly
+- Version history works properly
+- Routine metadata is properly managed
+
+### **Workout Management**
+
+#### **Tasks**
+
+- [ ] **WM2.1**: Implement workout and section management
+  - Add strength workouts to routines
+  - Add running workouts to routines
+  - Add sections to workouts (warmup, basic, cooldown)
+  - Reorder workouts and sections
+
+- [ ] **WM2.2**: Implement exercise management
+  - Add exercises to sections
+  - Configure basic exercise parameters (sets, reps, weight, rest)
+  - Reorder exercises within sections
+
+#### **Success Criteria**
+
+- Workout and section management is functional
+- Exercise management works correctly
+- Reordering functionality is smooth
+
+### **Exercise Library Integration**
+
+#### **Tasks**
+
+- [ ] **EL2.1**: Implement exercise library integration
   - Create exercise reference system (not embedded)
   - Implement local storage sync for exercise data
   - Add exercise lookup and validation
 
-- [ ] **EX3.2**: Create exercise sync system
+- [ ] **EL2.2**: Create exercise sync system
   - Download exercise library to local storage
   - Implement sync strategy (online/offline)
   - Add exercise data validation
 
-- [ ] **API3.1**: Create exercise-related endpoints
-  - Add exercise search and filtering
-  - Implement exercise validation
-  - Create exercise assignment endpoints
+- [ ] **EL2.3**: Add exercise selection features
+  - Basic exercise search and selection
+  - Exercise categories and muscle groups
+  - Exercise details and instructions
 
 #### **Success Criteria**
 
@@ -100,21 +148,25 @@ This document provides a detailed implementation plan for the Routines feature M
 - Exercise references are properly managed
 - Offline exercise access is available
 
-### **Week 4: Basic Frontend Foundation**
+---
+
+## 📋 **Phase 3: Integration (Weeks 5-6)**
+
+### **Frontend Foundation**
 
 #### **Tasks**
 
-- [ ] **FE4.1**: Create core React components
+- [ ] **FE3.1**: Create core React components
   - Implement RoutineList, RoutineCard components
   - Create basic routine creation form
   - Add routine detail view
 
-- [ ] **FE4.2**: Implement basic state management
+- [ ] **FE3.2**: Implement basic state management
   - Set up routine data fetching
   - Add loading and error states
   - Implement basic CRUD operations
 
-- [ ] **FE4.3**: Add basic styling and responsive design
+- [ ] **FE3.3**: Add basic styling and responsive design
   - Implement CSS modules for styling
   - Add responsive breakpoints
   - Create consistent design system
@@ -126,77 +178,21 @@ This document provides a detailed implementation plan for the Routines feature M
 - Responsive design is implemented
 - Loading and error states are handled
 
----
-
-## 📋 **Phase 2: Feature Implementation (Weeks 5-8)**
-
-### **Week 5: Routine Creation & Management**
+### **User Interface & Experience**
 
 #### **Tasks**
 
-- [ ] **RC5.1**: Implement tiered routine creation
-  - Create guided wizard for free users
-  - Add template selection for basic users
-  - Prepare structure for AI features (premium)
-
-- [ ] **RC5.2**: Add routine versioning system
-  - Implement version history tracking
-  - Add version comparison functionality
-  - Create version revert capability
-
-- [ ] **RC5.3**: Create routine templates system
-  - Add basic curated templates
-  - Implement template selection UI
-  - Create template customization
-
-#### **Success Criteria**
-
-- Tiered routine creation is functional
-- Version history works correctly
-- Basic templates are available
-- Template customization works
-
-### **Week 6: Workout Integration & Management**
-
-#### **Tasks**
-
-- [ ] **WI6.1**: Implement workout tracker integration
-  - Create hybrid approach (automatic + manual)
-  - Add dashboard integration with "Start" button
-  - Implement manual workout creation
-
-- [ ] **WI6.2**: Add workout scheduling
-  - Create calendar integration
-  - Implement workout scheduling logic
-  - Add conflict detection and resolution
-
-- [ ] **WI6.3**: Create workout execution flow
-  - Add workout start/stop functionality
-  - Implement progress tracking during workouts
-  - Create workout completion flow
-
-#### **Success Criteria**
-
-- Workout tracker integration is functional
-- Hybrid approach works correctly
-- Calendar scheduling is implemented
-- Workout execution flow is complete
-
-### **Week 7: Progressive Disclosure UI**
-
-#### **Tasks**
-
-- [ ] **UI7.1**: Implement progressive disclosure design
+- [ ] **UI3.1**: Implement progressive disclosure design
   - Create beginner-friendly interface
   - Add advanced features for experienced users
   - Implement feature unlocking system
 
-- [ ] **UI7.2**: Add comprehensive validation
+- [ ] **UI3.2**: Add comprehensive validation
   - Implement client-side validation
   - Add server-side validation
   - Create user-friendly error messages
 
-- [ ] **UI7.3**: Create responsive design
+- [ ] **UI3.3**: Create responsive design
   - Optimize for mobile devices
   - Add touch-friendly interactions
   - Implement adaptive layouts
@@ -208,21 +204,60 @@ This document provides a detailed implementation plan for the Routines feature M
 - Responsive design is fully implemented
 - User experience is intuitive
 
-### **Week 8: Performance & Optimization**
+### **Workout Integration**
 
 #### **Tasks**
 
-- [ ] **PO8.1**: Implement basic performance optimization
+- [ ] **WI3.1**: Implement basic workout tracker integration
+  - Create hybrid approach (automatic + manual)
+  - Add dashboard integration with "Start" button
+  - Implement manual workout creation
+
+- [ ] **WI3.2**: Add basic workout execution flow
+  - Add workout start/stop functionality
+  - Implement progress tracking during workouts
+  - Create workout completion flow
+
+#### **Success Criteria**
+
+- Workout tracker integration is functional
+- Hybrid approach works correctly
+- Workout execution flow is complete
+
+---
+
+## 📋 **Phase 4: Polish (Weeks 7-8)**
+
+### **Progress Tracking & Analytics**
+
+#### **Tasks**
+
+- [ ] **PT4.1**: Implement basic progress tracking
+  - Add basic routine progress indicators
+  - Implement workout completion tracking
+  - Create basic progress visualization
+
+- [ ] **PT4.2**: Add basic analytics
+  - Add completion statistics
+  - Implement basic progress tracking
+  - Create simple progress reports
+
+#### **Success Criteria**
+
+- Basic progress tracking is functional
+- Completion statistics are accurate
+- Progress visualization is clear
+
+### **Performance & Optimization**
+
+#### **Tasks**
+
+- [ ] **PO4.1**: Implement basic performance optimization
   - Add pagination for routine lists
   - Implement lazy loading for large datasets
   - Add basic caching strategies
 
-- [ ] **PO8.2**: Create basic analytics dashboard
-  - Add completion statistics
-  - Implement basic progress tracking
-  - Create simple analytics visualizations
-
-- [ ] **PO8.3**: Add error handling and monitoring
+- [ ] **PO4.2**: Add error handling and monitoring
   - Implement comprehensive error handling
   - Add performance monitoring
   - Create user feedback system
@@ -230,117 +265,35 @@ This document provides a detailed implementation plan for the Routines feature M
 #### **Success Criteria**
 
 - Performance optimization is implemented
-- Basic analytics dashboard is functional
 - Error handling is comprehensive
 - System is stable and performant
 
----
-
-## 📋 **Phase 3: Testing & Refinement (Weeks 9-12)**
-
-### **Week 9: Integration Testing**
+### **Testing & Documentation**
 
 #### **Tasks**
 
-- [ ] **IT9.1**: Test all integration points
-  - Test user authentication integration
-  - Test exercise library integration
-  - Test workout tracker integration
-
-- [ ] **IT9.2**: Performance testing
-  - Test with large datasets
+- [ ] **TD4.1**: Conduct comprehensive testing
+  - Test all integration points
   - Validate performance under load
-  - Optimize slow queries
-
-- [ ] **IT9.3**: Security testing
   - Test role-based access control
-  - Validate data isolation
-  - Test input validation
+
+- [ ] **TD4.2**: Create user documentation
+  - Write user guides and tutorials
+  - Create help documentation
+  - Add in-app guidance
+
+- [ ] **TD4.3**: Final testing and bug fixes
+  - Conduct comprehensive testing
+  - Fix any remaining issues
+  - Validate all features work correctly
 
 #### **Success Criteria**
 
 - All integrations work correctly
 - Performance meets requirements
 - Security is properly implemented
-- No critical bugs remain
-
-### **Week 10: User Experience Testing**
-
-#### **Tasks**
-
-- [ ] **UX10.1**: Conduct user testing
-  - Test with target user groups
-  - Gather feedback on usability
-  - Identify pain points
-
-- [ ] **UX10.2**: Refine user interface
-  - Address user feedback
-  - Improve user flows
-  - Enhance visual design
-
-- [ ] **UX10.3**: Optimize for different devices
-  - Test on various screen sizes
-  - Optimize touch interactions
-  - Ensure accessibility
-
-#### **Success Criteria**
-
-- User testing is complete
-- User feedback is incorporated
-- Interface is polished and intuitive
-- Accessibility requirements are met
-
-### **Week 11: Documentation & Training**
-
-#### **Tasks**
-
-- [ ] **DT11.1**: Create user documentation
-  - Write user guides and tutorials
-  - Create help documentation
-  - Add in-app guidance
-
-- [ ] **DT11.2**: Create technical documentation
-  - Document API endpoints
-  - Create deployment guides
-  - Write maintenance procedures
-
-- [ ] **DT11.3**: Prepare for launch
-  - Create launch checklist
-  - Prepare marketing materials
-  - Set up monitoring and analytics
-
-#### **Success Criteria**
-
 - User documentation is complete
-- Technical documentation is comprehensive
-- Launch preparation is ready
-- Support materials are available
-
-### **Week 12: Final Testing & Launch Preparation**
-
-#### **Tasks**
-
-- [ ] **FL12.1**: Final testing and bug fixes
-  - Conduct comprehensive testing
-  - Fix any remaining issues
-  - Validate all features work correctly
-
-- [ ] **FL12.2**: Performance optimization
-  - Final performance tuning
-  - Optimize database queries
-  - Improve loading times
-
-- [ ] **FL12.3**: Launch preparation
-  - Deploy to staging environment
-  - Conduct final validation
-  - Prepare for production launch
-
-#### **Success Criteria**
-
-- All features work correctly
-- Performance meets requirements
-- System is ready for production
-- Launch plan is complete
+- No critical bugs remain
 
 ---
 
@@ -371,21 +324,28 @@ This document provides a detailed implementation plan for the Routines feature M
 
 ## 🚀 **Post-MVP Roadmap**
 
-### **Phase 4: Advanced Features (Months 4-6)**
+### **Phase 5: Advanced Features (Months 3-4)**
 
-- Advanced analytics and insights
-- AI-powered recommendations
-- Community features and sharing
-- Advanced calendar integration
+- Trail running workout creation
+- Advanced progression methods
+- Routine templates
+- Enhanced progress tracking
 
-### **Phase 5: Premium Features (Months 7-9)**
+### **Phase 6: Social Features (Months 5-6)**
+
+- Routine sharing
+- Community features
+- Collaboration tools
+- Social analytics
+
+### **Phase 7: Premium Features (Months 7-9)**
 
 - AI-assisted routine creation
-- Advanced progress tracking
+- Advanced analytics
 - Professional collaboration tools
 - Advanced customization options
 
-### **Phase 6: Platform Integration (Months 10-12)**
+### **Phase 8: Platform Integration (Months 10-12)**
 
 - External platform integrations
 - Advanced recovery planning
