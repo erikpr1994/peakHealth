@@ -1,8 +1,8 @@
 'use client';
 
-import Routines from '@/features/routines/Routines';
+import Routines from '@/features/routines/features/routine-list/Routines';
 
-const RoutinesPage = () => {
+const RoutinesPage = (): React.ReactElement => {
   return <Routines />;
 };
 

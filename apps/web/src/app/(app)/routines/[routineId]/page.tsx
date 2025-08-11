@@ -2,9 +2,9 @@
 
 import { useParams } from 'next/navigation';
 
-import RoutineDetail from '@/features/routines/RoutineDetail';
+import RoutineDetail from '@/features/routines/features/routine-detail/RoutineDetail';
 
-const RoutineDetailPage = () => {
+const RoutineDetailPage = (): React.ReactElement => {
   const { routineId } = useParams();
   return <RoutineDetail routineId={routineId as string} />;
 };

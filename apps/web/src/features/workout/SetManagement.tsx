@@ -48,7 +48,17 @@ interface SetManagementProps {
 }
 
 // Configuration for each progression method
-const getProgressionConfig = (method: ProgressionMethod | undefined) => {
+const getProgressionConfig = (
+  method: ProgressionMethod | undefined
+): {
+  allowRepTypeChange: boolean;
+  allowSetTypeChange: boolean;
+  allowAddRemoveSets: boolean;
+  allowRepsChange: boolean;
+  allowRpeChange: boolean;
+  lockMessage: string;
+  description: string;
+} | null => {
   if (!method) return null;
 
   const configs = {
@@ -94,8 +104,8 @@ const getProgressionConfig = (method: ProgressionMethod | undefined) => {
       allowAddRemoveSets: true,
       allowRepsChange: true,
       allowRpeChange: true,
-      lockMessage: 'Widowmaker is a single failure set',
-      description: 'Single high-rep failure set',
+      lockMessage: 'Widowmaker structure is predefined',
+      description: 'Warmup set + 20-rep failure set',
     },
     amrap: {
       allowRepTypeChange: true,
@@ -111,12 +121,12 @@ const getProgressionConfig = (method: ProgressionMethod | undefined) => {
   return configs[method];
 };
 
-export default function SetManagement({
+const SetManagement = ({
   sets,
   onSetsChange,
   onNotesClick,
   progressionMethod,
-}: SetManagementProps) {
+}: SetManagementProps): React.ReactElement => {
   const [openPopoverId, setOpenPopoverId] = useState<string | null>(null);
   const [initialized, setInitialized] = useState(false);
 
@@ -137,7 +147,7 @@ export default function SetManagement({
     }
   }, [sets, onSetsChange, initialized]);
 
-  const addSet = () => {
+  const addSet = (): void => {
     const newSet: WorkoutSet = {
       id: Date.now().toString(),
       setNumber: sets.length + 1,
@@ -153,14 +163,14 @@ export default function SetManagement({
     onSetsChange([...sets, newSet]);
   };
 
-  const removeSet = (setId: string) => {
+  const removeSet = (setId: string): void => {
     const updatedSets = sets
       .filter(set => set.id !== setId)
       .map((set, index) => ({ ...set, setNumber: index + 1 }));
     onSetsChange(updatedSets);
   };
 
-  const updateSet = (setId: string, updates: Partial<WorkoutSet>) => {
+  const updateSet = (setId: string, updates: Partial<WorkoutSet>): void => {
     const updatedSets = sets.map(set => {
       if (set.id === setId) {
         const updatedSet = { ...set, ...updates };
@@ -192,7 +202,7 @@ export default function SetManagement({
   };
 
   // Calculate the display number/letter for each set
-  const getSetDisplay = (set: WorkoutSet, index: number) => {
+  const getSetDisplay = (set: WorkoutSet, index: number): string => {
     if (set.setType === 'normal') {
       // Count how many normal sets come before this one
       const normalSetsBefore = sets
@@ -214,17 +224,18 @@ export default function SetManagement({
     }
   };
 
-  const getSetTypeColor = (type: SetType) => {
-    switch (type) {
-      case 'warmup':
-        return 'bg-orange-100 text-orange-800 border-orange-200';
-      case 'failure':
-        return 'bg-red-100 text-red-800 border-red-200';
-      case 'dropset':
-        return 'bg-purple-100 text-purple-800 border-purple-200';
-      default:
-        return 'bg-gray-100 text-gray-800 border-gray-200';
-    }
+  const getSetTypeColor = (type: SetType): string => {
+    const colors = {
+      warmup: 'bg-blue-100 text-blue-800 border-blue-200',
+      normal: 'bg-green-100 text-green-800 border-green-200',
+      failure: 'bg-red-100 text-red-800 border-red-200',
+      dropset: 'bg-purple-100 text-purple-800 border-purple-200',
+    };
+    return colors[type] || 'bg-gray-100 text-gray-800 border-gray-200';
+  };
+
+  const handleSetTypeChange = (setId: string, newType: SetType): void => {
+    updateSet(setId, { setType: newType });
   };
 
   const setTypeOptions = [
@@ -241,11 +252,6 @@ export default function SetManagement({
     },
     { value: 'dropset', label: 'Drop Set', icon: <Zap className="w-4 h-4" /> },
   ];
-
-  const handleSetTypeChange = (setId: string, newType: SetType) => {
-    updateSet(setId, { setType: newType });
-    setOpenPopoverId(null);
-  };
 
   return (
     <div className="space-y-4">
@@ -486,4 +492,6 @@ export default function SetManagement({
       )}
     </div>
   );
-}
+};
+
+export default SetManagement;
