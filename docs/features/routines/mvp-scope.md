@@ -4,22 +4,26 @@
 
 This document defines the Minimum Viable Product (MVP) scope for the Routines feature, outlining the essential functionality required for initial release.
 
-## 🎯 **MVP Goals**
+## 🎯 **MVP Goals** ✅ **RESOLVED**
+
+**Decision**: **Comprehensive MVP with tiered feature access and progressive enhancement**
 
 ### **Primary Objectives**
 
 1. **Core Functionality**: Enable users to create, edit, and manage basic workout routines
-2. **Data Persistence**: Store and retrieve routine data with proper user association
-3. **Basic Integration**: Connect with user authentication and exercise library
-4. **User Experience**: Provide intuitive interface for routine management
+2. **Data Persistence**: Store and retrieve routine data with proper user association and version history
+3. **Tiered Integration**: Connect with user authentication and exercise library (referenced with local storage)
+4. **User Experience**: Provide intuitive interface with progressive disclosure and tiered feature access
+5. **Workout Integration**: Hybrid approach for workout tracker integration
 
 ### **Success Criteria**
 
-- Users can create and edit routines successfully
-- Routine data persists across sessions
-- Integration with user authentication works seamlessly
-- Basic exercise library integration is functional
-- UI is responsive and user-friendly
+- Users can create and edit routines successfully with version history
+- Routine data persists across sessions with proper user association
+- Integration with user authentication works seamlessly (role-based access)
+- Exercise library integration is functional (referenced with local storage sync)
+- UI is responsive and user-friendly with progressive disclosure
+- Workout tracker integration provides both automatic and manual options
 
 ## 📋 **MVP Features**
 

@@ -4,7 +4,7 @@ This document contains all the questions we need to answer to properly plan and 
 
 ## 🏗️ **Data Architecture Questions**
 
-### **Q1.1: Database Schema Design**
+### **Q1.1: Database Schema Design** ✅ **RESOLVED**
 
 **Question**: How should routines be structured in the database? Should we use a normalized approach or JSON storage for complex workout data?
 
@@ -12,9 +12,22 @@ This document contains all the questions we need to answer to properly plan and 
 
 **Options**:
 
-- **Option A**: Fully normalized tables (routines, workouts, sections, exercises, sets)
+- **Option A**: Fully normalized tables (routines, workouts, sections, exercises, sets) ✅ **SELECTED**
 - **Option B**: Hybrid approach (routines table + JSON columns for complex data)
 - **Option C**: Document-based approach (JSON storage for entire routines)
+
+**Decision**: **Option A - Fully normalized tables**
+
+**Rationale**:
+
+- Better data integrity and consistency
+- Superior query performance for complex operations
+- Easier to scale and optimize individual tables
+- More flexible for future features and integrations
+- Better support for analytics and reporting
+- Easier to implement routine sharing and versioning
+
+**Implementation**: Will use normalized tables: routines, workouts, workout_sections, exercises, exercise_sets, trail_running_data, trail_running_intervals
 
 **Considerations**:
 
@@ -25,17 +38,27 @@ This document contains all the questions we need to answer to properly plan and 
 
 ---
 
-### **Q1.2: Routine Versioning**
+### **Q1.2: Routine Versioning** ✅ **RESOLVED**
 
 **Question**: How should we handle routine versioning? Should users be able to modify routines without affecting historical data?
 
 **Context**: Users might want to modify their routines over time, but we need to preserve historical workout data that references specific routine versions.
 
-**Options**:
+**Decision**: **Option B - Mutable routines with version history**
 
-- **Option A**: Immutable routines (create new version when modified)
-- **Option B**: Mutable routines with version history
-- **Option C**: Copy-on-write (create new version only when actively used)
+**Implementation**:
+
+- **Mutable Routines**: Users can modify existing routines easily
+- **Version History**: Track all changes with timestamps and user info
+- **Revert Capability**: Allow users to revert to previous versions
+- **Change Tracking**: Show what changed between versions
+
+**Rationale**:
+
+- **User-Friendly**: Easy to modify routines without creating duplicates
+- **Data Integrity**: Can always revert to previous versions if needed
+- **History Tracking**: Users can see how their routines evolved
+- **Storage Efficient**: No need to duplicate entire routine data
 
 **Considerations**:
 
@@ -46,17 +69,27 @@ This document contains all the questions we need to answer to properly plan and 
 
 ---
 
-### **Q1.3: Routine Sharing & Collaboration**
+### **Q1.3: Routine Sharing & Collaboration** ✅ **RESOLVED**
 
 **Question**: How should we handle routine sharing and collaboration? Should there be public/private routines?
 
 **Context**: Users might want to share routines with others or collaborate on routine creation.
 
-**Options**:
+**Decision**: **No sharing features for MVP - Future scope**
 
-- **Option A**: Public/private with simple sharing
-- **Option B**: Advanced collaboration with real-time editing
-- **Option C**: Template-based sharing (read-only copies)
+**Implementation**:
+
+- **MVP**: All routines are private to the user
+- **Future**: Will be implemented as part of social features
+- **Data Structure**: Design database to support future sharing capabilities
+- **User Experience**: Focus on individual routine management
+
+**Rationale**:
+
+- **MVP Focus**: Concentrate on core routine functionality
+- **Social Features**: Sharing will be part of broader social platform
+- **Development Speed**: Faster MVP delivery without sharing complexity
+- **Future Scalability**: Database design supports future sharing features
 
 **Considerations**:
 
@@ -69,7 +102,7 @@ This document contains all the questions we need to answer to properly plan and 
 
 ## 🎯 **User Experience Questions**
 
-### **Q2.1: Routine Creation Flow**
+### **Q2.1: Routine Creation Flow** ✅ **RESOLVED**
 
 **Question**: How should the routine creation flow be optimized? Should we have templates or guided creation?
 
@@ -78,9 +111,24 @@ This document contains all the questions we need to answer to properly plan and 
 **Options**:
 
 - **Option A**: Template-based creation (choose from pre-built templates)
-- **Option B**: Guided wizard (step-by-step creation)
-- **Option C**: Hybrid approach (templates + customization)
-- **Option D**: AI-assisted creation (smart recommendations)
+- **Option B**: Guided wizard (step-by-step creation) ✅ **FREE USERS**
+- **Option C**: Hybrid approach (templates + customization) ✅ **BASIC PAYING USERS**
+- **Option D**: AI-assisted creation (smart recommendations) ✅ **PREMIUM USERS** (Future scope)
+
+**Decision**: **Tiered approach based on user subscription level**
+
+**Implementation**:
+
+- **Free Users**: Guided wizard (step-by-step creation)
+- **Basic Paying Users**: Hybrid approach (templates + customization)
+- **Premium Users**: AI-assisted creation (smart recommendations) - _Post-MVP_
+
+**Rationale**:
+
+- **Free tier**: Guided wizard provides value while encouraging upgrade
+- **Basic tier**: Templates + customization offers significant value for paid users
+- **Premium tier**: AI features as premium differentiator
+- **MVP scope**: Focus on Options B and C for initial release
 
 **Considerations**:
 
@@ -91,18 +139,27 @@ This document contains all the questions we need to answer to properly plan and 
 
 ---
 
-### **Q2.2: Routine Complexity Management**
+### **Q2.2: Routine Complexity Management** ✅ **RESOLVED**
 
 **Question**: How should we handle routine complexity? Should we have beginner/advanced modes?
 
 **Context**: Different users have different needs - beginners need simplicity, advanced users need power features.
 
-**Options**:
+**Decision**: **Option A - Progressive disclosure (show advanced features on demand)**
 
-- **Option A**: Progressive disclosure (show advanced features on demand)
-- **Option B**: Mode switching (beginner/advanced toggle)
-- **Option C**: Feature flags based on user level
-- **Option D**: Adaptive interface (learns from user behavior)
+**Implementation**:
+
+- **Current Approach**: Maintain existing progressive disclosure design
+- **User Experience**: All users see same interface, complexity revealed as needed
+- **Learning Curve**: Users naturally progress from simple to advanced features
+- **Consistency**: Single codebase, easier to maintain
+
+**Rationale**:
+
+- **Proven Design**: Current implementation works well
+- **User-Friendly**: No mode switching confusion
+- **Natural Progression**: Users learn advanced features organically
+- **Maintenance**: Single interface easier to maintain and improve
 
 **Considerations**:
 
@@ -113,18 +170,27 @@ This document contains all the questions we need to answer to properly plan and 
 
 ---
 
-### **Q2.3: Workout Tracker Integration**
+### **Q2.3: Workout Tracker Integration** ✅ **RESOLVED**
 
 **Question**: How should we integrate with the workout tracker? Should routines automatically create workout sessions?
 
 **Context**: Routines need to connect with the workout tracker for actual execution and progress tracking.
 
-**Options**:
+**Decision**: **Option C - Hybrid (suggested sessions with manual override)**
 
-- **Option A**: Automatic session creation (routine → workout session)
-- **Option B**: Manual session creation (user chooses when to start)
-- **Option C**: Hybrid (suggested sessions with manual override)
-- **Option D**: Template-based (routine provides template for tracker)
+**Implementation**:
+
+- **Dashboard Integration**: Show next scheduled workout with "Start" button for immediate execution
+- **Manual Creation**: Users can also manually create workout sessions from routines
+- **UI Flexibility**: Different entry points based on context (dashboard vs routine detail)
+- **Data Consistency**: Maintain connection between routine plan and actual execution
+
+**Rationale**:
+
+- **User Experience**: Quick start from dashboard for convenience
+- **Flexibility**: Manual creation for users who prefer more control
+- **Context Awareness**: Different UI patterns for different use cases
+- **Future Planning**: Can evolve based on user behavior and preferences
 
 **Considerations**:
 
@@ -137,18 +203,27 @@ This document contains all the questions we need to answer to properly plan and 
 
 ## 🔧 **Feature Scope Questions**
 
-### **Q3.1: Routine Templates & Community**
+### **Q3.1: Routine Templates & Community** ✅ **RESOLVED**
 
 **Question**: Should we support routine templates and community sharing in the MVP?
 
 **Context**: Pre-built templates could significantly improve user onboarding, but community features add complexity.
 
-**Options**:
+**Decision**: **Option A - Basic templates only (curated by us)**
 
-- **Option A**: Basic templates only (curated by us)
-- **Option B**: Templates + simple sharing
-- **Option C**: Full community features
-- **Option D**: No templates in MVP
+**Implementation**:
+
+- **MVP**: Curated templates for common workout types
+- **Quality Control**: All templates reviewed and optimized
+- **User Onboarding**: Templates help users get started quickly
+- **Future**: Can evolve to community features later
+
+**Rationale**:
+
+- **User Value**: Templates significantly improve onboarding experience
+- **Controlled Quality**: Curated templates ensure good user experience
+- **Implementation Speed**: Faster than building community features
+- **Foundation**: Sets up structure for future community features
 
 **Considerations**:
 
@@ -159,18 +234,27 @@ This document contains all the questions we need to answer to properly plan and 
 
 ---
 
-### **Q3.2: AI Recommendations**
+### **Q3.2: AI Recommendations** ✅ **RESOLVED**
 
 **Question**: How should we handle routine recommendations and AI suggestions?
 
 **Context**: AI could help users create better routines based on their goals, experience, and preferences.
 
-**Options**:
+**Decision**: **Option A - No AI in MVP**
 
-- **Option A**: No AI in MVP
-- **Option B**: Basic recommendations (goal-based templates)
-- **Option C**: Advanced AI (personalized suggestions)
-- **Option D**: Hybrid (AI-assisted creation)
+**Implementation**:
+
+- **MVP**: Use existing exercise selector without AI recommendations
+- **Current State**: Exercise selector is already built and functional
+- **Future**: Can add AI recommendations in later iterations
+- **User Experience**: Focus on core functionality first
+
+**Rationale**:
+
+- **Existing Functionality**: Exercise selector already works well
+- **MVP Focus**: Concentrate on core routine management features
+- **Development Speed**: Faster MVP delivery without AI complexity
+- **Future Enhancement**: Can add AI features when needed
 
 **Considerations**:
 
@@ -181,18 +265,27 @@ This document contains all the questions we need to answer to properly plan and 
 
 ---
 
-### **Q3.3: Import/Export Functionality**
+### **Q3.3: Import/Export Functionality** ✅ **RESOLVED**
 
 **Question**: Should we support routine import/export from other platforms?
 
 **Context**: Users might want to migrate routines from other fitness apps or share routines across platforms.
 
-**Options**:
+**Decision**: **Option A - No import/export in MVP**
 
-- **Option A**: No import/export in MVP
-- **Option B**: Export only (JSON/CSV)
-- **Option C**: Import from major platforms
-- **Option D**: Full import/export ecosystem
+**Implementation**:
+
+- **MVP**: Focus on core routine creation and management
+- **User Experience**: Users create new routines in the platform
+- **Future**: Can add import/export functionality later
+- **Data Migration**: Users can manually recreate routines if needed
+
+**Rationale**:
+
+- **MVP Focus**: Concentrate on core functionality
+- **User Migration**: Most users will create new routines
+- **Implementation Speed**: Faster MVP delivery
+- **Future Feature**: Can add import/export when needed
 
 **Considerations**:
 
@@ -205,18 +298,27 @@ This document contains all the questions we need to answer to properly plan and 
 
 ## ⚡ **Technical Implementation Questions**
 
-### **Q4.1: Real-time Collaboration**
+### **Q4.1: Real-time Collaboration** ✅ **RESOLVED**
 
 **Question**: How should we handle real-time collaboration on routines?
 
 **Context**: Multiple users might want to edit the same routine simultaneously (e.g., trainer and client).
 
-**Options**:
+**Decision**: **Option A - No real-time collaboration**
 
-- **Option A**: No real-time collaboration
-- **Option B**: Simple sharing (one editor at a time)
-- **Option C**: Real-time collaborative editing
-- **Option D**: Comment/feedback system
+**Implementation**:
+
+- **MVP**: Focus on individual user experience
+- **User Experience**: Single user routine management
+- **Future**: Can add collaboration when trainer platform is ready
+- **Development**: Faster MVP delivery without collaboration complexity
+
+**Rationale**:
+
+- **MVP Simplicity**: Focus on individual user experience
+- **Implementation Speed**: Faster development without collaboration complexity
+- **Future Feature**: Can add collaboration when trainer platform is ready
+- **User Focus**: Most MVP users will be individual users
 
 **Considerations**:
 
@@ -227,18 +329,27 @@ This document contains all the questions we need to answer to properly plan and 
 
 ---
 
-### **Q4.2: Performance Optimization**
+### **Q4.2: Performance Optimization** ✅ **RESOLVED**
 
 **Question**: How should we optimize performance for users with many routines?
 
 **Context**: Power users might have dozens of routines, which could impact performance.
 
-**Options**:
+**Decision**: **Option A - Basic pagination/loading**
 
-- **Option A**: Basic pagination/loading
-- **Option B**: Advanced caching and optimization
-- **Option C**: Lazy loading and virtualization
-- **Option D**: Offline-first approach
+**Implementation**:
+
+- **MVP**: Basic pagination and loading states
+- **User Experience**: Sufficient performance for initial user base
+- **Future**: Can add advanced optimization as user base grows
+- **Development**: Faster MVP delivery with basic performance features
+
+**Rationale**:
+
+- **MVP Simplicity**: Start with basic performance features
+- **User Experience**: Sufficient for initial user base
+- **Implementation Speed**: Faster development
+- **Future Optimization**: Can add advanced features as user base grows
 
 **Considerations**:
 
@@ -249,18 +360,27 @@ This document contains all the questions we need to answer to properly plan and 
 
 ---
 
-### **Q4.3: Offline Functionality**
+### **Q4.3: Offline Functionality** ✅ **RESOLVED**
 
 **Question**: How should we handle offline functionality for routine creation?
 
 **Context**: Users might want to create or edit routines without internet connectivity.
 
-**Options**:
+**Decision**: **Option A - No offline support**
 
-- **Option A**: No offline support
-- **Option B**: Basic offline (create, sync later)
-- **Option C**: Full offline functionality
-- **Option D**: Progressive web app approach
+**Implementation**:
+
+- **MVP**: Online-only functionality
+- **User Experience**: Requires internet connection
+- **Future**: Can add offline support later
+- **Development**: Faster MVP delivery without offline complexity
+
+**Rationale**:
+
+- **MVP Focus**: Concentrate on core online functionality
+- **Implementation Speed**: Faster development without offline complexity
+- **User Expectations**: Most users expect online functionality
+- **Future Feature**: Can add offline support when needed
 
 **Considerations**:
 
@@ -273,7 +393,7 @@ This document contains all the questions we need to answer to properly plan and 
 
 ## 🔗 **Integration Questions**
 
-### **Q5.1: Exercise Library Integration**
+### **Q5.1: Exercise Library Integration** ✅ **RESOLVED**
 
 **Question**: How should we integrate with the exercise library? Should exercises be embedded or referenced?
 
@@ -282,9 +402,26 @@ This document contains all the questions we need to answer to properly plan and 
 **Options**:
 
 - **Option A**: Embedded exercises (copy data into routine)
-- **Option B**: Referenced exercises (link to exercise library)
+- **Option B**: Referenced exercises (link to exercise library) ✅ **SELECTED**
 - **Option C**: Hybrid (reference with fallback to embedded)
 - **Option D**: Dynamic loading (load exercises on demand)
+
+**Decision**: **Option B - Referenced exercises with local storage sync**
+
+**Implementation**:
+
+- **Database**: Store exercise IDs as references (not embedded data)
+- **Local Storage**: Download entire exercise library to user's device
+- **Sync Strategy**: Sync exercise data when online, use local cache when offline
+- **Storage Efficiency**: Minimal database storage, comprehensive offline support
+
+**Rationale**:
+
+- **Database Efficiency**: Only store exercise IDs, not duplicate data
+- **Offline Support**: Full exercise library available offline via local storage
+- **Performance**: Fast local lookups, no API calls for exercise data
+- **Sync Strategy**: Update local cache when online, seamless offline experience
+- **Storage Optimization**: No redundant data in database
 
 **Considerations**:
 
@@ -295,7 +432,7 @@ This document contains all the questions we need to answer to properly plan and 
 
 ---
 
-### **Q5.2: User Authentication Integration**
+### **Q5.2: User Authentication Integration** ✅ **RESOLVED**
 
 **Question**: How should routines integrate with user authentication and data ownership?
 
@@ -304,9 +441,24 @@ This document contains all the questions we need to answer to properly plan and 
 **Options**:
 
 - **Option A**: Simple user association
-- **Option B**: Role-based access (owner, editor, viewer)
-- **Option C**: Advanced permissions system
-- **Option D**: Organization-based access
+- **Option B**: Role-based access (owner, editor, viewer) ✅ **MVP SELECTED**
+- **Option C**: Advanced permissions system ✅ **FUTURE SCOPE**
+- **Option D**: Organization-based access ✅ **FUTURE SCOPE**
+
+**Decision**: **Option B for MVP, evolving to C+D combination for future**
+
+**Implementation**:
+
+- **MVP**: Role-based access (owner, editor, viewer) for trainer/client relationships
+- **Future**: Advanced permissions system + organization-based access for professional platform
+- **Evolution Path**: Start with basic roles, add granular permissions, then organization support
+
+**Rationale**:
+
+- **MVP Speed**: Option B provides essential collaboration without overcomplicating
+- **Future Scalability**: C+D combination supports professional platform needs
+- **Development Efficiency**: Builds foundation for advanced features
+- **User Value**: Enables trainer/client relationships from the start
 
 **Considerations**:
 
@@ -341,18 +493,27 @@ This document contains all the questions we need to answer to properly plan and 
 
 ## 📊 **Analytics & Insights Questions**
 
-### **Q6.1: Progress Tracking**
+### **Q6.1: Progress Tracking** ✅ **RESOLVED**
 
 **Question**: How should we track and display routine progress and completion?
 
 **Context**: Users need to see their progress through routines and understand their performance.
 
-**Options**:
+**Decision**: **Option A - Basic completion tracking for MVP, with progression to advanced features**
 
-- **Option A**: Basic completion tracking
-- **Option B**: Advanced metrics and analytics
-- **Option C**: Goal-based progress
-- **Option D**: AI-powered insights
+**Implementation**:
+
+- **MVP**: Basic completion tracking and simple progress indicators
+- **Post-MVP**: Advanced metrics and analytics (Option B)
+- **Premium Feature**: Goal-based progress and AI insights (Option C) in Premium Routine Management
+- **Progressive Enhancement**: Build foundation, then add complexity
+
+**Rationale**:
+
+- **MVP Foundation**: Start with basic tracking to validate core functionality
+- **User Value**: Basic progress tracking provides immediate value
+- **Implementation Speed**: Faster MVP delivery with simple tracking
+- **Future Roadmap**: Clear progression path to advanced features
 
 **Considerations**:
 
@@ -363,18 +524,28 @@ This document contains all the questions we need to answer to properly plan and 
 
 ---
 
-### **Q6.2: Performance Analytics**
+### **Q6.2: Performance Analytics** ✅ **RESOLVED**
 
 **Question**: What performance analytics should we provide for routines?
 
 **Context**: Users want to understand how their routines are performing and where they can improve.
 
-**Options**:
+**Decision**: **Option A - Basic workout completion stats for MVP, with roadmap to all options**
 
-- **Option A**: Basic workout completion stats
-- **Option B**: Advanced performance metrics
-- **Option C**: Comparative analytics
-- **Option D**: Predictive insights
+**Implementation**:
+
+- **MVP**: Basic workout completion statistics and simple analytics
+- **Phase 2**: Advanced performance metrics (Option B)
+- **Phase 3**: Comparative analytics (Option C)
+- **Phase 4**: Predictive insights (Option D)
+- **Progressive Enhancement**: Build comprehensive analytics suite over time
+
+**Rationale**:
+
+- **MVP Foundation**: Start with basic analytics to validate user value
+- **Incremental Development**: Build analytics capabilities progressively
+- **User Value**: Each phase adds meaningful insights
+- **Technical Complexity**: Manage implementation complexity through phases
 
 **Considerations**:
 

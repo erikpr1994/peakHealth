@@ -4,14 +4,16 @@
 
 The Routines feature is a comprehensive workout management system that allows users to create, manage, and track various types of workout routines. It supports both strength training and cardio/running workouts with advanced features like trail running planning.
 
-## 🏗️ Architecture
+## 🏗️ Architecture ✅ **RESOLVED**
+
+**Decision**: **Maintain current progressive disclosure design with tiered feature access**
 
 ### Feature Structure
 
 ```
 features/routines/
 ├── features/                    # Sub-features
-│   ├── routine-creation/       # Routine creation and editing
+│   ├── routine-creation/       # Routine creation and editing (tiered by subscription)
 │   ├── routine-detail/         # Routine viewing and management
 │   ├── routine-list/           # Routine listing and browsing
 │   ├── trail-running/          # Specialized trail running workouts

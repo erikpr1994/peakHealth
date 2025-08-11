@@ -4,7 +4,9 @@
 
 This document provides the technical design specification for the Routines feature, including database schema, API design, and component architecture.
 
-## 🗄️ **Database Schema Design**
+## 🗄️ **Database Schema Design** ✅ **RESOLVED**
+
+**Decision**: **Option A - Fully normalized tables with version history**
 
 ### **Core Tables**
 

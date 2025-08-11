@@ -12,6 +12,10 @@ Complete feature explanation, system architecture, and technical specifications 
 
 Minimum Viable Product definition, features, development phases, and success criteria.
 
+### 🚀 [Implementation Plan](./implementation-plan.md)
+
+Detailed 12-week implementation plan with specific tasks, timelines, and success criteria.
+
 ### ❓ [Questions & Feedback](./questions.md)
 
 All questions that need answers to finalize the feature design. Questions are marked as pending, answered, or resolved.
