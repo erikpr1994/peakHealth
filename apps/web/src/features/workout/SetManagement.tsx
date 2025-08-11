@@ -201,26 +201,27 @@ const SetManagement = ({
     onSetsChange(updatedSets);
   };
 
-  const getSetDisplay = (
-    set: WorkoutSet,
-    index: number
-  ): React.ReactElement => {
-    const repDisplay =
-      set.repType === 'range'
-        ? `${set.repsMin}-${set.repsMax}`
-        : set.reps || '?';
-
-    return (
-      <div className="flex items-center space-x-2">
-        <span className="text-sm font-medium">Set {set.setNumber}</span>
-        <Badge variant="outline" className="text-xs">
-          {set.setType}
-        </Badge>
-        <span className="text-sm">{repDisplay} reps</span>
-        {set.weight && <span className="text-sm">{set.weight}kg</span>}
-        {set.rpe && <span className="text-sm">RPE {set.rpe}</span>}
-      </div>
-    );
+  // Calculate the display number/letter for each set
+  const getSetDisplay = (set: WorkoutSet, index: number): string => {
+    if (set.setType === 'normal') {
+      // Count how many normal sets come before this one
+      const normalSetsBefore = sets
+        .slice(0, index)
+        .filter(s => s.setType === 'normal').length;
+      return (normalSetsBefore + 1).toString();
+    } else {
+      // Return letter for special sets
+      switch (set.setType) {
+        case 'warmup':
+          return 'W';
+        case 'failure':
+          return 'F';
+        case 'dropset':
+          return 'D';
+        default:
+          return (index + 1).toString();
+      }
+    }
   };
 
   const getSetTypeColor = (type: SetType): string => {

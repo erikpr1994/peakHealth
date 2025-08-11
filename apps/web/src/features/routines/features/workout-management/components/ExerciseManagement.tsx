@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect } from 'react';
 import { Plus, Trash2, FileText } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
@@ -70,6 +71,14 @@ const ExerciseManagement = ({
     const predefinedSets = generateSetsForProgression(method);
     onUpdateSets(exercise.id, predefinedSets);
   };
+
+  // Auto-generate default linear progression sets for new exercises
+  useEffect(() => {
+    if (exercise.sets.length === 0) {
+      const defaultSets = generateSetsForProgression('linear');
+      onUpdateSets(exercise.id, defaultSets);
+    }
+  }, [exercise.id, exercise.sets.length, onUpdateSets]);
 
   return (
     <Card className="border border-gray-200">
@@ -146,7 +155,7 @@ const ExerciseManagement = ({
           <div>
             <Label>Progression Method</Label>
             <Select
-              value={exercise.progressionMethod || ''}
+              value={exercise.progressionMethod || 'linear'}
               onValueChange={value =>
                 handleProgressionMethodChange(value as ProgressionMethod)
               }
