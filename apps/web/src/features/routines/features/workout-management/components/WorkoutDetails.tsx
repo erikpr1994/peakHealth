@@ -22,6 +22,32 @@ interface WorkoutDetailsProps {
   onUpdateSchedule: (field: 'weeks' | 'day' | 'time', value: string) => void;
 }
 
+// Generate time options from 5:00 AM to 10:00 PM
+const generateTimeOptions = (): Array<{ label: string; value: string }> => {
+  const times = [];
+  for (let hour = 5; hour <= 22; hour++) {
+    const ampm = hour >= 12 ? 'PM' : 'AM';
+    const displayHour = hour > 12 ? hour - 12 : hour === 0 ? 12 : hour;
+    const time12 = `${displayHour}:00 ${ampm}`;
+    const time24 = `${hour.toString().padStart(2, '0')}:00`;
+    times.push({ label: time12, value: time24 });
+  }
+  return times;
+};
+
+const timeOptions = generateTimeOptions();
+
+const repeatOptions = [
+  { label: 'Every week', value: 'every-week' },
+  { label: 'Every 2 weeks', value: 'every-2-weeks' },
+  { label: 'Every 3 weeks', value: 'every-3-weeks' },
+  { label: 'Every 4 weeks', value: 'every-4-weeks' },
+  { label: 'Week 1 only', value: 'week-1' },
+  { label: 'Weeks 1, 3, 5', value: 'weeks-1-3-5' },
+  { label: 'Weeks 2, 4, 6', value: 'weeks-2-4-6' },
+  { label: 'Custom weeks', value: 'custom' },
+];
+
 const WorkoutDetails = ({
   objective,
   schedule,
@@ -44,12 +70,29 @@ const WorkoutDetails = ({
       {/* Schedule */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <div>
-          <Label className="block mb-2">Weeks</Label>
-          <Input
+          <Label className="block mb-2">Repeat every</Label>
+          <Select
             value={schedule.weeks}
-            onChange={e => onUpdateSchedule('weeks', e.target.value)}
-            placeholder="e.g., Week 1, 3, 5"
-          />
+            onValueChange={value => onUpdateSchedule('weeks', value)}
+          >
+            <SelectTrigger>
+              <SelectValue placeholder="Select repeat pattern" />
+            </SelectTrigger>
+            <SelectContent>
+              {repeatOptions.map(option => (
+                <SelectItem key={option.value} value={option.value}>
+                  {option.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          {schedule.weeks === 'custom' && (
+            <Input
+              className="mt-2"
+              placeholder="e.g., Week 1, 3, 5"
+              onChange={e => onUpdateSchedule('weeks', e.target.value)}
+            />
+          )}
         </div>
         <div>
           <Label className="block mb-2">Day</Label>
@@ -73,11 +116,21 @@ const WorkoutDetails = ({
         </div>
         <div>
           <Label className="block mb-2">Time</Label>
-          <Input
+          <Select
             value={schedule.time}
-            onChange={e => onUpdateSchedule('time', e.target.value)}
-            placeholder="e.g., 6:00 AM"
-          />
+            onValueChange={value => onUpdateSchedule('time', value)}
+          >
+            <SelectTrigger>
+              <SelectValue placeholder="Select time" />
+            </SelectTrigger>
+            <SelectContent>
+              {timeOptions.map(option => (
+                <SelectItem key={option.value} value={option.value}>
+                  {option.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
       </div>
     </div>
