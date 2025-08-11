@@ -16,6 +16,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
 
 export type SetType = 'warmup' | 'normal' | 'failure' | 'dropset';
 export type RepType = 'fixed' | 'range';
@@ -281,19 +286,27 @@ const SetManagement = ({
           )}
         </div>
         <div className="flex items-center gap-2">
-          <Button
-            onClick={onAddApproachSets}
-            size="sm"
-            variant="outline"
-            disabled={isAddApproachSetsDisabled}
-            title={getAddApproachSetsHoverText()}
-            className={
-              isAddApproachSetsDisabled ? 'opacity-50 cursor-not-allowed' : ''
-            }
-          >
-            <Target className="w-4 h-4 mr-1" />
-            Add Approach Sets
-          </Button>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                onClick={onAddApproachSets}
+                size="sm"
+                variant="outline"
+                disabled={isAddApproachSetsDisabled}
+                className={
+                  isAddApproachSetsDisabled
+                    ? 'opacity-50 cursor-not-allowed'
+                    : ''
+                }
+              >
+                <Target className="w-4 h-4 mr-1" />
+                Add Approach Sets
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>{getAddApproachSetsHoverText()}</p>
+            </TooltipContent>
+          </Tooltip>
           <Button onClick={addSet} size="sm" variant="outline">
             <Plus className="w-4 h-4 mr-1" />
             Add Set

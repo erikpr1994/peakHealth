@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
-import { Plus, Trash2, FileText } from 'lucide-react';
+import { Trash2, FileText } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -213,16 +213,6 @@ const ExerciseManagement = ({
                   progression method
                 </p>
               </div>
-              {!exercise.hasApproachSets && (
-                <Button
-                  onClick={() => onAddApproachSets(exercise.id)}
-                  size="sm"
-                  variant="outline"
-                >
-                  <Plus className="h-4 w-4 mr-2" />
-                  Add Approach Sets
-                </Button>
-              )}
             </div>
           </div>
         )}
