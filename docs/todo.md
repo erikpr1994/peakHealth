@@ -14,6 +14,23 @@ This document contains all actionable tasks for the PeakHealth project, organize
 
 ### 🔴 **Phase 1: Core Foundation (Weeks 1-4)**
 
+#### Routines Feature (High Priority) ✅ **DESIGN COMPLETE**
+
+- [ ] **ROUTINE1**: Implement fully normalized database schema with version history
+- [ ] **ROUTINE2**: Create API endpoints for routine CRUD operations with role-based access
+- [ ] **ROUTINE3**: Integrate routines with user authentication (role-based access for MVP)
+- [ ] **ROUTINE4**: Replace mock data with real API integration
+- [ ] **ROUTINE5**: Implement exercise library integration (referenced with local storage sync)
+- [ ] **ROUTINE6**: Connect routines with workout tracker (hybrid approach - automatic + manual)
+- [ ] **ROUTINE7**: Add basic routine progress tracking and completion stats
+- [ ] **ROUTINE8**: Implement tiered routine creation (guided wizard for free, templates for basic, AI for premium)
+- [ ] **ROUTINE9**: Add basic curated templates (no community features for MVP)
+- [ ] **ROUTINE10**: Implement comprehensive validation and error handling
+- [ ] **ROUTINE11**: Add routine versioning with history tracking
+- [ ] **ROUTINE12**: Implement progressive disclosure UI design
+- [ ] **ROUTINE13**: Add basic performance optimization (pagination/loading)
+- [ ] **ROUTINE14**: Create basic analytics dashboard (completion stats)
+
 #### Authentication & User Management
 
 - [ ] **AUTH1**: Complete user authentication system
