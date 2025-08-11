@@ -115,6 +115,7 @@ This document provides a detailed implementation plan for the Routines feature M
 - [ ] **WM2.2**: Implement exercise management
   - Add exercises to sections
   - Configure basic exercise parameters (sets, reps, weight, rest)
+  - Configure advanced progression methods (linear, dual, inverse pyramid, myo-reps, widowmaker, AMRAP)
   - Reorder exercises within sections
 
 #### **Success Criteria**
@@ -338,7 +339,6 @@ This document provides a detailed implementation plan for the Routines feature M
 ### **Phase 5: Advanced Features (Months 3-4)**
 
 - Tiered routine creation (guided wizard, templates, AI-assisted)
-- Advanced progression methods
 - Enhanced progress tracking
 
 ### **Phase 6: Social Features (Months 5-6)**

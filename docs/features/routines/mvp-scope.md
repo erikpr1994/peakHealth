@@ -46,6 +46,7 @@ This document defines the Minimum Viable Product (MVP) scope for the Routines fe
 - [ ] Add sections to workouts (warmup, basic, cooldown)
 - [ ] Add exercises to sections
 - [ ] Configure basic exercise parameters (sets, reps, weight, rest)
+- [ ] Configure advanced progression methods (linear, dual, inverse pyramid, myo-reps, widowmaker, AMRAP)
 - [ ] Reorder workouts and sections
 
 #### **3. Data Persistence**
@@ -91,7 +92,6 @@ This document defines the Minimum Viable Product (MVP) scope for the Routines fe
 
 #### **Advanced Features**
 
-- Advanced progression methods
 - Routine sharing and collaboration
 - AI recommendations
 - Advanced analytics

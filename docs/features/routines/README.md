@@ -45,6 +45,7 @@ The Routines feature enables users to create, manage, and track various types of
 - **Routine Creation**: Create and edit workout routines with metadata
 - **Workout Management**: Add, remove, and reorder workouts and sections
 - **Exercise Management**: Manage exercises within sections with sets and progression
+- **Advanced Progression Methods**: Linear, dual, inverse pyramid, myo-reps, widowmaker, AMRAP
 - **Trail Running**: Specialized trail running workout creation with intervals
 - **Progress Tracking**: Visual indicators of routine progress and completion
 - **Basic Templates**: Curated routine templates for common goals
