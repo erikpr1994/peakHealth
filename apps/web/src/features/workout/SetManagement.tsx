@@ -44,6 +44,7 @@ interface SetManagementProps {
   sets: WorkoutSet[];
   onSetsChange: (sets: WorkoutSet[]) => void;
   onNotesClick: (setId: string) => void;
+  onAddApproachSets: () => void;
   progressionMethod?: ProgressionMethod;
 }
 
@@ -125,12 +126,27 @@ const SetManagement = ({
   sets,
   onSetsChange,
   onNotesClick,
+  onAddApproachSets,
   progressionMethod,
 }: SetManagementProps): React.ReactElement => {
   const [openPopoverId, setOpenPopoverId] = useState<string | null>(null);
   const [initialized, setInitialized] = useState(false);
 
   const config = getProgressionConfig(progressionMethod);
+
+  // Determine if Add Approach Sets button should be disabled
+  const isAddApproachSetsDisabled = sets.length === 0 || !sets[0]?.weight;
+
+  // Get hover explanation for Add Approach Sets button
+  const getAddApproachSetsHoverText = (): string => {
+    if (sets.length === 0) {
+      return 'Add at least one set before adding approach sets';
+    }
+    if (!sets[0]?.weight) {
+      return 'First set must have a weight before adding approach sets';
+    }
+    return 'Add approach sets for this exercise';
+  };
 
   // Initialize repType for any sets that don't have it defined
   useEffect(() => {
@@ -264,10 +280,25 @@ const SetManagement = ({
             </Badge>
           )}
         </div>
-        <Button onClick={addSet} size="sm" variant="outline">
-          <Plus className="w-4 h-4 mr-1" />
-          Add Set
-        </Button>
+        <div className="flex items-center gap-2">
+          <Button
+            onClick={onAddApproachSets}
+            size="sm"
+            variant="outline"
+            disabled={isAddApproachSetsDisabled}
+            title={getAddApproachSetsHoverText()}
+            className={
+              isAddApproachSetsDisabled ? 'opacity-50 cursor-not-allowed' : ''
+            }
+          >
+            <Target className="w-4 h-4 mr-1" />
+            Add Approach Sets
+          </Button>
+          <Button onClick={addSet} size="sm" variant="outline">
+            <Plus className="w-4 h-4 mr-1" />
+            Add Set
+          </Button>
+        </div>
       </div>
 
       {/* Sets Header */}

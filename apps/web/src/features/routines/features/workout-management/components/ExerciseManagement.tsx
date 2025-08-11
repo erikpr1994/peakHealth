@@ -238,6 +238,7 @@ const ExerciseManagement = ({
             onNotesClick={(setId: string) =>
               onNotesClick('set', exercise.id, setId)
             }
+            onAddApproachSets={() => onAddApproachSets(exercise.id)}
           />
         </div>
       </div>
