@@ -22,6 +22,28 @@ Features that work across both apps and provide integration capabilities.
 
 ## Available Features
 
+### 🏋️‍♂️ [Routines](./routines/) - **User App**
+
+Core routine creation, management, and tracking system that forms the foundation for all workout planning.
+
+**Key Capabilities:**
+
+- Create and edit workout routines
+- Support for strength training and cardio workouts
+- Advanced trail running workout planning
+- Exercise library integration
+- Progress tracking and completion monitoring
+- Routine sharing and collaboration
+
+**Target Users:**
+
+- All fitness enthusiasts
+- Strength training beginners to advanced
+- Cardio and running enthusiasts
+- Trail runners and outdoor athletes
+
+**Status**: Core feature (MVP priority) - Partially implemented
+
 ### 🏃‍♂️ [Premium Routine Management](./premium-routine-management/) - **User App**
 
 Comprehensive season planning system that transforms basic routine creation into structured training periods with clear objectives, phases, and integrated routine management.
