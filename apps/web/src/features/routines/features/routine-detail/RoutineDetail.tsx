@@ -123,11 +123,6 @@ const RoutineDetail = ({
     console.log('Toggle favorite');
   };
 
-  const handleShare = (): void => {
-    // TODO: Implement share functionality
-    console.log('Share routine');
-  };
-
   const handleDuplicate = (): void => {
     // TODO: Implement duplicate functionality
     console.log('Duplicate routine');
@@ -147,7 +142,6 @@ const RoutineDetail = ({
         isActive={routineData.isActive}
         isFavorite={routineData.isFavorite}
         onToggleFavorite={handleToggleFavorite}
-        onShare={handleShare}
       />
 
       <RoutineOverviewCards
@@ -176,7 +170,6 @@ const RoutineDetail = ({
           createdDate={routineData.createdDate}
           lastModified={routineData.lastModified}
           onDuplicate={handleDuplicate}
-          onShare={handleShare}
           onDelete={handleDelete}
         />
       </div>
