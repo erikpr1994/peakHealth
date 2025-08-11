@@ -108,6 +108,7 @@ This document provides a detailed implementation plan for the Routines feature M
 - [ ] **WM2.1**: Implement workout and section management
   - Add strength workouts to routines
   - Add running workouts to routines
+  - Add trail running workouts to routines
   - Add sections to workouts (warmup, basic, cooldown)
   - Reorder workouts and sections
 
@@ -242,11 +243,21 @@ This document provides a detailed implementation plan for the Routines feature M
   - Implement basic progress tracking
   - Create simple progress reports
 
+### **Basic Templates**
+
+#### **Tasks**
+
+- [ ] **BT4.1**: Implement basic curated templates
+  - Add basic routine templates for common goals
+  - Implement template selection UI
+  - Create template customization
+
 #### **Success Criteria**
 
 - Basic progress tracking is functional
 - Completion statistics are accurate
 - Progress visualization is clear
+- Basic templates are available and functional
 
 ### **Performance & Optimization**
 
@@ -326,7 +337,6 @@ This document provides a detailed implementation plan for the Routines feature M
 
 ### **Phase 5: Advanced Features (Months 3-4)**
 
-- Trail running workout creation
 - Advanced progression methods
 - Routine templates
 - Enhanced progress tracking
@@ -340,6 +350,7 @@ This document provides a detailed implementation plan for the Routines feature M
 
 ### **Phase 7: Premium Features (Months 7-9)**
 
+- Tiered routine creation (guided wizard, templates, AI-assisted)
 - AI-assisted routine creation
 - Advanced analytics
 - Professional collaboration tools

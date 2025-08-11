@@ -47,7 +47,7 @@ The Routines feature enables users to create, manage, and track various types of
 - **Exercise Management**: Manage exercises within sections with sets and progression
 - **Trail Running**: Specialized trail running workout creation with intervals
 - **Progress Tracking**: Visual indicators of routine progress and completion
-- **Routine Sharing**: Share and collaborate on routines
+- **Basic Templates**: Curated routine templates for common goals
 
 ### Target Users
 

@@ -42,6 +42,7 @@ This document defines the Minimum Viable Product (MVP) scope for the Routines fe
 
 - [ ] Add strength workouts to routines
 - [ ] Add running workouts to routines
+- [ ] Add trail running workouts to routines
 - [ ] Add sections to workouts (warmup, basic, cooldown)
 - [ ] Add exercises to sections
 - [ ] Configure basic exercise parameters (sets, reps, weight, rest)
@@ -82,11 +83,14 @@ This document defines the Minimum Viable Product (MVP) scope for the Routines fe
 - [ ] Confirmation dialogs for destructive actions
 - [ ] Basic onboarding for first-time users
 
+#### **8. Basic Templates**
+
+- [ ] Add basic curated routine templates
+
 ### **❌ Excluded Features (Future Releases)**
 
 #### **Advanced Features**
 
-- Trail running workout creation
 - Advanced progression methods
 - Routine sharing and collaboration
 - AI recommendations
