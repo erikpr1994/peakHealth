@@ -456,12 +456,34 @@ const SetManagement = ({
                 variant="ghost"
                 size="sm"
                 onClick={() => onNotesClick(set.id)}
-                className={`h-8 w-8 p-0 flex items-center justify-center ${
-                  set.notes ? 'text-blue-600' : 'text-gray-400'
+                className={`h-8 w-full p-2 flex items-center justify-center text-xs ${
+                  set.notes
+                    ? 'text-blue-600 bg-blue-50 border border-blue-200'
+                    : 'text-gray-500 border border-dashed border-gray-300 hover:border-gray-400'
                 }`}
-                title={set.notes ? 'Edit notes' : 'Add notes'}
+                title={
+                  set.notes
+                    ? `Edit set notes: ${set.notes.substring(0, 50)}${
+                        set.notes.length > 50 ? '...' : ''
+                      }`
+                    : 'Add notes for this set'
+                }
               >
-                📝
+                {set.notes ? (
+                  <div className="flex items-center gap-1 w-full">
+                    <span className="text-blue-600">📝</span>
+                    <span className="truncate text-left">
+                      {set.notes.length > 20
+                        ? `${set.notes.substring(0, 20)}...`
+                        : set.notes}
+                    </span>
+                  </div>
+                ) : (
+                  <div className="flex items-center gap-1">
+                    <span>📝</span>
+                    <span>Notes</span>
+                  </div>
+                )}
               </Button>
             </div>
 

@@ -99,9 +99,31 @@ const ExerciseManagement = ({
               variant="ghost"
               size="sm"
               onClick={() => onNotesClick('exercise', exercise.id)}
-              className="text-gray-500 hover:text-gray-700"
+              className={`text-xs px-3 py-1 rounded-md border ${
+                exercise.notes
+                  ? 'text-blue-600 bg-blue-50 border-blue-200 hover:bg-blue-100'
+                  : 'text-gray-500 border-dashed border-gray-300 hover:border-gray-400 hover:bg-gray-50'
+              }`}
+              title={
+                exercise.notes
+                  ? `Edit exercise notes: ${exercise.notes.substring(0, 50)}${
+                      exercise.notes.length > 50 ? '...' : ''
+                    }`
+                  : 'Add notes for this exercise'
+              }
             >
-              <FileText className="h-4 w-4" />
+              <div className="flex items-center gap-1">
+                <FileText className="h-3 w-3" />
+                {exercise.notes ? (
+                  <span className="truncate max-w-20">
+                    {exercise.notes.length > 15
+                      ? `${exercise.notes.substring(0, 15)}...`
+                      : exercise.notes}
+                  </span>
+                ) : (
+                  <span>Notes</span>
+                )}
+              </div>
             </Button>
           </div>
           <Button
