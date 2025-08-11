@@ -63,7 +63,7 @@ const WorkoutDetails = ({
       </div>
 
       {/* Schedule */}
-      <div className="space-y-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {/* Repeat Pattern */}
         <div>
           <Label className="block mb-2">Repeat Pattern</Label>
@@ -94,7 +94,7 @@ const WorkoutDetails = ({
               max="30"
               value={schedule.repeatValue}
               onChange={e => onUpdateSchedule('repeatValue', e.target.value)}
-              placeholder="e.g., 2 for every 2 days"
+              placeholder="e.g., 2"
               className="w-full"
             />
           </div>
@@ -109,34 +109,9 @@ const WorkoutDetails = ({
               max="12"
               value={schedule.repeatValue}
               onChange={e => onUpdateSchedule('repeatValue', e.target.value)}
-              placeholder="e.g., 2 for every 2 weeks"
+              placeholder="e.g., 2"
               className="w-full"
             />
-          </div>
-        )}
-
-        {schedule.repeatPattern === 'weekdays' && (
-          <div>
-            <Label className="block mb-2">Select days of the week</Label>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-              {dayOptions.map(day => (
-                <div key={day.value} className="flex items-center space-x-2">
-                  <Checkbox
-                    id={day.value}
-                    checked={schedule.selectedDays.includes(day.value)}
-                    onCheckedChange={checked => {
-                      const newSelectedDays = checked
-                        ? [...schedule.selectedDays, day.value]
-                        : schedule.selectedDays.filter(d => d !== day.value);
-                      onUpdateSchedule('selectedDays', newSelectedDays);
-                    }}
-                  />
-                  <Label htmlFor={day.value} className="text-sm font-normal">
-                    {day.label}
-                  </Label>
-                </div>
-              ))}
-            </div>
           </div>
         )}
 
@@ -154,6 +129,32 @@ const WorkoutDetails = ({
           />
         </div>
       </div>
+
+      {/* Day Selection - Full Width Below */}
+      {schedule.repeatPattern === 'weekdays' && (
+        <div className="mt-4">
+          <Label className="block mb-2">Select days of the week</Label>
+          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-3">
+            {dayOptions.map(day => (
+              <div key={day.value} className="flex items-center space-x-2">
+                <Checkbox
+                  id={day.value}
+                  checked={schedule.selectedDays.includes(day.value)}
+                  onCheckedChange={checked => {
+                    const newSelectedDays = checked
+                      ? [...schedule.selectedDays, day.value]
+                      : schedule.selectedDays.filter(d => d !== day.value);
+                    onUpdateSchedule('selectedDays', newSelectedDays);
+                  }}
+                />
+                <Label htmlFor={day.value} className="text-sm font-normal">
+                  {day.label}
+                </Label>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 };
