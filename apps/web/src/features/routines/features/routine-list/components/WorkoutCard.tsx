@@ -287,46 +287,25 @@ const WorkoutCard = ({
           {/* Schedule */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
-              <Label>Weeks</Label>
-              <Input
-                value={workout.schedule.weeks}
-                onChange={e =>
-                  onUpdateSchedule(workout.id, 'weeks', e.target.value)
-                }
-                placeholder="e.g., Week 1, 3, 5"
-              />
-            </div>
-            <div>
-              <Label>Day</Label>
-              <Select
-                value={workout.schedule.day}
-                onValueChange={value =>
-                  onUpdateSchedule(workout.id, 'day', value)
-                }
-              >
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="Monday">Monday</SelectItem>
-                  <SelectItem value="Tuesday">Tuesday</SelectItem>
-                  <SelectItem value="Wednesday">Wednesday</SelectItem>
-                  <SelectItem value="Thursday">Thursday</SelectItem>
-                  <SelectItem value="Friday">Friday</SelectItem>
-                  <SelectItem value="Saturday">Saturday</SelectItem>
-                  <SelectItem value="Sunday">Sunday</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            <div>
-              <Label>Time</Label>
-              <Input
-                value={workout.schedule.time}
-                onChange={e =>
-                  onUpdateSchedule(workout.id, 'time', e.target.value)
-                }
-                placeholder="e.g., 9:00 AM"
-              />
+              <Label>Schedule</Label>
+              <div className="text-sm text-gray-600">
+                {workout.schedule.repeatPattern === 'days' && (
+                  <span>Every {workout.schedule.repeatValue} days</span>
+                )}
+                {workout.schedule.repeatPattern === 'weeks' && (
+                  <span>Every {workout.schedule.repeatValue} weeks</span>
+                )}
+                {workout.schedule.repeatPattern === 'weekdays' && (
+                  <span>
+                    {workout.schedule.selectedDays.length > 0
+                      ? workout.schedule.selectedDays.join(', ')
+                      : 'No days selected'}
+                  </span>
+                )}
+                {workout.schedule.time && (
+                  <span> at {workout.schedule.time}</span>
+                )}
+              </div>
             </div>
           </div>
 

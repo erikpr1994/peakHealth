@@ -26,8 +26,8 @@ interface StrengthWorkoutsSectionProps {
   onUpdateObjective: (workoutId: string, objective: string) => void;
   onUpdateSchedule: (
     workoutId: string,
-    field: 'weeks' | 'day' | 'time',
-    value: string
+    field: 'repeatPattern' | 'repeatValue' | 'selectedDays' | 'time',
+    value: string | string[]
   ) => void;
   onAddSection: (workoutId: string) => void;
   onUpdateSectionName: (

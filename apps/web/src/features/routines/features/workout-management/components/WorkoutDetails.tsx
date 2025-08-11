@@ -3,6 +3,7 @@
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
+import { Checkbox } from '@/components/ui/checkbox';
 import {
   Select,
   SelectContent,
@@ -14,23 +15,32 @@ import {
 interface WorkoutDetailsProps {
   objective: string;
   schedule: {
-    weeks: string;
-    day: string;
+    repeatPattern: string;
+    repeatValue: string;
+    selectedDays: string[];
     time: string;
   };
   onUpdateObjective: (objective: string) => void;
-  onUpdateSchedule: (field: 'weeks' | 'day' | 'time', value: string) => void;
+  onUpdateSchedule: (
+    field: 'repeatPattern' | 'repeatValue' | 'selectedDays' | 'time',
+    value: string | string[]
+  ) => void;
 }
 
-const repeatOptions = [
-  { label: 'Every week', value: 'every-week' },
-  { label: 'Every 2 weeks', value: 'every-2-weeks' },
-  { label: 'Every 3 weeks', value: 'every-3-weeks' },
-  { label: 'Every 4 weeks', value: 'every-4-weeks' },
-  { label: 'Week 1 only', value: 'week-1' },
-  { label: 'Weeks 1, 3, 5', value: 'weeks-1-3-5' },
-  { label: 'Weeks 2, 4, 6', value: 'weeks-2-4-6' },
-  { label: 'Custom weeks', value: 'custom' },
+const repeatPatternOptions = [
+  { label: 'Every X days', value: 'days' },
+  { label: 'Every X weeks', value: 'weeks' },
+  { label: 'Specific days of the week', value: 'weekdays' },
+];
+
+const dayOptions = [
+  { label: 'Monday', value: 'monday' },
+  { label: 'Tuesday', value: 'tuesday' },
+  { label: 'Wednesday', value: 'wednesday' },
+  { label: 'Thursday', value: 'thursday' },
+  { label: 'Friday', value: 'friday' },
+  { label: 'Saturday', value: 'saturday' },
+  { label: 'Sunday', value: 'sunday' },
 ];
 
 const WorkoutDetails = ({
@@ -53,52 +63,84 @@ const WorkoutDetails = ({
       </div>
 
       {/* Schedule */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div className="space-y-4">
+        {/* Repeat Pattern */}
         <div>
-          <Label className="block mb-2">Repeat every</Label>
+          <Label className="block mb-2">Repeat Pattern</Label>
           <Select
-            value={schedule.weeks}
-            onValueChange={value => onUpdateSchedule('weeks', value)}
+            value={schedule.repeatPattern}
+            onValueChange={value => onUpdateSchedule('repeatPattern', value)}
           >
             <SelectTrigger>
               <SelectValue placeholder="Select repeat pattern" />
             </SelectTrigger>
             <SelectContent>
-              {repeatOptions.map(option => (
+              {repeatPatternOptions.map(option => (
                 <SelectItem key={option.value} value={option.value}>
                   {option.label}
                 </SelectItem>
               ))}
             </SelectContent>
           </Select>
-          {schedule.weeks === 'custom' && (
+        </div>
+
+        {/* Repeat Value or Selected Days */}
+        {schedule.repeatPattern === 'days' && (
+          <div>
+            <Label className="block mb-2">Every X days</Label>
             <Input
-              className="mt-2"
-              placeholder="e.g., Week 1, 3, 5"
-              onChange={e => onUpdateSchedule('weeks', e.target.value)}
+              type="number"
+              min="1"
+              max="30"
+              value={schedule.repeatValue}
+              onChange={e => onUpdateSchedule('repeatValue', e.target.value)}
+              placeholder="e.g., 2 for every 2 days"
+              className="w-full"
             />
-          )}
-        </div>
-        <div>
-          <Label className="block mb-2">Day</Label>
-          <Select
-            value={schedule.day}
-            onValueChange={value => onUpdateSchedule('day', value)}
-          >
-            <SelectTrigger>
-              <SelectValue placeholder="Select day" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="monday">Monday</SelectItem>
-              <SelectItem value="tuesday">Tuesday</SelectItem>
-              <SelectItem value="wednesday">Wednesday</SelectItem>
-              <SelectItem value="thursday">Thursday</SelectItem>
-              <SelectItem value="friday">Friday</SelectItem>
-              <SelectItem value="saturday">Saturday</SelectItem>
-              <SelectItem value="sunday">Sunday</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
+          </div>
+        )}
+
+        {schedule.repeatPattern === 'weeks' && (
+          <div>
+            <Label className="block mb-2">Every X weeks</Label>
+            <Input
+              type="number"
+              min="1"
+              max="12"
+              value={schedule.repeatValue}
+              onChange={e => onUpdateSchedule('repeatValue', e.target.value)}
+              placeholder="e.g., 2 for every 2 weeks"
+              className="w-full"
+            />
+          </div>
+        )}
+
+        {schedule.repeatPattern === 'weekdays' && (
+          <div>
+            <Label className="block mb-2">Select days of the week</Label>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+              {dayOptions.map(day => (
+                <div key={day.value} className="flex items-center space-x-2">
+                  <Checkbox
+                    id={day.value}
+                    checked={schedule.selectedDays.includes(day.value)}
+                    onCheckedChange={checked => {
+                      const newSelectedDays = checked
+                        ? [...schedule.selectedDays, day.value]
+                        : schedule.selectedDays.filter(d => d !== day.value);
+                      onUpdateSchedule('selectedDays', newSelectedDays);
+                    }}
+                  />
+                  <Label htmlFor={day.value} className="text-sm font-normal">
+                    {day.label}
+                  </Label>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Time */}
         <div>
           <Label className="block mb-2">Time</Label>
           <Input

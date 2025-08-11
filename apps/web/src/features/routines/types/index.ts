@@ -50,8 +50,9 @@ export interface StrengthWorkout {
   type: 'strength';
   objective: string;
   schedule: {
-    weeks: string;
-    day: string;
+    repeatPattern: string;
+    repeatValue: string;
+    selectedDays: string[];
     time: string;
   };
   sections: WorkoutSection[];
@@ -63,8 +64,9 @@ export interface RunningWorkout {
   type: 'running' | 'trail-running' | 'swimming' | 'cycling';
   objective: string;
   schedule: {
-    weeks: string;
-    day: string;
+    repeatPattern: string;
+    repeatValue: string;
+    selectedDays: string[];
     time: string;
   };
   sections: WorkoutSection[];

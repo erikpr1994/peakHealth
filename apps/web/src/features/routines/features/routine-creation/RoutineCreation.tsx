@@ -167,8 +167,9 @@ const RoutineCreation = ({
         type: 'running' as 'running',
         objective: runningData.description || '',
         schedule: {
-          weeks: '',
-          day: 'monday',
+          repeatPattern: '',
+          repeatValue: '',
+          selectedDays: [],
           time: '',
         },
         sections: [],
