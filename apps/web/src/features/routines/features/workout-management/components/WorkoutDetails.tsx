@@ -22,21 +22,6 @@ interface WorkoutDetailsProps {
   onUpdateSchedule: (field: 'weeks' | 'day' | 'time', value: string) => void;
 }
 
-// Generate time options from 5:00 AM to 10:00 PM
-const generateTimeOptions = (): Array<{ label: string; value: string }> => {
-  const times = [];
-  for (let hour = 5; hour <= 22; hour++) {
-    const ampm = hour >= 12 ? 'PM' : 'AM';
-    const displayHour = hour > 12 ? hour - 12 : hour === 0 ? 12 : hour;
-    const time12 = `${displayHour}:00 ${ampm}`;
-    const time24 = `${hour.toString().padStart(2, '0')}:00`;
-    times.push({ label: time12, value: time24 });
-  }
-  return times;
-};
-
-const timeOptions = generateTimeOptions();
-
 const repeatOptions = [
   { label: 'Every week', value: 'every-week' },
   { label: 'Every 2 weeks', value: 'every-2-weeks' },
@@ -116,21 +101,15 @@ const WorkoutDetails = ({
         </div>
         <div>
           <Label className="block mb-2">Time</Label>
-          <Select
+          <Input
+            type="time"
             value={schedule.time}
-            onValueChange={value => onUpdateSchedule('time', value)}
-          >
-            <SelectTrigger>
-              <SelectValue placeholder="Select time" />
-            </SelectTrigger>
-            <SelectContent>
-              {timeOptions.map(option => (
-                <SelectItem key={option.value} value={option.value}>
-                  {option.label}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+            onChange={e => onUpdateSchedule('time', e.target.value)}
+            min="05:00"
+            max="22:00"
+            step="900"
+            className="w-full"
+          />
         </div>
       </div>
     </div>
