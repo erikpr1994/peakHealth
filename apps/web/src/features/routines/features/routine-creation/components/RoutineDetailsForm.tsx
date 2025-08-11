@@ -40,7 +40,9 @@ const RoutineDetailsForm = ({
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
-            <Label htmlFor="name">Routine Name</Label>
+            <Label htmlFor="name" className="block mb-2">
+              Routine Name
+            </Label>
             <Input
               id="name"
               value={name}
@@ -49,7 +51,9 @@ const RoutineDetailsForm = ({
             />
           </div>
           <div>
-            <Label htmlFor="difficulty">Difficulty</Label>
+            <Label htmlFor="difficulty" className="block mb-2">
+              Difficulty
+            </Label>
             <Select value={difficulty} onValueChange={onDifficultyChange}>
               <SelectTrigger>
                 <SelectValue />
@@ -64,7 +68,9 @@ const RoutineDetailsForm = ({
         </div>
 
         <div>
-          <Label htmlFor="description">Description</Label>
+          <Label htmlFor="description" className="block mb-2">
+            Description
+          </Label>
           <Textarea
             id="description"
             value={description}
@@ -75,7 +81,9 @@ const RoutineDetailsForm = ({
         </div>
 
         <div>
-          <Label htmlFor="objectives">Training Objectives</Label>
+          <Label htmlFor="objectives" className="block mb-2">
+            Training Objectives
+          </Label>
           <Textarea
             id="objectives"
             value={objectives}
