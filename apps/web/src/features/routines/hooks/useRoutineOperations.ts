@@ -122,16 +122,27 @@ export function useRoutineOperations(): {
         break;
 
       case 'widowmaker':
-        // Single high-rep failure set
+        // Warmup set + 20-rep failure set
         sets.push({
-          id: `${Date.now()}_widowmaker`,
-          setNumber: 1,
+          id: `${Date.now()}_widowmaker_warmup`,
+          setNumber: setNumber++,
+          setType: 'warmup',
+          repType: 'fixed',
+          reps: 8,
+          weight: null,
+          rpe: null,
+          notes: 'Warmup set - 60% of target weight',
+        });
+
+        sets.push({
+          id: `${Date.now()}_widowmaker_main`,
+          setNumber: setNumber,
           setType: 'failure',
           repType: 'fixed',
           reps: 20,
           weight: null,
           rpe: null,
-          notes: 'Single high-rep set to failure',
+          notes: 'Widowmaker set - 20 reps to failure',
         });
         break;
 
@@ -146,7 +157,7 @@ export function useRoutineOperations(): {
             reps: 8,
             weight: null,
             rpe: null,
-            notes: '',
+            notes: `Regular set ${i + 1}`,
           });
         }
 

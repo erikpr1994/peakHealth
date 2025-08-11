@@ -90,12 +90,12 @@ export const progressionMethods = [
   {
     value: 'widowmaker',
     label: 'Widowmaker',
-    description: 'Single high-rep set with moderate weight',
+    description: 'Warmup set + 20-rep failure set',
   },
   {
     value: 'amrap',
     label: 'AMRAP',
-    description: 'As Many Reps As Possible on final set',
+    description: 'Regular sets + final AMRAP set',
   },
 ];
 
