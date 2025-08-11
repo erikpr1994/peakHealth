@@ -1,6 +1,33 @@
-# User Personas - PeakHealth App
+# User Personas - PeakHealth User App
 
-This document contains comprehensive user personas that apply across all features of the PeakHealth fitness application. These personas represent our target users and their needs, goals, and behaviors.
+This document contains comprehensive user personas for the PeakHealth User App, including both self-managed and trainer-managed variations. These personas represent our target users and their needs, goals, and behaviors across different management approaches.
+
+## Management Type Attributes
+
+Each persona can exist in two management variations, which significantly affects their app experience and feature access:
+
+### **Self-Managed Users**
+
+- **Full Control**: Complete autonomy over training and health plans
+- **AI Guidance**: AI-powered recommendations and educational content
+- **Progressive Learning**: Built-in guidance that adapts to user experience
+- **Feature Access**: Access to all features with appropriate complexity levels
+- **Decision Making**: Users make all final decisions about their plans
+
+### **Trainer-Managed Users**
+
+- **Professional Oversight**: Health professionals provide guidance and modifications
+- **Collaborative Planning**: Joint planning with trainers and other professionals
+- **Professional Tools**: Access to professional-grade features and recommendations
+- **Cross-Professional Support**: Multiple specialists can contribute to their health
+- **User Autonomy**: Maintains control while benefiting from professional expertise
+
+### **Management Type Switching**
+
+- **Flexible Transitions**: Users can switch between management types
+- **Hybrid Approaches**: Combination of self-management and professional support
+- **Professional Referrals**: System can suggest professional help when needed
+- **Gradual Progression**: Users can start with professional help and transition to self-management
 
 ---
 
@@ -50,6 +77,22 @@ Alex is an experienced trail runner who competes in ultra-marathons and mountain
 - **Progress Tracking**: Wants performance metrics and trend analysis
 - **Social**: Values community and competition with other runners
 
+### Management Type Considerations
+
+**Self-Managed Trail Runner:**
+
+- **AI Recommendations**: System suggests training phases and race scheduling
+- **Educational Content**: Built-in guidance on trail running periodization
+- **Progressive Complexity**: Features unlock as user gains experience
+- **Independent Planning**: Full control over season planning and adjustments
+
+**Trainer-Managed Trail Runner:**
+
+- **Professional Planning**: Coaches create and modify training plans
+- **Cross-Professional Support**: Physiotherapists help with injury prevention
+- **Nutrition Integration**: Nutritionists coordinate fueling strategies
+- **Professional Oversight**: Regular professional review and adjustments
+
 ---
 
 ## 2. City Race Runner (Road Racing)
@@ -97,6 +140,22 @@ Maria is a dedicated road runner who focuses on improving her times and qualifyi
 - **Calendar**: Requires race scheduling and tapering periods
 - **Progress Tracking**: Wants pace improvements and BQ time calculations
 - **Social**: Enjoys comparing with other runners and sharing achievements
+
+### Management Type Considerations
+
+**Self-Managed City Race Runner:**
+
+- **AI Guidance**: System recommends training progression and race scheduling
+- **Educational Content**: Built-in guidance on road running periodization
+- **Progressive Features**: Advanced features unlock with experience
+- **Independent Racing**: Full control over race selection and planning
+
+**Trainer-Managed City Race Runner:**
+
+- **Professional Coaching**: Coaches manage training progression and race strategy
+- **Performance Analysis**: Professional analysis of training data and progress
+- **Race Strategy**: Coaches help with race selection and tapering
+- **Cross-Training**: Coordinated strength and mobility training
 
 ---
 
@@ -146,6 +205,22 @@ David is a competitive bodybuilder who competes in regional shows. He follows st
 - **Progress Tracking**: Wants physique photos, measurements, and strength gains
 - **Nutrition**: Needs integration with meal planning and supplementation
 
+### Management Type Considerations
+
+**Self-Managed Bodybuilding Competitor:**
+
+- **AI Phase Planning**: System suggests bulking, cutting, and peak week protocols
+- **Educational Content**: Built-in guidance on bodybuilding periodization
+- **Progressive Complexity**: Advanced features unlock with experience
+- **Independent Competition**: Full control over competition planning and preparation
+
+**Trainer-Managed Bodybuilding Competitor:**
+
+- **Professional Coaching**: Coaches manage all training phases and progression
+- **Physique Analysis**: Professional assessment of progress and conditioning
+- **Competition Strategy**: Coaches handle peak week and competition prep
+- **Nutrition Coordination**: Nutritionists manage meal plans and supplementation
+
 ---
 
 ## 4. Health-Conscious Individual (Summer Fitness)
@@ -194,6 +269,22 @@ Sarah is a young professional who prioritizes health and fitness. She has a cons
 - **Progress Tracking**: Values visual progress and milestone celebrations
 - **Motivation**: Needs encouragement and habit-building features
 
+### Management Type Considerations
+
+**Self-Managed Health-Conscious Individual:**
+
+- **AI Guidance**: System suggests balanced training approaches
+- **Educational Content**: Built-in guidance on fitness fundamentals
+- **Progressive Features**: Features unlock as user gains experience
+- **Independent Planning**: Full control over training and lifestyle integration
+
+**Trainer-Managed Health-Conscious Individual:**
+
+- **Professional Coaching**: Coaches create balanced training plans
+- **Lifestyle Integration**: Professional help with habit building
+- **Progress Monitoring**: Regular professional assessment and feedback
+- **Motivation Support**: Professional accountability and encouragement
+
 ---
 
 ## 5. Weight Loss Journey (Step-by-Step)
@@ -241,6 +332,22 @@ Mike has struggled with weight for years and has tried various diets and exercis
 - **Calendar**: Wants flexible scheduling with built-in recovery
 - **Progress Tracking**: Values non-scale victories and habit formation
 - **Support**: Needs encouragement and accountability features
+
+### Management Type Considerations
+
+**Self-Managed Weight Loss Journey:**
+
+- **AI Guidance**: System suggests sustainable weight loss approaches
+- **Educational Content**: Built-in guidance on healthy habits and nutrition
+- **Progressive Features**: Simple features that build confidence
+- **Independent Journey**: Full control over weight loss approach and pace
+
+**Trainer-Managed Weight Loss Journey:**
+
+- **Professional Coaching**: Coaches create sustainable weight loss plans
+- **Habit Building**: Professional help with lifestyle changes
+- **Progress Monitoring**: Regular professional assessment and support
+- **Accountability**: Professional accountability and motivation support
 
 ---
 

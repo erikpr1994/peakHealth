@@ -1,59 +1,120 @@
 # PeakHealth App Documentation
 
-This directory contains app-level documentation for the PeakHealth fitness application, including user personas, business strategy, and technical architecture that apply across all features.
+This directory contains app-level documentation for the PeakHealth fitness application, including user personas, business strategy, and technical architecture that apply across all apps.
+
+## App Architecture
+
+PeakHealth consists of multiple interconnected applications designed to serve different user types while maintaining a unified ecosystem:
+
+### 🏠 [User App](./user-app/)
+
+The main application for end users (athletes, fitness enthusiasts, health-conscious individuals).
+
+**Key Characteristics:**
+
+- **Self-managed users**: Full control over their training and health plans
+- **Trainer-managed users**: Guided by health professionals while maintaining user autonomy
+- **Progressive complexity**: Features adapt based on user experience level and management type
+- **Comprehensive health**: Beyond just training to complete health management
+
+**User Types:**
+
+- Trail Runners (Competition-Focused)
+- City Race Runners (Road Racing)
+- Bodybuilding Competitors
+- Health-Conscious Individuals
+- Weight Loss Journey Users
+
+### 🏥 [Professional Platform](./professional-platform/)
+
+A unified platform for health professionals to manage and support their clients.
+
+**Key Characteristics:**
+
+- **Role-based access**: Professionals see and manage only what's relevant to their expertise
+- **Cross-professional collaboration**: Different specialists can work together on client health
+- **Client management tools**: Professional-grade tools for managing multiple clients
+- **Integration with user app**: Seamless communication and data sharing
+
+**Professional Types:**
+
+- **Personal Trainers**: Training plan creation and modification
+- **Physiotherapists**: Injury management, recovery routines, recommendations
+- **Nutritionists**: Meal planning, supplementation, nutrition integration
+- **Doctors**: Health monitoring, medical recommendations
+- **Other Health Professionals**: Specialized health services
+
+### 🔗 [Shared Components](./shared/)
+
+Common elements shared across all applications.
+
+**Components:**
+
+- Technical architecture and system design
+- Design principles and user experience guidelines
+- Data models and integration patterns
+- Security and privacy frameworks
 
 ## Documentation Structure
 
-### 📋 [User Personas](./user-personas.md)
+### User App Documentation
 
-Comprehensive user personas that apply across all features of the application. These personas represent our target users and their needs, goals, and behaviors.
+- **[User App Overview](./user-app/README.md)**: Complete user app explanation
+- **[User Personas](./user-app/user-personas.md)**: Comprehensive personas with management type attributes
+- **[Business Strategy](./user-app/business-strategy.md)**: User app positioning and strategy
 
-### 📊 [Business Strategy](./business-strategy.md)
+### Professional Platform Documentation
 
-Overall business strategy, market positioning, and competitive landscape for the PeakHealth application.
+- **[Professional Platform Overview](./professional-platform/README.md)**: Complete professional platform explanation
+- **[Professional Personas](./professional-platform/professional-personas.md)**: Health professional personas and capabilities
+- **[Business Strategy](./professional-platform/business-strategy.md)**: Professional platform positioning and strategy
 
-### 🔧 [Technical Architecture](./technical-architecture.md)
+### Shared Documentation
 
-High-level technical architecture, system design, and integration patterns used across all features.
-
-### 🎯 [Design Principles](./design-principles.md)
-
-Core design principles, user experience guidelines, and design system foundations.
+- **[Technical Architecture](./shared/technical-architecture.md)**: System design and integration patterns
+- **[Design Principles](./shared/design-principles.md)**: Core design guidelines and UX principles
 
 ## Feature Documentation
 
 Feature-specific documentation is organized in the `docs/features/` directory:
 
 - **Premium Routine Management**: `docs/features/premium-routine-management/`
-- **Other Features**: Additional feature documentation as needed
+- **Onboarding System**: `docs/features/onboarding-system/`
+- **Platform Integrations**: `docs/features/platform-integrations/`
+- **Nutrition Management**: `docs/features/nutrition-management/`
+- **Coach Platform**: `docs/features/coach-platform/`
+- **Calendar Integration**: `docs/features/calendar-integration/`
 
-## Documentation Guidelines
+## Key Principles
 
-### User Personas
+### Multi-App Integration
 
-- All features should reference these app-level personas
-- Feature-specific user needs should be documented in feature docs
-- Personas should be updated based on user research and feedback
+- **Unified data model** across all applications
+- **Seamless user experience** when moving between apps
+- **Role-based access control** for professional features
+- **Cross-platform communication** for collaborative health management
 
-### Cross-Feature Consistency
+### User Management Types
 
-- All features should align with the same user personas
-- Design patterns should be consistent across features
-- Technical architecture should be shared where possible
+- **Self-Managed**: Full user control with optional professional guidance
+- **Trainer-Managed**: Professional oversight with user autonomy
+- **Hybrid Models**: Users can switch between management types
+- **Professional Collaboration**: Multiple professionals can support one user
 
-### Maintenance
+### Feature Distribution
 
-- App-level docs should be updated when user research reveals new insights
-- Feature docs should be updated when features evolve
-- Regular reviews ensure documentation stays current
+- **User App**: Core health and fitness features, routine management, progress tracking
+- **Professional Platform**: Client management, professional tools, collaboration features
+- **Shared Features**: Calendar integration, platform integrations, data analytics
 
 ## Quick Links
 
-- [View All User Personas](./user-personas.md)
-- [Business Strategy](./business-strategy.md)
-- [Technical Architecture](./technical-architecture.md)
+- [User App Documentation](./user-app/)
+- [Professional Platform Documentation](./professional-platform/)
+- [Shared Components](./shared/)
 - [Feature Documentation](../features/)
+- [Project TODO](../todo.md)
 
 ---
 
-_This documentation provides the foundation for all feature development and ensures consistency across the PeakHealth application._
+_This documentation provides the foundation for all app development and ensures consistency across the PeakHealth ecosystem._

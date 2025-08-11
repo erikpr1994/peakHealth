@@ -8,13 +8,17 @@ This folder contains documentation specifically for the Premium Routine Manageme
 
 Complete feature explanation, system architecture, and technical specifications for the Premium Routine Management feature.
 
+### 🎯 [MVP Scope](./mvp-scope.md)
+
+Minimum Viable Product definition, features, development phases, and success criteria.
+
 ### ❓ [Questions & Feedback](./questions.md)
 
 All questions that need answers to finalize the feature design. Questions are marked as pending, answered, or resolved.
 
-### ✅ [TODO & Tasks](./todo.md)
+### ✅ [TODO & Tasks](../../todo.md)
 
-Actionable tasks organized by category. Tasks are checked off as they're completed.
+Project-wide actionable tasks organized by category. Tasks are general and can be built when dependencies are ready.
 
 ### 🎯 [User Personas](./user-personas.md)
 
@@ -60,9 +64,9 @@ This feature primarily serves:
 
 ## Current Status
 
-- **Phase**: Design & Planning
-- **Status**: Gathering requirements and clarifying questions
-- **Next Step**: Answer pending questions in `questions.md`
+- **Phase**: MVP Development Ready
+- **Status**: All design questions answered, MVP scope defined
+- **Next Step**: Begin MVP development (Phase 1: Core Foundation)
 
 ## Quick Links
 

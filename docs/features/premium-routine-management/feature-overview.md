@@ -10,9 +10,14 @@ The Premium Routine Management System is designed to help users plan and execute
 2. **Intelligent Recommendations**: AI-powered phase calculation with user control
 3. **Date-Driven Planning**: Seasons are anchored to specific target dates
 4. **Phase-Based Structure**: Training is organized into logical phases with specific purposes
-5. **Routine Integration**: Existing routines are assigned to phases, not created from scratch
-6. **Calendar Integration**: Training plans integrate with the calendar for race scheduling and progress tracking
-7. **Platform Integration**: Leverages data from Strava, Garmin Connect, and other fitness platforms
+5. **Week-Based Progression**: Phases progress automatically by calendar weeks
+6. **Routine Integration**: Existing routines are assigned to phases, not created from scratch
+7. **Calendar Integration**: Training plans integrate with the calendar for race scheduling and progress tracking
+8. **Platform Integration**: Leverages data from Strava, Garmin Connect, and other fitness platforms
+9. **User Management Types**: Support for both self-managed and trainer-managed users
+10. **Progressive Complexity**: Beginner, intermediate, and expert modes with feature disclosure
+11. **Professional Collaboration**: Integration with health professionals through professional platform
+12. **Different Interfaces**: Separate interfaces for planning vs. execution with context-aware information
 
 ## System Architecture
 
@@ -62,6 +67,54 @@ Season
 - **Plateau Management**: Adjustments and continued progress
 - **Maintenance**: Stabilization and rebound prevention
 
+### User Management Types
+
+**Self-Managed Users:**
+
+- **Full Control**: Complete autonomy over training and health plans
+- **AI Guidance**: AI-powered recommendations and educational content
+- **Progressive Learning**: Built-in guidance that adapts to user experience
+- **Feature Access**: Access to all features with appropriate complexity levels
+- **Decision Making**: Users make all final decisions about their plans
+
+**Trainer-Managed Users:**
+
+- **Professional Oversight**: Health professionals provide guidance and modifications
+- **Collaborative Planning**: Joint planning with trainers and other professionals
+- **Professional Tools**: Access to professional-grade features and recommendations
+- **Cross-Professional Support**: Multiple specialists can contribute to their health
+- **User Autonomy**: Maintains control while benefiting from professional expertise
+
+**Management Type Switching:**
+
+- **Flexible Transitions**: Users can switch between management types
+- **Hybrid Approaches**: Combination of self-management and professional support
+- **Professional Referrals**: System can suggest professional help when needed
+- **Gradual Progression**: Users can start with professional help and transition to self-management
+
+### Progressive Complexity Modes
+
+**Beginner Mode:**
+
+- **Maximum Guidance**: Strong guidance and educational content
+- **Simplified Interfaces**: Streamlined workflows and explanations
+- **Step-by-Step Setup**: Guided season and phase creation
+- **Built-in Learning**: Educational content integrated throughout
+
+**Intermediate Mode:**
+
+- **Balanced Automation**: Balanced automation with customization options
+- **Additional Features**: Advanced capabilities and customization options
+- **Moderate Guidance**: Moderate guidance and recommendations
+- **Progressive Disclosure**: Advanced features become available
+
+**Expert Mode:**
+
+- **High Automation**: High automation with advanced control capabilities
+- **Full Feature Access**: Complete feature access with minimal guidance
+- **Professional Tools**: Professional-grade tools and analytics
+- **Maximum Customization**: Complete control and customization
+
 ### Routine Integration
 
 **Key Concept**: Phases contain assigned routines, not create new ones
@@ -73,19 +126,98 @@ Season
 3. **Progression Logic**: How routines evolve through phases
 4. **Calendar Scheduling**: Automatic scheduling of routines within phases
 
-**Example**:
+**Example by Persona**:
 
 ```
-Base Building Phase (8 weeks)
+Trail Runner - Base Building Phase (8 weeks)
 ├── Strength Routine: 3x/week (Full Body)
 ├── Cardio Routine: 2x/week (Endurance)
 └── Mobility Routine: 1x/week (Recovery)
 
-Build Phase (6 weeks)
-├── Strength Routine: 4x/week (Split)
-├── Cardio Routine: 3x/week (Intervals)
-└── Mobility Routine: 2x/week (Active Recovery)
+Bodybuilding - Off-Season Building (6 months)
+├── Strength Routine: 5x/week (Split)
+├── Cardio Routine: 2x/week (Low Intensity)
+└── Recovery Routine: 1x/week (Active Recovery)
+
+Health-Conscious - Building Phase (3 months)
+├── Strength Routine: 3x/week (Progressive)
+├── Cardio Routine: 3x/week (Balanced)
+└── Flexibility Routine: 2x/week (Maintenance)
 ```
+
+### Interface Design & Execution
+
+**Different Interfaces for Planning vs. Execution:**
+
+**Dashboard Execution View:**
+
+- **Next Trainings**: Upcoming workouts and schedule
+- **Weekly Schedule**: Current week's training plan
+- **Progress Indicators**: Completion status and milestones
+- **Quick Actions**: Start workout, view details, adjust schedule
+- **Important Data**: Key metrics and upcoming events
+
+**Premium Routine Management View:**
+
+- **Season Planning**: Phase creation and management
+- **Routine Assignment**: Assigning routines to phases
+- **Progress Tracking**: Overall season and phase progress
+- **Plan Modifications**: Adjusting phases and routines
+- **Analytics and Insights**: Detailed progress analysis
+
+**Integration Approach:**
+
+- **Unified Data Model**: Same data displayed differently per context
+- **Context-Aware Information**: Relevant data for each page/feature
+- **Seamless Navigation**: Easy movement between planning and execution
+- **Consistent Experience**: Unified design language across interfaces
+
+**Key Features**:
+
+- **No strict limits** on routine assignments
+- **Frequency-based conflict handling**
+- **Load monitoring and recommendations**
+- **Running routine flexibility** for weekly variations
+- **Smart defaults** approach for routine combinations
+
+### Professional Collaboration
+
+**Integration with Professional Platform:**
+
+- **Trainer Management**: Personal trainers can modify training plans
+- **Cross-Professional Support**: Physiotherapists, nutritionists, doctors can contribute
+- **Professional Recommendations**: Health professionals can add notes and suggestions
+- **Client-Professional Communication**: Direct messaging and collaboration tools
+
+**Professional Boundaries:**
+
+- **Role-Based Access**: Professionals only modify areas within their expertise
+- **Recommendation System**: Professionals can recommend but not override other areas
+- **Collaborative Planning**: Multiple professionals can work together on client health
+- **Professional Notes**: Each professional can add relevant notes and recommendations
+
+### Technical Architecture
+
+**Database Foundation:**
+
+- **Supabase Infrastructure**: Leverage existing Supabase foundation
+- **New Table Structure**: Dedicated tables for season management
+- **Performance Optimization**: Optimize for complex season plan queries
+- **Real-Time Capabilities**: Leverage Supabase real-time features
+
+**API Design:**
+
+- **New Endpoints**: Create dedicated API for season management
+- **RESTful Design**: Follow standard REST API patterns
+- **Comprehensive Coverage**: Support all season management operations
+- **Future Integration**: Prepare for external platform integrations
+
+**Offline Support:**
+
+- **Future Feature**: Offline support planned for post-MVP development
+- **Cross-Platform**: Offline functionality for both desktop and mobile
+- **Web App Approach**: Consistent offline experience across platforms
+- **Progressive Enhancement**: Add offline capabilities incrementally
 
 ## Calendar Integration
 

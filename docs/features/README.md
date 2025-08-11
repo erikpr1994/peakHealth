@@ -1,10 +1,28 @@
-# Features Documentation
+# Features Documentation - PeakHealth
 
-This directory contains documentation for specific features of the PeakHealth application. Each feature has its own subdirectory with comprehensive documentation.
+This directory contains documentation for all features of the PeakHealth ecosystem. Features are organized by their primary app (User App or Professional Platform) and include comprehensive documentation for development and implementation.
+
+## Feature Organization
+
+Features are organized by their primary app and implementation priority:
+
+### 🏠 **User App Features** (Primary Focus)
+
+Features that serve end users directly and form the core of the user experience.
+
+### 🏥 **Professional Platform Features** (Secondary Focus)
+
+Features that enable health professionals to support and manage clients.
+
+### 🔗 **Shared Features** (Cross-Platform)
+
+Features that work across both apps and provide integration capabilities.
+
+---
 
 ## Available Features
 
-### 🏃‍♂️ [Premium Routine Management](./premium-routine-management/)
+### 🏃‍♂️ [Premium Routine Management](./premium-routine-management/) - **User App**
 
 Comprehensive season planning system that transforms basic routine creation into structured training periods with clear objectives, phases, and integrated routine management.
 
@@ -24,7 +42,9 @@ Comprehensive season planning system that transforms basic routine creation into
 - Health-conscious individuals
 - Weight loss journey users
 
-### 🔗 [Platform Integrations](./platform-integrations/)
+**Status**: Core feature (MVP priority)
+
+### 🔗 [Platform Integrations](./platform-integrations/) - **Shared**
 
 Multi-platform integration system that connects with external fitness platforms to enhance personalized recommendations and provide better training insights.
 
@@ -37,7 +57,7 @@ Multi-platform integration system that connects with external fitness platforms 
 
 **Status**: Future feature (depends on Premium Routine Management foundation)
 
-### 🥗 [Nutrition Management](./nutrition-management/)
+### 🥗 [Nutrition Management](./nutrition-management/) - **Professional Platform**
 
 Comprehensive nutrition planning and tracking system that integrates with all training phases and user types.
 
@@ -49,6 +69,58 @@ Comprehensive nutrition planning and tracking system that integrates with all tr
 - Universal importance across all user personas
 
 **Status**: Future feature (depends on Premium Routine Management foundation)
+
+### 👨‍💼 [Coach Platform](./coach-platform/) - **Professional Platform**
+
+Professional platform for health professionals to manage clients and deliver personalized training programs.
+
+**Key Capabilities:**
+
+- Client management and progress tracking
+- Training program creation and management
+- Professional dashboard and analytics
+- Dedicated coach mobile application
+
+**Status**: Future feature (depends on Premium Routine Management foundation)
+
+### 📊 [Metrics Tracking](./metrics-tracking/) - **Shared**
+
+Comprehensive progress monitoring and performance analytics with universal metric access.
+
+**Key Capabilities:**
+
+- Universal metric access for all user types
+- Customizable dashboards and tracking
+- Multi-dimensional progress monitoring
+- Integration with training phases and routines
+
+**Status**: Future feature (separate milestone from core features)
+
+### 📅 [Calendar Integration](./calendar-integration/) - **Shared**
+
+Seamless integration with external calendar systems and advanced scheduling capabilities.
+
+**Key Capabilities:**
+
+- External calendar integration (Google, Apple, Outlook)
+- Conflict detection and resolution
+- Two-way synchronization
+- Smart scheduling and event management
+
+**Status**: Future feature (enhances core functionality)
+
+### 🚀 [Onboarding System](./onboarding-system/) - **User App**
+
+Personalized user setup and persona-based feature configuration.
+
+**Key Capabilities:**
+
+- Persona identification and template assignment
+- Feature configuration based on user goals
+- Flexible customization and persona switching
+- Progressive setup process
+
+**Status**: High priority (critical for user experience)
 
 ## Documentation Structure
 
