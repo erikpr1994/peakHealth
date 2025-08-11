@@ -24,6 +24,11 @@ export { default as TrailRunningHeader } from './components/TrailRunningHeader';
 export { default as WorkoutStats } from './components/WorkoutStats';
 export { default as WorkoutOverview } from './components/WorkoutOverview';
 export { default as IntensityTargetConfiguration } from './components/IntensityTargetConfiguration';
+export { default as SectionTypeSelector } from './components/SectionTypeSelector';
+export { default as RepeatIntervalsForm } from './components/RepeatIntervalsForm';
+export { default as SectionsList } from './components/SectionsList';
+export { default as SectionForm } from './components/SectionForm';
+export { default as SectionFormCard } from './components/SectionFormCard';
 
 // Workout creation components
 export { default as WorkoutHeader } from './components/WorkoutHeader';
@@ -38,6 +43,7 @@ export * from './types';
 export * from './utils';
 export * from './utils/workoutCalculations';
 export * from './utils/trailRunningUtils';
+export * from './utils/smartDefaults';
 
 // Hooks
 export * from './hooks/useRoutineOperations';
