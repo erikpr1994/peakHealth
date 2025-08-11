@@ -480,83 +480,81 @@ const RoutineCreation = ({
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <RoutineHeader mode={mode} onSave={handleSaveRoutine} />
+    <div className="w-full px-4 sm:px-6 lg:px-8 py-6">
+      <RoutineHeader mode={mode} onSave={handleSaveRoutine} />
 
-        <RoutineDetailsForm
-          name={name}
-          difficulty={difficulty}
-          description={description}
-          objectives={objectives}
-          onNameChange={setName}
-          onDifficultyChange={setDifficulty}
-          onDescriptionChange={setDescription}
-          onObjectivesChange={setObjectives}
-        />
+      <RoutineDetailsForm
+        name={name}
+        difficulty={difficulty}
+        description={description}
+        objectives={objectives}
+        onNameChange={setName}
+        onDifficultyChange={setDifficulty}
+        onDescriptionChange={setDescription}
+        onObjectivesChange={setObjectives}
+      />
 
-        <StrengthWorkoutsSection
-          strengthWorkouts={strengthWorkouts}
-          collapsedStrengthWorkouts={collapsedStrengthWorkouts}
-          onAddStrengthWorkout={addStrengthWorkout}
-          onToggleCollapse={toggleStrengthWorkoutCollapse}
-          onMoveUp={workoutId => moveStrengthWorkout(workoutId, 'up')}
-          onMoveDown={workoutId => moveStrengthWorkout(workoutId, 'down')}
-          onRemove={removeStrengthWorkout}
-          onUpdateName={updateStrengthWorkoutName}
-          onUpdateObjective={updateStrengthWorkoutObjective}
-          onUpdateSchedule={updateStrengthWorkoutSchedule}
-          onAddSection={addStrengthSection}
-          onUpdateSectionName={updateStrengthSectionName}
-          onUpdateSectionType={updateStrengthSectionType}
-          onUpdateSectionRestAfter={updateStrengthSectionRestAfter}
-          onUpdateSectionEmomDuration={updateStrengthSectionEmomDuration}
-          onRemoveSection={removeStrengthSection}
-          onAddExercise={handleAddExerciseClick}
-          onUpdateExerciseEmomReps={updateStrengthExerciseEmomReps}
-          onUpdateExerciseSets={updateStrengthExerciseSets}
-          onUpdateExerciseName={updateStrengthExerciseName}
-          onUpdateRestTimer={updateStrengthRestTimer}
-          onUpdateExerciseRestAfter={updateStrengthExerciseRestAfter}
-          onRemoveExercise={removeStrengthExercise}
-          onAddApproachSets={handleAddApproachSets}
-          onUpdateProgressionMethod={updateStrengthExerciseProgressionMethod}
-          onNotesClick={handleNotesClick}
-        />
+      <StrengthWorkoutsSection
+        strengthWorkouts={strengthWorkouts}
+        collapsedStrengthWorkouts={collapsedStrengthWorkouts}
+        onAddStrengthWorkout={addStrengthWorkout}
+        onToggleCollapse={toggleStrengthWorkoutCollapse}
+        onMoveUp={workoutId => moveStrengthWorkout(workoutId, 'up')}
+        onMoveDown={workoutId => moveStrengthWorkout(workoutId, 'down')}
+        onRemove={removeStrengthWorkout}
+        onUpdateName={updateStrengthWorkoutName}
+        onUpdateObjective={updateStrengthWorkoutObjective}
+        onUpdateSchedule={updateStrengthWorkoutSchedule}
+        onAddSection={addStrengthSection}
+        onUpdateSectionName={updateStrengthSectionName}
+        onUpdateSectionType={updateStrengthSectionType}
+        onUpdateSectionRestAfter={updateStrengthSectionRestAfter}
+        onUpdateSectionEmomDuration={updateStrengthSectionEmomDuration}
+        onRemoveSection={removeStrengthSection}
+        onAddExercise={handleAddExerciseClick}
+        onUpdateExerciseEmomReps={updateStrengthExerciseEmomReps}
+        onUpdateExerciseSets={updateStrengthExerciseSets}
+        onUpdateExerciseName={updateStrengthExerciseName}
+        onUpdateRestTimer={updateStrengthRestTimer}
+        onUpdateExerciseRestAfter={updateStrengthExerciseRestAfter}
+        onRemoveExercise={removeStrengthExercise}
+        onAddApproachSets={handleAddApproachSets}
+        onUpdateProgressionMethod={updateStrengthExerciseProgressionMethod}
+        onNotesClick={handleNotesClick}
+      />
 
-        <RunningWorkoutsSection
-          runningWorkouts={runningWorkouts}
-          collapsedRunningWorkouts={collapsedRunningWorkouts}
-          creatingRunning={creatingRunning}
-          editingRunning={editingRunning}
-          onAddRunningWorkout={handleAddRunningWorkout}
-          onRunningSave={handleRunningSave}
-          onRunningCancel={handleRunningCancel}
-          onEditRunning={handleEditRunning}
-          onToggleCollapse={toggleRunningWorkoutCollapse}
-          onMoveUp={workoutId => moveRunningWorkout(workoutId, 'up')}
-          onMoveDown={workoutId => moveRunningWorkout(workoutId, 'down')}
-          onRemove={removeRunningWorkout}
-          onUpdateName={updateRunningWorkoutName}
-          onUpdateObjective={updateRunningWorkoutObjective}
-          onUpdateSchedule={updateRunningWorkoutSchedule}
-          onAddSection={addRunningSection}
-          onUpdateSectionName={updateRunningSectionName}
-          onUpdateSectionType={updateRunningSectionType}
-          onUpdateSectionRestAfter={updateRunningSectionRestAfter}
-          onUpdateSectionEmomDuration={updateRunningSectionEmomDuration}
-          onRemoveSection={removeRunningSection}
-          onAddExercise={handleAddExerciseClick}
-          onUpdateExerciseEmomReps={updateRunningExerciseEmomReps}
-          onUpdateExerciseSets={updateRunningExerciseSets}
-          onUpdateExerciseName={updateRunningExerciseName}
-          onUpdateRestTimer={updateRunningRestTimer}
-          onUpdateExerciseRestAfter={updateRunningExerciseRestAfter}
-          onRemoveExercise={removeRunningExercise}
-          onAddApproachSets={handleAddApproachSets}
-          onNotesClick={handleNotesClick}
-        />
-      </div>
+      <RunningWorkoutsSection
+        runningWorkouts={runningWorkouts}
+        collapsedRunningWorkouts={collapsedRunningWorkouts}
+        creatingRunning={creatingRunning}
+        editingRunning={editingRunning}
+        onAddRunningWorkout={handleAddRunningWorkout}
+        onRunningSave={handleRunningSave}
+        onRunningCancel={handleRunningCancel}
+        onEditRunning={handleEditRunning}
+        onToggleCollapse={toggleRunningWorkoutCollapse}
+        onMoveUp={workoutId => moveRunningWorkout(workoutId, 'up')}
+        onMoveDown={workoutId => moveRunningWorkout(workoutId, 'down')}
+        onRemove={removeRunningWorkout}
+        onUpdateName={updateRunningWorkoutName}
+        onUpdateObjective={updateRunningWorkoutObjective}
+        onUpdateSchedule={updateRunningWorkoutSchedule}
+        onAddSection={addRunningSection}
+        onUpdateSectionName={updateRunningSectionName}
+        onUpdateSectionType={updateRunningSectionType}
+        onUpdateSectionRestAfter={updateRunningSectionRestAfter}
+        onUpdateSectionEmomDuration={updateRunningSectionEmomDuration}
+        onRemoveSection={removeRunningSection}
+        onAddExercise={handleAddExerciseClick}
+        onUpdateExerciseEmomReps={updateRunningExerciseEmomReps}
+        onUpdateExerciseSets={updateRunningExerciseSets}
+        onUpdateExerciseName={updateRunningExerciseName}
+        onUpdateRestTimer={updateRunningRestTimer}
+        onUpdateExerciseRestAfter={updateRunningExerciseRestAfter}
+        onRemoveExercise={removeRunningExercise}
+        onAddApproachSets={handleAddApproachSets}
+        onNotesClick={handleNotesClick}
+      />
 
       <RoutineModals
         exerciseModalOpen={exerciseModalOpen}
