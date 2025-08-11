@@ -117,7 +117,7 @@ const ExerciseManagement = ({
         {/* Exercise Configuration */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           <div>
-            <Label>Rest Between Sets</Label>
+            <Label className="block mb-2">Rest Between Sets</Label>
             <Input
               value={exercise.restTimer}
               onChange={e => onUpdateRestTimer(exercise.id, e.target.value)}
@@ -128,7 +128,7 @@ const ExerciseManagement = ({
           {/* Only show rest after exercise if NOT the last exercise */}
           {!isLastExercise && (
             <div>
-              <Label>Rest After Exercise</Label>
+              <Label className="block mb-2">Rest After Exercise</Label>
               <Input
                 value={exercise.restAfter}
                 onChange={e => onUpdateRestAfter(exercise.id, e.target.value)}
@@ -139,7 +139,7 @@ const ExerciseManagement = ({
 
           {exercise.emomReps !== undefined && (
             <div>
-              <Label>EMOM Reps</Label>
+              <Label className="block mb-2">EMOM Reps</Label>
               <Input
                 type="number"
                 value={exercise.emomReps}
@@ -153,7 +153,7 @@ const ExerciseManagement = ({
           )}
 
           <div>
-            <Label>Progression Method</Label>
+            <Label className="block mb-2">Progression Method</Label>
             <Select
               value={exercise.progressionMethod || 'linear'}
               onValueChange={value =>
@@ -208,7 +208,7 @@ const ExerciseManagement = ({
 
         {/* Sets Management */}
         <div>
-          <Label>Sets</Label>
+          <Label className="block mb-2">Sets</Label>
           <SetManagement
             sets={exercise.sets}
             onSetsChange={(sets: WorkoutSet[]) =>

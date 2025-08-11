@@ -108,7 +108,7 @@ const WorkoutSection = ({
         {/* Section Configuration */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div>
-            <Label>Section Type</Label>
+            <Label className="block mb-2">Section Type</Label>
             <Select
               value={section.type}
               onValueChange={value =>
@@ -131,7 +131,7 @@ const WorkoutSection = ({
           {/* Only show rest after section if NOT the last section */}
           {!isLastSection && (
             <div>
-              <Label>Rest After Section</Label>
+              <Label className="block mb-2">Rest After Section</Label>
               <Input
                 value={section.restAfter}
                 onChange={e => onUpdateRestAfter(e.target.value)}
@@ -142,7 +142,7 @@ const WorkoutSection = ({
 
           {section.type === 'emom' && (
             <div>
-              <Label>EMOM Duration (minutes)</Label>
+              <Label className="block mb-2">EMOM Duration (minutes)</Label>
               <Input
                 type="number"
                 value={section.emomDuration || ''}

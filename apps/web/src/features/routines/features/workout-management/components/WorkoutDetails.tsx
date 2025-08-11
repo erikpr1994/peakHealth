@@ -32,7 +32,7 @@ const WorkoutDetails = ({
     <div className="p-4 space-y-4">
       {/* Objective */}
       <div>
-        <Label>Objective</Label>
+        <Label className="block mb-2">Objective</Label>
         <Textarea
           value={objective}
           onChange={e => onUpdateObjective(e.target.value)}
@@ -44,7 +44,7 @@ const WorkoutDetails = ({
       {/* Schedule */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <div>
-          <Label>Weeks</Label>
+          <Label className="block mb-2">Weeks</Label>
           <Input
             value={schedule.weeks}
             onChange={e => onUpdateSchedule('weeks', e.target.value)}
@@ -52,7 +52,7 @@ const WorkoutDetails = ({
           />
         </div>
         <div>
-          <Label>Day</Label>
+          <Label className="block mb-2">Day</Label>
           <Select
             value={schedule.day}
             onValueChange={value => onUpdateSchedule('day', value)}
@@ -72,7 +72,7 @@ const WorkoutDetails = ({
           </Select>
         </div>
         <div>
-          <Label>Time</Label>
+          <Label className="block mb-2">Time</Label>
           <Input
             value={schedule.time}
             onChange={e => onUpdateSchedule('time', e.target.value)}
