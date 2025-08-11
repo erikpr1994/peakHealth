@@ -60,12 +60,13 @@ const RoutineDetailHeader = ({
         <Button
           variant="outline"
           onClick={() => router.push(`/routines/${routineId}/edit`)}
+          className="whitespace-nowrap min-w-[80px]"
         >
           <Edit className="w-4 h-4 mr-2" />
           Edit
         </Button>
         <Button
-          className="bg-indigo-600 hover:bg-indigo-700"
+          className="bg-indigo-600 hover:bg-indigo-700 whitespace-nowrap min-w-[120px]"
           onClick={() => router.push(`/workout-tracker/${routineId}`)}
         >
           <Play className="w-4 h-4 mr-2" />

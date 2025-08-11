@@ -52,7 +52,7 @@ const RoutineInfo = ({
             <Button
               variant="outline"
               size="sm"
-              className="w-full justify-start"
+              className="w-full justify-start whitespace-nowrap"
               onClick={onDuplicate}
             >
               <Copy className="w-4 h-4 mr-2" />
@@ -61,7 +61,7 @@ const RoutineInfo = ({
             <Button
               variant="outline"
               size="sm"
-              className="w-full justify-start"
+              className="w-full justify-start whitespace-nowrap"
               onClick={onShare}
             >
               <Share className="w-4 h-4 mr-2" />
@@ -70,7 +70,7 @@ const RoutineInfo = ({
             <Button
               variant="outline"
               size="sm"
-              className="w-full justify-start text-red-600 hover:text-red-700"
+              className="w-full justify-start whitespace-nowrap text-red-600 hover:text-red-700"
               onClick={onDelete}
             >
               <Trash className="w-4 h-4 mr-2" />
