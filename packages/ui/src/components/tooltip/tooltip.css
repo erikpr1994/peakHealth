@@ -28,13 +28,13 @@
 }
 
 /* Top position (default) */
-.tooltip.top {
+.tooltip-top {
   bottom: 125%;
   left: 50%;
   transform: translateX(-50%);
 }
 
-.tooltip.top::after {
+.tooltip-top::after {
   top: 100%;
   left: 50%;
   margin-left: -5px;
@@ -42,13 +42,13 @@
 }
 
 /* Bottom position */
-.tooltip.bottom {
+.tooltip-bottom {
   top: 125%;
   left: 50%;
   transform: translateX(-50%);
 }
 
-.tooltip.bottom::after {
+.tooltip-bottom::after {
   bottom: 100%;
   left: 50%;
   margin-left: -5px;
@@ -56,13 +56,13 @@
 }
 
 /* Left position */
-.tooltip.left {
+.tooltip-left {
   right: 125%;
   top: 50%;
   transform: translateY(-50%);
 }
 
-.tooltip.left::after {
+.tooltip-left::after {
   top: 50%;
   left: 100%;
   margin-top: -5px;
@@ -70,13 +70,13 @@
 }
 
 /* Right position */
-.tooltip.right {
+.tooltip-right {
   left: 125%;
   top: 50%;
   transform: translateY(-50%);
 }
 
-.tooltip.right::after {
+.tooltip-right::after {
   top: 50%;
   right: 100%;
   margin-top: -5px;
