@@ -247,38 +247,61 @@ DELETE /api/sets/:id                        # Delete set
 
 ### **API Response Format**
 
-```typescript
-// Success Response
-{
-  success: true,
-  data: T,
-  message?: string
-}
+**Success Responses:**
 
-// Error Response
-{
-  success: false,
-  error: {
-    code: string,
-    message: string,
-    details?: any
-  }
-}
+```typescript
+// Simple data return
+return NextResponse.json({ routines: routines || [] });
+
+// Complex data return
+return NextResponse.json({
+  routine: { ... },
+  workouts: [ ... ],
+  progress: { ... }
+});
+
+// Success confirmation
+return NextResponse.json({ success: true });
 ```
 
-### **Error Codes**
+**Error Responses:**
 
 ```typescript
-enum ErrorCodes {
-  ROUTINE_NOT_FOUND = 'ROUTINE_NOT_FOUND',
-  WORKOUT_NOT_FOUND = 'WORKOUT_NOT_FOUND',
-  SECTION_NOT_FOUND = 'SECTION_NOT_FOUND',
-  EXERCISE_NOT_FOUND = 'EXERCISE_NOT_FOUND',
-  SET_NOT_FOUND = 'SET_NOT_FOUND',
-  UNAUTHORIZED = 'UNAUTHORIZED',
-  VALIDATION_ERROR = 'VALIDATION_ERROR',
-  INTERNAL_ERROR = 'INTERNAL_ERROR',
-}
+// Authentication error
+return NextResponse.json({ error: 'Not authenticated' }, { status: 401 });
+
+// Database connection error
+return NextResponse.json(
+  { error: 'Database connection not available' },
+  { status: 503 }
+);
+
+// Not found error
+return NextResponse.json({ error: 'Routine not found' }, { status: 404 });
+
+// Internal server error
+return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+```
+
+### **Standard Error Messages**
+
+```typescript
+const ERROR_MESSAGES = {
+  NOT_AUTHENTICATED: 'Not authenticated',
+  DATABASE_UNAVAILABLE: 'Database connection not available',
+  ROUTINE_NOT_FOUND: 'Routine not found',
+  WORKOUT_NOT_FOUND: 'Workout not found',
+  SECTION_NOT_FOUND: 'Section not found',
+  EXERCISE_NOT_FOUND: 'Exercise not found',
+  SET_NOT_FOUND: 'Set not found',
+  INSUFFICIENT_PERMISSIONS: 'Insufficient permissions',
+  VALIDATION_ERROR: 'Validation error',
+  INTERNAL_ERROR: 'Internal server error',
+  FAILED_TO_FETCH: 'Failed to fetch data',
+  FAILED_TO_UPDATE: 'Failed to update data',
+  FAILED_TO_CREATE: 'Failed to create data',
+  FAILED_TO_DELETE: 'Failed to delete data',
+};
 ```
 
 ## 🏗️ **Component Architecture**
