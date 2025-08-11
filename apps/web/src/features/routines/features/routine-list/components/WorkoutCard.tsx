@@ -30,7 +30,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
-import Tooltip from '@/components/ui/tooltip';
+import { Tooltip } from '@peakhealth/ui';
 import {
   StrengthWorkout,
   RunningWorkout,

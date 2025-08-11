@@ -15,7 +15,7 @@ import {
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import Tooltip from '@/components/ui/tooltip';
+import { Tooltip } from '@peakhealth/ui';
 import { WorkoutType } from '@/features/routines/types';
 
 interface WorkoutHeaderProps {

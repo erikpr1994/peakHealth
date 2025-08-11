@@ -16,7 +16,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import Tooltip from '@/components/ui/tooltip';
+import { Tooltip } from '@peakhealth/ui';
 
 export type SetType = 'warmup' | 'normal' | 'failure' | 'dropset';
 export type RepType = 'fixed' | 'range';
