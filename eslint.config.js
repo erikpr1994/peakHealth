@@ -137,7 +137,7 @@ module.exports = [
       'import-x/no-extraneous-dependencies': 'error',
 
       // Import correctness via import-x
-      'import-x/no-unresolved': 'error',
+      'import-x/no-unresolved': ['error', { ignore: ['^@/'] }],
       'jsx-a11y/alt-text': 'error',
 
       'jsx-a11y/anchor-has-content': 'error',
