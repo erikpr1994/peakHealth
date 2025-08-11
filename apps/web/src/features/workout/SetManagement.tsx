@@ -16,8 +16,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-
-import styles from './SetManagement.module.css';
+import Tooltip from '@/components/ui/tooltip';
 
 export type SetType = 'warmup' | 'normal' | 'failure' | 'dropset';
 export type RepType = 'fixed' | 'range';
@@ -283,7 +282,7 @@ const SetManagement = ({
           )}
         </div>
         <div className="flex items-center gap-2">
-          <div className={styles.tooltipContainer}>
+          <Tooltip content={getAddApproachSetsHoverText()}>
             <Button
               onClick={onAddApproachSets}
               size="sm"
@@ -296,14 +295,13 @@ const SetManagement = ({
               <Target className="w-4 h-4 mr-1" />
               Add Approach Sets
             </Button>
-            <div className={styles.tooltip}>
-              {getAddApproachSetsHoverText()}
-            </div>
-          </div>
-          <Button onClick={addSet} size="sm" variant="outline">
-            <Plus className="w-4 h-4 mr-1" />
-            Add Set
-          </Button>
+          </Tooltip>
+          <Tooltip content="Add a new set to the workout">
+            <Button onClick={addSet} size="sm" variant="outline">
+              <Plus className="w-4 h-4 mr-1" />
+              Add Set
+            </Button>
+          </Tooltip>
         </div>
       </div>
 

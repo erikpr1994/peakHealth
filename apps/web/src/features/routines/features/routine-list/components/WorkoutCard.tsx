@@ -30,12 +30,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from '@/components/ui/tooltip';
+import Tooltip from '@/components/ui/tooltip';
 import {
   StrengthWorkout,
   RunningWorkout,
@@ -187,39 +182,29 @@ const WorkoutCard = ({
           <div className="flex items-center space-x-3">
             {/* Workout Order Controls */}
             <div className="flex flex-col space-y-1">
-              <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => onMove(workout.id, 'up')}
-                      disabled={index === 0}
-                      className="p-1 h-6 w-6"
-                    >
-                      <ArrowUp className="h-3 w-3" />
-                    </Button>
-                  </TooltipTrigger>
-                  <TooltipContent>Move up</TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
+              <Tooltip content="Move up">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => onMove(workout.id, 'up')}
+                  disabled={index === 0}
+                  className="p-1 h-6 w-6"
+                >
+                  <ArrowUp className="h-3 w-3" />
+                </Button>
+              </Tooltip>
 
-              <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => onMove(workout.id, 'down')}
-                      disabled={index === totalCount - 1}
-                      className="p-1 h-6 w-6"
-                    >
-                      <ArrowDown className="h-3 w-3" />
-                    </Button>
-                  </TooltipTrigger>
-                  <TooltipContent>Move down</TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
+              <Tooltip content="Move down">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => onMove(workout.id, 'down')}
+                  disabled={index === totalCount - 1}
+                  className="p-1 h-6 w-6"
+                >
+                  <ArrowDown className="h-3 w-3" />
+                </Button>
+              </Tooltip>
             </div>
 
             {/* Workout Order Number */}
@@ -522,63 +507,47 @@ const WorkoutCard = ({
                                   />
                                   {/* Progression Method Badge for Strength Exercises */}
                                   {isStrength && exercise.progressionMethod && (
-                                    <TooltipProvider>
-                                      <Tooltip>
-                                        <TooltipTrigger asChild>
-                                          <div>
-                                            <Badge
-                                              variant="outline"
-                                              className={`text-xs ${getProgressionMethodColor(
-                                                exercise.progressionMethod
-                                              )}`}
-                                            >
-                                              <TrendingUp className="h-3 w-3 mr-1" />
-                                              {getProgressionMethodLabel(
-                                                exercise.progressionMethod
-                                              )}
-                                            </Badge>
-                                          </div>
-                                        </TooltipTrigger>
-                                        <TooltipContent>
-                                          {getProgressionMethodDescription(
-                                            exercise.progressionMethod
-                                          )}
-                                        </TooltipContent>
-                                      </Tooltip>
-                                    </TooltipProvider>
+                                    <Tooltip
+                                      content={getProgressionMethodDescription(
+                                        exercise.progressionMethod
+                                      )}
+                                    >
+                                      <Badge
+                                        variant="outline"
+                                        className={`text-xs ${getProgressionMethodColor(
+                                          exercise.progressionMethod
+                                        )}`}
+                                      >
+                                        <TrendingUp className="h-3 w-3 mr-1" />
+                                        {getProgressionMethodLabel(
+                                          exercise.progressionMethod
+                                        )}
+                                      </Badge>
+                                    </Tooltip>
                                   )}
                                 </div>
                                 <div className="flex items-center space-x-2">
-                                  <TooltipProvider>
-                                    <Tooltip>
-                                      <TooltipTrigger asChild>
-                                        <Button
-                                          variant="ghost"
-                                          size="sm"
-                                          onClick={() =>
-                                            onNotesClick(
-                                              'exercise',
-                                              workout.id,
-                                              section.id,
-                                              exercise.id
-                                            )
-                                          }
-                                          className={
-                                            exercise.notes
-                                              ? 'text-blue-600'
-                                              : 'text-gray-400'
-                                          }
-                                        >
-                                          <FileText className="h-4 w-4" />
-                                        </Button>
-                                      </TooltipTrigger>
-                                      <TooltipContent>
-                                        {exercise.notes
-                                          ? 'Edit notes'
-                                          : 'Add notes'}
-                                      </TooltipContent>
-                                    </Tooltip>
-                                  </TooltipProvider>
+                                  <Tooltip content="Edit notes">
+                                    <Button
+                                      variant="ghost"
+                                      size="sm"
+                                      onClick={() =>
+                                        onNotesClick(
+                                          'exercise',
+                                          workout.id,
+                                          section.id,
+                                          exercise.id
+                                        )
+                                      }
+                                      className={
+                                        exercise.notes
+                                          ? 'text-blue-600'
+                                          : 'text-gray-400'
+                                      }
+                                    >
+                                      <FileText className="h-4 w-4" />
+                                    </Button>
+                                  </Tooltip>
                                   <Button
                                     variant="ghost"
                                     size="sm"
