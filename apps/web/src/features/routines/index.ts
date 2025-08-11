@@ -43,7 +43,6 @@ export {
   RoutineCard,
   RoutinesList,
   ActiveRoutineCard,
-  WorkoutCard,
 } from './features/routine-list';
 
 // Types
