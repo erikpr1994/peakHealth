@@ -107,7 +107,7 @@ CREATE TABLE exercise_sets (
   weight DECIMAL(6,2),
   duration_seconds INTEGER,
   rest_seconds INTEGER,
-  progression_method VARCHAR(50) CHECK (progression_method IN ('Linear', 'Dual', 'Inverse Pyramid', 'Myo-Reps', 'Widowmaker', 'AMRAP')),
+  progression_method VARCHAR(50) CHECK (progression_method IN ('linear', 'dual', 'inverse-pyramid', 'myo-reps', 'widowmaker', 'amrap')),
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
