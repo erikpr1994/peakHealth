@@ -1,25 +1,26 @@
 'use client';
 
+import { useState } from 'react';
+
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
-
+import { Label } from '@/components/ui/label';
 import SectionTypeSelector from './SectionTypeSelector';
 import RepeatIntervalsForm from './RepeatIntervalsForm';
 import SectionForm from './SectionForm';
 import {
-  TrailRunningSection,
-  TrailRunningInterval,
-  IntensityTarget,
-  IntervalType,
-} from '../types';
-import {
   getSmartDefaults,
   processRepeatSections,
-} from '../utils/smartDefaults';
-import { getDefaultName } from '../utils/trailRunningUtils';
+} from '@/features/routines/utils/smartDefaults';
+import { getDefaultName } from '@/features/routines/utils/trailRunningUtils';
+import {
+  TrailRunningSection,
+  TrailRunningInterval,
+  IntervalType,
+  IntensityTarget,
+} from '@/features/routines/types';
 
 interface SectionFormCardProps {
   editingSection: TrailRunningSection | null;

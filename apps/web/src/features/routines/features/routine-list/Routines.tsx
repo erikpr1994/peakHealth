@@ -1,7 +1,8 @@
 'use client';
 
-import { Routine } from './types';
+import { Routine } from '@/features/routines/types';
 import RoutinesList from './components/RoutinesList';
+import ActiveRoutineCard from './components/ActiveRoutineCard';
 
 const Routines = (): React.ReactElement => {
   const routines: Routine[] = [

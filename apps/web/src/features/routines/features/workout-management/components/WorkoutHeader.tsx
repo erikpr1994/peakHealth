@@ -1,27 +1,31 @@
 'use client';
 
 import {
-  ArrowUp,
-  ArrowDown,
-  ChevronUp,
   ChevronDown,
+  ChevronUp,
+  Edit,
+  GripVertical,
+  Trash2,
   Dumbbell,
   Activity,
   MapPin,
   Waves,
   Bike,
-  Trash2,
+  ArrowUp,
+  ArrowDown,
 } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
+import { Badge } from '@/components/ui/badge';
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
-import { WorkoutType } from '../types';
+import { WorkoutType } from '@/features/routines/types';
 
 interface WorkoutHeaderProps {
   workout: {

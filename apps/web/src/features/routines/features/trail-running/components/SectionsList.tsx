@@ -1,13 +1,14 @@
 'use client';
 
-import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-
-import { TrailRunningSection } from '../types';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Edit, Trash2 } from 'lucide-react';
 import {
   formatIntensityTargetDisplay,
   getIntensityTargetColor,
-} from '../utils/trailRunningUtils';
+} from '@/features/routines/utils/trailRunningUtils';
+import { TrailRunningSection } from '@/features/routines/types';
 
 interface SectionsListProps {
   sections: TrailRunningSection[];

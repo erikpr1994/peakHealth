@@ -3,7 +3,7 @@
 import { useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
 
-import { TrailRunningWorkoutData } from '@/features/routines/TrailRunningWorkout';
+import { TrailRunningWorkoutData } from '@/features/routines/types';
 
 // Import our new components and hooks
 import RoutineHeader from './components/RoutineHeader';
@@ -11,9 +11,9 @@ import RoutineDetailsForm from './components/RoutineDetailsForm';
 import StrengthWorkoutsSection from './components/StrengthWorkoutsSection';
 import RunningWorkoutsSection from './components/RunningWorkoutsSection';
 import RoutineModals from './components/RoutineModals';
-import { useWorkoutOperations } from './hooks/useWorkoutOperations';
-import { addApproachSets } from './utils/workoutCalculations';
-import { ProgressionMethod } from './types';
+import { useWorkoutOperations } from '../../hooks/useWorkoutOperations';
+import { addApproachSets } from '../../utils/workoutCalculations';
+import { ProgressionMethod } from '../../types';
 
 interface RoutineCreationProps {
   editRoutineId?: string;

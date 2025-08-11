@@ -1,11 +1,12 @@
 'use client';
 
-import { Play } from 'lucide-react';
+import { Calendar, Clock, Activity, Play } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
-import { getDifficultyColor } from '../utils';
+import { getDifficultyColor } from '@/features/routines/utils';
 
 interface Exercise {
   id: string;

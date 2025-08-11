@@ -1,5 +1,7 @@
 'use client';
 
+import { Activity, Mountain, Timer, Zap } from 'lucide-react';
+
 import { Label } from '@/components/ui/label';
 import {
   Select,
@@ -8,8 +10,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-
-import { TrailRunningSection } from '../types';
+import { TrailRunningSection } from '@/features/routines/types';
 
 interface SectionTypeSelectorProps {
   value: TrailRunningSection['type'];

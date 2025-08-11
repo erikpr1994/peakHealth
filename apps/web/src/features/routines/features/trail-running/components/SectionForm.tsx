@@ -2,9 +2,11 @@
 
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-
 import IntensityTargetConfiguration from './IntensityTargetConfiguration';
-import { TrailRunningSection, IntensityTarget } from '../types';
+import {
+  TrailRunningSection,
+  IntensityTarget,
+} from '@/features/routines/types';
 
 interface SectionFormProps {
   section: Partial<TrailRunningSection>;

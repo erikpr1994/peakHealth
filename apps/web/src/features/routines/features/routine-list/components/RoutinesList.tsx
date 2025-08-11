@@ -1,6 +1,6 @@
 'use client';
 
-import { Search, Grid, List, Plus } from 'lucide-react';
+import { Plus, Search, Filter } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
@@ -13,7 +13,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { Routine } from '../types';
+import { Routine } from '@/features/routines/types';
 import ActiveRoutineCard from './ActiveRoutineCard';
 import RoutineCard from './RoutineCard';
 
@@ -117,7 +117,7 @@ const RoutinesList = ({ routines }: RoutinesListProps): React.ReactElement => {
               onClick={() => setViewMode('grid')}
               className="rounded-r-none"
             >
-              <Grid className="w-4 h-4" />
+              <Filter className="w-4 h-4" />
             </Button>
             <Button
               variant={viewMode === 'list' ? 'default' : 'ghost'}
@@ -125,7 +125,7 @@ const RoutinesList = ({ routines }: RoutinesListProps): React.ReactElement => {
               onClick={() => setViewMode('list')}
               className="rounded-l-none"
             >
-              <List className="w-4 h-4" />
+              <Filter className="w-4 h-4" />
             </Button>
           </div>
         </div>

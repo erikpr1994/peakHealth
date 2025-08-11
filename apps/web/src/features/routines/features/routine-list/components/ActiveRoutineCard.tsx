@@ -1,13 +1,23 @@
 'use client';
 
-import { Play, Calendar, Target, Trophy, Zap, Dumbbell } from 'lucide-react';
+import {
+  Play,
+  Calendar,
+  Clock,
+  Target,
+  Users,
+  Trophy,
+  Zap,
+  Dumbbell,
+} from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
 import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
-import { Routine } from '../types';
-import { getIconColor } from '../utils';
+import { Routine } from '@/features/routines/types';
+import { getIconColor } from '@/features/routines/utils';
 
 interface ActiveRoutineCardProps {
   routine: Routine;

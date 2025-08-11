@@ -7,7 +7,7 @@ import WeeklySchedule from './components/WeeklySchedule';
 import RoutineInfo from './components/RoutineInfo';
 import WorkoutDaysList from './components/WorkoutDaysList';
 import ExerciseList from './components/ExerciseList';
-import { RoutineData } from './types';
+import { RoutineData } from '@/features/routines/types';
 
 interface RoutineDetailProps {
   routineId: string;

@@ -1,12 +1,12 @@
 'use client';
 
-import { Trash2, FileText, Plus } from 'lucide-react';
+import { Plus, Trash2, FileText, Clock, Dumbbell } from 'lucide-react';
 
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Badge } from '@/components/ui/badge';
 import {
   Select,
   SelectContent,
@@ -14,9 +14,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { Exercise, ProgressionMethod } from '../types';
+import { Textarea } from '@/components/ui/textarea';
+import { Exercise, ProgressionMethod } from '@/features/routines/types';
+import {
+  getProgressionMethodLabel,
+  getProgressionMethodColor,
+} from '@/features/routines/utils';
 import SetManagement, { WorkoutSet } from '@/features/workout/SetManagement';
-import { getProgressionMethodLabel, getProgressionMethodColor } from '../utils';
 
 interface ExerciseManagementProps {
   exercise: Exercise;

@@ -1,27 +1,23 @@
 'use client';
 
-import { Activity, Plus } from 'lucide-react';
+import { Dumbbell, Plus } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import TrailRunningWorkout, {
-  TrailRunningWorkoutData,
-} from '../TrailRunningWorkout';
-import WorkoutHeader from './WorkoutHeader';
-import WorkoutDetails from './WorkoutDetails';
-import WorkoutSection from './WorkoutSection';
-import { calculateWorkoutDuration } from '../utils/workoutCalculations';
-import { RunningWorkout, WorkoutSet } from '../types';
+import WorkoutHeader from '@/features/routines/features/workout-management/components/WorkoutHeader';
+import WorkoutDetails from '@/features/routines/features/workout-management/components/WorkoutDetails';
+import WorkoutSectionComponent from '@/features/routines/features/workout-management/components/WorkoutSection';
+import { calculateWorkoutDuration } from '@/features/routines/utils/workoutCalculations';
+import {
+  StrengthWorkout,
+  ProgressionMethod,
+  WorkoutSet,
+} from '@/features/routines/types';
 
-interface RunningWorkoutsSectionProps {
-  runningWorkouts: RunningWorkout[];
-  collapsedRunningWorkouts: Set<string>;
-  creatingRunning: boolean;
-  editingRunning: { workoutId: string; data: TrailRunningWorkoutData } | null;
-  onAddRunningWorkout: () => void;
-  onRunningSave: (runningData: TrailRunningWorkoutData) => void;
-  onRunningCancel: () => void;
-  onEditRunning: (workoutId: string) => void;
+interface StrengthWorkoutsSectionProps {
+  strengthWorkouts: StrengthWorkout[];
+  collapsedStrengthWorkouts: Set<string>;
+  onAddStrengthWorkout: () => void;
   onToggleCollapse: (workoutId: string) => void;
   onMoveUp: (workoutId: string) => void;
   onMoveDown: (workoutId: string) => void;
@@ -96,6 +92,12 @@ interface RunningWorkoutsSectionProps {
     sectionId: string,
     exerciseId: string
   ) => void;
+  onUpdateProgressionMethod: (
+    workoutId: string,
+    sectionId: string,
+    exerciseId: string,
+    method: ProgressionMethod
+  ) => void;
   onNotesClick: (
     type: 'exercise' | 'set',
     workoutId: string,
@@ -105,15 +107,10 @@ interface RunningWorkoutsSectionProps {
   ) => void;
 }
 
-const RunningWorkoutsSection = ({
-  runningWorkouts,
-  collapsedRunningWorkouts,
-  creatingRunning,
-  editingRunning,
-  onAddRunningWorkout,
-  onRunningSave,
-  onRunningCancel,
-  onEditRunning,
+const StrengthWorkoutsSection = ({
+  strengthWorkouts,
+  collapsedStrengthWorkouts,
+  onAddStrengthWorkout,
   onToggleCollapse,
   onMoveUp,
   onMoveDown,
@@ -135,64 +132,40 @@ const RunningWorkoutsSection = ({
   onUpdateExerciseRestAfter,
   onRemoveExercise,
   onAddApproachSets,
+  onUpdateProgressionMethod,
   onNotesClick,
-}: RunningWorkoutsSectionProps): React.ReactElement => {
+}: StrengthWorkoutsSectionProps): React.ReactElement => {
   return (
-    <div className="space-y-4 mt-8">
+    <div className="space-y-4">
       <div className="flex items-center justify-between">
         <h2 className="text-lg font-semibold text-gray-900">
-          Running Workouts ({runningWorkouts.length + (creatingRunning ? 1 : 0)}
-          )
+          Strength Workouts ({strengthWorkouts.length})
         </h2>
         <Button
-          onClick={onAddRunningWorkout}
-          className="bg-green-600 hover:bg-green-700"
+          onClick={onAddStrengthWorkout}
+          className="bg-indigo-600 hover:bg-indigo-700"
         >
-          <Activity className="h-4 w-4 mr-2" />
-          Add Running Workout
+          <Dumbbell className="h-4 w-4 mr-2" />
+          Add Strength Workout
         </Button>
       </div>
 
-      {/* Running Creation Inline */}
-      {creatingRunning && (
-        <Card className="border-2 border-green-200">
-          <TrailRunningWorkout
-            onSave={onRunningSave}
-            onCancel={onRunningCancel}
-            mode="create"
-          />
-        </Card>
-      )}
-
-      {/* Running Editing Inline */}
-      {editingRunning && (
-        <Card className="border-2 border-green-200">
-          <TrailRunningWorkout
-            onSave={onRunningSave}
-            onCancel={onRunningCancel}
-            initialData={editingRunning.data}
-            mode="edit"
-          />
-        </Card>
-      )}
-
-      {runningWorkouts.map((workout, index) => (
+      {strengthWorkouts.map((workout, index) => (
         <Card key={workout.id} className="overflow-hidden">
           <WorkoutHeader
             workout={workout}
             index={index}
-            totalCount={runningWorkouts.length}
-            isCollapsed={collapsedRunningWorkouts.has(workout.id)}
+            totalCount={strengthWorkouts.length}
+            isCollapsed={collapsedStrengthWorkouts.has(workout.id)}
             duration={calculateWorkoutDuration(workout)}
             onToggleCollapse={() => onToggleCollapse(workout.id)}
             onMoveUp={() => onMoveUp(workout.id)}
             onMoveDown={() => onMoveDown(workout.id)}
             onRemove={() => onRemove(workout.id)}
-            onEdit={() => onEditRunning(workout.id)}
             onUpdateName={name => onUpdateName(workout.id, name)}
           />
 
-          {!collapsedRunningWorkouts.has(workout.id) && (
+          {!collapsedStrengthWorkouts.has(workout.id) && (
             <>
               <WorkoutDetails
                 objective={workout.objective}
@@ -235,7 +208,7 @@ const RunningWorkoutsSection = ({
                 ) : (
                   <div className="space-y-3">
                     {workout.sections.map(section => (
-                      <WorkoutSection
+                      <WorkoutSectionComponent
                         key={section.id}
                         section={section}
                         workoutId={workout.id}
@@ -309,12 +282,14 @@ const RunningWorkoutsSection = ({
                         onAddApproachSets={exerciseId =>
                           onAddApproachSets(workout.id, section.id, exerciseId)
                         }
-                        onUpdateProgressionMethod={(exerciseId, method) => {
-                          // Running workouts don't have progression methods
-                          console.log(
-                            'Progression methods not supported for running workouts'
-                          );
-                        }}
+                        onUpdateProgressionMethod={(exerciseId, method) =>
+                          onUpdateProgressionMethod(
+                            workout.id,
+                            section.id,
+                            exerciseId,
+                            method
+                          )
+                        }
                         onNotesClick={(type, exerciseId, setId) =>
                           onNotesClick(
                             type,
@@ -334,20 +309,20 @@ const RunningWorkoutsSection = ({
         </Card>
       ))}
 
-      {runningWorkouts.length === 0 && !creatingRunning && (
+      {strengthWorkouts.length === 0 && (
         <Card className="p-8 text-center">
           <div className="flex flex-col items-center space-y-4">
-            <Activity className="h-12 w-12 text-gray-400" />
+            <Dumbbell className="h-12 w-12 text-gray-400" />
             <div>
               <p className="text-gray-500 mb-4">
-                No running workouts added yet
+                No strength workouts added yet
               </p>
               <Button
-                onClick={onAddRunningWorkout}
-                className="bg-green-600 hover:bg-green-700"
+                onClick={onAddStrengthWorkout}
+                className="bg-indigo-600 hover:bg-indigo-700"
               >
-                <Activity className="h-4 w-4 mr-2" />
-                Add Your First Running Workout
+                <Dumbbell className="h-4 w-4 mr-2" />
+                Add Your First Strength Workout
               </Button>
             </div>
           </div>
@@ -357,4 +332,4 @@ const RunningWorkoutsSection = ({
   );
 };
 
-export default RunningWorkoutsSection;
+export default StrengthWorkoutsSection;

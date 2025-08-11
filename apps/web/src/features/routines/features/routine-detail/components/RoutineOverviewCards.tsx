@@ -2,8 +2,9 @@
 
 import { Calendar, Activity, Clock, Target } from 'lucide-react';
 
-import { Card } from '@/components/ui/card';
-import { getGoalColor } from '../utils';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { getGoalColor } from '@/features/routines/utils';
 
 interface RoutineOverviewCardsProps {
   duration: number;

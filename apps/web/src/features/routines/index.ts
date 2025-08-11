@@ -1,47 +1,51 @@
-// Main components
-export { default as Routines } from './Routines';
-export { default as RoutineCreation } from './RoutineCreation';
-export { default as RoutineDetail } from './RoutineDetail';
-export { default as TrailRunningWorkout } from './TrailRunningWorkout';
+// Sub-features - explicit exports to avoid naming conflicts
+export {
+  RoutineCreation,
+  RoutineHeader,
+  RoutineDetailsForm,
+  RoutineModals,
+  StrengthWorkoutsSection,
+  RunningWorkoutsSection,
+} from './features/routine-creation';
 
-// Reusable components
-export { default as RoutineCard } from './components/RoutineCard';
-export { default as WorkoutCard } from './components/WorkoutCard';
-export { default as RoutinesList } from './components/RoutinesList';
-export { default as ActiveRoutineCard } from './components/ActiveRoutineCard';
+export {
+  RoutineDetail,
+  RoutineDetailHeader,
+  RoutineInfo,
+  RoutineOverviewCards,
+  RoutineProgress,
+  WeeklySchedule,
+  WorkoutDaysList,
+  ExerciseList,
+} from './features/routine-detail';
 
-// Routine detail components
-export { default as RoutineDetailHeader } from './components/RoutineDetailHeader';
-export { default as RoutineOverviewCards } from './components/RoutineOverviewCards';
-export { default as RoutineProgress } from './components/RoutineProgress';
-export { default as WeeklySchedule } from './components/WeeklySchedule';
-export { default as RoutineInfo } from './components/RoutineInfo';
-export { default as WorkoutDaysList } from './components/WorkoutDaysList';
-export { default as ExerciseList } from './components/ExerciseList';
+export {
+  TrailRunningWorkout,
+  TrailRunningHeader,
+  WorkoutStats,
+  WorkoutOverview,
+  IntensityTargetConfiguration,
+  SectionTypeSelector,
+  RepeatIntervalsForm,
+  SectionsList,
+  SectionForm,
+  SectionFormCard,
+} from './features/trail-running';
 
-// Routine creation components
-export { default as RoutineHeader } from './components/RoutineHeader';
-export { default as RoutineDetailsForm } from './components/RoutineDetailsForm';
-export { default as StrengthWorkoutsSection } from './components/StrengthWorkoutsSection';
-export { default as RunningWorkoutsSection } from './components/RunningWorkoutsSection';
-export { default as RoutineModals } from './components/RoutineModals';
+export {
+  WorkoutHeader,
+  WorkoutDetails,
+  WorkoutSection as WorkoutSectionComponent,
+  ExerciseManagement,
+} from './features/workout-management';
 
-// Trail running components
-export { default as TrailRunningHeader } from './components/TrailRunningHeader';
-export { default as WorkoutStats } from './components/WorkoutStats';
-export { default as WorkoutOverview } from './components/WorkoutOverview';
-export { default as IntensityTargetConfiguration } from './components/IntensityTargetConfiguration';
-export { default as SectionTypeSelector } from './components/SectionTypeSelector';
-export { default as RepeatIntervalsForm } from './components/RepeatIntervalsForm';
-export { default as SectionsList } from './components/SectionsList';
-export { default as SectionForm } from './components/SectionForm';
-export { default as SectionFormCard } from './components/SectionFormCard';
-
-// Workout creation components
-export { default as WorkoutHeader } from './components/WorkoutHeader';
-export { default as WorkoutDetails } from './components/WorkoutDetails';
-export { default as WorkoutSection } from './components/WorkoutSection';
-export { default as ExerciseManagement } from './components/ExerciseManagement';
+export {
+  Routines,
+  RoutineCard,
+  RoutinesList,
+  ActiveRoutineCard,
+  WorkoutCard,
+} from './features/routine-list';
 
 // Types
 export * from './types';

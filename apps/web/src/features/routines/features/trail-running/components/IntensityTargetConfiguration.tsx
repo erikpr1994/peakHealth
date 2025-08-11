@@ -11,7 +11,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { IntensityTarget } from '../types';
+import { IntensityTarget } from '@/features/routines/types';
 
 interface IntensityTargetConfigurationProps {
   target?: IntensityTarget;

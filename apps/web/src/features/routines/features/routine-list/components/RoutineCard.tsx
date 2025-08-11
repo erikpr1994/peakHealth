@@ -1,12 +1,16 @@
 'use client';
 
 import {
-  Play,
-  Heart,
+  Calendar,
+  Clock,
+  Target,
+  Users,
+  Star,
   Activity,
+  Heart,
   Eye,
   Edit,
-  Target,
+  Play,
   Trophy,
   Zap,
   Dumbbell,
@@ -14,9 +18,15 @@ import {
 import { useRouter } from 'next/navigation';
 
 import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
-import { Routine } from '../types';
-import { getDifficultyColor, getGoalColor, getIconColor } from '../utils';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Progress } from '@/components/ui/progress';
+import { Routine } from '@/features/routines/types';
+import {
+  getDifficultyColor,
+  getGoalColor,
+  getIconColor,
+} from '@/features/routines/utils';
 
 interface RoutineCardProps {
   routine: Routine;

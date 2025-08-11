@@ -7,9 +7,9 @@ import WorkoutStats from './components/WorkoutStats';
 import WorkoutOverview from './components/WorkoutOverview';
 import SectionFormCard from './components/SectionFormCard';
 import SectionsList from './components/SectionsList';
-import { useTrailRunningWorkout } from './hooks/useTrailRunningWorkout';
-import { calculateTotals } from './utils/trailRunningUtils';
-import { TrailRunningWorkoutData } from './types';
+import { useTrailRunningWorkout } from '../../hooks/useTrailRunningWorkout';
+import { calculateTotals } from '../../utils/trailRunningUtils';
+import { TrailRunningWorkoutData } from '@/features/routines/types';
 
 interface TrailRunningWorkoutProps {
   onSave: (workoutData: TrailRunningWorkoutData) => void;
@@ -17,14 +17,6 @@ interface TrailRunningWorkoutProps {
   initialData?: TrailRunningWorkoutData;
   mode: 'create' | 'edit';
 }
-
-// Re-export types for backward compatibility
-export type {
-  TrailRunningWorkoutData,
-  TrailRunningSection,
-  TrailRunningInterval,
-  IntensityTarget,
-} from './types';
 
 const TrailRunningWorkout = ({
   onSave,

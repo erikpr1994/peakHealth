@@ -1,12 +1,12 @@
 'use client';
 
-import { Plus, Trash2, FileText } from 'lucide-react';
+import { Plus, Trash2, Edit, Clock, Dumbbell } from 'lucide-react';
 
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Badge } from '@/components/ui/badge';
 import {
   Select,
   SelectContent,
@@ -14,13 +14,15 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { Textarea } from '@/components/ui/textarea';
+import ExerciseManagement from './ExerciseManagement';
 import {
   WorkoutSection as WorkoutSectionType,
+  Exercise,
   ProgressionMethod,
-} from '../types';
+} from '@/features/routines/types';
+import { getSectionColors, getSectionIcon } from '@/features/routines/utils';
 import { WorkoutSet } from '@/features/workout/SetManagement';
-import { getSectionColors, getSectionIcon } from '../utils';
-import ExerciseManagement from './ExerciseManagement';
 
 interface WorkoutSectionProps {
   section: WorkoutSectionType;
@@ -165,7 +167,7 @@ const WorkoutSection = ({
 
           {section.exercises.length === 0 ? (
             <div className="text-center py-8 text-gray-500">
-              <FileText className="h-12 w-12 mx-auto mb-4 text-gray-300" />
+              <Dumbbell className="h-12 w-12 mx-auto mb-4 text-gray-300" />
               <p>No exercises added yet</p>
               <Button
                 onClick={onAddExercise}

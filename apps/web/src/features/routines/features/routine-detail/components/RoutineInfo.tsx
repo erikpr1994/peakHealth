@@ -3,8 +3,9 @@
 import { Copy, Share, Trash } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
-import { getDifficultyColor } from '../utils';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { getDifficultyColor } from '@/features/routines/utils';
 
 interface RoutineInfoProps {
   difficulty: string;
