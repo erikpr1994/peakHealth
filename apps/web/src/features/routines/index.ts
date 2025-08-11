@@ -19,6 +19,13 @@ export { default as RoutineInfo } from './components/RoutineInfo';
 export { default as WorkoutDaysList } from './components/WorkoutDaysList';
 export { default as ExerciseList } from './components/ExerciseList';
 
+// Routine creation components
+export { default as RoutineHeader } from './components/RoutineHeader';
+export { default as RoutineDetailsForm } from './components/RoutineDetailsForm';
+export { default as StrengthWorkoutsSection } from './components/StrengthWorkoutsSection';
+export { default as RunningWorkoutsSection } from './components/RunningWorkoutsSection';
+export { default as RoutineModals } from './components/RoutineModals';
+
 // Trail running components
 export { default as TrailRunningHeader } from './components/TrailRunningHeader';
 export { default as WorkoutStats } from './components/WorkoutStats';
