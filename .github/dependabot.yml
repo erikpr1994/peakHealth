@@ -5,62 +5,62 @@ version: 2
 updates:
   # --- GitHub Actions ---
   # Keep your GitHub Actions up-to-date.
-  - package-ecosystem: "github-actions"
-    directory: "/" # Location of your .github/workflows directory
+  - package-ecosystem: 'github-actions'
+    directory: '/' # Location of your .github/workflows directory
     schedule:
-      interval: "weekly"
+      interval: 'weekly'
     commit-message:
-      prefix: "chore(actions)"
-      include: "scope"
+      prefix: 'chore(actions)'
+      include: 'scope'
     reviewers:
-      - "your-github-username" # Optional: Add reviewers
+      - 'your-github-username' # Optional: Add reviewers
     assignees:
-      - "your-github-username" # Optional: Add assignees
+      - 'your-github-username' # Optional: Add assignees
 
   # --- PNPM (for Node.js/JavaScript/TypeScript Monorepo) ---
   # For a pnpm monorepo, you only need one entry pointing to the root directory.
   # Dependabot will find the pnpm-lock.yaml and update all packages in the workspace.
-  - package-ecosystem: "npm" # This is correct, even for pnpm.
-    directory: "/" # Location of your pnpm-lock.yaml
+  - package-ecosystem: 'npm' # This is correct, even for pnpm.
+    directory: '/' # Location of your pnpm-lock.yaml
     schedule:
-      interval: "weekly"
-      day: "monday"
-      time: "09:00"
-      timezone: "America/New_York"
+      interval: 'weekly'
+      day: 'monday'
+      time: '09:00'
+      timezone: 'America/New_York'
     commit-message:
-      prefix: "chore(deps)"
-      prefix-development: "chore(deps-dev)"
-      include: "scope"
+      prefix: 'chore(deps)'
+      prefix-development: 'chore(deps-dev)'
+      include: 'scope'
     labels:
-      - "dependencies"
-      - "pnpm"
+      - 'dependencies'
+      - 'pnpm'
     # Group updates into separate PRs based on semantic versioning.
     # Major updates are not grouped and will get their own PRs.
     groups:
       # Group all patch updates into a single PR.
       patch-updates:
         patterns:
-          - "*"
+          - '*'
         update-types:
-          - "version-update:semver-patch"
+          - 'patch'
 
       # Group all minor updates into a single PR.
       minor-updates:
         patterns:
-          - "*"
+          - '*'
         update-types:
-          - "version-update:semver-minor"
+          - 'minor'
 
   # --- Docker ---
   # If you use Docker, this will keep your base images updated.
   # If you don't use Docker, you can safely remove this section.
-  - package-ecosystem: "docker"
-    directory: "/" # Location of your Dockerfile
+  - package-ecosystem: 'docker'
+    directory: '/' # Location of your Dockerfile
     schedule:
-      interval: "weekly"
+      interval: 'weekly'
     commit-message:
-      prefix: "chore(docker)"
-      include: "scope"
+      prefix: 'chore(docker)'
+      include: 'scope'
     labels:
-      - "dependencies"
-      - "docker"
+      - 'dependencies'
+      - 'docker'
