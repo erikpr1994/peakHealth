@@ -175,12 +175,7 @@ const sectionCategories = {
   ),
 };
 
-const difficultyLevels = [
-  { value: 'beginner', label: 'Beginner', color: 'bg-green-500' },
-  { value: 'intermediate', label: 'Intermediate', color: 'bg-yellow-500' },
-  { value: 'advanced', label: 'Advanced', color: 'bg-orange-500' },
-  { value: 'expert', label: 'Expert', color: 'bg-red-500' },
-];
+
 
 export default function TrailRunningWorkout({
   onSave,
@@ -209,7 +204,21 @@ export default function TrailRunningWorkout({
   const [skipLastRest, setSkipLastRest] = useState(false);
 
   // Get smart defaults for section types
-  const getSmartDefaults = (type: string): Record<string, unknown> | null => {
+  const getSmartDefaults = (type: string): {
+    repeatCount: number;
+    intervals: Array<{
+      name: string;
+      type: string;
+      distance?: number;
+      duration?: number;
+      intensityTarget?: {
+        type: string;
+        value?: number;
+        unit?: string;
+      };
+      elevationChange?: number;
+    }>;
+  } | null => {
     const defaults = {
       'uphill-repeat': {
         repeatCount: 6,
@@ -397,9 +406,8 @@ export default function TrailRunningWorkout({
           setWorkoutData(prev => ({ ...prev, description }))
         }
         onDifficultyChange={difficulty =>
-          setWorkoutData(prev => ({ ...prev, difficulty }))
+          setWorkoutData(prev => ({ ...prev, difficulty: difficulty as 'beginner' | 'intermediate' | 'advanced' | 'expert' }))
         }
-        difficultyLevels={difficultyLevels}
       />
 
       {/* Training Sections */}
@@ -1060,7 +1068,7 @@ export default function TrailRunningWorkout({
                               </span>
                               <span className="font-medium text-gray-900">
                                 {(
-                                  section.repeatSections?.reduce(
+                                  (section.repeatSections || []).reduce(
                                     (sum, sub) => sum + (sub.distance || 0),
                                     0
                                   ) * (section.repeatCount || 1)
@@ -1073,7 +1081,7 @@ export default function TrailRunningWorkout({
                                 Total Duration
                               </span>
                               <span className="font-medium text-blue-900">
-                                {section.repeatSections?.reduce(
+                                {(section.repeatSections || []).reduce(
                                   (sum, sub) => sum + (sub.duration || 0),
                                   0
                                 ) * (section.repeatCount || 1)}
