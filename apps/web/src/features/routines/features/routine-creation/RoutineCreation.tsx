@@ -9,6 +9,12 @@ import {
   RunningWorkout,
 } from '@/features/routines/types';
 import { routineService } from '../../services/routineService';
+import {
+  DatabaseWorkout,
+  DatabaseSection,
+  DatabaseExercise,
+  DatabaseSet,
+} from '../../types/database';
 
 // Import our new components and hooks
 import RoutineHeader from './components/RoutineHeader';
@@ -136,7 +142,7 @@ const RoutineCreation = ({
             const strengthWorkoutsData: StrengthWorkout[] = [];
             const runningWorkoutsData: RunningWorkout[] = [];
 
-            data.workouts.forEach((workout: any) => {
+            data.workouts.forEach((workout: DatabaseWorkout) => {
               if (workout.type === 'strength') {
                 // Transform strength workout
                 const strengthWorkout: StrengthWorkout = {
@@ -151,32 +157,34 @@ const RoutineCreation = ({
                     time: '',
                   },
                   sections:
-                    workout.sections?.map((section: any) => ({
+                    workout.sections?.map((section: DatabaseSection) => ({
                       id: section.id,
                       name: section.name,
                       type: section.type,
                       exercises:
-                        section.exercises?.map((exercise: any) => ({
-                          id: exercise.id,
-                          name: exercise.name,
-                          category: exercise.category,
-                          muscleGroups: exercise.muscleGroups || [],
-                          sets:
-                            exercise.sets?.map((set: any) => ({
-                              id: set.id,
-                              reps: set.reps?.toString() || '',
-                              weight: set.weight?.toString() || '',
-                              duration: set.duration?.toString() || '',
-                              restTime: set.restTime || '90s',
-                              notes: set.notes || '',
-                            })) || [],
-                          restTimer: exercise.restTimer || '90s',
-                          restAfter: exercise.restAfter || '2 min',
-                          notes: exercise.notes || '',
-                          progressionMethod: exercise.progressionMethod,
-                          hasApproachSets: exercise.hasApproachSets || false,
-                          emomReps: exercise.emomReps,
-                        })) || [],
+                        section.exercises?.map(
+                          (exercise: DatabaseExercise) => ({
+                            id: exercise.id,
+                            name: exercise.name,
+                            category: exercise.category,
+                            muscleGroups: exercise.muscleGroups || [],
+                            sets:
+                              exercise.sets?.map((set: DatabaseSet) => ({
+                                id: set.id,
+                                reps: set.reps?.toString() || '',
+                                weight: set.weight?.toString() || '',
+                                duration: set.duration?.toString() || '',
+                                restTime: set.restTime || '90s',
+                                notes: set.notes || '',
+                              })) || [],
+                            restTimer: exercise.restTimer || '90s',
+                            restAfter: exercise.restAfter || '2 min',
+                            notes: exercise.notes || '',
+                            progressionMethod: exercise.progressionMethod,
+                            hasApproachSets: exercise.hasApproachSets || false,
+                            emomReps: exercise.emomReps,
+                          })
+                        ) || [],
                       restAfter: section.restAfter || '2 min',
                       emomDuration: section.emomDuration,
                     })) || [],
@@ -196,30 +204,32 @@ const RoutineCreation = ({
                     time: '',
                   },
                   sections:
-                    workout.sections?.map((section: any) => ({
+                    workout.sections?.map((section: DatabaseSection) => ({
                       id: section.id,
                       name: section.name,
                       type: section.type,
                       exercises:
-                        section.exercises?.map((exercise: any) => ({
-                          id: exercise.id,
-                          name: exercise.name,
-                          category: exercise.category,
-                          muscleGroups: exercise.muscleGroups || [],
-                          sets:
-                            exercise.sets?.map((set: any) => ({
-                              id: set.id,
-                              reps: set.reps?.toString() || '',
-                              weight: set.weight?.toString() || '',
-                              duration: set.duration?.toString() || '',
-                              restTime: set.restTime || '90s',
-                              notes: set.notes || '',
-                            })) || [],
-                          restTimer: exercise.restTimer || '90s',
-                          restAfter: exercise.restAfter || '2 min',
-                          notes: exercise.notes || '',
-                          emomReps: exercise.emomReps,
-                        })) || [],
+                        section.exercises?.map(
+                          (exercise: DatabaseExercise) => ({
+                            id: exercise.id,
+                            name: exercise.name,
+                            category: exercise.category,
+                            muscleGroups: exercise.muscleGroups || [],
+                            sets:
+                              exercise.sets?.map((set: DatabaseSet) => ({
+                                id: set.id,
+                                reps: set.reps?.toString() || '',
+                                weight: set.weight?.toString() || '',
+                                duration: set.duration?.toString() || '',
+                                restTime: set.restTime || '90s',
+                                notes: set.notes || '',
+                              })) || [],
+                            restTimer: exercise.restTimer || '90s',
+                            restAfter: exercise.restAfter || '2 min',
+                            notes: exercise.notes || '',
+                            emomReps: exercise.emomReps,
+                          })
+                        ) || [],
                       restAfter: section.restAfter || '2 min',
                       emomDuration: section.emomDuration,
                     })) || [],
