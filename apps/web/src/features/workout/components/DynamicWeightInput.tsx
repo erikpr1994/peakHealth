@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { Info } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -128,17 +127,14 @@ export const DynamicWeightInput = ({
   // For pure bodyweight exercises, show disabled input with tooltip
   if (weightInputType === 'bodyweight') {
     return (
-      <div className="relative">
+      <Tooltip content={tooltipText}>
         <Input
           type="text"
           value="Bodyweight"
           disabled
-          className={`h-8 text-center bg-gray-50 text-gray-600 ${className}`}
+          className={`h-8 text-center bg-gray-50 text-gray-600 cursor-help ${className}`}
         />
-        <Tooltip content={tooltipText}>
-          <Info className="w-4 h-4 absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400" />
-        </Tooltip>
-      </div>
+      </Tooltip>
     );
   }
 
@@ -147,9 +143,9 @@ export const DynamicWeightInput = ({
     const displayText = getBodyweightDisplayText(weightInputType, value);
 
     return (
-      <div className="relative">
+      <div className="flex items-center gap-1">
         {showBodyweightPlus ? (
-          <div className="flex items-center gap-1">
+          <>
             <Input
               type="number"
               placeholder="0"
@@ -175,15 +171,17 @@ export const DynamicWeightInput = ({
             >
               Hide
             </Button>
-          </div>
+          </>
         ) : (
-          <div className="flex items-center gap-1">
-            <Input
-              type="text"
-              value={displayText}
-              disabled
-              className={`h-8 text-center bg-gray-50 text-gray-600 ${className}`}
-            />
+          <>
+            <Tooltip content={tooltipText}>
+              <Input
+                type="text"
+                value={displayText}
+                disabled
+                className={`h-8 text-center bg-gray-50 text-gray-600 cursor-help ${className}`}
+              />
+            </Tooltip>
             <Button
               type="button"
               variant="ghost"
@@ -193,12 +191,8 @@ export const DynamicWeightInput = ({
             >
               +
             </Button>
-          </div>
+          </>
         )}
-
-        <Tooltip content={tooltipText}>
-          <Info className="w-4 h-4 absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400" />
-        </Tooltip>
       </div>
     );
   }
@@ -206,7 +200,7 @@ export const DynamicWeightInput = ({
   // For resistance bands (future feature)
   if (weightInputType === 'resistance-band') {
     return (
-      <div className="relative">
+      <Tooltip content={tooltipText}>
         <Input
           type="text"
           placeholder="Select band"
@@ -216,19 +210,16 @@ export const DynamicWeightInput = ({
             const bandLevel = e.target.value ? parseInt(e.target.value) : null;
             onChange(bandLevel);
           }}
-          className={`h-8 text-center ${className}`}
+          className={`h-8 text-center cursor-help ${className}`}
           disabled={disabled}
         />
-        <Tooltip content={tooltipText}>
-          <Info className="w-4 h-4 absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400" />
-        </Tooltip>
-      </div>
+      </Tooltip>
     );
   }
 
   // Default weight input for free weights, machines, cables
   return (
-    <div className="relative">
+    <Tooltip content={tooltipText}>
       <Input
         type="number"
         placeholder={placeholder}
@@ -237,14 +228,11 @@ export const DynamicWeightInput = ({
           const newValue = e.target.value ? parseFloat(e.target.value) : null;
           onChange(newValue);
         }}
-        className={`h-8 text-center ${className}`}
+        className={`h-8 text-center cursor-help ${className}`}
         min="0"
         step="0.5"
         disabled={disabled}
       />
-      <Tooltip content={tooltipText}>
-        <Info className="w-4 h-4 absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400" />
-      </Tooltip>
-    </div>
+    </Tooltip>
   );
 };
