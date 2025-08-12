@@ -17,6 +17,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Tooltip } from '@peakhealth/ui';
+import { DynamicWeightInput } from './components/DynamicWeightInput';
 
 export type SetType = 'warmup' | 'normal' | 'failure' | 'dropset';
 export type RepType = 'fixed' | 'range';
@@ -47,6 +48,8 @@ interface SetManagementProps {
   onNotesClick: (setId: string) => void;
   onAddApproachSets: () => void;
   progressionMethod?: ProgressionMethod;
+  exerciseEquipment?: string[];
+  exerciseName?: string;
 }
 
 // Configuration for each progression method
@@ -129,6 +132,8 @@ const SetManagement = ({
   onNotesClick,
   onAddApproachSets,
   progressionMethod,
+  exerciseEquipment = [],
+  exerciseName,
 }: SetManagementProps): React.ReactElement => {
   const [openPopoverId, setOpenPopoverId] = useState<string | null>(null);
   const [initialized, setInitialized] = useState(false);
@@ -469,18 +474,13 @@ const SetManagement = ({
 
             {/* Weight Input */}
             <div className="col-span-1">
-              <Input
-                type="number"
+              <DynamicWeightInput
+                value={set.weight}
+                onChange={weight => updateSet(set.id, { weight })}
+                exerciseEquipment={exerciseEquipment}
+                exerciseName={exerciseName}
+                className="h-8"
                 placeholder="0"
-                value={set.weight || ''}
-                onChange={e =>
-                  updateSet(set.id, {
-                    weight: e.target.value ? parseFloat(e.target.value) : null,
-                  })
-                }
-                className="h-8 text-center"
-                min="0"
-                step="0.5"
               />
             </div>
 

@@ -22,6 +22,7 @@ export interface Exercise {
   name: string;
   category?: string;
   muscleGroups?: string[];
+  equipment?: string[]; // Equipment required for this exercise
   // Exercise and variant IDs for proper data tracking
   exerciseId?: string; // ID of the base exercise
   variantId?: string; // ID of the selected variant
