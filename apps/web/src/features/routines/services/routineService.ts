@@ -246,244 +246,138 @@ export class RoutineService {
         throw new Error('Missing required fields');
       }
 
-      // Start a transaction
-      const { data: routine, error: routineError } = await this.supabase
-        .from('routines')
-        .insert({
-          user_id: user.id,
-          name,
-          description,
-          difficulty,
-          goal,
-          days_per_week: daysPerWeek,
-          schedule: schedule || [
-            false,
-            false,
-            false,
-            false,
-            false,
-            false,
-            false,
-          ],
-          objectives: objectives || [],
+      // Prepare routine data for RPC function
+      const routineDataForRpc = {
+        userId: user.id,
+        name,
+        description,
+        difficulty,
+        goal,
+        daysPerWeek,
+        schedule: schedule || [false, false, false, false, false, false, false],
+        objectives: objectives || [],
+        isActive: false,
+        isFavorite: false,
+      };
+
+      // Prepare strength workouts data for RPC function
+      const strengthWorkoutsForRpc = (strengthWorkouts || []).map(
+        (workout, index) => ({
+          name: workout.name,
+          type: 'strength',
+          objective: workout.objective,
+          schedule: workout.schedule,
+          orderIndex: index,
+          sections: (workout.sections || []).map((section, sectionIndex) => ({
+            name: section.name,
+            type: section.type,
+            orderIndex: sectionIndex,
+            restAfter: section.restAfter,
+            emomDuration: section.emomDuration,
+            exercises: (section.exercises || []).map(
+              (exercise, exerciseIndex) => ({
+                name: exercise.name,
+                category: exercise.category,
+                muscleGroups: exercise.muscleGroups,
+                exerciseId: exercise.exerciseId,
+                variantId: exercise.variantId,
+                orderIndex: exerciseIndex,
+                restTimer: exercise.restTimer,
+                restAfter: exercise.restAfter,
+                progressionMethod: exercise.progressionMethod,
+                hasApproachSets: exercise.hasApproachSets,
+                emomReps: exercise.emomReps,
+                sets: (exercise.sets || []).map((set, setIndex) => ({
+                  setNumber: setIndex + 1,
+                  reps: set.reps,
+                  weight: set.weight,
+                  notes: set.notes,
+                })),
+              })
+            ),
+          })),
         })
-        .select()
+      );
+
+      // Prepare running workouts data for RPC function
+      const runningWorkoutsForRpc = (runningWorkouts || []).map(
+        (workout, index) => ({
+          name: workout.name,
+          type: workout.type,
+          objective: workout.objective,
+          schedule: workout.schedule,
+          orderIndex: (strengthWorkouts?.length || 0) + index,
+          trailRunningData: workout.trailRunningData
+            ? {
+                name: workout.trailRunningData.name,
+                description: workout.trailRunningData.description,
+                difficulty: workout.trailRunningData.difficulty,
+                estimatedDuration: workout.trailRunningData.estimatedDuration,
+                targetDistance: workout.trailRunningData.targetDistance,
+                elevationGain: workout.trailRunningData.elevationGain,
+              }
+            : undefined,
+          sections: (workout.sections || []).map((section, sectionIndex) => ({
+            name: section.name,
+            type: section.type,
+            orderIndex: sectionIndex,
+            restAfter: section.restAfter,
+            emomDuration: section.emomDuration,
+            exercises: (section.exercises || []).map(
+              (exercise, exerciseIndex) => ({
+                name: exercise.name,
+                category: exercise.category,
+                muscleGroups: exercise.muscleGroups,
+                orderIndex: exerciseIndex,
+                restTimer: exercise.restTimer,
+                restAfter: exercise.restAfter,
+                emomReps: exercise.emomReps,
+                sets: (exercise.sets || []).map((set, setIndex) => ({
+                  setNumber: setIndex + 1,
+                  reps: set.reps,
+                  weight: set.weight,
+                  notes: set.notes,
+                })),
+              })
+            ),
+          })),
+        })
+      );
+
+      // Call the comprehensive RPC function for atomic routine creation
+      const { data: result, error } = await this.supabase.rpc(
+        'create_complete_routine',
+        {
+          routine_data: routineDataForRpc,
+          strength_workouts_data: strengthWorkoutsForRpc,
+          running_workouts_data: runningWorkoutsForRpc,
+        }
+      );
+
+      if (error) {
+        console.error('Error creating routine via RPC:', error);
+        throw new Error(`Failed to create routine: ${error.message}`);
+      }
+
+      if (!result || !result.success) {
+        throw new Error('Routine creation failed');
+      }
+
+      // Fetch the created routine to return
+      const { data: createdRoutine, error: fetchError } = await this.supabase
+        .from('routines')
+        .select('*')
+        .eq('id', result.routineId)
         .single();
 
-      if (routineError) {
-        console.error('Error creating routine:', routineError);
-        throw new Error('Failed to create routine');
-      }
-
-      // Insert strength workouts
-      if (strengthWorkouts && strengthWorkouts.length > 0) {
-        for (let i = 0; i < strengthWorkouts.length; i++) {
-          const workout = strengthWorkouts[i];
-
-          const { data: workoutData, error: workoutError } = await this.supabase
-            .from('workouts')
-            .insert({
-              routine_id: routine.id,
-              name: workout.name,
-              type: 'strength',
-              objective: workout.objective,
-              schedule: workout.schedule,
-              order_index: i,
-            })
-            .select()
-            .single();
-
-          if (workoutError) {
-            console.error('Error creating strength workout:', workoutError);
-            continue;
-          }
-
-          // Insert sections for this workout
-          if (workout.sections && workout.sections.length > 0) {
-            for (let j = 0; j < workout.sections.length; j++) {
-              const section = workout.sections[j];
-
-              const { data: sectionData, error: sectionError } =
-                await this.supabase
-                  .from('workout_sections')
-                  .insert({
-                    workout_id: workoutData.id,
-                    name: section.name,
-                    type: section.type,
-                    order_index: j,
-                    rest_after: section.restAfter,
-                    emom_duration: section.emomDuration,
-                  })
-                  .select()
-                  .single();
-
-              if (sectionError) {
-                console.error('Error creating section:', sectionError);
-                continue;
-              }
-
-              // Insert exercises for this section
-              if (section.exercises && section.exercises.length > 0) {
-                for (let k = 0; k < section.exercises.length; k++) {
-                  const exercise = section.exercises[k];
-
-                  const { data: exerciseData, error: exerciseError } =
-                    await this.supabase
-                      .from('routine_exercises')
-                      .insert({
-                        section_id: sectionData.id,
-                        name: exercise.name,
-                        category: exercise.category,
-                        muscle_groups: exercise.muscleGroups,
-                        exercise_library_id:
-                          exercise.variantId || exercise.exerciseId, // Use variant ID if available, otherwise exercise ID
-                        order_index: k,
-                        rest_timer: exercise.restTimer,
-                        rest_after: exercise.restAfter,
-                        progression_method: exercise.progressionMethod,
-                        has_approach_sets: exercise.hasApproachSets,
-                        emom_reps: exercise.emomReps,
-                      })
-                      .select()
-                      .single();
-
-                  if (exerciseError) {
-                    console.error('Error creating exercise:', exerciseError);
-                    continue;
-                  }
-
-                  // Insert sets for this exercise
-                  if (exercise.sets && exercise.sets.length > 0) {
-                    for (let l = 0; l < exercise.sets.length; l++) {
-                      const set = exercise.sets[l];
-
-                      await this.supabase.from('exercise_sets').insert({
-                        exercise_id: exerciseData.id,
-                        set_number: l + 1,
-                        reps: set.reps,
-                        weight: set.weight,
-                        notes: set.notes,
-                      });
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-
-      // Insert running workouts
-      if (runningWorkouts && runningWorkouts.length > 0) {
-        for (let i = 0; i < runningWorkouts.length; i++) {
-          const workout = runningWorkouts[i];
-
-          const { data: workoutData, error: workoutError } = await this.supabase
-            .from('workouts')
-            .insert({
-              routine_id: routine.id,
-              name: workout.name,
-              type: workout.type,
-              objective: workout.objective,
-              schedule: workout.schedule,
-              order_index: strengthWorkouts ? strengthWorkouts.length + i : i,
-            })
-            .select()
-            .single();
-
-          if (workoutError) {
-            console.error('Error creating running workout:', workoutError);
-            continue;
-          }
-
-          // Insert trail running data if present
-          if (workout.trailRunningData) {
-            await this.supabase.from('trail_running_data').insert({
-              workout_id: workoutData.id,
-              name: workout.trailRunningData.name,
-              description: workout.trailRunningData.description,
-              difficulty: workout.trailRunningData.difficulty,
-              estimated_duration: workout.trailRunningData.estimatedDuration,
-              target_distance: workout.trailRunningData.targetDistance,
-              elevation_gain: workout.trailRunningData.elevationGain,
-            });
-          }
-
-          // Insert sections for this workout
-          if (workout.sections && workout.sections.length > 0) {
-            for (let j = 0; j < workout.sections.length; j++) {
-              const section = workout.sections[j];
-
-              const { data: sectionData, error: sectionError } =
-                await this.supabase
-                  .from('workout_sections')
-                  .insert({
-                    workout_id: workoutData.id,
-                    name: section.name,
-                    type: section.type,
-                    order_index: j,
-                    rest_after: section.restAfter,
-                    emom_duration: section.emomDuration,
-                  })
-                  .select()
-                  .single();
-
-              if (sectionError) {
-                console.error('Error creating section:', sectionError);
-                continue;
-              }
-
-              // Insert exercises for this section
-              if (section.exercises && section.exercises.length > 0) {
-                for (let k = 0; k < section.exercises.length; k++) {
-                  const exercise = section.exercises[k];
-
-                  const { data: exerciseData, error: exerciseError } =
-                    await this.supabase
-                      .from('routine_exercises')
-                      .insert({
-                        section_id: sectionData.id,
-                        name: exercise.name,
-                        category: exercise.category,
-                        muscle_groups: exercise.muscleGroups,
-                        order_index: k,
-                        rest_timer: exercise.restTimer,
-                        rest_after: exercise.restAfter,
-                        emom_reps: exercise.emomReps,
-                      })
-                      .select()
-                      .single();
-
-                  if (exerciseError) {
-                    console.error('Error creating exercise:', exerciseError);
-                    continue;
-                  }
-
-                  // Insert sets for this exercise
-                  if (exercise.sets && exercise.sets.length > 0) {
-                    for (let l = 0; l < exercise.sets.length; l++) {
-                      const set = exercise.sets[l];
-
-                      await this.supabase.from('exercise_sets').insert({
-                        exercise_id: exerciseData.id,
-                        set_number: l + 1,
-                        reps: set.reps,
-                        weight: set.weight,
-                        notes: set.notes,
-                      });
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
+      if (fetchError || !createdRoutine) {
+        throw new Error('Failed to fetch created routine');
       }
 
       return {
         success: true,
-        routine: routine,
-        message: 'Routine created successfully',
+        routine: createdRoutine,
+        message: result.message || 'Routine created successfully',
       };
     } catch (error) {
       console.error('Error creating routine:', error);

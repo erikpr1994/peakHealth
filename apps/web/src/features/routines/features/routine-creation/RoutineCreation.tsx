@@ -353,7 +353,7 @@ const RoutineCreation = ({
 
     // Use variant data if available, otherwise fall back to exercise data
     const exerciseData = selectedVariant || selectedExercise;
-    
+
     const newExercise = {
       id: `exercise-${Date.now()}`,
       name: exerciseData.name,
