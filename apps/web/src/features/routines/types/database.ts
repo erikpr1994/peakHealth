@@ -23,6 +23,7 @@ export interface DatabaseSet {
   id: string;
   setNumber: number;
   setType: string;
+  repType?: string;
   reps: number | null;
   weight: number | null;
   rpe: number | null;
@@ -34,28 +35,41 @@ export interface DatabaseSet {
 export interface DatabaseExercise {
   id: string;
   name: string;
+  category?: string | null;
   muscle_groups?: string[];
   notes?: string;
   sets?: DatabaseSet[];
   exerciseLibraryId?: string; // Link to exercise library (exercise or variant ID)
+  rest_timer?: string;
+  rest_after?: string;
+  progression_method?: string;
+  has_approach_sets?: boolean;
+  emom_reps?: number;
 }
 
 export interface DatabaseSection {
   id: string;
   name: string;
+  type: string;
   exercises?: DatabaseExercise[];
+  rest_after?: string;
+  emom_duration?: number;
 }
 
 export interface DatabaseWorkout {
   id: string;
   name: string;
   type: string;
-  objective: string;
+  objective: string | null;
   order_index: number;
   schedule?: {
+    repeatPattern?: string;
+    repeatValue?: string;
     selectedDays?: string[];
+    time?: string;
   };
   sections?: DatabaseSection[];
+  trail_running_data?: Record<string, unknown>; // TODO: Define proper type for trail running data
 }
 
 export interface DatabaseRoutineResponse {

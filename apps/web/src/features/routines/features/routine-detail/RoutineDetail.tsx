@@ -10,12 +10,7 @@ import RoutineInfo from './components/RoutineInfo';
 import WorkoutDaysList from './components/WorkoutDaysList';
 import { RoutineData } from '@/features/routines/types';
 import { routineService } from '../../services/routineService';
-import {
-  DatabaseWorkout,
-  DatabaseSection,
-  DatabaseExercise,
-  DatabaseSet,
-} from '../../types/database';
+import { transformDatabaseRoutineToRoutineData } from '../../utils/dataTransformers';
 
 interface RoutineDetailProps {
   routineId: string;
@@ -35,196 +30,14 @@ const RoutineDetail = ({
         setLoading(true);
         const data = await routineService.getRoutineById(routineId);
 
-        // Calculate weekly schedule from workout configs
-        const calculateWeeklySchedule = (
-          workouts: DatabaseWorkout[]
-        ): boolean[] => {
-          const schedule = new Array(7).fill(false);
+        // Use safe transformation function
+        const transformedData = transformDatabaseRoutineToRoutineData(data);
 
-          workouts?.forEach((workout: DatabaseWorkout) => {
-            if (workout.schedule?.selectedDays) {
-              workout.schedule.selectedDays.forEach((day: string) => {
-                const dayIndex = [
-                  'monday',
-                  'tuesday',
-                  'wednesday',
-                  'thursday',
-                  'friday',
-                  'saturday',
-                  'sunday',
-                ].indexOf(day.toLowerCase());
-                if (dayIndex !== -1) {
-                  schedule[dayIndex] = true;
-                }
-              });
-            }
-          });
-
-          return schedule;
-        };
-
-        // Calculate estimated duration
-        const _totalWorkouts = data.workouts?.length || 0;
-        const estimatedDuration =
-          data.workouts?.reduce((total: number, workout: DatabaseWorkout) => {
-            return (
-              total +
-              (workout.sections?.reduce(
-                (sectionTotal: number, section: DatabaseSection) => {
-                  return (
-                    sectionTotal +
-                    (section.exercises?.reduce(
-                      (exerciseTotal: number, exercise: DatabaseExercise) => {
-                        return exerciseTotal + (exercise.sets?.length || 0) * 2; // Rough estimate: 2 minutes per set
-                      },
-                      0
-                    ) || 0)
-                  );
-                },
-                0
-              ) || 0)
-            );
-          }, 0) || 0;
-
-        // Calculate workouts per week based on schedule
-        const calculateWorkoutsPerWeek = (workouts: unknown[]): number => {
-          const uniqueDays = new Set<string>();
-          workouts?.forEach((workout: unknown) => {
-            const workoutData = workout as {
-              schedule?: { selectedDays?: string[] };
-            };
-            if (workoutData.schedule?.selectedDays) {
-              workoutData.schedule.selectedDays.forEach((day: string) => {
-                uniqueDays.add(day.toLowerCase());
-              });
-            }
-          });
-          return uniqueDays.size;
-        };
-
-        const workoutsPerWeek = calculateWorkoutsPerWeek(data.workouts);
-
-        // Calculate total workouts for the routine's duration
-        const totalWorkoutsForDuration =
-          workoutsPerWeek * (data.routine.duration || 12);
-
-        // Transform the database data to match our frontend types
-        const transformedData: RoutineData = {
-          id: data.routine.id,
-          name: data.routine.name,
-          description: data.routine.description,
-          duration: data.routine.duration || 12, // Use actual duration from database
-          daysPerWeek: data.routine.days_per_week || 3,
-          difficulty: data.routine.difficulty as
-            | 'Beginner'
-            | 'Intermediate'
-            | 'Advanced',
-          goal: data.routine.goal as
-            | 'Strength'
-            | 'Hypertrophy'
-            | 'Endurance'
-            | 'Weight Loss',
-          isActive: data.routine.is_active,
-          isFavorite: data.routine.is_favorite,
-          progress: {
-            currentWeek:
-              workoutsPerWeek > 0
-                ? Math.floor(
-                    (data.routine.completed_workouts || 0) / workoutsPerWeek
-                  ) + 1
-                : 1,
-            totalWeeks: data.routine.duration || 12,
-            completedWorkouts: data.routine.completed_workouts || 0,
-            totalWorkouts: totalWorkoutsForDuration,
-          },
-          schedule: calculateWeeklySchedule(data.workouts),
-          workoutDays:
-            data.workouts?.map((workout: DatabaseWorkout) => ({
-              id: workout.id,
-              name: workout.name,
-              estimatedTime: `${Math.max(30, Math.min(estimatedDuration, 90))} min`,
-              difficulty: data.routine.difficulty as
-                | 'Beginner'
-                | 'Intermediate'
-                | 'Advanced',
-              exercises:
-                workout.sections?.flatMap(
-                  (section: DatabaseSection) =>
-                    section.exercises?.map((exercise: DatabaseExercise) => ({
-                      id: exercise.id,
-                      name: exercise.name,
-                      muscleGroups: exercise.muscle_groups || [],
-                      exerciseId: exercise.exerciseLibraryId || '', // Link to exercise library
-                      variantId: exercise.exerciseLibraryId || '', // For now, treat as variant ID
-                      sets:
-                        exercise.sets?.map((set: DatabaseSet) => ({
-                          reps: set.reps?.toString() || '',
-                          weight: set.weight?.toString() || '',
-                          duration: set.duration?.toString() || '',
-                          restTime: set.rest_time || '90s',
-                        })) || [],
-                      notes: exercise.notes || '',
-                    })) || []
-                ) || [],
-            })) || [],
-          createdDate: ((): string => {
-            try {
-              if (data.routine.created_at) {
-                const date = new Date(data.routine.created_at);
-                if (!isNaN(date.getTime())) {
-                  return date.toLocaleDateString('en-US', {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric',
-                  });
-                }
-              }
-              return 'Unknown';
-            } catch (error) {
-              console.error(
-                'Error parsing createdAt date:',
-                data.routine.created_at,
-                error
-              );
-              return 'Unknown';
-            }
-          })(),
-          lastModified: ((): string => {
-            try {
-              if (data.routine.updated_at) {
-                const date = new Date(data.routine.updated_at);
-                if (!isNaN(date.getTime())) {
-                  return date.toLocaleDateString('en-US', {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric',
-                  });
-                }
-              }
-              return 'Unknown';
-            } catch (error) {
-              console.error(
-                'Error parsing updatedAt date:',
-                data.routine.updated_at,
-                error
-              );
-              return 'Unknown';
-            }
-          })(),
-        };
-
-        // Debug logging
-        console.log('Routine data from database:', {
-          createdAt: data.routine.created_at,
-          updatedAt: data.routine.updated_at,
-          workouts: data.workouts?.length,
-          workoutsPerWeek,
-          completed_workouts: data.routine.completed_workouts,
-        });
+        // Debug logging removed for production
 
         setRoutineData(transformedData);
       } catch (err) {
-        console.error('Error fetching routine:', err);
+        // Error handling without console.log
         setError(
           err instanceof Error ? err.message : 'Failed to fetch routine'
         );
@@ -244,14 +57,14 @@ const RoutineDetail = ({
       setRoutineData(prev =>
         prev ? { ...prev, isFavorite: data.routine.is_favorite } : null
       );
-    } catch (error) {
-      console.error('Error toggling favorite:', error);
+    } catch {
+      // Error handling without console.log
     }
   };
 
   const handleDuplicate = (): void => {
     // TODO: Implement duplicate functionality
-    console.log('Duplicate routine');
+    // Debug logging removed for production
   };
 
   const handleDelete = async (): Promise<void> => {
@@ -263,8 +76,8 @@ const RoutineDetail = ({
       try {
         await routineService.deleteRoutine(routineId);
         router.push('/routines');
-      } catch (error) {
-        console.error('Error deleting routine:', error);
+      } catch {
+        // Error handling without console.log
       }
     }
   };

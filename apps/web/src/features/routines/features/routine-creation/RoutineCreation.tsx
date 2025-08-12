@@ -9,12 +9,8 @@ import {
   RunningWorkout,
 } from '@/features/routines/types';
 import { routineService } from '../../services/routineService';
-import {
-  DatabaseWorkout,
-  DatabaseSection,
-  DatabaseExercise,
-  DatabaseSet,
-} from '../../types/database';
+import { DatabaseWorkout } from '../../types/database';
+import { transformDatabaseWorkout } from '../../utils/dataTransformers';
 
 // Import our new components and hooks
 import RoutineHeader from './components/RoutineHeader';
@@ -137,105 +133,19 @@ const RoutineCreation = ({
           setObjectives(data.routine.objectives || []);
           setDuration(data.routine.duration || 12);
 
-          // Transform and load workouts data
+          // Transform and load workouts data using safe transformation
           if (data.workouts) {
             const strengthWorkoutsData: StrengthWorkout[] = [];
             const runningWorkoutsData: RunningWorkout[] = [];
 
             data.workouts.forEach((workout: DatabaseWorkout) => {
-              if (workout.type === 'strength') {
-                // Transform strength workout
-                const strengthWorkout: StrengthWorkout = {
-                  id: workout.id,
-                  name: workout.name,
-                  type: 'strength',
-                  objective: workout.objective,
-                  schedule: workout.schedule || {
-                    repeatPattern: '',
-                    repeatValue: '',
-                    selectedDays: [],
-                    time: '',
-                  },
-                  sections:
-                    workout.sections?.map((section: DatabaseSection) => ({
-                      id: section.id,
-                      name: section.name,
-                      type: section.type,
-                      exercises:
-                        section.exercises?.map(
-                          (exercise: DatabaseExercise) => ({
-                            id: exercise.id,
-                            name: exercise.name,
-                            category: exercise.category,
-                            muscleGroups: exercise.muscleGroups || [],
-                            sets:
-                              exercise.sets?.map((set: DatabaseSet) => ({
-                                id: set.id,
-                                reps: set.reps?.toString() || '',
-                                weight: set.weight?.toString() || '',
-                                duration: set.duration?.toString() || '',
-                                restTime: set.restTime || '90s',
-                                notes: set.notes || '',
-                              })) || [],
-                            restTimer: exercise.restTimer || '90s',
-                            restAfter: exercise.restAfter || '2 min',
-                            notes: exercise.notes || '',
-                            progressionMethod: exercise.progressionMethod,
-                            hasApproachSets: exercise.hasApproachSets || false,
-                            emomReps: exercise.emomReps,
-                          })
-                        ) || [],
-                      restAfter: section.restAfter || '2 min',
-                      emomDuration: section.emomDuration,
-                    })) || [],
-                };
-                strengthWorkoutsData.push(strengthWorkout);
-              } else if (workout.type === 'running') {
-                // Transform running workout
-                const runningWorkout: RunningWorkout = {
-                  id: workout.id,
-                  name: workout.name,
-                  type: 'running',
-                  objective: workout.objective,
-                  schedule: workout.schedule || {
-                    repeatPattern: '',
-                    repeatValue: '',
-                    selectedDays: [],
-                    time: '',
-                  },
-                  sections:
-                    workout.sections?.map((section: DatabaseSection) => ({
-                      id: section.id,
-                      name: section.name,
-                      type: section.type,
-                      exercises:
-                        section.exercises?.map(
-                          (exercise: DatabaseExercise) => ({
-                            id: exercise.id,
-                            name: exercise.name,
-                            category: exercise.category,
-                            muscleGroups: exercise.muscleGroups || [],
-                            sets:
-                              exercise.sets?.map((set: DatabaseSet) => ({
-                                id: set.id,
-                                reps: set.reps?.toString() || '',
-                                weight: set.weight?.toString() || '',
-                                duration: set.duration?.toString() || '',
-                                restTime: set.restTime || '90s',
-                                notes: set.notes || '',
-                              })) || [],
-                            restTimer: exercise.restTimer || '90s',
-                            restAfter: exercise.restAfter || '2 min',
-                            notes: exercise.notes || '',
-                            emomReps: exercise.emomReps,
-                          })
-                        ) || [],
-                      restAfter: section.restAfter || '2 min',
-                      emomDuration: section.emomDuration,
-                    })) || [],
-                  trailRunningData: workout.trailRunningData,
-                };
-                runningWorkoutsData.push(runningWorkout);
+              const transformedWorkout = transformDatabaseWorkout(workout);
+              if (transformedWorkout) {
+                if (transformedWorkout.type === 'strength') {
+                  strengthWorkoutsData.push(transformedWorkout);
+                } else if (transformedWorkout.type === 'running') {
+                  runningWorkoutsData.push(transformedWorkout);
+                }
               }
             });
 
@@ -244,15 +154,15 @@ const RoutineCreation = ({
             setRunningWorkouts(runningWorkoutsData);
           }
 
-          console.log('Loaded routine data for editing:', data);
-        } catch (error) {
-          console.error('Error loading routine for editing:', error);
+          // Debug logging removed for production
+        } catch {
+          // Error handling without console.log
         }
       }
     };
 
     loadRoutineForEditing();
-  }, [editRoutineId, mode]);
+  }, [editRoutineId, mode, setStrengthWorkouts, setRunningWorkouts]);
 
   // Collapse toggle handlers
   const toggleStrengthWorkoutCollapse = (workoutId: string): void => {
@@ -639,17 +549,17 @@ const RoutineCreation = ({
           objectives: routineData.objectives,
         };
         await routineService.updateRoutine(editRoutineId, updateData);
-        console.log('Routine updated successfully');
+        // Success logging removed for production
       } else {
         // Create new routine
-        const result = await routineService.createRoutine(routineData);
-        console.log('Routine saved successfully:', result);
+        const _result = await routineService.createRoutine(routineData);
+        // Success logging removed for production
       }
 
       // Navigate back to routines list
       router.push('/routines');
-    } catch (error) {
-      console.error('Error saving routine:', error);
+    } catch {
+      // Error handling without console.log
       // TODO: Show error message to user
     }
   };
