@@ -22,12 +22,25 @@ const RoutineDetail = ({
   // Calculate weekly schedule from workout days
   const calculateWeeklySchedule = (workoutDays: WorkoutDay[]): boolean[] => {
     const schedule = new Array(7).fill(false);
+    const dayMap = {
+      monday: 0,
+      tuesday: 1,
+      wednesday: 2,
+      thursday: 3,
+      friday: 4,
+      saturday: 5,
+      sunday: 6,
+    };
 
-    // For now, we'll calculate based on the number of workout days
-    // In a real implementation, this would use the actual workout day schedules
-    workoutDays.forEach((_, index) => {
-      if (index < 7) {
-        schedule[index] = true;
+    // Use the actual selected days from each workout's schedule
+    workoutDays.forEach(workoutDay => {
+      if (workoutDay.schedule?.selectedDays) {
+        workoutDay.schedule.selectedDays.forEach(day => {
+          const dayIndex = dayMap[day.toLowerCase() as keyof typeof dayMap];
+          if (dayIndex !== undefined) {
+            schedule[dayIndex] = true;
+          }
+        });
       }
     });
 

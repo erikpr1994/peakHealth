@@ -217,6 +217,12 @@ export function transformDatabaseRoutineToRoutineData(
       name: workout.name,
       estimatedTime: `${Math.max(30, Math.min(estimatedDuration, 90))} min`,
       difficulty: data.routine.difficulty,
+      schedule: {
+        repeatPattern: workout.schedule?.repeatPattern || 'weekdays',
+        repeatValue: workout.schedule?.repeatValue || '',
+        selectedDays: workout.schedule?.selectedDays || [],
+        time: workout.schedule?.time || '09:00',
+      },
       exercises:
         workout.sections?.flatMap(
           (section: DatabaseSection) =>

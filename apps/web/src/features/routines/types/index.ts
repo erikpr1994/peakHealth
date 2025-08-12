@@ -187,6 +187,12 @@ export interface WorkoutDay {
   exercises: ExerciseDetail[];
   estimatedTime: string;
   difficulty: 'Beginner' | 'Intermediate' | 'Advanced';
+  schedule?: {
+    repeatPattern: string;
+    repeatValue: string;
+    selectedDays: string[];
+    time: string;
+  };
 }
 
 export interface RoutineData {
