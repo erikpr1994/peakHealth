@@ -325,6 +325,7 @@ export class RoutineService {
                         name: exercise.name,
                         category: exercise.category,
                         muscle_groups: exercise.muscleGroups,
+                        exercise_library_id: exercise.variantId || exercise.exerciseId, // Use variant ID if available, otherwise exercise ID
                         order_index: k,
                         rest_timer: exercise.restTimer,
                         rest_after: exercise.restAfter,

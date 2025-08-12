@@ -330,21 +330,37 @@ const RoutineCreation = ({
     setExerciseModalOpen(true);
   };
 
-  const handleExerciseSelect = (selectedExercise: {
-    name: string;
-    category?: string;
-    muscleGroups?: string[];
-  }): void => {
+  const handleExerciseSelect = (
+    selectedExercise: {
+      id: string;
+      name: string;
+      category?: string;
+      muscleGroups?: string[];
+    },
+    selectedVariant?: {
+      id: string;
+      name: string;
+      muscleGroups: string[];
+      difficulty: string;
+      equipment: string[];
+      instructions: string[];
+    }
+  ): void => {
     if (!currentAddExerciseContext) return;
 
     const { workoutId, sectionId } = currentAddExerciseContext;
     const isStrength = strengthWorkouts.some(w => w.id === workoutId);
 
+    // Use variant data if available, otherwise fall back to exercise data
+    const exerciseData = selectedVariant || selectedExercise;
+    
     const newExercise = {
       id: `exercise-${Date.now()}`,
-      name: selectedExercise.name,
+      name: exerciseData.name,
       category: selectedExercise.category,
-      muscleGroups: selectedExercise.muscleGroups,
+      muscleGroups: exerciseData.muscleGroups,
+      exerciseId: selectedExercise.id,
+      variantId: selectedVariant?.id,
       sets: [],
       restTimer: '90s',
       restAfter: '2 min',

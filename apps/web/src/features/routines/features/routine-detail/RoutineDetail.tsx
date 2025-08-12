@@ -137,6 +137,8 @@ const RoutineDetail = ({
                     id: exercise.id,
                     name: exercise.name,
                     muscleGroups: exercise.muscle_groups || [],
+                    exerciseId: exercise.exerciseLibraryId, // Link to exercise library
+                    variantId: exercise.exerciseLibraryId, // For now, treat as variant ID
                     sets:
                       exercise.sets?.map((set: DatabaseSet) => ({
                         reps: set.reps?.toString() || '',
@@ -150,8 +152,8 @@ const RoutineDetail = ({
             })) || [],
           createdDate: ((): string => {
             try {
-              if (data.routine.createdAt) {
-                const date = new Date(data.routine.createdAt);
+              if (data.routine.created_at) {
+                const date = new Date(data.routine.created_at);
                 if (!isNaN(date.getTime())) {
                   return date.toLocaleDateString('en-US', {
                     year: 'numeric',
@@ -164,7 +166,7 @@ const RoutineDetail = ({
             } catch (error) {
               console.error(
                 'Error parsing createdAt date:',
-                data.routine.createdAt,
+                data.routine.created_at,
                 error
               );
               return 'Unknown';
@@ -172,8 +174,8 @@ const RoutineDetail = ({
           })(),
           lastModified: ((): string => {
             try {
-              if (data.routine.updatedAt) {
-                const date = new Date(data.routine.updatedAt);
+              if (data.routine.updated_at) {
+                const date = new Date(data.routine.updated_at);
                 if (!isNaN(date.getTime())) {
                   return date.toLocaleDateString('en-US', {
                     year: 'numeric',
@@ -186,7 +188,7 @@ const RoutineDetail = ({
             } catch (error) {
               console.error(
                 'Error parsing updatedAt date:',
-                data.routine.updatedAt,
+                data.routine.updated_at,
                 error
               );
               return 'Unknown';
@@ -196,8 +198,8 @@ const RoutineDetail = ({
 
         // Debug logging
         console.log('Routine data from database:', {
-          createdAt: data.routine.createdAt,
-          updatedAt: data.routine.updatedAt,
+          createdAt: data.routine.created_at,
+          updatedAt: data.routine.updated_at,
           workouts: data.workouts?.length,
           workoutsPerWeek,
           completed_workouts: data.routine.completed_workouts,

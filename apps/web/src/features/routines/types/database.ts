@@ -37,6 +37,7 @@ export interface DatabaseExercise {
   muscle_groups?: string[];
   notes?: string;
   sets?: DatabaseSet[];
+  exerciseLibraryId?: string; // Link to exercise library (exercise or variant ID)
 }
 
 export interface DatabaseSection {
