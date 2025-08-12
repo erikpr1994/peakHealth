@@ -15,6 +15,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import ExerciseManagement from './ExerciseManagement';
+import TimeInput from '../../routine-creation/components/TimeInput';
 import {
   WorkoutSection as WorkoutSectionType,
   ProgressionMethod,
@@ -136,14 +137,12 @@ const WorkoutSection = ({
 
           {/* Only show rest after section if NOT the last section */}
           {!isLastSection && (
-            <div>
-              <Label className="block mb-2">Rest After Section</Label>
-              <Input
-                value={section.restAfter}
-                onChange={e => onUpdateRestAfter(e.target.value)}
-                placeholder="e.g., 2 min"
-              />
-            </div>
+            <TimeInput
+              label="Rest After Section"
+              value={section.restAfter}
+              onChange={onUpdateRestAfter}
+              placeholder="e.g., 2:30 or 3:00"
+            />
           )}
 
           {section.type === 'emom' && (

@@ -3,7 +3,18 @@
 import { useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
 
-import { TrailRunningWorkoutData } from '@/features/routines/types';
+import {
+  TrailRunningWorkoutData,
+  StrengthWorkout,
+  RunningWorkout,
+} from '@/features/routines/types';
+import { routineService } from '../../services/routineService';
+import {
+  DatabaseWorkout,
+  DatabaseSection,
+  DatabaseExercise,
+  DatabaseSet,
+} from '../../types/database';
 
 // Import our new components and hooks
 import RoutineHeader from './components/RoutineHeader';
@@ -29,8 +40,10 @@ const RoutineCreation = ({
   // Routine metadata state
   const [name, setName] = useState('');
   const [difficulty, setDifficulty] = useState('Beginner');
+  const [goal, setGoal] = useState('Strength');
   const [description, setDescription] = useState('');
-  const [objectives, setObjectives] = useState('');
+  const [objectives, setObjectives] = useState<string[]>([]);
+  const [duration, setDuration] = useState(12); // Default 12 weeks (3 months)
 
   // Modal states
   const [exerciseModalOpen, setExerciseModalOpen] = useState(false);
@@ -111,11 +124,134 @@ const RoutineCreation = ({
 
   // Load routine data if editing
   useEffect(() => {
-    if (editRoutineId && mode === 'edit') {
-      // TODO: Load routine data from API
-      // For now, we'll use placeholder data
-      console.log('Loading routine for editing:', editRoutineId);
-    }
+    const loadRoutineForEditing = async (): Promise<void> => {
+      if (editRoutineId && mode === 'edit') {
+        try {
+          const data = await routineService.getRoutineById(editRoutineId);
+
+          // Set routine metadata
+          setName(data.routine.name);
+          setDifficulty(data.routine.difficulty);
+          setGoal(data.routine.goal);
+          setDescription(data.routine.description);
+          setObjectives(data.routine.objectives || []);
+          setDuration(data.routine.duration || 12);
+
+          // Transform and load workouts data
+          if (data.workouts) {
+            const strengthWorkoutsData: StrengthWorkout[] = [];
+            const runningWorkoutsData: RunningWorkout[] = [];
+
+            data.workouts.forEach((workout: DatabaseWorkout) => {
+              if (workout.type === 'strength') {
+                // Transform strength workout
+                const strengthWorkout: StrengthWorkout = {
+                  id: workout.id,
+                  name: workout.name,
+                  type: 'strength',
+                  objective: workout.objective,
+                  schedule: workout.schedule || {
+                    repeatPattern: '',
+                    repeatValue: '',
+                    selectedDays: [],
+                    time: '',
+                  },
+                  sections:
+                    workout.sections?.map((section: DatabaseSection) => ({
+                      id: section.id,
+                      name: section.name,
+                      type: section.type,
+                      exercises:
+                        section.exercises?.map(
+                          (exercise: DatabaseExercise) => ({
+                            id: exercise.id,
+                            name: exercise.name,
+                            category: exercise.category,
+                            muscleGroups: exercise.muscleGroups || [],
+                            sets:
+                              exercise.sets?.map((set: DatabaseSet) => ({
+                                id: set.id,
+                                reps: set.reps?.toString() || '',
+                                weight: set.weight?.toString() || '',
+                                duration: set.duration?.toString() || '',
+                                restTime: set.restTime || '90s',
+                                notes: set.notes || '',
+                              })) || [],
+                            restTimer: exercise.restTimer || '90s',
+                            restAfter: exercise.restAfter || '2 min',
+                            notes: exercise.notes || '',
+                            progressionMethod: exercise.progressionMethod,
+                            hasApproachSets: exercise.hasApproachSets || false,
+                            emomReps: exercise.emomReps,
+                          })
+                        ) || [],
+                      restAfter: section.restAfter || '2 min',
+                      emomDuration: section.emomDuration,
+                    })) || [],
+                };
+                strengthWorkoutsData.push(strengthWorkout);
+              } else if (workout.type === 'running') {
+                // Transform running workout
+                const runningWorkout: RunningWorkout = {
+                  id: workout.id,
+                  name: workout.name,
+                  type: 'running',
+                  objective: workout.objective,
+                  schedule: workout.schedule || {
+                    repeatPattern: '',
+                    repeatValue: '',
+                    selectedDays: [],
+                    time: '',
+                  },
+                  sections:
+                    workout.sections?.map((section: DatabaseSection) => ({
+                      id: section.id,
+                      name: section.name,
+                      type: section.type,
+                      exercises:
+                        section.exercises?.map(
+                          (exercise: DatabaseExercise) => ({
+                            id: exercise.id,
+                            name: exercise.name,
+                            category: exercise.category,
+                            muscleGroups: exercise.muscleGroups || [],
+                            sets:
+                              exercise.sets?.map((set: DatabaseSet) => ({
+                                id: set.id,
+                                reps: set.reps?.toString() || '',
+                                weight: set.weight?.toString() || '',
+                                duration: set.duration?.toString() || '',
+                                restTime: set.restTime || '90s',
+                                notes: set.notes || '',
+                              })) || [],
+                            restTimer: exercise.restTimer || '90s',
+                            restAfter: exercise.restAfter || '2 min',
+                            notes: exercise.notes || '',
+                            emomReps: exercise.emomReps,
+                          })
+                        ) || [],
+                      restAfter: section.restAfter || '2 min',
+                      emomDuration: section.emomDuration,
+                    })) || [],
+                  trailRunningData: workout.trailRunningData,
+                };
+                runningWorkoutsData.push(runningWorkout);
+              }
+            });
+
+            // Set the transformed workouts data
+            setStrengthWorkouts(strengthWorkoutsData);
+            setRunningWorkouts(runningWorkoutsData);
+          }
+
+          console.log('Loaded routine data for editing:', data);
+        } catch (error) {
+          console.error('Error loading routine for editing:', error);
+        }
+      }
+    };
+
+    loadRoutineForEditing();
   }, [editRoutineId, mode]);
 
   // Collapse toggle handlers
@@ -204,21 +340,37 @@ const RoutineCreation = ({
     setExerciseModalOpen(true);
   };
 
-  const handleExerciseSelect = (selectedExercise: {
-    name: string;
-    category?: string;
-    muscleGroups?: string[];
-  }): void => {
+  const handleExerciseSelect = (
+    selectedExercise: {
+      id: string;
+      name: string;
+      category?: string;
+      muscleGroups?: string[];
+    },
+    selectedVariant?: {
+      id: string;
+      name: string;
+      muscleGroups: string[];
+      difficulty: string;
+      equipment: string[];
+      instructions: string[];
+    }
+  ): void => {
     if (!currentAddExerciseContext) return;
 
     const { workoutId, sectionId } = currentAddExerciseContext;
     const isStrength = strengthWorkouts.some(w => w.id === workoutId);
 
+    // Use variant data if available, otherwise fall back to exercise data
+    const exerciseData = selectedVariant || selectedExercise;
+
     const newExercise = {
       id: `exercise-${Date.now()}`,
-      name: selectedExercise.name,
+      name: exerciseData.name,
       category: selectedExercise.category,
-      muscleGroups: selectedExercise.muscleGroups,
+      muscleGroups: exerciseData.muscleGroups,
+      exerciseId: selectedExercise.id,
+      variantId: selectedVariant?.id,
       sets: [],
       restTimer: '90s',
       restAfter: '2 min',
@@ -462,21 +614,43 @@ const RoutineCreation = ({
   const handleSaveRoutine = async (): Promise<void> => {
     const routineData = {
       name,
-      difficulty,
+      difficulty: difficulty as 'Beginner' | 'Intermediate' | 'Advanced',
+      goal: goal as 'Strength' | 'Hypertrophy' | 'Endurance' | 'Weight Loss',
       description,
       objectives,
+      duration,
+      daysPerWeek: 3, // TODO: Calculate from schedule
+      schedule: [true, false, true, false, true, false, false], // TODO: Get from form
       strengthWorkouts,
       runningWorkouts,
     };
 
     try {
-      // TODO: Save routine to API
-      console.log('Saving routine:', routineData);
+      if (mode === 'edit' && editRoutineId) {
+        // Update existing routine
+        const updateData = {
+          name: routineData.name,
+          description: routineData.description,
+          difficulty: routineData.difficulty,
+          goal: routineData.goal,
+          duration: routineData.duration,
+          daysPerWeek: routineData.daysPerWeek,
+          schedule: routineData.schedule,
+          objectives: routineData.objectives,
+        };
+        await routineService.updateRoutine(editRoutineId, updateData);
+        console.log('Routine updated successfully');
+      } else {
+        // Create new routine
+        const result = await routineService.createRoutine(routineData);
+        console.log('Routine saved successfully:', result);
+      }
 
-      // For now, just navigate back
+      // Navigate back to routines list
       router.push('/routines');
     } catch (error) {
       console.error('Error saving routine:', error);
+      // TODO: Show error message to user
     }
   };
 
@@ -487,12 +661,16 @@ const RoutineCreation = ({
       <RoutineDetailsForm
         name={name}
         difficulty={difficulty}
+        goal={goal}
         description={description}
         objectives={objectives}
+        duration={duration}
         onNameChange={setName}
         onDifficultyChange={setDifficulty}
+        onGoalChange={setGoal}
         onDescriptionChange={setDescription}
         onObjectivesChange={setObjectives}
+        onDurationChange={setDuration}
       />
 
       <StrengthWorkoutsSection

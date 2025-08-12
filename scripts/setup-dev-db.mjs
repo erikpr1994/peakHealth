@@ -1,9 +1,28 @@
 import { execSync } from 'child_process';
 
 import { createClient } from '@supabase/supabase-js';
-import dotenv from 'dotenv';
+import { readFileSync } from 'fs';
 
-dotenv.config({ path: 'apps/web/.env.local' });
+// Load environment variables manually
+const envPath = 'apps/web/.env.local';
+try {
+  const envContent = readFileSync(envPath, 'utf8');
+  const envVars = envContent.split('\n').reduce((acc, line) => {
+    const [key, ...valueParts] = line.split('=');
+    if (key && valueParts.length > 0) {
+      acc[key.trim()] = valueParts.join('=').trim();
+    }
+    return acc;
+  }, {});
+
+  Object.entries(envVars).forEach(([key, value]) => {
+    if (!process.env[key]) {
+      process.env[key] = value;
+    }
+  });
+} catch (error) {
+  console.warn('Could not load .env.local file:', error.message);
+}
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
@@ -63,6 +82,7 @@ async function setupDevDatabase() {
     const existingRegular = users.users.find(u => u.email === regularEmail);
 
     // Admin user
+    let adminUserId;
     if (existingAdmin) {
       console.log('Admin user already exists, updating permissions...');
 
@@ -91,6 +111,7 @@ async function setupDevDatabase() {
         return;
       }
 
+      adminUserId = existingAdmin.id;
       console.log('✅ User permissions updated successfully');
     } else {
       console.log('Creating new admin user...');
@@ -125,8 +146,9 @@ async function setupDevDatabase() {
         return;
       }
 
+      adminUserId = newUser.user.id;
       console.log('✅ Admin user created successfully');
-      console.log('User ID:', newUser.user.id);
+      console.log('User ID:', adminUserId);
     }
 
     // Trainer user (trainer + regular), accessible to Web (via groups) and Pro (via role)
@@ -214,6 +236,279 @@ async function setupDevDatabase() {
         console.error('Error creating regular user:', createRegularError);
       } else {
         console.log('✅ Regular user created:', regularUser.user.id);
+      }
+    }
+
+    // Step 3: Create sample routines for admin user
+    console.log('\n💪 Creating sample routines...');
+
+    if (adminUserId) {
+      try {
+        // Create a sample strength routine
+        const { data: strengthRoutine, error: strengthError } = await supabase
+          .from('routines')
+          .insert({
+            user_id: adminUserId,
+            name: 'Full Body Strength',
+            description:
+              'A comprehensive full-body workout targeting all major muscle groups with compound movements. Perfect for intermediate lifters looking to build strength and muscle mass.',
+            difficulty: 'Intermediate',
+            goal: 'Strength',
+            days_per_week: 3,
+            duration: 12,
+            schedule: [true, false, true, false, true, false, false], // M W F
+            objectives: [
+              'Build overall strength',
+              'Improve compound movements',
+              'Increase muscle mass',
+            ],
+            is_active: true,
+            is_favorite: false,
+            total_workouts: 24,
+            completed_workouts: 9,
+            estimated_duration: '45-60 min',
+          })
+          .select()
+          .single();
+
+        if (strengthError) {
+          console.error('Error creating strength routine:', strengthError);
+        } else {
+          console.log('✅ Created strength routine:', strengthRoutine.id);
+
+          // Create a workout for the strength routine
+          const { data: strengthWorkout, error: workoutError } = await supabase
+            .from('workouts')
+            .insert({
+              routine_id: strengthRoutine.id,
+              name: 'Workout A - Upper Focus',
+              type: 'strength',
+              objective: 'Upper body strength and hypertrophy',
+              schedule: {
+                repeatPattern: 'weeks',
+                repeatValue: '1',
+                selectedDays: ['monday', 'wednesday', 'friday'],
+                time: '09:00',
+              },
+              order_index: 0,
+            })
+            .select()
+            .single();
+
+          if (workoutError) {
+            console.error('Error creating strength workout:', workoutError);
+          } else {
+            console.log('✅ Created strength workout:', strengthWorkout.id);
+
+            // Create a section for the workout
+            const { data: section, error: sectionError } = await supabase
+              .from('workout_sections')
+              .insert({
+                workout_id: strengthWorkout.id,
+                name: 'Main Sets',
+                type: 'basic',
+                order_index: 0,
+                rest_after: '2 min',
+              })
+              .select()
+              .single();
+
+            if (sectionError) {
+              console.error('Error creating section:', sectionError);
+            } else {
+              console.log('✅ Created workout section:', section.id);
+
+              // Create an exercise for the section
+              const { data: exercise, error: exerciseError } = await supabase
+                .from('routine_exercises')
+                .insert({
+                  section_id: section.id,
+                  name: 'Barbell Bench Press',
+                  category: 'Compound',
+                  muscle_groups: ['Chest', 'Triceps', 'Shoulders'],
+                  order_index: 0,
+                  rest_timer: '90s',
+                  rest_after: '2 min',
+                  progression_method: 'linear',
+                  has_approach_sets: false,
+                })
+                .select()
+                .single();
+
+              if (exerciseError) {
+                console.error('Error creating exercise:', exerciseError);
+              } else {
+                console.log('✅ Created exercise:', exercise.id);
+
+                // Create sets for the exercise
+                const { error: setsError } = await supabase
+                  .from('exercise_sets')
+                  .insert([
+                    {
+                      exercise_id: exercise.id,
+                      set_number: 1,
+                      reps: '10',
+                      weight: '135 lbs',
+                      notes: 'Warm-up set',
+                    },
+                    {
+                      exercise_id: exercise.id,
+                      set_number: 2,
+                      reps: '8',
+                      weight: '155 lbs',
+                      notes: 'Working set',
+                    },
+                    {
+                      exercise_id: exercise.id,
+                      set_number: 3,
+                      reps: '6',
+                      weight: '175 lbs',
+                      notes: 'Working set',
+                    },
+                  ]);
+
+                if (setsError) {
+                  console.error('Error creating sets:', setsError);
+                } else {
+                  console.log('✅ Created exercise sets');
+                }
+              }
+            }
+          }
+
+          // Create a second workout for the strength routine
+          const { data: strengthWorkout2, error: workout2Error } =
+            await supabase
+              .from('workouts')
+              .insert({
+                routine_id: strengthRoutine.id,
+                name: 'Workout B - Lower Focus',
+                type: 'strength',
+                objective: 'Lower body strength and power',
+                schedule: {
+                  repeatPattern: 'weeks',
+                  repeatValue: '1',
+                  selectedDays: ['tuesday', 'thursday'],
+                  time: '10:00',
+                },
+                order_index: 1,
+              })
+              .select()
+              .single();
+
+          if (workout2Error) {
+            console.error(
+              'Error creating second strength workout:',
+              workout2Error
+            );
+          } else {
+            console.log(
+              '✅ Created second strength workout:',
+              strengthWorkout2.id
+            );
+          }
+        }
+
+        // Create a sample running routine
+        const { data: runningRoutine, error: runningError } = await supabase
+          .from('routines')
+          .insert({
+            user_id: adminUserId,
+            name: '5K Training Plan',
+            description:
+              'A structured 8-week training plan to prepare for your first 5K race. Includes progressive distance increases and speed work.',
+            difficulty: 'Beginner',
+            goal: 'Endurance',
+            days_per_week: 4,
+            duration: 8,
+            schedule: [true, false, true, false, true, false, true], // M T W T F S S
+            objectives: [
+              'Complete a 5K race',
+              'Build running endurance',
+              'Improve cardiovascular fitness',
+            ],
+            is_active: false,
+            is_favorite: true,
+            total_workouts: 32,
+            completed_workouts: 12,
+            estimated_duration: '30-45 min',
+          })
+          .select()
+          .single();
+
+        if (runningError) {
+          console.error('Error creating running routine:', runningError);
+        } else {
+          console.log('✅ Created running routine:', runningRoutine.id);
+
+          // Create a workout for the running routine
+          const { data: runningWorkout, error: runningWorkoutError } =
+            await supabase
+              .from('workouts')
+              .insert({
+                routine_id: runningRoutine.id,
+                name: 'Easy Run',
+                type: 'running',
+                objective: 'Build aerobic base and endurance',
+                schedule: {
+                  repeatPattern: 'days',
+                  repeatValue: '2',
+                  selectedDays: ['monday'],
+                  time: '07:00',
+                },
+                order_index: 0,
+              })
+              .select()
+              .single();
+
+          if (runningWorkoutError) {
+            console.error(
+              'Error creating running workout:',
+              runningWorkoutError
+            );
+          } else {
+            console.log('✅ Created running workout:', runningWorkout.id);
+          }
+        }
+
+        // Create a sample hypertrophy routine
+        const { data: hypertrophyRoutine, error: hypertrophyError } =
+          await supabase
+            .from('routines')
+            .insert({
+              user_id: adminUserId,
+              name: 'Muscle Building Split',
+              description:
+                'A bodybuilding-style split routine focusing on muscle hypertrophy with higher rep ranges and isolation exercises.',
+              difficulty: 'Advanced',
+              goal: 'Hypertrophy',
+              days_per_week: 5,
+              duration: 16,
+              schedule: [true, true, false, true, true, true, false], // M T W T F S S
+              objectives: [
+                'Maximize muscle growth',
+                'Improve muscle definition',
+                'Increase training volume',
+              ],
+              is_active: false,
+              is_favorite: false,
+              total_workouts: 40,
+              completed_workouts: 15,
+              estimated_duration: '60-75 min',
+            })
+            .select()
+            .single();
+
+        if (hypertrophyError) {
+          console.error(
+            'Error creating hypertrophy routine:',
+            hypertrophyError
+          );
+        } else {
+          console.log('✅ Created hypertrophy routine:', hypertrophyRoutine.id);
+        }
+      } catch (error) {
+        console.error('Error creating sample routines:', error);
       }
     }
 

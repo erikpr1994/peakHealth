@@ -29,8 +29,9 @@ const ActiveRoutineCard = ({
     return icons[index % icons.length];
   };
 
-  const progressPercentage =
-    (routine.progress.current / routine.progress.total) * 100;
+  const progressPercentage = routine.progress
+    ? (routine.progress.current / routine.progress.total) * 100
+    : 0;
 
   return (
     <Card className="overflow-hidden bg-gradient-to-br from-indigo-600 via-indigo-700 to-blue-800 text-white">
@@ -57,7 +58,8 @@ const ActiveRoutineCard = ({
               <div className="flex items-center justify-between mb-3">
                 <h3 className="text-lg font-semibold">Week Progress</h3>
                 <span className="text-indigo-100">
-                  Week {routine.progress.current} of {routine.progress.total}
+                  Week {routine.progress?.current || 0} of{' '}
+                  {routine.progress?.total || 4}
                 </span>
               </div>
               <div className="bg-white/20 rounded-full h-3 mb-2">

@@ -6,7 +6,7 @@ const Input = ({
   className,
   type,
   ...props
-}: React.ComponentProps<'input'>) => {
+}: React.ComponentProps<'input'>): React.ReactElement => {
   return (
     <input
       type={type}

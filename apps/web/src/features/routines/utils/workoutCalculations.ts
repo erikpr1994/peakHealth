@@ -366,6 +366,21 @@ export const generateSetsForProgression = (
 };
 
 export const addApproachSets = (sets: WorkoutSet[]): WorkoutSet[] => {
+  // Find the first set with a valid weight (normal, failure, or dropset)
+  const firstSetWithWeight = sets.find(set => {
+    const hasValidSetType = ['normal', 'failure', 'dropset'].includes(
+      set.setType
+    );
+    const hasWeight = set.weight && set.weight > 0;
+    return hasValidSetType && hasWeight;
+  });
+
+  // Get the weight from the first set
+  let baseWeight = 0;
+  if (firstSetWithWeight && firstSetWithWeight.weight) {
+    baseWeight = firstSetWithWeight.weight;
+  }
+
   const approachSets: WorkoutSet[] = [
     {
       id: 'approach-1',
@@ -373,9 +388,9 @@ export const addApproachSets = (sets: WorkoutSet[]): WorkoutSet[] => {
       setType: 'warmup' as SetType,
       repType: 'fixed',
       reps: 8,
-      weight: 0,
+      weight: baseWeight > 0 ? Math.round(baseWeight * 0.4) : 0,
       rpe: null,
-      notes: 'Approach set 1',
+      notes: 'Approach set 1 (40%)',
     },
     {
       id: 'approach-2',
@@ -383,9 +398,9 @@ export const addApproachSets = (sets: WorkoutSet[]): WorkoutSet[] => {
       setType: 'warmup' as SetType,
       repType: 'fixed',
       reps: 6,
-      weight: 0,
+      weight: baseWeight > 0 ? Math.round(baseWeight * 0.6) : 0,
       rpe: null,
-      notes: 'Approach set 2',
+      notes: 'Approach set 2 (60%)',
     },
     {
       id: 'approach-3',
@@ -393,9 +408,9 @@ export const addApproachSets = (sets: WorkoutSet[]): WorkoutSet[] => {
       setType: 'warmup' as SetType,
       repType: 'fixed',
       reps: 4,
-      weight: 0,
+      weight: baseWeight > 0 ? Math.round(baseWeight * 0.8) : 0,
       rpe: null,
-      notes: 'Approach set 3',
+      notes: 'Approach set 3 (80%)',
     },
   ];
 

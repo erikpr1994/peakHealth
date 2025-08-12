@@ -158,45 +158,9 @@ INSERT INTO exercise_media (exercise_variant_id, images, videos, featured_image,
  '/exercise-images/deadlift.jpg', 
  '/videos/deadlift.mp4');
 
--- Insert sample workout routines for the test user
-INSERT INTO workout_routines (id, user_id, name, description, schedule, is_active) VALUES
-('770e8400-e29b-41d4-a716-446655440001', 
- (SELECT id FROM auth.users WHERE email = 'erikpastorrios1994@gmail.com'), 
- 'Upper Body Split', 
- 'A comprehensive upper body workout focusing on chest, back, shoulders, and arms.', 
- 'Mon, Wed, Fri', 
- true),
-
-('770e8400-e29b-41d4-a716-446655440002', 
- (SELECT id FROM auth.users WHERE email = 'erikpastorrios1994@gmail.com'), 
- 'Push Day', 
- 'Focus on chest, shoulders, and triceps with compound and isolation movements.', 
- 'Tue, Sat', 
- true),
-
-('770e8400-e29b-41d4-a716-446655440003', 
- (SELECT id FROM auth.users WHERE email = 'erikpastorrios1994@gmail.com'), 
- 'Chest Focus', 
- 'Intensive chest workout with multiple bench press variations.', 
- 'Thu', 
- true);
-
--- Insert routine exercises
-INSERT INTO routine_exercises (routine_id, exercise_variant_id, exercise_order, sets, reps, rest_time_seconds, notes) VALUES
--- Upper Body Split Routine
-('770e8400-e29b-41d4-a716-446655440001', '660e8400-e29b-41d4-a716-446655440001', 1, 4, 8, 120, 'Focus on form and control'),
-('770e8400-e29b-41d4-a716-446655440001', '660e8400-e29b-41d4-a716-446655440013', 2, 3, 8, 120, 'Full range of motion'),
-('770e8400-e29b-41d4-a716-446655440001', '660e8400-e29b-41d4-a716-446655440008', 3, 3, 12, 90, 'Keep body straight'),
-
--- Push Day Routine
-('770e8400-e29b-41d4-a716-446655440002', '660e8400-e29b-41d4-a716-446655440001', 1, 4, 6, 180, 'Heavy weight, focus on power'),
-('770e8400-e29b-41d4-a716-446655440002', '660e8400-e29b-41d4-a716-446655440002', 2, 3, 10, 120, 'Upper chest focus'),
-('770e8400-e29b-41d4-a716-446655440002', '660e8400-e29b-41d4-a716-446655440010', 3, 3, 8, 90, 'Tricep emphasis'),
-
--- Chest Focus Routine
-('770e8400-e29b-41d4-a716-446655440003', '660e8400-e29b-41d4-a716-446655440001', 1, 5, 5, 180, 'Heavy sets'),
-('770e8400-e29b-41d4-a716-446655440003', '660e8400-e29b-41d4-a716-446655440002', 2, 4, 8, 120, 'Incline focus'),
-('770e8400-e29b-41d4-a716-446655440003', '660e8400-e29b-41d4-a716-446655440004', 3, 3, 12, 90, 'Dumbbell variation');
+-- Note: Sample routines will be created through the new comprehensive routine system
+-- The old workout_routines and routine_exercises tables have been replaced with
+-- the new normalized schema: routines, workouts, workout_sections, routine_exercises, exercise_sets
 
 -- Insert sample user exercise favorites
 INSERT INTO user_exercise_favorites (user_id, exercise_id) VALUES

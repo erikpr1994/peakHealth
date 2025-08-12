@@ -135,16 +135,32 @@ const SetManagement = ({
 
   const config = getProgressionConfig(progressionMethod);
 
+  // Check if approach sets are already present
+  const hasApproachSets = sets.some(
+    set =>
+      set.setType === 'warmup' &&
+      set.notes &&
+      set.notes.includes('Approach set')
+  );
+
   // Determine if Add Approach Sets button should be disabled
-  const isAddApproachSetsDisabled = sets.length === 0 || !sets[0]?.weight;
+  // Allow weight of 0 for bodyweight exercises, only disable if weight is null/undefined
+  const isAddApproachSetsDisabled =
+    sets.length === 0 ||
+    sets[0]?.weight === null ||
+    sets[0]?.weight === undefined ||
+    hasApproachSets;
 
   // Get hover explanation for Add Approach Sets button
   const getAddApproachSetsHoverText = (): string => {
     if (sets.length === 0) {
       return 'Add at least one set before adding approach sets';
     }
-    if (!sets[0]?.weight) {
+    if (sets[0]?.weight === null || sets[0]?.weight === undefined) {
       return 'First set must have a weight before adding approach sets';
+    }
+    if (hasApproachSets) {
+      return 'Approach sets already added. Delete them to add new ones.';
     }
     return 'Add approach sets for this exercise';
   };
@@ -286,14 +302,14 @@ const SetManagement = ({
             <Button
               onClick={onAddApproachSets}
               size="sm"
-              variant="outline"
+              variant={hasApproachSets ? 'secondary' : 'outline'}
               disabled={isAddApproachSetsDisabled}
               className={
                 isAddApproachSetsDisabled ? 'opacity-50 cursor-not-allowed' : ''
               }
             >
               <Target className="w-4 h-4 mr-1" />
-              Add Approach Sets
+              {hasApproachSets ? 'Approach Sets Added' : 'Add Approach Sets'}
             </Button>
           </Tooltip>
           <Tooltip content="Add a new set to the workout">

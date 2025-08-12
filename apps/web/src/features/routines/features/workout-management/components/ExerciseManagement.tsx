@@ -22,6 +22,7 @@ import {
 } from '@/features/routines/utils';
 import { generateSetsForProgression } from '@/features/routines/utils/workoutCalculations';
 import SetManagement, { WorkoutSet } from '@/features/workout/SetManagement';
+import TimeInput from '../../routine-creation/components/TimeInput';
 
 interface ExerciseManagementProps {
   exercise: Exercise;
@@ -137,25 +138,21 @@ const ExerciseManagement = ({
 
         {/* Exercise Configuration */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <div>
-            <Label className="block mb-2">Rest Between Sets</Label>
-            <Input
-              value={exercise.restTimer}
-              onChange={e => onUpdateRestTimer(exercise.id, e.target.value)}
-              placeholder="e.g., 90s"
-            />
-          </div>
+          <TimeInput
+            label="Rest Between Sets"
+            value={exercise.restTimer || null}
+            onChange={value => onUpdateRestTimer(exercise.id, value)}
+            placeholder="e.g., 90s or 2:30"
+          />
 
           {/* Only show rest after exercise if NOT the last exercise */}
           {!isLastExercise && (
-            <div>
-              <Label className="block mb-2">Rest After Exercise</Label>
-              <Input
-                value={exercise.restAfter}
-                onChange={e => onUpdateRestAfter(exercise.id, e.target.value)}
-                placeholder="e.g., 2 min"
-              />
-            </div>
+            <TimeInput
+              label="Rest After Exercise"
+              value={exercise.restAfter || null}
+              onChange={value => onUpdateRestAfter(exercise.id, value)}
+              placeholder="e.g., 2:30 or 3:00"
+            />
           )}
 
           {exercise.emomReps !== undefined && (
