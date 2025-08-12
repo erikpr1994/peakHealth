@@ -443,7 +443,7 @@ BEGIN
       'duration', r.duration,
       'isActive', r.is_active,
       'isFavorite', r.is_favorite,
-      'schedule', r.schedule,
+      -- Schedule is calculated dynamically from workout days
       'objectives', r.objectives,
       'totalWorkouts', r.total_workouts,
       'completedWorkouts', r.completed_workouts,
