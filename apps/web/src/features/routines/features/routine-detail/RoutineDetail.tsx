@@ -10,6 +10,12 @@ import RoutineInfo from './components/RoutineInfo';
 import WorkoutDaysList from './components/WorkoutDaysList';
 import { RoutineData } from '@/features/routines/types';
 import { routineService } from '../../services/routineService';
+import {
+  DatabaseWorkout,
+  DatabaseSection,
+  DatabaseExercise,
+  DatabaseSet,
+} from '../../types/database';
 
 interface RoutineDetailProps {
   routineId: string;
@@ -28,20 +34,6 @@ const RoutineDetail = ({
       try {
         setLoading(true);
         const data = await routineService.getRoutineById(routineId);
-
-        // Define types for database response
-        interface DatabaseWorkout {
-          id: string;
-          name: string;
-          schedule?: {
-            selectedDays?: string[];
-          };
-          sections?: Array<{
-            exercises?: Array<{
-              sets?: Array<unknown>;
-            }>;
-          }>;
-        }
 
         // Calculate weekly schedule from workout configs
         const calculateWeeklySchedule = (
@@ -74,15 +66,15 @@ const RoutineDetail = ({
         // Calculate estimated duration
         const _totalWorkouts = data.workouts?.length || 0;
         const estimatedDuration =
-          data.workouts?.reduce((total: number, workout: any) => {
+          data.workouts?.reduce((total: number, workout: DatabaseWorkout) => {
             return (
               total +
               (workout.sections?.reduce(
-                (sectionTotal: number, section: any) => {
+                (sectionTotal: number, section: DatabaseSection) => {
                   return (
                     sectionTotal +
                     (section.exercises?.reduce(
-                      (exerciseTotal: number, exercise: any) => {
+                      (exerciseTotal: number, exercise: DatabaseExercise) => {
                         return exerciseTotal + (exercise.sets?.length || 0) * 2; // Rough estimate: 2 minutes per set
                       },
                       0
@@ -134,19 +126,19 @@ const RoutineDetail = ({
           },
           schedule: calculateWeeklySchedule(data.workouts),
           workoutDays:
-            data.workouts?.map((workout: any) => ({
+            data.workouts?.map((workout: DatabaseWorkout) => ({
               id: workout.id,
               name: workout.name,
               estimatedTime: `${Math.max(30, Math.min(estimatedDuration, 90))} min`,
               difficulty: data.routine.difficulty,
               exercises:
-                workout.sections?.flatMap((section: any) =>
-                  section.exercises?.map((exercise: any) => ({
+                workout.sections?.flatMap((section: DatabaseSection) =>
+                  section.exercises?.map((exercise: DatabaseExercise) => ({
                     id: exercise.id,
                     name: exercise.name,
                     muscleGroups: exercise.muscle_groups || [],
                     sets:
-                      exercise.sets?.map((set: any) => ({
+                      exercise.sets?.map((set: DatabaseSet) => ({
                         reps: set.reps?.toString() || '',
                         weight: set.weight?.toString() || '',
                         duration: set.duration?.toString() || '',
@@ -156,7 +148,7 @@ const RoutineDetail = ({
                   }))
                 ) || [],
             })) || [],
-          createdDate: (() => {
+          createdDate: ((): string => {
             try {
               if (data.routine.createdAt) {
                 const date = new Date(data.routine.createdAt);
@@ -178,7 +170,7 @@ const RoutineDetail = ({
               return 'Unknown';
             }
           })(),
-          lastModified: (() => {
+          lastModified: ((): string => {
             try {
               if (data.routine.updatedAt) {
                 const date = new Date(data.routine.updatedAt);

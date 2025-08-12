@@ -68,7 +68,7 @@ export class RoutineService {
 
       // Transform data to match frontend types
       return (routines || []).map(
-        (routine: DatabaseRoutineResponse['routine']) => {
+        (routine: DatabaseRoutineResponse['routine']): Routine => {
           return {
             id: routine.id,
             name: routine.name || '',
@@ -91,7 +91,7 @@ export class RoutineService {
               current: routine.completed_workouts ?? 0,
               total: routine.total_workouts ?? 0,
             },
-            lastUsed: routine.last_used,
+            lastUsed: routine.last_used || undefined,
             objectives: routine.objectives || [],
             totalWorkouts: routine.total_workouts ?? 0,
             completedWorkouts: routine.completed_workouts ?? 0,
@@ -148,7 +148,7 @@ export class RoutineService {
     }
   }
 
-  async getRoutineById(routineId: string): Promise<any> {
+  async getRoutineById(routineId: string): Promise<DatabaseRoutineResponse> {
     try {
       if (!this.supabase) {
         throw new Error('Database connection not available');
@@ -202,7 +202,9 @@ export class RoutineService {
     }
   }
 
-  async createRoutine(routineData: CreateRoutineData): Promise<any> {
+  async createRoutine(
+    routineData: CreateRoutineData
+  ): Promise<{ success: boolean; routine: unknown; message: string }> {
     try {
       if (!this.supabase) {
         throw new Error('Database connection not available');
@@ -480,7 +482,7 @@ export class RoutineService {
   async updateRoutine(
     routineId: string,
     routineData: UpdateRoutineData
-  ): Promise<any> {
+  ): Promise<void> {
     try {
       if (!this.supabase) {
         throw new Error('Database connection not available');
