@@ -170,11 +170,25 @@ export const getSectionIcon = (
  * @returns The number of days per week, with a fallback to 3 if no workout days are available
  */
 export function calculateDaysPerWeek(routine: {
-  workoutDays?: unknown[];
+  workoutDays?: Array<{
+    schedule?: {
+      selectedDays?: string[];
+    };
+  }>;
 }): number {
-  // If workoutDays is available and has workouts, return the count
+  // If workoutDays is available and has workouts, calculate unique scheduled days
   if (routine.workoutDays && routine.workoutDays.length > 0) {
-    return routine.workoutDays.length;
+    const uniqueDays = new Set<string>();
+
+    routine.workoutDays.forEach(workoutDay => {
+      if (workoutDay.schedule?.selectedDays) {
+        workoutDay.schedule.selectedDays.forEach(day => {
+          uniqueDays.add(day.toLowerCase());
+        });
+      }
+    });
+
+    return uniqueDays.size;
   }
 
   // Fallback to 3 days per week when no workout days are available
