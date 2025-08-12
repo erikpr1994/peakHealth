@@ -5,6 +5,9 @@ export type { ButtonProps } from './components/button';
 export { Input } from './components/input';
 export type { InputProps } from './components/input';
 
+export { Modal } from './components/modal';
+export type { ModalProps } from './components/modal';
+
 export { Tooltip } from './components/tooltip';
 export type { TooltipProps } from './components/tooltip';
 

@@ -6,7 +6,6 @@ import RoutineProgress from './components/RoutineProgress';
 import WeeklySchedule from './components/WeeklySchedule';
 import RoutineInfo from './components/RoutineInfo';
 import WorkoutDaysList from './components/WorkoutDaysList';
-import { RoutineData } from '@/features/routines/types';
 
 interface RoutineDetailProps {
   routineId: string;
@@ -15,18 +14,19 @@ interface RoutineDetailProps {
 const RoutineDetail = ({
   routineId,
 }: RoutineDetailProps): React.ReactElement => {
-  // Mock data - in a real app, this would come from an API based on routineId
-  const routineData: RoutineData = {
+  // Mock data for demonstration
+  const routineData = {
     id: routineId,
     name: 'Full Body Split',
-    description:
-      'A comprehensive full-body workout targeting all major muscle groups with compound movements. Perfect for intermediate lifters looking to build strength and muscle mass.',
-    duration: 8,
-    daysPerWeek: 3,
-    difficulty: 'Intermediate',
-    goal: 'Hypertrophy',
+    description: 'A comprehensive full-body workout routine',
+    difficulty: 'Intermediate' as const,
+    estimatedTime: '45-60 minutes',
+    muscleGroups: ['Full Body'],
     isActive: true,
     isFavorite: false,
+    duration: 8,
+    daysPerWeek: 3,
+    goal: 'Hypertrophy',
     progress: {
       currentWeek: 4,
       totalWeeks: 8,
@@ -34,15 +34,16 @@ const RoutineDetail = ({
       totalWorkouts: 24,
     },
     schedule: [true, false, true, false, true, false, false], // M W F
+    createdDate: 'June 15, 2024',
+    lastModified: 'July 10, 2024',
     workoutDays: [
       {
-        id: 'workout-a',
-        name: 'Workout A - Upper Focus',
-        estimatedTime: '45-60 min',
-        difficulty: 'Intermediate',
+        id: 'day-1',
+        name: 'Push Day',
         exercises: [
           {
-            id: 'bench-press',
+            id: '550e8400-e29b-41d4-a716-446655440001', // Bench Press
+            variantId: '660e8400-e29b-41d4-a716-446655440001', // Bench Press variant
             name: 'Barbell Bench Press',
             muscleGroups: ['Chest', 'Triceps', 'Shoulders'],
             sets: [
@@ -53,45 +54,27 @@ const RoutineDetail = ({
             ],
           },
           {
-            id: 'bent-over-row',
+            id: '550e8400-e29b-41d4-a716-446655440004', // Deadlift
+            variantId: '660e8400-e29b-41d4-a716-446655440011', // Conventional Deadlift variant
             name: 'Bent-Over Barbell Row',
             muscleGroups: ['Back', 'Biceps'],
             sets: [
               { reps: '8', weight: '115 lbs', restTime: '90s' },
-              { reps: '8', weight: '125 lbs', restTime: '90s' },
-              { reps: '6', weight: '135 lbs', restTime: '90s' },
-            ],
-          },
-          {
-            id: 'shoulder-press',
-            name: 'Overhead Press',
-            muscleGroups: ['Shoulders', 'Triceps'],
-            sets: [
-              { reps: '8', weight: '85 lbs', restTime: '90s' },
-              { reps: '6', weight: '95 lbs', restTime: '90s' },
-              { reps: '6', weight: '95 lbs', restTime: '90s' },
-            ],
-          },
-          {
-            id: 'pull-ups',
-            name: 'Pull-ups',
-            muscleGroups: ['Back', 'Biceps'],
-            sets: [
-              { reps: '8', weight: 'Bodyweight', restTime: '90s' },
-              { reps: '6', weight: 'Bodyweight', restTime: '90s' },
-              { reps: '5', weight: 'Bodyweight', restTime: '90s' },
+              { reps: '8', weight: '115 lbs', restTime: '90s' },
+              { reps: '8', weight: '115 lbs', restTime: '90s' },
             ],
           },
         ],
+        estimatedTime: '30-35 minutes',
+        difficulty: 'Intermediate' as const,
       },
       {
-        id: 'workout-b',
-        name: 'Workout B - Lower Focus',
-        estimatedTime: '50-65 min',
-        difficulty: 'Intermediate',
+        id: 'day-2',
+        name: 'Pull Day',
         exercises: [
           {
-            id: 'squats',
+            id: '550e8400-e29b-41d4-a716-446655440002', // Squats
+            variantId: '660e8400-e29b-41d4-a716-446655440005', // Squat variant
             name: 'Barbell Back Squat',
             muscleGroups: ['Quadriceps', 'Glutes', 'Core'],
             sets: [
@@ -102,35 +85,33 @@ const RoutineDetail = ({
             ],
           },
           {
-            id: 'deadlift',
+            id: '550e8400-e29b-41d4-a716-446655440004', // Deadlift
+            variantId: '660e8400-e29b-41d4-a716-446655440012', // Romanian Deadlift variant
             name: 'Romanian Deadlift',
             muscleGroups: ['Hamstrings', 'Glutes', 'Back'],
             sets: [
               { reps: '8', weight: '135 lbs', restTime: '90s' },
-              { reps: '6', weight: '155 lbs', restTime: '90s' },
-              { reps: '6', weight: '165 lbs', restTime: '90s' },
+              { reps: '8', weight: '135 lbs', restTime: '90s' },
+              { reps: '8', weight: '135 lbs', restTime: '90s' },
             ],
           },
         ],
+        estimatedTime: '30-35 minutes',
+        difficulty: 'Intermediate' as const,
       },
     ],
-    createdDate: 'June 15, 2024',
-    lastModified: 'July 10, 2024',
   };
 
   const handleToggleFavorite = (): void => {
     // TODO: Implement favorite toggle
-    console.log('Toggle favorite');
   };
 
   const handleDuplicate = (): void => {
     // TODO: Implement duplicate functionality
-    console.log('Duplicate routine');
   };
 
   const handleDelete = (): void => {
     // TODO: Implement delete functionality
-    console.log('Delete routine');
   };
 
   return (

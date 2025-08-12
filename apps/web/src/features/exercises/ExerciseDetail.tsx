@@ -16,9 +16,14 @@ import { Card } from '@/components/ui/card';
 interface ExerciseDetailProps {
   exerciseId: string;
   variantId: string; // Required - all exercises are variants
+  showVariants?: boolean; // Optional - controls whether to show variants list
 }
 
-const ExerciseDetail = ({ exerciseId, variantId }: ExerciseDetailProps) => {
+const ExerciseDetail = ({
+  exerciseId,
+  variantId,
+  showVariants = true,
+}: ExerciseDetailProps): React.ReactElement => {
   const router = useRouter();
   const { exercise, isLoading, error } = useExercise(exerciseId);
 
@@ -128,7 +133,9 @@ const ExerciseDetail = ({ exerciseId, variantId }: ExerciseDetailProps) => {
       <ExerciseSteps exercise={exercise} variant={selectedVariant} />
 
       {/* Variants */}
-      <ExerciseVariants exercise={exercise} currentVariantId={variantId} />
+      {showVariants && (
+        <ExerciseVariants exercise={exercise} currentVariantId={variantId} />
+      )}
 
       {/* Pro Tips and Common Mistakes */}
       <ExerciseTips exercise={exercise} variant={selectedVariant} />

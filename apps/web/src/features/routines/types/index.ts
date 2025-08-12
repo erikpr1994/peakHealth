@@ -164,6 +164,7 @@ export interface Routine {
 // Routine Detail Types
 export interface ExerciseDetail {
   id: string;
+  variantId: string;
   name: string;
   sets: Array<{
     reps?: string;
