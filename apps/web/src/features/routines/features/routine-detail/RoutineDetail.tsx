@@ -104,6 +104,10 @@ const RoutineDetail = ({
 
         const workoutsPerWeek = calculateWorkoutsPerWeek(data.workouts);
 
+        // Calculate total workouts for the routine's duration
+        const totalWorkoutsForDuration =
+          workoutsPerWeek * (data.routine.duration || 12);
+
         // Transform the database data to match our frontend types
         const transformedData: RoutineData = {
           id: data.routine.id,
@@ -124,12 +128,14 @@ const RoutineDetail = ({
           isFavorite: data.routine.is_favorite,
           progress: {
             currentWeek:
-              Math.floor(
-                (data.routine.completed_workouts || 0) / workoutsPerWeek
-              ) + 1,
+              workoutsPerWeek > 0
+                ? Math.floor(
+                    (data.routine.completed_workouts || 0) / workoutsPerWeek
+                  ) + 1
+                : 1,
             totalWeeks: data.routine.duration || 12,
             completedWorkouts: data.routine.completed_workouts || 0,
-            totalWorkouts: workoutsPerWeek,
+            totalWorkouts: totalWorkoutsForDuration,
           },
           schedule: calculateWeeklySchedule(data.workouts),
           workoutDays:
