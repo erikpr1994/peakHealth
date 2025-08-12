@@ -13,10 +13,10 @@
     "lint:fix": "eslint src --ext .ts,.js --fix"
   },
   "devDependencies": {
-    "@eslint/js": "^9.32.0",
+    "@eslint/js": "^9.33.0",
     "@typescript-eslint/eslint-plugin": "^8.39.1",
     "@typescript-eslint/parser": "^8.39.1",
-    "eslint": "^9.32.0",
+    "eslint": "^9.33.0",
     "typescript": "^5.9.2"
   }
 }
