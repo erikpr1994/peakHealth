@@ -1,12 +1,7 @@
 import { createClient } from '@/lib/supabase/client';
 
 import { Routine, StrengthWorkout, RunningWorkout } from '../types';
-import {
-  DatabaseRoutineResponse,
-  DatabaseWorkout,
-  DatabaseSection,
-  DatabaseExercise,
-} from '../types/database';
+import { DatabaseRoutineResponse, DatabaseRoutine } from '../types/database';
 
 export interface CreateRoutineData {
   name: string;
@@ -79,8 +74,15 @@ export class RoutineService {
             name: routine.name || '',
             description: routine.description || '',
             daysPerWeek: routine.days_per_week || 3,
-            difficulty: routine.difficulty || 'Beginner',
-            goal: routine.goal || 'Strength',
+            difficulty: (routine.difficulty || 'Beginner') as
+              | 'Beginner'
+              | 'Intermediate'
+              | 'Advanced',
+            goal: (routine.goal || 'Strength') as
+              | 'Strength'
+              | 'Hypertrophy'
+              | 'Endurance'
+              | 'Weight Loss',
             isActive: routine.is_active ?? false,
             isFavorite: routine.is_favorite ?? false,
             schedule: routine.schedule || [
@@ -201,107 +203,18 @@ export class RoutineService {
         throw new Error('Routine not found');
       }
 
-      // Enhance the routine data with exercise variant information
-      const enhancedRoutineData =
-        await this.enhanceRoutineWithExerciseData(routineData);
-
-      return enhancedRoutineData;
+      return routineData;
     } catch (error) {
       console.error('Error fetching routine:', error);
       throw error;
     }
   }
 
-  private async enhanceRoutineWithExerciseData(
-    routineData: DatabaseRoutineResponse
-  ): Promise<DatabaseRoutineResponse> {
-    // Extract all exercise library IDs from the routine
-    const exerciseLibraryIds: string[] = [];
-
-    const extractExerciseIds = (workouts: DatabaseWorkout[]): void => {
-      workouts?.forEach(workout => {
-        workout.sections?.forEach((section: DatabaseSection) => {
-          section.exercises?.forEach((exercise: DatabaseExercise) => {
-            if (exercise.exerciseLibraryId) {
-              exerciseLibraryIds.push(exercise.exerciseLibraryId);
-            }
-          });
-        });
-      });
-    };
-
-    extractExerciseIds(routineData.workouts || []);
-
-    // Fetch exercise variant data for all exercise library IDs
-    let exerciseVariants: Array<{
-      id: string;
-      name: string;
-      description: string;
-      focus: string;
-      difficulty: string;
-      equipment: string[];
-      muscle_groups: string[];
-      instructions: string[];
-    }> = [];
-    if (exerciseLibraryIds.length > 0 && this.supabase) {
-      const { data: variants, error: variantsError } = await this.supabase
-        .from('exercise_variants')
-        .select('*')
-        .in('id', exerciseLibraryIds);
-
-      if (!variantsError && variants) {
-        exerciseVariants = variants;
-      }
-    }
-
-    // Create a map for quick lookup
-    const variantMap = new Map(exerciseVariants.map(v => [v.id, v]));
-
-    // Enhance the routine data with variant information
-    const enhanceWorkouts = (
-      workouts: DatabaseWorkout[]
-    ): DatabaseWorkout[] => {
-      return (workouts || []).map(workout => ({
-        ...workout,
-        sections: workout.sections?.map((section: DatabaseSection) => ({
-          ...section,
-          exercises: section.exercises?.map((exercise: DatabaseExercise) => {
-            const variant = exercise.exerciseLibraryId
-              ? variantMap.get(exercise.exerciseLibraryId)
-              : null;
-            return {
-              ...exercise,
-              // Use variant data if available, otherwise keep original data
-              name: variant?.name || exercise.name,
-              muscle_groups: variant?.muscle_groups || exercise.muscle_groups,
-              category: variant ? 'strength' : 'strength', // Default category for variants
-              variantData: variant
-                ? {
-                    id: variant.id,
-                    name: variant.name,
-                    description: variant.description,
-                    focus: variant.focus,
-                    difficulty: variant.difficulty,
-                    equipment: variant.equipment,
-                    muscleGroups: variant.muscle_groups,
-                    instructions: variant.instructions,
-                  }
-                : null,
-            };
-          }),
-        })),
-      }));
-    };
-
-    return {
-      ...routineData,
-      workouts: enhanceWorkouts(routineData.workouts || []),
-    };
-  }
-
-  async createRoutine(
-    routineData: CreateRoutineData
-  ): Promise<{ success: boolean; routine: unknown; message: string }> {
+  async createRoutine(routineData: CreateRoutineData): Promise<{
+    success: boolean;
+    routine: DatabaseRoutine;
+    message: string;
+  }> {
     try {
       if (!this.supabase) {
         throw new Error('Database connection not available');
@@ -352,7 +265,7 @@ export class RoutineService {
             false,
             false,
           ],
-          objectives: objectives ? [objectives] : [],
+          objectives: objectives || [],
         })
         .select()
         .single();
@@ -581,7 +494,7 @@ export class RoutineService {
   async updateRoutine(
     routineId: string,
     routineData: UpdateRoutineData
-  ): Promise<void> {
+  ): Promise<DatabaseRoutineResponse> {
     try {
       if (!this.supabase) {
         throw new Error('Database connection not available');
