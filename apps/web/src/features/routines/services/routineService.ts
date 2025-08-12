@@ -1,7 +1,11 @@
 import { createClient } from '@/lib/supabase/client';
 
 import { Routine, StrengthWorkout, RunningWorkout } from '../types';
-import { DatabaseRoutineResponse, DatabaseRoutine } from '../types/database';
+import {
+  DatabaseRoutineResponse,
+  DatabaseRoutine,
+  DatabaseRoutineWithWorkouts,
+} from '../types/database';
 import { transformDatabaseRoutineToRoutine } from '../utils/dataTransformers';
 
 export interface CreateRoutineData {
@@ -51,7 +55,8 @@ export class RoutineService {
           name,
           type,
           objective,
-          order_index
+          order_index,
+          schedule
         )
       `
       )
@@ -63,9 +68,11 @@ export class RoutineService {
     }
 
     // Transform data to match frontend types using safe transformation
-    return (routines || []).map((routine: DatabaseRoutine): Routine => {
-      return transformDatabaseRoutineToRoutine(routine);
-    });
+    return (routines || []).map(
+      (routine: DatabaseRoutineWithWorkouts): Routine => {
+        return transformDatabaseRoutineToRoutine(routine);
+      }
+    );
   }
 
   async setActiveRoutine(routineId: string): Promise<void> {

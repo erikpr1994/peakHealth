@@ -4,7 +4,7 @@ import {
   DatabaseSection,
   DatabaseExercise,
   DatabaseSet,
-  DatabaseRoutine,
+  DatabaseRoutineWithWorkouts,
 } from '../types/database';
 import {
   RoutineData,
@@ -293,7 +293,7 @@ export function transformDatabaseRoutineToRoutineData(
 }
 
 export function transformDatabaseRoutineToRoutine(
-  routine: DatabaseRoutine
+  routine: DatabaseRoutineWithWorkouts
 ): Routine {
   // Validate routine data
   if (!isValidDifficulty(routine.difficulty)) {
@@ -303,6 +303,28 @@ export function transformDatabaseRoutineToRoutine(
   if (!isValidGoal(routine.goal)) {
     throw new Error(`Invalid goal: ${routine.goal}`);
   }
+
+  // Create workoutDays from the workouts data for days per week calculation
+  const workoutDays =
+    routine.workouts?.map(
+      (workout: {
+        id: string;
+        name: string;
+        schedule?: { selectedDays?: string[] };
+      }) => ({
+        id: workout.id,
+        name: workout.name,
+        estimatedTime: '45-60 min',
+        difficulty: routine.difficulty,
+        schedule: {
+          repeatPattern: 'weekdays',
+          repeatValue: '',
+          selectedDays: workout.schedule?.selectedDays || [],
+          time: '09:00',
+        },
+        exercises: [],
+      })
+    ) || [];
 
   return {
     id: routine.id,
@@ -323,5 +345,6 @@ export function transformDatabaseRoutineToRoutine(
     totalWorkouts: routine.total_workouts ?? 0,
     completedWorkouts: routine.completed_workouts ?? 0,
     estimatedDuration: routine.estimated_duration || '45-60 min',
+    workoutDays,
   };
 }

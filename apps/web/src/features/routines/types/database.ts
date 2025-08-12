@@ -76,3 +76,19 @@ export interface DatabaseRoutineResponse {
   routine: DatabaseRoutine;
   workouts: DatabaseWorkout[];
 }
+
+export interface DatabaseRoutineWithWorkouts extends DatabaseRoutine {
+  workouts?: Array<{
+    id: string;
+    name: string;
+    type: string;
+    objective: string | null;
+    order_index: number;
+    schedule?: {
+      repeatPattern?: string;
+      repeatValue?: string;
+      selectedDays?: string[];
+      time?: string;
+    };
+  }>;
+}
