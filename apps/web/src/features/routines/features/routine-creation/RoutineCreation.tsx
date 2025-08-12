@@ -279,6 +279,7 @@ const RoutineCreation = ({
       name: exerciseData.name,
       category: selectedExercise.category,
       muscleGroups: exerciseData.muscleGroups,
+      equipment: selectedVariant?.equipment || [], // Include equipment data from variant
       exerciseId: selectedExercise.id,
       variantId: selectedVariant?.id,
       sets: [],
