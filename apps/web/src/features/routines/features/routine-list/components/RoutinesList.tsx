@@ -1,6 +1,6 @@
 'use client';
 
-import { Plus, Search, Grid3X3, List } from 'lucide-react';
+import { Plus, Search, Grid3X3, List, Heart } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
@@ -33,6 +33,7 @@ const RoutinesList = ({
   const [searchQuery, setSearchQuery] = useState('');
   const [levelFilter, setLevelFilter] = useState('all');
   const [goalFilter, setGoalFilter] = useState('all');
+  const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
 
   const activeRoutine = routines.find(routine => routine.isActive);
@@ -46,8 +47,9 @@ const RoutinesList = ({
     const matchesLevel =
       levelFilter === 'all' || routine.difficulty === levelFilter;
     const matchesGoal = goalFilter === 'all' || routine.goal === goalFilter;
+    const matchesFavorites = !showFavoritesOnly || routine.isFavorite;
 
-    return matchesSearch && matchesLevel && matchesGoal;
+    return matchesSearch && matchesLevel && matchesGoal && matchesFavorites;
   });
 
   const handleCreateRoutine = (): void => {
@@ -139,6 +141,17 @@ const RoutinesList = ({
           </div>
         </div>
         <div className="flex gap-2">
+          <Button
+            variant={showFavoritesOnly ? 'default' : 'outline'}
+            size="sm"
+            onClick={() => setShowFavoritesOnly(!showFavoritesOnly)}
+            className="flex items-center gap-2"
+          >
+            <Heart
+              className={`w-4 h-4 ${showFavoritesOnly ? 'text-white' : 'text-red-500'}`}
+            />
+            Favorites
+          </Button>
           <Select value={levelFilter} onValueChange={setLevelFilter}>
             <SelectTrigger className="w-32">
               <SelectValue placeholder="Level" />

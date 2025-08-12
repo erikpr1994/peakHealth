@@ -3,8 +3,8 @@ export interface DatabaseRoutine {
   id: string;
   name: string;
   description: string;
-  difficulty: string;
-  goal: string;
+  difficulty: 'Beginner' | 'Intermediate' | 'Advanced';
+  goal: 'Strength' | 'Hypertrophy' | 'Endurance' | 'Weight Loss';
   days_per_week: number;
   duration: number;
   is_active: boolean;
@@ -19,6 +19,33 @@ export interface DatabaseRoutine {
   last_used: string | null;
 }
 
+export interface DatabaseSet {
+  id: string;
+  setNumber: number;
+  setType: string;
+  reps: number | null;
+  weight: number | null;
+  rpe: number | null;
+  notes: string;
+  rest_time?: string;
+  duration?: number;
+}
+
+export interface DatabaseExercise {
+  id: string;
+  name: string;
+  muscle_groups?: string[];
+  notes?: string;
+  sets?: DatabaseSet[];
+  exerciseLibraryId?: string; // Link to exercise library (exercise or variant ID)
+}
+
+export interface DatabaseSection {
+  id: string;
+  name: string;
+  exercises?: DatabaseExercise[];
+}
+
 export interface DatabaseWorkout {
   id: string;
   name: string;
@@ -28,23 +55,7 @@ export interface DatabaseWorkout {
   schedule?: {
     selectedDays?: string[];
   };
-  sections?: Array<{
-    id: string;
-    name: string;
-    exercises?: Array<{
-      id: string;
-      name: string;
-      sets?: Array<{
-        id: string;
-        setNumber: number;
-        setType: string;
-        reps: number | null;
-        weight: number | null;
-        rpe: number | null;
-        notes: string;
-      }>;
-    }>;
-  }>;
+  sections?: DatabaseSection[];
 }
 
 export interface DatabaseRoutineResponse {

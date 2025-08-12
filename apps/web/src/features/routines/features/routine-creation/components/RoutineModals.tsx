@@ -16,11 +16,22 @@ interface RoutineModalsProps {
   } | null;
   onExerciseModalClose: () => void;
   onNotesModalClose: () => void;
-  onExerciseSelect: (selectedExercise: {
-    name: string;
-    category?: string;
-    muscleGroups?: string[];
-  }) => void;
+  onExerciseSelect: (
+    selectedExercise: {
+      id: string;
+      name: string;
+      category?: string;
+      muscleGroups?: string[];
+    },
+    selectedVariant?: {
+      id: string;
+      name: string;
+      muscleGroups: string[];
+      difficulty: string;
+      equipment: string[];
+      instructions: string[];
+    }
+  ) => void;
   onNotesSave: (notes: string) => void;
 }
 

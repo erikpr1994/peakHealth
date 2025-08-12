@@ -1,7 +1,12 @@
 import { createClient } from '@/lib/supabase/client';
 
 import { Routine, StrengthWorkout, RunningWorkout } from '../types';
-import { DatabaseRoutineResponse } from '../types/database';
+import {
+  DatabaseRoutineResponse,
+  DatabaseWorkout,
+  DatabaseSection,
+  DatabaseExercise,
+} from '../types/database';
 
 export interface CreateRoutineData {
   name: string;
@@ -68,7 +73,7 @@ export class RoutineService {
 
       // Transform data to match frontend types
       return (routines || []).map(
-        (routine: DatabaseRoutineResponse['routine']) => {
+        (routine: DatabaseRoutineResponse['routine']): Routine => {
           return {
             id: routine.id,
             name: routine.name || '',
@@ -91,7 +96,7 @@ export class RoutineService {
               current: routine.completed_workouts ?? 0,
               total: routine.total_workouts ?? 0,
             },
-            lastUsed: routine.last_used,
+            lastUsed: routine.last_used || undefined,
             objectives: routine.objectives || [],
             totalWorkouts: routine.total_workouts ?? 0,
             completedWorkouts: routine.completed_workouts ?? 0,
@@ -148,7 +153,7 @@ export class RoutineService {
     }
   }
 
-  async getRoutineById(routineId: string): Promise<any> {
+  async getRoutineById(routineId: string): Promise<DatabaseRoutineResponse> {
     try {
       if (!this.supabase) {
         throw new Error('Database connection not available');
@@ -195,14 +200,108 @@ export class RoutineService {
       if (!routineData) {
         throw new Error('Routine not found');
       }
-      return routineData;
+
+      // Enhance the routine data with exercise variant information
+      const enhancedRoutineData =
+        await this.enhanceRoutineWithExerciseData(routineData);
+
+      return enhancedRoutineData;
     } catch (error) {
       console.error('Error fetching routine:', error);
       throw error;
     }
   }
 
-  async createRoutine(routineData: CreateRoutineData): Promise<any> {
+  private async enhanceRoutineWithExerciseData(
+    routineData: DatabaseRoutineResponse
+  ): Promise<DatabaseRoutineResponse> {
+    // Extract all exercise library IDs from the routine
+    const exerciseLibraryIds: string[] = [];
+
+    const extractExerciseIds = (workouts: DatabaseWorkout[]): void => {
+      workouts?.forEach(workout => {
+        workout.sections?.forEach((section: DatabaseSection) => {
+          section.exercises?.forEach((exercise: DatabaseExercise) => {
+            if (exercise.exerciseLibraryId) {
+              exerciseLibraryIds.push(exercise.exerciseLibraryId);
+            }
+          });
+        });
+      });
+    };
+
+    extractExerciseIds(routineData.workouts || []);
+
+    // Fetch exercise variant data for all exercise library IDs
+    let exerciseVariants: Array<{
+      id: string;
+      name: string;
+      description: string;
+      focus: string;
+      difficulty: string;
+      equipment: string[];
+      muscle_groups: string[];
+      instructions: string[];
+    }> = [];
+    if (exerciseLibraryIds.length > 0 && this.supabase) {
+      const { data: variants, error: variantsError } = await this.supabase
+        .from('exercise_variants')
+        .select('*')
+        .in('id', exerciseLibraryIds);
+
+      if (!variantsError && variants) {
+        exerciseVariants = variants;
+      }
+    }
+
+    // Create a map for quick lookup
+    const variantMap = new Map(exerciseVariants.map(v => [v.id, v]));
+
+    // Enhance the routine data with variant information
+    const enhanceWorkouts = (
+      workouts: DatabaseWorkout[]
+    ): DatabaseWorkout[] => {
+      return (workouts || []).map(workout => ({
+        ...workout,
+        sections: workout.sections?.map((section: DatabaseSection) => ({
+          ...section,
+          exercises: section.exercises?.map((exercise: DatabaseExercise) => {
+            const variant = exercise.exerciseLibraryId
+              ? variantMap.get(exercise.exerciseLibraryId)
+              : null;
+            return {
+              ...exercise,
+              // Use variant data if available, otherwise keep original data
+              name: variant?.name || exercise.name,
+              muscle_groups: variant?.muscle_groups || exercise.muscle_groups,
+              category: variant ? 'strength' : 'strength', // Default category for variants
+              variantData: variant
+                ? {
+                    id: variant.id,
+                    name: variant.name,
+                    description: variant.description,
+                    focus: variant.focus,
+                    difficulty: variant.difficulty,
+                    equipment: variant.equipment,
+                    muscleGroups: variant.muscle_groups,
+                    instructions: variant.instructions,
+                  }
+                : null,
+            };
+          }),
+        })),
+      }));
+    };
+
+    return {
+      ...routineData,
+      workouts: enhanceWorkouts(routineData.workouts || []),
+    };
+  }
+
+  async createRoutine(
+    routineData: CreateRoutineData
+  ): Promise<{ success: boolean; routine: unknown; message: string }> {
     try {
       if (!this.supabase) {
         throw new Error('Database connection not available');
@@ -323,6 +422,8 @@ export class RoutineService {
                         name: exercise.name,
                         category: exercise.category,
                         muscle_groups: exercise.muscleGroups,
+                        exercise_library_id:
+                          exercise.variantId || exercise.exerciseId, // Use variant ID if available, otherwise exercise ID
                         order_index: k,
                         rest_timer: exercise.restTimer,
                         rest_after: exercise.restAfter,
@@ -480,7 +581,7 @@ export class RoutineService {
   async updateRoutine(
     routineId: string,
     routineData: UpdateRoutineData
-  ): Promise<any> {
+  ): Promise<void> {
     try {
       if (!this.supabase) {
         throw new Error('Database connection not available');
@@ -501,6 +602,7 @@ export class RoutineService {
         description: routineData.description,
         difficulty: routineData.difficulty,
         goal: routineData.goal,
+        duration: routineData.duration,
         days_per_week: routineData.daysPerWeek,
         schedule: routineData.schedule,
         objectives: routineData.objectives,
