@@ -195,11 +195,85 @@ export class RoutineService {
       if (!routineData) {
         throw new Error('Routine not found');
       }
-      return routineData;
+
+      // Enhance the routine data with exercise variant information
+      const enhancedRoutineData = await this.enhanceRoutineWithExerciseData(routineData);
+      
+      return enhancedRoutineData;
     } catch (error) {
       console.error('Error fetching routine:', error);
       throw error;
     }
+  }
+
+  private async enhanceRoutineWithExerciseData(routineData: any): Promise<DatabaseRoutineResponse> {
+    // Extract all exercise library IDs from the routine
+    const exerciseLibraryIds: string[] = [];
+    
+    const extractExerciseIds = (workouts: any[]) => {
+      workouts?.forEach(workout => {
+        workout.sections?.forEach((section: any) => {
+          section.exercises?.forEach((exercise: any) => {
+            if (exercise.exerciseLibraryId) {
+              exerciseLibraryIds.push(exercise.exerciseLibraryId);
+            }
+          });
+        });
+      });
+    };
+
+    extractExerciseIds(routineData.workouts);
+
+    // Fetch exercise variant data for all exercise library IDs
+    let exerciseVariants: any[] = [];
+    if (exerciseLibraryIds.length > 0) {
+      const { data: variants, error: variantsError } = await this.supabase
+        .from('exercise_variants')
+        .select('*')
+        .in('id', exerciseLibraryIds);
+
+      if (!variantsError && variants) {
+        exerciseVariants = variants;
+      }
+    }
+
+    // Create a map for quick lookup
+    const variantMap = new Map(exerciseVariants.map(v => [v.id, v]));
+
+    // Enhance the routine data with variant information
+    const enhanceWorkouts = (workouts: any[]) => {
+      return workouts?.map(workout => ({
+        ...workout,
+        sections: workout.sections?.map((section: any) => ({
+          ...section,
+          exercises: section.exercises?.map((exercise: any) => {
+            const variant = exercise.exerciseLibraryId ? variantMap.get(exercise.exerciseLibraryId) : null;
+            return {
+              ...exercise,
+              // Use variant data if available, otherwise keep original data
+              name: variant?.name || exercise.name,
+              muscleGroups: variant?.muscle_groups || exercise.muscleGroups,
+              category: variant ? 'strength' : exercise.category, // Default category for variants
+              variantData: variant ? {
+                id: variant.id,
+                name: variant.name,
+                description: variant.description,
+                focus: variant.focus,
+                difficulty: variant.difficulty,
+                equipment: variant.equipment,
+                muscleGroups: variant.muscle_groups,
+                instructions: variant.instructions,
+              } : null,
+            };
+          }),
+        })),
+      }));
+    };
+
+    return {
+      ...routineData,
+      workouts: enhanceWorkouts(routineData.workouts),
+    };
   }
 
   async createRoutine(
