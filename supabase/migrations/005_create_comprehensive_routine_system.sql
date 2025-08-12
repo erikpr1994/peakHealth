@@ -508,7 +508,7 @@ BEGIN
   -- Insert routine
   INSERT INTO routines (
     user_id, name, description, difficulty, goal, duration,
-    is_active, is_favorite, schedule, objectives, estimated_duration
+    is_active, is_favorite, objectives, estimated_duration
   ) VALUES (
     (routine_data->>'userId')::UUID,
     routine_data->>'name',
