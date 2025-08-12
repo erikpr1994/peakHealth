@@ -111,8 +111,15 @@ const RoutineDetail = ({
           description: data.routine.description,
           duration: data.routine.duration || 12, // Use actual duration from database
           daysPerWeek: data.routine.days_per_week || 3,
-          difficulty: data.routine.difficulty,
-          goal: data.routine.goal,
+          difficulty: data.routine.difficulty as
+            | 'Beginner'
+            | 'Intermediate'
+            | 'Advanced',
+          goal: data.routine.goal as
+            | 'Strength'
+            | 'Hypertrophy'
+            | 'Endurance'
+            | 'Weight Loss',
           isActive: data.routine.is_active,
           isFavorite: data.routine.is_favorite,
           progress: {
@@ -130,7 +137,10 @@ const RoutineDetail = ({
               id: workout.id,
               name: workout.name,
               estimatedTime: `${Math.max(30, Math.min(estimatedDuration, 90))} min`,
-              difficulty: data.routine.difficulty,
+              difficulty: data.routine.difficulty as
+                | 'Beginner'
+                | 'Intermediate'
+                | 'Advanced',
               exercises:
                 workout.sections?.flatMap(
                   (section: DatabaseSection) =>
