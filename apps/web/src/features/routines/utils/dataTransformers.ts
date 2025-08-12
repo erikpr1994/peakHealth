@@ -169,31 +169,7 @@ export function transformDatabaseRoutineToRoutineData(
     throw new Error(`Invalid goal: ${data.routine.goal}`);
   }
 
-  // Calculate weekly schedule from workout configs
-  const calculateWeeklySchedule = (workouts: DatabaseWorkout[]): boolean[] => {
-    const schedule = new Array(7).fill(false);
-
-    workouts?.forEach((workout: DatabaseWorkout) => {
-      if (workout.schedule?.selectedDays) {
-        workout.schedule.selectedDays.forEach((day: string) => {
-          const dayIndex = [
-            'monday',
-            'tuesday',
-            'wednesday',
-            'thursday',
-            'friday',
-            'saturday',
-            'sunday',
-          ].indexOf(day.toLowerCase());
-          if (dayIndex !== -1) {
-            schedule[dayIndex] = true;
-          }
-        });
-      }
-    });
-
-    return schedule;
-  };
+  // Schedule is calculated dynamically from workout days in the component
 
   // Calculate estimated duration
   const estimatedDuration =
@@ -303,7 +279,7 @@ export function transformDatabaseRoutineToRoutineData(
       completedWorkouts: data.routine.completed_workouts || 0,
       totalWorkouts: totalWorkoutsForDuration,
     },
-    schedule: calculateWeeklySchedule(data.workouts || []),
+    // Schedule is calculated dynamically from workout days
     workoutDays,
     createdDate: parseDate(data.routine.created_at),
     lastModified: parseDate(data.routine.updated_at),
@@ -331,15 +307,7 @@ export function transformDatabaseRoutineToRoutine(
     goal: routine.goal,
     isActive: routine.is_active ?? false,
     isFavorite: routine.is_favorite ?? false,
-    schedule: routine.schedule || [
-      false,
-      false,
-      false,
-      false,
-      false,
-      false,
-      false,
-    ],
+    // Schedule is calculated dynamically from workout days
     progress: {
       current: routine.completed_workouts ?? 0,
       total: routine.total_workouts ?? 0,

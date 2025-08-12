@@ -37,6 +37,9 @@ if (!supabaseUrl || !supabaseServiceKey) {
 
 const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
+/**
+ * Sets up the development database with users and sample data
+ */
 async function setupDevDatabase() {
   try {
     console.log('🚀 Setting up development database...');
@@ -404,7 +407,7 @@ async function setupDevDatabase() {
             goal: 'Strength',
             days_per_week: 3,
             duration: 12,
-            schedule: [true, false, true, false, true, false, false], // M W F
+            // Schedule is calculated dynamically from workout days
             objectives: [
               'Build overall strength',
               'Improve compound movements',
@@ -569,7 +572,7 @@ async function setupDevDatabase() {
             goal: 'Endurance',
             days_per_week: 4,
             duration: 8,
-            schedule: [true, false, true, false, true, false, true], // M T W T F S S
+            // Schedule is calculated dynamically from workout days
             objectives: [
               'Complete a 5K race',
               'Build running endurance',
@@ -632,7 +635,7 @@ async function setupDevDatabase() {
               goal: 'Hypertrophy',
               days_per_week: 5,
               duration: 16,
-              schedule: [true, true, false, true, true, true, false], // M T W T F S S
+              // Schedule is calculated dynamically from workout days
               objectives: [
                 'Maximize muscle growth',
                 'Improve muscle definition',

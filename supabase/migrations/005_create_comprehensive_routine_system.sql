@@ -27,7 +27,7 @@ CREATE TABLE routines (
   duration INTEGER NOT NULL DEFAULT 12 CHECK (duration BETWEEN 1 AND 52), -- Duration in weeks (default 12 weeks = 3 months)
   is_active BOOLEAN DEFAULT false,
   is_favorite BOOLEAN DEFAULT false,
-  schedule BOOLEAN[] DEFAULT ARRAY[false, false, false, false, false, false, false], -- [Mon, Tue, Wed, Thu, Fri, Sat, Sun]
+  -- Schedule is calculated dynamically from workout days, not stored
   objectives TEXT[],
   total_workouts INTEGER DEFAULT 0,
   completed_workouts INTEGER DEFAULT 0,
@@ -543,8 +543,15 @@ BEGIN
     (routine_data->>'daysPerWeek')::INTEGER,
     COALESCE((routine_data->>'isActive')::BOOLEAN, false),
     COALESCE((routine_data->>'isFavorite')::BOOLEAN, false),
-    COALESCE((routine_data->>'schedule')::BOOLEAN[], ARRAY[false, false, false, false, false, false, false]),
-    COALESCE((routine_data->>'objectives')::TEXT[], ARRAY[]::TEXT[]),
+    -- Schedule is calculated dynamically, not stored
+    COALESCE(
+      CASE 
+        WHEN routine_data->>'objectives' IS NOT NULL 
+        THEN (routine_data->'objectives')::TEXT[]
+        ELSE ARRAY[]::TEXT[]
+      END,
+      ARRAY[]::TEXT[]
+    ),
     routine_data->>'estimatedDuration'
   ) RETURNING id INTO new_routine_id;
 
@@ -576,7 +583,7 @@ CREATE OR REPLACE FUNCTION update_routine(
   goal routine_goal,
   duration INTEGER,
   days_per_week INTEGER,
-  schedule BOOLEAN[],
+  -- Schedule is calculated dynamically, not stored
   objectives TEXT[]
 )
 RETURNS VOID AS $$
@@ -589,7 +596,7 @@ BEGIN
     goal = update_routine.goal,
     duration = update_routine.duration,
     days_per_week = update_routine.days_per_week,
-    schedule = update_routine.schedule,
+    -- Schedule is calculated dynamically, not stored
     objectives = update_routine.objectives,
     updated_at = NOW()
   WHERE id = routine_id_param;

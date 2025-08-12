@@ -530,8 +530,7 @@ const RoutineCreation = ({
       description,
       objectives,
       duration,
-      daysPerWeek: 3, // TODO: Calculate from schedule
-      schedule: [true, false, true, false, true, false, false], // TODO: Get from form
+      daysPerWeek: 3, // TODO: Calculate from workout days
       strengthWorkouts,
       runningWorkouts,
     };
@@ -546,7 +545,6 @@ const RoutineCreation = ({
           goal: routineData.goal,
           duration: routineData.duration,
           daysPerWeek: routineData.daysPerWeek,
-          schedule: routineData.schedule,
           objectives: routineData.objectives,
         };
         await routineService.updateRoutine(editRoutineId, updateData);

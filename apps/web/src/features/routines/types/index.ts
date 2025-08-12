@@ -153,7 +153,7 @@ export interface Routine {
   goal: 'Strength' | 'Hypertrophy' | 'Endurance' | 'Weight Loss';
   isActive: boolean;
   isFavorite: boolean;
-  schedule: boolean[]; // [Mon, Tue, Wed, Thu, Fri, Sat, Sun]
+  // Schedule is calculated dynamically from workout days
   progress: {
     current: number;
     total: number;
@@ -204,7 +204,7 @@ export interface RoutineData {
     completedWorkouts: number;
     totalWorkouts: number;
   };
-  schedule: boolean[]; // [Mon, Tue, Wed, Thu, Fri, Sat, Sun]
+  // Schedule is calculated dynamically from workout days
   workoutDays: WorkoutDay[];
   createdDate: string;
   lastModified: string;

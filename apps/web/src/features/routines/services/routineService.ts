@@ -11,7 +11,6 @@ export interface CreateRoutineData {
   goal: 'Strength' | 'Hypertrophy' | 'Endurance' | 'Weight Loss';
   duration: number;
   daysPerWeek: number;
-  schedule: boolean[];
   objectives: string[];
   strengthWorkouts: StrengthWorkout[];
   runningWorkouts: RunningWorkout[];
@@ -24,7 +23,6 @@ export interface UpdateRoutineData {
   goal?: 'Strength' | 'Hypertrophy' | 'Endurance' | 'Weight Loss';
   duration?: number;
   daysPerWeek?: number;
-  schedule?: boolean[];
   objectives?: string[];
 }
 
@@ -184,7 +182,6 @@ export class RoutineService {
       difficulty,
       goal,
       daysPerWeek,
-      schedule,
       objectives,
       strengthWorkouts,
       runningWorkouts,
@@ -203,7 +200,6 @@ export class RoutineService {
       difficulty,
       goal,
       daysPerWeek,
-      schedule: schedule || [false, false, false, false, false, false, false],
       objectives: objectives || [],
       isActive: false,
       isFavorite: false,
@@ -348,7 +344,7 @@ export class RoutineService {
       goal: routineData.goal,
       duration: routineData.duration,
       days_per_week: routineData.daysPerWeek,
-      schedule: routineData.schedule,
+      // Schedule is calculated dynamically, not stored
       objectives: routineData.objectives,
     });
 

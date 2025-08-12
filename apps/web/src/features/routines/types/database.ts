@@ -9,7 +9,7 @@ export interface DatabaseRoutine {
   duration: number;
   is_active: boolean;
   is_favorite: boolean;
-  schedule: boolean[];
+  // Schedule is calculated dynamically from workout days
   objectives: string[];
   total_workouts: number;
   completed_workouts: number;

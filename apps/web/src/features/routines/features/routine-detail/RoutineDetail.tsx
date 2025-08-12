@@ -8,7 +8,7 @@ import RoutineProgress from './components/RoutineProgress';
 import WeeklySchedule from './components/WeeklySchedule';
 import RoutineInfo from './components/RoutineInfo';
 import WorkoutDaysList from './components/WorkoutDaysList';
-import { RoutineData } from '@/features/routines/types';
+import { RoutineData, WorkoutDay } from '@/features/routines/types';
 import { routineService } from '../../services/routineService';
 import { transformDatabaseRoutineToRoutineData } from '../../utils/dataTransformers';
 
@@ -19,6 +19,20 @@ interface RoutineDetailProps {
 const RoutineDetail = ({
   routineId,
 }: RoutineDetailProps): React.ReactElement => {
+  // Calculate weekly schedule from workout days
+  const calculateWeeklySchedule = (workoutDays: WorkoutDay[]): boolean[] => {
+    const schedule = new Array(7).fill(false);
+
+    // For now, we'll calculate based on the number of workout days
+    // In a real implementation, this would use the actual workout day schedules
+    workoutDays.forEach((_, index) => {
+      if (index < 7) {
+        schedule[index] = true;
+      }
+    });
+
+    return schedule;
+  };
   const router = useRouter();
   const [routineData, setRoutineData] = useState<RoutineData | null>(null);
   const [loading, setLoading] = useState(true);
@@ -152,7 +166,9 @@ const RoutineDetail = ({
             </div>
           )}
 
-          <WeeklySchedule schedule={routineData.schedule} />
+          <WeeklySchedule
+            schedule={calculateWeeklySchedule(routineData.workoutDays)}
+          />
         </div>
 
         {/* Routine Info */}
