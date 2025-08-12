@@ -373,14 +373,17 @@ export class RoutineService {
       throw new Error('Not authenticated');
     }
 
-    const { error } = await this.supabase
-      .from('routines')
-      .delete()
-      .eq('id', routineId)
-      .eq('user_id', user.id);
+    // Use the RPC function for proper cascading deletion
+    const { data: result, error } = await this.supabase.rpc('delete_routine', {
+      routine_id_param: routineId,
+    });
 
     if (error) {
       throw error;
+    }
+
+    if (!result || !result.success) {
+      throw new Error(result?.message || 'Failed to delete routine');
     }
   }
 
@@ -448,6 +451,66 @@ export class RoutineService {
     if (error) {
       throw error;
     }
+  }
+
+  async getHistoricalWorkouts(): Promise<{
+    deletedRoutines: Record<string, unknown>[];
+    orphanedWorkouts: Record<string, unknown>[];
+  }> {
+    if (!this.supabase) {
+      throw new Error('Database connection not available');
+    }
+
+    const {
+      data: { user },
+      error: authError,
+    } = await this.supabase.auth.getUser();
+
+    if (authError || !user) {
+      throw new Error('Not authenticated');
+    }
+
+    // Get deleted routines for this user
+    const { data: deletedRoutines, error: deletedRoutinesError } =
+      await this.supabase
+        .from('deleted_routines')
+        .select('*')
+        .eq('user_id', user.id)
+        .order('deleted_at', { ascending: false });
+
+    if (deletedRoutinesError) {
+      throw deletedRoutinesError;
+    }
+
+    // Get orphaned workouts (workouts with NULL routine_id)
+    const { data: orphanedWorkouts, error: orphanedWorkoutsError } =
+      await this.supabase
+        .from('workouts')
+        .select(
+          `
+        *,
+        workout_sections (
+          id,
+          name,
+          type,
+          order_index,
+          rest_after,
+          emom_duration,
+          notes
+        )
+      `
+        )
+        .is('routine_id', null)
+        .order('created_at', { ascending: false });
+
+    if (orphanedWorkoutsError) {
+      throw orphanedWorkoutsError;
+    }
+
+    return {
+      deletedRoutines: deletedRoutines || [],
+      orphanedWorkouts: orphanedWorkouts || [],
+    };
   }
 }
 
