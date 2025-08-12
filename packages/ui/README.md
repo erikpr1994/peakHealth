@@ -86,6 +86,50 @@ import { Input } from '@peakhealth/ui/input';
 <Input disabled placeholder="Disabled" />
 ```
 
+### Modal
+
+A reusable modal component with backdrop blur and accessibility features.
+
+```tsx
+import { Modal } from '@peakhealth/ui/modal';
+
+// Basic usage
+<Modal isOpen={isOpen} onClose={handleClose}>
+  <p>Modal content goes here</p>
+</Modal>
+
+// With title
+<Modal isOpen={isOpen} onClose={handleClose} title="Modal Title">
+  <p>Modal content goes here</p>
+</Modal>
+
+// Without close button
+<Modal isOpen={isOpen} onClose={handleClose} showCloseButton={false}>
+  <p>Modal without close button</p>
+</Modal>
+
+// Custom styling
+<Modal
+  isOpen={isOpen}
+  onClose={handleClose}
+  className="custom-modal"
+  contentClassName="custom-content"
+>
+  <p>Custom styled modal</p>
+</Modal>
+```
+
+**Features:**
+
+- Blurry backdrop with backdrop-filter
+- Fixed dimensions (90vw × 90vh)
+- Body scroll prevention
+- Escape key support
+- Click outside to close
+- Accessible close button
+- Responsive design
+- Customizable styling
+
 ## 🎨 Design System
 
 ### CSS Custom Properties
@@ -184,10 +228,20 @@ packages/ui/
 │   │   │   ├── button.css
 │   │   │   ├── Button.stories.ts
 │   │   │   └── index.ts
-│   │   └── input/
-│   │       ├── input.tsx
-│   │       ├── input.css
-│   │       ├── Input.stories.ts
+│   │   ├── input/
+│   │   │   ├── input.tsx
+│   │   │   ├── input.css
+│   │   │   ├── Input.stories.ts
+│   │   │   └── index.ts
+│   │   ├── modal/
+│   │   │   ├── modal.tsx
+│   │   │   ├── modal.css
+│   │   │   ├── Modal.stories.ts
+│   │   │   └── index.ts
+│   │   └── tooltip/
+│   │       ├── tooltip.tsx
+│   │       ├── tooltip.css
+│   │       ├── Tooltip.stories.ts
 │   │       └── index.ts
 │   ├── utils.ts           # Shared utilities
 │   └── index.ts           # Main exports

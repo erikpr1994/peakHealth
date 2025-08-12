@@ -66,6 +66,11 @@
       "import": "./dist/components/input/index.js",
       "require": "./dist/components/input/index.js"
     },
+    "./modal": {
+      "types": "./dist/components/modal/index.d.ts",
+      "import": "./dist/components/modal/index.js",
+      "require": "./dist/components/modal/index.js"
+    },
     "./tooltip": {
       "types": "./dist/components/tooltip/index.d.ts",
       "import": "./dist/components/tooltip/index.js",

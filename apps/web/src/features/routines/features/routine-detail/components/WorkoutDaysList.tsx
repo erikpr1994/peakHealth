@@ -9,6 +9,7 @@ import { getDifficultyColor } from '@/features/routines/utils';
 
 interface Exercise {
   id: string;
+  variantId: string;
   name: string;
   sets: Array<{
     reps?: string;
@@ -38,6 +39,11 @@ const WorkoutDaysList = ({
   routineId,
 }: WorkoutDaysListProps): React.ReactElement => {
   const router = useRouter();
+
+  const handleExerciseClick = (exerciseId: string, variantId: string): void => {
+    // Navigate directly to the exercise variant page which will be intercepted by the modal
+    router.push(`/exercises/${exerciseId}/variants/${variantId}`);
+  };
 
   return (
     <Card className="p-6 mb-8">
@@ -75,7 +81,13 @@ const WorkoutDaysList = ({
 
             <div className="space-y-3">
               {workout.exercises.map(exercise => (
-                <div key={exercise.id} className="bg-gray-50 p-4 rounded-lg">
+                <div
+                  key={exercise.id}
+                  className="bg-gray-50 p-4 rounded-lg cursor-pointer hover:bg-gray-100 transition-colors"
+                  onClick={() =>
+                    handleExerciseClick(exercise.id, exercise.variantId)
+                  }
+                >
                   <div className="flex items-center justify-between mb-2">
                     <h4 className="font-medium text-gray-800">
                       {exercise.name}
