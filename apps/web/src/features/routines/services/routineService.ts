@@ -427,7 +427,7 @@ export class RoutineService {
 
   async updateRoutineProgress(
     routineId: string,
-    completedWorkouts: number
+    completedWorkoutsIncrement: number = 1
   ): Promise<void> {
     if (!this.supabase) {
       throw new Error('Database connection not available');
@@ -442,11 +442,11 @@ export class RoutineService {
       throw new Error('Not authenticated');
     }
 
-    const { error } = await this.supabase
-      .from('routines')
-      .update({ completed_workouts: completedWorkouts })
-      .eq('id', routineId)
-      .eq('user_id', user.id);
+    // Use the RPC function for proper incremental progress tracking
+    const { error } = await this.supabase.rpc('update_routine_progress', {
+      routine_id_param: routineId,
+      completed_workouts_increment: completedWorkoutsIncrement,
+    });
 
     if (error) {
       throw error;
