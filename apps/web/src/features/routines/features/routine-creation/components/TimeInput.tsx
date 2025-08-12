@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { formatTimeDisplay, parseTimeDisplay } from '../../../utils/timeUtils';
@@ -22,15 +22,21 @@ const TimeInput = ({
 }: TimeInputProps): React.ReactElement => {
   const [inputValue, setInputValue] = useState('');
   const [isValid, setIsValid] = useState(true);
+  const isUserInputRef = useRef(false);
 
   // Initialize input value from the stored value
   useEffect(() => {
-    if (value && value !== null) {
-      const seconds = parseTimeDisplay(value);
-      setInputValue(seconds.toString());
-    } else {
-      setInputValue('');
+    // Only update from external value if it's not from user input
+    if (!isUserInputRef.current) {
+      if (value && value !== null) {
+        const seconds = parseTimeDisplay(value);
+        setInputValue(seconds.toString());
+      } else {
+        setInputValue('');
+      }
     }
+    // Reset the flag after handling the external change
+    isUserInputRef.current = false;
   }, [value]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
@@ -46,6 +52,7 @@ const TimeInput = ({
       const totalSeconds = (minutes || 0) * 60 + (seconds || 0);
       setInputValue(totalSeconds.toString());
       setIsValid(true);
+      isUserInputRef.current = true;
       onChange(formatTimeDisplay(totalSeconds));
     } else {
       // Format: just seconds
@@ -53,6 +60,7 @@ const TimeInput = ({
       setInputValue(seconds.toString());
       setIsValid(seconds >= 0);
       if (seconds >= 0) {
+        isUserInputRef.current = true;
         onChange(formatTimeDisplay(seconds));
       }
     }
@@ -62,6 +70,7 @@ const TimeInput = ({
     // Ensure the display is properly formatted when user leaves the field
     if (inputValue && isValid) {
       const seconds = parseInt(inputValue) || 0;
+      isUserInputRef.current = true;
       onChange(formatTimeDisplay(seconds));
     }
   };
