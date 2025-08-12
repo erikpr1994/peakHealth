@@ -1,9 +1,28 @@
 import { execSync } from 'child_process';
 
 import { createClient } from '@supabase/supabase-js';
-import dotenv from 'dotenv';
+import { readFileSync } from 'fs';
 
-dotenv.config({ path: 'apps/web/.env.local' });
+// Load environment variables manually
+const envPath = 'apps/web/.env.local';
+try {
+  const envContent = readFileSync(envPath, 'utf8');
+  const envVars = envContent.split('\n').reduce((acc, line) => {
+    const [key, ...valueParts] = line.split('=');
+    if (key && valueParts.length > 0) {
+      acc[key.trim()] = valueParts.join('=').trim();
+    }
+    return acc;
+  }, {});
+
+  Object.entries(envVars).forEach(([key, value]) => {
+    if (!process.env[key]) {
+      process.env[key] = value;
+    }
+  });
+} catch (error) {
+  console.warn('Could not load .env.local file:', error.message);
+}
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
@@ -328,22 +347,22 @@ async function setupDevDatabase() {
                     {
                       exercise_id: exercise.id,
                       set_number: 1,
-                      reps: 10,
-                      weight: 135,
+                      reps: '10',
+                      weight: '135 lbs',
                       notes: 'Warm-up set',
                     },
                     {
                       exercise_id: exercise.id,
                       set_number: 2,
-                      reps: 8,
-                      weight: 155,
+                      reps: '8',
+                      weight: '155 lbs',
                       notes: 'Working set',
                     },
                     {
                       exercise_id: exercise.id,
                       set_number: 3,
-                      reps: 6,
-                      weight: 175,
+                      reps: '6',
+                      weight: '175 lbs',
                       notes: 'Working set',
                     },
                   ]);
