@@ -139,7 +139,10 @@ const RoutineDetail = ({
 
       <RoutineOverviewCards
         duration={routineData.duration}
-        daysPerWeek={routineData.daysPerWeek}
+        daysPerWeek={
+          calculateWeeklySchedule(routineData.workoutDays).filter(day => day)
+            .length
+        }
         goal={routineData.goal}
         difficulty={routineData.difficulty}
       />

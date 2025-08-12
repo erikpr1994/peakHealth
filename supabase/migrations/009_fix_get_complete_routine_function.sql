@@ -14,11 +14,9 @@ BEGIN
       'description', r.description,
       'difficulty', r.difficulty,
       'goal', r.goal,
-      'daysPerWeek', r.days_per_week,
       'duration', r.duration,
       'isActive', r.is_active,
       'isFavorite', r.is_favorite,
-      -- Schedule is calculated dynamically from workout days
       'objectives', r.objectives,
       'totalWorkouts', r.total_workouts,
       'completedWorkouts', r.completed_workouts,

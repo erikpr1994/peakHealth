@@ -96,7 +96,7 @@ const RoutineCard = ({
                 {routine.description}
               </p>
               <div className="flex items-center space-x-4 text-sm text-gray-500">
-                <span>{routine.daysPerWeek} days/week</span>
+                <span>{routine.workoutDays?.length || 3} days/week</span>
                 <span>•</span>
                 <span>Avg. {routine.estimatedDuration || '45-60 min'}</span>
                 <span>•</span>
@@ -204,7 +204,9 @@ const RoutineCard = ({
       <div className="space-y-3 mb-4">
         <div className="flex items-center justify-between text-sm">
           <span className="text-gray-500">Frequency</span>
-          <span className="font-medium">{routine.daysPerWeek} days/week</span>
+          <span className="font-medium">
+            {routine.workoutDays?.length || 3} days/week
+          </span>
         </div>
         <div className="flex items-center justify-between text-sm">
           <span className="text-gray-500">Avg. Duration</span>

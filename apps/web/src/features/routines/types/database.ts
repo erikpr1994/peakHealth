@@ -5,7 +5,7 @@ export interface DatabaseRoutine {
   description: string;
   difficulty: 'Beginner' | 'Intermediate' | 'Advanced';
   goal: 'Strength' | 'Hypertrophy' | 'Endurance' | 'Weight Loss';
-  days_per_week: number;
+  // days_per_week is calculated dynamically from workout days
   duration: number;
   is_active: boolean;
   is_favorite: boolean;

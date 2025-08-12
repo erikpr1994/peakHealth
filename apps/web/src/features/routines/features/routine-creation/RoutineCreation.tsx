@@ -164,7 +164,6 @@ const RoutineCreation = ({
     loadRoutineForEditing();
   }, [editRoutineId, mode, setStrengthWorkouts, setRunningWorkouts]);
 
-  // Collapse toggle handlers
   const toggleStrengthWorkoutCollapse = (workoutId: string): void => {
     setCollapsedStrengthWorkouts(prev => {
       const newSet = new Set(prev);
@@ -189,14 +188,12 @@ const RoutineCreation = ({
     });
   };
 
-  // Running workout handlers
   const handleAddRunningWorkout = (): void => {
     setCreatingRunning(true);
   };
 
   const handleRunningSave = (runningData: TrailRunningWorkoutData): void => {
     if (editingRunning) {
-      // Update existing running workout
       setRunningWorkouts(prev =>
         prev.map(workout =>
           workout.id === editingRunning.workoutId
@@ -206,7 +203,6 @@ const RoutineCreation = ({
       );
       setEditingRunning(null);
     } else {
-      // Create new running workout
       const newWorkout = {
         id: `running-${Date.now()}`,
         name: runningData.name || 'New Running Workout',
@@ -279,7 +275,7 @@ const RoutineCreation = ({
       name: exerciseData.name,
       category: selectedExercise.category,
       muscleGroups: exerciseData.muscleGroups,
-      equipment: selectedVariant?.equipment || [], // Include equipment data from variant
+      equipment: selectedVariant?.equipment || [],
       exerciseId: selectedExercise.id,
       variantId: selectedVariant?.id,
       sets: [],
@@ -302,7 +298,6 @@ const RoutineCreation = ({
     setCurrentAddExerciseContext(null);
   };
 
-  // Notes handlers
   const handleNotesClick = (
     type: 'exercise' | 'set',
     workoutId: string,
@@ -345,7 +340,6 @@ const RoutineCreation = ({
     const isStrength = strengthWorkouts.some(w => w.id === workoutId);
 
     if (type === 'exercise') {
-      // Update exercise notes
       if (isStrength) {
         setStrengthWorkouts(prev =>
           prev.map(workout =>
@@ -392,7 +386,6 @@ const RoutineCreation = ({
         );
       }
     } else if (type === 'set' && setId) {
-      // Update set notes
       if (isStrength) {
         setStrengthWorkouts(prev =>
           prev.map(workout =>
@@ -454,7 +447,6 @@ const RoutineCreation = ({
     setCurrentNotesContext(null);
   };
 
-  // Approach sets handler
   const handleAddApproachSets = (
     workoutId: string,
     sectionId: string,
@@ -496,7 +488,6 @@ const RoutineCreation = ({
       );
     } else {
       updateRunningExerciseSets(workoutId, sectionId, exerciseId, updatedSets);
-      // Mark as having approach sets
       setRunningWorkouts(prev =>
         prev.map(w =>
           w.id === workoutId
@@ -530,7 +521,7 @@ const RoutineCreation = ({
       description,
       objectives,
       duration,
-      daysPerWeek: 3, // TODO: Calculate from workout days
+      // daysPerWeek is calculated dynamically from workout days
       strengthWorkouts,
       runningWorkouts,
     };
@@ -544,21 +535,15 @@ const RoutineCreation = ({
           difficulty: routineData.difficulty,
           goal: routineData.goal,
           duration: routineData.duration,
-          daysPerWeek: routineData.daysPerWeek,
           objectives: routineData.objectives,
         };
         await routineService.updateRoutine(editRoutineId, updateData);
-        // Success logging removed for production
       } else {
-        // Create new routine
-        const _result = await routineService.createRoutine(routineData);
-        // Success logging removed for production
+        await routineService.createRoutine(routineData);
       }
 
-      // Navigate back to routines list
       router.push('/routines');
     } catch {
-      // Error handling without console.log
       // TODO: Show error message to user
     }
   };

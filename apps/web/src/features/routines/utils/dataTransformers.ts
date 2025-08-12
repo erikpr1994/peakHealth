@@ -263,7 +263,7 @@ export function transformDatabaseRoutineToRoutineData(
     name: data.routine.name,
     description: data.routine.description,
     duration: data.routine.duration || 12,
-    daysPerWeek: data.routine.days_per_week || 3,
+    // daysPerWeek is calculated dynamically from workout days
     difficulty: data.routine.difficulty,
     goal: data.routine.goal,
     isActive: data.routine.is_active,
@@ -302,7 +302,7 @@ export function transformDatabaseRoutineToRoutine(
     id: routine.id,
     name: routine.name || '',
     description: routine.description || '',
-    daysPerWeek: routine.days_per_week || 3,
+    // daysPerWeek is calculated dynamically from workout days
     difficulty: routine.difficulty,
     goal: routine.goal,
     isActive: routine.is_active ?? false,

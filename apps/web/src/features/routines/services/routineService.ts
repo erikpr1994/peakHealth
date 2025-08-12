@@ -10,7 +10,6 @@ export interface CreateRoutineData {
   difficulty: 'Beginner' | 'Intermediate' | 'Advanced';
   goal: 'Strength' | 'Hypertrophy' | 'Endurance' | 'Weight Loss';
   duration: number;
-  daysPerWeek: number;
   objectives: string[];
   strengthWorkouts: StrengthWorkout[];
   runningWorkouts: RunningWorkout[];
@@ -22,7 +21,6 @@ export interface UpdateRoutineData {
   difficulty?: 'Beginner' | 'Intermediate' | 'Advanced';
   goal?: 'Strength' | 'Hypertrophy' | 'Endurance' | 'Weight Loss';
   duration?: number;
-  daysPerWeek?: number;
   objectives?: string[];
 }
 
@@ -181,14 +179,13 @@ export class RoutineService {
       description,
       difficulty,
       goal,
-      daysPerWeek,
       objectives,
       strengthWorkouts,
       runningWorkouts,
     } = routineData;
 
     // Basic validation
-    if (!name || !difficulty || !goal || !daysPerWeek) {
+    if (!name || !difficulty || !goal) {
       throw new Error('Missing required fields');
     }
 
@@ -199,7 +196,6 @@ export class RoutineService {
       description,
       difficulty,
       goal,
-      daysPerWeek,
       objectives: objectives || [],
       isActive: false,
       isFavorite: false,
@@ -343,7 +339,7 @@ export class RoutineService {
       difficulty: routineData.difficulty,
       goal: routineData.goal,
       duration: routineData.duration,
-      days_per_week: routineData.daysPerWeek,
+      // days_per_week is calculated dynamically from workout days
       // Schedule is calculated dynamically, not stored
       objectives: routineData.objectives,
     });

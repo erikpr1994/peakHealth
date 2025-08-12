@@ -405,7 +405,7 @@ async function setupDevDatabase() {
               'A comprehensive full-body workout targeting all major muscle groups with compound movements. Perfect for intermediate lifters looking to build strength and muscle mass.',
             difficulty: 'Intermediate',
             goal: 'Strength',
-            days_per_week: 3,
+            // days_per_week is calculated dynamically from workout days
             duration: 12,
             // Schedule is calculated dynamically from workout days
             objectives: [
@@ -570,7 +570,7 @@ async function setupDevDatabase() {
               'A structured 8-week training plan to prepare for your first 5K race. Includes progressive distance increases and speed work.',
             difficulty: 'Beginner',
             goal: 'Endurance',
-            days_per_week: 4,
+            // days_per_week is calculated dynamically from workout days
             duration: 8,
             // Schedule is calculated dynamically from workout days
             objectives: [
@@ -633,7 +633,7 @@ async function setupDevDatabase() {
                 'A bodybuilding-style split routine focusing on muscle hypertrophy with higher rep ranges and isolation exercises.',
               difficulty: 'Advanced',
               goal: 'Hypertrophy',
-              days_per_week: 5,
+              // days_per_week is calculated dynamically from workout days
               duration: 16,
               // Schedule is calculated dynamically from workout days
               objectives: [

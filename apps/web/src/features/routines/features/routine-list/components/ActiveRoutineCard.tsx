@@ -113,7 +113,8 @@ const ActiveRoutineCard = ({
                   <span className="text-sm font-medium">Frequency</span>
                 </div>
                 <p className="text-2xl font-bold">
-                  {routine.daysPerWeek} days/week
+                  {/* daysPerWeek is calculated dynamically from workout days */}
+                  {routine.workoutDays?.length || 3} days/week
                 </p>
               </div>
 

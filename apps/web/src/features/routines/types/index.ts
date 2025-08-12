@@ -148,7 +148,7 @@ export interface Routine {
   id: string;
   name: string;
   description: string;
-  daysPerWeek: number;
+  // daysPerWeek is calculated dynamically from workout days
   difficulty: 'Beginner' | 'Intermediate' | 'Advanced';
   goal: 'Strength' | 'Hypertrophy' | 'Endurance' | 'Weight Loss';
   isActive: boolean;
@@ -163,6 +163,7 @@ export interface Routine {
   totalWorkouts?: number;
   completedWorkouts?: number;
   estimatedDuration?: string;
+  workoutDays?: WorkoutDay[];
 }
 
 // Routine Detail Types
@@ -193,7 +194,7 @@ export interface RoutineData {
   name: string;
   description: string;
   duration: number; // weeks
-  daysPerWeek: number;
+  // daysPerWeek is calculated dynamically from workout days
   difficulty: 'Beginner' | 'Intermediate' | 'Advanced';
   goal: 'Strength' | 'Hypertrophy' | 'Endurance' | 'Weight Loss';
   isActive: boolean;

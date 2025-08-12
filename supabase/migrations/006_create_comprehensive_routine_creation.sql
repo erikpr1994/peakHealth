@@ -26,7 +26,7 @@ BEGIN
   
   -- Insert routine
   INSERT INTO routines (
-    user_id, name, description, difficulty, goal, days_per_week,
+    user_id, name, description, difficulty, goal,
     is_active, is_favorite, objectives
   ) VALUES (
     (routine_data->>'userId')::UUID,
@@ -34,7 +34,7 @@ BEGIN
     routine_data->>'description',
     (routine_data->>'difficulty')::routine_difficulty,
     (routine_data->>'goal')::routine_goal,
-    (routine_data->>'daysPerWeek')::INTEGER,
+    -- daysPerWeek is calculated dynamically from workout days
     COALESCE((routine_data->>'isActive')::BOOLEAN, false),
     COALESCE((routine_data->>'isFavorite')::BOOLEAN, false),
     -- Schedule is calculated dynamically, not stored
