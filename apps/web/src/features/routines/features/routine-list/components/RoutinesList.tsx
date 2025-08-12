@@ -14,14 +14,21 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Routine } from '@/features/routines/types';
+import { routineService } from '../../../services/routineService';
 import ActiveRoutineCard from './ActiveRoutineCard';
 import RoutineCard from './RoutineCard';
 
 interface RoutinesListProps {
   routines: Routine[];
+  onRoutineUpdate?: () => void;
+  onRoutinesChange?: (routines: Routine[]) => void;
 }
 
-const RoutinesList = ({ routines }: RoutinesListProps): React.ReactElement => {
+const RoutinesList = ({
+  routines,
+  onRoutineUpdate,
+  onRoutinesChange,
+}: RoutinesListProps): React.ReactElement => {
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState('');
   const [levelFilter, setLevelFilter] = useState('all');
@@ -45,6 +52,51 @@ const RoutinesList = ({ routines }: RoutinesListProps): React.ReactElement => {
 
   const handleCreateRoutine = (): void => {
     router.push('/routines/create');
+  };
+
+  const handleSetActiveRoutine = async (routineId: string): Promise<void> => {
+    try {
+      // Optimistically update the local state first
+      const updatedRoutines = routines.map(routine => ({
+        ...routine,
+        isActive: routine.id === routineId,
+      }));
+
+      if (onRoutinesChange) {
+        onRoutinesChange(updatedRoutines);
+      }
+
+      // Then update the database and ensure it completes
+      await routineService.setActiveRoutine(routineId);
+
+      // If we get here, the database update was successful
+      console.log('Routine set as active successfully');
+    } catch (error) {
+      console.error('Error setting active routine:', error);
+
+      // Revert the optimistic update on error
+      const revertedRoutines = routines.map(routine => ({
+        ...routine,
+        isActive: routine.isActive, // Keep original state
+      }));
+
+      if (onRoutinesChange) {
+        onRoutinesChange(revertedRoutines);
+      }
+
+      // TODO: Show error message to user
+      alert('Failed to set routine as active. Please try again.');
+    }
+  };
+
+  const handleFavoriteToggle = async (routineId: string): Promise<void> => {
+    try {
+      await routineService.toggleRoutineFavorite(routineId);
+      // Refresh the data to get updated favorite status
+      onRoutineUpdate?.();
+    } catch (error) {
+      console.error('Error toggling favorite:', error);
+    }
   };
 
   return (
@@ -175,6 +227,8 @@ const RoutinesList = ({ routines }: RoutinesListProps): React.ReactElement => {
               key={routine.id}
               routine={routine}
               viewMode={viewMode}
+              onSetActive={handleSetActiveRoutine}
+              onToggleFavorite={handleFavoriteToggle}
             />
           ))}
         </div>

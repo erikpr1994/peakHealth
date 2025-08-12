@@ -10,6 +10,7 @@ import {
   Trophy,
   Zap,
   Dumbbell,
+  CheckCircle,
 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
@@ -21,15 +22,20 @@ import {
   getGoalColor,
   getIconColor,
 } from '@/features/routines/utils';
+import { routineService } from '../../../services/routineService';
 
 interface RoutineCardProps {
   routine: Routine;
   viewMode: 'grid' | 'list';
+  onSetActive?: (routineId: string) => void;
+  onToggleFavorite?: (routineId: string) => void;
 }
 
 const RoutineCard = ({
   routine,
   viewMode,
+  onSetActive,
+  onToggleFavorite,
 }: RoutineCardProps): React.ReactElement => {
   const router = useRouter();
 
@@ -45,10 +51,22 @@ const RoutineCard = ({
     router.push(`/workout-tracker/${routine.id}`);
   };
 
-  const toggleFavorite = (): void => {
-    // TODO: Implement favorite toggle
-    // eslint-disable-next-line no-console
-    console.log('Toggle favorite for routine:', routine.id);
+  const toggleFavorite = async (): Promise<void> => {
+    try {
+      if (onToggleFavorite) {
+        await onToggleFavorite(routine.id);
+      } else {
+        await routineService.toggleRoutineFavorite(routine.id);
+      }
+    } catch (error) {
+      console.error('Error toggling favorite:', error);
+    }
+  };
+
+  const handleSetActive = (): void => {
+    if (onSetActive) {
+      onSetActive(routine.id);
+    }
   };
 
   if (viewMode === 'list') {
@@ -116,6 +134,17 @@ const RoutineCard = ({
               <Eye className="w-4 h-4 mr-1" />
               View
             </Button>
+            {!routine.isActive && onSetActive && (
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handleSetActive}
+                className="border-green-500 text-green-600 hover:bg-green-50"
+              >
+                <CheckCircle className="w-4 h-4 mr-1" />
+                Set Active
+              </Button>
+            )}
             <Button variant="outline" size="sm" onClick={handleEdit}>
               <Edit className="w-4 h-4 mr-1" />
               Edit
@@ -185,7 +214,8 @@ const RoutineCard = ({
         <div className="flex items-center justify-between text-sm">
           <span className="text-gray-500">Progress</span>
           <span className="font-medium">
-            {routine.progress.current}/{routine.progress.total} weeks
+            {routine.progress?.current || 0}/{routine.progress?.total || 4}{' '}
+            weeks
           </span>
         </div>
       </div>
@@ -237,6 +267,17 @@ const RoutineCard = ({
       <div className="flex-grow"></div>
 
       <div className="flex space-x-2 mt-auto">
+        {!routine.isActive && onSetActive && (
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={handleSetActive}
+            className="flex-1 border-green-500 text-green-600 hover:bg-green-50"
+          >
+            <CheckCircle className="w-4 h-4 mr-1" />
+            Set Active
+          </Button>
+        )}
         <Button
           variant="outline"
           size="sm"

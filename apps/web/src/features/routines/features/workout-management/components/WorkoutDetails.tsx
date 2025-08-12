@@ -115,6 +115,27 @@ const WorkoutDetails = ({
           </div>
         )}
 
+        {schedule.repeatPattern === 'days' && (
+          <div>
+            <Label className="block mb-2">Starting day</Label>
+            <Select
+              value={schedule.selectedDays[0] || ''}
+              onValueChange={value => onUpdateSchedule('selectedDays', [value])}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Select starting day" />
+              </SelectTrigger>
+              <SelectContent>
+                {dayOptions.map(day => (
+                  <SelectItem key={day.value} value={day.value}>
+                    {day.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+        )}
+
         {/* Time */}
         <div>
           <Label className="block mb-2">Time</Label>
@@ -131,9 +152,14 @@ const WorkoutDetails = ({
       </div>
 
       {/* Day Selection - Full Width Below */}
-      {schedule.repeatPattern === 'weekdays' && (
+      {(schedule.repeatPattern === 'weekdays' ||
+        schedule.repeatPattern === 'weeks') && (
         <div className="mt-4">
-          <Label className="block mb-2">Select days of the week</Label>
+          <Label className="block mb-2">
+            {schedule.repeatPattern === 'weekdays'
+              ? 'Select days of the week'
+              : 'Select workout days'}
+          </Label>
           <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-3">
             {dayOptions.map(day => (
               <div key={day.value} className="flex items-center space-x-2">
