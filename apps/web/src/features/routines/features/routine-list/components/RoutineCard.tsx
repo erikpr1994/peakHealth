@@ -12,6 +12,7 @@ import {
   Dumbbell,
   CheckCircle,
 } from 'lucide-react';
+
 import { useRouter } from 'next/navigation';
 
 import { Button } from '@/components/ui/button';
@@ -97,7 +98,7 @@ const RoutineCard = ({
               <div className="flex items-center space-x-4 text-sm text-gray-500">
                 <span>{routine.daysPerWeek} days/week</span>
                 <span>•</span>
-                <span>{routine.estimatedDuration || '45-60 min'}</span>
+                <span>Avg. {routine.estimatedDuration || '45-60 min'}</span>
                 <span>•</span>
                 <span
                   className={`px-2 py-1 rounded text-xs ${getDifficultyColor(
@@ -206,18 +207,20 @@ const RoutineCard = ({
           <span className="font-medium">{routine.daysPerWeek} days/week</span>
         </div>
         <div className="flex items-center justify-between text-sm">
-          <span className="text-gray-500">Duration</span>
+          <span className="text-gray-500">Avg. Duration</span>
           <span className="font-medium">
             {routine.estimatedDuration || '45-60 min'}
           </span>
         </div>
-        <div className="flex items-center justify-between text-sm">
-          <span className="text-gray-500">Progress</span>
-          <span className="font-medium">
-            {routine.progress?.current || 0}/{routine.progress?.total || 4}{' '}
-            weeks
-          </span>
-        </div>
+        {routine.isActive && (
+          <div className="flex items-center justify-between text-sm">
+            <span className="text-gray-500">Progress</span>
+            <span className="font-medium">
+              {routine.progress?.current || 0}/{routine.progress?.total || 4}{' '}
+              weeks
+            </span>
+          </div>
+        )}
       </div>
 
       <div className="flex flex-wrap gap-2 mb-4">
@@ -255,7 +258,10 @@ const RoutineCard = ({
               );
             })}
             {routine.objectives.length > 2 && (
-              <div className="text-xs text-gray-500">
+              <div 
+                className="text-xs text-gray-500 cursor-help"
+                title={routine.objectives.slice(2).join(', ')}
+              >
                 +{routine.objectives.length - 2} more objectives
               </div>
             )}
