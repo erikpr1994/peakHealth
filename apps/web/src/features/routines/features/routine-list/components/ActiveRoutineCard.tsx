@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { Routine } from '@/features/routines/types';
-import { getIconColor } from '@/features/routines/utils';
+import { getIconColor, calculateDaysPerWeek } from '@/features/routines/utils';
 
 interface ActiveRoutineCardProps {
   routine: Routine;
@@ -113,8 +113,7 @@ const ActiveRoutineCard = ({
                   <span className="text-sm font-medium">Frequency</span>
                 </div>
                 <p className="text-2xl font-bold">
-                  {/* daysPerWeek is calculated dynamically from workout days */}
-                  {routine.workoutDays?.length || 3} days/week
+                  {calculateDaysPerWeek(routine)} days/week
                 </p>
               </div>
 

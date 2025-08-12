@@ -163,3 +163,21 @@ export const getSectionIcon = (
   };
   return icons[type as keyof typeof icons] || Dumbbell;
 };
+
+/**
+ * Calculates the number of days per week for a routine
+ * @param routine - The routine data
+ * @returns The number of days per week, with a fallback to 3 if no workout days are available
+ */
+export function calculateDaysPerWeek(routine: {
+  workoutDays?: unknown[];
+}): number {
+  // If workoutDays is available and has workouts, return the count
+  if (routine.workoutDays && routine.workoutDays.length > 0) {
+    return routine.workoutDays.length;
+  }
+
+  // Fallback to 3 days per week when no workout days are available
+  // This is a reasonable default for most routines
+  return 3;
+}

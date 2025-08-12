@@ -22,6 +22,7 @@ import {
   getDifficultyColor,
   getGoalColor,
   getIconColor,
+  calculateDaysPerWeek,
 } from '@/features/routines/utils';
 import { routineService } from '../../../services/routineService';
 
@@ -96,7 +97,7 @@ const RoutineCard = ({
                 {routine.description}
               </p>
               <div className="flex items-center space-x-4 text-sm text-gray-500">
-                <span>{routine.workoutDays?.length || 3} days/week</span>
+                <span>{calculateDaysPerWeek(routine)} days/week</span>
                 <span>•</span>
                 <span>Avg. {routine.estimatedDuration || '45-60 min'}</span>
                 <span>•</span>
@@ -205,7 +206,7 @@ const RoutineCard = ({
         <div className="flex items-center justify-between text-sm">
           <span className="text-gray-500">Frequency</span>
           <span className="font-medium">
-            {routine.workoutDays?.length || 3} days/week
+            {calculateDaysPerWeek(routine)} days/week
           </span>
         </div>
         <div className="flex items-center justify-between text-sm">
