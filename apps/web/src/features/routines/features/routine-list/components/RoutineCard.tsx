@@ -258,7 +258,7 @@ const RoutineCard = ({
               );
             })}
             {routine.objectives.length > 2 && (
-              <div 
+              <div
                 className="text-xs text-gray-500 cursor-help"
                 title={routine.objectives.slice(2).join(', ')}
               >

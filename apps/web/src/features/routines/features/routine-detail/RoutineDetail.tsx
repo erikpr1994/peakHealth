@@ -132,23 +132,24 @@ const RoutineDetail = ({
               estimatedTime: `${Math.max(30, Math.min(estimatedDuration, 90))} min`,
               difficulty: data.routine.difficulty,
               exercises:
-                workout.sections?.flatMap((section: DatabaseSection) =>
-                  section.exercises?.map((exercise: DatabaseExercise) => ({
-                    id: exercise.id,
-                    name: exercise.name,
-                    muscleGroups: exercise.muscle_groups || [],
-                    exerciseId: exercise.exerciseLibraryId || '', // Link to exercise library
-                    variantId: exercise.exerciseLibraryId || '', // For now, treat as variant ID
-                    sets:
-                      exercise.sets?.map((set: DatabaseSet) => ({
-                        reps: set.reps?.toString() || '',
-                        weight: set.weight?.toString() || '',
-                        duration: set.duration?.toString() || '',
-                        restTime: set.rest_time || '90s',
-                      })) || [],
-                    notes: exercise.notes || '',
-                  }))
-                )?.filter(Boolean) || [],
+                workout.sections?.flatMap(
+                  (section: DatabaseSection) =>
+                    section.exercises?.map((exercise: DatabaseExercise) => ({
+                      id: exercise.id,
+                      name: exercise.name,
+                      muscleGroups: exercise.muscle_groups || [],
+                      exerciseId: exercise.exerciseLibraryId || '', // Link to exercise library
+                      variantId: exercise.exerciseLibraryId || '', // For now, treat as variant ID
+                      sets:
+                        exercise.sets?.map((set: DatabaseSet) => ({
+                          reps: set.reps?.toString() || '',
+                          weight: set.weight?.toString() || '',
+                          duration: set.duration?.toString() || '',
+                          restTime: set.rest_time || '90s',
+                        })) || [],
+                      notes: exercise.notes || '',
+                    })) || []
+                ) || [],
             })) || [],
           createdDate: ((): string => {
             try {
@@ -312,9 +313,12 @@ const RoutineDetail = ({
             />
           ) : (
             <div className="bg-gray-50 border border-gray-200 rounded-lg p-6">
-              <h2 className="text-lg font-semibold text-gray-800 mb-2">Progress</h2>
+              <h2 className="text-lg font-semibold text-gray-800 mb-2">
+                Progress
+              </h2>
               <p className="text-gray-600">
-                This routine is not currently active. Progress tracking will be available once you activate the routine.
+                This routine is not currently active. Progress tracking will be
+                available once you activate the routine.
               </p>
             </div>
           )}

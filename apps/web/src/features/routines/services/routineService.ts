@@ -243,7 +243,7 @@ export class RoutineService {
       muscle_groups: string[];
       instructions: string[];
     }> = [];
-    if (exerciseLibraryIds.length > 0) {
+    if (exerciseLibraryIds.length > 0 && this.supabase) {
       const { data: variants, error: variantsError } = await this.supabase
         .from('exercise_variants')
         .select('*')
