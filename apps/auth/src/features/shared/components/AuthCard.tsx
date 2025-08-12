@@ -8,15 +8,19 @@ interface AuthCardProps {
   title: string;
   subtitle?: string;
   children: React.ReactNode;
+  variant?: 'default' | 'full-width';
 }
 
 export const AuthCard: React.FC<AuthCardProps> = ({
   title,
   subtitle,
   children,
+  variant = 'default',
 }): React.JSX.Element => {
   return (
-    <div className={styles.authCard}>
+    <div
+      className={`${styles.authCard} ${variant === 'full-width' ? styles.fullWidth : ''}`}
+    >
       <div className={styles.header}>
         <h1 className={styles.title}>{title}</h1>
         {subtitle && <p className={styles.subtitle}>{subtitle}</p>}

@@ -6,11 +6,21 @@
   width: 100%;
   max-width: 400px;
   border: 1px solid var(--border-color);
+  max-height: 100vh;
+  overflow-y: auto;
+}
+
+.authCard.fullWidth {
+  max-width: none;
+  padding: 3rem;
+  max-height: 100vh;
+  overflow-y: auto;
 }
 
 .header {
   text-align: center;
   margin-bottom: 2rem;
+  flex-shrink: 0;
 }
 
 .title {
