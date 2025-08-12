@@ -206,9 +206,21 @@ export const DynamicWeightInput = ({
           placeholder="Select band"
           value={value ? `Band ${value}` : ''}
           onChange={e => {
-            // Future: implement band selection logic
-            const bandLevel = e.target.value ? parseInt(e.target.value) : null;
-            onChange(bandLevel);
+            // Extract number from input (e.g., "Band 3" -> 3)
+            const inputValue = e.target.value;
+            if (!inputValue) {
+              onChange(null);
+              return;
+            }
+
+            // Remove "Band " prefix and parse the remaining number
+            const numberMatch = inputValue.replace(/^Band\s*/i, '');
+            const bandLevel = numberMatch ? parseInt(numberMatch, 10) : null;
+
+            // Only update if we got a valid number
+            if (bandLevel !== null && !isNaN(bandLevel)) {
+              onChange(bandLevel);
+            }
           }}
           className={`h-8 text-center cursor-help ${className}`}
           disabled={disabled}
