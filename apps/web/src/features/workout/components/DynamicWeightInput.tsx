@@ -152,7 +152,10 @@ export const DynamicWeightInput = ({
               value={value || ''}
               onChange={e => {
                 const newValue = e.target.value
-                  ? parseFloat(e.target.value)
+                  ? ((): number | null => {
+                      const parsed = parseFloat(e.target.value);
+                      return isNaN(parsed) ? null : parsed;
+                    })()
                   : null;
                 onChange(newValue);
               }}
@@ -237,7 +240,12 @@ export const DynamicWeightInput = ({
         placeholder={placeholder}
         value={value || ''}
         onChange={e => {
-          const newValue = e.target.value ? parseFloat(e.target.value) : null;
+          const newValue = e.target.value
+            ? ((): number | null => {
+                const parsed = parseFloat(e.target.value);
+                return isNaN(parsed) ? null : parsed;
+              })()
+            : null;
           onChange(newValue);
         }}
         className={`h-8 text-center cursor-help ${className}`}
