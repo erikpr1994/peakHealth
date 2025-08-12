@@ -581,6 +581,7 @@ export const useWorkoutOperations = ({
       name: exerciseData.name || 'New Exercise',
       category: exerciseData.category,
       muscleGroups: exerciseData.muscleGroups,
+      equipment: exerciseData.equipment || [], // Include equipment data
       sets: exerciseData.sets || [],
       restTimer: exerciseData.restTimer || '',
       restAfter: exerciseData.restAfter || '',
@@ -619,6 +620,7 @@ export const useWorkoutOperations = ({
       name: exerciseData.name || 'New Exercise',
       category: exerciseData.category,
       muscleGroups: exerciseData.muscleGroups,
+      equipment: exerciseData.equipment || [], // Include equipment data
       sets: exerciseData.sets || [],
       restTimer: exerciseData.restTimer || '',
       restAfter: exerciseData.restAfter || '',
