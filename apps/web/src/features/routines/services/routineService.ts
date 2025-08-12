@@ -1,7 +1,11 @@
 import { createClient } from '@/lib/supabase/client';
 
 import { Routine, StrengthWorkout, RunningWorkout } from '../types';
-import { DatabaseRoutineResponse, DatabaseRoutine } from '../types/database';
+import {
+  DatabaseRoutineResponse,
+  DatabaseRoutine,
+  DatabaseRoutineWithWorkouts,
+} from '../types/database';
 import { transformDatabaseRoutineToRoutine } from '../utils/dataTransformers';
 
 export interface CreateRoutineData {
@@ -10,8 +14,6 @@ export interface CreateRoutineData {
   difficulty: 'Beginner' | 'Intermediate' | 'Advanced';
   goal: 'Strength' | 'Hypertrophy' | 'Endurance' | 'Weight Loss';
   duration: number;
-  daysPerWeek: number;
-  schedule: boolean[];
   objectives: string[];
   strengthWorkouts: StrengthWorkout[];
   runningWorkouts: RunningWorkout[];
@@ -23,8 +25,6 @@ export interface UpdateRoutineData {
   difficulty?: 'Beginner' | 'Intermediate' | 'Advanced';
   goal?: 'Strength' | 'Hypertrophy' | 'Endurance' | 'Weight Loss';
   duration?: number;
-  daysPerWeek?: number;
-  schedule?: boolean[];
   objectives?: string[];
 }
 
@@ -55,7 +55,8 @@ export class RoutineService {
           name,
           type,
           objective,
-          order_index
+          order_index,
+          schedule
         )
       `
       )
@@ -67,9 +68,11 @@ export class RoutineService {
     }
 
     // Transform data to match frontend types using safe transformation
-    return (routines || []).map((routine: DatabaseRoutine): Routine => {
-      return transformDatabaseRoutineToRoutine(routine);
-    });
+    return (routines || []).map(
+      (routine: DatabaseRoutineWithWorkouts): Routine => {
+        return transformDatabaseRoutineToRoutine(routine);
+      }
+    );
   }
 
   async setActiveRoutine(routineId: string): Promise<void> {
@@ -183,15 +186,13 @@ export class RoutineService {
       description,
       difficulty,
       goal,
-      daysPerWeek,
-      schedule,
       objectives,
       strengthWorkouts,
       runningWorkouts,
     } = routineData;
 
     // Basic validation
-    if (!name || !difficulty || !goal || !daysPerWeek) {
+    if (!name || !difficulty || !goal) {
       throw new Error('Missing required fields');
     }
 
@@ -202,8 +203,6 @@ export class RoutineService {
       description,
       difficulty,
       goal,
-      daysPerWeek,
-      schedule: schedule || [false, false, false, false, false, false, false],
       objectives: objectives || [],
       isActive: false,
       isFavorite: false,
@@ -347,8 +346,8 @@ export class RoutineService {
       difficulty: routineData.difficulty,
       goal: routineData.goal,
       duration: routineData.duration,
-      days_per_week: routineData.daysPerWeek,
-      schedule: routineData.schedule,
+      // days_per_week is calculated dynamically from workout days
+      // Schedule is calculated dynamically, not stored
       objectives: routineData.objectives,
     });
 

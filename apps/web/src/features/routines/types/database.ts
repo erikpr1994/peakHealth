@@ -5,11 +5,11 @@ export interface DatabaseRoutine {
   description: string;
   difficulty: 'Beginner' | 'Intermediate' | 'Advanced';
   goal: 'Strength' | 'Hypertrophy' | 'Endurance' | 'Weight Loss';
-  days_per_week: number;
+  // days_per_week is calculated dynamically from workout days
   duration: number;
   is_active: boolean;
   is_favorite: boolean;
-  schedule: boolean[];
+  // Schedule is calculated dynamically from workout days
   objectives: string[];
   total_workouts: number;
   completed_workouts: number;
@@ -75,4 +75,20 @@ export interface DatabaseWorkout {
 export interface DatabaseRoutineResponse {
   routine: DatabaseRoutine;
   workouts: DatabaseWorkout[];
+}
+
+export interface DatabaseRoutineWithWorkouts extends DatabaseRoutine {
+  workouts?: Array<{
+    id: string;
+    name: string;
+    type: string;
+    objective: string | null;
+    order_index: number;
+    schedule?: {
+      repeatPattern?: string;
+      repeatValue?: string;
+      selectedDays?: string[];
+      time?: string;
+    };
+  }>;
 }

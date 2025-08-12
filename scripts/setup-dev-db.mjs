@@ -37,6 +37,9 @@ if (!supabaseUrl || !supabaseServiceKey) {
 
 const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
+/**
+ * Sets up the development database with users and sample data
+ */
 async function setupDevDatabase() {
   try {
     console.log('🚀 Setting up development database...');
@@ -402,9 +405,9 @@ async function setupDevDatabase() {
               'A comprehensive full-body workout targeting all major muscle groups with compound movements. Perfect for intermediate lifters looking to build strength and muscle mass.',
             difficulty: 'Intermediate',
             goal: 'Strength',
-            days_per_week: 3,
+            // days_per_week is calculated dynamically from workout days
             duration: 12,
-            schedule: [true, false, true, false, true, false, false], // M W F
+            // Schedule is calculated dynamically from workout days
             objectives: [
               'Build overall strength',
               'Improve compound movements',
@@ -567,9 +570,9 @@ async function setupDevDatabase() {
               'A structured 8-week training plan to prepare for your first 5K race. Includes progressive distance increases and speed work.',
             difficulty: 'Beginner',
             goal: 'Endurance',
-            days_per_week: 4,
+            // days_per_week is calculated dynamically from workout days
             duration: 8,
-            schedule: [true, false, true, false, true, false, true], // M T W T F S S
+            // Schedule is calculated dynamically from workout days
             objectives: [
               'Complete a 5K race',
               'Build running endurance',
@@ -630,9 +633,9 @@ async function setupDevDatabase() {
                 'A bodybuilding-style split routine focusing on muscle hypertrophy with higher rep ranges and isolation exercises.',
               difficulty: 'Advanced',
               goal: 'Hypertrophy',
-              days_per_week: 5,
+              // days_per_week is calculated dynamically from workout days
               duration: 16,
-              schedule: [true, true, false, true, true, true, false], // M T W T F S S
+              // Schedule is calculated dynamically from workout days
               objectives: [
                 'Maximize muscle growth',
                 'Improve muscle definition',

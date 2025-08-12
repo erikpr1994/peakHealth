@@ -4,7 +4,7 @@ import {
   DatabaseSection,
   DatabaseExercise,
   DatabaseSet,
-  DatabaseRoutine,
+  DatabaseRoutineWithWorkouts,
 } from '../types/database';
 import {
   RoutineData,
@@ -169,31 +169,7 @@ export function transformDatabaseRoutineToRoutineData(
     throw new Error(`Invalid goal: ${data.routine.goal}`);
   }
 
-  // Calculate weekly schedule from workout configs
-  const calculateWeeklySchedule = (workouts: DatabaseWorkout[]): boolean[] => {
-    const schedule = new Array(7).fill(false);
-
-    workouts?.forEach((workout: DatabaseWorkout) => {
-      if (workout.schedule?.selectedDays) {
-        workout.schedule.selectedDays.forEach((day: string) => {
-          const dayIndex = [
-            'monday',
-            'tuesday',
-            'wednesday',
-            'thursday',
-            'friday',
-            'saturday',
-            'sunday',
-          ].indexOf(day.toLowerCase());
-          if (dayIndex !== -1) {
-            schedule[dayIndex] = true;
-          }
-        });
-      }
-    });
-
-    return schedule;
-  };
+  // Schedule is calculated dynamically from workout days in the component
 
   // Calculate estimated duration
   const estimatedDuration =
@@ -241,6 +217,12 @@ export function transformDatabaseRoutineToRoutineData(
       name: workout.name,
       estimatedTime: `${Math.max(30, Math.min(estimatedDuration, 90))} min`,
       difficulty: data.routine.difficulty,
+      schedule: {
+        repeatPattern: workout.schedule?.repeatPattern || 'weekdays',
+        repeatValue: workout.schedule?.repeatValue || '',
+        selectedDays: workout.schedule?.selectedDays || [],
+        time: workout.schedule?.time || '09:00',
+      },
       exercises:
         workout.sections?.flatMap(
           (section: DatabaseSection) =>
@@ -287,7 +269,7 @@ export function transformDatabaseRoutineToRoutineData(
     name: data.routine.name,
     description: data.routine.description,
     duration: data.routine.duration || 12,
-    daysPerWeek: data.routine.days_per_week || 3,
+    // daysPerWeek is calculated dynamically from workout days
     difficulty: data.routine.difficulty,
     goal: data.routine.goal,
     isActive: data.routine.is_active,
@@ -303,7 +285,7 @@ export function transformDatabaseRoutineToRoutineData(
       completedWorkouts: data.routine.completed_workouts || 0,
       totalWorkouts: totalWorkoutsForDuration,
     },
-    schedule: calculateWeeklySchedule(data.workouts || []),
+    // Schedule is calculated dynamically from workout days
     workoutDays,
     createdDate: parseDate(data.routine.created_at),
     lastModified: parseDate(data.routine.updated_at),
@@ -311,7 +293,7 @@ export function transformDatabaseRoutineToRoutineData(
 }
 
 export function transformDatabaseRoutineToRoutine(
-  routine: DatabaseRoutine
+  routine: DatabaseRoutineWithWorkouts
 ): Routine {
   // Validate routine data
   if (!isValidDifficulty(routine.difficulty)) {
@@ -322,24 +304,38 @@ export function transformDatabaseRoutineToRoutine(
     throw new Error(`Invalid goal: ${routine.goal}`);
   }
 
+  // Create workoutDays from the workouts data for days per week calculation
+  const workoutDays =
+    routine.workouts?.map(
+      (workout: {
+        id: string;
+        name: string;
+        schedule?: { selectedDays?: string[] };
+      }) => ({
+        id: workout.id,
+        name: workout.name,
+        estimatedTime: '45-60 min',
+        difficulty: routine.difficulty,
+        schedule: {
+          repeatPattern: 'weekdays',
+          repeatValue: '',
+          selectedDays: workout.schedule?.selectedDays || [],
+          time: '09:00',
+        },
+        exercises: [],
+      })
+    ) || [];
+
   return {
     id: routine.id,
     name: routine.name || '',
     description: routine.description || '',
-    daysPerWeek: routine.days_per_week || 3,
+    // daysPerWeek is calculated dynamically from workout days
     difficulty: routine.difficulty,
     goal: routine.goal,
     isActive: routine.is_active ?? false,
     isFavorite: routine.is_favorite ?? false,
-    schedule: routine.schedule || [
-      false,
-      false,
-      false,
-      false,
-      false,
-      false,
-      false,
-    ],
+    // Schedule is calculated dynamically from workout days
     progress: {
       current: routine.completed_workouts ?? 0,
       total: routine.total_workouts ?? 0,
@@ -349,5 +345,6 @@ export function transformDatabaseRoutineToRoutine(
     totalWorkouts: routine.total_workouts ?? 0,
     completedWorkouts: routine.completed_workouts ?? 0,
     estimatedDuration: routine.estimated_duration || '45-60 min',
+    workoutDays,
   };
 }

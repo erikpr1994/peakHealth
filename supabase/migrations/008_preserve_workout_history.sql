@@ -9,11 +9,11 @@ CREATE TABLE deleted_routines (
   description TEXT,
   difficulty routine_difficulty,
   goal routine_goal,
-  days_per_week INTEGER,
+  -- days_per_week is calculated dynamically from workout days
   duration INTEGER,
   is_active BOOLEAN,
   is_favorite BOOLEAN,
-  schedule BOOLEAN[],
+  -- schedule is calculated dynamically from workout days, not stored
   objectives TEXT[],
   total_workouts INTEGER,
   completed_workouts INTEGER,
@@ -95,15 +95,15 @@ BEGIN
     BEGIN
         -- Archive the routine data before deletion
         INSERT INTO deleted_routines (
-            id, user_id, name, description, difficulty, goal, days_per_week,
-            duration, is_active, is_favorite, schedule, objectives,
+            id, user_id, name, description, difficulty, goal,
+            duration, is_active, is_favorite, objectives,
             total_workouts, completed_workouts, estimated_duration,
             created_at, updated_at, last_used
         ) VALUES (
             routine_data.id, routine_data.user_id, routine_data.name, routine_data.description,
-            routine_data.difficulty, routine_data.goal, routine_data.days_per_week,
+            routine_data.difficulty, routine_data.goal,
             routine_data.duration, routine_data.is_active, routine_data.is_favorite,
-            routine_data.schedule, routine_data.objectives, routine_data.total_workouts,
+            routine_data.objectives, routine_data.total_workouts,
             routine_data.completed_workouts, routine_data.estimated_duration,
             routine_data.created_at, routine_data.updated_at, routine_data.last_used
         );

@@ -8,7 +8,7 @@ import RoutineProgress from './components/RoutineProgress';
 import WeeklySchedule from './components/WeeklySchedule';
 import RoutineInfo from './components/RoutineInfo';
 import WorkoutDaysList from './components/WorkoutDaysList';
-import { RoutineData } from '@/features/routines/types';
+import { RoutineData, WorkoutDay } from '@/features/routines/types';
 import { routineService } from '../../services/routineService';
 import { transformDatabaseRoutineToRoutineData } from '../../utils/dataTransformers';
 
@@ -19,6 +19,33 @@ interface RoutineDetailProps {
 const RoutineDetail = ({
   routineId,
 }: RoutineDetailProps): React.ReactElement => {
+  // Calculate weekly schedule from workout days
+  const calculateWeeklySchedule = (workoutDays: WorkoutDay[]): boolean[] => {
+    const schedule = new Array(7).fill(false);
+    const dayMap = {
+      monday: 0,
+      tuesday: 1,
+      wednesday: 2,
+      thursday: 3,
+      friday: 4,
+      saturday: 5,
+      sunday: 6,
+    };
+
+    // Use the actual selected days from each workout's schedule
+    workoutDays.forEach(workoutDay => {
+      if (workoutDay.schedule?.selectedDays) {
+        workoutDay.schedule.selectedDays.forEach(day => {
+          const dayIndex = dayMap[day.toLowerCase() as keyof typeof dayMap];
+          if (dayIndex !== undefined) {
+            schedule[dayIndex] = true;
+          }
+        });
+      }
+    });
+
+    return schedule;
+  };
   const router = useRouter();
   const [routineData, setRoutineData] = useState<RoutineData | null>(null);
   const [loading, setLoading] = useState(true);
@@ -125,7 +152,10 @@ const RoutineDetail = ({
 
       <RoutineOverviewCards
         duration={routineData.duration}
-        daysPerWeek={routineData.daysPerWeek}
+        daysPerWeek={
+          calculateWeeklySchedule(routineData.workoutDays).filter(day => day)
+            .length
+        }
         goal={routineData.goal}
         difficulty={routineData.difficulty}
       />
@@ -152,7 +182,9 @@ const RoutineDetail = ({
             </div>
           )}
 
-          <WeeklySchedule schedule={routineData.schedule} />
+          <WeeklySchedule
+            schedule={calculateWeeklySchedule(routineData.workoutDays)}
+          />
         </div>
 
         {/* Routine Info */}

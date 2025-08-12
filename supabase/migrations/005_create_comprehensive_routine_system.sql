@@ -5,7 +5,6 @@
 DROP TABLE IF EXISTS routine_exercises CASCADE;
 DROP TABLE IF EXISTS workout_routines CASCADE;
 
--- Create enums for routine system
 CREATE TYPE routine_difficulty AS ENUM ('Beginner', 'Intermediate', 'Advanced');
 CREATE TYPE routine_goal AS ENUM ('Strength', 'Hypertrophy', 'Endurance', 'Weight Loss');
 CREATE TYPE workout_type AS ENUM ('strength', 'running', 'trail-running', 'swimming', 'cycling');
@@ -15,7 +14,6 @@ CREATE TYPE trail_running_difficulty AS ENUM ('beginner', 'intermediate', 'advan
 CREATE TYPE interval_type AS ENUM ('Run', 'Uphill', 'Downhill', 'Sprint', 'Recovery', 'Rest', 'Walk');
 CREATE TYPE intensity_target_type AS ENUM ('Heart Rate', 'Speed', 'Power', 'Cadence', 'RPE');
 
--- Main routines table
 CREATE TABLE routines (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
@@ -23,11 +21,9 @@ CREATE TABLE routines (
   description TEXT,
   difficulty routine_difficulty NOT NULL DEFAULT 'Beginner',
   goal routine_goal NOT NULL,
-  days_per_week INTEGER NOT NULL CHECK (days_per_week BETWEEN 1 AND 7),
-  duration INTEGER NOT NULL DEFAULT 12 CHECK (duration BETWEEN 1 AND 52), -- Duration in weeks (default 12 weeks = 3 months)
+  duration INTEGER NOT NULL DEFAULT 12 CHECK (duration BETWEEN 1 AND 52),
   is_active BOOLEAN DEFAULT false,
   is_favorite BOOLEAN DEFAULT false,
-  schedule BOOLEAN[] DEFAULT ARRAY[false, false, false, false, false, false, false], -- [Mon, Tue, Wed, Thu, Fri, Sat, Sun]
   objectives TEXT[],
   total_workouts INTEGER DEFAULT 0,
   completed_workouts INTEGER DEFAULT 0,
@@ -37,83 +33,77 @@ CREATE TABLE routines (
   last_used TIMESTAMP WITH TIME ZONE
 );
 
--- Workouts table (strength, running, trail-running, etc.)
 CREATE TABLE workouts (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   routine_id UUID NOT NULL REFERENCES routines(id) ON DELETE CASCADE,
   name VARCHAR(255) NOT NULL,
   type workout_type NOT NULL,
   objective TEXT,
-  schedule JSONB, -- Store complex schedule data as JSON
+  schedule JSONB,
   order_index INTEGER NOT NULL,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
--- Workout sections table
 CREATE TABLE workout_sections (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   workout_id UUID NOT NULL REFERENCES workouts(id) ON DELETE CASCADE,
   name VARCHAR(255) NOT NULL,
   type section_type NOT NULL,
   order_index INTEGER NOT NULL,
-  rest_after VARCHAR(50), -- e.g., "2 min"
-  emom_duration INTEGER, -- duration in minutes for EMOM sections
+  rest_after VARCHAR(50),
+  emom_duration INTEGER,
   notes TEXT,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
--- Routine exercises table (within sections)
 CREATE TABLE routine_exercises (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   section_id UUID NOT NULL REFERENCES workout_sections(id) ON DELETE CASCADE,
   name VARCHAR(255) NOT NULL,
   category VARCHAR(100),
   muscle_groups TEXT[],
-  exercise_library_id UUID REFERENCES exercise_variants(id), -- Link to exercise library
+  exercise_library_id UUID REFERENCES exercise_variants(id),
   order_index INTEGER NOT NULL,
-  rest_timer VARCHAR(50), -- e.g., "90s"
-  rest_after VARCHAR(50), -- e.g., "2 min"
+  rest_timer VARCHAR(50),
+  rest_after VARCHAR(50),
   notes TEXT,
   progression_method progression_method,
   has_approach_sets BOOLEAN DEFAULT false,
-  emom_reps INTEGER, -- target reps per minute for EMOM
+  emom_reps INTEGER,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
--- Exercise sets table
 CREATE TABLE exercise_sets (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   exercise_id UUID NOT NULL REFERENCES routine_exercises(id) ON DELETE CASCADE,
   set_number INTEGER NOT NULL,
-  reps VARCHAR(50), -- e.g., "8-12", "AMRAP"
-  weight VARCHAR(50), -- e.g., "155 lbs", "Bodyweight"
-  duration VARCHAR(50), -- e.g., "30s", "1 min"
-  rest_time VARCHAR(50), -- e.g., "90s"
+  reps VARCHAR(50),
+  weight VARCHAR(50),
+  duration VARCHAR(50),
+  rest_time VARCHAR(50),
   notes TEXT,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
--- Trail running specific data table
 CREATE TABLE trail_running_data (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   workout_id UUID NOT NULL REFERENCES workouts(id) ON DELETE CASCADE,
   name VARCHAR(255) NOT NULL,
   description TEXT,
   difficulty trail_running_difficulty NOT NULL DEFAULT 'beginner',
-  estimated_duration INTEGER, -- in minutes
-  target_distance DECIMAL(8,2), -- in kilometers
-  elevation_gain INTEGER, -- in meters
+  estimated_duration INTEGER,
+  target_distance DECIMAL(8,2),
+  elevation_gain INTEGER,
   intensity_target_type intensity_target_type,
   intensity_target_value VARCHAR(100),
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
--- Trail running intervals table
 CREATE TABLE trail_running_intervals (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   section_id UUID NOT NULL REFERENCES workout_sections(id) ON DELETE CASCADE,
@@ -128,7 +118,6 @@ CREATE TABLE trail_running_intervals (
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
--- Create indexes for performance
 CREATE INDEX idx_routines_user_id ON routines(user_id);
 CREATE INDEX idx_routines_is_active ON routines(is_active);
 CREATE INDEX idx_routines_is_favorite ON routines(is_favorite);
@@ -144,7 +133,6 @@ CREATE INDEX idx_trail_running_data_workout_id ON trail_running_data(workout_id)
 CREATE INDEX idx_trail_running_intervals_section_id ON trail_running_intervals(section_id);
 CREATE INDEX idx_trail_running_intervals_order_index ON trail_running_intervals(order_index);
 
--- Enable Row Level Security
 ALTER TABLE routines ENABLE ROW LEVEL SECURITY;
 ALTER TABLE workouts ENABLE ROW LEVEL SECURITY;
 ALTER TABLE workout_sections ENABLE ROW LEVEL SECURITY;
@@ -153,7 +141,6 @@ ALTER TABLE exercise_sets ENABLE ROW LEVEL SECURITY;
 ALTER TABLE trail_running_data ENABLE ROW LEVEL SECURITY;
 ALTER TABLE trail_running_intervals ENABLE ROW LEVEL SECURITY;
 
--- RLS Policies for routines
 CREATE POLICY "Users can view their own routines" ON routines
   FOR SELECT USING (auth.uid() = user_id);
 
@@ -166,7 +153,6 @@ CREATE POLICY "Users can update their own routines" ON routines
 CREATE POLICY "Users can delete their own routines" ON routines
   FOR DELETE USING (auth.uid() = user_id);
 
--- RLS Policies for workouts
 CREATE POLICY "Users can view workouts in their own routines" ON workouts
   FOR SELECT USING (
     EXISTS (
@@ -203,7 +189,6 @@ CREATE POLICY "Users can delete workouts in their own routines" ON workouts
     )
   );
 
--- RLS Policies for workout_sections
 CREATE POLICY "Users can view sections in their own workouts" ON workout_sections
   FOR SELECT USING (
     EXISTS (
@@ -244,7 +229,6 @@ CREATE POLICY "Users can delete sections in their own workouts" ON workout_secti
     )
   );
 
--- RLS Policies for routine_exercises
 CREATE POLICY "Users can view exercises in their own sections" ON routine_exercises
   FOR SELECT USING (
     EXISTS (
@@ -289,7 +273,6 @@ CREATE POLICY "Users can delete exercises in their own sections" ON routine_exer
     )
   );
 
--- RLS Policies for exercise_sets
 CREATE POLICY "Users can view sets in their own exercises" ON exercise_sets
   FOR SELECT USING (
     EXISTS (
@@ -338,7 +321,6 @@ CREATE POLICY "Users can delete sets in their own exercises" ON exercise_sets
     )
   );
 
--- RLS Policies for trail_running_data
 CREATE POLICY "Users can view trail running data in their own workouts" ON trail_running_data
   FOR SELECT USING (
     EXISTS (
@@ -379,7 +361,6 @@ CREATE POLICY "Users can delete trail running data in their own workouts" ON tra
     )
   );
 
--- RLS Policies for trail_running_intervals
 CREATE POLICY "Users can view intervals in their own sections" ON trail_running_intervals
   FOR SELECT USING (
     EXISTS (
@@ -424,9 +405,7 @@ CREATE POLICY "Users can delete intervals in their own sections" ON trail_runnin
     )
   );
 
--- Create functions for common operations
 
--- Function to get a complete routine with all related data
 CREATE OR REPLACE FUNCTION get_complete_routine(routine_id_param UUID)
 RETURNS JSON AS $$
 DECLARE
@@ -439,11 +418,9 @@ BEGIN
       'description', r.description,
       'difficulty', r.difficulty,
       'goal', r.goal,
-      'daysPerWeek', r.days_per_week,
       'duration', r.duration,
       'isActive', r.is_active,
       'isFavorite', r.is_favorite,
-      'schedule', r.schedule,
       'objectives', r.objectives,
       'totalWorkouts', r.total_workouts,
       'completedWorkouts', r.completed_workouts,
@@ -516,7 +493,6 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
 
--- Function to create a new routine with workouts
 CREATE OR REPLACE FUNCTION create_routine_with_workouts(
   routine_data JSON,
   workouts_data JSON
@@ -531,8 +507,8 @@ DECLARE
 BEGIN
   -- Insert routine
   INSERT INTO routines (
-    user_id, name, description, difficulty, goal, duration, days_per_week,
-    is_active, is_favorite, schedule, objectives, estimated_duration
+    user_id, name, description, difficulty, goal, duration,
+    is_active, is_favorite, objectives, estimated_duration
   ) VALUES (
     (routine_data->>'userId')::UUID,
     routine_data->>'name',
@@ -540,11 +516,16 @@ BEGIN
     (routine_data->>'difficulty')::routine_difficulty,
     (routine_data->>'goal')::routine_goal,
     COALESCE((routine_data->>'duration')::INTEGER, 12),
-    (routine_data->>'daysPerWeek')::INTEGER,
     COALESCE((routine_data->>'isActive')::BOOLEAN, false),
     COALESCE((routine_data->>'isFavorite')::BOOLEAN, false),
-    COALESCE((routine_data->>'schedule')::BOOLEAN[], ARRAY[false, false, false, false, false, false, false]),
-    COALESCE((routine_data->>'objectives')::TEXT[], ARRAY[]::TEXT[]),
+    COALESCE(
+      CASE 
+        WHEN routine_data->>'objectives' IS NOT NULL 
+        THEN (routine_data->'objectives')::TEXT[]
+        ELSE ARRAY[]::TEXT[]
+      END,
+      ARRAY[]::TEXT[]
+    ),
     routine_data->>'estimatedDuration'
   ) RETURNING id INTO new_routine_id;
 
@@ -567,7 +548,6 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
 
--- Function to update routine metadata
 CREATE OR REPLACE FUNCTION update_routine(
   routine_id_param UUID,
   name TEXT,
@@ -575,8 +555,6 @@ CREATE OR REPLACE FUNCTION update_routine(
   difficulty routine_difficulty,
   goal routine_goal,
   duration INTEGER,
-  days_per_week INTEGER,
-  schedule BOOLEAN[],
   objectives TEXT[]
 )
 RETURNS VOID AS $$
@@ -588,15 +566,12 @@ BEGIN
     difficulty = update_routine.difficulty,
     goal = update_routine.goal,
     duration = update_routine.duration,
-    days_per_week = update_routine.days_per_week,
-    schedule = update_routine.schedule,
     objectives = update_routine.objectives,
     updated_at = NOW()
   WHERE id = routine_id_param;
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
 
--- Function to update routine progress
 CREATE OR REPLACE FUNCTION update_routine_progress(
   routine_id_param UUID,
   completed_workouts_increment INTEGER DEFAULT 1
@@ -612,7 +587,6 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
 
--- Create triggers for updated_at timestamps
 CREATE OR REPLACE FUNCTION update_updated_at_column()
 RETURNS TRIGGER AS $$
 BEGIN
