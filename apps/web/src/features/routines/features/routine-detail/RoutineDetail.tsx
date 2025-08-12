@@ -137,8 +137,8 @@ const RoutineDetail = ({
                     id: exercise.id,
                     name: exercise.name,
                     muscleGroups: exercise.muscle_groups || [],
-                    exerciseId: exercise.exerciseLibraryId, // Link to exercise library
-                    variantId: exercise.exerciseLibraryId, // For now, treat as variant ID
+                    exerciseId: exercise.exerciseLibraryId || '', // Link to exercise library
+                    variantId: exercise.exerciseLibraryId || '', // For now, treat as variant ID
                     sets:
                       exercise.sets?.map((set: DatabaseSet) => ({
                         reps: set.reps?.toString() || '',
@@ -148,7 +148,7 @@ const RoutineDetail = ({
                       })) || [],
                     notes: exercise.notes || '',
                   }))
-                ) || [],
+                )?.filter(Boolean) || [],
             })) || [],
           createdDate: ((): string => {
             try {
@@ -303,12 +303,21 @@ const RoutineDetail = ({
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
         {/* Progress & Schedule */}
         <div className="lg:col-span-2 space-y-6">
-          <RoutineProgress
-            currentWeek={routineData.progress.currentWeek}
-            totalWeeks={routineData.progress.totalWeeks}
-            completedWorkouts={routineData.progress.completedWorkouts}
-            totalWorkouts={routineData.progress.totalWorkouts}
-          />
+          {routineData.isActive ? (
+            <RoutineProgress
+              currentWeek={routineData.progress.currentWeek}
+              totalWeeks={routineData.progress.totalWeeks}
+              completedWorkouts={routineData.progress.completedWorkouts}
+              totalWorkouts={routineData.progress.totalWorkouts}
+            />
+          ) : (
+            <div className="bg-gray-50 border border-gray-200 rounded-lg p-6">
+              <h2 className="text-lg font-semibold text-gray-800 mb-2">Progress</h2>
+              <p className="text-gray-600">
+                This routine is not currently active. Progress tracking will be available once you activate the routine.
+              </p>
+            </div>
+          )}
 
           <WeeklySchedule schedule={routineData.schedule} />
         </div>
