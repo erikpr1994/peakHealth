@@ -144,15 +144,19 @@ const SetManagement = ({
   );
 
   // Determine if Add Approach Sets button should be disabled
+  // Allow weight of 0 for bodyweight exercises, only disable if weight is null/undefined
   const isAddApproachSetsDisabled =
-    sets.length === 0 || !sets[0]?.weight || hasApproachSets;
+    sets.length === 0 ||
+    sets[0]?.weight === null ||
+    sets[0]?.weight === undefined ||
+    hasApproachSets;
 
   // Get hover explanation for Add Approach Sets button
   const getAddApproachSetsHoverText = (): string => {
     if (sets.length === 0) {
       return 'Add at least one set before adding approach sets';
     }
-    if (!sets[0]?.weight) {
+    if (sets[0]?.weight === null || sets[0]?.weight === undefined) {
       return 'First set must have a weight before adding approach sets';
     }
     if (hasApproachSets) {
