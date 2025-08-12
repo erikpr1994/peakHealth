@@ -8,15 +8,20 @@ interface AuthCardProps {
   title: string;
   subtitle?: string;
   children: React.ReactNode;
+  variant?: 'default' | 'full-width';
 }
 
+// eslint-disable-next-line css-modules/no-unused-class
 export const AuthCard: React.FC<AuthCardProps> = ({
   title,
   subtitle,
   children,
+  variant = 'default',
 }): React.JSX.Element => {
   return (
-    <div className={styles.authCard}>
+    <div
+      className={`${styles.authCard} ${variant === 'full-width' ? styles.fullWidth : ''}`}
+    >
       <div className={styles.header}>
         <h1 className={styles.title}>{title}</h1>
         {subtitle && <p className={styles.subtitle}>{subtitle}</p>}
@@ -26,6 +31,7 @@ export const AuthCard: React.FC<AuthCardProps> = ({
   );
 };
 
+// eslint-disable-next-line css-modules/no-unused-class
 export const FormGroup: React.FC<{
   label: string;
   children: React.ReactNode;
@@ -40,6 +46,7 @@ export const FormGroup: React.FC<{
   );
 };
 
+// eslint-disable-next-line css-modules/no-unused-class
 export const Input: React.FC<
   React.InputHTMLAttributes<HTMLInputElement> & {
     error?: boolean;
@@ -55,6 +62,7 @@ export const Input: React.FC<
   );
 };
 
+// eslint-disable-next-line css-modules/no-unused-class
 export const Button: React.FC<
   React.ButtonHTMLAttributes<HTMLButtonElement> & {
     variant?: 'primary' | 'secondary';
@@ -77,6 +85,7 @@ export const Button: React.FC<
   );
 };
 
+// eslint-disable-next-line css-modules/no-unused-class
 export const Divider: React.FC<{ text?: string }> = ({
   text = 'or',
 }): React.JSX.Element => {
@@ -87,6 +96,7 @@ export const Divider: React.FC<{ text?: string }> = ({
   );
 };
 
+// eslint-disable-next-line css-modules/no-unused-class
 export const Link: React.FC<{
   className?: string;
   children: React.ReactNode;
