@@ -1,21 +1,38 @@
 // Deep import to avoid bundling browser client in Edge runtime
 import { NextResponse, type NextRequest } from 'next/server';
 
-export async function middleware(request: NextRequest) {
+export async function middleware(request: NextRequest): Promise<NextResponse> {
   const response = NextResponse.next({
     request: { headers: request.headers },
   });
 
   // Lightweight auth check in Edge without importing Supabase SDK
   const cookies = request.cookies.getAll();
+
   // Supabase chunked cookie names look like: sb-<projectRef>-auth-token.0 / .1
   const hasSupabaseAuthToken = cookies.some(c =>
     /^sb-[^-]+-auth-token(\.\d+)?$/.test(c.name)
   );
-  const hasCrossDomainAuthToken = Boolean(
+  const _hasCrossDomainAuthToken = Boolean(
     request.cookies.get('auth-token')?.value
   );
-  const isAuthenticated = hasSupabaseAuthToken || hasCrossDomainAuthToken;
+
+  // For now, let's be more strict and require Supabase auth token
+  // The cross-domain auth token might not be properly validated
+  const isAuthenticated = hasSupabaseAuthToken;
+
+  // Handle root route logic
+  if (request.nextUrl.pathname === '/') {
+    if (isAuthenticated) {
+      // If authenticated, redirect to dashboard
+      return NextResponse.redirect(new URL('/dashboard', request.url));
+    } else {
+      // If not authenticated, redirect to landing app
+      const landingUrl =
+        process.env.NEXT_PUBLIC_WEB_APP_URL || 'http://localhost:3024';
+      return NextResponse.redirect(new URL(landingUrl));
+    }
+  }
 
   // Define protected routes that require authentication
   const protectedRoutes = [
@@ -49,7 +66,7 @@ export async function middleware(request: NextRequest) {
   // Redirect unauthenticated users to external landing for protected routes
   if (isProtectedRoute && !isAuthenticated) {
     const landing =
-      process.env.NEXT_PUBLIC_LANDING_URL || 'http://localhost:3004';
+      process.env.NEXT_PUBLIC_WEB_APP_URL || 'http://localhost:3024';
     return NextResponse.redirect(new URL(landing));
   }
 

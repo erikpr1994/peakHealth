@@ -31,9 +31,30 @@ interface UserMenuProps {
   supportMenuItems: MenuItem[];
 }
 
-const getInitials = (email: string | undefined) => {
+const getInitials = (email: string | undefined): string => {
   if (!email) return '';
   return email.substring(0, 2).toUpperCase();
+};
+
+const getUserDisplayName = (user: User | null): string => {
+  if (!user) return '';
+
+  // Try different possible name fields
+  const name =
+    user.user_metadata?.name ||
+    user.user_metadata?.display_name ||
+    user.user_metadata?.full_name ||
+    user.email ||
+    'User';
+
+  return name;
+};
+
+const getUserEmail = (user: User | null): string => {
+  if (!user) return '';
+
+  // Try user_metadata.email first, then fallback to user.email
+  return user.user_metadata?.email || user.email || '';
 };
 
 export const UserMenu = ({
@@ -42,11 +63,11 @@ export const UserMenu = ({
   userMenuItems,
   settingsMenuItems,
   supportMenuItems,
-}: UserMenuProps) => {
+}: UserMenuProps): React.ReactElement => {
   const router = useRouter();
   const [userDropdownOpen, setUserDropdownOpen] = useState(false);
 
-  const handleNavigate = (path: string) => {
+  const handleNavigate = (path: string): void => {
     router.push(path);
     setUserDropdownOpen(false);
   };
@@ -63,22 +84,19 @@ export const UserMenu = ({
         >
           <Avatar className="w-8 h-8">
             <AvatarImage
-              src={user?.user_metadata.avatar_url}
-              alt={user?.email ?? ''}
+              src={user?.user_metadata?.avatar_url}
+              alt={getUserEmail(user)}
             />
             <AvatarFallback className="text-xs">
-              {getInitials(user?.email)}
+              {getInitials(getUserEmail(user))}
             </AvatarFallback>
           </Avatar>
           <div className="hidden sm:flex flex-col text-left">
             <span className="text-sm font-medium text-gray-700 truncate max-w-[150px]">
-              {user?.user_metadata.name ??
-                user?.user_metadata.display_name ??
-                user?.user_metadata.full_name ??
-                user?.email}
+              {getUserDisplayName(user)}
             </span>
             <span className="text-xs text-gray-500 truncate max-w-[150px]">
-              {user?.user_metadata.email}
+              {getUserEmail(user)}
             </span>
           </div>
           <ChevronDown className="w-4 h-4 text-gray-500" />

@@ -1,4 +1,5 @@
 import type { NextConfig } from 'next';
+import { withMicrofrontends } from '@vercel/microfrontends/next/config';
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
@@ -16,4 +17,4 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default nextConfig;
+export default withMicrofrontends(nextConfig);

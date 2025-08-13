@@ -13,7 +13,7 @@ function isValidRedirectUrl(url: string): boolean {
     }
 
     const allowedDomains = [
-      'localhost:3001', // web app
+      'localhost:3024', // microfrontends proxy (web app)
       'localhost:3002', // admin app
       'localhost:3003', // pro app
       'peakhealth.es',
