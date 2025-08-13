@@ -23,16 +23,14 @@ export const Footer = (): React.JSX.Element => {
             <h3 className={styles.sectionTitle}>Product</h3>
             <div className={styles.links}>
               <Link href="/features">Features</Link>
-              <Link href="/pricing">Pricing</Link>
-              <Link href="/workouts">Workouts</Link>
-              <Link href="/nutrition">Nutrition</Link>
+              <Link href="/roadmap">Roadmap</Link>
+              <Link href="/feedback">Feedback</Link>
             </div>
           </div>
 
           <div className={styles.section}>
             <h3 className={styles.sectionTitle}>Company</h3>
             <div className={styles.links}>
-              <Link href="/about">About</Link>
               <Link href="/blog">Blog</Link>
               <Link href="/careers">Careers</Link>
               <Link href="/contact">Contact</Link>
@@ -43,8 +41,6 @@ export const Footer = (): React.JSX.Element => {
             <h3 className={styles.sectionTitle}>Support</h3>
             <div className={styles.links}>
               <Link href="/help">Help Center</Link>
-              <Link href="/docs">Documentation</Link>
-              <Link href="/status">Status</Link>
               <Link href="/feedback">Feedback</Link>
             </div>
           </div>
