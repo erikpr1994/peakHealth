@@ -31,12 +31,10 @@ export const HeroSection = (): React.JSX.Element => {
           </p>
 
           <div className={styles.actions}>
-            <Button asChild variant="primary" size="lg">
-              <Link href={getSignupUrl()}>
-                Start Your Journey
-                <ArrowRight />
-              </Link>
-            </Button>
+            <Link href={getSignupUrl()} className={styles.primaryButton}>
+              Start Your Journey
+              <ArrowRight />
+            </Link>
 
             <Button variant="outline" size="lg">
               <Play />

@@ -1,10 +1,7 @@
-import Link from 'next/link';
 import React from 'react';
-
-import styles from './Footer.module.css';
-
+import Link from 'next/link';
 import { getSignupUrl } from '@/lib/auth';
-import { Button } from '@peakhealth/ui';
+import styles from './Footer.module.css';
 
 export const Footer = (): React.JSX.Element => {
   return (
@@ -12,75 +9,55 @@ export const Footer = (): React.JSX.Element => {
       <div className={styles.container}>
         <div className={styles.content}>
           <div className={styles.section}>
-            <h3 className={styles.title}>Peak Health</h3>
+            <div className={styles.title}>PeakHealth</div>
             <p className={styles.description}>
-              Your ultimate fitness companion for tracking workouts, monitoring
-              progress, and achieving your fitness goals.
+              Transform your fitness journey with personalized workouts, expert
+              guidance, and a supportive community.
             </p>
-            <Button asChild variant="primary" size="sm">
-              <Link href={getSignupUrl()}>Get Started</Link>
-            </Button>
+            <Link href={getSignupUrl()} className={styles.ctaButton}>
+              Get Started
+            </Link>
           </div>
 
           <div className={styles.section}>
-            <h4 className={styles.sectionTitle}>Product</h4>
-            <ul className={styles.links}>
-              <li>
-                <Link href="/features">Features</Link>
-              </li>
-              <li>
-                <Link href="/pricing">Pricing</Link>
-              </li>
-              <li>
-                <Link href="/blog">Blog</Link>
-              </li>
-              <li>
-                <Link href="/about">About</Link>
-              </li>
-            </ul>
+            <h3 className={styles.sectionTitle}>Product</h3>
+            <div className={styles.links}>
+              <Link href="/features">Features</Link>
+              <Link href="/pricing">Pricing</Link>
+              <Link href="/workouts">Workouts</Link>
+              <Link href="/nutrition">Nutrition</Link>
+            </div>
           </div>
 
           <div className={styles.section}>
-            <h4 className={styles.sectionTitle}>Support</h4>
-            <ul className={styles.links}>
-              <li>
-                <Link href="/help">Help Center</Link>
-              </li>
-              <li>
-                <Link href="/contact">Contact</Link>
-              </li>
-              <li>
-                <Link href="/privacy">Privacy</Link>
-              </li>
-              <li>
-                <Link href="/terms">Terms</Link>
-              </li>
-            </ul>
+            <h3 className={styles.sectionTitle}>Company</h3>
+            <div className={styles.links}>
+              <Link href="/about">About</Link>
+              <Link href="/blog">Blog</Link>
+              <Link href="/careers">Careers</Link>
+              <Link href="/contact">Contact</Link>
+            </div>
           </div>
 
           <div className={styles.section}>
-            <h4 className={styles.sectionTitle}>Connect</h4>
-            <ul className={styles.links}>
-              <li>
-                <Link href="/twitter">Twitter</Link>
-              </li>
-              <li>
-                <Link href="/facebook">Facebook</Link>
-              </li>
-              <li>
-                <Link href="/instagram">Instagram</Link>
-              </li>
-              <li>
-                <Link href="/linkedin">LinkedIn</Link>
-              </li>
-            </ul>
+            <h3 className={styles.sectionTitle}>Support</h3>
+            <div className={styles.links}>
+              <Link href="/help">Help Center</Link>
+              <Link href="/docs">Documentation</Link>
+              <Link href="/status">Status</Link>
+              <Link href="/feedback">Feedback</Link>
+            </div>
           </div>
         </div>
 
         <div className={styles.bottom}>
-          <p className={styles.copyright}>
-            © 2024 Peak Health. All rights reserved.
-          </p>
+          <div className={styles.copyright}>
+            © 2024 PeakHealth. All rights reserved.
+          </div>
+          <div className={styles.legal}>
+            <Link href="/privacy">Privacy Policy</Link>
+            <Link href="/terms">Terms of Service</Link>
+          </div>
         </div>
       </div>
     </footer>

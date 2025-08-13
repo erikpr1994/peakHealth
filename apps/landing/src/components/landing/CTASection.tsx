@@ -1,11 +1,8 @@
-import { ArrowRight } from 'lucide-react';
-import Link from 'next/link';
 import React from 'react';
-
-import styles from './CTASection.module.css';
-
+import Link from 'next/link';
+import { ArrowRight } from 'lucide-react';
 import { getSignupUrl } from '@/lib/auth';
-import { Button } from '@peakhealth/ui';
+import styles from './CTASection.module.css';
 
 export const CTASection = (): React.JSX.Element => {
   return (
@@ -13,22 +10,19 @@ export const CTASection = (): React.JSX.Element => {
       <div className={styles.container}>
         <div className={styles.content}>
           <h2 className={styles.title}>
-            Ready to transform your fitness journey?
+            Ready to Transform Your Fitness Journey?
           </h2>
           <p className={styles.description}>
             Join thousands of users who have already achieved their fitness
-            goals with Peak Health. Start your transformation today.
+            goals with PeakHealth. Start your free trial today and experience
+            the difference.
           </p>
           <div className={styles.actions}>
-            <Button asChild variant="primary" size="lg">
-              <Link href={getSignupUrl()}>
-                Get Started Free
-                <ArrowRight />
-              </Link>
-            </Button>
-            <Button variant="outline" size="lg">
-              Learn More
-            </Button>
+            <Link href={getSignupUrl()} className={styles.primaryButton}>
+              Get Started Free
+              <ArrowRight />
+            </Link>
+            <button className={styles.secondaryButton}>Learn More</button>
           </div>
         </div>
       </div>
