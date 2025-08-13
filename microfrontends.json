@@ -5,60 +5,18 @@
       "packageName": "@peakhealth/landing",
       "development": {
         "fallback": "https://peakhealth-es.vercel.app"
-      }
+      },
+      "routing": [
+        {
+          "paths": ["/", "/blog", "/blog/:path*"]
+        }
+      ]
     },
     "peak-health": {
       "packageName": "@peakhealth/web",
-      "routing": [
-        {
-          "group": "app",
-          "paths": [
-            "/dashboard",
-            "/dashboard/:path*",
-            "/profile",
-            "/profile/:path*",
-            "/calendar",
-            "/calendar/:path*",
-            "/exercises",
-            "/exercises/:path*",
-            "/routines",
-            "/routines/:path*",
-            "/workout-tracker",
-            "/workout-tracker/:path*",
-            "/equipment",
-            "/equipment/:path*",
-            "/gyms",
-            "/gyms/:path*",
-            "/health",
-            "/health/:path*",
-            "/performance",
-            "/performance/:path*",
-            "/suggestions",
-            "/suggestions/:path*",
-            "/trainer-and-clubs",
-            "/trainer-and-clubs/:path*",
-            "/account-settings",
-            "/account-settings/:path*",
-            "/app-settings",
-            "/app-settings/:path*",
-            "/help-support",
-            "/help-support/:path*"
-          ]
-        },
-        {
-          "group": "api",
-          "paths": [
-            "/api/auth/:path*",
-            "/api/feature-flags/:path*",
-            "/api/routines/:path*",
-            "/api/exercises/:path*",
-            "/api/equipment/:path*",
-            "/api/gyms/:path*",
-            "/api/notifications/:path*",
-            "/api/settings/:path*"
-          ]
-        }
-      ]
+      "development": {
+        "fallback": "https://peak-health.vercel.app"
+      }
     }
   }
 }
