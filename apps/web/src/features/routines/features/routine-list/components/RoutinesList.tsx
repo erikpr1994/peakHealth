@@ -147,7 +147,7 @@ const RoutinesList = ({
             onClick={() => setShowFavoritesOnly(!showFavoritesOnly)}
             className="flex items-center gap-2"
           >
-            <Heart className="w-4 h-4 text-red-500" />
+            <Heart className="w-4 h-4 text-red-500 fill-red-500" />
             Favorites
           </Button>
           <Select value={levelFilter} onValueChange={setLevelFilter}>
