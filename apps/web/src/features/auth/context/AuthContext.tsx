@@ -66,9 +66,8 @@ const handleUserNotFoundCleanup = async (): Promise<void> => {
     if (supabase) {
       await supabase.auth.signOut();
     }
-  } catch (error) {
-    // Log error but continue with cleanup even if signOut fails
-    console.error('Error during signOut cleanup:', error);
+  } catch {
+    // swallow error
   }
 
   try {
@@ -82,7 +81,7 @@ const handleUserNotFoundCleanup = async (): Promise<void> => {
 
   // Redirect to external landing app
   const landingUrl =
-    process.env.NEXT_PUBLIC_LANDING_URL || 'http://localhost:3004';
+    process.env.NEXT_PUBLIC_WEB_APP_URL || 'http://http://localhost:3024';
   window.location.href = landingUrl;
 };
 
@@ -106,7 +105,11 @@ const userFetcher = async (url: string): Promise<ExtendedUser | null> => {
   return data.user || null;
 };
 
-export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
+export const AuthProvider = ({
+  children,
+}: {
+  children: React.ReactNode;
+}): React.ReactElement => {
   const supabase = createClient();
   const router = useRouter();
   const [isAuthOperationLoading, setIsAuthOperationLoading] = useState(false);
@@ -119,10 +122,15 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       revalidateOnFocus: false,
       revalidateOnReconnect: true,
       errorRetryCount: 3,
-      onError: (error: any) => {
-        // Handle USER_NOT_FOUND specifically
-        if (error?.info?.code === 'USER_NOT_FOUND') {
-          handleUserNotFoundCleanup();
+      onError: (error: unknown) => {
+        if (error instanceof Error) {
+          // Handle USER_NOT_FOUND specifically
+          if (
+            'info' in error &&
+            (error.info as { code?: string })?.code === 'USER_NOT_FOUND'
+          ) {
+            handleUserNotFoundCleanup();
+          }
         }
       },
     }
@@ -143,7 +151,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         // Clear user data when signed out
         await mutateUser(null);
         const landingUrl =
-          process.env.NEXT_PUBLIC_LANDING_URL || 'http://localhost:3004';
+          process.env.NEXT_PUBLIC_WEB_APP_URL || 'http://http://localhost:3024';
         // Use full redirect to landing app
         if (typeof window !== 'undefined') {
           window.location.href = landingUrl;
@@ -153,10 +161,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       }
     });
 
-    return () => subscription.unsubscribe();
+    return (): void => subscription.unsubscribe();
   }, [mutateUser, router, supabase]);
 
-  const login = async (email?: string, password?: string) => {
+  const login = async (email?: string, password?: string): Promise<void> => {
     // Input validation
     if (!email || !password) {
       throw new Error('Email and password are required');
@@ -190,7 +198,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
-  const signUp = async (email?: string, password?: string, name?: string) => {
+  const signUp = async (
+    email?: string,
+    password?: string,
+    name?: string
+  ): Promise<void> => {
     // Input validation
     if (!email || !password) {
       throw new Error('Email and password are required');
@@ -278,7 +290,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
       // Redirect to external landing app
       const landingUrl =
-        process.env.NEXT_PUBLIC_LANDING_URL || 'http://localhost:3004';
+        process.env.NEXT_PUBLIC_WEB_APP_URL || 'http://http://localhost:3024';
       if (typeof window !== 'undefined') {
         window.location.href = landingUrl;
       }
@@ -302,24 +314,26 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   // Legacy support (for backward compatibility during transition)
   const userRoles = user?.app_metadata?.roles || [primaryUserType];
 
-  const hasPermission = (permission: string) =>
+  const hasPermission = (permission: string): boolean =>
     permissions[permission] === true;
 
-  const hasFeature = (feature: string) => features.includes(feature);
+  const hasFeature = (feature: string): boolean => features.includes(feature);
 
-  const hasUserType = (userType: string) => userTypes.includes(userType);
+  const hasUserType = (userType: string): boolean =>
+    userTypes.includes(userType);
 
-  const hasAnyUserType = (typesToCheck: string[]) =>
+  const hasAnyUserType = (typesToCheck: string[]): boolean =>
     typesToCheck.some(type => userTypes.includes(type));
 
-  const hasSubscriptionTier = (tier: string) => subscriptionTier === tier;
+  const hasSubscriptionTier = (tier: string): boolean =>
+    subscriptionTier === tier;
 
-  const hasGroup = (group: string) => userGroups.includes(group);
+  const hasGroup = (group: string): boolean => userGroups.includes(group);
 
-  const hasAnyGroup = (groups: string[]) =>
+  const hasAnyGroup = (groups: string[]): boolean =>
     groups.some(group => userGroups.includes(group));
 
-  const canAccessData = (dataType: string, accessLevel: string) => {
+  const canAccessData = (dataType: string, accessLevel: string): boolean => {
     const rule = dataAccessRules[dataType];
     if (!rule) return false;
 
@@ -382,7 +396,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   );
 };
 
-export const useAuth = () => {
+export const useAuth = (): AuthContextType => {
   const context = useContext(AuthContext);
   if (context === undefined) {
     throw new Error('useAuth must be used within an AuthProvider');
