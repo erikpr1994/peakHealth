@@ -9,7 +9,7 @@ import {
 } from '@sentry/nextjs';
 
 init({
-  dsn: process.env.NEXT_PUBLIC_SENTRY_DNS,
+  dsn: process.env.NEXT_PUBLIC_SENTRY_DSN,
 
   // Add optional integrations for additional features
   integrations: [replayIntegration()],
