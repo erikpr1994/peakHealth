@@ -33,7 +33,9 @@ export const Footer = (): React.JSX.Element => {
             <div className={styles.links}>
               <Link href="/blog">Blog</Link>
               <Link href="/careers">Careers</Link>
-              <Link href="/contact">Contact</Link>
+              <a href="mailto:info@peakhealth.es" className={styles.link}>
+                Contact
+              </a>
             </div>
           </div>
 
