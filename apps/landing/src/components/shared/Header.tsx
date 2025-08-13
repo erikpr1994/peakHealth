@@ -2,6 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
+
 import { getLoginUrl, getSignupUrl } from '@/lib/auth';
 import styles from './Header.module.css';
 
@@ -19,14 +20,14 @@ export const Header = (): React.JSX.Element => {
           <Link href="/features" className={styles.navLink}>
             Features
           </Link>
-          <Link href="/pricing" className={styles.navLink}>
-            Pricing
+          <Link href="/roadmap" className={styles.navLink}>
+            Roadmap
           </Link>
-          <Link href="/about" className={styles.navLink}>
-            About
+          <Link href="/feedback" className={styles.navLink}>
+            Feedback
           </Link>
-          <Link href="/contact" className={styles.navLink}>
-            Contact
+          <Link href="/blog" className={styles.navLink}>
+            Blog
           </Link>
         </nav>
 
