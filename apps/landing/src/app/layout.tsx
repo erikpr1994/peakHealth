@@ -61,8 +61,10 @@ const RootLayout = ({
 }): React.JSX.Element => {
   return (
     <html lang="en" className="scroll-smooth">
-      <body className={inter.className}>
-        <div className="min-h-screen bg-background font-sans antialiased">
+      <body>
+        <div
+          className={`min-h-screen bg-background font-sans antialiased ${inter.className}`}
+        >
           <Header />
           <main>{children}</main>
           <Footer />

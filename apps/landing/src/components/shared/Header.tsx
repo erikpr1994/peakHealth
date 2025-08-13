@@ -8,6 +8,7 @@ import styles from './Header.module.css';
 
 export const Header = (): React.JSX.Element => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isClosing, setIsClosing] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
   const [loginUrl, setLoginUrl] = useState('');
   const [signupUrl, setSignupUrl] = useState('');
@@ -24,7 +25,11 @@ export const Header = (): React.JSX.Element => {
   };
 
   const closeMobileMenu = (): void => {
-    setIsMobileMenuOpen(false);
+    setIsClosing(true);
+    setTimeout(() => {
+      setIsMobileMenuOpen(false);
+      setIsClosing(false);
+    }, 300);
   };
 
   // Prevent body scrolling when mobile menu is open
@@ -79,19 +84,39 @@ export const Header = (): React.JSX.Element => {
 
         <button
           className={styles.mobileMenuButton}
-          onClick={toggleMobileMenu}
+          onClick={isMobileMenuOpen ? closeMobileMenu : toggleMobileMenu}
           aria-label="Toggle mobile menu"
         >
-          <span className={styles.hamburgerLine}></span>
-          <span className={styles.hamburgerLine}></span>
-          <span className={styles.hamburgerLine}></span>
+          {isMobileMenuOpen ? (
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              className={styles.closeIcon}
+            >
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          ) : (
+            <>
+              <span className={styles.hamburgerLine}></span>
+              <span className={styles.hamburgerLine}></span>
+              <span className={styles.hamburgerLine}></span>
+            </>
+          )}
         </button>
       </div>
 
       {/* Mobile Navigation Overlay */}
-      {isMobileMenuOpen && (
+      {(isMobileMenuOpen || isClosing) && (
         <div className={styles.mobileMenuOverlay} onClick={closeMobileMenu}>
-          <nav className={styles.mobileNav} onClick={e => e.stopPropagation()}>
+          <nav
+            className={`${styles.mobileNav} ${isClosing ? styles.closing : ''}`}
+            onClick={e => e.stopPropagation()}
+          >
             <Link
               href="/features"
               className={styles.mobileNavLink}
