@@ -1,8 +1,8 @@
 .hero {
-  min-height: 80vh;
+  min-height: 90vh;
   display: flex;
   align-items: center;
-  padding-top: 2rem;
+  padding-top: 3rem;
   background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
   position: relative;
   overflow: hidden;
@@ -45,7 +45,7 @@
   border-radius: 50px;
   font-size: 0.875rem;
   font-weight: 500;
-  margin-bottom: 1rem;
+  margin-bottom: 1.25rem;
 }
 
 .starIcon {
@@ -58,7 +58,7 @@
   font-size: 3.5rem;
   font-weight: 800;
   line-height: 1.1;
-  margin-bottom: 1rem;
+  margin-bottom: 1.25rem;
   color: var(--foreground);
 }
 
@@ -73,7 +73,7 @@
   font-size: 1.25rem;
   line-height: 1.6;
   color: var(--muted-foreground);
-  margin-bottom: 2rem;
+  margin-bottom: 2.25rem;
 }
 
 .valueProps {
@@ -295,6 +295,18 @@
 
   .description {
     font-size: 1.125rem;
+  }
+
+  .badge {
+    margin-bottom: 1rem;
+  }
+
+  .title {
+    margin-bottom: 1rem;
+  }
+
+  .description {
+    margin-bottom: 2rem;
   }
 
   .valueProps {
