@@ -92,7 +92,14 @@ BEGIN
               new_section_id,
               exercise_record->>'name',
               exercise_record->>'category',
-              exercise_record->'muscleGroups',
+              COALESCE(
+                CASE 
+                  WHEN exercise_record->'muscleGroups' IS NOT NULL AND exercise_record->'muscleGroups' != 'null'::JSON
+                  THEN (exercise_record->'muscleGroups')::TEXT[]
+                  ELSE ARRAY[]::TEXT[]
+                END,
+                ARRAY[]::TEXT[]
+              ),
               COALESCE(exercise_record->>'variantId', exercise_record->>'exerciseId'),
               (exercise_record->>'orderIndex')::INTEGER,
               COALESCE((exercise_record->>'restTimer')::INTEGER, 0),
@@ -182,7 +189,14 @@ BEGIN
               new_section_id,
               exercise_record->>'name',
               exercise_record->>'category',
-              exercise_record->'muscleGroups',
+              COALESCE(
+                CASE 
+                  WHEN exercise_record->'muscleGroups' IS NOT NULL AND exercise_record->'muscleGroups' != 'null'::JSON
+                  THEN (exercise_record->'muscleGroups')::TEXT[]
+                  ELSE ARRAY[]::TEXT[]
+                END,
+                ARRAY[]::TEXT[]
+              ),
               (exercise_record->>'orderIndex')::INTEGER,
               COALESCE((exercise_record->>'restTimer')::INTEGER, 0),
               COALESCE((exercise_record->>'restAfter')::INTEGER, 0),
