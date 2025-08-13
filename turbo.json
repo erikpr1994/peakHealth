@@ -25,10 +25,11 @@
     },
     "dev": {
       "cache": false,
-      "persistent": true,
-      "dependsOn": ["supabase:start"]
+      "persistent": true
     },
-
+    "//#proxy": {
+      "cache": false
+    },
     "test": {
       "dependsOn": ["^build"],
       "outputs": [],
