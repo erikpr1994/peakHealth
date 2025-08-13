@@ -8,6 +8,16 @@ import styles from './Header.module.css';
 
 export const Header = (): React.JSX.Element => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
+  const [loginUrl, setLoginUrl] = useState('');
+  const [signupUrl, setSignupUrl] = useState('');
+
+  // Set mounted state and auth URLs on client side only
+  useEffect((): void => {
+    setIsMounted(true);
+    setLoginUrl(getLoginUrl());
+    setSignupUrl(getSignupUrl());
+  }, []);
 
   const toggleMobileMenu = (): void => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
@@ -56,10 +66,13 @@ export const Header = (): React.JSX.Element => {
         </nav>
 
         <div className={styles.actions}>
-          <Link href={getLoginUrl()} className={styles.signInLink}>
+          <Link href={isMounted ? loginUrl : '#'} className={styles.signInLink}>
             Sign In
           </Link>
-          <Link href={getSignupUrl()} className={styles.signUpLink}>
+          <Link
+            href={isMounted ? signupUrl : '#'}
+            className={styles.signUpLink}
+          >
             Get Started
           </Link>
         </div>
@@ -154,7 +167,7 @@ export const Header = (): React.JSX.Element => {
             </Link>
             <div className={styles.mobileActions}>
               <Link
-                href={getLoginUrl()}
+                href={isMounted ? loginUrl : '#'}
                 className={styles.mobileSignInLink}
                 onClick={closeMobileMenu}
               >
@@ -173,7 +186,7 @@ export const Header = (): React.JSX.Element => {
                 Sign In
               </Link>
               <Link
-                href={getSignupUrl()}
+                href={isMounted ? signupUrl : '#'}
                 className={styles.mobileSignUpLink}
                 onClick={closeMobileMenu}
               >

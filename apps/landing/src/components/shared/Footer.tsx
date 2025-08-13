@@ -1,10 +1,21 @@
-import React from 'react';
+'use client';
+
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { getSignupUrl } from '@/lib/auth';
 import styles from './Footer.module.css';
 
 export const Footer = (): React.JSX.Element => {
-  const currentYear = new Date().getFullYear();
+  const [currentYear, setCurrentYear] = useState('');
+  const [signupUrl, setSignupUrl] = useState('');
+  const [isMounted, setIsMounted] = useState(false);
+
+  // Set values on client side only to prevent hydration mismatches
+  useEffect((): void => {
+    setIsMounted(true);
+    setCurrentYear(new Date().getFullYear().toString());
+    setSignupUrl(getSignupUrl());
+  }, []);
 
   return (
     <footer className={styles.footer}>
@@ -16,7 +27,10 @@ export const Footer = (): React.JSX.Element => {
               Transform your fitness journey with personalized workouts, expert
               guidance, and a supportive community.
             </p>
-            <Link href={getSignupUrl()} className={styles.ctaButton}>
+            <Link
+              href={isMounted ? signupUrl : '#'}
+              className={styles.ctaButton}
+            >
               Get Started
             </Link>
           </div>
@@ -52,7 +66,8 @@ export const Footer = (): React.JSX.Element => {
 
         <div className={styles.bottom}>
           <div className={styles.copyright}>
-            © {currentYear} PeakHealth. All rights reserved.
+            © {isMounted ? currentYear : '2025'} PeakHealth. All rights
+            reserved.
           </div>
           <div className={styles.legal}>
             <Link href="/privacy">Privacy Policy</Link>
