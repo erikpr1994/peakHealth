@@ -4,6 +4,7 @@
   "version": "0.0.0",
   "scripts": {
     "dev": "turbo dev",
+    "dev:microfrontends": "microfrontends proxy --local-apps landing,web",
     "build": "turbo build",
     "lint": "turbo lint",
     "lint:adopt": "UPDATE_ADOPTION_BLACKLIST=true eslint .",

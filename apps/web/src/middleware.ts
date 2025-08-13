@@ -1,7 +1,7 @@
 // Deep import to avoid bundling browser client in Edge runtime
 import { NextResponse, type NextRequest } from 'next/server';
 
-export async function middleware(request: NextRequest) {
+export async function middleware(request: NextRequest): Promise<NextResponse> {
   const response = NextResponse.next({
     request: { headers: request.headers },
   });
@@ -16,6 +16,19 @@ export async function middleware(request: NextRequest) {
     request.cookies.get('auth-token')?.value
   );
   const isAuthenticated = hasSupabaseAuthToken || hasCrossDomainAuthToken;
+
+  // Handle root route logic
+  if (request.nextUrl.pathname === '/') {
+    if (isAuthenticated) {
+      // If authenticated, redirect to dashboard
+      return NextResponse.redirect(new URL('/dashboard', request.url));
+    } else {
+      // If not authenticated, redirect to landing app
+      const landingUrl =
+        process.env.NEXT_PUBLIC_LANDING_URL || 'http://localhost:3004';
+      return NextResponse.redirect(new URL(landingUrl));
+    }
+  }
 
   // Define protected routes that require authentication
   const protectedRoutes = [
