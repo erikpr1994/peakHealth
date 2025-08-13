@@ -41,12 +41,12 @@ export const HowItWorksSection = (): React.JSX.Element => {
         <div className={styles.steps}>
           {steps.map((step, index) => (
             <div key={index} className={styles.step}>
-              <div className={styles.stepNumber}>{index + 1}</div>
-              <div className={styles.stepContent}>
+              <div className={styles.stepHeader}>
+                <div className={styles.stepNumber}>{index + 1}</div>
                 <div className={styles.stepIcon}>{step.icon}</div>
                 <h3 className={styles.stepTitle}>{step.title}</h3>
-                <p className={styles.stepDescription}>{step.description}</p>
               </div>
+              <p className={styles.stepDescription}>{step.description}</p>
               {index < steps.length - 1 && (
                 <div className={styles.stepArrow}>
                   <ArrowRight />
