@@ -50,7 +50,7 @@ async function cleanupDevPorts() {
       }
     }
 
-        // Also clean up any remaining pnpm dev processes
+    // Also clean up any remaining pnpm dev processes
     try {
       const pnpmProcesses = execSync('pgrep -f "pnpm.*dev"', {
         encoding: 'utf8',
@@ -59,7 +59,7 @@ async function cleanupDevPorts() {
 
       if (pnpmProcesses) {
         const pidList = pnpmProcesses.split('\n').filter(pid => pid.trim());
-        
+
         for (const pid of pidList) {
           try {
             // Get process info to verify it's our dev process
@@ -91,7 +91,7 @@ async function cleanupDevPorts() {
 
       if (allNodeProcesses) {
         const pidList = allNodeProcesses.split('\n').filter(pid => pid.trim());
-        
+
         for (const pid of pidList) {
           try {
             // Get process info to verify it's a development server

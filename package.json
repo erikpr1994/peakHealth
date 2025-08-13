@@ -4,8 +4,7 @@
   "private": true,
   "version": "0.0.0",
   "scripts": {
-    "dev": "turbo dev",
-    "dev:clean": "node scripts/cleanup-dev-ports.mjs && turbo dev",
+    "dev": "node scripts/cleanup-dev-ports.mjs && turbo dev",
     "build": "turbo build",
     "lint": "turbo lint",
     "lint:adopt": "UPDATE_ADOPTION_BLACKLIST=true eslint .",
