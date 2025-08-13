@@ -111,7 +111,7 @@ async function globalTeardown(): Promise<void> {
     }
 
     // Additional cleanup: Kill any processes on our known development ports
-    const knownDevPorts = [3000, 3001, 3002, 3003, 3024];
+    const knownDevPorts = [3000, 3001, 3002, 3003, 3024, 4450, 7524];
     for (const port of knownDevPorts) {
       try {
         const pids = execSync(`lsof -ti:${port}`, {

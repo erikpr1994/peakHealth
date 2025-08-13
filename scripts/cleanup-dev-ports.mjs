@@ -13,7 +13,7 @@ async function cleanupDevPorts() {
     console.log('🧹 Cleaning up development ports before starting servers...');
 
     // Kill any processes on our known development ports
-    const knownDevPorts = [3000, 3001, 3002, 3003, 3024];
+    const knownDevPorts = [3000, 3001, 3002, 3003, 3024, 4450, 7524];
     for (const port of knownDevPorts) {
       try {
         const pids = execSync(`lsof -ti:${port}`, {
@@ -50,7 +50,7 @@ async function cleanupDevPorts() {
       }
     }
 
-    // Also clean up any remaining pnpm dev processes
+        // Also clean up any remaining pnpm dev processes
     try {
       const pnpmProcesses = execSync('pgrep -f "pnpm.*dev"', {
         encoding: 'utf8',
@@ -59,7 +59,7 @@ async function cleanupDevPorts() {
 
       if (pnpmProcesses) {
         const pidList = pnpmProcesses.split('\n').filter(pid => pid.trim());
-
+        
         for (const pid of pidList) {
           try {
             // Get process info to verify it's our dev process
@@ -80,6 +80,42 @@ async function cleanupDevPorts() {
       }
     } catch {
       // No pnpm dev processes found, which is fine
+    }
+
+    // Additional aggressive cleanup: Kill ALL Node.js processes that might be dev servers
+    try {
+      const allNodeProcesses = execSync('pgrep -f "node"', {
+        encoding: 'utf8',
+        stdio: ['pipe', 'pipe', 'ignore'],
+      }).trim();
+
+      if (allNodeProcesses) {
+        const pidList = allNodeProcesses.split('\n').filter(pid => pid.trim());
+        
+        for (const pid of pidList) {
+          try {
+            // Get process info to verify it's a development server
+            const processInfo = execSync(`ps -p ${pid} -o command=`, {
+              encoding: 'utf8',
+            }).trim();
+
+            // Kill if it's any kind of development server
+            if (
+              processInfo.includes('next') ||
+              processInfo.includes('dev') ||
+              (processInfo.includes('node') && processInfo.includes('turbo'))
+            ) {
+              execSync(`kill -9 ${pid}`, { stdio: 'ignore' });
+              killedProcesses.push(`Node.js dev PID ${pid}`);
+              console.log(`✅ Killed Node.js dev process ${pid}`);
+            }
+          } catch {
+            // Process might have already been killed
+          }
+        }
+      }
+    } catch {
+      // No Node.js processes found, which is fine
     }
 
     if (killedProcesses.length > 0) {
