@@ -9,6 +9,6 @@ test.describe('Trainer user flows', () => {
     await expect(page).toHaveURL(/localhost:3000\/login/);
     await page.goto('http://localhost:3000/app-selector');
     await page.getByTestId('app-card-web').click();
-    await expect(page).toHaveURL(/localhost:3001/);
+    await expect(page).toHaveURL(/localhost:3024\/dashboard/);
   });
 });

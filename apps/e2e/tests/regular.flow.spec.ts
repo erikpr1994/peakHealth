@@ -8,7 +8,7 @@ test.describe('Regular user flows', () => {
     await page.getByRole('link', { name: /sign in/i }).click();
     await expect(page).toHaveURL(/localhost:3000\/login/);
     // With storage state, the web is accessible directly
-    await page.goto('http://localhost:3001/dashboard');
-    await expect(page).toHaveURL(/localhost:3001/);
+    await page.goto('http://localhost:3024/dashboard');
+    await expect(page).toHaveURL(/localhost:3024\/dashboard/);
   });
 });

@@ -15,7 +15,7 @@ test('setup: trainer -> app selector -> web', async ({ browser }) => {
     .getByText(/^PeakHealth$/i)
     .first()
     .click();
-  await page.waitForURL('http://localhost:3001/**', { timeout: 60_000 });
+  await page.waitForURL('http://localhost:3024/**', { timeout: 60_000 });
   await context.storageState({ path: 'storage-states/trainer-web.json' });
   await context.close();
 });

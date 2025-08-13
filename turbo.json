@@ -24,6 +24,7 @@
       "cache": false
     },
     "dev": {
+      "dependsOn": ["supabase:start"],
       "cache": false,
       "persistent": true
     },
@@ -40,7 +41,7 @@
       ]
     },
     "test:e2e": {
-      "dependsOn": ["build"],
+      "cache": false,
       "outputs": []
     }
   }
