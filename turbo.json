@@ -24,6 +24,7 @@
       "cache": false
     },
     "dev": {
+      "dependsOn": ["supabase:start"],
       "cache": false,
       "persistent": true
     },
