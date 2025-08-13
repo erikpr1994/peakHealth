@@ -6,27 +6,31 @@ import HomePage from './page';
 
 // Mock the components to avoid complex testing setup
 vi.mock('@/components/shared/Header', () => ({
-  Header: () => <div data-testid="header">Header</div>,
+  Header: (): React.JSX.Element => <div data-testid="header">Header</div>,
 }));
 
 vi.mock('@/components/shared/Footer', () => ({
-  Footer: () => <div data-testid="footer">Footer</div>,
+  Footer: (): React.JSX.Element => <div data-testid="footer">Footer</div>,
 }));
 
 vi.mock('@/components/landing/HeroSection', () => ({
-  HeroSection: () => <div data-testid="hero">Hero</div>,
+  HeroSection: (): React.JSX.Element => <div data-testid="hero">Hero</div>,
 }));
 
 vi.mock('@/components/landing/FeatureSection', () => ({
-  FeatureSection: () => <div data-testid="features">Features</div>,
+  FeatureSection: (): React.JSX.Element => (
+    <div data-testid="features">Features</div>
+  ),
 }));
 
-vi.mock('@/components/landing/TestimonialSection', () => ({
-  TestimonialSection: () => <div data-testid="testimonials">Testimonials</div>,
+vi.mock('@/components/landing/HowItWorksSection', () => ({
+  HowItWorksSection: (): React.JSX.Element => (
+    <div data-testid="how-it-works">How It Works</div>
+  ),
 }));
 
 vi.mock('@/components/landing/CTASection', () => ({
-  CTASection: () => <div data-testid="cta">CTA</div>,
+  CTASection: (): React.JSX.Element => <div data-testid="cta">CTA</div>,
 }));
 
 describe('HomePage', () => {
@@ -36,7 +40,7 @@ describe('HomePage', () => {
     expect(screen.getByTestId('header')).toBeInTheDocument();
     expect(screen.getByTestId('hero')).toBeInTheDocument();
     expect(screen.getByTestId('features')).toBeInTheDocument();
-    expect(screen.getByTestId('testimonials')).toBeInTheDocument();
+    expect(screen.getByTestId('how-it-works')).toBeInTheDocument();
     expect(screen.getByTestId('cta')).toBeInTheDocument();
     expect(screen.getByTestId('footer')).toBeInTheDocument();
   });
