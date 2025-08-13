@@ -33,6 +33,9 @@ pnpm-debug.log*
 
 # Local env files
 .env*.local
+.env
+.env.*
+!.env.example
 
 # Vercel
 .vercel
