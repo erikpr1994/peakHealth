@@ -1,8 +1,9 @@
 import { defineConfig } from '@playwright/test';
 
 export default defineConfig({
+  globalTeardown: './global-teardown.ts',
   testDir: './tests',
-  timeout: 60_000,
+  timeout: 30_000,
   fullyParallel: true,
   reporter: [['html', { open: 'never' }]],
   use: {
@@ -13,31 +14,15 @@ export default defineConfig({
       command: 'pnpm supabase:start',
       url: 'http://localhost:54323',
       reuseExistingServer: true,
-      timeout: 240_000,
+      timeout: 120_000,
+      cwd: '../..',
     },
     {
-      command: 'pnpm -C ../auth dev',
-      url: 'http://localhost:3000',
-      reuseExistingServer: true,
-      timeout: 240_000,
-    },
-    {
-      command: 'pnpm -C ../web dev',
-      url: 'http://localhost:3001',
-      reuseExistingServer: true,
-      timeout: 240_000,
-    },
-    {
-      command: 'pnpm -C ../admin dev',
-      url: 'http://localhost:3002',
-      reuseExistingServer: true,
-      timeout: 240_000,
-    },
-    {
-      command: 'pnpm -C ../landing dev',
+      command: 'pnpm dev',
       url: 'http://localhost:3024',
       reuseExistingServer: true,
-      timeout: 240_000,
+      timeout: 120_000,
+      cwd: '../..',
     },
   ],
   projects: [
@@ -74,7 +59,7 @@ export default defineConfig({
       name: 'admin-web',
       dependencies: ['setup-admin-web'],
       use: {
-        baseURL: 'http://localhost:3001',
+        baseURL: 'http://localhost:3024',
         storageState: 'storage-states/admin-web.json',
       },
       testMatch: [
@@ -98,7 +83,7 @@ export default defineConfig({
       name: 'regular-web',
       dependencies: ['setup-regular-web'],
       use: {
-        baseURL: 'http://localhost:3001',
+        baseURL: 'http://localhost:3024',
         storageState: 'storage-states/regular-web.json',
       },
       testMatch: [
@@ -111,7 +96,7 @@ export default defineConfig({
       name: 'trainer-web',
       dependencies: ['setup-trainer-web'],
       use: {
-        baseURL: 'http://localhost:3001',
+        baseURL: 'http://localhost:3024',
         storageState: 'storage-states/trainer-web.json',
       },
       testMatch: [

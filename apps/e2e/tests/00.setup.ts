@@ -49,8 +49,8 @@ test('seed dev DB and create storage states', async ({ browser }) => {
     await expect(page.getByText(/Choose\s*Your\s*App/i)).toBeVisible();
     // Click Web app card via test id
     await page.getByTestId('app-card-web').click();
-    await page.waitForURL('http://localhost:3001/**', { timeout: 60_000 });
-    await expect(page).toHaveURL(/localhost:3001/);
+    await page.waitForURL('http://localhost:3024/**', { timeout: 60_000 });
+    await expect(page).toHaveURL(/localhost:3024/);
     await context.storageState({ path: 'storage-states/web.json' });
     await context.close();
   }
