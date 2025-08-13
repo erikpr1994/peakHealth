@@ -1,10 +1,8 @@
 'use client';
 
-import { ArrowRight, Star } from 'lucide-react';
-import Link from 'next/link';
+import { Star } from 'lucide-react';
 import React from 'react';
 
-import { getSignupUrl } from '@/lib/auth';
 import styles from './HeroSection.module.css';
 
 export const HeroSection = (): React.JSX.Element => {
@@ -27,13 +25,6 @@ export const HeroSection = (): React.JSX.Element => {
             Build routines, measure your gains, and enjoy a better experience
             than other workout apps.
           </p>
-
-          <div className={styles.actions}>
-            <Link href={getSignupUrl()} className={styles.primaryButton}>
-              Join the Waitlist
-              <ArrowRight />
-            </Link>
-          </div>
 
           <div className={styles.valueProps}>
             <div className={styles.valueProp}>
