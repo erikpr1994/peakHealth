@@ -16,8 +16,8 @@ Centralized authentication service for the PeakHealth platform.
 
 The apps are configured to run on specific ports:
 
-- **Auth App**: `http://localhost:3000` (auth.peakhealth.es in production)
-- **Web App**: `http://localhost:3001` (peakhealth.es in production)
+- **Auth App**: `http://localhost:3005` (auth.peakhealth.es in production)
+- **Web App**: `http://localhost:3000` (microfrontends proxy) (peakhealth.es in production)
 - **Admin App**: `http://localhost:3002` (admin.peakhealth.es in production)
 - **Pro App**: `http://localhost:3003` (pro.peakhealth.es in production)
 
@@ -32,7 +32,7 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
 SUPABASE_SERVICE_ROLE_KEY=your_supabase_service_role_key
 
 # App URLs (optional - will use localhost defaults in development)
-NEXT_PUBLIC_WEB_APP_URL=http://localhost:3001
+NEXT_PUBLIC_WEB_APP_URL=http://localhost:3000
 NEXT_PUBLIC_ADMIN_APP_URL=http://localhost:3002
 NEXT_PUBLIC_PRO_APP_URL=http://localhost:3003
 

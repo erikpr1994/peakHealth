@@ -44,6 +44,19 @@
             "/help-support",
             "/help-support/:path*"
           ]
+        },
+        {
+          "group": "api",
+          "paths": [
+            "/api/auth/:path*",
+            "/api/feature-flags/:path*",
+            "/api/routines/:path*",
+            "/api/exercises/:path*",
+            "/api/equipment/:path*",
+            "/api/gyms/:path*",
+            "/api/notifications/:path*",
+            "/api/settings/:path*"
+          ]
         }
       ]
     }

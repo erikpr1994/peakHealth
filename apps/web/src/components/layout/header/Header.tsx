@@ -20,7 +20,7 @@ import { FEATURE_FLAGS, useFeatureFlag } from '@/features/feature-flags';
 import { useNotifications, NotificationsBell } from '@/features/notifications';
 import { useNavigationFeatureFlags } from '@/hooks/useNavigationFeatureFlags';
 
-const Header = () => {
+const Header = (): React.ReactElement => {
   const router = useRouter();
   const pathname = usePathname();
   const { logout, user } = useAuth();
@@ -61,7 +61,7 @@ const Header = () => {
     isHelpSupportEnabled: navigationFeatureFlags.isHelpSupportEnabled,
   });
 
-  const handleNavigate = (path: string) => {
+  const handleNavigate = (path: string): void => {
     router.push(path);
     setIsSideNavOpen(false);
   };

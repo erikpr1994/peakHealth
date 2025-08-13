@@ -76,7 +76,7 @@ export const AuthProvider = ({
           await mutateUser();
         } else if (event === 'SIGNED_OUT') {
           await mutateUser(null);
-          router.push('/login');
+          redirectToAuth();
         }
         setIsLoading(false);
       }
@@ -105,37 +105,10 @@ export const AuthProvider = ({
       // Clear the user data
       await mutateUser(null);
 
-      // Redirect to auth app with improved domain logic
-      const currentDomain = window.location.hostname;
-      let authDomain: string;
-
-      if (process.env.NODE_ENV === 'development') {
-        authDomain = 'localhost:3000';
-      } else {
-        // Handle various admin subdomain patterns
-        if (currentDomain.startsWith('admin.')) {
-          authDomain = `auth.${currentDomain.substring(6)}`; // Remove 'admin.'
-        } else if (currentDomain.includes('-admin.')) {
-          // Handle patterns like 'staging-admin.example.com'
-          authDomain = currentDomain.replace('-admin.', '-auth.');
-        } else if (currentDomain.startsWith('staging-admin.')) {
-          authDomain = currentDomain.replace('staging-admin.', 'staging-auth.');
-        } else {
-          // Fallback: assume auth subdomain
-          authDomain = `auth.${currentDomain}`;
-        }
-      }
-
-      const protocol =
-        process.env.NODE_ENV === 'development' ? 'http' : 'https';
-      const authUrl = `${protocol}://${authDomain}`;
-
-      window.location.href = authUrl;
-    } catch (error) {
-      console.error('Logout error:', error);
-      // Fallback: try to sign out directly and redirect
+      redirectToAuth();
+    } catch {
       await supabase.auth.signOut();
-      router.push('/');
+      redirectToAuth();
     }
   };
 
@@ -160,6 +133,13 @@ export const AuthProvider = ({
       {children}
     </AuthContext.Provider>
   );
+};
+
+const redirectToAuth = (): void => {
+  const authDomain = process.env.NEXT_PUBLIC_AUTH_APP_URL || 'localhost:3000';
+  const protocol = process.env.NODE_ENV === 'development' ? 'http' : 'https';
+  const authUrl = `${protocol}://${authDomain}`;
+  window.location.href = authUrl;
 };
 
 export const useAuth = (): AuthContextType => {
