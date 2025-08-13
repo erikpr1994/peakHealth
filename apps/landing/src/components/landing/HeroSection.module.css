@@ -45,7 +45,7 @@
   border-radius: 50px;
   font-size: 0.875rem;
   font-weight: 500;
-  margin-bottom: 1.25rem;
+  margin-bottom: 1.5rem;
 }
 
 .starIcon {
@@ -58,7 +58,7 @@
   font-size: 3.5rem;
   font-weight: 800;
   line-height: 1.1;
-  margin-bottom: 1.25rem;
+  margin-bottom: 1.5rem;
   color: var(--foreground);
 }
 
@@ -73,7 +73,7 @@
   font-size: 1.25rem;
   line-height: 1.6;
   color: var(--muted-foreground);
-  margin-bottom: 2.25rem;
+  margin-bottom: 2.5rem;
 }
 
 .valueProps {
@@ -252,7 +252,49 @@
   margin-top: 0.25rem;
 }
 
-/* Mobile styles */
+/* Desktop styles (1024px and up) */
+@media (min-width: 1024px) {
+  .hero {
+    min-height: 100vh;
+    padding-top: 2rem;
+    padding-bottom: 4rem;
+  }
+
+  .badge {
+    margin-bottom: 2rem;
+  }
+
+  .title {
+    margin-bottom: 2rem;
+  }
+
+  .description {
+    margin-bottom: 3rem;
+  }
+}
+
+/* Tablet styles (768px to 1023px) */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .hero {
+    min-height: 90vh;
+    padding-top: 3rem;
+    padding-bottom: 3rem;
+  }
+
+  .badge {
+    margin-bottom: 1.5rem;
+  }
+
+  .title {
+    margin-bottom: 1.5rem;
+  }
+
+  .description {
+    margin-bottom: 2.5rem;
+  }
+}
+
+/* Tablet and mobile layout adjustments */
 @media (max-width: 1024px) {
   .container {
     grid-template-columns: 1fr;
@@ -282,6 +324,7 @@
   }
 }
 
+/* Mobile styles */
 @media (max-width: 768px) {
   .hero {
     padding-top: 1rem;
