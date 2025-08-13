@@ -41,17 +41,24 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     );
 
     if (asChild && React.isValidElement(children)) {
-      return React.cloneElement(children as React.ReactElement<any>, {
-        className: buttonClasses,
+      const child = children as React.ReactElement<
+        React.ComponentProps<'button'>
+      >;
+      return React.cloneElement(child, {
+        className: cn(buttonClasses, child.props.className),
         ref,
         ...props,
       });
     }
 
-    return (
-      <button data-slot="button" className={buttonClasses} ref={ref} {...props}>
-        {children}
-      </button>
+    return React.createElement(
+      'button',
+      {
+        className: buttonClasses,
+        ref,
+        ...props,
+      },
+      children
     );
   }
 );
