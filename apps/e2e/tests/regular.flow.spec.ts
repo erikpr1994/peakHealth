@@ -4,7 +4,7 @@ import { test, expect } from '@playwright/test';
 test.describe('Regular user flows', () => {
   test.use({ storageState: 'storage-states/regular-web.json' });
   test('regular: landing -> login -> web', async ({ page }) => {
-    await page.goto('http://http://localhost:3024/');
+    await page.goto('http://localhost:3024/');
     await page.getByRole('link', { name: /sign in/i }).click();
     await expect(page).toHaveURL(/localhost:3000\/login/);
     // With storage state, the web is accessible directly

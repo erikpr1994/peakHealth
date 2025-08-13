@@ -39,7 +39,7 @@ pnpm install
 pnpm dev
 ```
 
-3. Open [http://http://localhost:3024](http://http://localhost:3024) in your browser.
+3. Open [http://localhost:3024](http://localhost:3024) in your browser.
 
 ### Build for Production
 

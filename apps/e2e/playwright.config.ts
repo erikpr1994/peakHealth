@@ -35,7 +35,7 @@ export default defineConfig({
     },
     {
       command: 'pnpm -C ../landing dev',
-      url: 'http://http://localhost:3024',
+      url: 'http://localhost:3024',
       reuseExistingServer: true,
       timeout: 240_000,
     },
@@ -45,7 +45,7 @@ export default defineConfig({
     {
       name: 'landing',
       testMatch: ['tests/landing.*.spec.ts'],
-      use: { baseURL: 'http://http://localhost:3024' },
+      use: { baseURL: 'http://localhost:3024' },
     },
     // Persona-specific projects only
     // Per-user setup projects
