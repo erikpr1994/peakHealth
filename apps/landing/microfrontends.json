@@ -1,0 +1,11 @@
+{
+  "$schema": "https://openapi.vercel.sh/microfrontends.json",
+  "applications": {
+    "peak-health-landing": {
+      "packageName": "@peakhealth/landing",
+      "development": {
+        "fallback": "https://peak-health-landing.vercel.app"
+      }
+    }
+  }
+}
