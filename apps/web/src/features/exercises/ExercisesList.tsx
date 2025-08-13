@@ -104,7 +104,9 @@ const ExercisesListContent = ({
       <NewExercisesCarousel
         newExercises={newExercises}
         href={(exercise: Exercise) =>
-          `/exercises/${exercise.id}/variants/${exercise.mainVariantId}`
+          exercise.mainVariantId
+            ? `/exercises/${exercise.id}/variants/${exercise.mainVariantId}`
+            : `/exercises/${exercise.id}/variants`
         }
       />
 
@@ -115,7 +117,9 @@ const ExercisesListContent = ({
         viewMode={viewMode}
         onViewModeChange={setViewMode}
         href={(exercise: Exercise) =>
-          `/exercises/${exercise.id}/variants/${exercise.mainVariantId}`
+          exercise.mainVariantId
+            ? `/exercises/${exercise.id}/variants/${exercise.mainVariantId}`
+            : `/exercises/${exercise.id}/variants`
         }
       />
 
