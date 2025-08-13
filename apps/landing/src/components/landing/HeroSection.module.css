@@ -104,28 +104,54 @@
   box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
 }
 
-.stats {
-  display: flex;
-  gap: 3rem;
-}
-
-.stat {
+.valueProps {
   display: flex;
   flex-direction: column;
+  gap: 1.5rem;
+}
+
+.valueProp {
+  display: flex;
   align-items: flex-start;
+  gap: 1rem;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.7);
+  border-radius: 12px;
+  border: 1px solid rgba(59, 130, 246, 0.1);
+  transition: all 0.3s ease;
 }
 
-.statNumber {
-  font-size: 2rem;
-  font-weight: 800;
-  color: var(--primary);
-  line-height: 1;
+.valueProp:hover {
+  background: rgba(255, 255, 255, 0.9);
+  transform: translateX(4px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-.statLabel {
+.valueIcon {
+  font-size: 1.5rem;
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--primary);
+  color: white;
+  border-radius: 8px;
+}
+
+.valueContent h3 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--foreground);
+  margin-bottom: 0.5rem;
+}
+
+.valueContent p {
   font-size: 0.875rem;
   color: var(--muted-foreground);
-  margin-top: 0.25rem;
+  line-height: 1.5;
+  margin: 0;
 }
 
 .visual {
@@ -268,8 +294,8 @@
     font-size: 2.5rem;
   }
 
-  .stats {
-    justify-content: center;
+  .valueProps {
+    gap: 1rem;
   }
 
   .mockup {
@@ -303,13 +329,18 @@
     align-items: center;
   }
 
-  .stats {
-    flex-direction: column;
-    gap: 1.5rem;
+  .valueProps {
+    gap: 1rem;
   }
 
-  .stat {
-    align-items: center;
+  .valueProp {
+    padding: 0.75rem;
+  }
+
+  .valueIcon {
+    width: 32px;
+    height: 32px;
+    font-size: 1.25rem;
   }
 
   .mockup {

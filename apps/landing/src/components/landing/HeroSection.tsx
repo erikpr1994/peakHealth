@@ -14,7 +14,7 @@ export const HeroSection = (): React.JSX.Element => {
         <div className={styles.content}>
           <div className={styles.badge}>
             <Star className={styles.starIcon} />
-            <span>Join 10,000+ fitness enthusiasts</span>
+            <span>Coming Soon - Be the First to Experience</span>
           </div>
 
           <h1 className={styles.title}>
@@ -23,30 +23,49 @@ export const HeroSection = (): React.JSX.Element => {
           </h1>
 
           <p className={styles.description}>
-            Track workouts, monitor progress, and achieve your fitness goals
-            with Peak Health. Join thousands of users transforming their fitness
-            journey with our comprehensive platform.
+            Transform your fitness journey with personalized workout plans,
+            real-time progress tracking, and expert guidance. PeakHealth
+            combines cutting-edge technology with proven fitness science to help
+            you achieve your goals faster and more effectively.
           </p>
 
           <div className={styles.actions}>
             <Link href={getSignupUrl()} className={styles.primaryButton}>
-              Start Your Journey
+              Join the Waitlist
               <ArrowRight />
             </Link>
           </div>
 
-          <div className={styles.stats}>
-            <div className={styles.stat}>
-              <span className={styles.statNumber}>50K+</span>
-              <span className={styles.statLabel}>Active Users</span>
+          <div className={styles.valueProps}>
+            <div className={styles.valueProp}>
+              <div className={styles.valueIcon}>🎯</div>
+              <div className={styles.valueContent}>
+                <h3>Personalized Plans</h3>
+                <p>
+                  AI-powered workout recommendations tailored to your goals and
+                  fitness level
+                </p>
+              </div>
             </div>
-            <div className={styles.stat}>
-              <span className={styles.statNumber}>1M+</span>
-              <span className={styles.statLabel}>Workouts Tracked</span>
+            <div className={styles.valueProp}>
+              <div className={styles.valueIcon}>📊</div>
+              <div className={styles.valueContent}>
+                <h3>Smart Tracking</h3>
+                <p>
+                  Monitor progress with detailed analytics and insights to stay
+                  motivated
+                </p>
+              </div>
             </div>
-            <div className={styles.stat}>
-              <span className={styles.statNumber}>4.9</span>
-              <span className={styles.statLabel}>App Store Rating</span>
+            <div className={styles.valueProp}>
+              <div className={styles.valueIcon}>👨‍💼</div>
+              <div className={styles.valueContent}>
+                <h3>Expert Guidance</h3>
+                <p>
+                  Access to certified trainers and nutritionists for
+                  personalized advice
+                </p>
+              </div>
             </div>
           </div>
         </div>
@@ -57,7 +76,7 @@ export const HeroSection = (): React.JSX.Element => {
               <div className={styles.screen}>
                 <div className={styles.appHeader}>
                   <div className={styles.appIcon}></div>
-                  <div className={styles.appTitle}>Peak Health</div>
+                  <div className={styles.appTitle}>PeakHealth</div>
                 </div>
                 <div className={styles.appContent}>
                   <div className={styles.workoutCard}>
