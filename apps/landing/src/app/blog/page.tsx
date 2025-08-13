@@ -1,3 +1,4 @@
+import React from 'react';
 import { Metadata } from 'next';
 
 import { BlogHeader } from '@/components/blog/BlogHeader';
@@ -16,15 +17,15 @@ export const metadata: Metadata = {
   },
 };
 
-const BlogPage = () => {
+const BlogPage = (): React.JSX.Element => {
   return (
-    <div style={{ minHeight: '100vh', backgroundColor: 'var(--secondary)' }}>
+    <>
       <BlogHeader
         title="Peak Health Blog"
         description="Fitness tips, workout guides, and health insights from our experts"
       />
       <BlogList />
-    </div>
+    </>
   );
 };
 

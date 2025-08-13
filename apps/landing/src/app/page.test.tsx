@@ -1,18 +1,11 @@
 import { render, screen } from '@testing-library/react';
+import React from 'react'; // Added React import for JSX.Element type
 
 import HomePage from './page';
 
 /* eslint-disable no-undef */
 
 // Mock the components to avoid complex testing setup
-vi.mock('@/components/shared/Header', () => ({
-  Header: (): React.JSX.Element => <div data-testid="header">Header</div>,
-}));
-
-vi.mock('@/components/shared/Footer', () => ({
-  Footer: (): React.JSX.Element => <div data-testid="footer">Footer</div>,
-}));
-
 vi.mock('@/components/landing/HeroSection', () => ({
   HeroSection: (): React.JSX.Element => <div data-testid="hero">Hero</div>,
 }));
@@ -37,11 +30,9 @@ describe('HomePage', () => {
   it('renders all main sections', () => {
     render(<HomePage />);
 
-    expect(screen.getByTestId('header')).toBeInTheDocument();
     expect(screen.getByTestId('hero')).toBeInTheDocument();
     expect(screen.getByTestId('features')).toBeInTheDocument();
     expect(screen.getByTestId('how-it-works')).toBeInTheDocument();
     expect(screen.getByTestId('cta')).toBeInTheDocument();
-    expect(screen.getByTestId('footer')).toBeInTheDocument();
   });
 });
