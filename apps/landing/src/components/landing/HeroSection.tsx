@@ -19,14 +19,13 @@ export const HeroSection = (): React.JSX.Element => {
 
           <h1 className={styles.title}>
             Your Ultimate
-            <span className={styles.gradientText}> Fitness Companion</span>
+            <span className={styles.gradientText}> Workout Tracker</span>
           </h1>
 
           <p className={styles.description}>
-            Transform your fitness journey with personalized workout plans,
-            real-time progress tracking, and expert guidance. PeakHealth
-            combines cutting-edge technology with proven fitness science to help
-            you achieve your goals faster and more effectively.
+            Log workouts, track progress, and stay motivated with PeakHealth.
+            Build routines, measure your gains, and join a community of fitness
+            enthusiasts working towards their goals.
           </p>
 
           <div className={styles.actions}>
@@ -38,32 +37,32 @@ export const HeroSection = (): React.JSX.Element => {
 
           <div className={styles.valueProps}>
             <div className={styles.valueProp}>
-              <div className={styles.valueIcon}>🎯</div>
+              <div className={styles.valueIcon}>📝</div>
               <div className={styles.valueContent}>
-                <h3>Personalized Plans</h3>
+                <h3>Log Workouts</h3>
                 <p>
-                  AI-powered workout recommendations tailored to your goals and
-                  fitness level
+                  Track your exercises, sets, reps, and weights with our
+                  intuitive workout logging interface
                 </p>
               </div>
             </div>
             <div className={styles.valueProp}>
               <div className={styles.valueIcon}>📊</div>
               <div className={styles.valueContent}>
-                <h3>Smart Tracking</h3>
+                <h3>Track Progress</h3>
                 <p>
-                  Monitor progress with detailed analytics and insights to stay
-                  motivated
+                  Monitor your gains with detailed charts, personal records, and
+                  exercise history
                 </p>
               </div>
             </div>
             <div className={styles.valueProp}>
-              <div className={styles.valueIcon}>👨‍💼</div>
+              <div className={styles.valueIcon}>👥</div>
               <div className={styles.valueContent}>
-                <h3>Expert Guidance</h3>
+                <h3>Join Community</h3>
                 <p>
-                  Access to certified trainers and nutritionists for
-                  personalized advice
+                  Connect with other fitness enthusiasts, share workouts, and
+                  stay accountable together
                 </p>
               </div>
             </div>
