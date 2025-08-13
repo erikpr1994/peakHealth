@@ -1,28 +1,27 @@
 import React from 'react';
 import Link from 'next/link';
-import { ArrowRight, Dumbbell, Target, TrendingUp } from 'lucide-react';
-import { getSignupUrl } from '@/lib/auth';
+import { ArrowRight, Dumbbell, BarChart3, Users } from 'lucide-react';
 import styles from './FeatureSection.module.css';
 
 export const FeatureSection = (): React.JSX.Element => {
   const features = [
     {
       icon: <Dumbbell />,
-      title: 'Personalized Workouts',
+      title: 'Log Workouts',
       description:
-        'Get custom workout plans tailored to your fitness level and goals.',
+        'Track your exercises, sets, reps, and weights with our intuitive workout logging interface.',
     },
     {
-      icon: <Target />,
-      title: 'Progress Tracking',
+      icon: <BarChart3 />,
+      title: 'Track Progress',
       description:
-        'Monitor your fitness journey with detailed analytics and insights.',
+        'Monitor your gains with detailed charts, personal records, and exercise history.',
     },
     {
-      icon: <TrendingUp />,
-      title: 'Expert Guidance',
+      icon: <Users />,
+      title: 'Community Driven',
       description:
-        'Access professional trainers and nutritionists for personalized advice.',
+        'Help shape the future of PeakHealth by voting on features and suggesting improvements.',
     },
   ];
 
@@ -32,8 +31,9 @@ export const FeatureSection = (): React.JSX.Element => {
         <div className={styles.header}>
           <h2 className={styles.title}>Why Choose PeakHealth?</h2>
           <p className={styles.description}>
-            Our comprehensive platform provides everything you need to achieve
-            your fitness goals and maintain a healthy lifestyle.
+            A workout tracker that focuses on what matters most - logging
+            workouts, tracking progress, and building a better experience
+            together.
           </p>
         </div>
 
@@ -47,16 +47,23 @@ export const FeatureSection = (): React.JSX.Element => {
           ))}
         </div>
 
-        <div className={styles.cta}>
-          <h3>Ready to Start Your Fitness Journey?</h3>
+        <div className={styles.communitySection}>
+          <h3>Help Shape the Future</h3>
           <p>
-            Join thousands of users who have transformed their lives with
-            PeakHealth.
+            PeakHealth is community-driven. We believe the best features come
+            from the people who use the app every day. Vote on upcoming
+            features, suggest improvements, and see what we're working on.
           </p>
-          <Link href={getSignupUrl()} className={styles.ctaButton}>
-            Get Started Today
-            <ArrowRight />
-          </Link>
+          <div className={styles.communityLinks}>
+            <Link href="/roadmap" className={styles.roadmapLink}>
+              View Roadmap
+              <ArrowRight />
+            </Link>
+            <Link href="/feedback" className={styles.feedbackLink}>
+              Suggest Features
+              <ArrowRight />
+            </Link>
+          </div>
         </div>
       </div>
     </section>

@@ -75,7 +75,7 @@
   line-height: 1.6;
 }
 
-.cta {
+.communitySection {
   text-align: center;
   padding: 3rem;
   background: linear-gradient(135deg, var(--primary) 0%, #8b5cf6 100%);
@@ -83,23 +83,44 @@
   color: white;
 }
 
-.ctaButton {
+.communitySection h3 {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.communitySection p {
+  font-size: 1.125rem;
+  line-height: 1.6;
+  margin-bottom: 2rem;
+  opacity: 0.9;
+}
+
+.communityLinks {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.roadmapLink,
+.feedbackLink {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
   background: white;
   color: var(--primary);
   text-decoration: none;
-  padding: 1rem 2rem;
+  padding: 0.75rem 1.5rem;
   border-radius: var(--radius);
   font-weight: 600;
-  font-size: 1.125rem;
+  font-size: 1rem;
   transition: all 0.3s ease;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  height: 2.5rem;
 }
 
-.ctaButton:hover {
+.roadmapLink:hover,
+.feedbackLink:hover {
   transform: translateY(-2px);
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
 }
@@ -127,8 +148,17 @@
     padding: 1.5rem;
   }
 
-  .cta {
+  .communitySection {
     padding: 2rem 1.5rem;
+  }
+
+  .communitySection h3 {
+    font-size: 1.5rem;
+  }
+
+  .communityLinks {
+    flex-direction: column;
+    align-items: center;
   }
 }
 
