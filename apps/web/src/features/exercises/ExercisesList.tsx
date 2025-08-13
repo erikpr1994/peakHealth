@@ -22,7 +22,7 @@ interface ExercisesListProps {
 const ExercisesListContent = ({
   initialExercises = [],
   initialError,
-}: ExercisesListProps) => {
+}: ExercisesListProps): React.ReactElement => {
   const router = useRouter();
   const [activeCategory, setActiveCategory] = useState('All Exercises');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
@@ -34,10 +34,6 @@ const ExercisesListContent = ({
   const isLoading = false; // No longer loading since we have initial data
 
   const newExercises = exercises.filter(exercise => exercise.isNew);
-
-  const handleExerciseClick = (exercise: Exercise) => {
-    router.push(`/exercises/${exercise.id}`);
-  };
 
   if (isLoading) {
     return (
@@ -107,7 +103,11 @@ const ExercisesListContent = ({
       {/* New Exercises Section */}
       <NewExercisesCarousel
         newExercises={newExercises}
-        onExerciseClick={handleExerciseClick}
+        href={(exercise: Exercise) =>
+          exercise.mainVariantId
+            ? `/exercises/${exercise.id}/variants/${exercise.mainVariantId}`
+            : `/exercises/${exercise.id}/variants`
+        }
       />
 
       {/* Main Exercises Section */}
@@ -116,7 +116,11 @@ const ExercisesListContent = ({
         activeCategory={activeCategory}
         viewMode={viewMode}
         onViewModeChange={setViewMode}
-        onExerciseClick={handleExerciseClick}
+        href={(exercise: Exercise) =>
+          exercise.mainVariantId
+            ? `/exercises/${exercise.id}/variants/${exercise.mainVariantId}`
+            : `/exercises/${exercise.id}/variants`
+        }
       />
 
       {/* Filter Dialog */}
@@ -131,7 +135,7 @@ const ExercisesListContent = ({
 const ExercisesList = ({
   initialExercises,
   initialError,
-}: ExercisesListProps) => {
+}: ExercisesListProps): React.ReactElement => {
   return (
     <ExerciseProvider>
       <ExercisesListContent

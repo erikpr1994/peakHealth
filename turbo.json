@@ -23,6 +23,12 @@
     "supabase:start": {
       "cache": false
     },
+    "cleanup": {
+      "cache": false
+    },
+    "setup-dev-db": {
+      "cache": false
+    },
     "dev": {
       "dependsOn": ["supabase:start"],
       "cache": false,

@@ -14,7 +14,8 @@ interface ExerciseGridProps {
   activeCategory: string;
   viewMode: 'grid' | 'list';
   onViewModeChange: (mode: 'grid' | 'list') => void;
-  onExerciseClick: (exercise: Exercise) => void;
+  onExerciseClick?: (exercise: Exercise) => void;
+  href?: (exercise: Exercise) => string;
 }
 
 export const ExerciseGrid = ({
@@ -23,7 +24,8 @@ export const ExerciseGrid = ({
   viewMode,
   onViewModeChange,
   onExerciseClick,
-}: ExerciseGridProps) => {
+  href,
+}: ExerciseGridProps): React.ReactElement => {
   const { searchTerm } = useExerciseSearch();
   const { filters } = useExerciseFilters();
 
@@ -61,7 +63,7 @@ export const ExerciseGrid = ({
       : filters // Don't double-filter
   );
 
-  const getSectionTitle = () => {
+  const getSectionTitle = (): string => {
     if (activeCategory === 'All Exercises') return 'All Exercises';
     if (activeCategory === 'Favorites') return 'Favorite Exercises';
     return `${activeCategory} Exercises`;
@@ -133,7 +135,10 @@ export const ExerciseGrid = ({
           <ExerciseCard
             key={exercise.id}
             exercise={exercise}
-            onClick={() => onExerciseClick(exercise)}
+            onClick={() =>
+              onExerciseClick ? onExerciseClick(exercise) : undefined
+            }
+            href={href ? href(exercise) : undefined}
           />
         ))}
       </div>

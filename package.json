@@ -4,7 +4,7 @@
   "private": true,
   "version": "0.0.0",
   "scripts": {
-    "dev": "turbo dev",
+    "dev": "node scripts/cleanup-dev-ports.mjs && turbo dev",
     "build": "turbo build",
     "lint": "turbo lint",
     "lint:adopt": "UPDATE_ADOPTION_BLACKLIST=true eslint .",
@@ -13,7 +13,8 @@
     "test:e2e": "turbo run test:e2e --filter @peakhealth/e2e",
     "prepare": "husky",
     "supabase:start": "supabase start",
-    "setup-dev-db": "node scripts/setup-dev-db.mjs"
+    "setup-dev-db": "node scripts/setup-dev-db.mjs",
+    "cleanup": "node scripts/cleanup-dev-ports.mjs"
   },
   "devDependencies": {
     "@eslint/js": "^9.33.0",

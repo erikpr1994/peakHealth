@@ -5,7 +5,7 @@ import { useEffect } from 'react';
 
 import { useExercise } from '@/features/exercises/hooks/useExercises';
 
-const ExerciseRedirectPage = () => {
+const ExerciseVariantsRedirectPage = (): React.ReactElement => {
   const { exerciseId } = useParams();
   const router = useRouter();
   const { exercise, isLoading, error } = useExercise(exerciseId as string);
@@ -104,7 +104,16 @@ const ExerciseRedirectPage = () => {
     );
   }
 
-  return null;
+  return (
+    <div className="w-full px-4 sm:px-6 lg:px-8 py-6">
+      <div className="text-center">
+        <h1 className="text-2xl font-bold text-gray-900 mb-4">
+          Loading Exercise...
+        </h1>
+        <p className="text-gray-600">Redirecting to exercise details...</p>
+      </div>
+    </div>
+  );
 };
 
-export default ExerciseRedirectPage;
+export default ExerciseVariantsRedirectPage;
