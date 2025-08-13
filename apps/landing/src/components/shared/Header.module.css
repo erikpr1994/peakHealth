@@ -1,13 +1,11 @@
 .header {
-  position: fixed;
+  position: sticky;
   top: 0;
-  left: 0;
-  right: 0;
-  z-index: 1000;
-  background-color: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(10px);
+  z-index: 50;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(8px);
   border-bottom: 1px solid var(--border);
-  transition: all 0.3s ease;
+  padding: 1rem 0;
 }
 
 .container {
@@ -17,7 +15,6 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 70px;
 }
 
 .logo {
@@ -25,13 +22,10 @@
 }
 
 .logoLink {
-  text-decoration: none;
-  color: inherit;
-}
-
-.logoText {
   font-size: 1.5rem;
-  font-weight: 700;
+  font-weight: 800;
+  color: var(--foreground);
+  text-decoration: none;
   background: linear-gradient(135deg, var(--primary) 0%, #8b5cf6 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -40,172 +34,243 @@
 
 .nav {
   display: flex;
+  gap: 2rem;
   align-items: center;
 }
 
-.navList {
-  display: flex;
-  list-style: none;
-  gap: 2rem;
-  margin: 0;
-  padding: 0;
-}
-
-.navItem {
-  margin: 0;
-}
-
 .navLink {
+  color: var(--muted-foreground);
   text-decoration: none;
-  color: var(--foreground);
   font-weight: 500;
   transition: color 0.2s ease;
-  position: relative;
 }
 
 .navLink:hover {
-  color: var(--primary);
-}
-
-.navLink::after {
-  content: '';
-  position: absolute;
-  bottom: -4px;
-  left: 0;
-  width: 0;
-  height: 2px;
-  background: var(--primary);
-  transition: width 0.2s ease;
-}
-
-.navLink:hover::after {
-  width: 100%;
+  color: var(--foreground);
 }
 
 .actions {
   display: flex;
-  align-items: center;
   gap: 1rem;
+  align-items: center;
 }
 
-.loginLink {
-  text-decoration: none;
-  color: var(--foreground);
-  font-weight: 500;
-  padding: 0.5rem 1rem;
-  border-radius: var(--radius);
-  transition: all 0.2s ease;
-}
-
-.loginLink:hover {
-  background-color: var(--secondary);
-}
-
-.signupLink {
-  display: flex;
+.signInLink {
+  display: inline-flex;
   align-items: center;
   gap: 0.5rem;
+  background: transparent;
+  color: var(--foreground);
+  border: 1px solid var(--border);
   text-decoration: none;
-  color: white;
-  background: var(--primary);
-  font-weight: 500;
-  padding: 0.75rem 1.5rem;
+  padding: 0.5rem 1rem;
   border-radius: var(--radius);
-  transition: all 0.2s ease;
+  font-weight: 500;
+  font-size: 0.875rem;
+  transition: all 0.3s ease;
+  height: 2rem;
 }
 
-.signupLink:hover {
+.signInLink:hover {
+  background: var(--secondary);
+  border-color: var(--primary);
+}
+
+.signUpLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--primary);
+  color: white;
+  text-decoration: none;
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius);
+  font-weight: 500;
+  font-size: 0.875rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.2);
+  height: 2rem;
+}
+
+.signUpLink:hover {
   background: #2563eb;
   transform: translateY(-1px);
   box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
 }
 
-.arrowIcon {
-  width: 16px;
-  height: 16px;
-  transition: transform 0.2s ease;
-}
-
-.signupLink:hover .arrowIcon {
-  transform: translateX(2px);
-}
-
-.menuButton {
+/* Mobile Menu Button */
+.mobileMenuButton {
   display: none;
-  background: none;
+  flex-direction: column;
+  justify-content: space-around;
+  width: 2.5rem;
+  height: 2.5rem;
+  background: transparent;
   border: none;
   cursor: pointer;
   padding: 0.5rem;
-  border-radius: var(--radius);
-  transition: background-color 0.2s ease;
+  z-index: 101;
+  border-radius: 8px;
+  transition: all 0.2s ease;
 }
 
-.menuButton:hover {
-  background-color: var(--secondary);
+.mobileMenuButton:hover {
+  background: rgba(0, 0, 0, 0.05);
 }
 
-.menuIcon {
-  width: 24px;
-  height: 24px;
+.hamburgerLine {
+  width: 1.5rem;
+  height: 0.2rem;
+  background: var(--foreground);
+  border-radius: 2px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  transform-origin: center;
+}
+
+.closeIcon {
   color: var(--foreground);
+  transition: all 0.3s ease;
+}
+
+/* Mobile Navigation Overlay */
+.mobileMenuOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: transparent;
+  z-index: 100;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-end;
+  padding-top: 0;
+}
+
+.mobileNav {
+  background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+  width: 100%;
+  max-width: 320px;
+  height: 100vh;
+  padding: 2rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  box-shadow: -8px 0 32px rgba(0, 0, 0, 0.15);
+  border-left: 1px solid rgba(0, 0, 0, 0.05);
+  margin-top: 0;
+  transform: translateX(0);
+  animation: slideIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.mobileNav.closing {
+  transform: translateX(100%);
+}
+
+.mobileNavLink {
+  color: var(--foreground);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 1.1rem;
+  padding: 1rem 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.mobileNavLink:hover {
+  color: var(--primary);
+  background: rgba(59, 130, 246, 0.05);
+  margin: 0 -1.5rem;
+  padding: 1rem 1.5rem;
+  border-radius: 0;
+}
+
+.mobileNavLink:last-of-type {
+  border-bottom: none;
+}
+
+.mobileActions {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: auto;
+  padding-top: 2rem;
+  border-top: 2px solid rgba(0, 0, 0, 0.08);
+}
+
+.mobileSignInLink {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background: transparent;
+  color: var(--foreground);
+  border: 2px solid var(--border);
+  text-decoration: none;
+  padding: 0.875rem 1.5rem;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.mobileSignInLink:hover {
+  background: var(--secondary);
+  border-color: var(--primary);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.mobileSignUpLink {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background: linear-gradient(135deg, var(--primary) 0%, #2563eb 100%);
+  color: white;
+  text-decoration: none;
+  padding: 0.875rem 1.5rem;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 16px rgba(59, 130, 246, 0.3);
+  border: none;
+}
+
+.mobileSignUpLink:hover {
+  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(59, 130, 246, 0.4);
+}
+
+@keyframes slideIn {
+  0% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(0);
+  }
 }
 
 /* Mobile styles */
 @media (max-width: 768px) {
   .nav {
-    position: fixed;
-    top: 70px;
-    left: 0;
-    right: 0;
-    background-color: white;
-    border-bottom: 1px solid var(--border);
-    transform: translateY(-100%);
-    opacity: 0;
-    visibility: hidden;
-    transition: all 0.3s ease;
-  }
-
-  .navOpen {
-    transform: translateY(0);
-    opacity: 1;
-    visibility: visible;
-  }
-
-  .navList {
-    flex-direction: column;
-    gap: 0;
-    padding: 1rem 0;
-  }
-
-  .navItem {
-    width: 100%;
-  }
-
-  .navLink {
-    display: block;
-    padding: 1rem 2rem;
-    border-bottom: 1px solid var(--border);
-  }
-
-  .navLink::after {
     display: none;
   }
 
   .actions {
-    gap: 0.5rem;
+    display: none;
   }
 
-  .loginLink {
-    padding: 0.5rem;
-  }
-
-  .signupLink {
-    padding: 0.5rem 1rem;
-    font-size: 0.875rem;
-  }
-
-  .menuButton {
-    display: block;
+  .mobileMenuButton {
+    display: flex;
   }
 }
 
@@ -214,21 +279,12 @@
     padding: 0 0.75rem;
   }
 
-  .logoText {
+  .logoLink {
     font-size: 1.25rem;
   }
 
-  .actions {
-    gap: 0.25rem;
-  }
-
-  .signupLink {
-    padding: 0.5rem 0.75rem;
-    font-size: 0.8rem;
-  }
-
-  .arrowIcon {
-    width: 14px;
-    height: 14px;
+  .mobileNav {
+    max-width: 100%;
+    padding: 2rem 1rem;
   }
 }

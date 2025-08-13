@@ -1,8 +1,8 @@
 .hero {
-  min-height: 100vh;
+  min-height: 90vh;
   display: flex;
   align-items: center;
-  padding-top: 70px;
+  padding-top: 3rem;
   background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
   position: relative;
   overflow: hidden;
@@ -76,91 +76,55 @@
   margin-bottom: 2.5rem;
 }
 
-.actions {
-  display: flex;
-  gap: 1rem;
-  margin-bottom: 3rem;
-}
-
-.primaryButton {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  background: var(--primary);
-  color: white;
-  text-decoration: none;
-  padding: 1rem 2rem;
-  border-radius: var(--radius);
-  font-weight: 600;
-  font-size: 1.125rem;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
-}
-
-.primaryButton:hover {
-  background: #2563eb;
-  transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
-}
-
-.arrowIcon {
-  width: 20px;
-  height: 20px;
-  transition: transform 0.3s ease;
-}
-
-.primaryButton:hover .arrowIcon {
-  transform: translateX(4px);
-}
-
-.secondaryButton {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  background: transparent;
-  color: var(--foreground);
-  border: 2px solid var(--border);
-  padding: 1rem 2rem;
-  border-radius: var(--radius);
-  font-weight: 600;
-  font-size: 1.125rem;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.secondaryButton:hover {
-  background: var(--secondary);
-  border-color: var(--primary);
-  color: var(--primary);
-}
-
-.playIcon {
-  width: 20px;
-  height: 20px;
-}
-
-.stats {
-  display: flex;
-  gap: 3rem;
-}
-
-.stat {
+.valueProps {
   display: flex;
   flex-direction: column;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.valueProp {
+  display: flex;
   align-items: flex-start;
+  gap: 1rem;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.7);
+  border-radius: 12px;
+  border: 1px solid rgba(59, 130, 246, 0.1);
+  transition: all 0.3s ease;
 }
 
-.statNumber {
-  font-size: 2rem;
-  font-weight: 800;
-  color: var(--primary);
-  line-height: 1;
+.valueProp:hover {
+  background: rgba(255, 255, 255, 0.9);
+  transform: translateX(4px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-.statLabel {
+.valueIcon {
+  font-size: 1.5rem;
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--primary);
+  color: white;
+  border-radius: 8px;
+}
+
+.valueContent h3 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--foreground);
+  margin-bottom: 0.5rem;
+}
+
+.valueContent p {
   font-size: 0.875rem;
   color: var(--muted-foreground);
-  margin-top: 0.25rem;
+  line-height: 1.5;
+  margin: 0;
 }
 
 .visual {
@@ -288,12 +252,53 @@
   margin-top: 0.25rem;
 }
 
-/* Mobile styles */
+/* Desktop styles (1024px and up) */
+@media (min-width: 1024px) {
+  .hero {
+    min-height: auto;
+    padding-top: 1.5rem;
+    padding-bottom: 3rem;
+  }
+
+  .badge {
+    margin-bottom: 1.5rem;
+  }
+
+  .title {
+    margin-bottom: 1.5rem;
+  }
+
+  .description {
+    margin-bottom: 2.5rem;
+  }
+}
+
+/* Tablet styles (768px to 1023px) */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .hero {
+    min-height: auto;
+    padding-top: 1rem;
+    padding-bottom: 1.5rem;
+  }
+
+  .badge {
+    margin-bottom: 0.75rem;
+  }
+
+  .title {
+    margin-bottom: 0.75rem;
+  }
+
+  .description {
+    margin-bottom: 1.5rem;
+  }
+}
+
+/* Tablet and mobile layout adjustments */
 @media (max-width: 1024px) {
   .container {
     grid-template-columns: 1fr;
     gap: 3rem;
-    text-align: center;
   }
 
   .content {
@@ -304,8 +309,8 @@
     font-size: 2.5rem;
   }
 
-  .stats {
-    justify-content: center;
+  .valueProps {
+    gap: 1rem;
   }
 
   .mockup {
@@ -319,11 +324,12 @@
   }
 }
 
+/* Mobile styles */
 @media (max-width: 768px) {
   .hero {
-    padding-top: 100px;
+    padding-top: 1rem;
     min-height: auto;
-    padding-bottom: 4rem;
+    padding-bottom: 3rem;
   }
 
   .title {
@@ -334,25 +340,30 @@
     font-size: 1.125rem;
   }
 
-  .actions {
-    flex-direction: column;
-    align-items: center;
+  .badge {
+    margin-bottom: 1rem;
   }
 
-  .primaryButton,
-  .secondaryButton {
-    width: 100%;
-    max-width: 300px;
-    justify-content: center;
+  .title {
+    margin-bottom: 1rem;
   }
 
-  .stats {
-    flex-direction: column;
-    gap: 1.5rem;
+  .description {
+    margin-bottom: 2rem;
   }
 
-  .stat {
-    align-items: center;
+  .valueProps {
+    gap: 1rem;
+  }
+
+  .valueProp {
+    padding: 0.75rem;
+  }
+
+  .valueIcon {
+    width: 32px;
+    height: 32px;
+    font-size: 1.25rem;
   }
 
   .mockup {

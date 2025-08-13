@@ -1,20 +1,19 @@
-.section {
+.cta {
   padding: 6rem 0;
   background: linear-gradient(135deg, var(--primary) 0%, #8b5cf6 100%);
   color: white;
-  text-align: center;
 }
 
 .container {
-  max-width: 800px;
+  max-width: 1200px;
   margin: 0 auto;
   padding: 0 1rem;
 }
 
 .content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  text-align: center;
+  max-width: 600px;
+  margin: 0 auto;
 }
 
 .title {
@@ -22,55 +21,24 @@
   font-weight: 800;
   line-height: 1.1;
   margin-bottom: 1.5rem;
-  color: white;
-}
-
-.gradientText {
-  background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
 }
 
 .description {
   font-size: 1.25rem;
   line-height: 1.6;
-  margin-bottom: 2rem;
-  opacity: 0.9;
-}
-
-.features {
-  display: flex;
-  gap: 2rem;
   margin-bottom: 2.5rem;
-  flex-wrap: wrap;
-  justify-content: center;
-}
-
-.feature {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-weight: 500;
-}
-
-.checkIcon {
-  width: 20px;
-  height: 20px;
-  color: #fbbf24;
-  flex-shrink: 0;
+  opacity: 0.9;
 }
 
 .actions {
   display: flex;
   gap: 1rem;
-  margin-bottom: 1.5rem;
-  flex-wrap: wrap;
   justify-content: center;
+  flex-wrap: wrap;
 }
 
 .primaryButton {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   gap: 0.5rem;
   background: white;
@@ -82,6 +50,7 @@
   font-size: 1.125rem;
   transition: all 0.3s ease;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  height: 2.5rem;
 }
 
 .primaryButton:hover {
@@ -89,45 +58,33 @@
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
 }
 
-.arrowIcon {
-  width: 20px;
-  height: 20px;
-  transition: transform 0.3s ease;
-}
-
-.primaryButton:hover .arrowIcon {
-  transform: translateX(4px);
-}
-
 .secondaryButton {
-  display: flex;
+  display: inline-flex;
   align-items: center;
+  gap: 0.5rem;
   background: transparent;
   color: white;
+  border: 2px solid white;
   text-decoration: none;
   padding: 1rem 2rem;
-  border: 2px solid rgba(255, 255, 255, 0.3);
   border-radius: var(--radius);
   font-weight: 600;
   font-size: 1.125rem;
   transition: all 0.3s ease;
+  cursor: pointer;
+  height: 2.5rem;
 }
 
 .secondaryButton:hover {
-  background: rgba(255, 255, 255, 0.1);
-  border-color: white;
-}
-
-.disclaimer {
-  font-size: 0.875rem;
-  opacity: 0.7;
-  margin: 0;
+  background: white;
+  color: var(--primary);
+  transform: translateY(-2px);
 }
 
 /* Mobile styles */
 @media (max-width: 768px) {
-  .section {
-    padding: 4rem 0;
+  .cta {
+    padding: 2rem 0;
   }
 
   .title {
@@ -138,22 +95,9 @@
     font-size: 1.125rem;
   }
 
-  .features {
-    flex-direction: column;
-    gap: 1rem;
-    align-items: center;
-  }
-
   .actions {
     flex-direction: column;
-    width: 100%;
-    max-width: 300px;
-  }
-
-  .primaryButton,
-  .secondaryButton {
-    width: 100%;
-    justify-content: center;
+    align-items: center;
   }
 }
 
@@ -164,18 +108,5 @@
 
   .title {
     font-size: 1.75rem;
-  }
-
-  .description {
-    font-size: 1rem;
-  }
-
-  .feature {
-    font-size: 0.875rem;
-  }
-
-  .checkIcon {
-    width: 18px;
-    height: 18px;
   }
 }

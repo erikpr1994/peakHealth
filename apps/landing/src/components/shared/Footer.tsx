@@ -1,115 +1,78 @@
-import Link from 'next/link';
-import React from 'react';
+'use client';
 
+import React, { useState, useEffect } from 'react';
+import Link from 'next/link';
+import { getSignupUrl } from '@/lib/auth';
 import styles from './Footer.module.css';
 
-import { getSignupUrl } from '@/lib/auth';
+export const Footer = (): React.JSX.Element => {
+  const [currentYear, setCurrentYear] = useState('');
+  const [signupUrl, setSignupUrl] = useState('');
+  const [isMounted, setIsMounted] = useState(false);
 
-const Button: React.FC<
-  React.ButtonHTMLAttributes<HTMLButtonElement> & {
-    variant?: 'primary' | 'secondary' | 'outline';
-    size?: 'sm' | 'md' | 'lg';
-    asChild?: boolean;
-  }
-> = ({
-  variant = 'primary',
-  size = 'md',
-  asChild = false,
-  className,
-  children,
-  ...props
-}) => {
-  const buttonClasses = `${styles.button} ${styles[`button--${variant}`]} ${styles[`button--${size}`]} ${className ?? ''}`;
+  // Set values on client side only to prevent hydration mismatches
+  useEffect((): void => {
+    setIsMounted(true);
+    setCurrentYear(new Date().getFullYear().toString());
+    setSignupUrl(getSignupUrl());
+  }, []);
 
-  if (asChild && React.isValidElement(children)) {
-    return React.cloneElement(children as React.ReactElement<any>, {
-      className: buttonClasses,
-      ...props,
-    });
-  }
-
-  return (
-    <button className={buttonClasses} {...props}>
-      {children}
-    </button>
-  );
-};
-
-export const Footer = () => {
   return (
     <footer className={styles.footer}>
       <div className={styles.container}>
         <div className={styles.content}>
           <div className={styles.section}>
-            <h3 className={styles.title}>Peak Health</h3>
+            <div className={styles.title}>PeakHealth</div>
             <p className={styles.description}>
-              Your ultimate fitness companion for tracking workouts, monitoring
-              progress, and achieving your fitness goals.
+              Transform your fitness journey with personalized workouts, expert
+              guidance, and a supportive community.
             </p>
-            <Button asChild variant="primary" size="sm">
-              <Link href={getSignupUrl()}>Get Started</Link>
-            </Button>
+            <Link
+              href={isMounted ? signupUrl : '#'}
+              className={styles.ctaButton}
+            >
+              Get Started
+            </Link>
           </div>
 
           <div className={styles.section}>
-            <h4 className={styles.sectionTitle}>Product</h4>
-            <ul className={styles.links}>
-              <li>
-                <Link href="/features">Features</Link>
-              </li>
-              <li>
-                <Link href="/pricing">Pricing</Link>
-              </li>
-              <li>
-                <Link href="/blog">Blog</Link>
-              </li>
-              <li>
-                <Link href="/about">About</Link>
-              </li>
-            </ul>
+            <h3 className={styles.sectionTitle}>Product</h3>
+            <div className={styles.links}>
+              <Link href="/features">Features</Link>
+              <Link href="/roadmap">Roadmap</Link>
+              <Link href="/feedback">Feedback</Link>
+            </div>
           </div>
 
           <div className={styles.section}>
-            <h4 className={styles.sectionTitle}>Support</h4>
-            <ul className={styles.links}>
-              <li>
-                <Link href="/help">Help Center</Link>
-              </li>
-              <li>
-                <Link href="/contact">Contact</Link>
-              </li>
-              <li>
-                <Link href="/privacy">Privacy</Link>
-              </li>
-              <li>
-                <Link href="/terms">Terms</Link>
-              </li>
-            </ul>
+            <h3 className={styles.sectionTitle}>Company</h3>
+            <div className={styles.links}>
+              <Link href="/blog">Blog</Link>
+              <Link href="/careers">Careers</Link>
+              <Link href="/contact" className={styles.link}>
+                Contact
+              </Link>
+            </div>
           </div>
 
           <div className={styles.section}>
-            <h4 className={styles.sectionTitle}>Connect</h4>
-            <ul className={styles.links}>
-              <li>
-                <Link href="/twitter">Twitter</Link>
-              </li>
-              <li>
-                <Link href="/facebook">Facebook</Link>
-              </li>
-              <li>
-                <Link href="/instagram">Instagram</Link>
-              </li>
-              <li>
-                <Link href="/linkedin">LinkedIn</Link>
-              </li>
-            </ul>
+            <h3 className={styles.sectionTitle}>Support</h3>
+            <div className={styles.links}>
+              <Link href="/help">Help Center</Link>
+              <Link href="/feedback">Feedback</Link>
+            </div>
           </div>
         </div>
 
         <div className={styles.bottom}>
-          <p className={styles.copyright}>
-            © 2024 Peak Health. All rights reserved.
-          </p>
+          <div className={styles.copyright}>
+            © {isMounted ? currentYear : '2025'} PeakHealth. All rights
+            reserved.
+          </div>
+          <div className={styles.legal}>
+            <Link href="/privacy">Privacy Policy</Link>
+            <Link href="/terms">Terms of Service</Link>
+          </div>
         </div>
       </div>
     </footer>

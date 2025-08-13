@@ -14,7 +14,19 @@
       },
       "routing": [
         {
-          "paths": ["/", "/blog", "/blog/:path*"]
+          "paths": [
+            "/",
+            "/blog",
+            "/blog/:path*",
+            "/features",
+            "/roadmap",
+            "/feedback",
+            "/careers",
+            "/contact",
+            "/help",
+            "/privacy",
+            "/terms"
+          ]
         }
       ]
     }

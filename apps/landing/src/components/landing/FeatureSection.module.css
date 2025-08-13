@@ -1,4 +1,4 @@
-.section {
+.features {
   padding: 6rem 0;
   background: white;
 }
@@ -22,14 +22,7 @@
   color: var(--foreground);
 }
 
-.gradientText {
-  background: linear-gradient(135deg, var(--primary) 0%, #8b5cf6 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-.subtitle {
+.description {
   font-size: 1.25rem;
   line-height: 1.6;
   color: var(--muted-foreground);
@@ -50,6 +43,9 @@
   border-radius: 16px;
   transition: all 0.3s ease;
   border: 1px solid var(--border);
+  display: flex;
+  align-items: flex-start;
+  gap: 1.5rem;
 }
 
 .feature:hover {
@@ -58,7 +54,7 @@
   border-color: var(--primary);
 }
 
-.iconContainer {
+.icon {
   width: 60px;
   height: 60px;
   background: var(--primary);
@@ -66,28 +62,29 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 1.5rem;
+  flex-shrink: 0;
+  color: white;
 }
 
-.icon {
-  width: 28px;
-  height: 28px;
-  color: white;
+.content {
+  flex: 1;
+  min-width: 0;
 }
 
 .featureTitle {
   font-size: 1.25rem;
   font-weight: 700;
-  margin-bottom: 1rem;
+  margin-bottom: 0.75rem;
   color: var(--foreground);
 }
 
 .featureDescription {
   color: var(--muted-foreground);
   line-height: 1.6;
+  margin: 0;
 }
 
-.cta {
+.communitySection {
   text-align: center;
   padding: 3rem;
   background: linear-gradient(135deg, var(--primary) 0%, #8b5cf6 100%);
@@ -95,34 +92,51 @@
   color: white;
 }
 
-.ctaText {
-  font-size: 1.5rem;
-  font-weight: 600;
-  margin-bottom: 1.5rem;
+.communitySection h3 {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
 }
 
-.ctaButton {
+.communitySection p {
+  font-size: 1.125rem;
+  line-height: 1.6;
+  margin-bottom: 2rem;
+  opacity: 0.9;
+}
+
+.communityLinks {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.roadmapLink,
+.feedbackLink {
   display: inline-flex;
   align-items: center;
+  gap: 0.5rem;
   background: white;
   color: var(--primary);
   text-decoration: none;
-  padding: 1rem 2rem;
+  padding: 0.75rem 1.5rem;
   border-radius: var(--radius);
   font-weight: 600;
-  font-size: 1.125rem;
+  font-size: 1rem;
   transition: all 0.3s ease;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-.ctaButton:hover {
+.roadmapLink:hover,
+.feedbackLink:hover {
   transform: translateY(-2px);
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
 }
 
 /* Mobile styles */
 @media (max-width: 768px) {
-  .section {
+  .features {
     padding: 4rem 0;
   }
 
@@ -130,7 +144,7 @@
     font-size: 2rem;
   }
 
-  .subtitle {
+  .description {
     font-size: 1.125rem;
   }
 
@@ -141,14 +155,29 @@
 
   .feature {
     padding: 1.5rem;
+    gap: 1rem;
   }
 
-  .cta {
+  .icon {
+    width: 50px;
+    height: 50px;
+  }
+
+  .featureTitle {
+    font-size: 1.125rem;
+  }
+
+  .communitySection {
     padding: 2rem 1.5rem;
   }
 
-  .ctaText {
-    font-size: 1.25rem;
+  .communitySection h3 {
+    font-size: 1.5rem;
+  }
+
+  .communityLinks {
+    flex-direction: column;
+    align-items: center;
   }
 }
 
@@ -163,15 +192,15 @@
 
   .feature {
     padding: 1.25rem;
-  }
-
-  .iconContainer {
-    width: 50px;
-    height: 50px;
+    gap: 0.75rem;
   }
 
   .icon {
-    width: 24px;
-    height: 24px;
+    width: 45px;
+    height: 45px;
+  }
+
+  .featureTitle {
+    font-size: 1rem;
   }
 }

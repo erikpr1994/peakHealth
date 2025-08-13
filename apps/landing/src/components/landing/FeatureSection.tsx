@@ -1,112 +1,73 @@
-import { Check, ArrowRight } from 'lucide-react';
-import Link from 'next/link';
 import React from 'react';
-
+import Link from 'next/link';
+import { ArrowRight, Dumbbell, BarChart3, Users } from 'lucide-react';
 import styles from './FeatureSection.module.css';
 
-import { getSignupUrl } from '@/lib/auth';
+export const FeatureSection = (): React.JSX.Element => {
+  const features = [
+    {
+      icon: <Dumbbell />,
+      title: 'Log Workouts',
+      description:
+        'Track your exercises, sets, reps, and weights with our intuitive workout logging interface.',
+    },
+    {
+      icon: <BarChart3 />,
+      title: 'Track Progress',
+      description:
+        'Monitor your gains with detailed charts, personal records, and exercise history.',
+    },
+    {
+      icon: <Users />,
+      title: 'Community Driven',
+      description:
+        'Help shape the future of PeakHealth by voting on features and suggesting improvements.',
+    },
+  ];
 
-const Button: React.FC<
-  React.ButtonHTMLAttributes<HTMLButtonElement> & {
-    variant?: 'primary' | 'secondary' | 'outline';
-    size?: 'sm' | 'md' | 'lg';
-    asChild?: boolean;
-  }
-> = ({
-  variant = 'primary',
-  size = 'md',
-  asChild = false,
-  className,
-  children,
-  ...props
-}) => {
-  const buttonClasses = `${styles.button} ${styles[`button--${variant}`]} ${styles[`button--${size}`]} ${className ?? ''}`;
-
-  if (asChild && React.isValidElement(children)) {
-    return React.cloneElement(children as React.ReactElement<any>, {
-      className: buttonClasses,
-      ...props,
-    });
-  }
-
-  return (
-    <button className={buttonClasses} {...props}>
-      {children}
-    </button>
-  );
-};
-
-const features = [
-  {
-    title: 'Workout Tracking',
-    description:
-      'Log your exercises, sets, and reps with our intuitive interface.',
-    icon: Check,
-  },
-  {
-    title: 'Progress Analytics',
-    description:
-      'Visualize your fitness journey with detailed charts and insights.',
-    icon: Check,
-  },
-  {
-    title: 'Personalized Plans',
-    description:
-      'Get custom workout plans tailored to your goals and fitness level.',
-    icon: Check,
-  },
-  {
-    title: 'Social Features',
-    description:
-      'Connect with friends, share achievements, and stay motivated.',
-    icon: Check,
-  },
-  {
-    title: 'Nutrition Tracking',
-    description:
-      "Monitor your diet and ensure you're fueling your workouts properly.",
-    icon: Check,
-  },
-  {
-    title: 'Expert Guidance',
-    description: 'Access to certified trainers and fitness professionals.',
-    icon: Check,
-  },
-];
-
-export const FeatureSection = () => {
   return (
     <section className={styles.features}>
       <div className={styles.container}>
         <div className={styles.header}>
-          <h2 className={styles.title}>
-            Everything you need to achieve your fitness goals
-          </h2>
+          <h2 className={styles.title}>Why Choose PeakHealth?</h2>
           <p className={styles.description}>
-            Peak Health provides all the tools and features you need to
-            transform your fitness journey and reach your goals faster.
+            A workout tracker that focuses on what matters most - logging
+            workouts, tracking progress, and building a better experience
+            together.
           </p>
         </div>
 
         <div className={styles.grid}>
           {features.map((feature, index) => (
             <div key={index} className={styles.feature}>
-              <div className={styles.icon}>
-                <feature.icon className={styles.iconSvg} />
+              <div className={styles.icon}>{feature.icon}</div>
+              <div className={styles.content}>
+                <h3 className={styles.featureTitle}>{feature.title}</h3>
+                <p className={styles.featureDescription}>
+                  {feature.description}
+                </p>
               </div>
-              <h3 className={styles.featureTitle}>{feature.title}</h3>
-              <p className={styles.featureDescription}>{feature.description}</p>
             </div>
           ))}
         </div>
 
-        <div className={styles.cta}>
-          <Button asChild variant="primary" size="lg">
-            <Link href={getSignupUrl()}>
-              Get Started Today
-              <ArrowRight className={styles.arrowIcon} />
+        <div className={styles.communitySection}>
+          <h3>Help Shape the Future</h3>
+          <p>
+            PeakHealth is community-driven. We believe the best features come
+            from the people who use the app every day. Vote on upcoming
+            features, suggest improvements, and see what we're working on.
+          </p>
+          <div className={styles.communityLinks}>
+            <Link href="/roadmap" className={styles.roadmapLink}>
+              View Roadmap
+              <ArrowRight />
             </Link>
-          </Button>
+            <Link href="/feedback" className={styles.feedbackLink}>
+              Suggest Features
+              <ArrowRight />
+            </Link>
+          </div>
         </div>
       </div>
     </section>

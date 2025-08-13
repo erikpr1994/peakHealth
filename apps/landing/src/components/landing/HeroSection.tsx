@@ -1,90 +1,51 @@
 'use client';
 
-import { ArrowRight, Play, Star } from 'lucide-react';
-import Link from 'next/link';
+import { Star } from 'lucide-react';
 import React from 'react';
 
 import styles from './HeroSection.module.css';
 
-import { getSignupUrl } from '@/lib/auth';
-
-const Button: React.FC<
-  React.ButtonHTMLAttributes<HTMLButtonElement> & {
-    variant?: 'primary' | 'secondary' | 'outline';
-    size?: 'sm' | 'md' | 'lg';
-    asChild?: boolean;
-  }
-> = ({
-  variant = 'primary',
-  size = 'md',
-  asChild = false,
-  className,
-  children,
-  ...props
-}) => {
-  const buttonClasses = `${styles.button} ${styles[`button--${variant}`]} ${styles[`button--${size}`]} ${className ?? ''}`;
-
-  if (asChild && React.isValidElement(children)) {
-    return React.cloneElement(children as React.ReactElement<any>, {
-      className: buttonClasses,
-      ...props,
-    });
-  }
-
-  return (
-    <button className={buttonClasses} {...props}>
-      {children}
-    </button>
-  );
-};
-
-export const HeroSection = () => {
+export const HeroSection = (): React.JSX.Element => {
   return (
     <section className={styles.hero}>
       <div className={styles.container}>
         <div className={styles.content}>
           <div className={styles.badge}>
             <Star className={styles.starIcon} />
-            <span>Join 10,000+ fitness enthusiasts</span>
+            <span>Coming Soon - Be the First to Experience</span>
           </div>
 
           <h1 className={styles.title}>
             Your Ultimate
-            <span className={styles.gradientText}> Fitness Companion</span>
+            <span className={styles.gradientText}> Workout Tracker</span>
           </h1>
 
           <p className={styles.description}>
-            Track workouts, monitor progress, and achieve your fitness goals
-            with Peak Health. Join thousands of users transforming their fitness
-            journey with our comprehensive platform.
+            Log workouts, track progress, and stay motivated with PeakHealth.
+            Build routines, measure your gains, and enjoy a better experience
+            than other workout apps.
           </p>
 
-          <div className={styles.actions}>
-            <Button asChild variant="primary" size="lg">
-              <Link href={getSignupUrl()}>
-                Start Your Journey
-                <ArrowRight className={styles.arrowIcon} />
-              </Link>
-            </Button>
-
-            <Button variant="outline" size="lg">
-              <Play className={styles.playIcon} />
-              Watch Demo
-            </Button>
-          </div>
-
-          <div className={styles.stats}>
-            <div className={styles.stat}>
-              <span className={styles.statNumber}>50K+</span>
-              <span className={styles.statLabel}>Active Users</span>
+          <div className={styles.valueProps}>
+            <div className={styles.valueProp}>
+              <div className={styles.valueIcon}>📝</div>
+              <div className={styles.valueContent}>
+                <h3>Log Workouts</h3>
+                <p>
+                  Track your exercises, sets, reps, and weights with our
+                  intuitive workout logging interface
+                </p>
+              </div>
             </div>
-            <div className={styles.stat}>
-              <span className={styles.statNumber}>1M+</span>
-              <span className={styles.statLabel}>Workouts Tracked</span>
-            </div>
-            <div className={styles.stat}>
-              <span className={styles.statNumber}>4.9</span>
-              <span className={styles.statLabel}>App Store Rating</span>
+            <div className={styles.valueProp}>
+              <div className={styles.valueIcon}>📊</div>
+              <div className={styles.valueContent}>
+                <h3>Track Progress</h3>
+                <p>
+                  Monitor your gains with detailed charts, personal records, and
+                  exercise history
+                </p>
+              </div>
             </div>
           </div>
         </div>
@@ -95,7 +56,7 @@ export const HeroSection = () => {
               <div className={styles.screen}>
                 <div className={styles.appHeader}>
                   <div className={styles.appIcon}></div>
-                  <div className={styles.appTitle}>Peak Health</div>
+                  <div className={styles.appTitle}>PeakHealth</div>
                 </div>
                 <div className={styles.appContent}>
                   <div className={styles.workoutCard}>
