@@ -28,6 +28,10 @@
       "persistent": true,
       "dependsOn": ["supabase:start"]
     },
+    "dev:microfrontends": {
+      "cache": false,
+      "persistent": true
+    },
     "test": {
       "dependsOn": ["^build"],
       "outputs": [],
