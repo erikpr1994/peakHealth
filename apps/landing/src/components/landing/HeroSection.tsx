@@ -1,13 +1,11 @@
 'use client';
 
-import { ArrowRight, Play, Star } from 'lucide-react';
+import { ArrowRight, Star } from 'lucide-react';
 import Link from 'next/link';
 import React from 'react';
 
-import styles from './HeroSection.module.css';
-
 import { getSignupUrl } from '@/lib/auth';
-import { Button } from '@peakhealth/ui';
+import styles from './HeroSection.module.css';
 
 export const HeroSection = (): React.JSX.Element => {
   return (
@@ -35,11 +33,6 @@ export const HeroSection = (): React.JSX.Element => {
               Start Your Journey
               <ArrowRight />
             </Link>
-
-            <Button variant="outline" size="lg">
-              <Play />
-              Watch Demo
-            </Button>
           </div>
 
           <div className={styles.stats}>
