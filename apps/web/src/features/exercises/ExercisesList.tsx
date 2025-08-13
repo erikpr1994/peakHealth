@@ -35,12 +35,6 @@ const ExercisesListContent = ({
 
   const newExercises = exercises.filter(exercise => exercise.isNew);
 
-  // Use Link components for direct navigation from exercises page to prevent modal interception
-  const handleExerciseClick = (exercise: Exercise): void => {
-    // This will only be used when href is not provided (for modal contexts)
-    router.push(`/exercises/${exercise.id}/variants/${exercise.mainVariantId}`);
-  };
-
   if (isLoading) {
     return (
       <div className="w-full px-4 sm:px-6 lg:px-8 py-6">
@@ -109,7 +103,6 @@ const ExercisesListContent = ({
       {/* New Exercises Section */}
       <NewExercisesCarousel
         newExercises={newExercises}
-        onExerciseClick={handleExerciseClick}
         href={(exercise: Exercise) =>
           `/exercises/${exercise.id}/variants/${exercise.mainVariantId}`
         }
@@ -121,7 +114,6 @@ const ExercisesListContent = ({
         activeCategory={activeCategory}
         viewMode={viewMode}
         onViewModeChange={setViewMode}
-        onExerciseClick={handleExerciseClick}
         href={(exercise: Exercise) =>
           `/exercises/${exercise.id}/variants/${exercise.mainVariantId}`
         }

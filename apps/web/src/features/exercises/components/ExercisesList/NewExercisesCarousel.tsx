@@ -11,7 +11,7 @@ import {
 
 interface NewExercisesCarouselProps {
   newExercises: Exercise[];
-  onExerciseClick: (exercise: Exercise) => void;
+  onExerciseClick?: (exercise: Exercise) => void;
   href?: (exercise: Exercise) => string;
 }
 
@@ -44,7 +44,7 @@ export const NewExercisesCarousel = ({
                 <ExerciseCard
                   exercise={exercise}
                   size="sm"
-                  onClick={() => onExerciseClick(exercise)}
+                  onClick={() => onExerciseClick?.(exercise)}
                   href={href ? href(exercise) : undefined}
                 />
               </CarouselItem>
@@ -59,7 +59,7 @@ export const NewExercisesCarousel = ({
               <ExerciseCard
                 exercise={exercise}
                 size="sm"
-                onClick={() => onExerciseClick(exercise)}
+                onClick={() => onExerciseClick?.(exercise)}
                 href={href ? href(exercise) : undefined}
               />
             </div>

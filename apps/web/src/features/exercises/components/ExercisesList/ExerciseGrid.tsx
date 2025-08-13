@@ -14,7 +14,7 @@ interface ExerciseGridProps {
   activeCategory: string;
   viewMode: 'grid' | 'list';
   onViewModeChange: (mode: 'grid' | 'list') => void;
-  onExerciseClick: (exercise: Exercise) => void;
+  onExerciseClick?: (exercise: Exercise) => void;
   href?: (exercise: Exercise) => string;
 }
 
@@ -135,7 +135,9 @@ export const ExerciseGrid = ({
           <ExerciseCard
             key={exercise.id}
             exercise={exercise}
-            onClick={() => onExerciseClick(exercise)}
+            onClick={() =>
+              onExerciseClick ? onExerciseClick(exercise) : undefined
+            }
             href={href ? href(exercise) : undefined}
           />
         ))}
