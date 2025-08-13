@@ -1,13 +1,13 @@
 {
   "$schema": "https://openapi.vercel.sh/microfrontends.json",
   "applications": {
-    "landing": {
+    "peak-health-landing": {
       "packageName": "@peakhealth/landing",
       "development": {
         "fallback": "https://peakhealth-es.vercel.app"
       }
     },
-    "web": {
+    "peak-health": {
       "packageName": "@peakhealth/web",
       "routing": [
         {
