@@ -1,7 +1,7 @@
 import { execSync } from 'child_process';
 
 async function globalTeardown(): Promise<void> {
-  const ports = [3000, 3001, 3002, 3024, 54323]; // Our app ports + Supabase
+  const ports = [3000, 3001, 3002, 3024, 4450, 7524, 9009, 54323]; // Our app ports + Supabase
   const killedProcesses: string[] = [];
 
   try {
@@ -64,7 +64,7 @@ async function globalTeardown(): Promise<void> {
           try {
             // Verify it's our dev process by checking if it's using our ports
             const portCheck = execSync(
-              `lsof -p ${pid} -i :3000,:3001,:3002,:3024`,
+              `lsof -p ${pid} -i :3000,:3001,:3002,:3024,:4450,:7524`,
               {
                 encoding: 'utf8',
                 stdio: ['pipe', 'pipe', 'ignore'],
