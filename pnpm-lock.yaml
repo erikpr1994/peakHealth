@@ -361,6 +361,19 @@ importers:
         version: 5.9.2
 
   apps/e2e:
+    dependencies:
+      '@peakhealth/admin':
+        specifier: workspace:*
+        version: link:../admin
+      '@peakhealth/auth':
+        specifier: workspace:*
+        version: link:../auth
+      '@peakhealth/landing':
+        specifier: workspace:*
+        version: link:../landing
+      '@peakhealth/web':
+        specifier: workspace:*
+        version: link:../web
     devDependencies:
       '@playwright/test':
         specifier: ^1.54.2

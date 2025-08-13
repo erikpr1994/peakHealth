@@ -11,6 +11,12 @@
     "lint": "eslint .",
     "type-check": "tsc --noEmit"
   },
+  "dependencies": {
+    "@peakhealth/web": "workspace:*",
+    "@peakhealth/admin": "workspace:*",
+    "@peakhealth/landing": "workspace:*",
+    "@peakhealth/auth": "workspace:*"
+  },
   "devDependencies": {
     "@playwright/test": "^1.54.2",
     "@types/node": "^24.2.1",
