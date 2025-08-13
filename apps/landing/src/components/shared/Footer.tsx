@@ -4,6 +4,8 @@ import { getSignupUrl } from '@/lib/auth';
 import styles from './Footer.module.css';
 
 export const Footer = (): React.JSX.Element => {
+  const currentYear = new Date().getFullYear();
+
   return (
     <footer className={styles.footer}>
       <div className={styles.container}>
@@ -50,7 +52,7 @@ export const Footer = (): React.JSX.Element => {
 
         <div className={styles.bottom}>
           <div className={styles.copyright}>
-            © 2024 PeakHealth. All rights reserved.
+            © {currentYear} PeakHealth. All rights reserved.
           </div>
           <div className={styles.legal}>
             <Link href="/privacy">Privacy Policy</Link>

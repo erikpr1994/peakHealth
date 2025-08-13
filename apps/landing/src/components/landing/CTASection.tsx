@@ -22,7 +22,9 @@ export const CTASection = (): React.JSX.Element => {
               Get Started Free
               <ArrowRight />
             </Link>
-            <button className={styles.secondaryButton}>Learn More</button>
+            <Link href="/features" className={styles.secondaryButton}>
+              Learn More
+            </Link>
           </div>
         </div>
       </div>
