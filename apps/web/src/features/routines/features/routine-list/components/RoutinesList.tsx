@@ -142,13 +142,15 @@ const RoutinesList = ({
         </div>
         <div className="flex gap-2">
           <Button
-            variant={showFavoritesOnly ? 'default' : 'outline'}
+            variant="outline"
             size="sm"
             onClick={() => setShowFavoritesOnly(!showFavoritesOnly)}
             className="flex items-center gap-2"
           >
             <Heart
-              className={`w-4 h-4 ${showFavoritesOnly ? 'text-white' : 'text-red-500'}`}
+              className={`w-4 h-4 text-red-500 ${
+                showFavoritesOnly ? 'fill-red-500' : ''
+              }`}
             />
             Favorites
           </Button>
