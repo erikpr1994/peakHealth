@@ -8,6 +8,7 @@ async function globalTeardown(): Promise<void> {
 
     // Find all Node.js processes that might be our development servers
     try {
+      // More comprehensive search for Next.js processes
       const nodeProcesses = execSync('pgrep -f "node.*next"', {
         encoding: 'utf8',
         stdio: ['pipe', 'pipe', 'ignore'],
@@ -23,10 +24,11 @@ async function globalTeardown(): Promise<void> {
               encoding: 'utf8',
             }).trim();
 
-            // Check if this is a Next.js development server
+            // Check if this is a Next.js development server (more comprehensive check)
             if (
               processInfo.includes('next dev') ||
-              processInfo.includes('next-server')
+              processInfo.includes('next-server') ||
+              processInfo.includes('next') // Catch any Next.js related process
             ) {
               // Get the port this process is using
               try {
@@ -106,6 +108,44 @@ async function globalTeardown(): Promise<void> {
       }
     } catch {
       // No pnpm dev processes found, which is fine
+    }
+
+    // Additional cleanup: Kill any processes on our known development ports
+    const knownDevPorts = [3000, 3001, 3002, 3003, 3024];
+    for (const port of knownDevPorts) {
+      try {
+        const pids = execSync(`lsof -ti:${port}`, {
+          encoding: 'utf8',
+          stdio: ['pipe', 'pipe', 'ignore'],
+        }).trim();
+
+        if (pids) {
+          const pidList = pids.split('\n').filter(pid => pid.trim());
+          for (const pid of pidList) {
+            try {
+              // Get process info to verify it's a development server
+              const processInfo = execSync(`ps -p ${pid} -o command=`, {
+                encoding: 'utf8',
+              }).trim();
+
+              // Only kill if it's a development-related process
+              if (
+                processInfo.includes('next') ||
+                processInfo.includes('node') ||
+                processInfo.includes('pnpm')
+              ) {
+                execSync(`kill -9 ${pid}`, { stdio: 'ignore' });
+                killedProcesses.push(`PID ${pid} (port ${port})`);
+                console.log(`✅ Killed process ${pid} on port ${port}`);
+              }
+            } catch {
+              // Process might have already been killed
+            }
+          }
+        }
+      } catch {
+        // Port might not be in use, which is fine
+      }
     }
 
     if (killedProcesses.length > 0) {
