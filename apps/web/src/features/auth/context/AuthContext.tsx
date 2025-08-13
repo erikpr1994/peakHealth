@@ -81,7 +81,7 @@ const handleUserNotFoundCleanup = async (): Promise<void> => {
 
   // Redirect to external landing app
   const landingUrl =
-    process.env.NEXT_PUBLIC_WEB_APP_URL || 'http://http://localhost:3024';
+    process.env.NEXT_PUBLIC_WEB_APP_URL || 'http://localhost:3024';
   window.location.href = landingUrl;
 };
 
@@ -151,7 +151,7 @@ export const AuthProvider = ({
         // Clear user data when signed out
         await mutateUser(null);
         const landingUrl =
-          process.env.NEXT_PUBLIC_WEB_APP_URL || 'http://http://localhost:3024';
+          process.env.NEXT_PUBLIC_WEB_APP_URL || 'http://localhost:3024';
         // Use full redirect to landing app
         if (typeof window !== 'undefined') {
           window.location.href = landingUrl;
@@ -290,7 +290,7 @@ export const AuthProvider = ({
 
       // Redirect to external landing app
       const landingUrl =
-        process.env.NEXT_PUBLIC_WEB_APP_URL || 'http://http://localhost:3024';
+        process.env.NEXT_PUBLIC_WEB_APP_URL || 'http://localhost:3024';
       if (typeof window !== 'undefined') {
         window.location.href = landingUrl;
       }
