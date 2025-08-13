@@ -5,36 +5,7 @@ import React from 'react';
 import styles from './FeatureSection.module.css';
 
 import { getSignupUrl } from '@/lib/auth';
-
-const Button: React.FC<
-  React.ButtonHTMLAttributes<HTMLButtonElement> & {
-    variant?: 'primary' | 'secondary' | 'outline';
-    size?: 'sm' | 'md' | 'lg';
-    asChild?: boolean;
-  }
-> = ({
-  variant = 'primary',
-  size = 'md',
-  asChild = false,
-  className,
-  children,
-  ...props
-}) => {
-  const buttonClasses = `${styles.button} ${styles[`button--${variant}`]} ${styles[`button--${size}`]} ${className ?? ''}`;
-
-  if (asChild && React.isValidElement(children)) {
-    return React.cloneElement(children as React.ReactElement<any>, {
-      className: buttonClasses,
-      ...props,
-    });
-  }
-
-  return (
-    <button className={buttonClasses} {...props}>
-      {children}
-    </button>
-  );
-};
+import { Button } from '@peakhealth/ui';
 
 const features = [
   {
@@ -74,7 +45,7 @@ const features = [
   },
 ];
 
-export const FeatureSection = () => {
+export const FeatureSection = (): React.JSX.Element => {
   return (
     <section className={styles.features}>
       <div className={styles.container}>
@@ -104,7 +75,7 @@ export const FeatureSection = () => {
           <Button asChild variant="primary" size="lg">
             <Link href={getSignupUrl()}>
               Get Started Today
-              <ArrowRight className={styles.arrowIcon} />
+              <ArrowRight />
             </Link>
           </Button>
         </div>

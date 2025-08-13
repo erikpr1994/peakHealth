@@ -4,38 +4,9 @@ import React from 'react';
 import styles from './Footer.module.css';
 
 import { getSignupUrl } from '@/lib/auth';
+import { Button } from '@peakhealth/ui';
 
-const Button: React.FC<
-  React.ButtonHTMLAttributes<HTMLButtonElement> & {
-    variant?: 'primary' | 'secondary' | 'outline';
-    size?: 'sm' | 'md' | 'lg';
-    asChild?: boolean;
-  }
-> = ({
-  variant = 'primary',
-  size = 'md',
-  asChild = false,
-  className,
-  children,
-  ...props
-}) => {
-  const buttonClasses = `${styles.button} ${styles[`button--${variant}`]} ${styles[`button--${size}`]} ${className ?? ''}`;
-
-  if (asChild && React.isValidElement(children)) {
-    return React.cloneElement(children as React.ReactElement<any>, {
-      className: buttonClasses,
-      ...props,
-    });
-  }
-
-  return (
-    <button className={buttonClasses} {...props}>
-      {children}
-    </button>
-  );
-};
-
-export const Footer = () => {
+export const Footer = (): React.JSX.Element => {
   return (
     <footer className={styles.footer}>
       <div className={styles.container}>
