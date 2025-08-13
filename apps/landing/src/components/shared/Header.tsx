@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 
 import { getLoginUrl, getSignupUrl } from '@/lib/auth';
@@ -16,6 +16,20 @@ export const Header = (): React.JSX.Element => {
   const closeMobileMenu = (): void => {
     setIsMobileMenuOpen(false);
   };
+
+  // Prevent body scrolling when mobile menu is open
+  useEffect((): (() => void) => {
+    if (isMobileMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+
+    // Cleanup on unmount
+    return (): void => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [isMobileMenuOpen]);
 
   return (
     <header className={styles.header}>
