@@ -41,8 +41,12 @@ export const FeatureSection = (): React.JSX.Element => {
           {features.map((feature, index) => (
             <div key={index} className={styles.feature}>
               <div className={styles.icon}>{feature.icon}</div>
-              <h3 className={styles.featureTitle}>{feature.title}</h3>
-              <p className={styles.featureDescription}>{feature.description}</p>
+              <div className={styles.content}>
+                <h3 className={styles.featureTitle}>{feature.title}</h3>
+                <p className={styles.featureDescription}>
+                  {feature.description}
+                </p>
+              </div>
             </div>
           ))}
         </div>
