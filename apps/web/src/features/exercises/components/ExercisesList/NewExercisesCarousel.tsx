@@ -12,12 +12,14 @@ import {
 interface NewExercisesCarouselProps {
   newExercises: Exercise[];
   onExerciseClick: (exercise: Exercise) => void;
+  href?: (exercise: Exercise) => string;
 }
 
 export const NewExercisesCarousel = ({
   newExercises,
   onExerciseClick,
-}: NewExercisesCarouselProps) => {
+  href,
+}: NewExercisesCarouselProps): React.ReactElement | null => {
   const isMobile = useIsMobile();
 
   if (newExercises.length === 0) {
@@ -43,6 +45,7 @@ export const NewExercisesCarousel = ({
                   exercise={exercise}
                   size="sm"
                   onClick={() => onExerciseClick(exercise)}
+                  href={href ? href(exercise) : undefined}
                 />
               </CarouselItem>
             ))}
@@ -57,6 +60,7 @@ export const NewExercisesCarousel = ({
                 exercise={exercise}
                 size="sm"
                 onClick={() => onExerciseClick(exercise)}
+                href={href ? href(exercise) : undefined}
               />
             </div>
           ))}

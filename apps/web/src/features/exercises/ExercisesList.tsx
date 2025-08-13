@@ -22,7 +22,7 @@ interface ExercisesListProps {
 const ExercisesListContent = ({
   initialExercises = [],
   initialError,
-}: ExercisesListProps) => {
+}: ExercisesListProps): React.ReactElement => {
   const router = useRouter();
   const [activeCategory, setActiveCategory] = useState('All Exercises');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
@@ -35,7 +35,9 @@ const ExercisesListContent = ({
 
   const newExercises = exercises.filter(exercise => exercise.isNew);
 
-  const handleExerciseClick = (exercise: Exercise) => {
+  // Use Link components for direct navigation from exercises page to prevent modal interception
+  const handleExerciseClick = (exercise: Exercise): void => {
+    // This will only be used when href is not provided (for modal contexts)
     router.push(`/exercises/${exercise.id}`);
   };
 
@@ -108,6 +110,7 @@ const ExercisesListContent = ({
       <NewExercisesCarousel
         newExercises={newExercises}
         onExerciseClick={handleExerciseClick}
+        href={(exercise: Exercise) => `/exercises/${exercise.id}`}
       />
 
       {/* Main Exercises Section */}
@@ -117,6 +120,7 @@ const ExercisesListContent = ({
         viewMode={viewMode}
         onViewModeChange={setViewMode}
         onExerciseClick={handleExerciseClick}
+        href={(exercise: Exercise) => `/exercises/${exercise.id}`}
       />
 
       {/* Filter Dialog */}
@@ -131,7 +135,7 @@ const ExercisesListContent = ({
 const ExercisesList = ({
   initialExercises,
   initialError,
-}: ExercisesListProps) => {
+}: ExercisesListProps): React.ReactElement => {
   return (
     <ExerciseProvider>
       <ExercisesListContent

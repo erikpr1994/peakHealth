@@ -1,4 +1,5 @@
 import { Heart, Star, ChevronRight } from 'lucide-react';
+import Link from 'next/link';
 import { useState } from 'react';
 
 import { useFavoriteManagement } from '../../hooks/useExercises';
@@ -19,6 +20,7 @@ interface ExerciseCardProps {
   isSelected?: boolean;
   className?: string;
   size?: 'sm' | 'md' | 'lg';
+  href?: string;
 }
 
 export const ExerciseCard = ({
@@ -29,20 +31,21 @@ export const ExerciseCard = ({
   isSelected = false,
   className = '',
   size = 'md',
-}: ExerciseCardProps) => {
+  href,
+}: ExerciseCardProps): React.ReactElement => {
   const [isFavorite, setIsFavorite] = useState(exercise.isFavorite);
   const [isUpdatingFavorite, setIsUpdatingFavorite] = useState(false);
   const { addToFavorites, removeFromFavorites } = useFavoriteManagement();
   const { userId } = useAuth();
 
   // Helper function to get the main variant
-  const getMainVariant = () => {
+  const getMainVariant = (): Exercise['variants'][0] | undefined => {
     return exercise.variants.find(v => v.id === exercise.mainVariantId);
   };
 
   const mainVariant = getMainVariant();
 
-  const handleFavoriteClick = async (e: React.MouseEvent) => {
+  const handleFavoriteClick = async (e: React.MouseEvent): Promise<void> => {
     e.stopPropagation();
 
     if (!userId) {
@@ -95,7 +98,7 @@ export const ExerciseCard = ({
     lg: 'w-full max-w-md',
   };
 
-  return (
+  const CardContent = (
     <Card
       className={`cursor-pointer hover:shadow-md transition-shadow ${
         sizeClasses[size]
@@ -191,4 +194,10 @@ export const ExerciseCard = ({
       </div>
     </Card>
   );
+
+  if (href) {
+    return <Link href={href}>{CardContent}</Link>;
+  }
+
+  return CardContent;
 };
