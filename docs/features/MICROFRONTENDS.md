@@ -26,8 +26,8 @@ This project uses Vercel microfrontends to provide a single domain experience fo
 
 ### Development URLs
 
-- **Marketing**: `localhost:3000/` (landing app via microfrontends proxy)
-- **User App**: `localhost:3000/dashboard` (web app via microfrontends proxy)
+- **Marketing**: `localhost:3024/` (landing app via microfrontends proxy)
+- **User App**: `localhost:3024/dashboard` (web app via microfrontends proxy)
 - **Admin**: `localhost:3002` (admin app)
 - **Auth**: `localhost:3000` (auth app)
 

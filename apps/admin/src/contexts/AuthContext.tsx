@@ -136,10 +136,18 @@ export const AuthProvider = ({
 };
 
 const redirectToAuth = (): void => {
-  const authDomain = process.env.NEXT_PUBLIC_AUTH_APP_URL || 'localhost:3000';
-  const protocol = process.env.NODE_ENV === 'development' ? 'http' : 'https';
-  const authUrl = `${protocol}://${authDomain}`;
-  window.location.href = authUrl;
+  const authAppUrl = process.env.NEXT_PUBLIC_AUTH_APP_URL || 'localhost:3000';
+
+  // If the URL already includes a protocol, use it as is
+  // This prevents malformed URLs when NEXT_PUBLIC_AUTH_APP_URL includes a protocol
+  if (authAppUrl.startsWith('http://') || authAppUrl.startsWith('https://')) {
+    window.location.href = authAppUrl;
+  } else {
+    // Otherwise, prepend the appropriate protocol
+    const protocol = process.env.NODE_ENV === 'development' ? 'http' : 'https';
+    const authUrl = `${protocol}://${authAppUrl}`;
+    window.location.href = authUrl;
+  }
 };
 
 export const useAuth = (): AuthContextType => {

@@ -1,23 +1,24 @@
-# PeakHealth Auth App
+# Auth App
 
 Centralized authentication service for the PeakHealth platform.
 
-## Features
+## Overview
 
-- **User Registration**: Sign up with email, password, and profile information
-- **User Login**: Secure authentication with email and password
-- **App Selection**: Multi-role users can choose which app to access
-- **Cross-Domain Sessions**: Shared authentication across subdomains
-- **Role-Based Access**: Different user types (user, admin, trainer)
+This app handles all authentication flows including:
 
-## Setup
+- User registration and login
+- Password reset
+- Email verification
+- OAuth providers (Google, GitHub, etc.)
+- Session management
+- App selection after authentication
 
-### 1. Port Configuration
+## Port Configuration
 
 The apps are configured to run on specific ports:
 
-- **Auth App**: `http://localhost:3005` (auth.peakhealth.es in production)
-- **Web App**: `http://localhost:3000` (microfrontends proxy) (peakhealth.es in production)
+- **Auth App**: `http://localhost:3000` (auth.peakhealth.es in production)
+- **Web App**: `http://localhost:3024` (microfrontends proxy) (peakhealth.es in production)
 - **Admin App**: `http://localhost:3002` (admin.peakhealth.es in production)
 - **Pro App**: `http://localhost:3003` (pro.peakhealth.es in production)
 
@@ -32,7 +33,7 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
 SUPABASE_SERVICE_ROLE_KEY=your_supabase_service_role_key
 
 # App URLs (optional - will use localhost defaults in development)
-NEXT_PUBLIC_WEB_APP_URL=http://localhost:3000
+NEXT_PUBLIC_WEB_APP_URL=http://localhost:3024
 NEXT_PUBLIC_ADMIN_APP_URL=http://localhost:3002
 NEXT_PUBLIC_PRO_APP_URL=http://localhost:3003
 
@@ -58,7 +59,7 @@ pnpm install
 # Start auth app (port 3000)
 cd apps/auth && pnpm dev
 
-# Start web app (port 3001)
+# Start web app (port 3024 via microfrontends proxy)
 cd apps/web && pnpm dev
 
 # Start admin app (port 3002)
