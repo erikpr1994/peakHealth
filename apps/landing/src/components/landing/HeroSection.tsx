@@ -24,8 +24,8 @@ export const HeroSection = (): React.JSX.Element => {
 
           <p className={styles.description}>
             Log workouts, track progress, and stay motivated with PeakHealth.
-            Build routines, measure your gains, and join a community of fitness
-            enthusiasts working towards their goals.
+            Build routines, measure your gains, and enjoy a better experience
+            than other workout apps.
           </p>
 
           <div className={styles.actions}>
@@ -53,16 +53,6 @@ export const HeroSection = (): React.JSX.Element => {
                 <p>
                   Monitor your gains with detailed charts, personal records, and
                   exercise history
-                </p>
-              </div>
-            </div>
-            <div className={styles.valueProp}>
-              <div className={styles.valueIcon}>👥</div>
-              <div className={styles.valueContent}>
-                <h3>Join Community</h3>
-                <p>
-                  Connect with other fitness enthusiasts, share workouts, and
-                  stay accountable together
                 </p>
               </div>
             </div>
