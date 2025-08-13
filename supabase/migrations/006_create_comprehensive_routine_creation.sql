@@ -94,7 +94,7 @@ BEGIN
               exercise_record->>'category',
               COALESCE(
                 CASE 
-                  WHEN exercise_record->'muscleGroups' IS NOT NULL 
+                  WHEN exercise_record->'muscleGroups' IS NOT NULL AND exercise_record->'muscleGroups' != 'null'::JSON
                   THEN (exercise_record->'muscleGroups')::TEXT[]
                   ELSE ARRAY[]::TEXT[]
                 END,
@@ -191,7 +191,7 @@ BEGIN
               exercise_record->>'category',
               COALESCE(
                 CASE 
-                  WHEN exercise_record->'muscleGroups' IS NOT NULL 
+                  WHEN exercise_record->'muscleGroups' IS NOT NULL AND exercise_record->'muscleGroups' != 'null'::JSON
                   THEN (exercise_record->'muscleGroups')::TEXT[]
                   ELSE ARRAY[]::TEXT[]
                 END,
