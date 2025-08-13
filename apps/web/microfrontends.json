@@ -6,6 +6,17 @@
       "development": {
         "fallback": "https://peak-health.vercel.app"
       }
+    },
+    "peak-health-landing": {
+      "packageName": "@peakhealth/landing",
+      "development": {
+        "fallback": "https://peak-health-landing.vercel.app"
+      },
+      "routing": [
+        {
+          "paths": ["/", "/blog", "/blog/:path*"]
+        }
+      ]
     }
   }
 }
