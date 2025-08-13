@@ -21,7 +21,6 @@ const reactPlugin = require('eslint-plugin-react');
 const reactHooksPlugin = require('eslint-plugin-react-hooks');
 const reactRefreshPlugin = require('eslint-plugin-react-refresh');
 const ruleAdoptionPlugin = require('eslint-plugin-rule-adoption');
-const typelintPlugin = require('eslint-plugin-typelint');
 const unicornPlugin = require('eslint-plugin-unicorn');
 
 module.exports = [
@@ -97,7 +96,6 @@ module.exports = [
       'react-hooks': reactHooksPlugin,
       'react-refresh': reactRefreshPlugin,
       'rule-adoption': ruleAdoptionPlugin,
-      typelint: typelintPlugin,
       unicorn: unicornPlugin,
     },
     processor: 'rule-adoption/processor',
