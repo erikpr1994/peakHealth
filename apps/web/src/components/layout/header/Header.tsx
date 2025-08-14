@@ -1,6 +1,6 @@
 'use client';
 
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import { useState, Suspense } from 'react';
 
 import { DesktopNavigation } from './DesktopNavigation';
@@ -21,7 +21,6 @@ import { useNotifications, NotificationsBell } from '@/features/notifications';
 import { useNavigationFeatureFlags } from '@/hooks/useNavigationFeatureFlags';
 
 const Header = (): React.ReactElement => {
-  const router = useRouter();
   const pathname = usePathname();
   const { logout, user } = useAuth();
   const { unreadCount } = useNotifications();
@@ -61,11 +60,6 @@ const Header = (): React.ReactElement => {
     isHelpSupportEnabled: navigationFeatureFlags.isHelpSupportEnabled,
   });
 
-  const handleNavigate = (path: string): void => {
-    router.push(path);
-    setIsSideNavOpen(false);
-  };
-
   return (
     <header className={styles.header}>
       <div
@@ -76,7 +70,6 @@ const Header = (): React.ReactElement => {
           <div className="flex items-center gap-2">
             <SideNav
               items={navigationItems}
-              onNavigate={handleNavigate}
               pathname={pathname ?? ''}
               isOpen={isSideNavOpen}
               onOpenChange={setIsSideNavOpen}
@@ -89,7 +82,6 @@ const Header = (): React.ReactElement => {
           <DesktopNavigation
             items={navigationItems}
             pathname={pathname ?? ''}
-            onNavigate={handleNavigate}
           />
 
           <div className="flex items-center gap-3">
