@@ -9,16 +9,10 @@
     "import": "./dist/components/button/index.js",
     "require": "./dist/components/button/index.js"
   },
-  "./button/styles": {
-    "import": "./dist/components/button/button.css"
-  },
   "./input": {
     "types": "./dist/components/input/index.d.ts",
     "import": "./dist/components/input/index.js",
     "require": "./dist/components/input/index.js"
-  },
-  "./input/styles": {
-    "import": "./dist/components/input/input.css"
   },
   "./modal": {
     "types": "./dist/components/modal/index.d.ts",
@@ -35,7 +29,7 @@
     "import": "./dist/components/tooltip/index.js",
     "require": "./dist/components/tooltip/index.js"
   },
-  "./styles": {
-    "import": "./dist/components/ui.css"
+  "./design-system": {
+    "import": "./dist/design-system.css"
   }
 }

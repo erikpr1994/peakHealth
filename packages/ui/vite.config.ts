@@ -1,4 +1,4 @@
-import { readdirSync, existsSync } from 'fs';
+import { readdirSync, existsSync, copyFileSync } from 'fs';
 import { resolve, dirname } from 'path';
 
 import { fileURLToPath } from 'url';
@@ -40,6 +40,17 @@ export default defineConfig({
       insertTypesEntry: true,
       rollupTypes: true,
     }),
+    {
+      name: 'copy-design-system-css',
+      writeBundle(): void {
+        // Copy design system CSS to dist
+        const sourcePath = resolve(__dirname, 'src/design-system.css');
+        const destPath = resolve(__dirname, 'dist/design-system.css');
+        if (existsSync(sourcePath)) {
+          copyFileSync(sourcePath, destPath);
+        }
+      },
+    },
   ],
   build: {
     lib: {

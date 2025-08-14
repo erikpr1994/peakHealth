@@ -30,18 +30,13 @@ function generateExports() {
           require: `./dist/components/${component}/index.js`,
         };
 
-        // Add CSS export only if CSS file exists and component is not toast (which auto-imports CSS)
-        if (existsSync(cssPath) && component !== 'toast') {
-          exports[`./${component}/styles`] = {
-            import: `./dist/components/${component}/${component}.css`,
-          };
-        }
+        // CSS files are used internally by components, not exported
       }
     });
 
-    // Add main styles export
-    exports['./styles'] = {
-      import: './dist/components/ui.css',
+    // Add design system CSS export
+    exports['./design-system'] = {
+      import: './dist/design-system.css',
     };
   }
   return exports;

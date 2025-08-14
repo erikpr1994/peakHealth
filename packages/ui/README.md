@@ -22,30 +22,18 @@ pnpm add @peakhealth/ui
 
 ```tsx
 import { Button } from '@peakhealth/ui/button';
-import '@peakhealth/ui/button/styles.css';
-// Import styles separately for optimal tree-shaking
+// CSS is included internally by components
 
 // Or import multiple components
-import { Button, Input } from '@peakhealth/ui';
-import '@peakhealth/ui/button/styles.css';
-import '@peakhealth/ui/input/styles.css';
+import { Button, Input, Toast } from '@peakhealth/ui';
+// All components include their own CSS internally
 ```
 
-### Bundle import with all styles
+### Design System CSS
 
 ```tsx
-import { Button, Input } from '@peakhealth/ui';
-import '@peakhealth/ui/styles.css';
-// Import all styles at once
-```
-
-### Individual component styles
-
-```tsx
-// Import only the styles you need
-import '@peakhealth/ui/button/styles.css';
-import '@peakhealth/ui/modal/styles.css';
-// Note: Toast component automatically includes its CSS
+// Import the design system CSS for global styles and variables
+import '@peakhealth/ui/design-system.css';
 ```
 
 ## 🧩 Components
@@ -144,11 +132,10 @@ import { Modal } from '@peakhealth/ui/modal';
 
 ### Toast
 
-A flexible toast notification component with multiple variants and automatic CSS import.
+A flexible toast notification component with multiple variants.
 
 ```tsx
 import { Toast, ToastProvider, useToast } from '@peakhealth/ui/toast';
-// CSS is automatically imported - no need to import styles separately
 
 // Wrap your app with ToastProvider
 <ToastProvider>
@@ -171,7 +158,6 @@ showToast({ message: 'Success!', variant: 'success' });
 - Responsive design with mobile optimization
 - Dark theme support
 - Accessibility features (ARIA labels, keyboard navigation)
-- **Automatic CSS import** - no need to import styles separately
 
 ## 🎨 Design System
 
