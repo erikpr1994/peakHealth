@@ -1,7 +1,7 @@
 'use client';
 
+import Link from 'next/link';
 import type { User } from '@supabase/supabase-js';
-import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
 import { LogOut, ChevronDown } from './menuItems';
@@ -64,13 +64,7 @@ export const UserMenu = ({
   settingsMenuItems,
   supportMenuItems,
 }: UserMenuProps): React.ReactElement => {
-  const router = useRouter();
   const [userDropdownOpen, setUserDropdownOpen] = useState(false);
-
-  const handleNavigate = (path: string): void => {
-    router.push(path);
-    setUserDropdownOpen(false);
-  };
 
   const menuSections = [userMenuItems, settingsMenuItems, supportMenuItems];
 
@@ -109,14 +103,16 @@ export const UserMenu = ({
             {section.map(item => {
               const Icon = item.icon;
               return (
-                <DropdownMenuItem
+                <Link
                   key={item.id}
-                  onClick={() => handleNavigate(item.path)}
-                  className="flex items-center gap-2"
+                  href={item.path}
+                  onClick={() => setUserDropdownOpen(false)}
                 >
-                  <Icon className="w-4 h-4" />
-                  {item.label}
-                </DropdownMenuItem>
+                  <DropdownMenuItem className="flex items-center gap-2 cursor-pointer">
+                    <Icon className="w-4 h-4" />
+                    {item.label}
+                  </DropdownMenuItem>
+                </Link>
               );
             })}
             {index < menuSections.length - 1 && <DropdownMenuSeparator />}

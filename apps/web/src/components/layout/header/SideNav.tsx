@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { Menu, type LucideIcon } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
@@ -20,7 +21,6 @@ interface NavigationItem {
 
 interface SideNavProps {
   items: NavigationItem[];
-  onNavigate: (path: string) => void;
   pathname: string;
   isOpen: boolean;
   onOpenChange: (open: boolean) => void;
@@ -28,7 +28,6 @@ interface SideNavProps {
 
 export const SideNav = ({
   items,
-  onNavigate,
   pathname,
   isOpen,
   onOpenChange,
@@ -65,15 +64,19 @@ export const SideNav = ({
               const Icon = item.icon;
               const isActive = isNavigationItemActive(item.path, pathname);
               return (
-                <Button
+                <Link
                   key={item.id}
-                  variant={isActive ? 'secondary' : 'ghost'}
-                  onClick={() => onNavigate(item.path)}
-                  className="flex items-center justify-start gap-3"
+                  href={item.path}
+                  onClick={() => onOpenChange(false)}
                 >
-                  <Icon className="h-5 w-5" />
-                  <span>{item.label}</span>
-                </Button>
+                  <Button
+                    variant={isActive ? 'secondary' : 'ghost'}
+                    className="flex items-center justify-start gap-3 w-full"
+                  >
+                    <Icon className="h-5 w-5" />
+                    <span>{item.label}</span>
+                  </Button>
+                </Link>
               );
             })}
           </nav>
