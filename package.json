@@ -12,6 +12,7 @@
     "test:unit": "turbo test",
     "test:coverage": "turbo test:coverage",
     "test:e2e": "turbo run test:e2e --filter @peakhealth/e2e",
+    "test:e2e:update-snapshots": "turbo run test:update-snapshots --filter @peakhealth/e2e",
     "prepare": "husky",
     "supabase:start": "supabase start",
     "setup-dev-db": "node scripts/setup-dev-db.mjs",

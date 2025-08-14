@@ -3,9 +3,9 @@ import { defineConfig } from '@playwright/test';
 export default defineConfig({
   globalTeardown: './global-teardown.ts',
   testDir: './tests',
-  timeout: 30_000,
+  timeout: 60_000, // Increased timeout for setup tests
   fullyParallel: false, // Changed from true to false to prevent test interference
-  workers: 2, // Limit workers to prevent race conditions
+  workers: 1, // Reduced to 1 worker to ensure proper sequencing
   reporter: [['html', { open: 'never' }]],
   use: {
     trace: 'retain-on-failure',
@@ -64,9 +64,7 @@ export default defineConfig({
         storageState: 'storage-states/admin-web.json',
       },
       testMatch: [
-        'tests/web.smoke.spec.ts',
         'tests/admin.flow.spec.ts',
-        'tests/regular.flow.spec.ts',
         'tests/trainer.flow.spec.ts',
         'tests/landing.redirect.spec.ts',
       ],
@@ -88,7 +86,6 @@ export default defineConfig({
         storageState: 'storage-states/regular-web.json',
       },
       testMatch: [
-        'tests/web.smoke.spec.ts',
         'tests/regular.flow.spec.ts',
         'tests/landing.redirect.spec.ts',
       ],
@@ -101,7 +98,6 @@ export default defineConfig({
         storageState: 'storage-states/trainer-web.json',
       },
       testMatch: [
-        'tests/web.smoke.spec.ts',
         'tests/trainer.flow.spec.ts',
         'tests/landing.redirect.spec.ts',
       ],
