@@ -1,6 +1,3 @@
-#!/usr/bin/env sh
-. "$(dirname -- "$0")/_/husky.sh"
-
 echo "🔍 Checking for source files without tests..."
 
 # Get list of changed files being pushed
@@ -26,6 +23,11 @@ for file in $CHANGED_FILES; do
   
   # Skip if it's in node_modules, dist, build, or .next
   if [[ "$file" =~ node_modules/ ]] || [[ "$file" =~ dist/ ]] || [[ "$file" =~ build/ ]] || [[ "$file" =~ \.next/ ]]; then
+    continue
+  fi
+  
+  # Skip e2e test files and config files
+  if [[ "$file" =~ apps/e2e/ ]] || [[ "$file" =~ playwright\.config\. ]] || [[ "$file" =~ \.config\. ]]; then
     continue
   fi
   
