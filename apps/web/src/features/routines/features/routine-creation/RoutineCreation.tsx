@@ -514,6 +514,28 @@ const RoutineCreation = ({
 
   // Save routine handler
   const handleSaveRoutine = async (): Promise<void> => {
+    console.log('handleSaveRoutine called with data:', {
+      name,
+      difficulty,
+      goal,
+      description,
+      objectives,
+      duration,
+      strengthWorkoutsCount: strengthWorkouts.length,
+      runningWorkoutsCount: runningWorkouts.length,
+    });
+
+    // Validate required fields
+    if (!name.trim()) {
+      console.error('Routine name is required');
+      return;
+    }
+
+    if (!difficulty || !goal) {
+      console.error('Difficulty and goal are required');
+      return;
+    }
+
     const routineData = {
       name,
       difficulty: difficulty as 'Beginner' | 'Intermediate' | 'Advanced',
@@ -543,7 +565,9 @@ const RoutineCreation = ({
       }
 
       router.push('/routines');
-    } catch {
+    } catch (error) {
+      // Add error logging for debugging
+      console.error('Error saving routine:', error);
       // TODO: Show error message to user
     }
   };
