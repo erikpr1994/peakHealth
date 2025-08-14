@@ -16,7 +16,7 @@ async function runNode(scriptRelPath: string): Promise<void> {
     const p = spawn(process.execPath, [scriptPath], {
       stdio: 'inherit',
       cwd: repoRoot,
-      env: { ...process.env, SKIP_DB_RESET: '1' },
+      env: { ...process.env },
     });
     p.on('exit', (code: number | null) =>
       code === 0
@@ -28,7 +28,7 @@ async function runNode(scriptRelPath: string): Promise<void> {
 
 test('seed dev DB', async () => {
   test.setTimeout(300_000);
-  await wait(2000);
+  await wait(5000); // Increased wait time to ensure database is fully ready
 
   await runNode('scripts/setup-dev-db.mjs');
   await mkdir('storage-states', { recursive: true });
