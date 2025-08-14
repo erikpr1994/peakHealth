@@ -21,14 +21,23 @@ function generateExports() {
 
     components.forEach(component => {
       const indexPath = resolve(componentsDir, component, 'index.ts');
+      const cssPath = resolve(componentsDir, component, `${component}.css`);
+
       if (existsSync(indexPath)) {
         exports[`./${component}`] = {
           types: `./dist/components/${component}/index.d.ts`,
           import: `./dist/components/${component}/index.js`,
           require: `./dist/components/${component}/index.js`,
         };
+
+        // CSS files are used internally by components, not exported
       }
     });
+
+    // Add design system CSS export
+    exports['./design-system'] = {
+      import: './dist/design-system.css',
+    };
   }
   return exports;
 }
@@ -46,4 +55,5 @@ const packageJson = JSON.parse(readFileSync(packageJsonPath, 'utf8'));
 packageJson.exports = exports;
 writeFileSync(packageJsonPath, `${JSON.stringify(packageJson, null, 2)}\n`);
 
+// eslint-disable-next-line no-console
 console.log('Exports generated and package.json updated successfully');

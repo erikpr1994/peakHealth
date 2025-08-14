@@ -1,16 +1,17 @@
-import { readdirSync, existsSync } from 'fs';
+import { readdirSync, existsSync, copyFileSync } from 'fs';
 import { resolve, dirname } from 'path';
 
 import { fileURLToPath } from 'url';
 
 import react from '@vitejs/plugin-react';
 import { defineConfig } from 'vite';
+// eslint-disable-next-line import-x/default
 import dts from 'vite-plugin-dts';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
 // Dynamically discover all components
-function getComponentEntries() {
+function getComponentEntries(): Record<string, string> {
   const componentsDir = resolve(__dirname, 'src/components');
   const entries: Record<string, string> = {
     index: resolve(__dirname, 'src/index.ts'),
@@ -24,7 +25,7 @@ function getComponentEntries() {
     components.forEach(component => {
       const indexPath = resolve(componentsDir, component, 'index.ts');
       if (existsSync(indexPath)) {
-        entries[`components/${component}`] = indexPath;
+        entries[component] = indexPath;
       }
     });
   }
@@ -39,6 +40,17 @@ export default defineConfig({
       insertTypesEntry: true,
       rollupTypes: true,
     }),
+    {
+      name: 'copy-design-system-css',
+      writeBundle(): void {
+        // Copy design system CSS to dist
+        const sourcePath = resolve(__dirname, 'src/design-system.css');
+        const destPath = resolve(__dirname, 'dist/design-system.css');
+        if (existsSync(sourcePath)) {
+          copyFileSync(sourcePath, destPath);
+        }
+      },
+    },
   ],
   build: {
     lib: {
@@ -51,7 +63,9 @@ export default defineConfig({
       output: {
         preserveModules: true,
         preserveModulesRoot: 'src',
-        assetFileNames: 'components/[name][extname]',
+        assetFileNames: assetInfo => {
+          return '[name][extname]';
+        },
       },
     },
     cssCodeSplit: true,

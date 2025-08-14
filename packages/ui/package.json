@@ -5,7 +5,7 @@
   "main": "./dist/index.js",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
-  "style": "./dist/index.css",
+  "style": "./dist/design-system.css",
   "files": [
     "dist"
   ],
@@ -71,10 +71,18 @@
       "import": "./dist/components/modal/index.js",
       "require": "./dist/components/modal/index.js"
     },
+    "./toast": {
+      "types": "./dist/components/toast/index.d.ts",
+      "import": "./dist/components/toast/index.js",
+      "require": "./dist/components/toast/index.js"
+    },
     "./tooltip": {
       "types": "./dist/components/tooltip/index.d.ts",
       "import": "./dist/components/tooltip/index.js",
       "require": "./dist/components/tooltip/index.js"
+    },
+    "./design-system": {
+      "import": "./dist/design-system.css"
     }
   }
 }

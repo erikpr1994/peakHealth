@@ -22,18 +22,18 @@ pnpm add @peakhealth/ui
 
 ```tsx
 import { Button } from '@peakhealth/ui/button';
-// CSS is automatically included with the component
+// CSS is included internally by components
 
 // Or import multiple components
-import { Button, Input } from '@peakhealth/ui';
-// CSS is automatically included with each component
+import { Button, Input, Toast } from '@peakhealth/ui';
+// All components include their own CSS internally
 ```
 
-### Bundle import
+### Design System CSS
 
 ```tsx
-import { Button, Input } from '@peakhealth/ui';
-// CSS is automatically included with each component
+// Import the design system CSS for global styles and variables
+import '@peakhealth/ui/design-system.css';
 ```
 
 ## 🧩 Components
@@ -129,6 +129,35 @@ import { Modal } from '@peakhealth/ui/modal';
 - Accessible close button
 - Responsive design
 - Customizable styling
+
+### Toast
+
+A flexible toast notification component with multiple variants.
+
+```tsx
+import { Toast, ToastProvider, useToast } from '@peakhealth/ui/toast';
+
+// Wrap your app with ToastProvider
+<ToastProvider>
+  <App />
+</ToastProvider>;
+
+// Use the hook to show toasts
+const { showToast } = useToast();
+showToast({ message: 'Success!', variant: 'success' });
+
+// Or use the standalone component
+<Toast variant="success">Success message</Toast>;
+```
+
+**Features:**
+
+- Multiple variants: default, success, error, warning, info
+- Auto-dismiss with configurable duration
+- Manual close button option
+- Responsive design with mobile optimization
+- Dark theme support
+- Accessibility features (ARIA labels, keyboard navigation)
 
 ## 🎨 Design System
 
