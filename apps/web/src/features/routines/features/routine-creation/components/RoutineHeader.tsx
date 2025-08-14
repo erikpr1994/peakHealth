@@ -33,16 +33,7 @@ const RoutineHeader = ({
           </p>
         </div>
       </div>
-      <Button
-        onClick={() => {
-          console.log('Save button clicked');
-          alert('Save button clicked!');
-          onSave();
-        }}
-        className="bg-indigo-600 hover:bg-indigo-700"
-        disabled={false}
-        type="button"
-      >
+      <Button onClick={onSave} className="bg-indigo-600 hover:bg-indigo-700">
         <Save className="h-4 w-4 mr-2" />
         {mode === 'edit' ? 'Update Routine' : 'Save Routine'}
       </Button>

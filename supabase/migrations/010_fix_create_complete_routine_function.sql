@@ -1,10 +1,6 @@
--- Migration: Create comprehensive routine creation function with transactional integrity
--- This function handles the complete routine creation process atomically
+-- Migration: Fix create_complete_routine function to handle JSON to RECORD conversion properly
+-- The issue was using ->> operator on RECORD types instead of JSON types
 
--- Drop the existing incomplete function
-DROP FUNCTION IF EXISTS create_routine_with_workouts(JSON, JSON);
-
--- Create a comprehensive routine creation function that handles all aspects atomically
 CREATE OR REPLACE FUNCTION create_complete_routine(
   routine_data JSON,
   strength_workouts_data JSON DEFAULT '[]'::JSON,
@@ -13,10 +9,10 @@ CREATE OR REPLACE FUNCTION create_complete_routine(
 RETURNS JSON AS $$
 DECLARE
   new_routine_id UUID;
-  workout_record RECORD;
-  section_record RECORD;
-  exercise_record RECORD;
-  set_record RECORD;
+  workout_json JSON;
+  section_json JSON;
+  exercise_json JSON;
+  set_json JSON;
   new_workout_id UUID;
   new_section_id UUID;
   new_exercise_id UUID;
@@ -43,37 +39,37 @@ BEGIN
   ) RETURNING id INTO new_routine_id;
 
   -- Insert strength workouts
-  FOR workout_record IN SELECT * FROM json_array_elements(strength_workouts_data)
+  FOR workout_json IN SELECT value FROM json_array_elements(strength_workouts_data)
   LOOP
     -- Insert workout
     INSERT INTO workouts (
       routine_id, name, type, objective, schedule, order_index
     ) VALUES (
       new_routine_id,
-      workout_record->>'name',
+      workout_json->>'name',
       'strength',
-      workout_record->>'objective',
-      workout_record->'schedule',
-      (workout_record->>'orderIndex')::INTEGER
+      workout_json->>'objective',
+      workout_json->'schedule',
+      (workout_json->>'orderIndex')::INTEGER
     ) RETURNING id INTO new_workout_id;
 
     -- Insert sections for this workout
-    FOR section_record IN SELECT * FROM json_array_elements(workout_record->'sections')
+    FOR section_json IN SELECT value FROM json_array_elements(workout_json->'sections')
     LOOP
       -- Insert section
       INSERT INTO workout_sections (
         workout_id, name, type, order_index, rest_after, emom_duration
       ) VALUES (
         new_workout_id,
-        section_record->>'name',
-        (section_record->>'type')::section_type,
-        (section_record->>'orderIndex')::INTEGER,
-        COALESCE((section_record->>'restAfter')::INTEGER, 0),
-        COALESCE((section_record->>'emomDuration')::INTEGER, 0)
+        section_json->>'name',
+        (section_json->>'type')::section_type,
+        (section_json->>'orderIndex')::INTEGER,
+        COALESCE((section_json->>'restAfter')::INTEGER, 0),
+        COALESCE((section_json->>'emomDuration')::INTEGER, 0)
       ) RETURNING id INTO new_section_id;
 
       -- Insert exercises for this section
-      FOR exercise_record IN SELECT * FROM json_array_elements(section_record->'exercises')
+      FOR exercise_json IN SELECT value FROM json_array_elements(section_json->'exercises')
       LOOP
         -- Insert exercise
         INSERT INTO routine_exercises (
@@ -83,28 +79,28 @@ BEGIN
         ) VALUES (
           new_section_id,
           COALESCE(
-            (exercise_record->>'variantId')::UUID,
-            (exercise_record->>'exerciseId')::UUID
+            (exercise_json->>'variantId')::UUID,
+            (exercise_json->>'exerciseId')::UUID
           ),
-          (exercise_record->>'orderIndex')::INTEGER,
-          COALESCE(exercise_record->>'restTimer', '90s'),
-          COALESCE(exercise_record->>'restAfter', '2 min'),
-          exercise_record->>'progressionMethod',
-          COALESCE((exercise_record->>'hasApproachSets')::BOOLEAN, false),
-          COALESCE((exercise_record->>'emomReps')::INTEGER, 0)
+          (exercise_json->>'orderIndex')::INTEGER,
+          COALESCE(exercise_json->>'restTimer', '90s'),
+          COALESCE(exercise_json->>'restAfter', '2 min'),
+          exercise_json->>'progressionMethod',
+          COALESCE((exercise_json->>'hasApproachSets')::BOOLEAN, false),
+          COALESCE((exercise_json->>'emomReps')::INTEGER, 0)
         ) RETURNING id INTO new_exercise_id;
 
         -- Insert sets for this exercise
-        FOR set_record IN SELECT * FROM json_array_elements(exercise_record->'sets')
+        FOR set_json IN SELECT value FROM json_array_elements(exercise_json->'sets')
         LOOP
           INSERT INTO exercise_sets (
             exercise_id, set_number, reps, weight, notes
           ) VALUES (
             new_exercise_id,
-            (set_record->>'setNumber')::INTEGER,
-            (set_record->>'reps')::INTEGER,
-            COALESCE((set_record->>'weight')::DECIMAL, 0),
-            set_record->>'notes'
+            (set_json->>'setNumber')::INTEGER,
+            (set_json->>'reps')::INTEGER,
+            COALESCE((set_json->>'weight')::DECIMAL, 0),
+            set_json->>'notes'
           );
         END LOOP;
       END LOOP;
@@ -112,53 +108,53 @@ BEGIN
   END LOOP;
 
   -- Insert running workouts
-  FOR workout_record IN SELECT * FROM json_array_elements(running_workouts_data)
+  FOR workout_json IN SELECT value FROM json_array_elements(running_workouts_data)
   LOOP
     -- Insert workout
     INSERT INTO workouts (
       routine_id, name, type, objective, schedule, order_index
     ) VALUES (
       new_routine_id,
-      workout_record->>'name',
-      (workout_record->>'type')::workout_type,
-      workout_record->>'objective',
-      workout_record->'schedule',
-      (workout_record->>'orderIndex')::INTEGER
+      workout_json->>'name',
+      (workout_json->>'type')::workout_type,
+      workout_json->>'objective',
+      workout_json->'schedule',
+      (workout_json->>'orderIndex')::INTEGER
     ) RETURNING id INTO new_workout_id;
 
     -- Insert trail running data if present
-    IF workout_record ? 'trailRunningData' THEN
+    IF workout_json ? 'trailRunningData' THEN
       INSERT INTO trail_running_data (
         workout_id, name, description, difficulty, estimated_duration,
         target_distance, elevation_gain
       ) VALUES (
         new_workout_id,
-        workout_record->'trailRunningData'->>'name',
-        workout_record->'trailRunningData'->>'description',
-        (workout_record->'trailRunningData'->>'difficulty')::trail_difficulty,
-        workout_record->'trailRunningData'->>'estimatedDuration',
-        COALESCE((workout_record->'trailRunningData'->>'targetDistance')::DECIMAL, 0),
-        COALESCE((workout_record->'trailRunningData'->>'elevationGain')::INTEGER, 0)
+        workout_json->'trailRunningData'->>'name',
+        workout_json->'trailRunningData'->>'description',
+        (workout_json->'trailRunningData'->>'difficulty')::trail_difficulty,
+        workout_json->'trailRunningData'->>'estimatedDuration',
+        COALESCE((workout_json->'trailRunningData'->>'targetDistance')::DECIMAL, 0),
+        COALESCE((workout_json->'trailRunningData'->>'elevationGain')::INTEGER, 0)
       );
     END IF;
 
     -- Insert sections for this workout
-    FOR section_record IN SELECT * FROM json_array_elements(workout_record->'sections')
+    FOR section_json IN SELECT value FROM json_array_elements(workout_json->'sections')
     LOOP
       -- Insert section
       INSERT INTO workout_sections (
         workout_id, name, type, order_index, rest_after, emom_duration
       ) VALUES (
         new_workout_id,
-        section_record->>'name',
-        (section_record->>'type')::section_type,
-        (section_record->>'orderIndex')::INTEGER,
-        COALESCE((section_record->>'restAfter')::INTEGER, 0),
-        COALESCE((section_record->>'emomDuration')::INTEGER, 0)
+        section_json->>'name',
+        (section_json->>'type')::section_type,
+        (section_json->>'orderIndex')::INTEGER,
+        COALESCE((section_json->>'restAfter')::INTEGER, 0),
+        COALESCE((section_json->>'emomDuration')::INTEGER, 0)
       ) RETURNING id INTO new_section_id;
 
       -- Insert exercises for this section
-      FOR exercise_record IN SELECT * FROM json_array_elements(section_record->'exercises')
+      FOR exercise_json IN SELECT value FROM json_array_elements(section_json->'exercises')
       LOOP
         -- Insert exercise
         INSERT INTO routine_exercises (
@@ -168,28 +164,28 @@ BEGIN
         ) VALUES (
           new_section_id,
           COALESCE(
-            (exercise_record->>'variantId')::UUID,
-            (exercise_record->>'exerciseId')::UUID
+            (exercise_json->>'variantId')::UUID,
+            (exercise_json->>'exerciseId')::UUID
           ),
-          (exercise_record->>'orderIndex')::INTEGER,
-          COALESCE(exercise_record->>'restTimer', '90s'),
-          COALESCE(exercise_record->>'restAfter', '2 min'),
-          exercise_record->>'progressionMethod',
-          COALESCE((exercise_record->>'hasApproachSets')::BOOLEAN, false),
-          COALESCE((exercise_record->>'emomReps')::INTEGER, 0)
+          (exercise_json->>'orderIndex')::INTEGER,
+          COALESCE(exercise_json->>'restTimer', '90s'),
+          COALESCE(exercise_json->>'restAfter', '2 min'),
+          exercise_json->>'progressionMethod',
+          COALESCE((exercise_json->>'hasApproachSets')::BOOLEAN, false),
+          COALESCE((exercise_json->>'emomReps')::INTEGER, 0)
         ) RETURNING id INTO new_exercise_id;
 
         -- Insert sets for this exercise
-        FOR set_record IN SELECT * FROM json_array_elements(exercise_record->'sets')
+        FOR set_json IN SELECT value FROM json_array_elements(exercise_json->'sets')
         LOOP
           INSERT INTO exercise_sets (
             exercise_id, set_number, reps, weight, notes
           ) VALUES (
             new_exercise_id,
-            (set_record->>'setNumber')::INTEGER,
-            (set_record->>'reps')::INTEGER,
-            COALESCE((set_record->>'weight')::DECIMAL, 0),
-            set_record->>'notes'
+            (set_json->>'setNumber')::INTEGER,
+            (set_json->>'reps')::INTEGER,
+            COALESCE((set_json->>'weight')::DECIMAL, 0),
+            set_json->>'notes'
           );
         END LOOP;
       END LOOP;

@@ -2,7 +2,6 @@
 
 import { useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
-import { captureException } from '@sentry/nextjs';
 
 import {
   TrailRunningWorkoutData,
@@ -35,13 +34,6 @@ const RoutineCreation = ({
 }: RoutineCreationProps): React.ReactElement => {
   const router = useRouter();
   const { isAuthenticated, user } = useAuth();
-
-  // Debug authentication state
-  console.log('RoutineCreation - Auth state:', {
-    isAuthenticated,
-    userId: user?.id,
-    userEmail: user?.email,
-  });
 
   // Routine metadata state
   const [name, setName] = useState('');
@@ -524,40 +516,145 @@ const RoutineCreation = ({
 
   // Save routine handler
   const handleSaveRoutine = async (): Promise<void> => {
-    console.log('handleSaveRoutine called with data:', {
-      name,
-      difficulty,
-      goal,
-      description,
-      objectives,
-      duration,
-      strengthWorkoutsCount: strengthWorkouts.length,
-      runningWorkoutsCount: runningWorkouts.length,
-    });
-
     // Check authentication first
     if (!isAuthenticated || !user) {
-      console.error('User not authenticated. Cannot save routine.');
       alert('You must be logged in to create a routine. Please log in first.');
       return;
     }
 
-    // Validate required fields
+    // Validate routine data
     if (!name.trim()) {
-      console.error('Routine name is required');
+      alert('Routine name is required');
       return;
     }
-
     if (!difficulty || !goal) {
-      console.error('Difficulty and goal are required');
+      alert('Difficulty and goal are required');
+      return;
+    }
+    if (!objectives || objectives.length === 0) {
+      alert('At least one objective is required');
       return;
     }
 
+    // Validate workouts
+    if (!strengthWorkouts || strengthWorkouts.length === 0) {
+      alert('At least one strength workout is required');
+      return;
+    }
+
+    // Validate each workout
+    for (const workout of strengthWorkouts) {
+      if (!workout.name?.trim()) {
+        alert(`Workout "${workout.name || 'Unnamed'}" must have a name`);
+        return;
+      }
+      if (!workout.objective?.trim()) {
+        alert(`Workout "${workout.name}" must have an objective`);
+        return;
+      }
+      if (!workout.sections || workout.sections.length === 0) {
+        alert(`Workout "${workout.name}" must have at least one section`);
+        return;
+      }
+
+      // Validate each section
+      for (const section of workout.sections) {
+        if (!section.name?.trim()) {
+          alert(
+            `Section "${section.name || 'Unnamed'}" in workout "${workout.name}" must have a name`
+          );
+          return;
+        }
+        if (!section.exercises || section.exercises.length === 0) {
+          alert(
+            `Section "${section.name}" in workout "${workout.name}" must have at least one exercise`
+          );
+          return;
+        }
+
+        // Validate each exercise
+        for (const exercise of section.exercises) {
+          if (!exercise.variantId && !exercise.exerciseId) {
+            alert(
+              `Exercise "${exercise.name || 'Unnamed'}" in section "${section.name}" must be selected from the exercise library`
+            );
+            return;
+          }
+          if (!exercise.sets || exercise.sets.length === 0) {
+            alert(
+              `Exercise "${exercise.name || 'Unnamed'}" in section "${section.name}" must have at least one set`
+            );
+            return;
+          }
+
+          // Validate each set
+          for (const set of exercise.sets) {
+            if (!set.reps || set.reps <= 0) {
+              alert(
+                `Set ${set.setNumber} in exercise "${exercise.name || 'Unnamed'}" must have valid reps`
+              );
+              return;
+            }
+          }
+        }
+      }
+    }
+
+    // Validate running workouts if any
+    if (runningWorkouts && runningWorkouts.length > 0) {
+      for (const workout of runningWorkouts) {
+        if (!workout.name?.trim()) {
+          alert(
+            `Running workout "${workout.name || 'Unnamed'}" must have a name`
+          );
+          return;
+        }
+        if (!workout.objective?.trim()) {
+          alert(`Running workout "${workout.name}" must have an objective`);
+          return;
+        }
+        if (!workout.sections || workout.sections.length === 0) {
+          alert(
+            `Running workout "${workout.name}" must have at least one section`
+          );
+          return;
+        }
+
+        // Validate each section
+        for (const section of workout.sections) {
+          if (!section.name?.trim()) {
+            alert(
+              `Section "${section.name || 'Unnamed'}" in running workout "${workout.name}" must have a name`
+            );
+            return;
+          }
+          if (!section.exercises || section.exercises.length === 0) {
+            alert(
+              `Section "${section.name}" in running workout "${workout.name}" must have at least one exercise`
+            );
+            return;
+          }
+
+          // Validate each exercise
+          for (const exercise of section.exercises) {
+            if (!exercise.variantId && !exercise.exerciseId) {
+              alert(
+                `Exercise "${exercise.name || 'Unnamed'}" in section "${section.name}" must be selected from the exercise library`
+              );
+              return;
+            }
+          }
+        }
+      }
+    }
+
+    // Prepare routine data
     const routineData = {
-      name,
+      userId: user.id,
+      name: name.trim(),
+      description: description.trim(),
       difficulty: difficulty as 'Beginner' | 'Intermediate' | 'Advanced',
       goal: goal as 'Strength' | 'Hypertrophy' | 'Endurance' | 'Weight Loss',
-      description,
       objectives,
       duration,
       // daysPerWeek is calculated dynamically from workout days
@@ -566,52 +663,15 @@ const RoutineCreation = ({
     };
 
     try {
-      if (mode === 'edit' && editRoutineId) {
-        // Update existing routine
-        const updateData = {
-          name: routineData.name,
-          description: routineData.description,
-          difficulty: routineData.difficulty,
-          goal: routineData.goal,
-          duration: routineData.duration,
-          objectives: routineData.objectives,
-        };
-        await routineService.updateRoutine(editRoutineId, updateData);
-      } else {
-        await routineService.createRoutine(routineData);
-      }
-
+      // setIsSaving(true); // This state variable is not defined in the original file
+      await routineService.createRoutine(routineData);
       router.push('/routines');
     } catch (error) {
-      // Add error logging for debugging
-      console.error('Error saving routine:', error);
-
-      // Report error to Sentry
-      captureException(error, {
-        tags: {
-          feature: 'routine-creation',
-          action: mode === 'edit' ? 'update-routine' : 'create-routine',
-        },
-        extra: {
-          routineData: {
-            name: routineData.name,
-            difficulty: routineData.difficulty,
-            goal: routineData.goal,
-            objectivesCount: routineData.objectives.length,
-            strengthWorkoutsCount: routineData.strengthWorkouts.length,
-            runningWorkoutsCount: routineData.runningWorkouts.length,
-          },
-          userId: user?.id,
-          isAuthenticated,
-        },
-      });
-
-      // Show user-friendly error message
       alert(
-        `Failed to save routine: ${
-          error instanceof Error ? error.message : 'Unknown error occurred'
-        }`
+        `Failed to save routine: ${error instanceof Error ? error.message : 'Unknown error'}`
       );
+    } finally {
+      // setIsSaving(false); // This state variable is not defined in the original file
     }
   };
 

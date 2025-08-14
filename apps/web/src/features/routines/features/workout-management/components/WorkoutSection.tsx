@@ -83,7 +83,11 @@ const WorkoutSection = ({
             <SectionIcon className="h-5 w-5" />
             <div className="flex items-center space-x-2">
               <div className="relative group">
+                <Label htmlFor="section-name" className="sr-only">
+                  Section Name
+                </Label>
                 <Input
+                  id="section-name"
                   value={section.name}
                   onChange={e => onUpdateName(e.target.value)}
                   className="font-semibold border-2 border-dashed border-gray-300 hover:border-gray-400 focus:border-blue-500 p-2 h-auto bg-white/80 backdrop-blur-sm transition-colors duration-200"

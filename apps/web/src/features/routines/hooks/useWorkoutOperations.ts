@@ -582,6 +582,8 @@ export const useWorkoutOperations = ({
       category: exerciseData.category,
       muscleGroups: exerciseData.muscleGroups,
       equipment: exerciseData.equipment || [], // Include equipment data
+      exerciseId: exerciseData.exerciseId, // Add exercise library reference
+      variantId: exerciseData.variantId, // Add variant reference
       sets: exerciseData.sets || [],
       restTimer: exerciseData.restTimer || '',
       restAfter: exerciseData.restAfter || '',
@@ -621,6 +623,8 @@ export const useWorkoutOperations = ({
       category: exerciseData.category,
       muscleGroups: exerciseData.muscleGroups,
       equipment: exerciseData.equipment || [], // Include equipment data
+      exerciseId: exerciseData.exerciseId, // Add exercise library reference
+      variantId: exerciseData.variantId, // Add variant reference
       sets: exerciseData.sets || [],
       restTimer: exerciseData.restTimer || '',
       restAfter: exerciseData.restAfter || '',

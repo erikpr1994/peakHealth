@@ -474,9 +474,7 @@ async function setupDevDatabase() {
                 .from('routine_exercises')
                 .insert({
                   section_id: section.id,
-                  name: 'Barbell Bench Press',
-                  category: 'Compound',
-                  muscle_groups: ['Chest', 'Triceps', 'Shoulders'],
+                  exercise_library_id: '660e8400-e29b-41d4-a716-446655440001', // Bench Press variant
                   order_index: 0,
                   rest_timer: '90s',
                   rest_after: '2 min',
