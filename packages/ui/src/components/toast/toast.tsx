@@ -40,6 +40,7 @@ interface ToastItem {
   onClose?: () => void;
   className?: string;
   showCloseButton?: boolean;
+  timeoutId?: NodeJS.Timeout;
 }
 
 export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({
@@ -48,7 +49,13 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({
   const [toasts, setToasts] = React.useState<ToastItem[]>([]);
 
   const hideToast = React.useCallback((id: string) => {
-    setToasts(prev => prev.filter(toast => toast.id !== id));
+    setToasts(prev => {
+      const toastToRemove = prev.find(toast => toast.id === id);
+      if (toastToRemove?.timeoutId) {
+        clearTimeout(toastToRemove.timeoutId);
+      }
+      return prev.filter(toast => toast.id !== id);
+    });
   }, []);
 
   const showToast = React.useCallback(
@@ -56,23 +63,40 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({
       const id = Math.random().toString(36).substr(2, 9);
       const { message, duration = 5000, ...toastProps } = props;
 
+      let timeoutId: NodeJS.Timeout | undefined;
+
+      if (duration > 0) {
+        timeoutId = setTimeout(() => {
+          hideToast(id);
+        }, duration);
+      }
+
       const newToast: ToastItem = {
         id,
         message,
         duration,
+        timeoutId,
         ...toastProps,
       };
 
       setToasts(prev => [...prev, newToast]);
-
-      if (duration > 0) {
-        setTimeout(() => {
-          hideToast(id);
-        }, duration);
-      }
     },
     [hideToast]
   );
+
+  // Cleanup all timeouts on unmount
+  React.useEffect((): (() => void) => {
+    return (): void => {
+      setToasts(prev => {
+        prev.forEach(toast => {
+          if (toast.timeoutId) {
+            clearTimeout(toast.timeoutId);
+          }
+        });
+        return [];
+      });
+    };
+  }, []);
 
   return (
     <ToastContext.Provider value={{ showToast, hideToast }}>
@@ -113,6 +137,7 @@ const ToastItemComponent: React.FC<ToastItemComponentProps> = ({
   onClose,
 }) => {
   const [isVisible, setIsVisible] = React.useState(false);
+  const exitTimeoutRef = React.useRef<NodeJS.Timeout | undefined>(undefined);
 
   React.useEffect(() => {
     // Trigger entrance animation
@@ -120,9 +145,18 @@ const ToastItemComponent: React.FC<ToastItemComponentProps> = ({
     return (): void => clearTimeout(timer);
   }, []);
 
+  // Cleanup exit timeout on unmount
+  React.useEffect((): (() => void) => {
+    return (): void => {
+      if (exitTimeoutRef.current) {
+        clearTimeout(exitTimeoutRef.current);
+      }
+    };
+  }, []);
+
   const handleClose = (): void => {
     setIsVisible(false);
-    setTimeout(onClose, 200); // Wait for exit animation
+    exitTimeoutRef.current = setTimeout(onClose, 200); // Wait for exit animation
   };
 
   const getIcon = (): React.ReactNode => {
