@@ -110,6 +110,30 @@ The auth system supports multiple apps with different access levels:
 - `admin` - Administrator (access to admin app)
 - `trainer` - Trainer/Professional (access to pro app)
 
+## Development Performance Optimization
+
+### Preventing Connection Timeout Issues
+
+This app is optimized to prevent development server connection timeouts:
+
+1. **Disable Sentry in Development**: For optimal development performance, leave `NEXT_PUBLIC_SENTRY_DSN` empty in your `.env.local` file. This prevents Sentry from loading heavy monitoring bundles during development.
+
+2. **Enable Sentry Only When Needed**: Only set the `NEXT_PUBLIC_SENTRY_DSN` environment variable when you specifically need to test Sentry integration.
+
+3. **Optimized Configuration**: The application automatically:
+   - Disables Sentry replay and extensive tracing in development
+   - Reduces bundle splitting overhead with optimized webpack configuration
+   - Skips sourcemap uploads in development
+   - Uses conditional Sentry initialization
+
+### Troubleshooting Connection Issues
+
+If you experience "Connection closed" errors:
+
+1. Ensure `NEXT_PUBLIC_SENTRY_DSN` is not set in `.env.local`
+2. Clear browser cache and restart the development server
+3. Check system memory allocation for Node.js
+
 ## Development Notes
 
 - Uses CSS Modules for styling
@@ -117,3 +141,4 @@ The auth system supports multiple apps with different access levels:
 - TypeScript for type safety
 - Shared packages for common functionality
 - Cross-domain cookie management
+- Optimized for development server performance
