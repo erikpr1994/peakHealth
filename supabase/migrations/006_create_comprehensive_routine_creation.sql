@@ -40,8 +40,11 @@ BEGIN
     -- Schedule is calculated dynamically, not stored
     COALESCE(
       CASE 
-        WHEN routine_data->>'objectives' IS NOT NULL 
-        THEN (routine_data->'objectives')::TEXT[]
+        WHEN routine_data->'objectives' IS NOT NULL AND routine_data->'objectives' != 'null'::JSON
+        THEN (
+          SELECT COALESCE(array_agg(value::TEXT), ARRAY[]::TEXT[])
+          FROM json_array_elements_text(routine_data->'objectives')
+        )
         ELSE ARRAY[]::TEXT[]
       END,
       ARRAY[]::TEXT[]
@@ -235,7 +238,8 @@ BEGIN
 EXCEPTION
   WHEN OTHERS THEN
     -- Rollback will happen automatically due to transaction
-    RAISE EXCEPTION 'Failed to create routine: %', SQLERRM;
+    RAISE EXCEPTION 'Failed to create routine: % (SQL State: %, Error Code: %)', 
+      SQLERRM, SQLSTATE, SQLCODE;
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
 

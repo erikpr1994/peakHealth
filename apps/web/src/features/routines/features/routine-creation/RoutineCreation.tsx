@@ -2,6 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
+import { captureException } from '@sentry/nextjs';
 
 import {
   TrailRunningWorkoutData,
@@ -584,7 +585,33 @@ const RoutineCreation = ({
     } catch (error) {
       // Add error logging for debugging
       console.error('Error saving routine:', error);
-      // TODO: Show error message to user
+
+      // Report error to Sentry
+      captureException(error, {
+        tags: {
+          feature: 'routine-creation',
+          action: mode === 'edit' ? 'update-routine' : 'create-routine',
+        },
+        extra: {
+          routineData: {
+            name: routineData.name,
+            difficulty: routineData.difficulty,
+            goal: routineData.goal,
+            objectivesCount: routineData.objectives.length,
+            strengthWorkoutsCount: routineData.strengthWorkouts.length,
+            runningWorkoutsCount: routineData.runningWorkouts.length,
+          },
+          userId: user?.id,
+          isAuthenticated,
+        },
+      });
+
+      // Show user-friendly error message
+      alert(
+        `Failed to save routine: ${
+          error instanceof Error ? error.message : 'Unknown error occurred'
+        }`
+      );
     }
   };
 
