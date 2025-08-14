@@ -30,8 +30,8 @@ function generateExports() {
           require: `./dist/components/${component}/index.js`,
         };
 
-        // Add CSS export only if CSS file exists
-        if (existsSync(cssPath)) {
+        // Add CSS export only if CSS file exists and component is not toast (which auto-imports CSS)
+        if (existsSync(cssPath) && component !== 'toast') {
           exports[`./${component}/styles`] = {
             import: `./dist/components/${component}/${component}.css`,
           };

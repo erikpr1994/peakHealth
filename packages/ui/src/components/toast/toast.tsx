@@ -1,6 +1,8 @@
 import * as React from 'react';
-import './toast.css';
 import { cn } from '../../utils';
+
+// Auto-import CSS for convenience
+import './toast.css';
 
 export interface ToastProps {
   children?: React.ReactNode;

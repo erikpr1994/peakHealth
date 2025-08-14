@@ -82,9 +82,6 @@
       "import": "./dist/components/toast/index.js",
       "require": "./dist/components/toast/index.js"
     },
-    "./toast/styles": {
-      "import": "./dist/components/toast/toast.css"
-    },
     "./tooltip": {
       "types": "./dist/components/tooltip/index.d.ts",
       "import": "./dist/components/tooltip/index.js",
