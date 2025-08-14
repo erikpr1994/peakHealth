@@ -11,6 +11,7 @@ import {
 import { routineService } from '../../services/routineService';
 import { DatabaseWorkout } from '../../types/database';
 import { transformDatabaseWorkout } from '../../utils/dataTransformers';
+import { useAuth } from '@/features/auth/context/AuthContext';
 
 // Import our new components and hooks
 import RoutineHeader from './components/RoutineHeader';
@@ -32,6 +33,14 @@ const RoutineCreation = ({
   mode = 'create',
 }: RoutineCreationProps): React.ReactElement => {
   const router = useRouter();
+  const { isAuthenticated, user } = useAuth();
+
+  // Debug authentication state
+  console.log('RoutineCreation - Auth state:', {
+    isAuthenticated,
+    userId: user?.id,
+    userEmail: user?.email,
+  });
 
   // Routine metadata state
   const [name, setName] = useState('');
@@ -524,6 +533,13 @@ const RoutineCreation = ({
       strengthWorkoutsCount: strengthWorkouts.length,
       runningWorkoutsCount: runningWorkouts.length,
     });
+
+    // Check authentication first
+    if (!isAuthenticated || !user) {
+      console.error('User not authenticated. Cannot save routine.');
+      alert('You must be logged in to create a routine. Please log in first.');
+      return;
+    }
 
     // Validate required fields
     if (!name.trim()) {
