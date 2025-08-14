@@ -32,6 +32,8 @@ export default defineConfig({
       ],
       // This will check coverage only for changed files
       changedFiles: true,
+      // Ensure all files are not included by default
+      all: false,
       // Require 80% coverage for changed files only
       thresholds: {
         // Apply thresholds to all source files - vitest will only check changed files

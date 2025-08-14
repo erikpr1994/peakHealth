@@ -37,6 +37,8 @@ export default defineConfig({
         '**/*.d.ts',
         '**/types/**',
       ],
+      // This will check coverage only for changed files
+      changedFiles: true,
       // Ensure all files are not included by default
       all: false,
       // Thresholds are applied only to files included in the run
