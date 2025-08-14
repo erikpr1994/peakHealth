@@ -215,59 +215,6 @@ test.describe('Regular user flows', () => {
         .nth(3)
         .fill('110');
 
-      // Debug: Check how many sets are present and their state
-      await test.step('Debug: Check sets state before save', async () => {
-        // Wait a moment for any auto-generated sets to appear
-        await page.waitForTimeout(1000);
-
-        // Count all textboxes in the sets area
-        const _allTextboxes = await page.getByRole('textbox').all();
-        // Total textboxes logged for debugging
-
-        // Look for set numbers in the UI
-        const setButtons = await page
-          .locator('button')
-          .filter({ hasText: /^[0-9]+$/ })
-          .all();
-        // Set number buttons logged for debugging
-
-        // Get the text of all set buttons
-        for (let i = 0; i < setButtons.length; i++) {
-          const _text = await setButtons[i].textContent();
-          // Set button text logged for debugging
-        }
-
-        // Check if there are any empty reps fields that need filling
-        const emptyRepsFields = await page
-          .locator('input[type="number"][placeholder="10"]')
-          .all();
-        // Empty reps fields logged for debugging
-
-        // Fill any remaining empty reps fields
-        for (let i = 0; i < emptyRepsFields.length; i++) {
-          const value = await emptyRepsFields[i].inputValue();
-          if (!value || value === '') {
-            // Filling empty reps field logged for debugging
-            await emptyRepsFields[i].fill('10');
-          }
-        }
-
-        // Check if there are any empty weight fields that need filling
-        const emptyWeightFields = await page
-          .locator('input[type="number"][placeholder="0"]')
-          .all();
-        // Empty weight fields logged for debugging
-
-        // Fill any remaining empty weight fields
-        for (let i = 0; i < emptyWeightFields.length; i++) {
-          const value = await emptyWeightFields[i].inputValue();
-          if (!value || value === '') {
-            // Filling empty weight field logged for debugging
-            await emptyWeightFields[i].fill('50');
-          }
-        }
-      });
-
       // Now try to save - this should succeed and navigate to routines page
       await page.getByRole('button', { name: /save routine/i }).click();
 
