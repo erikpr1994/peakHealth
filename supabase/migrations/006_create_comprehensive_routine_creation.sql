@@ -238,8 +238,8 @@ BEGIN
 EXCEPTION
   WHEN OTHERS THEN
     -- Rollback will happen automatically due to transaction
-    RAISE EXCEPTION 'Failed to create routine: % (SQL State: %, Error Code: %)', 
-      SQLERRM, SQLSTATE, SQLCODE;
+    RAISE EXCEPTION 'Failed to create routine: % (SQL State: %)', 
+      SQLERRM, SQLSTATE;
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
 
