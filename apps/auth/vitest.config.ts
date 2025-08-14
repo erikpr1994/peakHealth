@@ -38,6 +38,7 @@ export default defineConfig({
         '**/types/**',
       ],
       // This will check coverage only for changed files
+      all: false,
       changedFiles: true,
       // Require 80% coverage for changed files
       thresholds: {
