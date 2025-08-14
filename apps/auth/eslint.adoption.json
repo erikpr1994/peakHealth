@@ -1,89 +1,23 @@
 {
-  "092e1fc47016cf03574e6096d7806760eb368eccbc46b9b0501cf5595efdd99f": {
-    "file": "next.config.ts",
-    "rules": [
-      "perfectionist/sort-objects"
-    ]
-  },
   "64a4976153a9fb0059d159df01755cb8f806948c34f49f3c215683bb9ec5b410": {
     "file": "src/app/(auth)/access-denied/page.tsx",
-    "rules": [
-      "perfectionist/sort-imports",
-      "import-x/no-unresolved",
-      "@typescript-eslint/explicit-function-return-type",
-      "compat/compat",
-      "no-console"
-    ]
-  },
-  "113dfc780e9fe0ab0ec138b7f7390b88448d8c806d19e9b93772c74fd76f6a66": {
-    "file": "src/app/(auth)/app-selector/page.tsx",
-    "rules": [
-      "import-x/no-unresolved"
-    ]
+    "rules": ["@typescript-eslint/explicit-function-return-type", "no-console"]
   },
   "764cbeada0e3b3c5d5007855513994d05f524eac99fdbd37781e8d34ae38ec6f": {
     "file": "src/app/api/auth/apps/route.ts",
-    "rules": [
-      "import-x/no-unresolved",
-      "no-console",
-      "perfectionist/sort-objects"
-    ]
+    "rules": ["no-console"]
   },
-  "cbdf0ee08da57d9f0aa515e6494a92f94bb5481ad621cad605a02b98a7cd4ec8": {
+  "e65fca0ad05b047c9b1a585e8bb09758f964945af1bf94d37747cdd0f5f6a446": {
     "file": "src/app/api/auth/login/route.ts",
-    "rules": [
-      "import-x/no-unresolved",
-      "compat/compat",
-      "no-console",
-      "perfectionist/sort-objects"
-    ]
+    "rules": ["no-console"]
   },
   "1152124d7bbcf319d6e5ddda7f792199786f8bac9333624bc69e810cad37c34d": {
     "file": "src/app/api/auth/logout/route.ts",
-    "rules": [
-      "import-x/no-unresolved",
-      "no-console",
-      "perfectionist/sort-objects"
-    ]
-  },
-  "bed11657660d2a81c80a6d9f4fe38906994a76e1b445451c558a4c89ef84efe9": {
-    "file": "src/app/(auth)/signup/page.tsx",
-    "rules": [
-      "import-x/no-unresolved"
-    ]
+    "rules": ["no-console"]
   },
   "90ec7ff06a56a84e5047c6736415ceed31af91e35a0f765de9860acc1859fcf7": {
     "file": "src/app/api/auth/session/route.ts",
-    "rules": [
-      "import-x/no-unresolved",
-      "no-console",
-      "perfectionist/sort-objects"
-    ]
-  },
-  "aa842a8c653b5ad8229aa04013590c6d3112f1a329be9348ea5029362d0b434a": {
-    "file": "src/app/(auth)/login/page.tsx",
-    "rules": [
-      "import-x/no-unresolved",
-      "compat/compat",
-      "perfectionist/sort-objects"
-    ]
-  },
-  "21bfc0de35e26ecf5dfde7a6967bd8d0cf6e4bcb599208df0cae7678c4c7a05d": {
-    "file": "src/app/api/auth/signup/route.ts",
-    "rules": [
-      "import-x/no-unresolved",
-      "perfectionist/sort-objects",
-      "no-console"
-    ]
-  },
-  "687f084b472ba5b409f97c7d2615b2da5dfff2770c6205320eb17cba2eb0e8c9": {
-    "file": "src/app/layout.tsx",
-    "rules": [
-      "perfectionist/sort-imports",
-      "perfectionist/sort-objects",
-      "@typescript-eslint/explicit-function-return-type",
-      "@typescript-eslint/explicit-module-boundary-types"
-    ]
+    "rules": ["no-console"]
   },
   "16019611320444eb47213ebab63744f27d83403689d2d0feb3f5d0132db26c75": {
     "file": "src/app/page.tsx",
@@ -92,46 +26,26 @@
       "@typescript-eslint/explicit-module-boundary-types"
     ]
   },
+  "21bfc0de35e26ecf5dfde7a6967bd8d0cf6e4bcb599208df0cae7678c4c7a05d": {
+    "file": "src/app/api/auth/signup/route.ts",
+    "rules": ["no-console"]
+  },
+  "687f084b472ba5b409f97c7d2615b2da5dfff2770c6205320eb17cba2eb0e8c9": {
+    "file": "src/app/layout.tsx",
+    "rules": [
+      "@typescript-eslint/explicit-function-return-type",
+      "@typescript-eslint/explicit-module-boundary-types"
+    ]
+  },
+  "3d460aa352073bfdf46cca7e148d4087c071171d827ee13291c1dff7cda3c106": {
+    "file": "src/features/shared/components/AuthCard.tsx",
+    "rules": ["css-modules/no-unused-class"]
+  },
   "2b14ab4fd0677afb7cab22d53122325bd3756b050b9e8d99d239b6644af153d9": {
     "file": "src/features/auth/components/SignUpForm.tsx",
     "rules": [
       "css-modules/no-unused-class",
-      "perfectionist/sort-imports",
-      "import-x/no-unresolved",
-      "perfectionist/sort-objects",
-      "@typescript-eslint/explicit-function-return-type",
-      "compat/compat"
-    ]
-  },
-  "67765bfc0d69b9adfd6e1bb056f7421ebfd30388d6e969c947e40dda9a23daea": {
-    "file": "src/app/test/page.tsx",
-    "rules": [
-      "import-x/no-unresolved",
-      "perfectionist/sort-objects"
-    ]
-  },
-  "5cdfe30a3be9a056a1c77f19e5eada1e7191af20c9a0e07e0b91cb22d91467f0": {
-    "file": "src/features/auth/components/AppSelector.tsx",
-    "rules": [
-      "perfectionist/sort-imports",
-      "css-modules/no-unused-class",
-      "import-x/no-unresolved",
-      "@typescript-eslint/explicit-function-return-type",
-      "compat/compat"
-    ]
-  },
-  "e587cd9517a68c6c4f0b85328b09f97679a10047ce5906c5bf085383c87ce789": {
-    "file": "src/features/shared/components/AuthCard.tsx",
-    "rules": [
-      "css-modules/no-unused-class",
-      "perfectionist/sort-objects"
-    ]
-  },
-  "1322e34bdf3e46d6761d79c076618bf023b0aeefa96d4be14e07e785833867b4": {
-    "file": "src/lib/supabase/client.ts",
-    "rules": [
-      "@typescript-eslint/explicit-function-return-type",
-      "@typescript-eslint/explicit-module-boundary-types"
+      "@typescript-eslint/explicit-function-return-type"
     ]
   },
   "2e6b693238f600d7a6b2cd9f1d1f88bbda2b7c7add7349c2d46ca21fafa8ebf4": {
@@ -139,8 +53,14 @@
     "rules": [
       "@typescript-eslint/explicit-function-return-type",
       "@typescript-eslint/explicit-module-boundary-types",
-      "@typescript-eslint/no-explicit-any",
-      "perfectionist/sort-objects"
+      "@typescript-eslint/no-explicit-any"
+    ]
+  },
+  "1322e34bdf3e46d6761d79c076618bf023b0aeefa96d4be14e07e785833867b4": {
+    "file": "src/lib/supabase/client.ts",
+    "rules": [
+      "@typescript-eslint/explicit-function-return-type",
+      "@typescript-eslint/explicit-module-boundary-types"
     ]
   }
 }

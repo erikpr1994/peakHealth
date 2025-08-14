@@ -4,7 +4,8 @@ export default defineConfig({
   globalTeardown: './global-teardown.ts',
   testDir: './tests',
   timeout: 30_000,
-  fullyParallel: true,
+  fullyParallel: false, // Changed from true to false to prevent test interference
+  workers: 2, // Limit workers to prevent race conditions
   reporter: [['html', { open: 'never' }]],
   use: {
     trace: 'retain-on-failure',

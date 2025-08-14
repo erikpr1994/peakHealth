@@ -26,7 +26,27 @@ const unicornPlugin = require('eslint-plugin-unicorn');
 module.exports = [
   js.configs.recommended,
   {
-    files: ['**/*.{js,jsx,ts,tsx,mjs,cjs}'],
+    files: [
+      'apps/**/*.{js,jsx,ts,tsx,mjs,cjs}',
+      'packages/**/*.{js,jsx,ts,tsx,mjs,cjs}',
+      'scripts/**/*.{js,jsx,ts,tsx,mjs,cjs}',
+      '*.{js,jsx,ts,tsx,mjs,cjs}',
+    ],
+    ignores: [
+      '**/node_modules/**',
+      '**/.next/**',
+      '**/.turbo/**',
+      '**/dist/**',
+      '**/build/**',
+      '**/.vercel/**',
+      '**/coverage/**',
+      '**/.nyc_output/**',
+      '**/playwright-report/**',
+      '**/test-results/**',
+      '**/storage-states/**',
+      '**/.sentryclirc',
+      '**/sentry.properties',
+    ],
     languageOptions: {
       globals: {
         __dirname: 'readonly',
@@ -146,7 +166,7 @@ module.exports = [
       'jsx-a11y/aria-unsupported-elements': 'error',
       'jsx-a11y/role-has-required-aria-props': 'error',
       'jsx-a11y/role-supports-aria-props': 'error',
-      'no-console': 'warn',
+      'no-console': 'error',
       'no-debugger': 'error',
       'no-duplicate-imports': 'error',
       'no-secrets/no-secrets': 'error',

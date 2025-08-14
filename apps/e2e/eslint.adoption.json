@@ -1,22 +1,10 @@
 {
-  "3abeea000ca733e2b74298a977c489e7bd227be94be86508bd659c39e059e8b7": {
-    "file": "tests/00.setup.ts",
-    "rules": [
-      "perfectionist/sort-imports",
-      "compat/compat",
-      "perfectionist/sort-objects"
-    ]
-  },
-  "014e139566ddea4b6999398a5753caa74bb25fdd6ad76d819a53bd8a62f28440": {
-    "file": "playwright.config.ts",
-    "rules": [
-      "perfectionist/sort-objects"
-    ]
+  "a1318cc3d8994e53e200f8d5958c0d980aa391146b513d01c95acb5636b29d3b": {
+    "file": "global-teardown.ts",
+    "rules": ["no-console"]
   },
   "192f1777fd639b4306ba65488b43aea2acdd5c3d0f3f905de24186f8c33609ca": {
     "file": "tests/admin.smoke.spec.ts",
-    "rules": [
-      "@typescript-eslint/no-explicit-any"
-    ]
+    "rules": ["@typescript-eslint/no-explicit-any"]
   }
 }

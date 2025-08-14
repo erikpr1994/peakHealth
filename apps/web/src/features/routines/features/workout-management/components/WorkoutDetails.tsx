@@ -53,8 +53,11 @@ const WorkoutDetails = ({
     <div className="p-4 space-y-4">
       {/* Objective */}
       <div>
-        <Label className="block mb-2">Objective</Label>
+        <Label htmlFor="workout-objective" className="block mb-2">
+          Objective
+        </Label>
         <Textarea
+          id="workout-objective"
           value={objective}
           onChange={e => onUpdateObjective(e.target.value)}
           placeholder="What is the primary goal of this workout?"

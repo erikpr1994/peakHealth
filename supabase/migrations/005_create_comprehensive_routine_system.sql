@@ -61,9 +61,6 @@ CREATE TABLE workout_sections (
 CREATE TABLE routine_exercises (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   section_id UUID NOT NULL REFERENCES workout_sections(id) ON DELETE CASCADE,
-  name VARCHAR(255) NOT NULL,
-  category VARCHAR(100),
-  muscle_groups TEXT[],
   exercise_library_id UUID REFERENCES exercise_variants(id),
   order_index INTEGER NOT NULL,
   rest_timer VARCHAR(50),

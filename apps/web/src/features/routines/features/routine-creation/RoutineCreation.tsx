@@ -11,6 +11,7 @@ import {
 import { routineService } from '../../services/routineService';
 import { DatabaseWorkout } from '../../types/database';
 import { transformDatabaseWorkout } from '../../utils/dataTransformers';
+import { useAuth } from '@/features/auth/context/AuthContext';
 
 // Import our new components and hooks
 import RoutineHeader from './components/RoutineHeader';
@@ -32,6 +33,7 @@ const RoutineCreation = ({
   mode = 'create',
 }: RoutineCreationProps): React.ReactElement => {
   const router = useRouter();
+  const { isAuthenticated, user } = useAuth();
 
   // Routine metadata state
   const [name, setName] = useState('');
@@ -514,11 +516,145 @@ const RoutineCreation = ({
 
   // Save routine handler
   const handleSaveRoutine = async (): Promise<void> => {
+    // Check authentication first
+    if (!isAuthenticated || !user) {
+      alert('You must be logged in to create a routine. Please log in first.');
+      return;
+    }
+
+    // Validate routine data
+    if (!name.trim()) {
+      alert('Routine name is required');
+      return;
+    }
+    if (!difficulty || !goal) {
+      alert('Difficulty and goal are required');
+      return;
+    }
+    if (!objectives || objectives.length === 0) {
+      alert('At least one objective is required');
+      return;
+    }
+
+    // Validate workouts
+    if (!strengthWorkouts || strengthWorkouts.length === 0) {
+      alert('At least one strength workout is required');
+      return;
+    }
+
+    // Validate each workout
+    for (const workout of strengthWorkouts) {
+      if (!workout.name?.trim()) {
+        alert(`Workout "${workout.name || 'Unnamed'}" must have a name`);
+        return;
+      }
+      if (!workout.objective?.trim()) {
+        alert(`Workout "${workout.name}" must have an objective`);
+        return;
+      }
+      if (!workout.sections || workout.sections.length === 0) {
+        alert(`Workout "${workout.name}" must have at least one section`);
+        return;
+      }
+
+      // Validate each section
+      for (const section of workout.sections) {
+        if (!section.name?.trim()) {
+          alert(
+            `Section "${section.name || 'Unnamed'}" in workout "${workout.name}" must have a name`
+          );
+          return;
+        }
+        if (!section.exercises || section.exercises.length === 0) {
+          alert(
+            `Section "${section.name}" in workout "${workout.name}" must have at least one exercise`
+          );
+          return;
+        }
+
+        // Validate each exercise
+        for (const exercise of section.exercises) {
+          if (!exercise.variantId && !exercise.exerciseId) {
+            alert(
+              `Exercise "${exercise.name || 'Unnamed'}" in section "${section.name}" must be selected from the exercise library`
+            );
+            return;
+          }
+          if (!exercise.sets || exercise.sets.length === 0) {
+            alert(
+              `Exercise "${exercise.name || 'Unnamed'}" in section "${section.name}" must have at least one set`
+            );
+            return;
+          }
+
+          // Validate each set
+          for (const set of exercise.sets) {
+            if (!set.reps || set.reps <= 0) {
+              alert(
+                `Set ${set.setNumber} in exercise "${exercise.name || 'Unnamed'}" must have valid reps`
+              );
+              return;
+            }
+          }
+        }
+      }
+    }
+
+    // Validate running workouts if any
+    if (runningWorkouts && runningWorkouts.length > 0) {
+      for (const workout of runningWorkouts) {
+        if (!workout.name?.trim()) {
+          alert(
+            `Running workout "${workout.name || 'Unnamed'}" must have a name`
+          );
+          return;
+        }
+        if (!workout.objective?.trim()) {
+          alert(`Running workout "${workout.name}" must have an objective`);
+          return;
+        }
+        if (!workout.sections || workout.sections.length === 0) {
+          alert(
+            `Running workout "${workout.name}" must have at least one section`
+          );
+          return;
+        }
+
+        // Validate each section
+        for (const section of workout.sections) {
+          if (!section.name?.trim()) {
+            alert(
+              `Section "${section.name || 'Unnamed'}" in running workout "${workout.name}" must have a name`
+            );
+            return;
+          }
+          if (!section.exercises || section.exercises.length === 0) {
+            alert(
+              `Section "${section.name}" in running workout "${workout.name}" must have at least one exercise`
+            );
+            return;
+          }
+
+          // Validate each exercise
+          for (const exercise of section.exercises) {
+            if (!exercise.variantId && !exercise.exerciseId) {
+              alert(
+                `Exercise "${exercise.name || 'Unnamed'}" in section "${section.name}" must be selected from the exercise library`
+              );
+              return;
+            }
+          }
+        }
+      }
+    }
+
+    // Prepare routine data
     const routineData = {
-      name,
+      userId: user.id,
+      name: name.trim(),
+      description: description.trim(),
       difficulty: difficulty as 'Beginner' | 'Intermediate' | 'Advanced',
       goal: goal as 'Strength' | 'Hypertrophy' | 'Endurance' | 'Weight Loss',
-      description,
       objectives,
       duration,
       // daysPerWeek is calculated dynamically from workout days
@@ -527,24 +663,15 @@ const RoutineCreation = ({
     };
 
     try {
-      if (mode === 'edit' && editRoutineId) {
-        // Update existing routine
-        const updateData = {
-          name: routineData.name,
-          description: routineData.description,
-          difficulty: routineData.difficulty,
-          goal: routineData.goal,
-          duration: routineData.duration,
-          objectives: routineData.objectives,
-        };
-        await routineService.updateRoutine(editRoutineId, updateData);
-      } else {
-        await routineService.createRoutine(routineData);
-      }
-
+      // setIsSaving(true); // This state variable is not defined in the original file
+      await routineService.createRoutine(routineData);
       router.push('/routines');
-    } catch {
-      // TODO: Show error message to user
+    } catch (error) {
+      alert(
+        `Failed to save routine: ${error instanceof Error ? error.message : 'Unknown error'}`
+      );
+    } finally {
+      // setIsSaving(false); // This state variable is not defined in the original file
     }
   };
 

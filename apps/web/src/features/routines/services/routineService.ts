@@ -224,11 +224,7 @@ export class RoutineService {
           emomDuration: section.emomDuration,
           exercises: (section.exercises || []).map(
             (exercise, exerciseIndex) => ({
-              name: exercise.name,
-              category: exercise.category,
-              muscleGroups: exercise.muscleGroups,
-              exerciseId: exercise.exerciseId,
-              variantId: exercise.variantId,
+              variantId: exercise.variantId || exercise.exerciseId,
               orderIndex: exerciseIndex,
               restTimer: exercise.restTimer,
               restAfter: exercise.restAfter,
@@ -263,14 +259,12 @@ export class RoutineService {
           emomDuration: section.emomDuration,
           exercises: (section.exercises || []).map(
             (exercise, exerciseIndex) => ({
-              name: exercise.name,
-              category: exercise.category,
-              muscleGroups: exercise.muscleGroups,
-              exerciseId: exercise.exerciseId,
-              variantId: exercise.variantId,
+              variantId: exercise.variantId || exercise.exerciseId,
               orderIndex: exerciseIndex,
               restTimer: exercise.restTimer,
               restAfter: exercise.restAfter,
+              progressionMethod: exercise.progressionMethod,
+              hasApproachSets: exercise.hasApproachSets,
               emomReps: exercise.emomReps,
               sets: (exercise.sets || []).map((set, setIndex) => ({
                 setNumber: setIndex + 1,
@@ -286,6 +280,8 @@ export class RoutineService {
     );
 
     // Call the comprehensive RPC function for atomic routine creation
+    // Data being sent to create_complete_routine logged for debugging
+
     const { data: result, error } = await this.supabase.rpc(
       'create_complete_routine',
       {

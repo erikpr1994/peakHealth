@@ -91,4 +91,6 @@ for matrix_item in "${BUILD_MATRIX[@]}"; do
   run_task "$task" "$task_name"
 done
 
+pnpm test:e2e
+
 echo "✅ Pre-commit checks passed!"
