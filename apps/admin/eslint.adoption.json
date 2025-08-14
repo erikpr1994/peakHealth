@@ -23,8 +23,8 @@
       "react/function-component-definition"
     ]
   },
-  "62fa81c0e90eab8492d63e94e58a640508fb970621c37a5a99370c721f25d6e2": {
-    "file": "src/app/(content)/features/page.tsx",
+  "5b6dc21b33d2b70da4717a02f1973824d95a7988a8a6f1b8498a7849042d79dc": {
+    "file": "src/app/(communication)/notifications/page.tsx",
     "rules": [
       "@typescript-eslint/explicit-function-return-type",
       "@typescript-eslint/explicit-module-boundary-types",
@@ -33,6 +33,14 @@
   },
   "26f9ab8bd31c593320d14c27d540bfbc1f491e885bd9281dd918a4feb53b026b": {
     "file": "src/app/(content)/content/page.tsx",
+    "rules": [
+      "@typescript-eslint/explicit-function-return-type",
+      "@typescript-eslint/explicit-module-boundary-types",
+      "react/function-component-definition"
+    ]
+  },
+  "62fa81c0e90eab8492d63e94e58a640508fb970621c37a5a99370c721f25d6e2": {
+    "file": "src/app/(content)/features/page.tsx",
     "rules": [
       "@typescript-eslint/explicit-function-return-type",
       "@typescript-eslint/explicit-module-boundary-types",
@@ -71,22 +79,6 @@
       "react/function-component-definition"
     ]
   },
-  "5b6dc21b33d2b70da4717a02f1973824d95a7988a8a6f1b8498a7849042d79dc": {
-    "file": "src/app/(communication)/notifications/page.tsx",
-    "rules": [
-      "@typescript-eslint/explicit-function-return-type",
-      "@typescript-eslint/explicit-module-boundary-types",
-      "react/function-component-definition"
-    ]
-  },
-  "1d43629b9d3f200ca4bd600bc2449aa1e878c72c092d44ace36a27613ebb76e5": {
-    "file": "src/app/(system)/subscription-tiers/page.tsx",
-    "rules": [
-      "@typescript-eslint/explicit-function-return-type",
-      "@typescript-eslint/explicit-module-boundary-types",
-      "react/function-component-definition"
-    ]
-  },
   "82dfb992fed0e1121c4f591667a246462d775694c1d5dc342906316af350789c": {
     "file": "src/app/(partners)/partners/page.tsx",
     "rules": [
@@ -111,8 +103,8 @@
       "react/function-component-definition"
     ]
   },
-  "7fa8756ca029a7c85a8764d6c8336494dc7b3d275533d9c55e66563643d8ebbb": {
-    "file": "src/app/(system)/user-defaults/page.tsx",
+  "1d43629b9d3f200ca4bd600bc2449aa1e878c72c092d44ace36a27613ebb76e5": {
+    "file": "src/app/(system)/subscription-tiers/page.tsx",
     "rules": [
       "@typescript-eslint/explicit-function-return-type",
       "@typescript-eslint/explicit-module-boundary-types",
@@ -121,6 +113,14 @@
   },
   "65abfcf78784fe47358dfb2e2d7491b137323c86bdc1683109eb95d91e8e3fd0": {
     "file": "src/app/(system)/support/page.tsx",
+    "rules": [
+      "@typescript-eslint/explicit-function-return-type",
+      "@typescript-eslint/explicit-module-boundary-types",
+      "react/function-component-definition"
+    ]
+  },
+  "7fa8756ca029a7c85a8764d6c8336494dc7b3d275533d9c55e66563643d8ebbb": {
+    "file": "src/app/(system)/user-defaults/page.tsx",
     "rules": [
       "@typescript-eslint/explicit-function-return-type",
       "@typescript-eslint/explicit-module-boundary-types",
@@ -151,12 +151,16 @@
       "react/function-component-definition"
     ]
   },
+  "db9281b22f2eb5f4630794632f1901384605c67a8c04a2ed9bf44141986a4ce9": {
+    "file": "src/app/api/admin/clients/[id]/route.ts",
+    "rules": ["no-console"]
+  },
   "588c3892725f502e5877f785b662af12540233e55186deba0b647aeb200abbc0": {
     "file": "src/app/api/admin/clients/assign-program/route.ts",
     "rules": ["no-console"]
   },
-  "db9281b22f2eb5f4630794632f1901384605c67a8c04a2ed9bf44141986a4ce9": {
-    "file": "src/app/api/admin/clients/[id]/route.ts",
+  "a3aff6b7198aa46d7ca1ba798b183408b3fe1954f323d45d2214dc7eacebe86b": {
+    "file": "src/app/api/admin/clients/route.ts",
     "rules": ["no-console"]
   },
   "5e7db9000d2b48553a89a1a31e98b9b50be961bce372186a5ffebd0e5b79dbb9": {
@@ -167,12 +171,16 @@
       "@typescript-eslint/no-explicit-any"
     ]
   },
-  "a3aff6b7198aa46d7ca1ba798b183408b3fe1954f323d45d2214dc7eacebe86b": {
-    "file": "src/app/api/admin/clients/route.ts",
-    "rules": ["no-console"]
-  },
   "414b6a4d38641d8cf285b63c19a8cda568a8fce92a713d5d971ad21412d3ba6e": {
     "file": "src/app/api/admin/subscription-tiers/route.ts",
+    "rules": [
+      "@typescript-eslint/explicit-function-return-type",
+      "@typescript-eslint/explicit-module-boundary-types",
+      "no-console"
+    ]
+  },
+  "084fafd4e7c7f2f3dfa90b18c8697e945aa9d347221cefd00bb0902b0bede750": {
+    "file": "src/app/api/admin/user-defaults/route.ts",
     "rules": [
       "@typescript-eslint/explicit-function-return-type",
       "@typescript-eslint/explicit-module-boundary-types",
@@ -191,14 +199,6 @@
     "file": "src/app/api/admin/user-groups/route.ts",
     "rules": ["no-console"]
   },
-  "084fafd4e7c7f2f3dfa90b18c8697e945aa9d347221cefd00bb0902b0bede750": {
-    "file": "src/app/api/admin/user-defaults/route.ts",
-    "rules": [
-      "@typescript-eslint/explicit-function-return-type",
-      "@typescript-eslint/explicit-module-boundary-types",
-      "no-console"
-    ]
-  },
   "1b161e8dc1d25762c288b11861e26ac56a96c1b585fe7cfb11d68d6bf895b682": {
     "file": "src/app/api/admin/user-types/route.ts",
     "rules": ["no-console"]
@@ -206,14 +206,6 @@
   "e57519d25477abb2674c251575834fc4c649d2d8f13da9a50f3f288329a6ed17": {
     "file": "src/app/api/auth/logout/route.ts",
     "rules": ["no-console"]
-  },
-  "02757afe4e319ac8983a2ba5dd06d7f6200fc747bf4dca887ed482118a1957bd": {
-    "file": "src/app/dashboard/page.tsx",
-    "rules": [
-      "@typescript-eslint/explicit-function-return-type",
-      "@typescript-eslint/explicit-module-boundary-types",
-      "react/function-component-definition"
-    ]
   },
   "3b1440d29243592821eac96787d209779afac11d5ecb6b85e8346c1d99da6be4": {
     "file": "src/app/api/auth/user/route.ts",
@@ -223,15 +215,23 @@
       "no-console"
     ]
   },
-  "49b08689467a9991ad78d510dee2e3df925b7ab5532ee91fc94b8531fb99446d": {
-    "file": "src/app/page.tsx",
+  "02757afe4e319ac8983a2ba5dd06d7f6200fc747bf4dca887ed482118a1957bd": {
+    "file": "src/app/dashboard/page.tsx",
+    "rules": [
+      "@typescript-eslint/explicit-function-return-type",
+      "@typescript-eslint/explicit-module-boundary-types",
+      "react/function-component-definition"
+    ]
+  },
+  "b8f40d39f5e73cde92b778a0d0dbbeb5fe6e23262b7672f981572fa4a0febdb0": {
+    "file": "src/app/layout.tsx",
     "rules": [
       "@typescript-eslint/explicit-function-return-type",
       "@typescript-eslint/explicit-module-boundary-types"
     ]
   },
-  "b8f40d39f5e73cde92b778a0d0dbbeb5fe6e23262b7672f981572fa4a0febdb0": {
-    "file": "src/app/layout.tsx",
+  "49b08689467a9991ad78d510dee2e3df925b7ab5532ee91fc94b8531fb99446d": {
+    "file": "src/app/page.tsx",
     "rules": [
       "@typescript-eslint/explicit-function-return-type",
       "@typescript-eslint/explicit-module-boundary-types"
@@ -242,31 +242,6 @@
     "rules": [
       "@typescript-eslint/explicit-function-return-type",
       "@typescript-eslint/explicit-module-boundary-types"
-    ]
-  },
-  "26d99d3ffc4c90fce2ad09ab691dc1c16e7b52bc00a2bd0448a33c4e1b5a0ed2": {
-    "file": "src/components/ClientProgressTracking.tsx",
-    "rules": [
-      "prettier/prettier",
-      "@typescript-eslint/no-unused-vars",
-      "no-secrets/no-secrets",
-      "@typescript-eslint/no-explicit-any",
-      "@typescript-eslint/explicit-function-return-type",
-      "react/function-component-definition",
-      "no-console",
-      "@typescript-eslint/explicit-module-boundary-types"
-    ]
-  },
-  "c2c5f88635f4ccc0802be73e12e4fcad5886c33598ccc49eb811f9b8159d8050": {
-    "file": "src/components/ClientView.tsx",
-    "rules": [
-      "prettier/prettier",
-      "@typescript-eslint/no-unused-vars",
-      "no-secrets/no-secrets",
-      "@typescript-eslint/no-explicit-any",
-      "@typescript-eslint/explicit-function-return-type",
-      "@typescript-eslint/explicit-module-boundary-types",
-      "react/function-component-definition"
     ]
   },
   "f2b40e65ebca8e71d40649adf735fa70d9d676f120a74b8ad7d9faac73574ba1": {
@@ -284,6 +259,38 @@
       "@typescript-eslint/explicit-function-return-type",
       "@typescript-eslint/explicit-module-boundary-types",
       "@next/next/no-img-element"
+    ]
+  },
+  "c2c5f88635f4ccc0802be73e12e4fcad5886c33598ccc49eb811f9b8159d8050": {
+    "file": "src/components/ClientView.tsx",
+    "rules": [
+      "prettier/prettier",
+      "@typescript-eslint/no-unused-vars",
+      "no-secrets/no-secrets",
+      "@typescript-eslint/no-explicit-any",
+      "@typescript-eslint/explicit-function-return-type",
+      "@typescript-eslint/explicit-module-boundary-types",
+      "react/function-component-definition"
+    ]
+  },
+  "26d99d3ffc4c90fce2ad09ab691dc1c16e7b52bc00a2bd0448a33c4e1b5a0ed2": {
+    "file": "src/components/ClientProgressTracking.tsx",
+    "rules": [
+      "prettier/prettier",
+      "@typescript-eslint/no-unused-vars",
+      "no-secrets/no-secrets",
+      "@typescript-eslint/no-explicit-any",
+      "@typescript-eslint/explicit-function-return-type",
+      "react/function-component-definition",
+      "no-console",
+      "@typescript-eslint/explicit-module-boundary-types"
+    ]
+  },
+  "9d4177adc9c74c73259e672b099674b470eb96f3f1d132e1558bcfbfdc12c54e": {
+    "file": "src/components/LoadingSpinner.tsx",
+    "rules": [
+      "@typescript-eslint/explicit-function-return-type",
+      "@typescript-eslint/explicit-module-boundary-types"
     ]
   },
   "050001c5368a9d1eec7115d4a684f9ff2e31c530f568b5569a692bad454105a9": {
@@ -317,13 +324,6 @@
       "react/function-component-definition"
     ]
   },
-  "9d4177adc9c74c73259e672b099674b470eb96f3f1d132e1558bcfbfdc12c54e": {
-    "file": "src/components/LoadingSpinner.tsx",
-    "rules": [
-      "@typescript-eslint/explicit-function-return-type",
-      "@typescript-eslint/explicit-module-boundary-types"
-    ]
-  },
   "8b4032f5a30cfc85c0c42d5040a341473a9f1ef099acb67fa885a3a1ff4cf42f": {
     "file": "src/components/NotificationManagement.tsx",
     "rules": [
@@ -352,16 +352,6 @@
       "react/function-component-definition"
     ]
   },
-  "487a3df15bbd7bfcaccf8b5f13c5aee2686a1a84b9fe61e0991169a1e96f9efd": {
-    "file": "src/components/ProductRoadmap.tsx",
-    "rules": [
-      "@typescript-eslint/no-unused-vars",
-      "@typescript-eslint/no-explicit-any",
-      "@typescript-eslint/explicit-function-return-type",
-      "@typescript-eslint/explicit-module-boundary-types",
-      "react/function-component-definition"
-    ]
-  },
   "c18e26b8f2cfbab27a1605085fc17952e11e24436ae5b7ce817b8bea5af9fd93": {
     "file": "src/components/ProgramBuilder.tsx",
     "rules": [
@@ -371,6 +361,16 @@
       "@typescript-eslint/explicit-module-boundary-types",
       "react/function-component-definition",
       "@typescript-eslint/no-explicit-any"
+    ]
+  },
+  "487a3df15bbd7bfcaccf8b5f13c5aee2686a1a84b9fe61e0991169a1e96f9efd": {
+    "file": "src/components/ProductRoadmap.tsx",
+    "rules": [
+      "@typescript-eslint/no-unused-vars",
+      "@typescript-eslint/no-explicit-any",
+      "@typescript-eslint/explicit-function-return-type",
+      "@typescript-eslint/explicit-module-boundary-types",
+      "react/function-component-definition"
     ]
   },
   "ba2bbe3cca2a0a4e7d4e42235322b691251f3e2949ab8f8c0401dd0456552a96": {
@@ -399,18 +399,6 @@
       "no-secrets/no-secrets"
     ]
   },
-  "61bb7cd4fdedc9cd23232b80e1ee82914298d112527af0477f15c2bcc749a41f": {
-    "file": "src/components/SuggestionsManagement.tsx",
-    "rules": [
-      "@typescript-eslint/no-unused-vars",
-      "no-secrets/no-secrets",
-      "@typescript-eslint/no-explicit-any",
-      "@typescript-eslint/explicit-function-return-type",
-      "@typescript-eslint/explicit-module-boundary-types",
-      "react/function-component-definition",
-      "no-console"
-    ]
-  },
   "edc3883ffbfd88fc95e45d6f48f2efed704b7965636f22c15a416c7dc7d4a50a": {
     "file": "src/components/SubscriptionTiersManagement.tsx",
     "rules": [
@@ -429,10 +417,9 @@
       "react/function-component-definition"
     ]
   },
-  "e0eb0508d892a4a427ec10a852234dab2d36b1a520f18f7408b0f90c66071a73": {
-    "file": "src/components/UserFeedback.tsx",
+  "f9bfe3289014e78e59aa3728faac4251cda2646b0faf6abbf726385fac0baaf7": {
+    "file": "src/components/SupportTicketing.tsx",
     "rules": [
-      "prettier/prettier",
       "@typescript-eslint/no-unused-vars",
       "no-secrets/no-secrets",
       "@typescript-eslint/no-explicit-any",
@@ -448,16 +435,6 @@
       "@typescript-eslint/explicit-module-boundary-types"
     ]
   },
-  "65758e13fe4918f6ea72483171cd153c0e4b77240d37fb8df825d8d70a1f1a03": {
-    "file": "src/components/UserEngagement.tsx",
-    "rules": [
-      "@typescript-eslint/no-unused-vars",
-      "@typescript-eslint/no-explicit-any",
-      "@typescript-eslint/explicit-function-return-type",
-      "@typescript-eslint/explicit-module-boundary-types",
-      "react/function-component-definition"
-    ]
-  },
   "2dd9090fb665278a7fcc2502295c84d8f2c5de0a083dac6da7572e2b41e25043": {
     "file": "src/components/TrainerManagement.tsx",
     "rules": [
@@ -470,9 +447,32 @@
       "@typescript-eslint/explicit-module-boundary-types"
     ]
   },
-  "f9bfe3289014e78e59aa3728faac4251cda2646b0faf6abbf726385fac0baaf7": {
-    "file": "src/components/SupportTicketing.tsx",
+  "65758e13fe4918f6ea72483171cd153c0e4b77240d37fb8df825d8d70a1f1a03": {
+    "file": "src/components/UserEngagement.tsx",
     "rules": [
+      "@typescript-eslint/no-unused-vars",
+      "@typescript-eslint/no-explicit-any",
+      "@typescript-eslint/explicit-function-return-type",
+      "@typescript-eslint/explicit-module-boundary-types",
+      "react/function-component-definition"
+    ]
+  },
+  "61bb7cd4fdedc9cd23232b80e1ee82914298d112527af0477f15c2bcc749a41f": {
+    "file": "src/components/SuggestionsManagement.tsx",
+    "rules": [
+      "@typescript-eslint/no-unused-vars",
+      "no-secrets/no-secrets",
+      "@typescript-eslint/no-explicit-any",
+      "@typescript-eslint/explicit-function-return-type",
+      "@typescript-eslint/explicit-module-boundary-types",
+      "react/function-component-definition",
+      "no-console"
+    ]
+  },
+  "e0eb0508d892a4a427ec10a852234dab2d36b1a520f18f7408b0f90c66071a73": {
+    "file": "src/components/UserFeedback.tsx",
+    "rules": [
+      "prettier/prettier",
       "@typescript-eslint/no-unused-vars",
       "no-secrets/no-secrets",
       "@typescript-eslint/no-explicit-any",
@@ -488,16 +488,6 @@
       "@typescript-eslint/explicit-module-boundary-types"
     ]
   },
-  "da6407c7b6e3bda9f6d9d8f6a0c77bb47f2eea3e6fdc2355c3daaef32b8d7105": {
-    "file": "src/components/WorkoutPrograms.tsx",
-    "rules": [
-      "prettier/prettier",
-      "@typescript-eslint/no-unused-vars",
-      "@typescript-eslint/explicit-function-return-type",
-      "@typescript-eslint/explicit-module-boundary-types",
-      "react/function-component-definition"
-    ]
-  },
   "11bc581d0965d153670f8b0281617d508f2e7eba78f28666f5ca446566ed1cb1": {
     "file": "src/components/figma/ImageWithFallback.tsx",
     "rules": [
@@ -507,6 +497,16 @@
       "react/function-component-definition",
       "no-undef",
       "@next/next/no-img-element"
+    ]
+  },
+  "da6407c7b6e3bda9f6d9d8f6a0c77bb47f2eea3e6fdc2355c3daaef32b8d7105": {
+    "file": "src/components/WorkoutPrograms.tsx",
+    "rules": [
+      "prettier/prettier",
+      "@typescript-eslint/no-unused-vars",
+      "@typescript-eslint/explicit-function-return-type",
+      "@typescript-eslint/explicit-module-boundary-types",
+      "react/function-component-definition"
     ]
   },
   "d06d504a8b108c020a35d94dc936097c7ab49fab8d87c98a405f6fc455102f1f": {
@@ -550,15 +550,6 @@
       "@typescript-eslint/explicit-module-boundary-types"
     ]
   },
-  "f42c492ea8bc7d992ada399c95f36e0d25f8956c473c315d8c141ff77037ddfc": {
-    "file": "src/components/ui/badge.tsx",
-    "rules": [
-      "prettier/prettier",
-      "@typescript-eslint/explicit-function-return-type",
-      "@typescript-eslint/explicit-module-boundary-types",
-      "react/function-component-definition"
-    ]
-  },
   "bcafa5bbeae8d1b2a2ebf412467ada42207db1de33d1fd2cac7a784face54c13": {
     "file": "src/components/ui/button.tsx",
     "rules": ["@typescript-eslint/no-explicit-any"]
@@ -570,13 +561,22 @@
       "@typescript-eslint/explicit-module-boundary-types"
     ]
   },
-  "ab664fc7608e09a979f29dddb2fcd9d5f9c8f76bc797c30968af97d380485ad8": {
-    "file": "src/components/ui/chart.tsx",
+  "ca4f53dac771665547e4ebc9f3801b3a6f5c5886a57c9b1f5d0152931083d533": {
+    "file": "src/components/ui/card.tsx",
     "rules": [
+      "prettier/prettier",
       "@typescript-eslint/explicit-function-return-type",
       "@typescript-eslint/explicit-module-boundary-types",
-      "react/function-component-definition",
-      "@typescript-eslint/no-explicit-any"
+      "react/function-component-definition"
+    ]
+  },
+  "f42c492ea8bc7d992ada399c95f36e0d25f8956c473c315d8c141ff77037ddfc": {
+    "file": "src/components/ui/badge.tsx",
+    "rules": [
+      "prettier/prettier",
+      "@typescript-eslint/explicit-function-return-type",
+      "@typescript-eslint/explicit-module-boundary-types",
+      "react/function-component-definition"
     ]
   },
   "997272890fe9a0ae4d29c69f4552ed5178d1850b833e8f5942db4c736d553ce6": {
@@ -597,8 +597,8 @@
       "react/function-component-definition"
     ]
   },
-  "ca4f53dac771665547e4ebc9f3801b3a6f5c5886a57c9b1f5d0152931083d533": {
-    "file": "src/components/ui/card.tsx",
+  "80aa49e53c92f7617226a0377ea6f9287eaee6ba1f2d1240432267acb0ceb374": {
+    "file": "src/components/ui/collapsible.tsx",
     "rules": [
       "prettier/prettier",
       "@typescript-eslint/explicit-function-return-type",
@@ -606,8 +606,17 @@
       "react/function-component-definition"
     ]
   },
-  "80aa49e53c92f7617226a0377ea6f9287eaee6ba1f2d1240432267acb0ceb374": {
-    "file": "src/components/ui/collapsible.tsx",
+  "ab664fc7608e09a979f29dddb2fcd9d5f9c8f76bc797c30968af97d380485ad8": {
+    "file": "src/components/ui/chart.tsx",
+    "rules": [
+      "@typescript-eslint/explicit-function-return-type",
+      "@typescript-eslint/explicit-module-boundary-types",
+      "react/function-component-definition",
+      "@typescript-eslint/no-explicit-any"
+    ]
+  },
+  "7dcb950bbd8bc9209baed6c60d6dfe6b3b715f6ab0b92dce3f7502cf37764b39": {
+    "file": "src/components/ui/carousel.tsx",
     "rules": [
       "prettier/prettier",
       "@typescript-eslint/explicit-function-return-type",
@@ -626,15 +635,6 @@
   },
   "1506be8447ebf668f081fa301cf0de59b11607f022b54f4a3b81818d2572e6c8": {
     "file": "src/components/ui/drawer.tsx",
-    "rules": [
-      "prettier/prettier",
-      "@typescript-eslint/explicit-function-return-type",
-      "@typescript-eslint/explicit-module-boundary-types",
-      "react/function-component-definition"
-    ]
-  },
-  "7dcb950bbd8bc9209baed6c60d6dfe6b3b715f6ab0b92dce3f7502cf37764b39": {
-    "file": "src/components/ui/carousel.tsx",
     "rules": [
       "prettier/prettier",
       "@typescript-eslint/explicit-function-return-type",
@@ -669,26 +669,8 @@
       "react/function-component-definition"
     ]
   },
-  "a432d89955fe0e6d464e030ab9d35ed71921b1e62563c8a2208394f27c407e86": {
-    "file": "src/components/ui/dropdown-menu.tsx",
-    "rules": [
-      "prettier/prettier",
-      "@typescript-eslint/explicit-function-return-type",
-      "@typescript-eslint/explicit-module-boundary-types",
-      "react/function-component-definition"
-    ]
-  },
   "45ca32b5d5522f15aa75f1bb39ab95b916c747aee0db3c2d695d62bfbda6a62e": {
     "file": "src/components/ui/hover-card.tsx",
-    "rules": [
-      "prettier/prettier",
-      "@typescript-eslint/explicit-function-return-type",
-      "@typescript-eslint/explicit-module-boundary-types",
-      "react/function-component-definition"
-    ]
-  },
-  "a161163ebfd4015f6df5d60d3152603f9501e870a0305a96b249d4d32080ced9": {
-    "file": "src/components/ui/input.tsx",
     "rules": [
       "prettier/prettier",
       "@typescript-eslint/explicit-function-return-type",
@@ -705,8 +687,26 @@
       "react/function-component-definition"
     ]
   },
+  "a161163ebfd4015f6df5d60d3152603f9501e870a0305a96b249d4d32080ced9": {
+    "file": "src/components/ui/input.tsx",
+    "rules": [
+      "prettier/prettier",
+      "@typescript-eslint/explicit-function-return-type",
+      "@typescript-eslint/explicit-module-boundary-types",
+      "react/function-component-definition"
+    ]
+  },
   "b22f7f26b027b05d065f6a2a62c7b7a2e7ff08d1e73ed18f1d8bc8886a7cedb2": {
     "file": "src/components/ui/label.tsx",
+    "rules": [
+      "prettier/prettier",
+      "@typescript-eslint/explicit-function-return-type",
+      "@typescript-eslint/explicit-module-boundary-types",
+      "react/function-component-definition"
+    ]
+  },
+  "a432d89955fe0e6d464e030ab9d35ed71921b1e62563c8a2208394f27c407e86": {
+    "file": "src/components/ui/dropdown-menu.tsx",
     "rules": [
       "prettier/prettier",
       "@typescript-eslint/explicit-function-return-type",
@@ -721,31 +721,6 @@
       "@typescript-eslint/explicit-function-return-type",
       "@typescript-eslint/explicit-module-boundary-types",
       "react/function-component-definition"
-    ]
-  },
-  "568ed602502b7189aeb93e7ae41562f374b91f2c1c6cf18a43a6ca7a9b7a73a2": {
-    "file": "src/components/ui/navigation-menu.tsx",
-    "rules": [
-      "prettier/prettier",
-      "@typescript-eslint/explicit-function-return-type",
-      "@typescript-eslint/explicit-module-boundary-types",
-      "react/function-component-definition"
-    ]
-  },
-  "ef02a7805f8f0756e39839b171b1d756b5fa86eece53187d5bd66b8ea5bc6338": {
-    "file": "src/components/ui/menubar.tsx",
-    "rules": [
-      "prettier/prettier",
-      "@typescript-eslint/explicit-function-return-type",
-      "@typescript-eslint/explicit-module-boundary-types",
-      "react/function-component-definition"
-    ]
-  },
-  "85f30d05655fb72e3c666a341d192370fcafafadaef9cc7de729b15924b6330e": {
-    "file": "src/components/ui/pagination.tsx",
-    "rules": [
-      "@typescript-eslint/explicit-function-return-type",
-      "@typescript-eslint/explicit-module-boundary-types"
     ]
   },
   "fb2a5089594695326474c84e076f7ecf3d5f3cc214a978457bc20f083306154a": {
@@ -764,6 +739,22 @@
       "@typescript-eslint/explicit-function-return-type",
       "@typescript-eslint/explicit-module-boundary-types",
       "react/function-component-definition"
+    ]
+  },
+  "568ed602502b7189aeb93e7ae41562f374b91f2c1c6cf18a43a6ca7a9b7a73a2": {
+    "file": "src/components/ui/navigation-menu.tsx",
+    "rules": [
+      "prettier/prettier",
+      "@typescript-eslint/explicit-function-return-type",
+      "@typescript-eslint/explicit-module-boundary-types",
+      "react/function-component-definition"
+    ]
+  },
+  "85f30d05655fb72e3c666a341d192370fcafafadaef9cc7de729b15924b6330e": {
+    "file": "src/components/ui/pagination.tsx",
+    "rules": [
+      "@typescript-eslint/explicit-function-return-type",
+      "@typescript-eslint/explicit-module-boundary-types"
     ]
   },
   "9eab26c0f5a26b02a06894ae2296bd69a38ee12185309c738ac7944dbe388873": {
@@ -802,6 +793,15 @@
       "react/function-component-definition"
     ]
   },
+  "ef02a7805f8f0756e39839b171b1d756b5fa86eece53187d5bd66b8ea5bc6338": {
+    "file": "src/components/ui/menubar.tsx",
+    "rules": [
+      "prettier/prettier",
+      "@typescript-eslint/explicit-function-return-type",
+      "@typescript-eslint/explicit-module-boundary-types",
+      "react/function-component-definition"
+    ]
+  },
   "8c867a34c68993d238c09d03d165b6c3806f2cd4594e8f4fe4b09d500f3eb051": {
     "file": "src/components/ui/separator.tsx",
     "rules": [
@@ -818,6 +818,14 @@
       "@typescript-eslint/explicit-function-return-type",
       "@typescript-eslint/explicit-module-boundary-types",
       "react/function-component-definition"
+    ]
+  },
+  "c8f6b1b911603b73fb4c0c03f87036f3cc17b7b7ccd1694b0cf3063fa69f5f30": {
+    "file": "src/components/ui/sidebar.tsx",
+    "rules": [
+      "import-x/named",
+      "@typescript-eslint/explicit-function-return-type",
+      "@typescript-eslint/explicit-module-boundary-types"
     ]
   },
   "bc60c2fd98a98abb47174c3b8a802c8c75e9192174738d789d9365d5b56a4eb2": {
@@ -845,14 +853,6 @@
       "@typescript-eslint/explicit-function-return-type",
       "@typescript-eslint/explicit-module-boundary-types",
       "react/function-component-definition"
-    ]
-  },
-  "c8f6b1b911603b73fb4c0c03f87036f3cc17b7b7ccd1694b0cf3063fa69f5f30": {
-    "file": "src/components/ui/sidebar.tsx",
-    "rules": [
-      "import-x/named",
-      "@typescript-eslint/explicit-function-return-type",
-      "@typescript-eslint/explicit-module-boundary-types"
     ]
   },
   "0f260baa8539e28eb65737db5dbad5ea6b2a88696159a1a2892985782d4b945b": {
@@ -937,12 +937,12 @@
     "file": "src/features/client-management/components/UserDetailPage.tsx",
     "rules": ["no-console"]
   },
-  "acc97dd5dcfa3741f933370045433adf522867fd436ec408537bac1c66642306": {
-    "file": "src/features/client-management/services/clientService.ts",
-    "rules": ["no-console"]
-  },
   "3f14ce1749c059c803dac141e3732f724bd7775d985d5c01751a02cc52a334d8": {
     "file": "src/features/client-management/hooks/useClientManagement.ts",
+    "rules": ["no-console"]
+  },
+  "acc97dd5dcfa3741f933370045433adf522867fd436ec408537bac1c66642306": {
+    "file": "src/features/client-management/services/clientService.ts",
     "rules": ["no-console"]
   },
   "16fe7c1dcc02cf88b464d4594b5fd2ff4d34b7878a7576e97054d8a8ff782083": {

@@ -26,17 +26,6 @@
       "@typescript-eslint/explicit-module-boundary-types"
     ]
   },
-  "2b14ab4fd0677afb7cab22d53122325bd3756b050b9e8d99d239b6644af153d9": {
-    "file": "src/features/auth/components/SignUpForm.tsx",
-    "rules": [
-      "css-modules/no-unused-class",
-      "@typescript-eslint/explicit-function-return-type"
-    ]
-  },
-  "3d460aa352073bfdf46cca7e148d4087c071171d827ee13291c1dff7cda3c106": {
-    "file": "src/features/shared/components/AuthCard.tsx",
-    "rules": ["css-modules/no-unused-class"]
-  },
   "21bfc0de35e26ecf5dfde7a6967bd8d0cf6e4bcb599208df0cae7678c4c7a05d": {
     "file": "src/app/api/auth/signup/route.ts",
     "rules": ["no-console"]
@@ -46,6 +35,17 @@
     "rules": [
       "@typescript-eslint/explicit-function-return-type",
       "@typescript-eslint/explicit-module-boundary-types"
+    ]
+  },
+  "3d460aa352073bfdf46cca7e148d4087c071171d827ee13291c1dff7cda3c106": {
+    "file": "src/features/shared/components/AuthCard.tsx",
+    "rules": ["css-modules/no-unused-class"]
+  },
+  "2b14ab4fd0677afb7cab22d53122325bd3756b050b9e8d99d239b6644af153d9": {
+    "file": "src/features/auth/components/SignUpForm.tsx",
+    "rules": [
+      "css-modules/no-unused-class",
+      "@typescript-eslint/explicit-function-return-type"
     ]
   },
   "2e6b693238f600d7a6b2cd9f1d1f88bbda2b7c7add7349c2d46ca21fafa8ebf4": {

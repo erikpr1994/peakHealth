@@ -1,17 +1,14 @@
 {
-  "b0f589a2e145a2e0e105244783b9a6bbffea010743d0835dfea4ca7c7b1d3507": {
-    "file": "eslint.config.js",
-    "rules": [
-      "depend/ban-dependencies"
-    ]
-  },
-  "61796741c49da07deefd16b92e76ce8f27eb328f1024bb96320c256df83bd4db": {
+  "48d841906eef7d1dbb8694c9df7ee26071121e46be7c9e591a00cb75ec5923fb": {
     "file": "scripts/setup-dev-db.mjs",
+    "rules": ["no-console", "@typescript-eslint/explicit-function-return-type"]
+  },
+  "21450d33a1013bdcf36acb993ce1377a319437d61d544e307176d5b695723b26": {
+    "file": "scripts/cleanup-dev-ports.mjs",
     "rules": [
-      "perfectionist/sort-imports",
-      "depend/ban-dependencies",
-      "no-console",
-      "@typescript-eslint/explicit-function-return-type"
+      "@typescript-eslint/explicit-function-return-type",
+      "@typescript-eslint/explicit-module-boundary-types",
+      "no-console"
     ]
   }
 }

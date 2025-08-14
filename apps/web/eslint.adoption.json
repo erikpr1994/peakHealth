@@ -1,23 +1,14 @@
 {
-  "092e1fc47016cf03574e6096d7806760eb368eccbc46b9b0501cf5595efdd99f": {
-    "file": "next.config.ts",
+  "177d9b613d491d25f94b654ca0ed78144cb1bcc37717224d1343426b3f38001b": {
+    "file": "src/app/(app)/account-settings/page.tsx",
     "rules": [
-      "perfectionist/sort-objects"
+      "@typescript-eslint/explicit-function-return-type",
+      "@typescript-eslint/explicit-module-boundary-types"
     ]
   },
   "4ccc14627ee731d7cffd150788939527dfce474e07e2e4045fe8a2ce22af3802": {
     "file": "src/app/(app)/app-settings/page.tsx",
     "rules": [
-      "import-x/no-unresolved",
-      "@typescript-eslint/explicit-function-return-type",
-      "@typescript-eslint/explicit-module-boundary-types",
-      "perfectionist/sort-objects"
-    ]
-  },
-  "177d9b613d491d25f94b654ca0ed78144cb1bcc37717224d1343426b3f38001b": {
-    "file": "src/app/(app)/account-settings/page.tsx",
-    "rules": [
-      "import-x/no-unresolved",
       "@typescript-eslint/explicit-function-return-type",
       "@typescript-eslint/explicit-module-boundary-types"
     ]
@@ -25,42 +16,13 @@
   "6fa3cefe7264fc81887271e1d76fcae6e40d5f06c095adf8bbe771007ca0addd": {
     "file": "src/app/(app)/calendar/page.tsx",
     "rules": [
-      "import-x/no-unresolved",
       "@typescript-eslint/explicit-function-return-type",
       "@typescript-eslint/explicit-module-boundary-types"
-    ]
-  },
-  "100fc7e0502df0292f898e1734e62aa03e13dab9ce2e1c677afc74673e9322a2": {
-    "file": "src/app/(app)/dashboard/page.tsx",
-    "rules": [
-      "import-x/no-unresolved",
-      "@typescript-eslint/explicit-function-return-type",
-      "perfectionist/sort-objects",
-      "no-console",
-      "@typescript-eslint/explicit-module-boundary-types"
-    ]
-  },
-  "33f502b33e80ab1256de6509ae83d060b5d0ffd43bdd9c0a92416a80f8731afa": {
-    "file": "src/app/(app)/equipment/page.tsx",
-    "rules": [
-      "import-x/no-unresolved",
-      "@typescript-eslint/explicit-function-return-type",
-      "@typescript-eslint/explicit-module-boundary-types"
-    ]
-  },
-  "0ab9115bdb04052f0e42b164fc44f53a2cf38453eb278c71f9b0ae080c9104a0": {
-    "file": "src/app/(app)/exercises/[exerciseId]/page.tsx",
-    "rules": [
-      "import-x/no-unresolved",
-      "@typescript-eslint/explicit-function-return-type",
-      "@typescript-eslint/explicit-module-boundary-types",
-      "perfectionist/sort-objects"
     ]
   },
   "34ee4220d81244bace85f73778e23b8f4a460b35507725955f1be18b25fc9863": {
     "file": "src/app/(app)/exercises/[exerciseId]/variants/[variantId]/page.tsx",
     "rules": [
-      "import-x/no-unresolved",
       "@typescript-eslint/explicit-function-return-type",
       "@typescript-eslint/explicit-module-boundary-types"
     ]
@@ -68,9 +30,15 @@
   "6c079daf57b2cfa348c8a941d113b32d8fa651773a496a747233bdbf79f205cc": {
     "file": "src/app/(app)/exercises/page.tsx",
     "rules": [
-      "import-x/no-unresolved",
       "@typescript-eslint/explicit-function-return-type",
-      "perfectionist/sort-objects",
+      "no-console",
+      "@typescript-eslint/explicit-module-boundary-types"
+    ]
+  },
+  "100fc7e0502df0292f898e1734e62aa03e13dab9ce2e1c677afc74673e9322a2": {
+    "file": "src/app/(app)/dashboard/page.tsx",
+    "rules": [
+      "@typescript-eslint/explicit-function-return-type",
       "no-console",
       "@typescript-eslint/explicit-module-boundary-types"
     ]
@@ -78,7 +46,6 @@
   "174d16e4e163975779cb033dc20abafc20c0e59fb5c4c2131b29b0873c8e4c69": {
     "file": "src/app/(app)/gyms/page.tsx",
     "rules": [
-      "import-x/no-unresolved",
       "@typescript-eslint/explicit-function-return-type",
       "@typescript-eslint/explicit-module-boundary-types"
     ]
@@ -86,7 +53,13 @@
   "cccac8f939129afcf17d6e6c1d759c5a5fc0360a6a20a9417fa2e0d4a313d6be": {
     "file": "src/app/(app)/health/page.tsx",
     "rules": [
-      "import-x/no-unresolved",
+      "@typescript-eslint/explicit-function-return-type",
+      "@typescript-eslint/explicit-module-boundary-types"
+    ]
+  },
+  "33f502b33e80ab1256de6509ae83d060b5d0ffd43bdd9c0a92416a80f8731afa": {
+    "file": "src/app/(app)/equipment/page.tsx",
+    "rules": [
       "@typescript-eslint/explicit-function-return-type",
       "@typescript-eslint/explicit-module-boundary-types"
     ]
@@ -94,15 +67,6 @@
   "c8c7a84139e991bc2b554264cc4c6d227d8ea8b7f1ea2d59c7eda5807cc60593": {
     "file": "src/app/(app)/help-support/page.tsx",
     "rules": [
-      "import-x/no-unresolved",
-      "@typescript-eslint/explicit-function-return-type",
-      "@typescript-eslint/explicit-module-boundary-types"
-    ]
-  },
-  "9daa2b4f2db4ec8cecfbc2a9a90a197207f6124c68d3a08c92fec4f6a3d8364d": {
-    "file": "src/app/(app)/layout.tsx",
-    "rules": [
-      "import-x/no-unresolved",
       "@typescript-eslint/explicit-function-return-type",
       "@typescript-eslint/explicit-module-boundary-types"
     ]
@@ -110,7 +74,6 @@
   "9358d92b536c7a6ace89af6ffe5809e2e8947ec5435687ed6d26367a42747a90": {
     "file": "src/app/(app)/performance/page.tsx",
     "rules": [
-      "import-x/no-unresolved",
       "@typescript-eslint/explicit-function-return-type",
       "@typescript-eslint/explicit-module-boundary-types"
     ]
@@ -118,7 +81,6 @@
   "410455009369f9038491a955a9675e39ea993bcfe8e715d2e9ad8584ac1537d7": {
     "file": "src/app/(app)/profile/page.tsx",
     "rules": [
-      "import-x/no-unresolved",
       "@typescript-eslint/explicit-function-return-type",
       "@typescript-eslint/explicit-module-boundary-types"
     ]
@@ -126,7 +88,6 @@
   "591ab1cc6d2516e254b037b4dbc2450c4e2850e1798f3973d372df94086c9c82": {
     "file": "src/app/(app)/profile/loading.tsx",
     "rules": [
-      "import-x/no-unresolved",
       "@typescript-eslint/explicit-function-return-type",
       "@typescript-eslint/explicit-module-boundary-types",
       "react/function-component-definition"
@@ -135,7 +96,6 @@
   "fdc8b7ec9de3bbea2420b98e73409557cd8cb87cd468f16343eedac681bb5498": {
     "file": "src/app/(app)/suggestions/page.tsx",
     "rules": [
-      "import-x/no-unresolved",
       "@typescript-eslint/explicit-function-return-type",
       "@typescript-eslint/explicit-module-boundary-types"
     ]
@@ -143,45 +103,12 @@
   "c80134e0cb88485a2871f86383b44710840c43e57da9faca826cb95c94a09524": {
     "file": "src/app/(app)/trainer-and-clubs/page.tsx",
     "rules": [
-      "import-x/no-unresolved",
-      "@typescript-eslint/explicit-function-return-type",
-      "@typescript-eslint/explicit-module-boundary-types"
-    ]
-  },
-  "1cf75fd017d7f03d2455982d28fa3acb3e34b8d883fb0f74c78b5a2e772f8b33": {
-    "file": "src/app/(app)/routines/[routineId]/page.tsx",
-    "rules": [
-      "import-x/no-unresolved",
       "@typescript-eslint/explicit-function-return-type",
       "@typescript-eslint/explicit-module-boundary-types"
     ]
   },
   "a4ce36de0317b0fcb1429b60cfdc049203759206f4732eee4322f71b9e5e482c": {
     "file": "src/app/(app)/workout-tracker/[routineId]/page.tsx",
-    "rules": [
-      "import-x/no-unresolved",
-      "@typescript-eslint/explicit-function-return-type",
-      "@typescript-eslint/explicit-module-boundary-types"
-    ]
-  },
-  "0307358d8f4ae802fca535dda5936e1132db48113facb0d3d10bc49d28da7051": {
-    "file": "src/app/(app)/routines/page.tsx",
-    "rules": [
-      "import-x/no-unresolved",
-      "@typescript-eslint/explicit-function-return-type",
-      "@typescript-eslint/explicit-module-boundary-types"
-    ]
-  },
-  "47e07c266513879fa310e24e17bc1e7e068f67d8b8707c9a9e1eea3b74495743": {
-    "file": "src/app/(app)/routines/create/page.tsx",
-    "rules": [
-      "import-x/no-unresolved",
-      "@typescript-eslint/explicit-function-return-type",
-      "@typescript-eslint/explicit-module-boundary-types"
-    ]
-  },
-  "4c6c7c7e7f29c1962a298a218ce28a5180b279f50d1a291cbd2dc5c18bfac491": {
-    "file": "src/app/(auth)/layout.tsx",
     "rules": [
       "@typescript-eslint/explicit-function-return-type",
       "@typescript-eslint/explicit-module-boundary-types"
@@ -190,17 +117,34 @@
   "832d7bd046652561cd0c98bfa327b87960dc00f9c9494bd49890b950276a44fa": {
     "file": "src/app/api/auth/login/route.ts",
     "rules": [
-      "import-x/no-unresolved",
       "@typescript-eslint/explicit-function-return-type",
       "@typescript-eslint/explicit-module-boundary-types",
-      "no-console",
-      "perfectionist/sort-objects"
+      "no-console"
     ]
   },
   "01cbe2496c1be3e14bc9335be27207d5e4a54c1c4b2bf053df8af7e5924d1836": {
     "file": "src/app/api/auth/logout/route.ts",
     "rules": [
-      "import-x/no-unresolved",
+      "@typescript-eslint/explicit-function-return-type",
+      "@typescript-eslint/explicit-module-boundary-types",
+      "no-console"
+    ]
+  },
+  "b0cebf5dcf547bee55c720f116e2dbda9fe8c5969acbfe92d1dddd36853c4b32": {
+    "file": "src/app/api/auth/user/route.ts",
+    "rules": ["no-console"]
+  },
+  "d2da1952639c5c223a15138f16af5674aa50310887aecc88adbcc9661a5dcca9": {
+    "file": "src/app/api/auth/signup/route.ts",
+    "rules": [
+      "@typescript-eslint/explicit-function-return-type",
+      "@typescript-eslint/explicit-module-boundary-types",
+      "no-console"
+    ]
+  },
+  "850d0f9fa65614e340a7c6975b7d70c070b88474dc9b722bac186c590eed339b": {
+    "file": "src/app/api/exercises/[exerciseId]/route.ts",
+    "rules": [
       "@typescript-eslint/explicit-function-return-type",
       "@typescript-eslint/explicit-module-boundary-types",
       "no-console"
@@ -208,67 +152,19 @@
   },
   "832dfd190918ddb8bc713a439266c99db8d98a58c54bd0297b109477b86f8818": {
     "file": "src/app/api/auth/signup/__tests__/route.test.ts",
-    "rules": [
-      "perfectionist/sort-imports",
-      "import-x/no-unresolved",
-      "@typescript-eslint/no-explicit-any",
-      "perfectionist/sort-objects"
-    ]
+    "rules": ["@typescript-eslint/no-explicit-any"]
   },
-  "fc31b2f5320d05b8cb05ad0d16c66fc20304aa980d1588baf5dfc998f87e00e9": {
-    "file": "src/app/api/auth/user/route.ts",
+  "8d4229625cd02988a0f2fac47c80eb5999e0aaf2ed63b7858fe9d8865635e046": {
+    "file": "src/app/api/exercises/route.ts",
     "rules": [
-      "import-x/no-unresolved",
       "@typescript-eslint/explicit-function-return-type",
       "@typescript-eslint/explicit-module-boundary-types",
-      "no-console",
-      "perfectionist/sort-objects"
-    ]
-  },
-  "d2da1952639c5c223a15138f16af5674aa50310887aecc88adbcc9661a5dcca9": {
-    "file": "src/app/api/auth/signup/route.ts",
-    "rules": [
-      "import-x/no-unresolved",
-      "@typescript-eslint/explicit-function-return-type",
-      "@typescript-eslint/explicit-module-boundary-types",
-      "perfectionist/sort-objects",
       "no-console"
     ]
   },
   "1d8cbc38dadc8143b321e8240ed574b7e8a185ac9020fba1dc4f0dc6259073ae": {
     "file": "src/app/api/exercises/favorites/route.ts",
     "rules": [
-      "import-x/no-unresolved",
-      "@typescript-eslint/explicit-function-return-type",
-      "@typescript-eslint/explicit-module-boundary-types",
-      "compat/compat",
-      "no-console",
-      "perfectionist/sort-objects"
-    ]
-  },
-  "850d0f9fa65614e340a7c6975b7d70c070b88474dc9b722bac186c590eed339b": {
-    "file": "src/app/api/exercises/[exerciseId]/route.ts",
-    "rules": [
-      "import-x/no-unresolved",
-      "@typescript-eslint/explicit-function-return-type",
-      "@typescript-eslint/explicit-module-boundary-types",
-      "no-console"
-    ]
-  },
-  "612b52702d42faac611020ea2add63e56b6c2c600a6afcd29af730790b817ea9": {
-    "file": "src/app/api/feature-flags/route.ts",
-    "rules": [
-      "import-x/no-unresolved",
-      "@typescript-eslint/explicit-function-return-type",
-      "@typescript-eslint/explicit-module-boundary-types",
-      "no-console",
-      "perfectionist/sort-objects"
-    ]
-  },
-  "8d4229625cd02988a0f2fac47c80eb5999e0aaf2ed63b7858fe9d8865635e046": {
-    "file": "src/app/api/exercises/route.ts",
-    "rules": [
-      "import-x/no-unresolved",
       "@typescript-eslint/explicit-function-return-type",
       "@typescript-eslint/explicit-module-boundary-types",
       "no-console"
@@ -277,22 +173,41 @@
   "ea056febff2c377a16c6991182e0e5aa281554fa7b420d7c586bef09d4385ed1": {
     "file": "src/app/api/exercises/search/route.ts",
     "rules": [
-      "import-x/no-unresolved",
       "@typescript-eslint/explicit-function-return-type",
       "@typescript-eslint/explicit-module-boundary-types",
-      "compat/compat",
-      "perfectionist/sort-objects",
       "@typescript-eslint/no-explicit-any",
+      "no-console"
+    ]
+  },
+  "a6a53f31bb5a4ef05be737087d2b98f401476df38ffad5fbdfad6b7da8f7b4ba": {
+    "file": "src/app/api/feature-flags/public/route.ts",
+    "rules": [
+      "@typescript-eslint/explicit-function-return-type",
+      "@typescript-eslint/explicit-module-boundary-types",
+      "no-console"
+    ]
+  },
+  "612b52702d42faac611020ea2add63e56b6c2c600a6afcd29af730790b817ea9": {
+    "file": "src/app/api/feature-flags/route.ts",
+    "rules": [
+      "@typescript-eslint/explicit-function-return-type",
+      "@typescript-eslint/explicit-module-boundary-types",
+      "no-console"
+    ]
+  },
+  "f938a4aa8bda0ff9800a4f8c9137630e6c36256d6e87fe530c29b070289abebe": {
+    "file": "src/app/api/profile/route.ts",
+    "rules": [
+      "@typescript-eslint/explicit-function-return-type",
+      "@typescript-eslint/explicit-module-boundary-types",
       "no-console"
     ]
   },
   "5fc2038c953dbd8a293969de356adff8a6df2d8fd6b327c143bd8f31e79d50ae": {
     "file": "src/app/api/workouts/sessions/[sessionId]/route.ts",
     "rules": [
-      "import-x/no-unresolved",
       "@typescript-eslint/explicit-function-return-type",
       "@typescript-eslint/explicit-module-boundary-types",
-      "perfectionist/sort-objects",
       "no-console",
       "@typescript-eslint/no-explicit-any"
     ]
@@ -300,27 +215,6 @@
   "31400c5a582fb6ebb7419a70b11178edaf1a28c6fd74e3de21f2d32d159acb0a": {
     "file": "src/app/api/workouts/sessions/route.ts",
     "rules": [
-      "import-x/no-unresolved",
-      "@typescript-eslint/explicit-function-return-type",
-      "@typescript-eslint/explicit-module-boundary-types",
-      "no-console",
-      "perfectionist/sort-objects"
-    ]
-  },
-  "c4663471fcee3728a04f3960e2cfd65e8ab7afe2ec31ad132d948f5e8391b20d": {
-    "file": "src/app/layout.tsx",
-    "rules": [
-      "perfectionist/sort-imports",
-      "import-x/no-unresolved",
-      "perfectionist/sort-objects",
-      "@typescript-eslint/explicit-function-return-type",
-      "@typescript-eslint/explicit-module-boundary-types"
-    ]
-  },
-  "a6a53f31bb5a4ef05be737087d2b98f401476df38ffad5fbdfad6b7da8f7b4ba": {
-    "file": "src/app/api/feature-flags/public/route.ts",
-    "rules": [
-      "import-x/no-unresolved",
       "@typescript-eslint/explicit-function-return-type",
       "@typescript-eslint/explicit-module-boundary-types",
       "no-console"
@@ -329,61 +223,9 @@
   "dc1a4116d0d913019f59aaca079d3c99b353c78b820e59f7c6be2346dfa0cad7": {
     "file": "src/app/api/workouts/routines/route.ts",
     "rules": [
-      "import-x/no-unresolved",
       "@typescript-eslint/explicit-function-return-type",
       "@typescript-eslint/explicit-module-boundary-types",
-      "no-console",
-      "perfectionist/sort-objects"
-    ]
-  },
-  "f938a4aa8bda0ff9800a4f8c9137630e6c36256d6e87fe530c29b070289abebe": {
-    "file": "src/app/api/profile/route.ts",
-    "rules": [
-      "import-x/no-unresolved",
-      "@typescript-eslint/explicit-function-return-type",
-      "@typescript-eslint/explicit-module-boundary-types",
-      "no-console",
-      "perfectionist/sort-objects"
-    ]
-  },
-  "66babb99ec81ff002a77ae49f9726d48ef3c450b42dd02b699e7c4a463146a23": {
-    "file": "src/components/layout/header/DesktopNavigation.tsx",
-    "rules": [
-      "import-x/no-unresolved",
-      "perfectionist/sort-objects",
-      "@typescript-eslint/explicit-function-return-type",
-      "@typescript-eslint/explicit-module-boundary-types"
-    ]
-  },
-  "b6a522eecd35d6e051cb00335303dece8a35a3f7ef025707d08a9b7eccc849b6": {
-    "file": "src/components/layout/header/Header.tsx",
-    "rules": [
-      "perfectionist/sort-imports",
-      "import-x/no-unresolved",
-      "@typescript-eslint/explicit-function-return-type",
-      "@typescript-eslint/explicit-module-boundary-types",
-      "perfectionist/sort-objects"
-    ]
-  },
-  "c1345d6818f261e29abcb9280ef3cfc39088af54109b8ea79fc2c9b36cf6d81c": {
-    "file": "src/components/layout/header/SideNav.tsx",
-    "rules": [
-      "no-duplicate-imports",
-      "perfectionist/sort-imports",
-      "import-x/no-unresolved",
-      "perfectionist/sort-objects",
-      "@typescript-eslint/explicit-function-return-type",
-      "@typescript-eslint/explicit-module-boundary-types"
-    ]
-  },
-  "97c9b9c12f92a6b6042a338620a8c375d8174d0181ec9e1c5aad18b65e06c31d": {
-    "file": "src/components/layout/header/UserMenu.tsx",
-    "rules": [
-      "perfectionist/sort-imports",
-      "import-x/no-unresolved",
-      "@typescript-eslint/explicit-function-return-type",
-      "perfectionist/sort-objects",
-      "@typescript-eslint/explicit-module-boundary-types"
+      "no-console"
     ]
   },
   "14236e72c990776ab4e614f81221cf5df7216f72ae48559e7bac841ff3572da5": {
@@ -393,19 +235,9 @@
       "@typescript-eslint/explicit-module-boundary-types"
     ]
   },
-  "48e1041644e239eac72cf12055984c7ca9069097d81ce56734e58de95c04ac7b": {
-    "file": "src/components/providers/SWRProvider.tsx",
+  "c4663471fcee3728a04f3960e2cfd65e8ab7afe2ec31ad132d948f5e8391b20d": {
+    "file": "src/app/layout.tsx",
     "rules": [
-      "import-x/no-unresolved",
-      "@typescript-eslint/explicit-function-return-type",
-      "@typescript-eslint/explicit-module-boundary-types"
-    ]
-  },
-  "ac8f306d7af0e8a21cf099b90e799519364f208fc77efb546dc73bf301f5f613": {
-    "file": "src/components/shared/NotesModal.tsx",
-    "rules": [
-      "import-x/no-unresolved",
-      "perfectionist/sort-objects",
       "@typescript-eslint/explicit-function-return-type",
       "@typescript-eslint/explicit-module-boundary-types"
     ]
@@ -414,31 +246,12 @@
     "file": "src/components/layout/header/menuItems.ts",
     "rules": [
       "@typescript-eslint/explicit-function-return-type",
-      "@typescript-eslint/explicit-module-boundary-types",
-      "perfectionist/sort-objects"
-    ]
-  },
-  "8051ae6ad06cd8b692523e3af1aff2ee4413e6b5c1d1b303f02f443867c85234": {
-    "file": "src/components/shared/UnderConstruction.tsx",
-    "rules": [
-      "import-x/no-unresolved",
-      "@typescript-eslint/explicit-function-return-type",
       "@typescript-eslint/explicit-module-boundary-types"
     ]
   },
-  "c4f89d190acf5e44eded83bae6cb721171e096cdd6d1b42a1309ede61752e70c": {
-    "file": "src/components/ui/alert.tsx",
+  "48e1041644e239eac72cf12055984c7ca9069097d81ce56734e58de95c04ac7b": {
+    "file": "src/components/providers/SWRProvider.tsx",
     "rules": [
-      "import-x/no-unresolved",
-      "perfectionist/sort-objects",
-      "@typescript-eslint/explicit-function-return-type",
-      "@typescript-eslint/explicit-module-boundary-types"
-    ]
-  },
-  "9b1aabaf61e455b683bb9258ceb206b56aa1fdcc28f663df6d4a832eb46b83b6": {
-    "file": "src/components/ui/avatar.tsx",
-    "rules": [
-      "import-x/no-unresolved",
       "@typescript-eslint/explicit-function-return-type",
       "@typescript-eslint/explicit-module-boundary-types"
     ]
@@ -451,19 +264,55 @@
       "react/function-component-definition"
     ]
   },
-  "b6a5e141a5480167d1baadcc7af5f1a28b4cc5e28dccec311084a2d91ef59a8d": {
-    "file": "src/components/ui/badge.tsx",
+  "8051ae6ad06cd8b692523e3af1aff2ee4413e6b5c1d1b303f02f443867c85234": {
+    "file": "src/components/shared/UnderConstruction.tsx",
     "rules": [
-      "import-x/no-unresolved",
-      "perfectionist/sort-objects",
       "@typescript-eslint/explicit-function-return-type",
       "@typescript-eslint/explicit-module-boundary-types"
     ]
   },
+  "ac8f306d7af0e8a21cf099b90e799519364f208fc77efb546dc73bf301f5f613": {
+    "file": "src/components/shared/NotesModal.tsx",
+    "rules": [
+      "@typescript-eslint/explicit-function-return-type",
+      "@typescript-eslint/explicit-module-boundary-types"
+    ]
+  },
+  "c4f89d190acf5e44eded83bae6cb721171e096cdd6d1b42a1309ede61752e70c": {
+    "file": "src/components/ui/alert.tsx",
+    "rules": [
+      "@typescript-eslint/explicit-function-return-type",
+      "@typescript-eslint/explicit-module-boundary-types"
+    ]
+  },
+  "b6a5e141a5480167d1baadcc7af5f1a28b4cc5e28dccec311084a2d91ef59a8d": {
+    "file": "src/components/ui/badge.tsx",
+    "rules": [
+      "@typescript-eslint/explicit-function-return-type",
+      "@typescript-eslint/explicit-module-boundary-types"
+    ]
+  },
+  "9b1aabaf61e455b683bb9258ceb206b56aa1fdcc28f663df6d4a832eb46b83b6": {
+    "file": "src/components/ui/avatar.tsx",
+    "rules": [
+      "@typescript-eslint/explicit-function-return-type",
+      "@typescript-eslint/explicit-module-boundary-types"
+    ]
+  },
+  "f4c89d5fb53c524d0cfbc28ec77a77c5644027e981a9365f7280c06cfcdb868e": {
+    "file": "src/components/ui/button.tsx",
+    "rules": ["@typescript-eslint/no-explicit-any"]
+  },
   "6a21c246b0c05f5a2c7947bc131f304106eef1c9c4bd5853c2de52ef7ebdfc2e": {
     "file": "src/components/ui/alert-dialog.tsx",
     "rules": [
-      "import-x/no-unresolved",
+      "@typescript-eslint/explicit-function-return-type",
+      "@typescript-eslint/explicit-module-boundary-types"
+    ]
+  },
+  "e7ae9068ec3b7b2bd037956014ca92b5df94588ad879a5ff05d64b229b41417b": {
+    "file": "src/components/ui/calendar.tsx",
+    "rules": [
       "@typescript-eslint/explicit-function-return-type",
       "@typescript-eslint/explicit-module-boundary-types"
     ]
@@ -471,49 +320,13 @@
   "25a7181668fd369f88c95f42fb8253e0b85826ff9ffb192169ddc5ccacec94ec": {
     "file": "src/components/ui/card.tsx",
     "rules": [
-      "import-x/no-unresolved",
       "@typescript-eslint/explicit-function-return-type",
-      "@typescript-eslint/explicit-module-boundary-types"
-    ]
-  },
-  "f4c89d5fb53c524d0cfbc28ec77a77c5644027e981a9365f7280c06cfcdb868e": {
-    "file": "src/components/ui/button.tsx",
-    "rules": [
-      "perfectionist/sort-objects",
-      "@typescript-eslint/no-explicit-any"
-    ]
-  },
-  "e7ae9068ec3b7b2bd037956014ca92b5df94588ad879a5ff05d64b229b41417b": {
-    "file": "src/components/ui/calendar.tsx",
-    "rules": [
-      "import-x/no-unresolved",
-      "@typescript-eslint/explicit-function-return-type",
-      "@typescript-eslint/explicit-module-boundary-types",
-      "perfectionist/sort-objects"
-    ]
-  },
-  "9de430366a4bcff54f556d64a9fe1569469a316bd55498f8f3247da4588e13dd": {
-    "file": "src/components/ui/chart.tsx",
-    "rules": [
-      "import-x/no-unresolved",
-      "perfectionist/sort-objects",
-      "@typescript-eslint/explicit-function-return-type",
-      "@typescript-eslint/explicit-module-boundary-types"
-    ]
-  },
-  "8e037b31ec371603fa3b43d6bd8d84ef5d8d7316f628fa2bb9ca318aef808472": {
-    "file": "src/components/ui/carousel.tsx",
-    "rules": [
-      "import-x/no-unresolved",
-      "@typescript-eslint/explicit-function-return-type",
-      "perfectionist/sort-objects",
       "@typescript-eslint/explicit-module-boundary-types"
     ]
   },
   "07982f4599e54c0493fbec4022bbb5573beae461feafe81577fa63a52816e5a7": {
     "file": "src/components/ui/checkbox.tsx",
     "rules": [
-      "import-x/no-unresolved",
       "@typescript-eslint/explicit-function-return-type",
       "@typescript-eslint/explicit-module-boundary-types"
     ]
@@ -525,71 +338,9 @@
       "@typescript-eslint/explicit-module-boundary-types"
     ]
   },
-  "531497333e98698fefb70d840df824e83214f0f6250f3a2bc5b5562c2eebd334": {
-    "file": "src/components/ui/input.tsx",
-    "rules": [
-      "import-x/no-unresolved",
-      "@typescript-eslint/explicit-function-return-type",
-      "@typescript-eslint/explicit-module-boundary-types"
-    ]
-  },
-  "95a6983eeeafc7c6af03461472eab954b273468ddf1492c79c1910c43859d1ff": {
-    "file": "src/components/ui/form.tsx",
-    "rules": [
-      "import-x/no-unresolved",
-      "@typescript-eslint/explicit-function-return-type",
-      "@typescript-eslint/explicit-module-boundary-types",
-      "perfectionist/sort-objects"
-    ]
-  },
   "238b79904d7cde60b5cf70f1415171bfabb89cad9dcc5656043285958e111bae": {
     "file": "src/components/ui/dialog.tsx",
     "rules": [
-      "import-x/no-unresolved",
-      "perfectionist/sort-objects",
-      "@typescript-eslint/explicit-function-return-type",
-      "@typescript-eslint/explicit-module-boundary-types"
-    ]
-  },
-  "c584ed19562389db42c28a04222f6cdb64e9ecf7267ce64fe970552b19e6b37a": {
-    "file": "src/components/ui/label.tsx",
-    "rules": [
-      "import-x/no-unresolved",
-      "@typescript-eslint/explicit-function-return-type",
-      "@typescript-eslint/explicit-module-boundary-types"
-    ]
-  },
-  "2d22b5c80af1095cc2c41215e556a351263f85062532da0f30a11d50c7f69c19": {
-    "file": "src/components/ui/popover.tsx",
-    "rules": [
-      "import-x/no-unresolved",
-      "@typescript-eslint/explicit-function-return-type",
-      "@typescript-eslint/explicit-module-boundary-types",
-      "perfectionist/sort-objects"
-    ]
-  },
-  "fb5482b49e50a4e30ff4e39cbc3d0328cdbada5f5ebe6ce4c09d7e3ed13d0734": {
-    "file": "src/components/ui/progress.tsx",
-    "rules": [
-      "import-x/no-unresolved",
-      "@typescript-eslint/explicit-function-return-type",
-      "@typescript-eslint/explicit-module-boundary-types"
-    ]
-  },
-  "2a4a0ac6edde60ed3d04eedf70df614f368da3dd979de493e6217ad436803c1e": {
-    "file": "src/components/ui/scroll-area.tsx",
-    "rules": [
-      "import-x/no-unresolved",
-      "perfectionist/sort-objects",
-      "@typescript-eslint/explicit-function-return-type",
-      "@typescript-eslint/explicit-module-boundary-types"
-    ]
-  },
-  "b42a0dacebc283db6525c441401f028c7929fe064095ee56431142abf7cb4cf9": {
-    "file": "src/components/ui/separator.tsx",
-    "rules": [
-      "import-x/no-unresolved",
-      "perfectionist/sort-objects",
       "@typescript-eslint/explicit-function-return-type",
       "@typescript-eslint/explicit-module-boundary-types"
     ]
@@ -597,8 +348,48 @@
   "3aee14f09e9a2c9d0af022019d090fb195f3a308d59d5166f7a8961cda616958": {
     "file": "src/components/ui/dropdown-menu.tsx",
     "rules": [
-      "import-x/no-unresolved",
-      "perfectionist/sort-objects",
+      "@typescript-eslint/explicit-function-return-type",
+      "@typescript-eslint/explicit-module-boundary-types"
+    ]
+  },
+  "8e037b31ec371603fa3b43d6bd8d84ef5d8d7316f628fa2bb9ca318aef808472": {
+    "file": "src/components/ui/carousel.tsx",
+    "rules": [
+      "@typescript-eslint/explicit-function-return-type",
+      "@typescript-eslint/explicit-module-boundary-types"
+    ]
+  },
+  "95a6983eeeafc7c6af03461472eab954b273468ddf1492c79c1910c43859d1ff": {
+    "file": "src/components/ui/form.tsx",
+    "rules": [
+      "@typescript-eslint/explicit-function-return-type",
+      "@typescript-eslint/explicit-module-boundary-types"
+    ]
+  },
+  "9de430366a4bcff54f556d64a9fe1569469a316bd55498f8f3247da4588e13dd": {
+    "file": "src/components/ui/chart.tsx",
+    "rules": [
+      "@typescript-eslint/explicit-function-return-type",
+      "@typescript-eslint/explicit-module-boundary-types"
+    ]
+  },
+  "2d22b5c80af1095cc2c41215e556a351263f85062532da0f30a11d50c7f69c19": {
+    "file": "src/components/ui/popover.tsx",
+    "rules": [
+      "@typescript-eslint/explicit-function-return-type",
+      "@typescript-eslint/explicit-module-boundary-types"
+    ]
+  },
+  "c584ed19562389db42c28a04222f6cdb64e9ecf7267ce64fe970552b19e6b37a": {
+    "file": "src/components/ui/label.tsx",
+    "rules": [
+      "@typescript-eslint/explicit-function-return-type",
+      "@typescript-eslint/explicit-module-boundary-types"
+    ]
+  },
+  "2a4a0ac6edde60ed3d04eedf70df614f368da3dd979de493e6217ad436803c1e": {
+    "file": "src/components/ui/scroll-area.tsx",
+    "rules": [
       "@typescript-eslint/explicit-function-return-type",
       "@typescript-eslint/explicit-module-boundary-types"
     ]
@@ -606,25 +397,27 @@
   "605f1ce3aff69282a2d0624d1927e20808a12bd7bb2391073c36e063cbcf4615": {
     "file": "src/components/ui/select.tsx",
     "rules": [
-      "import-x/no-unresolved",
       "@typescript-eslint/explicit-function-return-type",
-      "@typescript-eslint/explicit-module-boundary-types",
-      "perfectionist/sort-objects"
+      "@typescript-eslint/explicit-module-boundary-types"
+    ]
+  },
+  "fb5482b49e50a4e30ff4e39cbc3d0328cdbada5f5ebe6ce4c09d7e3ed13d0734": {
+    "file": "src/components/ui/progress.tsx",
+    "rules": [
+      "@typescript-eslint/explicit-function-return-type",
+      "@typescript-eslint/explicit-module-boundary-types"
+    ]
+  },
+  "b42a0dacebc283db6525c441401f028c7929fe064095ee56431142abf7cb4cf9": {
+    "file": "src/components/ui/separator.tsx",
+    "rules": [
+      "@typescript-eslint/explicit-function-return-type",
+      "@typescript-eslint/explicit-module-boundary-types"
     ]
   },
   "ef6d2e2a22ffd366d52ae1817a024a9b8d3325c7ef4ad946fe593bd47a4b123c": {
     "file": "src/components/ui/sheet.tsx",
     "rules": [
-      "import-x/no-unresolved",
-      "@typescript-eslint/explicit-function-return-type",
-      "@typescript-eslint/explicit-module-boundary-types",
-      "perfectionist/sort-objects"
-    ]
-  },
-  "6cdab40e6c73c74f37cae7c6555adbb878a8f54082246545f24fc3d549b1ada5": {
-    "file": "src/components/ui/switch.tsx",
-    "rules": [
-      "import-x/no-unresolved",
       "@typescript-eslint/explicit-function-return-type",
       "@typescript-eslint/explicit-module-boundary-types"
     ]
@@ -632,7 +425,13 @@
   "608a5b1a408bd1fb66fa80b5089c9d403bcba1cadff4dc20eaa760e85778494a": {
     "file": "src/components/ui/table.tsx",
     "rules": [
-      "import-x/no-unresolved",
+      "@typescript-eslint/explicit-function-return-type",
+      "@typescript-eslint/explicit-module-boundary-types"
+    ]
+  },
+  "6cdab40e6c73c74f37cae7c6555adbb878a8f54082246545f24fc3d549b1ada5": {
+    "file": "src/components/ui/switch.tsx",
+    "rules": [
       "@typescript-eslint/explicit-function-return-type",
       "@typescript-eslint/explicit-module-boundary-types"
     ]
@@ -640,7 +439,6 @@
   "59b4421b96dd429e85cb734fb914b608f9897987b9d8a06acfec1940cd6b4232": {
     "file": "src/components/ui/tabs.tsx",
     "rules": [
-      "import-x/no-unresolved",
       "@typescript-eslint/explicit-function-return-type",
       "@typescript-eslint/explicit-module-boundary-types"
     ]
@@ -648,7 +446,6 @@
   "814fdb645dc8706d8cd23fe71435e93a3de1409e212b53815c08a8e2b95d7362": {
     "file": "src/components/ui/textarea.tsx",
     "rules": [
-      "import-x/no-unresolved",
       "@typescript-eslint/explicit-function-return-type",
       "@typescript-eslint/explicit-module-boundary-types"
     ]
@@ -656,8 +453,6 @@
   "9b35d1ca73cd0b2b816dd08126bb90408e0662963b4785ebe0a12ee77d5a5fea": {
     "file": "src/components/ui/toggle-group.tsx",
     "rules": [
-      "import-x/no-unresolved",
-      "perfectionist/sort-objects",
       "@typescript-eslint/explicit-function-return-type",
       "@typescript-eslint/explicit-module-boundary-types"
     ]
@@ -665,31 +460,15 @@
   "8e46771baf0e662b1f02e6012a79c82d4f4d31b878adb0fb3568380a9fdc5e85": {
     "file": "src/components/ui/toggle.tsx",
     "rules": [
-      "import-x/no-unresolved",
-      "perfectionist/sort-objects",
       "@typescript-eslint/explicit-function-return-type",
       "@typescript-eslint/explicit-module-boundary-types"
     ]
   },
-  "22ca1a621747c23fff3a38c24bd5c4337559a22c585635212a1ba54ee3226634": {
-    "file": "src/components/ui/tooltip.tsx",
+  "537430c1cefacc8d31cefaba76980d3519f717f2b6ea6d33dde1d4c8789f10e0": {
+    "file": "src/contexts/AppContext.tsx",
     "rules": [
-      "import-x/no-unresolved",
       "@typescript-eslint/explicit-function-return-type",
-      "@typescript-eslint/explicit-module-boundary-types",
-      "perfectionist/sort-objects"
-    ]
-  },
-  "c9d57e6b8d0a0e0647e6f05b33d6f4ea4482659709c0859bf9ecbe986e4cf762": {
-    "file": "src/features/auth/context/AuthContext.tsx",
-    "rules": [
-      "import-x/no-unresolved",
-      "no-console",
-      "compat/compat",
-      "@typescript-eslint/explicit-function-return-type",
-      "@typescript-eslint/explicit-module-boundary-types",
-      "perfectionist/sort-objects",
-      "@typescript-eslint/no-explicit-any"
+      "@typescript-eslint/explicit-module-boundary-types"
     ]
   },
   "0709528026440dd6b7c898ebc0f2f131d3db2fce68dd3b4b6c7197a363f5c974": {
@@ -698,53 +477,39 @@
       "import-x/named",
       "no-duplicate-imports",
       "@typescript-eslint/explicit-function-return-type",
-      "perfectionist/sort-objects",
-      "compat/compat",
       "@typescript-eslint/no-non-null-assertion"
     ]
   },
-  "537430c1cefacc8d31cefaba76980d3519f717f2b6ea6d33dde1d4c8789f10e0": {
-    "file": "src/contexts/AppContext.tsx",
+  "4cf4f9983cd6faa7c45b8953dc9a6439918d23f1b5baeb57d8a282e7b23690ea": {
+    "file": "src/features/auth/context/AuthContext.tsx",
+    "rules": ["no-console"]
+  },
+  "d1fe4f4328c3b25fac332082e3a2522abd9bfd6dba9b4cdfc908891368f2090a": {
+    "file": "src/features/calendar/Calendar.tsx",
     "rules": [
       "@typescript-eslint/explicit-function-return-type",
       "@typescript-eslint/explicit-module-boundary-types",
-      "perfectionist/sort-objects"
-    ]
-  },
-  "1ec81c297da33ff41b43100102581ef72022e897344a8cda6f2416570e4aaa02": {
-    "file": "src/features/calendar/components/CalendarGrid/CalendarGrid.tsx",
-    "rules": [
-      "perfectionist/sort-imports",
-      "@typescript-eslint/explicit-function-return-type",
-      "@typescript-eslint/explicit-module-boundary-types"
+      "no-console"
     ]
   },
   "22034d406a10a857595950b2a4c3e532aa69171985766ac59aadbc5f9e055f1e": {
     "file": "src/features/calendar/components/CalendarDay/CalendarDay.tsx",
     "rules": [
-      "perfectionist/sort-imports",
       "css-modules/no-unused-class",
       "@typescript-eslint/explicit-function-return-type",
       "@typescript-eslint/explicit-module-boundary-types"
     ]
   },
-  "d1fe4f4328c3b25fac332082e3a2522abd9bfd6dba9b4cdfc908891368f2090a": {
-    "file": "src/features/calendar/Calendar.tsx",
+  "1ec81c297da33ff41b43100102581ef72022e897344a8cda6f2416570e4aaa02": {
+    "file": "src/features/calendar/components/CalendarGrid/CalendarGrid.tsx",
     "rules": [
-      "perfectionist/sort-imports",
-      "import-x/no-unresolved",
       "@typescript-eslint/explicit-function-return-type",
-      "@typescript-eslint/explicit-module-boundary-types",
-      "perfectionist/sort-objects",
-      "no-console"
+      "@typescript-eslint/explicit-module-boundary-types"
     ]
   },
   "08e1694297456265281cbbb6e9dd917c0965642d6ce5d5ac0d0d0ef141b6ba46": {
     "file": "src/features/calendar/components/CalendarNavigation/CalendarNavigation.tsx",
     "rules": [
-      "perfectionist/sort-imports",
-      "import-x/no-unresolved",
-      "perfectionist/sort-objects",
       "@typescript-eslint/explicit-function-return-type",
       "@typescript-eslint/explicit-module-boundary-types"
     ]
@@ -752,8 +517,6 @@
   "bdcce3e81ddf093484b4717a3f952507f504ffdd96a464e1ccf61782451d8a3d": {
     "file": "src/features/calendar/components/CalendarStats/CalendarStats.tsx",
     "rules": [
-      "perfectionist/sort-imports",
-      "import-x/no-unresolved",
       "@typescript-eslint/explicit-function-return-type",
       "@typescript-eslint/explicit-module-boundary-types"
     ]
@@ -761,8 +524,6 @@
   "465f85fb30297978e5ebb58873402a5a7dcffd9e2b827ccf6d1e23e7798f5a86": {
     "file": "src/features/calendar/components/QuickActions/QuickActions.tsx",
     "rules": [
-      "perfectionist/sort-imports",
-      "import-x/no-unresolved",
       "@typescript-eslint/explicit-function-return-type",
       "@typescript-eslint/explicit-module-boundary-types"
     ]
@@ -770,9 +531,6 @@
   "b20f6b17b5f3f1e738f2d52d988d9145627ac775df6bc51af591aade12096edb": {
     "file": "src/features/calendar/components/UpcomingWorkouts/UpcomingWorkouts.tsx",
     "rules": [
-      "perfectionist/sort-imports",
-      "import-x/no-unresolved",
-      "perfectionist/sort-objects",
       "@typescript-eslint/explicit-function-return-type",
       "@typescript-eslint/explicit-module-boundary-types"
     ]
@@ -780,10 +538,7 @@
   "e19f478d9c13ce389e74625c33bc8696a17a278c3d50353b3fc5253fd14f1242": {
     "file": "src/features/calendar/components/WorkoutEventCard/WorkoutEventCard.tsx",
     "rules": [
-      "perfectionist/sort-imports",
       "css-modules/no-unused-class",
-      "import-x/no-unresolved",
-      "perfectionist/sort-objects",
       "@typescript-eslint/explicit-function-return-type",
       "@typescript-eslint/explicit-module-boundary-types"
     ]
@@ -791,7 +546,6 @@
   "c8b5196462161b8f6a9d4465fdfca9fb5173667d0dd6d6643fbae7b9c9998597": {
     "file": "src/features/calendar/components/WorkoutTypeLegend/WorkoutTypeLegend.tsx",
     "rules": [
-      "perfectionist/sort-imports",
       "css-modules/no-unused-class",
       "@typescript-eslint/explicit-function-return-type",
       "@typescript-eslint/explicit-module-boundary-types"
@@ -801,59 +555,34 @@
     "file": "src/features/calendar/hooks/useCalendar.ts",
     "rules": [
       "@typescript-eslint/explicit-function-return-type",
-      "@typescript-eslint/explicit-module-boundary-types",
-      "perfectionist/sort-objects"
-    ]
-  },
-  "f1090295dbfaae53b5d99103068f613da3b925c78ec374f8709a714ca80d4e94": {
-    "file": "src/features/calendar/config/workoutTypes.ts",
-    "rules": [
-      "perfectionist/sort-objects"
-    ]
-  },
-  "768b3a80271c07132a8c221cfde2d3dd981ecc718e8e890b1c825e3eb5db085d": {
-    "file": "src/features/calendar/data/mockWorkouts.ts",
-    "rules": [
-      "perfectionist/sort-objects"
+      "@typescript-eslint/explicit-module-boundary-types"
     ]
   },
   "bd2ee7b018fbb3444ed168095d0c1bc947f3335267b99a02fb6ab05a4536a4fe": {
     "file": "src/features/calendar/hooks/useWorkouts.ts",
     "rules": [
       "@typescript-eslint/explicit-function-return-type",
-      "@typescript-eslint/explicit-module-boundary-types",
-      "perfectionist/sort-objects"
-    ]
-  },
-  "702cdfe655bdd7732a031c2e6ac8046c620cc940e1387063ed6cdb0c7a420693": {
-    "file": "src/features/calendar/utils/calendarUtils.ts",
-    "rules": [
-      "perfectionist/sort-objects"
+      "@typescript-eslint/explicit-module-boundary-types"
     ]
   },
   "818764c130f5fe54920dd22db1854a50e532c3aed4b94c7d561609386f21b32d": {
     "file": "src/features/calendar/utils/workoutUtils.ts",
     "rules": [
       "@typescript-eslint/explicit-function-return-type",
-      "@typescript-eslint/explicit-module-boundary-types",
-      "perfectionist/sort-objects"
+      "@typescript-eslint/explicit-module-boundary-types"
     ]
   },
   "2101ddce90326f647d5f5ca0a2183d7887978d77b744df813f46573636b9e9bb": {
     "file": "src/features/dashboard/Dashboard.tsx",
     "rules": [
-      "import-x/no-unresolved",
       "@typescript-eslint/explicit-function-return-type",
       "@typescript-eslint/explicit-module-boundary-types",
-      "perfectionist/sort-objects",
       "no-console"
     ]
   },
   "f0bab60420262786e88e183d93ee51b9bda03f6ad0ccecf796a8180588ae9c68": {
     "file": "src/features/equipment/EditEquipment.tsx",
     "rules": [
-      "import-x/no-unresolved",
-      "perfectionist/sort-objects",
       "@typescript-eslint/explicit-function-return-type",
       "@typescript-eslint/explicit-module-boundary-types",
       "no-console"
@@ -862,17 +591,20 @@
   "31c398b56c48b2a5ea3972b26fd91105eab0103657da5fb7bdc1c3c2657556d1": {
     "file": "src/features/equipment/Equipment.tsx",
     "rules": [
-      "import-x/no-unresolved",
       "@typescript-eslint/explicit-function-return-type",
-      "@typescript-eslint/explicit-module-boundary-types",
-      "perfectionist/sort-objects"
+      "@typescript-eslint/explicit-module-boundary-types"
+    ]
+  },
+  "4be837cd28bb6ff7f6a6ca5ff72904a417beb8458e5679ececb9646620cdf14f": {
+    "file": "src/features/exercises/ExerciseSelectionModal.tsx",
+    "rules": [
+      "@typescript-eslint/explicit-function-return-type",
+      "@typescript-eslint/explicit-module-boundary-types"
     ]
   },
   "72bd3dbf1b63025b76f63e527b689550a59eccc879879cb42b784af9f627df47": {
     "file": "src/features/equipment/EquipmentDetail.tsx",
     "rules": [
-      "import-x/no-unresolved",
-      "perfectionist/sort-objects",
       "@typescript-eslint/explicit-function-return-type",
       "@typescript-eslint/explicit-module-boundary-types"
     ]
@@ -880,39 +612,21 @@
   "5725a59858c250f6a08cc47e6e81be59a26191ea46f47a3b96fa8ae6537187ec": {
     "file": "src/features/equipment/SuggestEquipment.tsx",
     "rules": [
-      "import-x/no-unresolved",
       "@typescript-eslint/explicit-function-return-type",
       "@typescript-eslint/explicit-module-boundary-types",
-      "perfectionist/sort-objects",
       "no-console"
     ]
   },
-  "aae736717e600121fbf8705f6b1d22bc47e543f0586204338d31c98e461c4c07": {
-    "file": "src/features/exercises/ExerciseDetail.tsx",
+  "cb59b2a162880ad18c65d0c8fe6cee83fb4a8d379f1eb4df8fab915e48fbf8a6": {
+    "file": "src/features/exercises/components/ExerciseDetail/ExerciseHeader.tsx",
     "rules": [
-      "perfectionist/sort-imports",
-      "import-x/no-unresolved",
       "@typescript-eslint/explicit-function-return-type",
-      "@typescript-eslint/explicit-module-boundary-types",
-      "perfectionist/sort-objects"
-    ]
-  },
-  "4be837cd28bb6ff7f6a6ca5ff72904a417beb8458e5679ececb9646620cdf14f": {
-    "file": "src/features/exercises/ExerciseSelectionModal.tsx",
-    "rules": [
-      "perfectionist/sort-imports",
-      "import-x/no-unresolved",
-      "@typescript-eslint/explicit-function-return-type",
-      "perfectionist/sort-objects",
       "@typescript-eslint/explicit-module-boundary-types"
     ]
   },
-  "02531d5cb3ebdabab2632a709c6c9a84867e7cfbbaba7045d4f0591b32848cf7": {
-    "file": "src/features/exercises/ExercisesList.tsx",
+  "c9fc72135efcda38e519f63fc9c57d3190df17bf51eee195884f8dd419f59ff2": {
+    "file": "src/features/exercises/components/ExerciseDetail/ExerciseSteps.tsx",
     "rules": [
-      "perfectionist/sort-imports",
-      "import-x/no-unresolved",
-      "perfectionist/sort-objects",
       "@typescript-eslint/explicit-function-return-type",
       "@typescript-eslint/explicit-module-boundary-types"
     ]
@@ -924,29 +638,9 @@
       "@typescript-eslint/explicit-module-boundary-types"
     ]
   },
-  "cb59b2a162880ad18c65d0c8fe6cee83fb4a8d379f1eb4df8fab915e48fbf8a6": {
-    "file": "src/features/exercises/components/ExerciseDetail/ExerciseHeader.tsx",
-    "rules": [
-      "perfectionist/sort-imports",
-      "import-x/no-unresolved",
-      "@typescript-eslint/explicit-function-return-type",
-      "@typescript-eslint/explicit-module-boundary-types"
-    ]
-  },
-  "c9fc72135efcda38e519f63fc9c57d3190df17bf51eee195884f8dd419f59ff2": {
-    "file": "src/features/exercises/components/ExerciseDetail/ExerciseSteps.tsx",
-    "rules": [
-      "perfectionist/sort-imports",
-      "import-x/no-unresolved",
-      "@typescript-eslint/explicit-function-return-type",
-      "@typescript-eslint/explicit-module-boundary-types"
-    ]
-  },
   "927a2cd5b214ea046124375cfade78eddd9c4086ec98cd20ea0b240046c0d8f5": {
     "file": "src/features/exercises/components/ExerciseDetail/ExerciseTips.tsx",
     "rules": [
-      "perfectionist/sort-imports",
-      "import-x/no-unresolved",
       "@typescript-eslint/explicit-function-return-type",
       "@typescript-eslint/explicit-module-boundary-types"
     ]
@@ -954,9 +648,6 @@
   "6ea8a11ad24dc7f0a37331a919abf691ee1e906339b38fa21db9ef179d776dbf": {
     "file": "src/features/exercises/components/ExerciseDetail/ExerciseVariants.tsx",
     "rules": [
-      "perfectionist/sort-imports",
-      "import-x/no-unresolved",
-      "perfectionist/sort-objects",
       "@typescript-eslint/explicit-function-return-type",
       "@typescript-eslint/explicit-module-boundary-types"
     ]
@@ -964,69 +655,25 @@
   "b398d5a24014ba2cf2992c1efb6a92459bd721ea4c5f2a3b3f34622a90cd3162": {
     "file": "src/features/exercises/components/ExerciseDetail/ExerciseVideo.tsx",
     "rules": [
-      "perfectionist/sort-imports",
-      "import-x/no-unresolved",
       "@typescript-eslint/explicit-function-return-type",
       "@typescript-eslint/explicit-module-boundary-types"
     ]
   },
   "f707745e10b119bb8cb7aff147887dd3e294ca9c10f914853b6ea2a7393f635d": {
     "file": "src/features/exercises/components/ExerciseDetail/__tests__/ExerciseHeader.noUser.test.tsx",
-    "rules": [
-      "perfectionist/sort-imports",
-      "@typescript-eslint/explicit-function-return-type",
-      "perfectionist/sort-objects"
-    ]
+    "rules": ["@typescript-eslint/explicit-function-return-type"]
   },
   "6a5b335876a51c7ec59afe20d5173c6b98f3d3409811b856c8734acf0e5c7767": {
     "file": "src/features/exercises/components/ExerciseDetail/__tests__/ExerciseHeader.test.tsx",
-    "rules": [
-      "perfectionist/sort-imports",
-      "@typescript-eslint/explicit-function-return-type",
-      "perfectionist/sort-objects"
-    ]
-  },
-  "209b98097aa07adc038ac43a1365b4cc54870a461b2edaac5c28288fea3f43bf": {
-    "file": "src/features/exercises/components/ExerciseDetail/__tests__/ExerciseInfo.test.tsx",
-    "rules": [
-      "perfectionist/sort-imports",
-      "perfectionist/sort-objects"
-    ]
-  },
-  "f7a3deb94f12690f7d85e2f1a0dbdd86c045c4c549736ce20662816d70aae530": {
-    "file": "src/features/exercises/components/ExerciseDetail/__tests__/ExerciseSteps.test.tsx",
-    "rules": [
-      "perfectionist/sort-imports",
-      "perfectionist/sort-objects"
-    ]
-  },
-  "9eec49955a6d2db9a3fbe041be9255d9fdffb47bd0b02464d3e44f2db68e86e6": {
-    "file": "src/features/exercises/components/ExerciseDetail/__tests__/ExerciseTips.test.tsx",
-    "rules": [
-      "perfectionist/sort-imports",
-      "perfectionist/sort-objects"
-    ]
+    "rules": ["@typescript-eslint/explicit-function-return-type"]
   },
   "b3007b3284a729ceb677320022198c5a6e9e47ab4ef4310c55c57aea7c971466": {
     "file": "src/features/exercises/components/ExerciseDetail/__tests__/ExerciseVariants.test.tsx",
-    "rules": [
-      "@typescript-eslint/explicit-function-return-type",
-      "perfectionist/sort-objects"
-    ]
-  },
-  "f96bd4a049276a666154231dedfb38d18a56629e69ee311b0e405d9c2fbbd723": {
-    "file": "src/features/exercises/components/ExerciseDetail/__tests__/ExerciseVideo.test.tsx",
-    "rules": [
-      "perfectionist/sort-imports",
-      "perfectionist/sort-objects"
-    ]
+    "rules": ["@typescript-eslint/explicit-function-return-type"]
   },
   "0f8961554687af901e083f3cb31a481361b78e0d4e1a08ed6627d67c749db373": {
     "file": "src/features/exercises/components/ExerciseSelectionModal/ExerciseLibrary.tsx",
     "rules": [
-      "perfectionist/sort-imports",
-      "import-x/no-unresolved",
-      "perfectionist/sort-objects",
       "@typescript-eslint/explicit-function-return-type",
       "@typescript-eslint/explicit-module-boundary-types"
     ]
@@ -1034,19 +681,6 @@
   "fd5ae2c238f6105c5730bdb11426014780448c121f997c28cf00bbfb96263dfd": {
     "file": "src/features/exercises/components/ExerciseSelectionModal/ExercisePreview.tsx",
     "rules": [
-      "perfectionist/sort-imports",
-      "import-x/no-unresolved",
-      "perfectionist/sort-objects",
-      "@typescript-eslint/explicit-function-return-type",
-      "@typescript-eslint/explicit-module-boundary-types"
-    ]
-  },
-  "82238371156ce39be96e4e4d6c620a2a5fabd275283af6fbf7450f932fa41673": {
-    "file": "src/features/exercises/components/ExerciseSelectionModal/SearchAndFilters.tsx",
-    "rules": [
-      "perfectionist/sort-imports",
-      "import-x/no-unresolved",
-      "perfectionist/sort-objects",
       "@typescript-eslint/explicit-function-return-type",
       "@typescript-eslint/explicit-module-boundary-types"
     ]
@@ -1054,27 +688,19 @@
   "b3f7e217d75ce298ec63532047ae3aec2fb50850be176558f28a7565a9b3a5f4": {
     "file": "src/features/exercises/components/ExerciseSelectionModal/VariantSelector.tsx",
     "rules": [
-      "perfectionist/sort-imports",
-      "import-x/no-unresolved",
-      "perfectionist/sort-objects",
       "@typescript-eslint/explicit-function-return-type",
       "@typescript-eslint/explicit-module-boundary-types"
     ]
   },
-  "516d237a51c361edd24bc1747f710e1cbd0869c3c2285b437788b8502e958d0e": {
-    "file": "src/features/exercises/components/ExerciseSelectionModal/__tests__/ExerciseLibrary.test.tsx",
-    "rules": [
-      "perfectionist/sort-imports",
-      "@typescript-eslint/explicit-function-return-type",
-      "perfectionist/sort-objects"
-    ]
-  },
   "b57ea6f16f0d7053c4f580ed0f74271d9d7979bbc2d65d058544ceaf056476bf": {
     "file": "src/features/exercises/components/ExerciseSelectionModal/__tests__/ExercisePreview.test.tsx",
+    "rules": ["@typescript-eslint/explicit-function-return-type"]
+  },
+  "82238371156ce39be96e4e4d6c620a2a5fabd275283af6fbf7450f932fa41673": {
+    "file": "src/features/exercises/components/ExerciseSelectionModal/SearchAndFilters.tsx",
     "rules": [
-      "perfectionist/sort-imports",
       "@typescript-eslint/explicit-function-return-type",
-      "perfectionist/sort-objects"
+      "@typescript-eslint/explicit-module-boundary-types"
     ]
   },
   "447f06544631dfd8dbc20e741b4a8c4180a955b57a41b1c49cb0bc27a5283eb8": {
@@ -1084,60 +710,20 @@
       "@typescript-eslint/explicit-module-boundary-types"
     ]
   },
-  "ed2c314c4d057a03ee4b6c06dabc5706c94ffacff3b0d55c04aee392be73ebaa": {
-    "file": "src/features/exercises/components/ExercisesList/ExerciseGrid.tsx",
-    "rules": [
-      "perfectionist/sort-imports",
-      "import-x/no-unresolved",
-      "perfectionist/sort-objects",
-      "@typescript-eslint/explicit-function-return-type",
-      "@typescript-eslint/explicit-module-boundary-types"
-    ]
-  },
   "64b82248f8a400f93a2fa467163ec9d18a11f04329951d73b7c16d931ffc142c": {
     "file": "src/features/exercises/components/ExercisesList/FilterDialog.tsx",
     "rules": [
-      "perfectionist/sort-imports",
-      "import-x/no-unresolved",
-      "@typescript-eslint/explicit-function-return-type",
-      "@typescript-eslint/explicit-module-boundary-types",
-      "perfectionist/sort-objects"
-    ]
-  },
-  "e0ba8ff91efead78191ef8e07783b9a3daaca3a42feb85dfe97df73a995b61eb": {
-    "file": "src/features/exercises/components/ExercisesList/NewExercisesCarousel.tsx",
-    "rules": [
-      "perfectionist/sort-imports",
-      "import-x/no-unresolved",
       "@typescript-eslint/explicit-function-return-type",
       "@typescript-eslint/explicit-module-boundary-types"
     ]
+  },
+  "516d237a51c361edd24bc1747f710e1cbd0869c3c2285b437788b8502e958d0e": {
+    "file": "src/features/exercises/components/ExerciseSelectionModal/__tests__/ExerciseLibrary.test.tsx",
+    "rules": ["@typescript-eslint/explicit-function-return-type"]
   },
   "afff02c4579045c6d693a508441d745d6c4a0b953e828d3350b10ee71590c4f0": {
     "file": "src/features/exercises/components/ExercisesList/SearchAndFilters.tsx",
     "rules": [
-      "perfectionist/sort-imports",
-      "import-x/no-unresolved",
-      "@typescript-eslint/explicit-function-return-type",
-      "@typescript-eslint/explicit-module-boundary-types",
-      "perfectionist/sort-objects"
-    ]
-  },
-  "e0e81fe549225ebf392d5aa46e0dd107617a0572e3b8baa222fdef669bb72a54": {
-    "file": "src/features/exercises/components/shared/CategoryBadge.tsx",
-    "rules": [
-      "perfectionist/sort-imports",
-      "import-x/no-unresolved",
-      "perfectionist/sort-objects",
-      "@typescript-eslint/explicit-function-return-type",
-      "@typescript-eslint/explicit-module-boundary-types"
-    ]
-  },
-  "0a90863eb7c0e6d03901236677364d1635df5e671977491bb33e90b225ae1283": {
-    "file": "src/features/exercises/components/shared/EquipmentTags.tsx",
-    "rules": [
-      "import-x/no-unresolved",
-      "perfectionist/sort-objects",
       "@typescript-eslint/explicit-function-return-type",
       "@typescript-eslint/explicit-module-boundary-types"
     ]
@@ -1145,19 +731,20 @@
   "c4bc92bf387beaf863324e4861360da85232c002226274ad8576e62b09cbcc02": {
     "file": "src/features/exercises/components/shared/DifficultyBadge.tsx",
     "rules": [
-      "perfectionist/sort-imports",
-      "import-x/no-unresolved",
-      "perfectionist/sort-objects",
       "@typescript-eslint/explicit-function-return-type",
       "@typescript-eslint/explicit-module-boundary-types"
     ]
   },
-  "eb8a21131db55c69ec566887f48aed92a95879f6c0d81ebfd09702ac2b507672": {
-    "file": "src/features/exercises/components/shared/ExerciseCard.tsx",
+  "e0e81fe549225ebf392d5aa46e0dd107617a0572e3b8baa222fdef669bb72a54": {
+    "file": "src/features/exercises/components/shared/CategoryBadge.tsx",
     "rules": [
-      "perfectionist/sort-imports",
-      "import-x/no-unresolved",
-      "perfectionist/sort-objects",
+      "@typescript-eslint/explicit-function-return-type",
+      "@typescript-eslint/explicit-module-boundary-types"
+    ]
+  },
+  "0a90863eb7c0e6d03901236677364d1635df5e671977491bb33e90b225ae1283": {
+    "file": "src/features/exercises/components/shared/EquipmentTags.tsx",
+    "rules": [
       "@typescript-eslint/explicit-function-return-type",
       "@typescript-eslint/explicit-module-boundary-types"
     ]
@@ -1165,23 +752,8 @@
   "97e1276a570c06302cea4564d5a1d2014e27d26edca763aa9c0eec1a986cd514": {
     "file": "src/features/exercises/components/shared/MuscleGroupTags.tsx",
     "rules": [
-      "perfectionist/sort-objects",
       "@typescript-eslint/explicit-function-return-type",
       "@typescript-eslint/explicit-module-boundary-types"
-    ]
-  },
-  "b4b8f549fb8b996760b903690edc8b56def5bd3593165fa09b0decd701fcc749": {
-    "file": "src/features/exercises/components/shared/__tests__/DifficultyBadge.test.tsx",
-    "rules": [
-      "perfectionist/sort-imports"
-    ]
-  },
-  "097ab4fbd2e14ded7550031122756c9dcb86b5ef8ce900ed8d3a1b4dcd702c3a": {
-    "file": "src/features/exercises/components/shared/__tests__/ExerciseCard.test.tsx",
-    "rules": [
-      "perfectionist/sort-imports",
-      "@typescript-eslint/explicit-function-return-type",
-      "perfectionist/sort-objects"
     ]
   },
   "a775c8f52f9efe7bb5c0540b06110bfceed59155c94ef3dfccc402d3a45a5c4b": {
@@ -1189,188 +761,100 @@
     "rules": [
       "@typescript-eslint/explicit-function-return-type",
       "@typescript-eslint/explicit-module-boundary-types",
-      "perfectionist/sort-objects",
       "@typescript-eslint/no-explicit-any"
     ]
   },
   "5a1c1aab5db86e4225da545848b39ee2a1511887fa268ae1accb69ffffa3ec27": {
     "file": "src/features/exercises/hooks/__tests__/useExerciseFilters.test.tsx",
-    "rules": [
-      "@typescript-eslint/explicit-function-return-type",
-      "perfectionist/sort-objects"
-    ]
+    "rules": ["@typescript-eslint/explicit-function-return-type"]
+  },
+  "097ab4fbd2e14ded7550031122756c9dcb86b5ef8ce900ed8d3a1b4dcd702c3a": {
+    "file": "src/features/exercises/components/shared/__tests__/ExerciseCard.test.tsx",
+    "rules": ["@typescript-eslint/explicit-function-return-type"]
   },
   "fa181236d5f3f872bcf4717b70fb165adb1e8fc42d570ff72c3385c13b1943a0": {
     "file": "src/features/exercises/hooks/__tests__/useExerciseSearch.test.tsx",
-    "rules": [
-      "@typescript-eslint/explicit-function-return-type",
-      "perfectionist/sort-objects"
-    ]
+    "rules": ["@typescript-eslint/explicit-function-return-type"]
   },
   "37914210c90e20182a5caddfe66cffe5248549c3dbfb3101d6f840658de7c184": {
     "file": "src/features/exercises/hooks/useExerciseFilters.ts",
     "rules": [
       "@typescript-eslint/explicit-function-return-type",
-      "@typescript-eslint/explicit-module-boundary-types",
-      "perfectionist/sort-objects"
-    ]
-  },
-  "4821d19e8fd95994015ed34ccd5192d12058a78f8d094b9821f7c68eabc09273": {
-    "file": "src/features/exercises/hooks/__tests__/useExerciseSelection.test.tsx",
-    "rules": [
-      "perfectionist/sort-imports",
-      "perfectionist/sort-objects"
+      "@typescript-eslint/explicit-module-boundary-types"
     ]
   },
   "cc3dac6f42bb728826180bbad6d0a86647a0bc8b4d2ac3b48345fee12ecb3b2a": {
     "file": "src/features/exercises/hooks/useExerciseSearch.ts",
     "rules": [
       "@typescript-eslint/explicit-function-return-type",
-      "@typescript-eslint/explicit-module-boundary-types",
-      "perfectionist/sort-objects"
+      "@typescript-eslint/explicit-module-boundary-types"
     ]
   },
   "39d270123406431c542b7f128c16e5b21efcbbdeeaeb864f646451a2c2f30a21": {
     "file": "src/features/exercises/hooks/useExerciseSelection.ts",
     "rules": [
       "@typescript-eslint/explicit-function-return-type",
-      "@typescript-eslint/explicit-module-boundary-types",
-      "perfectionist/sort-objects"
+      "@typescript-eslint/explicit-module-boundary-types"
     ]
   },
   "cb7952889e308944132285840edd2dfa9bbdfd129ff150df22e6383d03e8c589": {
     "file": "src/features/exercises/hooks/useExercises.ts",
     "rules": [
-      "perfectionist/sort-imports",
       "@typescript-eslint/explicit-function-return-type",
-      "compat/compat",
-      "@typescript-eslint/explicit-module-boundary-types",
-      "perfectionist/sort-objects"
-    ]
-  },
-  "43cd0cf43f4433c1eb9f07a9f115bf09f8c75f1112f0feda246331194163d55d": {
-    "file": "src/features/exercises/services/__tests__/apiRoutes.test.ts",
-    "rules": [
-      "perfectionist/sort-objects",
-      "@typescript-eslint/explicit-function-return-type",
-      "@typescript-eslint/no-explicit-any",
-      "import-x/no-unresolved",
-      "compat/compat"
+      "@typescript-eslint/explicit-module-boundary-types"
     ]
   },
   "28485edce07f400c3668669b3664bd2c78a74f97639e0930c0302f6e902dac0f": {
     "file": "src/features/exercises/services/__tests__/dataAggregators.test.ts",
-    "rules": [
-      "perfectionist/sort-objects",
-      "@typescript-eslint/no-explicit-any"
-    ]
+    "rules": ["@typescript-eslint/no-explicit-any"]
   },
-  "b8fedc2cbd76cd3aff3f47dec6592086b0155c980249e27e7bf75d20c6be0d87": {
-    "file": "src/features/exercises/services/__tests__/databaseQueries.test.ts",
+  "43cd0cf43f4433c1eb9f07a9f115bf09f8c75f1112f0feda246331194163d55d": {
+    "file": "src/features/exercises/services/__tests__/apiRoutes.test.ts",
     "rules": [
-      "import-x/no-unresolved",
-      "@typescript-eslint/no-explicit-any",
-      "perfectionist/sort-objects"
+      "@typescript-eslint/explicit-function-return-type",
+      "@typescript-eslint/no-explicit-any"
     ]
   },
   "182447ab80c33beb842db73609df98afe828900e6af75fe4cb96d4cf026e6338": {
     "file": "src/features/exercises/services/__tests__/errorHandlers.test.ts",
-    "rules": [
-      "@typescript-eslint/no-empty-function",
-      "no-console"
-    ]
+    "rules": ["@typescript-eslint/no-empty-function", "no-console"]
   },
-  "8bb3726d98edddbe40739458536d404bcb8d81213b26eae1be447a6c926602b5": {
-    "file": "src/features/exercises/services/__tests__/exerciseMappers.test.ts",
-    "rules": [
-      "perfectionist/sort-imports",
-      "perfectionist/sort-objects",
-      "@typescript-eslint/no-explicit-any"
-    ]
+  "b8fedc2cbd76cd3aff3f47dec6592086b0155c980249e27e7bf75d20c6be0d87": {
+    "file": "src/features/exercises/services/__tests__/databaseQueries.test.ts",
+    "rules": ["@typescript-eslint/no-explicit-any"]
   },
   "0a8a52a18c3adcc25f4f1036f849ebebf0b872abfb069b33d7ed0a3aa9b75caf": {
     "file": "src/features/exercises/services/__tests__/exerciseSelection.test.ts",
-    "rules": [
-      "perfectionist/sort-imports",
-      "no-duplicate-imports",
-      "perfectionist/sort-objects",
-      "@typescript-eslint/no-explicit-any"
-    ]
+    "rules": ["no-duplicate-imports", "@typescript-eslint/no-explicit-any"]
   },
-  "0b8d8a8663a94fb3ec7bd57a5f4995448f62577d6d1fa53380f0843fc1da955d": {
-    "file": "src/features/exercises/services/__tests__/exerciseService.test.ts",
-    "rules": [
-      "perfectionist/sort-objects"
-    ]
-  },
-  "ae3fe382bf92f247b52b1cb291fbfdf7a07a44b8a98144da372cfa0a46cd963c": {
-    "file": "src/features/exercises/services/__tests__/integration.test.ts",
-    "rules": [
-      "perfectionist/sort-objects"
-    ]
+  "8bb3726d98edddbe40739458536d404bcb8d81213b26eae1be447a6c926602b5": {
+    "file": "src/features/exercises/services/__tests__/exerciseMappers.test.ts",
+    "rules": ["@typescript-eslint/no-explicit-any"]
   },
   "567f5813f790c50e18f6d2a6ff70036ec68d4a850da5e7cb0889d68cdb2d6898": {
     "file": "src/features/exercises/services/__tests__/validators.test.ts",
-    "rules": [
-      "perfectionist/sort-objects",
-      "@typescript-eslint/no-explicit-any"
-    ]
-  },
-  "4ea9ed9cbff3bd4560b301367cf57a4128861231425344180eb97603b58346da": {
-    "file": "src/features/exercises/services/databaseQueries.ts",
-    "rules": [
-      "import-x/no-unresolved",
-      "perfectionist/sort-objects"
-    ]
+    "rules": ["@typescript-eslint/no-explicit-any"]
   },
   "dd5ee32418eb9e91406815e5309c28775f652e646644e3acb49bd6e22090ed31": {
     "file": "src/features/exercises/services/errorHandlers.ts",
-    "rules": [
-      "no-console"
-    ]
+    "rules": ["no-console"]
   },
   "db4b92df9531779279b22c3433b37248f7e99c62965340cff5a1e6168a4d8e2f": {
     "file": "src/features/exercises/services/exerciseMappers.ts",
-    "rules": [
-      "perfectionist/sort-objects",
-      "@typescript-eslint/explicit-function-return-type"
-    ]
-  },
-  "5a47878249e444f8141c1663d57c50a55800d371f0e46c7f6ca7b8a8c0032663": {
-    "file": "src/features/exercises/services/exerciseService.ts",
-    "rules": [
-      "perfectionist/sort-objects"
-    ]
-  },
-  "bb1a2ed89be17ce965d2f87178fc3c787758b3df90511381b84f13dcea1a6f72": {
-    "file": "src/features/exercises/types/constants.ts",
-    "rules": [
-      "perfectionist/sort-objects"
-    ]
-  },
-  "575bed6bdd1fce2f510962f5c25f9e1d91f49508b5c37eb5bbdd94ed0a8289c4": {
-    "file": "src/features/exercises/types/mockData.ts",
-    "rules": [
-      "perfectionist/sort-objects"
-    ]
+    "rules": ["@typescript-eslint/explicit-function-return-type"]
   },
   "0401e231a9e8b6b055b33b8acacecb801063a5e8afd6a9a3eb1817472ff12e0f": {
     "file": "src/features/exercises/utils/exerciseUtils.ts",
     "rules": [
       "@typescript-eslint/explicit-function-return-type",
-      "@typescript-eslint/explicit-module-boundary-types",
-      "perfectionist/sort-objects"
+      "@typescript-eslint/explicit-module-boundary-types"
     ]
   },
   "b016462fe65c16f4d210dd801245a5a852c2bb3c460901f5a0facdd573de1c79": {
     "file": "src/features/feature-flags/context/FeatureFlagContext.tsx",
     "rules": [
-      "perfectionist/sort-imports",
-      "import-x/no-unresolved",
       "@typescript-eslint/explicit-function-return-type",
       "@typescript-eslint/explicit-module-boundary-types",
-      "compat/compat",
-      "perfectionist/sort-objects",
       "no-console"
     ]
   },
@@ -1378,11 +862,7 @@
     "file": "src/features/feature-flags/__tests__/integration.test.tsx",
     "rules": [
       "import-x/named",
-      "perfectionist/sort-imports",
-      "import-x/no-unresolved",
       "@typescript-eslint/explicit-function-return-type",
-      "perfectionist/sort-objects",
-      "compat/compat",
       "@typescript-eslint/no-empty-function"
     ]
   },
@@ -1390,131 +870,89 @@
     "file": "src/features/feature-flags/context/__tests__/FeatureFlagContext.test.tsx",
     "rules": [
       "import-x/named",
-      "perfectionist/sort-imports",
-      "import-x/no-unresolved",
-      "@typescript-eslint/explicit-function-return-type",
-      "perfectionist/sort-objects",
-      "compat/compat"
+      "@typescript-eslint/explicit-function-return-type"
     ]
+  },
+  "189eea14bb382b0be4710a34b13e8df358fd73db21299cfa139137767f43c0e8": {
+    "file": "src/features/feature-flags/hooks/useFeatureFlag.ts",
+    "rules": ["@typescript-eslint/explicit-function-return-type"]
   },
   "60376fa0ce1b679a53f9b106e0f51bf1f0b592ee25d0d8631760bdaeb72df135": {
     "file": "src/features/feature-flags/hooks/__tests__/useFeatureFlag.test.tsx",
     "rules": [
       "import-x/named",
-      "perfectionist/sort-imports",
-      "import-x/no-unresolved",
-      "@typescript-eslint/explicit-function-return-type",
-      "perfectionist/sort-objects",
-      "compat/compat"
-    ]
-  },
-  "189eea14bb382b0be4710a34b13e8df358fd73db21299cfa139137767f43c0e8": {
-    "file": "src/features/feature-flags/hooks/useFeatureFlag.ts",
-    "rules": [
-      "perfectionist/sort-objects",
       "@typescript-eslint/explicit-function-return-type"
-    ]
-  },
-  "959acd710e1aaaa0b2803f6a27a7f60e4dfe1ce1da1e938abfe6e5673294aca3": {
-    "file": "src/features/feature-flags/lib/__tests__/config.test.ts",
-    "rules": [
-      "perfectionist/sort-objects"
     ]
   },
   "261a7a5126108ecd26f5da66a726cc0dec0bebd9e551cbf794093f8533860fea": {
     "file": "src/features/feature-flags/lib/__tests__/monitoring.test.ts",
-    "rules": [
-      "@typescript-eslint/no-empty-function",
-      "no-console",
-      "perfectionist/sort-objects"
-    ]
-  },
-  "e8d68c3084051e7ac7f17c2e1273614e097f29cc530332c7731df37cad020f38": {
-    "file": "src/features/feature-flags/lib/cache.ts",
-    "rules": [
-      "perfectionist/sort-objects"
-    ]
-  },
-  "f142da6a92ec4b0c952f0d4d4c46d7e19e1b1519cc0dece22930550adda9890a": {
-    "file": "src/features/feature-flags/lib/config.ts",
-    "rules": [
-      "perfectionist/sort-objects"
-    ]
+    "rules": ["@typescript-eslint/no-empty-function", "no-console"]
   },
   "74ee6415e9d4e1d084d24059b425a6b97d7516fceb62fcdc7a5542b486148f8a": {
     "file": "src/features/feature-flags/lib/monitoring.ts",
+    "rules": ["no-console"]
+  },
+  "3d803b0095972916bf43ea4e5bd2b9bae3ad68a7fd8c91fd09eb011f2fc19f57": {
+    "file": "src/features/gyms/EditGym.tsx",
     "rules": [
-      "perfectionist/sort-objects",
+      "@typescript-eslint/explicit-function-return-type",
+      "@typescript-eslint/explicit-module-boundary-types",
+      "react/function-component-definition",
       "no-console"
     ]
   },
   "502ab549c6ab0a638f8d9feab4358c286118a373ad35311bc246c3ce8bbcb5fa": {
     "file": "src/features/gyms/CreateGym.tsx",
     "rules": [
-      "import-x/no-unresolved",
       "@typescript-eslint/explicit-function-return-type",
       "@typescript-eslint/explicit-module-boundary-types",
-      "perfectionist/sort-objects",
       "no-console"
     ]
   },
   "cf6e7226f7d2dea2d8e3b0b9414f448190e5a93299dce51e84ff7533e2593bb0": {
     "file": "src/features/gyms/GymDetail.tsx",
     "rules": [
-      "import-x/no-unresolved",
       "@typescript-eslint/explicit-function-return-type",
       "@typescript-eslint/explicit-module-boundary-types",
-      "react/function-component-definition",
-      "perfectionist/sort-objects"
-    ]
-  },
-  "3d803b0095972916bf43ea4e5bd2b9bae3ad68a7fd8c91fd09eb011f2fc19f57": {
-    "file": "src/features/gyms/EditGym.tsx",
-    "rules": [
-      "import-x/no-unresolved",
-      "@typescript-eslint/explicit-function-return-type",
-      "@typescript-eslint/explicit-module-boundary-types",
-      "react/function-component-definition",
-      "perfectionist/sort-objects",
-      "no-console"
+      "react/function-component-definition"
     ]
   },
   "0d4fe701c419a5b55af02e4b50132579542e5fc54068a8ce64696c37524b1627": {
     "file": "src/features/gyms/Gyms.tsx",
     "rules": [
-      "import-x/no-unresolved",
       "@typescript-eslint/explicit-function-return-type",
       "@typescript-eslint/explicit-module-boundary-types",
       "react/function-component-definition",
-      "perfectionist/sort-objects",
       "no-console"
     ]
   },
   "23fb9c52e7618851c18586c9c53f5f4839fb205686976cb5d4593906325c8d63": {
     "file": "src/features/gyms/SuggestGym.tsx",
     "rules": [
-      "import-x/no-unresolved",
       "@typescript-eslint/explicit-function-return-type",
       "@typescript-eslint/explicit-module-boundary-types",
       "react/function-component-definition",
-      "perfectionist/sort-objects",
       "no-console"
     ]
   },
   "f9f9e7e7111c5b519d3b1df74a4a48bfd22cbdc39c5622bdf2323f234ebca1b6": {
     "file": "src/features/health/Health.tsx",
     "rules": [
-      "import-x/no-unresolved",
       "@typescript-eslint/explicit-function-return-type",
       "@typescript-eslint/explicit-module-boundary-types",
-      "react/function-component-definition",
-      "perfectionist/sort-objects"
+      "react/function-component-definition"
     ]
   },
   "516a1147bce8e0c5fed8f5d2565e515919067af5e5dca0c05e4f738bf9e85dd2": {
     "file": "src/features/notifications/NotificationsBell.tsx",
     "rules": [
-      "import-x/no-unresolved",
+      "@typescript-eslint/explicit-function-return-type",
+      "@typescript-eslint/explicit-module-boundary-types"
+    ]
+  },
+  "c434102e18798266d0878d12471ef4192db5b98022f4a5a7b2f258d047819522": {
+    "file": "src/features/notifications/NotificationsContext.tsx",
+    "rules": [
       "@typescript-eslint/explicit-function-return-type",
       "@typescript-eslint/explicit-module-boundary-types"
     ]
@@ -1522,79 +960,59 @@
   "207e7d8ce35de6a0cbf43e9db79a481d185501bf661584a6822ced98c5ddb1e8": {
     "file": "src/features/onboarding/WelcomeOnboarding.tsx",
     "rules": [
-      "import-x/no-unresolved",
-      "perfectionist/sort-objects",
       "@typescript-eslint/explicit-function-return-type",
       "@typescript-eslint/explicit-module-boundary-types",
       "react/function-component-definition",
       "react-hooks/exhaustive-deps"
     ]
   },
-  "c434102e18798266d0878d12471ef4192db5b98022f4a5a7b2f258d047819522": {
-    "file": "src/features/notifications/NotificationsContext.tsx",
-    "rules": [
-      "@typescript-eslint/explicit-function-return-type",
-      "@typescript-eslint/explicit-module-boundary-types",
-      "perfectionist/sort-objects"
-    ]
-  },
   "b495d2f5ab85bb5fc804161a40df788b2528ce816bde9852f95987cd109bfa99": {
     "file": "src/features/performance/Performance.tsx",
     "rules": [
-      "import-x/no-unresolved",
       "@typescript-eslint/explicit-function-return-type",
       "@typescript-eslint/explicit-module-boundary-types",
-      "react/function-component-definition",
-      "perfectionist/sort-objects"
+      "react/function-component-definition"
+    ]
+  },
+  "01088201014ec450c77ec68ec3b881dfcc841f97376fc27dc18e543dd2b8d2a8": {
+    "file": "src/features/profile/components/AchievementsCard/AchievementsCard.tsx",
+    "rules": [
+      "@typescript-eslint/explicit-function-return-type",
+      "@typescript-eslint/explicit-module-boundary-types"
     ]
   },
   "3268653cac0e961233285b051a010a3bdd795999975a05becd8186b96ca73f24": {
     "file": "src/features/profile/Profile.tsx",
     "rules": [
       "css-modules/no-unused-class",
-      "perfectionist/sort-imports",
-      "import-x/no-unresolved",
       "@typescript-eslint/explicit-function-return-type",
-      "@typescript-eslint/explicit-module-boundary-types",
-      "perfectionist/sort-objects"
-    ]
-  },
-  "01088201014ec450c77ec68ec3b881dfcc841f97376fc27dc18e543dd2b8d2a8": {
-    "file": "src/features/profile/components/AchievementsCard/AchievementsCard.tsx",
-    "rules": [
-      "perfectionist/sort-imports",
-      "import-x/no-unresolved",
-      "@typescript-eslint/explicit-function-return-type",
-      "@typescript-eslint/explicit-module-boundary-types",
-      "perfectionist/sort-objects"
+      "@typescript-eslint/explicit-module-boundary-types"
     ]
   },
   "a3361fc459b45875c570bccf8b84b78ed96b562b73d63c98092dd7f49e92c3ca": {
     "file": "src/features/profile/components/ActivityStatsCard/ActivityStatsCard.tsx",
     "rules": [
-      "perfectionist/sort-imports",
-      "import-x/no-unresolved",
       "@typescript-eslint/explicit-function-return-type",
-      "@typescript-eslint/explicit-module-boundary-types",
-      "perfectionist/sort-objects"
+      "@typescript-eslint/explicit-module-boundary-types"
     ]
   },
   "e154c926af626dc9b0fd32db60869612aa1c1ce444345a2f272ea38f1982cf1a": {
     "file": "src/features/profile/components/FitnessProfileCard/FitnessProfileCard.tsx",
     "rules": [
-      "perfectionist/sort-imports",
-      "import-x/no-unresolved",
       "@typescript-eslint/explicit-function-return-type",
-      "@typescript-eslint/explicit-module-boundary-types",
-      "perfectionist/sort-objects"
+      "@typescript-eslint/explicit-module-boundary-types"
     ]
   },
   "0b409c24fecbd9d8dd0720e0e6b346a173fafb34ab801e19ebcfabdaf8bd6b8f": {
     "file": "src/features/profile/components/PersonalInfoCard/PersonalInfoCard.tsx",
     "rules": [
-      "perfectionist/sort-imports",
-      "import-x/no-unresolved",
-      "perfectionist/sort-objects",
+      "@typescript-eslint/explicit-function-return-type",
+      "@typescript-eslint/explicit-module-boundary-types"
+    ]
+  },
+  "6e7cf051ee33a7dc57604d521edc7f4e70399e458f0b585fcbc9a0081d52c5af": {
+    "file": "src/features/profile/hooks/useUserProfile.ts",
+    "rules": [
       "@typescript-eslint/explicit-function-return-type",
       "@typescript-eslint/explicit-module-boundary-types"
     ]
@@ -1603,93 +1021,53 @@
     "file": "src/features/profile/hooks/useProfileUpdate.ts",
     "rules": [
       "@typescript-eslint/explicit-function-return-type",
-      "@typescript-eslint/explicit-module-boundary-types",
-      "perfectionist/sort-objects"
+      "@typescript-eslint/explicit-module-boundary-types"
     ]
   },
-  "6e7cf051ee33a7dc57604d521edc7f4e70399e458f0b585fcbc9a0081d52c5af": {
-    "file": "src/features/profile/hooks/useUserProfile.ts",
-    "rules": [
-      "@typescript-eslint/explicit-function-return-type",
-      "@typescript-eslint/explicit-module-boundary-types",
-      "perfectionist/sort-objects"
-    ]
+  "71b9402e66387614183287f75acbeb58b101a86ce3d99915f088ff5927c13e8e": {
+    "file": "src/features/routines/features/routine-creation/RoutineCreation.tsx",
+    "rules": ["no-console"]
   },
-  "91da1d1148175e5cb5e18a22da6df5e950b04a150628df8af2a3636a1e2bbe3f": {
-    "file": "src/features/profile/services/userProfileService.ts",
-    "rules": [
-      "compat/compat",
-      "perfectionist/sort-objects"
-    ]
+  "b1ef192d780c51a7597f5b1064b9f2c89d4180826822e3999a3ad5b2aecf49e0": {
+    "file": "src/features/routines/features/routine-creation/components/RoutineHeader.tsx",
+    "rules": ["no-console"]
   },
-  "1332a0126433cccecd3de830822225804f2c1b928cc8b8a1daa495273565c2fd": {
-    "file": "src/features/routines/RoutineCreation.tsx",
-    "rules": [
-      "import-x/no-unresolved",
-      "@typescript-eslint/explicit-function-return-type",
-      "@typescript-eslint/explicit-module-boundary-types",
-      "react/function-component-definition",
-      "perfectionist/sort-objects",
-      "react-hooks/exhaustive-deps",
-      "@typescript-eslint/no-non-null-assertion"
-    ]
+  "706eb5ac96c4d6b9a42f8cc26149d5c20a8b596a2caa062d29303975cf16db3e": {
+    "file": "src/features/routines/features/routine-creation/components/RunningWorkoutsSection.tsx",
+    "rules": ["no-console"]
   },
-  "29d7796e669835f119986d9e59eca88dd394287a9ad39408f5e7d23574b11592": {
-    "file": "src/features/routines/RoutineDetail.tsx",
-    "rules": [
-      "import-x/no-unresolved",
-      "@typescript-eslint/explicit-function-return-type",
-      "@typescript-eslint/explicit-module-boundary-types",
-      "react/function-component-definition",
-      "perfectionist/sort-objects"
-    ]
+  "183c311ac8c96abc13162c1ebf53e47447ee24ea60865797bf8ecfc8ac8fff43": {
+    "file": "src/features/routines/features/routine-list/Routines.tsx",
+    "rules": ["no-console"]
   },
-  "fb725beccdf98e633e6a491faacfb0d7e8e14ba79d641f921f77df8afeebbd0e": {
-    "file": "src/features/routines/Routines.tsx",
-    "rules": [
-      "import-x/no-unresolved",
-      "@typescript-eslint/explicit-function-return-type",
-      "@typescript-eslint/explicit-module-boundary-types",
-      "react/function-component-definition",
-      "perfectionist/sort-objects"
-    ]
+  "4d1fda77f68de635f5aec1b31b6143922f212c7dea521accfe67d8a49eab6a2d": {
+    "file": "src/features/routines/features/routine-list/components/RoutineCard.tsx",
+    "rules": ["no-console"]
   },
-  "a906da4e67c884126d38c3c56ac6c3a684211adbae2b63c2469309fb1872cf42": {
-    "file": "src/features/routines/TrailRunningWorkout.tsx",
-    "rules": [
-      "import-x/no-unresolved",
-      "perfectionist/sort-objects",
-      "@typescript-eslint/explicit-function-return-type",
-      "@typescript-eslint/explicit-module-boundary-types",
-      "react/function-component-definition",
-      "@typescript-eslint/no-non-null-assertion"
-    ]
+  "0fcf0d5d06f59a17a1e71a034b54ef743ceb51b070098dbb891df8e4f286f76e": {
+    "file": "src/features/routines/features/routine-list/components/RoutinesList.tsx",
+    "rules": ["no-console"]
   },
   "2ad86666df9ac4500866b067b141898b28a48425faf969c981f6f04c7dc4187c": {
     "file": "src/features/settings/AccountSettings.tsx",
     "rules": [
-      "import-x/no-unresolved",
       "@typescript-eslint/explicit-function-return-type",
       "@typescript-eslint/explicit-module-boundary-types",
-      "perfectionist/sort-objects",
       "no-console"
     ]
   },
   "75fa41015297f74a2c1f55da37db6d3f6be6e6b136cb28a1d493bca6658a68d3": {
     "file": "src/features/settings/AppSettings.tsx",
     "rules": [
-      "import-x/no-unresolved",
       "@typescript-eslint/explicit-function-return-type",
       "@typescript-eslint/explicit-module-boundary-types",
       "react/function-component-definition",
-      "perfectionist/sort-objects",
       "no-console"
     ]
   },
   "6655dfa5451f519c2100afb71982201aca5a54dc917579d803a3ecf07501911a": {
     "file": "src/features/settings/HelpSupport.tsx",
     "rules": [
-      "import-x/no-unresolved",
       "@typescript-eslint/explicit-function-return-type",
       "@typescript-eslint/explicit-module-boundary-types",
       "react/function-component-definition"
@@ -1698,81 +1076,65 @@
   "78953df17a7d11983818b4a59f50e4cb8d79572f9781a037fb7a03897d91f611": {
     "file": "src/features/settings/Settings.tsx",
     "rules": [
-      "import-x/no-unresolved",
       "@typescript-eslint/explicit-function-return-type",
       "@typescript-eslint/explicit-module-boundary-types",
       "react/function-component-definition",
-      "perfectionist/sort-objects",
       "no-secrets/no-secrets"
     ]
   },
   "06e1fdf074fc9623d413498cdce1a9bbb713c4b5144bec7283459f120d3b12e3": {
     "file": "src/features/social/ClubEventConflictModal.tsx",
     "rules": [
-      "import-x/no-unresolved",
       "@typescript-eslint/explicit-function-return-type",
       "@typescript-eslint/explicit-module-boundary-types",
-      "react/function-component-definition",
-      "perfectionist/sort-objects"
+      "react/function-component-definition"
     ]
   },
   "d7e46a02866e42e72def275ec119931161ca4c64bd351df7fcce8901c4f9e3df": {
     "file": "src/features/social/TrainerAndClubs.tsx",
     "rules": [
-      "import-x/no-unresolved",
       "@typescript-eslint/explicit-function-return-type",
       "@typescript-eslint/explicit-module-boundary-types",
-      "react/function-component-definition",
-      "perfectionist/sort-objects"
+      "react/function-component-definition"
     ]
   },
   "c772dfa82ce57c4a7edfd6e7ab6749a248a688aff0696a8c1b52fc258ca20be6": {
     "file": "src/features/statistics/Statistics.tsx",
     "rules": [
-      "import-x/no-unresolved",
       "@typescript-eslint/explicit-function-return-type",
       "@typescript-eslint/explicit-module-boundary-types",
-      "react/function-component-definition",
-      "perfectionist/sort-objects"
+      "react/function-component-definition"
     ]
   },
   "5cde0c7f624236e9ab496b0b63bb68515821a4b95c16c2483286bfe1626e8941": {
     "file": "src/features/suggestions/SuggestExercise.tsx",
     "rules": [
-      "import-x/no-unresolved",
       "@typescript-eslint/explicit-function-return-type",
       "@typescript-eslint/explicit-module-boundary-types",
       "react/function-component-definition",
-      "perfectionist/sort-objects",
       "no-console"
     ]
   },
   "57ee33cdb71fb64b827c414ff376f069a49f380aa69ba987adea68e78796348d": {
     "file": "src/features/suggestions/Suggestions.tsx",
     "rules": [
-      "import-x/no-unresolved",
       "@typescript-eslint/explicit-function-return-type",
       "@typescript-eslint/explicit-module-boundary-types",
       "react/function-component-definition",
-      "perfectionist/sort-objects",
       "no-console"
     ]
   },
   "30a986f0707a136d5e460f60eb7b0b95336885d624567c57beec408068f25d31": {
     "file": "src/features/workout/ExerciseView.tsx",
     "rules": [
-      "import-x/no-unresolved",
       "@typescript-eslint/explicit-function-return-type",
       "@typescript-eslint/explicit-module-boundary-types",
-      "react/function-component-definition",
-      "perfectionist/sort-objects"
+      "react/function-component-definition"
     ]
   },
   "cfb8cdfcdc528bd63941f1f30db8dc3fdd69a5bea04c9e986b1fd58828ea007e": {
     "file": "src/features/workout/RestTimer.tsx",
     "rules": [
-      "import-x/no-unresolved",
-      "perfectionist/sort-objects",
       "@typescript-eslint/explicit-function-return-type",
       "@typescript-eslint/explicit-module-boundary-types",
       "react/function-component-definition"
@@ -1781,52 +1143,32 @@
   "7af6a5bd53f2a5e813ab220938af6d24f385ee62cc8edf1a12c988cce5683fd0": {
     "file": "src/features/workout/RestView.tsx",
     "rules": [
-      "perfectionist/sort-imports",
-      "import-x/no-unresolved",
       "@typescript-eslint/explicit-function-return-type",
       "@typescript-eslint/explicit-module-boundary-types",
       "react/function-component-definition",
-      "perfectionist/sort-objects",
       "no-console"
-    ]
-  },
-  "ad244933c4fdf5c56fcf86f5a5b8e10d4dc457f7570d26c450ccf0bc6e3624d8": {
-    "file": "src/features/workout/SetManagement.tsx",
-    "rules": [
-      "import-x/no-unresolved",
-      "@typescript-eslint/explicit-function-return-type",
-      "perfectionist/sort-objects",
-      "@typescript-eslint/explicit-module-boundary-types",
-      "react/function-component-definition"
     ]
   },
   "d695d4be3482dee036701e76ccc67a0993af5addec3415f90144423805644720": {
     "file": "src/features/workout/WorkoutSummary.tsx",
     "rules": [
-      "import-x/no-unresolved",
       "@typescript-eslint/explicit-function-return-type",
       "@typescript-eslint/explicit-module-boundary-types",
       "react/function-component-definition",
-      "perfectionist/sort-objects",
       "no-console"
     ]
   },
   "a47829ace49519b04ae37ba2828d51e42bf1218b9c1b77d28abe90713fc63103": {
     "file": "src/features/workout/WorkoutTracker.tsx",
     "rules": [
-      "perfectionist/sort-imports",
-      "import-x/no-unresolved",
       "@typescript-eslint/explicit-function-return-type",
       "@typescript-eslint/explicit-module-boundary-types",
-      "perfectionist/sort-objects",
       "no-console"
     ]
   },
   "7f961cf8693492f03cec5a11f79c6e850109008057a0e138418fe52c8f44955a": {
     "file": "src/features/workout/WorkoutTypeSelectionModal.tsx",
     "rules": [
-      "import-x/no-unresolved",
-      "perfectionist/sort-objects",
       "@typescript-eslint/explicit-function-return-type",
       "@typescript-eslint/explicit-module-boundary-types",
       "react/function-component-definition"
@@ -1842,39 +1184,22 @@
   "c331b53396f9e8baf635fb71b66f2a0800153299336cfbaa0562900dcede46f0": {
     "file": "src/hooks/useDataAccess.ts",
     "rules": [
-      "import-x/no-unresolved",
       "@typescript-eslint/explicit-function-return-type",
-      "@typescript-eslint/explicit-module-boundary-types",
-      "perfectionist/sort-objects"
+      "@typescript-eslint/explicit-module-boundary-types"
     ]
   },
   "a7c5d5303f2c450b74b60a33237070ee987a5ba28036a73b25ab80bf01d6061e": {
     "file": "src/hooks/useNavigationFeatureFlags.ts",
     "rules": [
-      "import-x/no-unresolved",
       "@typescript-eslint/explicit-function-return-type",
-      "@typescript-eslint/explicit-module-boundary-types",
-      "perfectionist/sort-objects"
+      "@typescript-eslint/explicit-module-boundary-types"
     ]
   },
   "bd2aeed5da6f6f18e16508db0368f8f0a7adaf713724ef4d1ee1d75e62c025bd": {
     "file": "src/hooks/useTrainerAndClub.ts",
     "rules": [
       "@typescript-eslint/explicit-function-return-type",
-      "@typescript-eslint/explicit-module-boundary-types",
-      "perfectionist/sort-objects"
-    ]
-  },
-  "d9c35bc0d1d47f6fe11bbf68cf54fe56014d346609850e6f585167c9085d0da4": {
-    "file": "src/lib/data-access.ts",
-    "rules": [
-      "perfectionist/sort-objects"
-    ]
-  },
-  "c0269c671eb38cab52c601688bb07c685e0095372c62328e6317a6ac172a30c5": {
-    "file": "src/lib/navigation.ts",
-    "rules": [
-      "perfectionist/sort-objects"
+      "@typescript-eslint/explicit-module-boundary-types"
     ]
   },
   "6cf36eed25df47f8f4e3c22b52d42b522b155fd7a8fcd5f6bcea98ebca039e6d": {
@@ -1884,17 +1209,16 @@
       "@typescript-eslint/explicit-module-boundary-types"
     ]
   },
-  "4560eddff0ca6dcbf31d69e4c9a26b62d3bd9945d2c1b6f5b47f58ce04a798ad": {
-    "file": "src/lib/supabase/server.ts",
+  "5a0aab97ab8aa300bd498b161850387ab93d3d982863ab0a5d4f5a608a524430": {
+    "file": "src/lib/supabase/client.ts",
     "rules": [
       "@typescript-eslint/explicit-function-return-type",
       "@typescript-eslint/explicit-module-boundary-types",
-      "no-console",
-      "perfectionist/sort-objects"
+      "no-console"
     ]
   },
-  "5a0aab97ab8aa300bd498b161850387ab93d3d982863ab0a5d4f5a608a524430": {
-    "file": "src/lib/supabase/client.ts",
+  "4560eddff0ca6dcbf31d69e4c9a26b62d3bd9945d2c1b6f5b47f58ce04a798ad": {
+    "file": "src/lib/supabase/server.ts",
     "rules": [
       "@typescript-eslint/explicit-function-return-type",
       "@typescript-eslint/explicit-module-boundary-types",
@@ -1907,9 +1231,7 @@
       "import-x/named",
       "@typescript-eslint/explicit-function-return-type",
       "@typescript-eslint/explicit-module-boundary-types",
-      "compat/compat",
-      "@typescript-eslint/no-explicit-any",
-      "perfectionist/sort-objects"
+      "@typescript-eslint/no-explicit-any"
     ]
   },
   "ec6e83ad472cce1f9e01bae577cf0bfc577d08ff790cd7ccf15945d34919572c": {
@@ -1919,33 +1241,8 @@
       "@typescript-eslint/explicit-module-boundary-types"
     ]
   },
-  "6a2b34d3173f1996a279e4e0070fa485202857eb712891e09b26d3ba3e61a18a": {
-    "file": "src/middleware.ts",
-    "rules": [
-      "@typescript-eslint/explicit-function-return-type",
-      "@typescript-eslint/explicit-module-boundary-types"
-    ]
-  },
   "c4f4b12fba9b226ec9861c38fb0ededa06cf3eac380667ef5c703b4382df36b2": {
     "file": "src/test/setup.ts",
-    "rules": [
-      "perfectionist/sort-imports",
-      "@typescript-eslint/explicit-function-return-type",
-      "perfectionist/sort-objects",
-      "compat/compat"
-    ]
-  },
-  "60066706a4bbaedc7cd00e1103efc7ae025a0dd0f457936bbd1508239ec8bd28": {
-    "file": "vitest.config.ts",
-    "rules": [
-      "perfectionist/sort-imports",
-      "perfectionist/sort-objects"
-    ]
-  },
-  "2fd2d243aad016123496b192116a62d40fa09cc5e1808d987854e4caf0cc9d89": {
-    "file": "tailwind.config.js",
-    "rules": [
-      "perfectionist/sort-objects"
-    ]
+    "rules": ["@typescript-eslint/explicit-function-return-type"]
   }
 }
