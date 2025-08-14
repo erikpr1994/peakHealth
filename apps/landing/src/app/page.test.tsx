@@ -30,9 +30,9 @@ describe('HomePage', () => {
   it('renders all main sections', () => {
     render(<HomePage />);
 
-    expect(screen.getByTestId('hero')).toBeInTheDocument();
-    expect(screen.getByTestId('features')).toBeInTheDocument();
-    expect(screen.getByTestId('how-it-works')).toBeInTheDocument();
-    expect(screen.getByTestId('cta')).toBeInTheDocument();
+    expect(screen.getByTestId('hero')).toBeDefined();
+    expect(screen.getByTestId('features')).toBeDefined();
+    expect(screen.getByTestId('how-it-works')).toBeDefined();
+    expect(screen.getByTestId('cta')).toBeDefined();
   });
 });

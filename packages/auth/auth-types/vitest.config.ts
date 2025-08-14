@@ -1,22 +1,16 @@
 import path from 'path';
 
-import react from '@vitejs/plugin-react';
 import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
-  plugins: [react()],
   test: {
-    environment: 'jsdom',
-    setupFiles: ['./src/test/setup.ts'],
     globals: true,
-    css: true,
+    setupFiles: ['./src/test/setup.ts'],
     exclude: [
-      'e2e/**/*',
       'node_modules/**/*',
       '**/node_modules/**/*',
       '**/dist/**/*',
       '**/build/**/*',
-      '**/.next/**/*',
     ],
     include: [
       'src/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}',
@@ -30,7 +24,6 @@ export default defineConfig({
         '**/node_modules/**',
         '**/dist/**',
         '**/build/**',
-        '**/.next/**',
         '**/*.config.{js,ts}',
         '**/test/**',
         '**/tests/**',
@@ -41,7 +34,7 @@ export default defineConfig({
       changedFiles: true,
       // Ensure all files are not included by default
       all: false,
-      // Require 80% coverage for changed files
+      // Require 80% coverage for changed files only
       thresholds: {
         // Apply thresholds only to files that are actually being tested
         global: {
@@ -51,13 +44,6 @@ export default defineConfig({
           statements: 80,
         },
       },
-    },
-    onConsoleLog(log, type) {
-      // Suppress unhandled rejection warnings in tests
-      if (type === 'stderr' && log.includes('Unhandled Rejection')) {
-        return false;
-      }
-      return true;
     },
   },
   resolve: {

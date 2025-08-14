@@ -1,1 +1,16 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+echo "📊 Running coverage checks on changed files..."
+pnpm test:coverage -- --changed
+
+if [ $? -ne 0 ]; then
+  echo "❌ Coverage checks failed"
+  echo "💡 Make sure changed files have at least 80% test coverage"
+  exit 1
+fi
+
+echo "🧪 Running e2e tests..."
 pnpm test:e2e
+
+echo "✅ Pre-push checks passed!"

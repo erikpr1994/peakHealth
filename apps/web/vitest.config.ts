@@ -22,6 +22,36 @@ export default defineConfig({
       'src/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}',
       '**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}',
     ],
+    coverage: {
+      provider: 'v8',
+      reporter: ['text', 'json', 'html'],
+      exclude: [
+        'node_modules/**',
+        '**/node_modules/**',
+        '**/dist/**',
+        '**/build/**',
+        '**/.next/**',
+        '**/*.config.{js,ts}',
+        '**/test/**',
+        '**/tests/**',
+        '**/*.d.ts',
+        '**/types/**',
+      ],
+      // This will check coverage only for changed files
+      changedFiles: true,
+      // Ensure all files are not included by default
+      all: false,
+      // Require 80% coverage for changed files
+      thresholds: {
+        // Apply thresholds only to files that are actually being tested
+        global: {
+          branches: 80,
+          functions: 80,
+          lines: 80,
+          statements: 80,
+        },
+      },
+    },
     onConsoleLog(log, type) {
       // Suppress unhandled rejection warnings in tests
       if (type === 'stderr' && log.includes('Unhandled Rejection')) {
