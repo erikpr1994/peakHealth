@@ -22,18 +22,30 @@ pnpm add @peakhealth/ui
 
 ```tsx
 import { Button } from '@peakhealth/ui/button';
-// CSS is automatically included with the component
+import '@peakhealth/ui/button/styles.css';
+// Import styles separately for optimal tree-shaking
 
 // Or import multiple components
 import { Button, Input } from '@peakhealth/ui';
-// CSS is automatically included with each component
+import '@peakhealth/ui/button/styles.css';
+import '@peakhealth/ui/input/styles.css';
 ```
 
-### Bundle import
+### Bundle import with all styles
 
 ```tsx
 import { Button, Input } from '@peakhealth/ui';
-// CSS is automatically included with each component
+import '@peakhealth/ui/styles.css';
+// Import all styles at once
+```
+
+### Individual component styles
+
+```tsx
+// Import only the styles you need
+import '@peakhealth/ui/button/styles.css';
+import '@peakhealth/ui/toast/styles.css';
+import '@peakhealth/ui/modal/styles.css';
 ```
 
 ## 🧩 Components
