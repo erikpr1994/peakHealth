@@ -3,8 +3,15 @@
 
 echo "🔍 Checking for source files without tests..."
 
-# Get list of changed files
-CHANGED_FILES=$(git diff --cached --name-only --diff-filter=ACM)
+# Get list of changed files being pushed
+# Use origin/main...HEAD to get files that differ from remote main branch
+# Fall back to HEAD~1..HEAD if origin/main doesn't exist (first push scenario)
+if git rev-parse --verify origin/main >/dev/null 2>&1; then
+  CHANGED_FILES=$(git diff --name-only --diff-filter=ACM origin/main...HEAD)
+else
+  # For first push or when origin/main doesn't exist, check the last commit
+  CHANGED_FILES=$(git diff --name-only --diff-filter=ACM HEAD~1..HEAD 2>/dev/null || git ls-files)
+fi
 
 # Initialize variables
 UNCOVERED_SOURCE_FILES=""
