@@ -1,5 +1,6 @@
-// This file configures the initialization of Sentry on the client.
-// The added config here will be used whenever a users loads a page in their browser.
+// This file configures the initialization of Sentry for edge features (middleware, edge routes, and so on).
+// The config you add here will be used whenever one of the edge features is loaded.
+// Note that this config is unrelated to the Vercel Edge Runtime and is also required when running locally.
 // https://docs.sentry.io/platforms/javascript/guides/nextjs/
 
 import {
@@ -8,27 +9,34 @@ import {
   replayIntegration,
 } from '@sentry/nextjs';
 
-init({
-  dsn: process.env.NEXT_PUBLIC_SENTRY_DSN,
+// Determine if we're in development mode
+const isDevelopment = process.env.NODE_ENV === 'development';
 
-  // Add optional integrations for additional features
-  integrations: [replayIntegration()],
+// Only initialize Sentry if DSN is available or in production
+if (process.env.NEXT_PUBLIC_SENTRY_DSN || !isDevelopment) {
+  init({
+    dsn: process.env.NEXT_PUBLIC_SENTRY_DSN,
 
-  // Define how likely traces are sampled. Adjust this value in production, or use tracesSampler for greater control.
-  tracesSampleRate: 1,
-  // Enable logs to be sent to Sentry
-  enableLogs: true,
+    // Add optional integrations for additional features
+    // Disable replay in development to reduce bundle size and compilation overhead
+    integrations: isDevelopment ? [] : [replayIntegration()],
 
-  // Define how likely Replay events are sampled.
-  // This sets the sample rate to be 10%. You may want this to be 100% while
-  // in development and sample at a lower rate in production
-  replaysSessionSampleRate: 0.1,
+    // Reduce trace sampling in development to improve performance
+    tracesSampleRate: isDevelopment ? 0.1 : 1,
 
-  // Define how likely Replay events are sampled when an error occurs.
-  replaysOnErrorSampleRate: 1.0,
+    // Disable logs in development to reduce overhead
+    enableLogs: !isDevelopment,
 
-  // Setting this option to true will print useful information to the console while you're setting up Sentry.
-  debug: false,
-});
+    // Define how likely Replay events are sampled.
+    // Disable replay completely in development
+    replaysSessionSampleRate: isDevelopment ? 0 : 0.1,
+
+    // Define how likely Replay events are sampled when an error occurs.
+    replaysOnErrorSampleRate: isDevelopment ? 0 : 1.0,
+
+    // Setting this option to true will print useful information to the console while you're setting up Sentry.
+    debug: false,
+  });
+}
 
 export const onRouterTransitionStart = captureRouterTransitionStart;

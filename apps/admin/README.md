@@ -34,3 +34,27 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+## Development Performance Optimization
+
+### Preventing Connection Timeout Issues
+
+This app is optimized to prevent development server connection timeouts:
+
+1. **Disable Sentry in Development**: For optimal development performance, leave `NEXT_PUBLIC_SENTRY_DSN` empty in your `.env.local` file. This prevents Sentry from loading heavy monitoring bundles during development.
+
+2. **Enable Sentry Only When Needed**: Only set the `NEXT_PUBLIC_SENTRY_DSN` environment variable when you specifically need to test Sentry integration.
+
+3. **Optimized Configuration**: The application automatically:
+   - Disables Sentry replay and extensive tracing in development
+   - Reduces bundle splitting overhead with optimized webpack configuration
+   - Skips sourcemap uploads in development
+   - Uses conditional Sentry initialization
+
+### Troubleshooting Connection Issues
+
+If you experience "Connection closed" errors:
+
+1. Ensure `NEXT_PUBLIC_SENTRY_DSN` is not set in `.env.local`
+2. Clear browser cache and restart the development server
+3. Check system memory allocation for Node.js
