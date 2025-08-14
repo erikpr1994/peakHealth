@@ -40,7 +40,7 @@ BEGIN
     -- Schedule is calculated dynamically, not stored
     COALESCE(
       CASE 
-        WHEN routine_data->'objectives' IS NOT NULL AND routine_data->'objectives' != 'null'::JSON
+        WHEN routine_data->'objectives' IS NOT NULL AND routine_data->'objectives' IS DISTINCT FROM 'null'::JSON
         THEN (
           SELECT COALESCE(array_agg(value::TEXT), ARRAY[]::TEXT[])
           FROM json_array_elements_text(routine_data->'objectives')
@@ -97,7 +97,7 @@ BEGIN
               exercise_record->>'category',
               COALESCE(
                 CASE 
-                  WHEN exercise_record->'muscleGroups' IS NOT NULL AND exercise_record->'muscleGroups' != 'null'::JSON
+                  WHEN exercise_record->'muscleGroups' IS NOT NULL AND exercise_record->'muscleGroups' IS DISTINCT FROM 'null'::JSON
                   THEN (exercise_record->'muscleGroups')::TEXT[]
                   ELSE ARRAY[]::TEXT[]
                 END,
@@ -194,7 +194,7 @@ BEGIN
               exercise_record->>'category',
               COALESCE(
                 CASE 
-                  WHEN exercise_record->'muscleGroups' IS NOT NULL AND exercise_record->'muscleGroups' != 'null'::JSON
+                  WHEN exercise_record->'muscleGroups' IS NOT NULL AND exercise_record->'muscleGroups' IS DISTINCT FROM 'null'::JSON
                   THEN (exercise_record->'muscleGroups')::TEXT[]
                   ELSE ARRAY[]::TEXT[]
                 END,
