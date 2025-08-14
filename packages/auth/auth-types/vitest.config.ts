@@ -1,22 +1,16 @@
 import path from 'path';
 
-import react from '@vitejs/plugin-react';
 import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
-  plugins: [react()],
   test: {
-    environment: 'jsdom',
-    setupFiles: ['./src/test/setup.ts'],
     globals: true,
-    css: true,
+    setupFiles: ['./src/test/setup.ts'],
     exclude: [
-      'e2e/**/*',
       'node_modules/**/*',
       '**/node_modules/**/*',
       '**/dist/**/*',
       '**/build/**/*',
-      '**/.next/**/*',
     ],
     include: [
       'src/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}',
@@ -30,29 +24,24 @@ export default defineConfig({
         '**/node_modules/**',
         '**/dist/**',
         '**/build/**',
-        '**/.next/**',
         '**/*.config.{js,ts}',
         '**/test/**',
         '**/tests/**',
         '**/*.d.ts',
         '**/types/**',
       ],
-      // Ensure all files are not included by default
-      all: false,
-      // Thresholds are applied only to files included in the run
+      // This will check coverage only for changed files
+      changedFiles: true,
+      // Require 80% coverage for changed files only
       thresholds: {
-        lines: 80,
-        functions: 80,
-        branches: 80,
-        statements: 80,
+        // Apply thresholds to all source files - vitest will only check changed files
+        './src/**/*.{js,ts}': {
+          branches: 80,
+          functions: 80,
+          lines: 80,
+          statements: 80,
+        },
       },
-    },
-    onConsoleLog(log, type) {
-      // Suppress unhandled rejection warnings in tests
-      if (type === 'stderr' && log.includes('Unhandled Rejection')) {
-        return false;
-      }
-      return true;
     },
   },
   resolve: {

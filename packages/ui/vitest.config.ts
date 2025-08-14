@@ -11,12 +11,12 @@ export default defineConfig({
     globals: true,
     css: true,
     exclude: [
-      'e2e/**/*',
       'node_modules/**/*',
       '**/node_modules/**/*',
       '**/dist/**/*',
       '**/build/**/*',
-      '**/.next/**/*',
+      '**/.storybook/**/*',
+      '**/*.stories.{js,jsx,ts,tsx}',
     ],
     include: [
       'src/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}',
@@ -30,12 +30,13 @@ export default defineConfig({
         '**/node_modules/**',
         '**/dist/**',
         '**/build/**',
-        '**/.next/**',
         '**/*.config.{js,ts}',
         '**/test/**',
         '**/tests/**',
         '**/*.d.ts',
         '**/types/**',
+        '**/.storybook/**',
+        '**/*.stories.{js,jsx,ts,tsx}',
       ],
       // Ensure all files are not included by default
       all: false,
@@ -46,13 +47,6 @@ export default defineConfig({
         branches: 80,
         statements: 80,
       },
-    },
-    onConsoleLog(log, type) {
-      // Suppress unhandled rejection warnings in tests
-      if (type === 'stderr' && log.includes('Unhandled Rejection')) {
-        return false;
-      }
-      return true;
     },
   },
   resolve: {

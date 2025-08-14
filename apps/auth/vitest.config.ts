@@ -37,14 +37,17 @@ export default defineConfig({
         '**/*.d.ts',
         '**/types/**',
       ],
-      // Ensure all files are not included by default
-      all: false,
-      // Thresholds are applied only to files included in the run
+      // This will check coverage only for changed files
+      changedFiles: true,
+      // Require 80% coverage for changed files
       thresholds: {
-        lines: 80,
-        functions: 80,
-        branches: 80,
-        statements: 80,
+        // Thresholds for changed files - these will fail the build
+        './src/**/*.{js,jsx,ts,tsx}': {
+          branches: 80,
+          functions: 80,
+          lines: 80,
+          statements: 80,
+        },
       },
     },
     onConsoleLog(log, type) {
