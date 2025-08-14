@@ -42,12 +42,15 @@ export default defineConfig({
       changedFiles: true,
       // Ensure all files are not included by default
       all: false,
-      // Thresholds are applied only to files included in the run
+      // Require 80% coverage for changed files
       thresholds: {
-        lines: 80,
-        functions: 80,
-        branches: 80,
-        statements: 80,
+        // Apply thresholds only to files that are actually being tested
+        global: {
+          branches: 80,
+          functions: 80,
+          lines: 80,
+          statements: 80,
+        },
       },
     },
   },

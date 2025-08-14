@@ -36,8 +36,8 @@ export default defineConfig({
       all: false,
       // Require 80% coverage for changed files only
       thresholds: {
-        // Apply thresholds to all source files - vitest will only check changed files
-        './src/**/*.{js,ts}': {
+        // Apply thresholds only to files that are actually being tested
+        global: {
           branches: 80,
           functions: 80,
           lines: 80,

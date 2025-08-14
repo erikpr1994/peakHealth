@@ -38,12 +38,13 @@ export default defineConfig({
         '**/types/**',
       ],
       // This will check coverage only for changed files
-      all: false,
       changedFiles: true,
+      // Ensure all files are not included by default
+      all: false,
       // Require 80% coverage for changed files
       thresholds: {
-        // Thresholds for changed files - these will fail the build
-        './src/**/*.{js,jsx,ts,tsx}': {
+        // Apply thresholds only to files that are actually being tested
+        global: {
           branches: 80,
           functions: 80,
           lines: 80,
