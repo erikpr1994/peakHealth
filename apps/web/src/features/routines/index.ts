@@ -3,7 +3,6 @@ export {
   RoutineCreation,
   RoutineHeader,
   RoutineDetailsForm,
-  RoutineModals,
   StrengthWorkoutsSection,
   RunningWorkoutsSection,
 } from './features/routine-creation';

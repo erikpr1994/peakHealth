@@ -1,0 +1,48 @@
+---
+alwaysApply: true
+---
+
+# Files
+
+<!-- markdownlint-configure-file {"MD029": {"style": "ordered"}} -->
+
+1. Keep files small
+   - Non-test, non-config, non-rules files should be under 300 lines.
+   - 200–300 lines is a refactor signal: extract components, hooks, utils, or types.
+
+2. Split by responsibility
+   - UI into smaller components (co-locate in `components/`).
+   - State logic into `hooks/` or `context/`.
+   - Pure logic into `utils/` and shared shapes into `types/`.
+
+3. Place by feature
+   - Co-locate everything under `features/<feature_name>/...` (components, hooks, context, tests, types).
+
+4. Naming and file types
+   - React components: `PascalCase.tsx` (one primary component per file).
+   - Hooks/utils: `camelCase.ts`.
+   - Styles: `ComponentName.module.css` next to the component.
+
+5. Styles
+   - Use CSS Modules only; no utility CSS frameworks.
+   - In `packages/ui`, only `design-system.css` is exported; do not export other CSS from `dist`.
+
+6. Exports
+   - Prefer named exports for shared modules; avoid large default-export barrels.
+   - Keep `index.ts` barrels minimal and stable (feature-level public API only).
+
+7. Imports
+   - Prefer path aliases (e.g., `@/`) over deep relative chains.
+   - Do not import from another feature’s internals; depend on its public barrel if needed.
+
+8. Tests
+   - Co-locate as `*.test.ts(x)` next to the file.
+   - Keep tests focused; split oversized specs rather than exceeding several hundred lines.
+
+9. Route files and pages
+   - Keep route/page files thin; move logic/UI into feature components and hooks.
+
+10. Housekeeping
+
+- Remove dead files promptly.
+- Avoid committing generated or `dist` artifacts (except designated exports).

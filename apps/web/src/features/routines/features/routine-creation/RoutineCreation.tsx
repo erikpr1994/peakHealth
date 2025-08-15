@@ -18,14 +18,27 @@ import RoutineHeader from './components/RoutineHeader';
 import RoutineDetailsForm from './components/RoutineDetailsForm';
 import StrengthWorkoutsSection from './components/StrengthWorkoutsSection';
 import RunningWorkoutsSection from './components/RunningWorkoutsSection';
-import RoutineModals from './components/RoutineModals';
+import dynamic from 'next/dynamic';
+
+const RoutineExerciseSelectionModal = dynamic(
+  () => import('./components/ExerciseSelectionModal'),
+  { ssr: false }
+);
+
+const RoutineNotesModal = dynamic(() => import('./components/NotesModal'), {
+  ssr: false,
+});
 import { useWorkoutOperations } from '../../hooks/useWorkoutOperations';
 import { addApproachSets } from '../../utils/workoutCalculations';
-import { ProgressionMethod } from '../../types';
 import {
   RoutineDetailsProvider,
   useRoutineDetailsContext,
 } from './context/RoutineDetailsContext';
+import {
+  ExerciseSelectionProvider,
+  useExerciseSelectionContext,
+} from './context/ExerciseSelectionContext';
+import { NotesProvider, useNotesContext } from './context/NotesContext';
 
 interface RoutineCreationProps {
   editRoutineId?: string;
@@ -47,22 +60,6 @@ const RoutineCreationContent = ({
     duration,
     updateRoutineDetails,
   } = useRoutineDetailsContext();
-
-  // Modal states
-  const [exerciseModalOpen, setExerciseModalOpen] = useState(false);
-  const [notesModalOpen, setNotesModalOpen] = useState(false);
-  const [currentAddExerciseContext, setCurrentAddExerciseContext] = useState<{
-    workoutId: string;
-    sectionId: string;
-  } | null>(null);
-  const [currentNotesContext, setCurrentNotesContext] = useState<{
-    type: 'exercise' | 'set';
-    workoutId: string;
-    sectionId: string;
-    exerciseId: string;
-    setId?: string;
-    currentNotes: string;
-  } | null>(null);
 
   // Running workout creation/editing states
   const [creatingRunning, setCreatingRunning] = useState(false);
@@ -253,65 +250,17 @@ const RoutineCreationContent = ({
   };
 
   // Exercise selection handlers
+  const { openExerciseModal } = useExerciseSelectionContext();
+
   const handleAddExerciseClick = (
     workoutId: string,
     sectionId: string
   ): void => {
-    setCurrentAddExerciseContext({ workoutId, sectionId });
-    setExerciseModalOpen(true);
+    openExerciseModal(workoutId, sectionId);
   };
 
-  const handleExerciseSelect = (
-    selectedExercise: {
-      id: string;
-      name: string;
-      category?: string;
-      muscleGroups?: string[];
-    },
-    selectedVariant?: {
-      id: string;
-      name: string;
-      muscleGroups: string[];
-      difficulty: string;
-      equipment: string[];
-      instructions: string[];
-    }
-  ): void => {
-    if (!currentAddExerciseContext) return;
-
-    const { workoutId, sectionId } = currentAddExerciseContext;
-    const isStrength = strengthWorkouts.some(w => w.id === workoutId);
-
-    // Use variant data if available, otherwise fall back to exercise data
-    const exerciseData = selectedVariant || selectedExercise;
-
-    const newExercise = {
-      id: `exercise-${Date.now()}`,
-      name: exerciseData.name,
-      category: selectedExercise.category,
-      muscleGroups: exerciseData.muscleGroups,
-      equipment: selectedVariant?.equipment || [],
-      exerciseId: selectedExercise.id,
-      variantId: selectedVariant?.id,
-      sets: [],
-      restTimer: '90s',
-      restAfter: '2 min',
-      notes: '',
-      progressionMethod: isStrength
-        ? ('linear' as ProgressionMethod)
-        : undefined,
-      hasApproachSets: false,
-    };
-
-    if (isStrength) {
-      addStrengthExercise(workoutId, sectionId, newExercise);
-    } else {
-      addRunningExercise(workoutId, sectionId, newExercise);
-    }
-
-    setExerciseModalOpen(false);
-    setCurrentAddExerciseContext(null);
-  };
+  // Notes handlers
+  const { openNotesModal } = useNotesContext();
 
   const handleNotesClick = (
     type: 'exercise' | 'set',
@@ -320,146 +269,7 @@ const RoutineCreationContent = ({
     exerciseId: string,
     setId?: string
   ): void => {
-    const isStrength = strengthWorkouts.some(w => w.id === workoutId);
-    const workouts = isStrength ? strengthWorkouts : runningWorkouts;
-    const workout = workouts.find(w => w.id === workoutId);
-    const section = workout?.sections.find(s => s.id === sectionId);
-    const exercise = section?.exercises.find(e => e.id === exerciseId);
-
-    if (!exercise) return;
-
-    let currentNotes = '';
-    if (type === 'exercise') {
-      currentNotes = exercise.notes;
-    } else if (type === 'set' && setId) {
-      const set = exercise.sets.find(s => s.id === setId);
-      currentNotes = set?.notes || '';
-    }
-
-    setCurrentNotesContext({
-      type,
-      workoutId,
-      sectionId,
-      exerciseId,
-      setId,
-      currentNotes,
-    });
-    setNotesModalOpen(true);
-  };
-
-  const handleNotesSave = (notes: string): void => {
-    if (!currentNotesContext) return;
-
-    const { type, workoutId, sectionId, exerciseId, setId } =
-      currentNotesContext;
-    const isStrength = strengthWorkouts.some(w => w.id === workoutId);
-
-    if (type === 'exercise') {
-      if (isStrength) {
-        setStrengthWorkouts(prev =>
-          prev.map(workout =>
-            workout.id === workoutId
-              ? {
-                  ...workout,
-                  sections: workout.sections.map(section =>
-                    section.id === sectionId
-                      ? {
-                          ...section,
-                          exercises: section.exercises.map(exercise =>
-                            exercise.id === exerciseId
-                              ? { ...exercise, notes }
-                              : exercise
-                          ),
-                        }
-                      : section
-                  ),
-                }
-              : workout
-          )
-        );
-      } else {
-        setRunningWorkouts(prev =>
-          prev.map(workout =>
-            workout.id === workoutId
-              ? {
-                  ...workout,
-                  sections: workout.sections.map(section =>
-                    section.id === sectionId
-                      ? {
-                          ...section,
-                          exercises: section.exercises.map(exercise =>
-                            exercise.id === exerciseId
-                              ? { ...exercise, notes }
-                              : exercise
-                          ),
-                        }
-                      : section
-                  ),
-                }
-              : workout
-          )
-        );
-      }
-    } else if (type === 'set' && setId) {
-      if (isStrength) {
-        setStrengthWorkouts(prev =>
-          prev.map(workout =>
-            workout.id === workoutId
-              ? {
-                  ...workout,
-                  sections: workout.sections.map(section =>
-                    section.id === sectionId
-                      ? {
-                          ...section,
-                          exercises: section.exercises.map(exercise =>
-                            exercise.id === exerciseId
-                              ? {
-                                  ...exercise,
-                                  sets: exercise.sets.map(set =>
-                                    set.id === setId ? { ...set, notes } : set
-                                  ),
-                                }
-                              : exercise
-                          ),
-                        }
-                      : section
-                  ),
-                }
-              : workout
-          )
-        );
-      } else {
-        setRunningWorkouts(prev =>
-          prev.map(workout =>
-            workout.id === workoutId
-              ? {
-                  ...workout,
-                  sections: workout.sections.map(section =>
-                    section.id === sectionId
-                      ? {
-                          ...section,
-                          exercises: section.exercises.map(exercise =>
-                            exercise.id === exerciseId
-                              ? {
-                                  ...exercise,
-                                  sets: exercise.sets.map(set =>
-                                    set.id === setId ? { ...set, notes } : set
-                                  ),
-                                }
-                              : exercise
-                          ),
-                        }
-                      : section
-                  ),
-                }
-              : workout
-          )
-        );
-      }
-    }
-
-    setNotesModalOpen(false);
-    setCurrentNotesContext(null);
+    openNotesModal(type, workoutId, sectionId, exerciseId, setId);
   };
 
   const handleAddApproachSets = (
@@ -689,89 +499,90 @@ const RoutineCreationContent = ({
   };
 
   return (
-    <div className="w-full px-4 sm:px-6 lg:px-8 py-6">
-      <RoutineHeader mode={mode} onSave={handleSaveRoutine} />
-
-      <RoutineDetailsForm />
-
-      <StrengthWorkoutsSection
+    <ExerciseSelectionProvider
+      strengthWorkouts={strengthWorkouts}
+      runningWorkouts={runningWorkouts}
+      addStrengthExercise={addStrengthExercise}
+      addRunningExercise={addRunningExercise}
+    >
+      <NotesProvider
         strengthWorkouts={strengthWorkouts}
-        collapsedStrengthWorkouts={collapsedStrengthWorkouts}
-        onAddStrengthWorkout={addStrengthWorkout}
-        onToggleCollapse={toggleStrengthWorkoutCollapse}
-        onMoveUp={workoutId => moveStrengthWorkout(workoutId, 'up')}
-        onMoveDown={workoutId => moveStrengthWorkout(workoutId, 'down')}
-        onRemove={removeStrengthWorkout}
-        onUpdateName={updateStrengthWorkoutName}
-        onUpdateObjective={updateStrengthWorkoutObjective}
-        onUpdateSchedule={updateStrengthWorkoutSchedule}
-        onAddSection={addStrengthSection}
-        onUpdateSectionName={updateStrengthSectionName}
-        onUpdateSectionType={updateStrengthSectionType}
-        onUpdateSectionRestAfter={updateStrengthSectionRestAfter}
-        onUpdateSectionEmomDuration={updateStrengthSectionEmomDuration}
-        onRemoveSection={removeStrengthSection}
-        onAddExercise={handleAddExerciseClick}
-        onUpdateExerciseEmomReps={updateStrengthExerciseEmomReps}
-        onUpdateExerciseSets={updateStrengthExerciseSets}
-        onUpdateExerciseName={updateStrengthExerciseName}
-        onUpdateRestTimer={updateStrengthRestTimer}
-        onUpdateExerciseRestAfter={updateStrengthExerciseRestAfter}
-        onRemoveExercise={removeStrengthExercise}
-        onAddApproachSets={handleAddApproachSets}
-        onUpdateProgressionMethod={updateStrengthExerciseProgressionMethod}
-        onNotesClick={handleNotesClick}
-      />
-
-      <RunningWorkoutsSection
         runningWorkouts={runningWorkouts}
-        collapsedRunningWorkouts={collapsedRunningWorkouts}
-        creatingRunning={creatingRunning}
-        editingRunning={editingRunning}
-        onAddRunningWorkout={handleAddRunningWorkout}
-        onRunningSave={handleRunningSave}
-        onRunningCancel={handleRunningCancel}
-        onEditRunning={handleEditRunning}
-        onToggleCollapse={toggleRunningWorkoutCollapse}
-        onMoveUp={workoutId => moveRunningWorkout(workoutId, 'up')}
-        onMoveDown={workoutId => moveRunningWorkout(workoutId, 'down')}
-        onRemove={removeRunningWorkout}
-        onUpdateName={updateRunningWorkoutName}
-        onUpdateObjective={updateRunningWorkoutObjective}
-        onUpdateSchedule={updateRunningWorkoutSchedule}
-        onAddSection={addRunningSection}
-        onUpdateSectionName={updateRunningSectionName}
-        onUpdateSectionType={updateRunningSectionType}
-        onUpdateSectionRestAfter={updateRunningSectionRestAfter}
-        onUpdateSectionEmomDuration={updateRunningSectionEmomDuration}
-        onRemoveSection={removeRunningSection}
-        onAddExercise={handleAddExerciseClick}
-        onUpdateExerciseEmomReps={updateRunningExerciseEmomReps}
-        onUpdateExerciseSets={updateRunningExerciseSets}
-        onUpdateExerciseName={updateRunningExerciseName}
-        onUpdateRestTimer={updateRunningRestTimer}
-        onUpdateExerciseRestAfter={updateRunningExerciseRestAfter}
-        onRemoveExercise={removeRunningExercise}
-        onAddApproachSets={handleAddApproachSets}
-        onNotesClick={handleNotesClick}
-      />
+        setStrengthWorkouts={setStrengthWorkouts}
+        setRunningWorkouts={setRunningWorkouts}
+      >
+        <div className="w-full px-4 sm:px-6 lg:px-8 py-6">
+          <RoutineHeader mode={mode} onSave={handleSaveRoutine} />
 
-      <RoutineModals
-        exerciseModalOpen={exerciseModalOpen}
-        notesModalOpen={notesModalOpen}
-        currentNotesContext={currentNotesContext}
-        onExerciseModalClose={() => {
-          setExerciseModalOpen(false);
-          setCurrentAddExerciseContext(null);
-        }}
-        onNotesModalClose={() => {
-          setNotesModalOpen(false);
-          setCurrentNotesContext(null);
-        }}
-        onExerciseSelect={handleExerciseSelect}
-        onNotesSave={handleNotesSave}
-      />
-    </div>
+          <RoutineDetailsForm />
+
+          <StrengthWorkoutsSection
+            strengthWorkouts={strengthWorkouts}
+            collapsedStrengthWorkouts={collapsedStrengthWorkouts}
+            onAddStrengthWorkout={addStrengthWorkout}
+            onToggleCollapse={toggleStrengthWorkoutCollapse}
+            onMoveUp={workoutId => moveStrengthWorkout(workoutId, 'up')}
+            onMoveDown={workoutId => moveStrengthWorkout(workoutId, 'down')}
+            onRemove={removeStrengthWorkout}
+            onUpdateName={updateStrengthWorkoutName}
+            onUpdateObjective={updateStrengthWorkoutObjective}
+            onUpdateSchedule={updateStrengthWorkoutSchedule}
+            onAddSection={addStrengthSection}
+            onUpdateSectionName={updateStrengthSectionName}
+            onUpdateSectionType={updateStrengthSectionType}
+            onUpdateSectionRestAfter={updateStrengthSectionRestAfter}
+            onUpdateSectionEmomDuration={updateStrengthSectionEmomDuration}
+            onRemoveSection={removeStrengthSection}
+            onAddExercise={handleAddExerciseClick}
+            onUpdateExerciseEmomReps={updateStrengthExerciseEmomReps}
+            onUpdateExerciseSets={updateStrengthExerciseSets}
+            onUpdateExerciseName={updateStrengthExerciseName}
+            onUpdateRestTimer={updateStrengthRestTimer}
+            onUpdateExerciseRestAfter={updateStrengthExerciseRestAfter}
+            onRemoveExercise={removeStrengthExercise}
+            onAddApproachSets={handleAddApproachSets}
+            onUpdateProgressionMethod={updateStrengthExerciseProgressionMethod}
+            onNotesClick={handleNotesClick}
+          />
+
+          <RunningWorkoutsSection
+            runningWorkouts={runningWorkouts}
+            collapsedRunningWorkouts={collapsedRunningWorkouts}
+            creatingRunning={creatingRunning}
+            editingRunning={editingRunning}
+            onAddRunningWorkout={handleAddRunningWorkout}
+            onRunningSave={handleRunningSave}
+            onRunningCancel={handleRunningCancel}
+            onEditRunning={handleEditRunning}
+            onToggleCollapse={toggleRunningWorkoutCollapse}
+            onMoveUp={workoutId => moveRunningWorkout(workoutId, 'up')}
+            onMoveDown={workoutId => moveRunningWorkout(workoutId, 'down')}
+            onRemove={removeRunningWorkout}
+            onUpdateName={updateRunningWorkoutName}
+            onUpdateObjective={updateRunningWorkoutObjective}
+            onUpdateSchedule={updateRunningWorkoutSchedule}
+            onAddSection={addRunningSection}
+            onUpdateSectionName={updateRunningSectionName}
+            onUpdateSectionType={updateRunningSectionType}
+            onUpdateSectionRestAfter={updateRunningSectionRestAfter}
+            onUpdateSectionEmomDuration={updateRunningSectionEmomDuration}
+            onRemoveSection={removeRunningSection}
+            onAddExercise={handleAddExerciseClick}
+            onUpdateExerciseEmomReps={updateRunningExerciseEmomReps}
+            onUpdateExerciseSets={updateRunningExerciseSets}
+            onUpdateExerciseName={updateRunningExerciseName}
+            onUpdateRestTimer={updateRunningRestTimer}
+            onUpdateExerciseRestAfter={updateRunningExerciseRestAfter}
+            onRemoveExercise={removeRunningExercise}
+            onAddApproachSets={handleAddApproachSets}
+            onNotesClick={handleNotesClick}
+          />
+
+          <RoutineExerciseSelectionModal />
+          <RoutineNotesModal />
+        </div>
+      </NotesProvider>
+    </ExerciseSelectionProvider>
   );
 };
 
