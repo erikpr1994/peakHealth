@@ -13,7 +13,7 @@ alwaysApply: true
 2. Split by responsibility
    - UI into smaller components (co-locate in `components/`).
    - State logic into `hooks/` or `context/`.
-   - Pure logic into `utils/` and shared shapes into `types/`.
+   - Domain pure logic under `features/<feature>/domain/` (or `mappers/`, `formatters/`, `validators/`, `calculations/`). Reserve `utils/` only for generic, cross-cutting helpers. Shared shapes go in `types/`.
 
 3. Place by feature
    - Co-locate everything under `features/<feature_name>/...` (components, hooks, context, tests, types).
@@ -22,6 +22,7 @@ alwaysApply: true
    - React components: `PascalCase.tsx` (one primary component per file).
    - Hooks/utils: `camelCase.ts`.
    - Styles: `ComponentName.module.css` next to the component.
+   - Avoid generic catch-all files like `helpers.ts` or `utils.ts`; use intent-revealing names (e.g., `computeWorkoutVolume.ts`).
 
 5. Styles
    - Use CSS Modules only; no utility CSS frameworks.
@@ -46,3 +47,14 @@ alwaysApply: true
 
 - Remove dead files promptly.
 - Avoid committing generated or `dist` artifacts (except designated exports).
+
+11. UI components and design system
+
+- Make UI components as generic as possible. If a component has reuse potential (e.g., buttons, labels, inputs, modals, toasts), create it in the `@ui/` package.
+- Keep app-level components feature-specific. When a pattern becomes generic, promote it to `@ui/`.
+- Components in `@ui/` should import their own CSS internally; only `design-system.css` is exported from the package.
+
+12. Types organization
+
+- Keep type files small; prefer splitting into multiple files inside `types/` by domain or entity (e.g., `routine.ts`, `exercise.ts`).
+- Use named exports and avoid a single catch-all `types.ts`.
