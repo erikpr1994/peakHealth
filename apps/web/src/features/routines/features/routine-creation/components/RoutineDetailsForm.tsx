@@ -12,36 +12,24 @@ import {
 } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
 import ObjectivesInput from './ObjectivesInput';
+import { useRoutineDetailsContext } from '../context/RoutineDetailsContext';
 
-interface RoutineDetailsFormProps {
-  name: string;
-  difficulty: string;
-  goal: string;
-  description: string;
-  objectives: string[];
-  duration: number;
-  onNameChange: (name: string) => void;
-  onDifficultyChange: (difficulty: string) => void;
-  onGoalChange: (goal: string) => void;
-  onDescriptionChange: (description: string) => void;
-  onObjectivesChange: (objectives: string[]) => void;
-  onDurationChange: (duration: number) => void;
-}
+const RoutineDetailsForm = (): React.ReactElement => {
+  const {
+    name,
+    difficulty,
+    goal,
+    description,
+    objectives,
+    duration,
+    setName,
+    setDifficulty,
+    setGoal,
+    setDescription,
+    setObjectives,
+    setDuration,
+  } = useRoutineDetailsContext();
 
-const RoutineDetailsForm = ({
-  name,
-  difficulty,
-  goal,
-  description,
-  objectives,
-  duration,
-  onNameChange,
-  onDifficultyChange,
-  onGoalChange,
-  onDescriptionChange,
-  onObjectivesChange,
-  onDurationChange,
-}: RoutineDetailsFormProps): React.ReactElement => {
   return (
     <Card className="mb-8">
       <div className="p-6 space-y-6">
@@ -55,7 +43,7 @@ const RoutineDetailsForm = ({
             <Input
               id="name"
               value={name}
-              onChange={e => onNameChange(e.target.value)}
+              onChange={e => setName(e.target.value)}
               placeholder="Enter routine name..."
             />
           </div>
@@ -63,7 +51,7 @@ const RoutineDetailsForm = ({
             <Label htmlFor="difficulty" className="block mb-2">
               Difficulty
             </Label>
-            <Select value={difficulty} onValueChange={onDifficultyChange}>
+            <Select value={difficulty} onValueChange={setDifficulty}>
               <SelectTrigger>
                 <SelectValue />
               </SelectTrigger>
@@ -78,7 +66,7 @@ const RoutineDetailsForm = ({
             <Label htmlFor="goal" className="block mb-2">
               Goal
             </Label>
-            <Select value={goal} onValueChange={onGoalChange}>
+            <Select value={goal} onValueChange={setGoal}>
               <SelectTrigger>
                 <SelectValue />
               </SelectTrigger>
@@ -100,7 +88,7 @@ const RoutineDetailsForm = ({
               min="1"
               max="52"
               value={duration}
-              onChange={e => onDurationChange(Number(e.target.value))}
+              onChange={e => setDuration(Number(e.target.value))}
               placeholder="12"
             />
           </div>
@@ -113,7 +101,7 @@ const RoutineDetailsForm = ({
           <Textarea
             id="description"
             value={description}
-            onChange={e => onDescriptionChange(e.target.value)}
+            onChange={e => setDescription(e.target.value)}
             placeholder="Describe your routine..."
             rows={3}
           />
@@ -122,7 +110,7 @@ const RoutineDetailsForm = ({
         <ObjectivesInput
           label="Training Objectives"
           objectives={objectives}
-          onChange={onObjectivesChange}
+          onChange={setObjectives}
           placeholder="What are the main goals and focus areas of this routine?"
         />
       </div>

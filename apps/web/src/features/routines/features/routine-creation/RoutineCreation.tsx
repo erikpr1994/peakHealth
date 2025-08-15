@@ -22,26 +22,31 @@ import RoutineModals from './components/RoutineModals';
 import { useWorkoutOperations } from '../../hooks/useWorkoutOperations';
 import { addApproachSets } from '../../utils/workoutCalculations';
 import { ProgressionMethod } from '../../types';
+import {
+  RoutineDetailsProvider,
+  useRoutineDetailsContext,
+} from './context/RoutineDetailsContext';
 
 interface RoutineCreationProps {
   editRoutineId?: string;
   mode?: 'create' | 'edit';
 }
 
-const RoutineCreation = ({
+const RoutineCreationContent = ({
   editRoutineId,
   mode = 'create',
 }: RoutineCreationProps): React.ReactElement => {
   const router = useRouter();
   const { isAuthenticated, user } = useAuth();
-
-  // Routine metadata state
-  const [name, setName] = useState('');
-  const [difficulty, setDifficulty] = useState('Beginner');
-  const [goal, setGoal] = useState('Strength');
-  const [description, setDescription] = useState('');
-  const [objectives, setObjectives] = useState<string[]>([]);
-  const [duration, setDuration] = useState(12); // Default 12 weeks (3 months)
+  const {
+    name,
+    difficulty,
+    goal,
+    description,
+    objectives,
+    duration,
+    updateRoutineDetails,
+  } = useRoutineDetailsContext();
 
   // Modal states
   const [exerciseModalOpen, setExerciseModalOpen] = useState(false);
@@ -128,12 +133,14 @@ const RoutineCreation = ({
           const data = await routineService.getRoutineById(editRoutineId);
 
           // Set routine metadata
-          setName(data.routine.name);
-          setDifficulty(data.routine.difficulty);
-          setGoal(data.routine.goal);
-          setDescription(data.routine.description);
-          setObjectives(data.routine.objectives || []);
-          setDuration(data.routine.duration || 12);
+          updateRoutineDetails({
+            name: data.routine.name,
+            difficulty: data.routine.difficulty,
+            goal: data.routine.goal,
+            description: data.routine.description,
+            objectives: data.routine.objectives || [],
+            duration: data.routine.duration || 12,
+          });
 
           // Transform and load workouts data using safe transformation
           if (data.workouts) {
@@ -164,7 +171,13 @@ const RoutineCreation = ({
     };
 
     loadRoutineForEditing();
-  }, [editRoutineId, mode, setStrengthWorkouts, setRunningWorkouts]);
+  }, [
+    editRoutineId,
+    mode,
+    setStrengthWorkouts,
+    setRunningWorkouts,
+    updateRoutineDetails,
+  ]);
 
   const toggleStrengthWorkoutCollapse = (workoutId: string): void => {
     setCollapsedStrengthWorkouts(prev => {
@@ -679,20 +692,7 @@ const RoutineCreation = ({
     <div className="w-full px-4 sm:px-6 lg:px-8 py-6">
       <RoutineHeader mode={mode} onSave={handleSaveRoutine} />
 
-      <RoutineDetailsForm
-        name={name}
-        difficulty={difficulty}
-        goal={goal}
-        description={description}
-        objectives={objectives}
-        duration={duration}
-        onNameChange={setName}
-        onDifficultyChange={setDifficulty}
-        onGoalChange={setGoal}
-        onDescriptionChange={setDescription}
-        onObjectivesChange={setObjectives}
-        onDurationChange={setDuration}
-      />
+      <RoutineDetailsForm />
 
       <StrengthWorkoutsSection
         strengthWorkouts={strengthWorkouts}
@@ -772,6 +772,17 @@ const RoutineCreation = ({
         onNotesSave={handleNotesSave}
       />
     </div>
+  );
+};
+
+const RoutineCreation = ({
+  editRoutineId,
+  mode = 'create',
+}: RoutineCreationProps): React.ReactElement => {
+  return (
+    <RoutineDetailsProvider>
+      <RoutineCreationContent editRoutineId={editRoutineId} mode={mode} />
+    </RoutineDetailsProvider>
   );
 };
 
