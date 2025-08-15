@@ -519,30 +519,35 @@ const RoutineCreationContent = ({
           <StrengthWorkoutsSection
             strengthWorkouts={strengthWorkouts}
             collapsedStrengthWorkouts={collapsedStrengthWorkouts}
-            onAddStrengthWorkout={addStrengthWorkout}
-            onToggleCollapse={toggleStrengthWorkoutCollapse}
-            onMoveUp={workoutId => moveStrengthWorkout(workoutId, 'up')}
-            onMoveDown={workoutId => moveStrengthWorkout(workoutId, 'down')}
-            onRemove={removeStrengthWorkout}
-            onUpdateName={updateStrengthWorkoutName}
-            onUpdateObjective={updateStrengthWorkoutObjective}
-            onUpdateSchedule={updateStrengthWorkoutSchedule}
-            onAddSection={addStrengthSection}
-            onUpdateSectionName={updateStrengthSectionName}
-            onUpdateSectionType={updateStrengthSectionType}
-            onUpdateSectionRestAfter={updateStrengthSectionRestAfter}
-            onUpdateSectionEmomDuration={updateStrengthSectionEmomDuration}
-            onRemoveSection={removeStrengthSection}
-            onAddExercise={handleAddExerciseClick}
-            onUpdateExerciseEmomReps={updateStrengthExerciseEmomReps}
-            onUpdateExerciseSets={updateStrengthExerciseSets}
-            onUpdateExerciseName={updateStrengthExerciseName}
-            onUpdateRestTimer={updateStrengthRestTimer}
-            onUpdateExerciseRestAfter={updateStrengthExerciseRestAfter}
-            onRemoveExercise={removeStrengthExercise}
-            onAddApproachSets={handleAddApproachSets}
-            onUpdateProgressionMethod={updateStrengthExerciseProgressionMethod}
-            onNotesClick={handleNotesClick}
+            operations={{
+              onAddStrengthWorkout: addStrengthWorkout,
+              onToggleCollapse: toggleStrengthWorkoutCollapse,
+              onMoveUp: (workoutId: string) =>
+                moveStrengthWorkout(workoutId, 'up'),
+              onMoveDown: (workoutId: string) =>
+                moveStrengthWorkout(workoutId, 'down'),
+              onRemove: removeStrengthWorkout,
+              onUpdateName: updateStrengthWorkoutName,
+              onUpdateObjective: updateStrengthWorkoutObjective,
+              onUpdateSchedule: updateStrengthWorkoutSchedule,
+              onAddSection: addStrengthSection,
+              onUpdateSectionName: updateStrengthSectionName,
+              onUpdateSectionType: updateStrengthSectionType,
+              onUpdateSectionRestAfter: updateStrengthSectionRestAfter,
+              onUpdateSectionEmomDuration: updateStrengthSectionEmomDuration,
+              onRemoveSection: removeStrengthSection,
+              onAddExercise: handleAddExerciseClick,
+              onUpdateExerciseEmomReps: updateStrengthExerciseEmomReps,
+              onUpdateExerciseSets: updateStrengthExerciseSets,
+              onUpdateExerciseName: updateStrengthExerciseName,
+              onUpdateRestTimer: updateStrengthRestTimer,
+              onUpdateExerciseRestAfter: updateStrengthExerciseRestAfter,
+              onRemoveExercise: removeStrengthExercise,
+              onAddApproachSets: handleAddApproachSets,
+              onUpdateProgressionMethod:
+                updateStrengthExerciseProgressionMethod,
+              onNotesClick: handleNotesClick,
+            }}
           />
 
           <RunningWorkoutsSection

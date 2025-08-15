@@ -1,18 +1,10 @@
 'use client';
 
-import { Dumbbell } from 'lucide-react';
-
-import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
-import {
-  StrengthWorkout,
-  WorkoutSet,
-  ProgressionMethod,
-} from '@/features/routines/types';
-import StrengthWorkoutCard from './StrengthWorkoutCard';
-import { StrengthWorkoutProvider } from '../context/StrengthWorkoutContext';
+import React, { createContext, useContext, ReactNode } from 'react';
+import { ProgressionMethod, WorkoutSet } from '../../../types';
 
 interface StrengthWorkoutOperations {
+  // Workout operations
   onAddStrengthWorkout: () => void;
   onToggleCollapse: (workoutId: string) => void;
   onMoveUp: (workoutId: string) => void;
@@ -25,6 +17,8 @@ interface StrengthWorkoutOperations {
     field: 'repeatPattern' | 'repeatValue' | 'selectedDays' | 'time',
     value: string | string[]
   ) => void;
+
+  // Section operations
   onAddSection: (workoutId: string) => void;
   onUpdateSectionName: (
     workoutId: string,
@@ -47,6 +41,8 @@ interface StrengthWorkoutOperations {
     duration: number
   ) => void;
   onRemoveSection: (workoutId: string, sectionId: string) => void;
+
+  // Exercise operations
   onAddExercise: (workoutId: string, sectionId: string) => void;
   onUpdateExerciseEmomReps: (
     workoutId: string,
@@ -103,65 +99,40 @@ interface StrengthWorkoutOperations {
   ) => void;
 }
 
-interface StrengthWorkoutsSectionProps {
-  strengthWorkouts: StrengthWorkout[];
-  collapsedStrengthWorkouts: Set<string>;
+interface StrengthWorkoutContextType {
   operations: StrengthWorkoutOperations;
 }
 
-const StrengthWorkoutsSection = ({
-  strengthWorkouts,
-  collapsedStrengthWorkouts,
+const StrengthWorkoutContext = createContext<
+  StrengthWorkoutContextType | undefined
+>(undefined);
+
+interface StrengthWorkoutProviderProps {
+  children: ReactNode;
+  operations: StrengthWorkoutOperations;
+}
+
+export const StrengthWorkoutProvider = ({
+  children,
   operations,
-}: StrengthWorkoutsSectionProps): React.ReactElement => {
+}: StrengthWorkoutProviderProps): React.ReactElement => {
+  const value: StrengthWorkoutContextType = {
+    operations,
+  };
+
   return (
-    <StrengthWorkoutProvider operations={operations}>
-      <div className="space-y-4">
-        <div className="flex items-center justify-between">
-          <h2 className="text-lg font-semibold text-gray-900">
-            Strength Workouts ({strengthWorkouts.length})
-          </h2>
-          <Button
-            onClick={operations.onAddStrengthWorkout}
-            className="bg-indigo-600 hover:bg-indigo-700"
-          >
-            <Dumbbell className="h-4 w-4 mr-2" />
-            Add Strength Workout
-          </Button>
-        </div>
-
-        {strengthWorkouts.map((workout, index) => (
-          <StrengthWorkoutCard
-            key={workout.id}
-            workout={workout}
-            index={index}
-            totalCount={strengthWorkouts.length}
-            isCollapsed={collapsedStrengthWorkouts.has(workout.id)}
-          />
-        ))}
-
-        {strengthWorkouts.length === 0 && (
-          <Card className="p-8 text-center">
-            <div className="flex flex-col items-center space-y-4">
-              <Dumbbell className="h-12 w-12 text-gray-400" />
-              <div>
-                <p className="text-gray-500 mb-4">
-                  No strength workouts added yet
-                </p>
-                <Button
-                  onClick={operations.onAddStrengthWorkout}
-                  className="bg-indigo-600 hover:bg-indigo-700"
-                >
-                  <Dumbbell className="h-4 w-4 mr-2" />
-                  Add Your First Strength Workout
-                </Button>
-              </div>
-            </div>
-          </Card>
-        )}
-      </div>
-    </StrengthWorkoutProvider>
+    <StrengthWorkoutContext.Provider value={value}>
+      {children}
+    </StrengthWorkoutContext.Provider>
   );
 };
 
-export default StrengthWorkoutsSection;
+export const useStrengthWorkoutContext = (): StrengthWorkoutContextType => {
+  const context = useContext(StrengthWorkoutContext);
+  if (context === undefined) {
+    throw new Error(
+      'useStrengthWorkoutContext must be used within a StrengthWorkoutProvider'
+    );
+  }
+  return context;
+};
