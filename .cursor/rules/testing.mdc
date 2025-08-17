@@ -1,9 +1,15 @@
+---
+description: When I need to write, organize, or structure tests for React components, hooks, utilities, or any other code in the application.
+globs:
+alwaysApply: false
+---
+
 # Testing
 
 ## Test Structure
 
 1. Use `test.step` with descriptive names for clear separation of steps in all tests
-2. Co-locate tests as `*.test.ts(x)` next to the file being tested
+2. **Co-locate tests as `*.test.ts(x)` next to the file being tested** - place test files in the same directory as the source file, not in separate `__tests__` folders
 3. Keep tests focused; split oversized specs rather than exceeding several hundred lines
 4. Use descriptive test names that explain the expected behavior
 

@@ -18,10 +18,13 @@ import RoutineHeader from './components/RoutineHeader';
 import RoutineDetailsForm from './components/RoutineDetailsForm';
 import StrengthWorkoutsSection from './components/StrengthWorkoutsSection';
 import RunningWorkoutsSection from './components/RunningWorkoutsSection';
-import RoutineModals from './components/RoutineModals';
 import { useWorkoutOperations } from '../../hooks/useWorkoutOperations';
 import { addApproachSets } from '../../utils/workoutCalculations';
 import { ProgressionMethod } from '../../types';
+import { useRoutineModals } from './hooks/useRoutineModals';
+import { NotesContext } from './types/modal';
+import ExerciseSelectionModal from '@/features/exercises/ExerciseSelectionModal';
+import NotesModal from '@/components/shared/NotesModal';
 
 interface RoutineCreationProps {
   editRoutineId?: string;
@@ -43,21 +46,9 @@ const RoutineCreation = ({
   const [objectives, setObjectives] = useState<string[]>([]);
   const [duration, setDuration] = useState(12); // Default 12 weeks (3 months)
 
-  // Modal states
-  const [exerciseModalOpen, setExerciseModalOpen] = useState(false);
-  const [notesModalOpen, setNotesModalOpen] = useState(false);
-  const [currentAddExerciseContext, setCurrentAddExerciseContext] = useState<{
-    workoutId: string;
-    sectionId: string;
-  } | null>(null);
-  const [currentNotesContext, setCurrentNotesContext] = useState<{
-    type: 'exercise' | 'set';
-    workoutId: string;
-    sectionId: string;
-    exerciseId: string;
-    setId?: string;
-    currentNotes: string;
-  } | null>(null);
+  // Modal state management
+  const { isModalOpen, openModal, closeModal, getModalContext } =
+    useRoutineModals();
 
   // Running workout creation/editing states
   const [creatingRunning, setCreatingRunning] = useState(false);
@@ -244,8 +235,7 @@ const RoutineCreation = ({
     workoutId: string,
     sectionId: string
   ): void => {
-    setCurrentAddExerciseContext({ workoutId, sectionId });
-    setExerciseModalOpen(true);
+    openModal('exercise', { workoutId, sectionId });
   };
 
   const handleExerciseSelect = (
@@ -264,9 +254,10 @@ const RoutineCreation = ({
       instructions: string[];
     }
   ): void => {
-    if (!currentAddExerciseContext) return;
+    const exerciseContext = getModalContext('exercise');
+    if (!exerciseContext) return;
 
-    const { workoutId, sectionId } = currentAddExerciseContext;
+    const { workoutId, sectionId } = exerciseContext;
     const isStrength = strengthWorkouts.some(w => w.id === workoutId);
 
     // Use variant data if available, otherwise fall back to exercise data
@@ -296,8 +287,7 @@ const RoutineCreation = ({
       addRunningExercise(workoutId, sectionId, newExercise);
     }
 
-    setExerciseModalOpen(false);
-    setCurrentAddExerciseContext(null);
+    closeModal();
   };
 
   const handleNotesClick = (
@@ -323,22 +313,22 @@ const RoutineCreation = ({
       currentNotes = set?.notes || '';
     }
 
-    setCurrentNotesContext({
+    const notesContext: NotesContext = {
       type,
       workoutId,
       sectionId,
       exerciseId,
       setId,
       currentNotes,
-    });
-    setNotesModalOpen(true);
+    };
+    openModal('notes', notesContext);
   };
 
   const handleNotesSave = (notes: string): void => {
-    if (!currentNotesContext) return;
+    const notesContext = getModalContext('notes');
+    if (!notesContext) return;
 
-    const { type, workoutId, sectionId, exerciseId, setId } =
-      currentNotesContext;
+    const { type, workoutId, sectionId, exerciseId, setId } = notesContext;
     const isStrength = strengthWorkouts.some(w => w.id === workoutId);
 
     if (type === 'exercise') {
@@ -445,8 +435,7 @@ const RoutineCreation = ({
       }
     }
 
-    setNotesModalOpen(false);
-    setCurrentNotesContext(null);
+    closeModal();
   };
 
   const handleAddApproachSets = (
@@ -756,20 +745,18 @@ const RoutineCreation = ({
         onNotesClick={handleNotesClick}
       />
 
-      <RoutineModals
-        exerciseModalOpen={exerciseModalOpen}
-        notesModalOpen={notesModalOpen}
-        currentNotesContext={currentNotesContext}
-        onExerciseModalClose={() => {
-          setExerciseModalOpen(false);
-          setCurrentAddExerciseContext(null);
-        }}
-        onNotesModalClose={() => {
-          setNotesModalOpen(false);
-          setCurrentNotesContext(null);
-        }}
-        onExerciseSelect={handleExerciseSelect}
-        onNotesSave={handleNotesSave}
+      {/* Modals */}
+      <ExerciseSelectionModal
+        isOpen={isModalOpen('exercise')}
+        onClose={closeModal}
+        onSelectExercise={handleExerciseSelect}
+      />
+
+      <NotesModal
+        isOpen={isModalOpen('notes')}
+        onClose={closeModal}
+        onSave={handleNotesSave}
+        initialNotes={getModalContext('notes')?.currentNotes || ''}
       />
     </div>
   );
