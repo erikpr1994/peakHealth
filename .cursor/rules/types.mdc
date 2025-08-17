@@ -1,0 +1,197 @@
+# Type Definitions and Data Structures
+
+## Type Organization
+
+1. **Split type definitions into small, separate files** inside `types/` by domain/entity (e.g., `routine.ts`, `exercise.ts`)
+2. **Use named exports** for all types; avoid a catch-all `types.ts` file
+3. **Keep type files small** - split into multiple files when they grow large
+4. **Co-locate types with features** when they're feature-specific
+
+## Type Naming Conventions
+
+1. **Use PascalCase** for type and interface names
+2. **Use descriptive names** that clearly indicate the purpose
+3. **Use suffixes appropriately**:
+   - `Props` for component props
+   - `State` for state types
+   - `Config` for configuration types
+   - `Event` for event types
+   - `Response` for API response types
+   - `Request` for API request types
+
+## Type Structure Examples
+
+```typescript
+// types/routine.ts
+export interface Routine {
+  id: string;
+  name: string;
+  description?: string;
+  difficulty: 'beginner' | 'intermediate' | 'advanced';
+  exercises: Exercise[];
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface RoutineCreateRequest {
+  name: string;
+  description?: string;
+  difficulty: Routine['difficulty'];
+  exerciseIds: string[];
+}
+
+export interface RoutineUpdateRequest extends Partial<RoutineCreateRequest> {
+  id: string;
+}
+
+export type RoutineListResponse = {
+  routines: Routine[];
+  totalCount: number;
+  page: number;
+  pageSize: number;
+};
+```
+
+```typescript
+// types/exercise.ts
+export interface Exercise {
+  id: string;
+  name: string;
+  description?: string;
+  category: ExerciseCategory;
+  equipment: Equipment[];
+  muscleGroups: MuscleGroup[];
+  instructions: string[];
+  videoUrl?: string;
+  imageUrl?: string;
+}
+
+export type ExerciseCategory =
+  | 'strength'
+  | 'cardio'
+  | 'flexibility'
+  | 'balance'
+  | 'sports';
+
+export type MuscleGroup =
+  | 'chest'
+  | 'back'
+  | 'shoulders'
+  | 'arms'
+  | 'legs'
+  | 'core'
+  | 'full-body';
+
+export interface Equipment {
+  id: string;
+  name: string;
+  category: 'free-weight' | 'machine' | 'bodyweight' | 'cardio';
+}
+```
+
+## Component Props Types
+
+```typescript
+// Component props should be co-located with the component
+interface ButtonProps {
+  variant?: 'primary' | 'secondary' | 'outline';
+  size?: 'small' | 'medium' | 'large';
+  children: React.ReactNode;
+  onClick?: () => void;
+  disabled?: boolean;
+  className?: string;
+}
+
+// Or in a separate types file for complex components
+// components/Button/types.ts
+export interface ButtonProps {
+  // ... props definition
+}
+```
+
+## API Types
+
+```typescript
+// types/api.ts
+export interface ApiResponse<T> {
+  data: T;
+  message?: string;
+  success: boolean;
+}
+
+export interface ApiError {
+  code: string;
+  message: string;
+  details?: Record<string, unknown>;
+}
+
+export interface PaginatedResponse<T> {
+  data: T[];
+  pagination: {
+    page: number;
+    pageSize: number;
+    totalCount: number;
+    totalPages: number;
+  };
+}
+```
+
+## State Types
+
+```typescript
+// hooks/useRoutines/types.ts
+export interface RoutinesState {
+  routines: Routine[];
+  loading: boolean;
+  error: string | null;
+  selectedRoutine: Routine | null;
+}
+
+export interface RoutinesActions {
+  fetchRoutines: () => Promise<void>;
+  createRoutine: (routine: RoutineCreateRequest) => Promise<void>;
+  updateRoutine: (routine: RoutineUpdateRequest) => Promise<void>;
+  deleteRoutine: (id: string) => Promise<void>;
+  selectRoutine: (routine: Routine | null) => void;
+}
+```
+
+## Best Practices
+
+1. **Use strict typing** - avoid `any` and `unknown` when possible
+2. **Use union types** for finite sets of values
+3. **Use intersection types** to combine multiple types
+4. **Use utility types** like `Partial<T>`, `Pick<T, K>`, `Omit<T, K>`
+5. **Use generics** for reusable type patterns
+6. **Document complex types** with JSDoc comments
+7. **Use branded types** for type safety when needed
+
+## Type Guards and Validation
+
+```typescript
+// Type guards for runtime type checking
+export function isRoutine(obj: unknown): obj is Routine {
+  return (
+    typeof obj === 'object' &&
+    obj !== null &&
+    'id' in obj &&
+    'name' in obj &&
+    'difficulty' in obj &&
+    'exercises' in obj
+  );
+}
+
+// Validation schemas (if using a validation library)
+export const routineSchema = z.object({
+  name: z.string().min(1).max(100),
+  description: z.string().optional(),
+  difficulty: z.enum(['beginner', 'intermediate', 'advanced']),
+  exerciseIds: z.array(z.string().uuid()),
+});
+```
+
+description:
+globs:
+alwaysApply: false
+
+---

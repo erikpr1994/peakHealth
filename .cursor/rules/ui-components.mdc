@@ -1,0 +1,132 @@
+# UI Components and Design System
+
+## Component Organization
+
+1. **Make UI components as generic as possible** - if a component has reuse potential (buttons, labels, inputs, modals, toasts), create it in the `@ui/` package
+2. **Keep app-level components feature-specific** - when a pattern becomes generic, promote it to `@ui/`
+3. **Components in `@ui/` should import their own CSS internally** - only `design-system.css` is exported from the package
+4. **CSS files in the dist directory should not be exported** - they should be used inside components
+
+## Component Structure
+
+1. **React components**: Use `PascalCase.tsx` (one primary component per file)
+2. **Styles**: Use `ComponentName.module.css` next to the component
+3. **Keep components small and focused** - extract smaller components when they exceed 200-300 lines
+4. **Use named exports** for shared modules; avoid large default-export barrels
+
+## Styling Guidelines
+
+1. **Always use CSS Modules** - no utility CSS frameworks like Tailwind
+2. **Use media queries for responsive styling** rather than modifying styles directly across all screen sizes
+3. **Apply mobile UI changes via media queries** rather than modifying default or desktop styles
+4. **Use Next/image component** instead of standard `<img>` tags when rendering images
+
+## Component Patterns
+
+```typescript
+// Example of a reusable UI component
+import styles from './Button.module.css';
+
+interface ButtonProps {
+  variant?: 'primary' | 'secondary' | 'outline';
+  size?: 'small' | 'medium' | 'large';
+  children: React.ReactNode;
+  onClick?: () => void;
+  disabled?: boolean;
+}
+
+export function Button({
+  variant = 'primary',
+  size = 'medium',
+  children,
+  onClick,
+  disabled = false
+}: ButtonProps) {
+  return (
+    <button
+      className={`${styles.button} ${styles[variant]} ${styles[size]}`}
+      onClick={onClick}
+      disabled={disabled}
+    >
+      {children}
+    </button>
+  );
+}
+```
+
+## CSS Module Patterns
+
+```css
+/* Button.module.css */
+.button {
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.primary {
+  background-color: var(--color-primary);
+  color: white;
+}
+
+.secondary {
+  background-color: var(--color-secondary);
+  color: var(--color-text);
+}
+
+.outline {
+  background-color: transparent;
+  border: 1px solid var(--color-primary);
+  color: var(--color-primary);
+}
+
+.small {
+  padding: 8px 16px;
+  font-size: 14px;
+}
+
+.medium {
+  padding: 12px 24px;
+  font-size: 16px;
+}
+
+.large {
+  padding: 16px 32px;
+  font-size: 18px;
+}
+
+/* Responsive design with media queries */
+@media (max-width: 768px) {
+  .button {
+    width: 100%;
+  }
+
+  .large {
+    padding: 14px 28px;
+    font-size: 16px;
+  }
+}
+```
+
+## Design System Principles
+
+1. **Consistency**: Use consistent spacing, colors, and typography throughout the application
+2. **Accessibility**: Ensure all components meet accessibility standards
+3. **Performance**: Optimize components for performance, especially when they're reused frequently
+4. **Documentation**: Document component APIs and usage examples
+5. **Testing**: Write tests for reusable components to ensure they work correctly in different scenarios
+
+## Component Promotion Process
+
+1. **Start with feature-specific components** in the app
+2. **Identify patterns** that are used across multiple features
+3. **Extract to `@ui/` package** when a component becomes generic
+4. **Update imports** across the codebase to use the new shared component
+5. **Remove the original** feature-specific component
+   description:
+   globs:
+   alwaysApply: false
+
+---
