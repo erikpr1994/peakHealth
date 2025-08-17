@@ -2,10 +2,13 @@ import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { NotesProvider, useNotesContext } from './NotesContext';
-import { StrengthWorkout, RunningWorkout } from '../../../types';
 
 // Test component that uses the context
-const TestComponent = (): React.ReactElement => {
+const TestComponent = ({
+  workoutId = 'workout-1',
+}: {
+  workoutId?: string;
+}): React.ReactElement => {
   const {
     notesModalOpen,
     openNotesModal,
@@ -22,7 +25,14 @@ const TestComponent = (): React.ReactElement => {
       </span>
       <button
         onClick={() =>
-          openNotesModal('exercise', 'workout-1', 'section-1', 'exercise-1')
+          openNotesModal(
+            'exercise',
+            workoutId,
+            'section-1',
+            'exercise-1',
+            undefined,
+            'Original exercise notes'
+          )
         }
         data-testid="open-exercise-notes"
       >
@@ -30,7 +40,14 @@ const TestComponent = (): React.ReactElement => {
       </button>
       <button
         onClick={() =>
-          openNotesModal('set', 'workout-1', 'section-1', 'exercise-1', 'set-1')
+          openNotesModal(
+            'set',
+            workoutId,
+            'section-1',
+            'exercise-1',
+            'set-1',
+            'Original set notes'
+          )
         }
         data-testid="open-set-notes"
       >
@@ -50,41 +67,7 @@ const TestComponent = (): React.ReactElement => {
 };
 
 describe('NotesContext', () => {
-  const mockSetStrengthWorkouts = vi.fn();
-  const mockSetRunningWorkouts = vi.fn();
-  const mockStrengthWorkouts: StrengthWorkout[] = [
-    {
-      id: 'workout-1',
-      name: 'Test Strength Workout',
-      type: 'strength',
-      objective: 'Build strength',
-      schedule: {
-        repeatPattern: 'weekly',
-        repeatValue: '1',
-        selectedDays: ['monday'],
-        time: '09:00',
-      },
-      sections: [
-        {
-          id: 'section-1',
-          name: 'Test Section',
-          type: 'basic',
-          exercises: [
-            {
-              id: 'exercise-1',
-              name: 'Test Exercise',
-              notes: 'Original exercise notes',
-              sets: [],
-              restTimer: '90s',
-              restAfter: '2 min',
-            },
-          ],
-          restAfter: '2 min',
-        },
-      ],
-    },
-  ];
-  const mockRunningWorkouts: RunningWorkout[] = [];
+  const mockOnNotesSave = vi.fn();
 
   beforeEach(() => {
     vi.clearAllMocks();
@@ -93,12 +76,7 @@ describe('NotesContext', () => {
   describe('NotesProvider', () => {
     it('should provide default values when no initial data is provided', () => {
       render(
-        <NotesProvider
-          strengthWorkouts={[]}
-          runningWorkouts={[]}
-          setStrengthWorkouts={mockSetStrengthWorkouts}
-          setRunningWorkouts={mockSetRunningWorkouts}
-        >
+        <NotesProvider onNotesSave={mockOnNotesSave}>
           <TestComponent />
         </NotesProvider>
       );
@@ -109,12 +87,7 @@ describe('NotesContext', () => {
 
     it('should open exercise notes modal correctly', () => {
       render(
-        <NotesProvider
-          strengthWorkouts={mockStrengthWorkouts}
-          runningWorkouts={mockRunningWorkouts}
-          setStrengthWorkouts={mockSetStrengthWorkouts}
-          setRunningWorkouts={mockSetRunningWorkouts}
-        >
+        <NotesProvider onNotesSave={mockOnNotesSave}>
           <TestComponent />
         </NotesProvider>
       );
@@ -134,12 +107,7 @@ describe('NotesContext', () => {
 
     it('should open set notes modal correctly', () => {
       render(
-        <NotesProvider
-          strengthWorkouts={mockStrengthWorkouts}
-          runningWorkouts={mockRunningWorkouts}
-          setStrengthWorkouts={mockSetStrengthWorkouts}
-          setRunningWorkouts={mockSetRunningWorkouts}
-        >
+        <NotesProvider onNotesSave={mockOnNotesSave}>
           <TestComponent />
         </NotesProvider>
       );
@@ -156,12 +124,7 @@ describe('NotesContext', () => {
 
     it('should close modal correctly', () => {
       render(
-        <NotesProvider
-          strengthWorkouts={mockStrengthWorkouts}
-          runningWorkouts={mockRunningWorkouts}
-          setStrengthWorkouts={mockSetStrengthWorkouts}
-          setRunningWorkouts={mockSetRunningWorkouts}
-        >
+        <NotesProvider onNotesSave={mockOnNotesSave}>
           <TestComponent />
         </NotesProvider>
       );
@@ -178,12 +141,7 @@ describe('NotesContext', () => {
 
     it('should handle notes save for exercise notes', () => {
       render(
-        <NotesProvider
-          strengthWorkouts={mockStrengthWorkouts}
-          runningWorkouts={mockRunningWorkouts}
-          setStrengthWorkouts={mockSetStrengthWorkouts}
-          setRunningWorkouts={mockSetRunningWorkouts}
-        >
+        <NotesProvider onNotesSave={mockOnNotesSave}>
           <TestComponent />
         </NotesProvider>
       );
@@ -194,9 +152,16 @@ describe('NotesContext', () => {
       // Save notes
       fireEvent.click(screen.getByTestId('save-notes'));
 
-      // Should call setStrengthWorkouts with updated data
-      expect(mockSetStrengthWorkouts).toHaveBeenCalledWith(
-        expect.any(Function)
+      // Should call onNotesSave with correct context and notes
+      expect(mockOnNotesSave).toHaveBeenCalledWith(
+        {
+          type: 'exercise',
+          workoutId: 'workout-1',
+          sectionId: 'section-1',
+          exerciseId: 'exercise-1',
+          currentNotes: 'Original exercise notes',
+        },
+        'Updated notes'
       );
 
       // Modal should be closed after save
@@ -205,12 +170,7 @@ describe('NotesContext', () => {
 
     it('should handle notes save for set notes', () => {
       render(
-        <NotesProvider
-          strengthWorkouts={mockStrengthWorkouts}
-          runningWorkouts={mockRunningWorkouts}
-          setStrengthWorkouts={mockSetStrengthWorkouts}
-          setRunningWorkouts={mockSetRunningWorkouts}
-        >
+        <NotesProvider onNotesSave={mockOnNotesSave}>
           <TestComponent />
         </NotesProvider>
       );
@@ -221,9 +181,17 @@ describe('NotesContext', () => {
       // Save notes
       fireEvent.click(screen.getByTestId('save-notes'));
 
-      // Should call setStrengthWorkouts with updated data
-      expect(mockSetStrengthWorkouts).toHaveBeenCalledWith(
-        expect.any(Function)
+      // Should call onNotesSave with correct context and notes
+      expect(mockOnNotesSave).toHaveBeenCalledWith(
+        {
+          type: 'set',
+          workoutId: 'workout-1',
+          sectionId: 'section-1',
+          exerciseId: 'exercise-1',
+          setId: 'set-1',
+          currentNotes: 'Original set notes',
+        },
+        'Updated notes'
       );
 
       // Modal should be closed after save
@@ -231,47 +199,9 @@ describe('NotesContext', () => {
     });
 
     it('should handle running workout notes correctly', () => {
-      const mockRunningWorkoutsWithData: RunningWorkout[] = [
-        {
-          id: 'running-workout-1',
-          name: 'Test Running Workout',
-          type: 'running',
-          objective: 'Build endurance',
-          schedule: {
-            repeatPattern: 'weekly',
-            repeatValue: '1',
-            selectedDays: ['monday'],
-            time: '09:00',
-          },
-          sections: [
-            {
-              id: 'section-1',
-              name: 'Test Section',
-              type: 'basic',
-              exercises: [
-                {
-                  id: 'exercise-1',
-                  name: 'Test Exercise',
-                  notes: 'Running exercise notes',
-                  sets: [],
-                  restTimer: '90s',
-                  restAfter: '2 min',
-                },
-              ],
-              restAfter: '2 min',
-            },
-          ],
-        },
-      ];
-
       render(
-        <NotesProvider
-          strengthWorkouts={[]}
-          runningWorkouts={mockRunningWorkoutsWithData}
-          setStrengthWorkouts={mockSetStrengthWorkouts}
-          setRunningWorkouts={mockSetRunningWorkouts}
-        >
-          <TestComponent />
+        <NotesProvider onNotesSave={mockOnNotesSave}>
+          <TestComponent workoutId="running-workout-1" />
         </NotesProvider>
       );
 
@@ -281,8 +211,17 @@ describe('NotesContext', () => {
       // Save notes
       fireEvent.click(screen.getByTestId('save-notes'));
 
-      // Should call setRunningWorkouts with updated data
-      expect(mockSetRunningWorkouts).toHaveBeenCalledWith(expect.any(Function));
+      // Should call onNotesSave with correct context
+      expect(mockOnNotesSave).toHaveBeenCalledWith(
+        {
+          type: 'exercise',
+          workoutId: 'running-workout-1',
+          sectionId: 'section-1',
+          exerciseId: 'exercise-1',
+          currentNotes: 'Original exercise notes',
+        },
+        'Updated notes'
+      );
     });
   });
 
@@ -328,12 +267,7 @@ describe('NotesContext', () => {
       };
 
       render(
-        <NotesProvider
-          strengthWorkouts={[]}
-          runningWorkouts={[]}
-          setStrengthWorkouts={mockSetStrengthWorkouts}
-          setRunningWorkouts={mockSetRunningWorkouts}
-        >
+        <NotesProvider onNotesSave={mockOnNotesSave}>
           <TestHookComponent />
         </NotesProvider>
       );

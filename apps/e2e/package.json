@@ -13,10 +13,11 @@
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
-    "@peakhealth/web": "workspace:*",
     "@peakhealth/admin": "workspace:*",
+    "@peakhealth/auth": "workspace:*",
     "@peakhealth/landing": "workspace:*",
-    "@peakhealth/auth": "workspace:*"
+    "@peakhealth/web": "workspace:*",
+    "dotenv": "^17.2.1"
   },
   "devDependencies": {
     "@playwright/test": "^1.54.2",

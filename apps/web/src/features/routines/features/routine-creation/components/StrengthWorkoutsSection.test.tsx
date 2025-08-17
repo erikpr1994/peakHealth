@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 import StrengthWorkoutsSection from './StrengthWorkoutsSection';
 import { StrengthWorkout } from '../../../types';
 
@@ -27,32 +27,61 @@ vi.mock('./StrengthWorkoutCard', () => ({
 }));
 
 describe('StrengthWorkoutsSection', (): void => {
-  const mockOperations = {
-    onAddStrengthWorkout: vi.fn(),
-    onToggleCollapse: vi.fn(),
-    onMoveUp: vi.fn(),
-    onMoveDown: vi.fn(),
-    onRemove: vi.fn(),
-    onUpdateName: vi.fn(),
-    onUpdateObjective: vi.fn(),
-    onUpdateSchedule: vi.fn(),
-    onAddSection: vi.fn(),
-    onUpdateSectionName: vi.fn(),
-    onUpdateSectionType: vi.fn(),
-    onUpdateSectionRestAfter: vi.fn(),
-    onUpdateSectionEmomDuration: vi.fn(),
-    onRemoveSection: vi.fn(),
-    onAddExercise: vi.fn(),
-    onUpdateExerciseEmomReps: vi.fn(),
-    onUpdateExerciseSets: vi.fn(),
-    onUpdateExerciseName: vi.fn(),
-    onUpdateRestTimer: vi.fn(),
-    onUpdateExerciseRestAfter: vi.fn(),
-    onRemoveExercise: vi.fn(),
-    onAddApproachSets: vi.fn(),
-    onUpdateProgressionMethod: vi.fn(),
-    onNotesClick: vi.fn(),
+  let mockOperations: {
+    onAddStrengthWorkout: ReturnType<typeof vi.fn>;
+    onToggleCollapse: ReturnType<typeof vi.fn>;
+    onMoveUp: ReturnType<typeof vi.fn>;
+    onMoveDown: ReturnType<typeof vi.fn>;
+    onRemove: ReturnType<typeof vi.fn>;
+    onUpdateName: ReturnType<typeof vi.fn>;
+    onUpdateObjective: ReturnType<typeof vi.fn>;
+    onUpdateSchedule: ReturnType<typeof vi.fn>;
+    onAddSection: ReturnType<typeof vi.fn>;
+    onUpdateSectionName: ReturnType<typeof vi.fn>;
+    onUpdateSectionType: ReturnType<typeof vi.fn>;
+    onUpdateSectionRestAfter: ReturnType<typeof vi.fn>;
+    onUpdateSectionEmomDuration: ReturnType<typeof vi.fn>;
+    onRemoveSection: ReturnType<typeof vi.fn>;
+    onAddExercise: ReturnType<typeof vi.fn>;
+    onUpdateExerciseEmomReps: ReturnType<typeof vi.fn>;
+    onUpdateExerciseSets: ReturnType<typeof vi.fn>;
+    onUpdateExerciseName: ReturnType<typeof vi.fn>;
+    onUpdateRestTimer: ReturnType<typeof vi.fn>;
+    onUpdateExerciseRestAfter: ReturnType<typeof vi.fn>;
+    onRemoveExercise: ReturnType<typeof vi.fn>;
+    onAddApproachSets: ReturnType<typeof vi.fn>;
+    onUpdateProgressionMethod: ReturnType<typeof vi.fn>;
+    onNotesClick: ReturnType<typeof vi.fn>;
   };
+
+  beforeEach((): void => {
+    mockOperations = {
+      onAddStrengthWorkout: vi.fn(),
+      onToggleCollapse: vi.fn(),
+      onMoveUp: vi.fn(),
+      onMoveDown: vi.fn(),
+      onRemove: vi.fn(),
+      onUpdateName: vi.fn(),
+      onUpdateObjective: vi.fn(),
+      onUpdateSchedule: vi.fn(),
+      onAddSection: vi.fn(),
+      onUpdateSectionName: vi.fn(),
+      onUpdateSectionType: vi.fn(),
+      onUpdateSectionRestAfter: vi.fn(),
+      onUpdateSectionEmomDuration: vi.fn(),
+      onRemoveSection: vi.fn(),
+      onAddExercise: vi.fn(),
+      onUpdateExerciseEmomReps: vi.fn(),
+      onUpdateExerciseSets: vi.fn(),
+      onUpdateExerciseName: vi.fn(),
+      onUpdateRestTimer: vi.fn(),
+      onUpdateExerciseRestAfter: vi.fn(),
+      onRemoveExercise: vi.fn(),
+      onAddApproachSets: vi.fn(),
+      onUpdateProgressionMethod: vi.fn(),
+      onNotesClick: vi.fn(),
+    };
+  });
 
   const mockWorkouts: StrengthWorkout[] = [
     {

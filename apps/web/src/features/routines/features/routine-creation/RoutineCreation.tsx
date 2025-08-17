@@ -103,14 +103,14 @@ const RoutineCreationContentWithContext = ({
   onRemoveRunningExercise,
   onAddApproachSets,
 }: {
-  mode: string;
+  mode: 'create' | 'edit';
   onSave: () => Promise<void>;
   strengthWorkouts: StrengthWorkout[];
   collapsedStrengthWorkouts: Set<string>;
   runningWorkouts: RunningWorkout[];
   collapsedRunningWorkouts: Set<string>;
   creatingRunning: boolean;
-  editingRunning: boolean;
+  editingRunning: { workoutId: string; data: TrailRunningWorkoutData } | null;
   onAddStrengthWorkout: () => void;
   onToggleStrengthCollapse: (workoutId: string) => void;
   onMoveStrengthUp: (workoutId: string) => void;
@@ -120,7 +120,7 @@ const RoutineCreationContentWithContext = ({
   onUpdateStrengthObjective: (workoutId: string, objective: string) => void;
   onUpdateStrengthSchedule: (
     workoutId: string,
-    field: string,
+    field: 'repeatPattern' | 'repeatValue' | 'selectedDays' | 'time',
     value: string | string[]
   ) => void;
   onAddStrengthSection: (workoutId: string) => void;
@@ -132,7 +132,7 @@ const RoutineCreationContentWithContext = ({
   onUpdateStrengthSectionType: (
     workoutId: string,
     sectionId: string,
-    type: string
+    type: 'amrap' | 'warmup' | 'basic' | 'cooldown' | 'emom' | 'tabata'
   ) => void;
   onUpdateStrengthSectionRestAfter: (
     workoutId: string,
@@ -187,7 +187,7 @@ const RoutineCreationContentWithContext = ({
     method: ProgressionMethod
   ) => void;
   onAddRunningWorkout: () => void;
-  onRunningSave: () => void;
+  onRunningSave: (runningData: TrailRunningWorkoutData) => void;
   onRunningCancel: () => void;
   onEditRunning: (workoutId: string) => void;
   onToggleRunningCollapse: (workoutId: string) => void;
@@ -198,7 +198,7 @@ const RoutineCreationContentWithContext = ({
   onUpdateRunningObjective: (workoutId: string, objective: string) => void;
   onUpdateRunningSchedule: (
     workoutId: string,
-    field: string,
+    field: 'repeatPattern' | 'repeatValue' | 'selectedDays' | 'time',
     value: string | string[]
   ) => void;
   onAddRunningSection: (workoutId: string) => void;
@@ -210,7 +210,7 @@ const RoutineCreationContentWithContext = ({
   onUpdateRunningSectionType: (
     workoutId: string,
     sectionId: string,
-    type: string
+    type: 'amrap' | 'warmup' | 'basic' | 'cooldown' | 'emom' | 'tabata'
   ) => void;
   onUpdateRunningSectionRestAfter: (
     workoutId: string,
@@ -282,7 +282,24 @@ const RoutineCreationContentWithContext = ({
     exerciseId: string,
     setId?: string
   ): void => {
-    openNotesModal(type, workoutId, sectionId, exerciseId, setId);
+    // Find the current notes based on the context
+    const isStrength = strengthWorkouts.some(w => w.id === workoutId);
+    const workouts = isStrength ? strengthWorkouts : runningWorkouts;
+    const workout = workouts.find(w => w.id === workoutId);
+    const section = workout?.sections.find(s => s.id === sectionId);
+    const exercise = section?.exercises.find(e => e.id === exerciseId);
+
+    if (!exercise) return;
+
+    let currentNotes = '';
+    if (type === 'exercise') {
+      currentNotes = exercise.notes || '';
+    } else if (type === 'set' && setId) {
+      const set = exercise.sets.find(s => s.id === setId);
+      currentNotes = set?.notes || '';
+    }
+
+    openNotesModal(type, workoutId, sectionId, exerciseId, setId, currentNotes);
   };
 
   return (
@@ -630,6 +647,125 @@ const RoutineCreationContent = ({
     }
   };
 
+  const handleNotesSave = (
+    context: {
+      type: 'exercise' | 'set';
+      workoutId: string;
+      sectionId: string;
+      exerciseId: string;
+      setId?: string;
+      currentNotes: string;
+    },
+    notes: string
+  ): void => {
+    const { type, workoutId, sectionId, exerciseId, setId } = context;
+    const isStrength = strengthWorkouts.some(w => w.id === workoutId);
+
+    if (type === 'exercise') {
+      if (isStrength) {
+        setStrengthWorkouts(prev =>
+          prev.map(workout =>
+            workout.id === workoutId
+              ? {
+                  ...workout,
+                  sections: workout.sections.map(section =>
+                    section.id === sectionId
+                      ? {
+                          ...section,
+                          exercises: section.exercises.map(exercise =>
+                            exercise.id === exerciseId
+                              ? { ...exercise, notes }
+                              : exercise
+                          ),
+                        }
+                      : section
+                  ),
+                }
+              : workout
+          )
+        );
+      } else {
+        setRunningWorkouts(prev =>
+          prev.map(workout =>
+            workout.id === workoutId
+              ? {
+                  ...workout,
+                  sections: workout.sections.map(section =>
+                    section.id === sectionId
+                      ? {
+                          ...section,
+                          exercises: section.exercises.map(exercise =>
+                            exercise.id === exerciseId
+                              ? { ...exercise, notes }
+                              : exercise
+                          ),
+                        }
+                      : section
+                  ),
+                }
+              : workout
+          )
+        );
+      }
+    } else if (type === 'set' && setId) {
+      if (isStrength) {
+        setStrengthWorkouts(prev =>
+          prev.map(workout =>
+            workout.id === workoutId
+              ? {
+                  ...workout,
+                  sections: workout.sections.map(section =>
+                    section.id === sectionId
+                      ? {
+                          ...section,
+                          exercises: section.exercises.map(exercise =>
+                            exercise.id === exerciseId
+                              ? {
+                                  ...exercise,
+                                  sets: exercise.sets.map(set =>
+                                    set.id === setId ? { ...set, notes } : set
+                                  ),
+                                }
+                              : exercise
+                          ),
+                        }
+                      : section
+                  ),
+                }
+              : workout
+          )
+        );
+      } else {
+        setRunningWorkouts(prev =>
+          prev.map(workout =>
+            workout.id === workoutId
+              ? {
+                  ...workout,
+                  sections: workout.sections.map(section =>
+                    section.id === sectionId
+                      ? {
+                          ...section,
+                          exercises: section.exercises.map(exercise =>
+                            exercise.id === exerciseId
+                              ? {
+                                  ...exercise,
+                                  sets: exercise.sets.map(set =>
+                                    set.id === setId ? { ...set, notes } : set
+                                  ),
+                                }
+                              : exercise
+                          ),
+                        }
+                      : section
+                  ),
+                }
+              : workout
+          )
+        );
+      }
+    }
+  };
+
   // Save routine handler
   const handleSaveRoutine = async (): Promise<void> => {
     // Check authentication first
@@ -798,12 +934,7 @@ const RoutineCreationContent = ({
       addStrengthExercise={addStrengthExercise}
       addRunningExercise={addRunningExercise}
     >
-      <NotesProvider
-        strengthWorkouts={strengthWorkouts}
-        runningWorkouts={runningWorkouts}
-        setStrengthWorkouts={setStrengthWorkouts}
-        setRunningWorkouts={setRunningWorkouts}
-      >
+      <NotesProvider onNotesSave={handleNotesSave}>
         <RoutineCreationContentWithContext
           mode={mode}
           onSave={handleSaveRoutine}

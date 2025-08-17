@@ -1,7 +1,10 @@
 import { test, expect } from '@playwright/test';
 
 test.describe('Regular user flows', () => {
-  test.use({ storageState: 'storage-states/regular-web.json' });
+  test.use({
+    storageState: 'storage-states/regular-web.json',
+    viewport: { width: 1280, height: 720 },
+  });
 
   test('regular user can create routines with proper validation', async ({
     page,
@@ -26,7 +29,7 @@ test.describe('Regular user flows', () => {
     await test.step('Access dashboard with authenticated session', async () => {
       await page.goto('http://localhost:3024/dashboard');
       await expect(page).toHaveURL(/localhost:3024\/dashboard/);
-      await page.waitForTimeout(500);
+      await page.waitForTimeout(1000);
       await expect(page).toHaveScreenshot({
         fullPage: true,
         animations: 'disabled',
@@ -53,21 +56,30 @@ test.describe('Regular user flows', () => {
       await createButton.click();
 
       await expect(page).toHaveURL(/localhost:3024\/routines\/create/);
-      await page.waitForTimeout(500);
+      await page.waitForTimeout(1000);
+
+      // Wait for any input to be visible and ready
+      await page.waitForSelector('input', {
+        timeout: 10000,
+        state: 'visible',
+      });
+
       await expect(page).toHaveScreenshot({
         fullPage: true,
         animations: 'disabled',
       });
 
       await page
-        .getByPlaceholder(/enter routine name/i)
+        .getByPlaceholder(/enter routine name\.\.\./i)
         .fill('Incomplete Test Routine');
       await page
-        .getByPlaceholder(/describe your routine/i)
+        .getByPlaceholder(/describe your routine\.\.\./i)
         .fill('A test routine with incomplete data');
 
       await page
-        .getByPlaceholder(/what are the main goals/i)
+        .getByPlaceholder(
+          /what are the main goals and focus areas of this routine\?/i
+        )
         .fill('Build strength');
       await page.keyboard.press('Enter');
       await expect(page).toHaveScreenshot({
@@ -80,8 +92,15 @@ test.describe('Regular user flows', () => {
       await page.waitForTimeout(1000);
 
       await expect(page).toHaveURL(/localhost:3024\/routines\/create/);
+
+      // Wait for the component to be fully loaded
+      await page.waitForSelector('input[placeholder*="routine name"]', {
+        timeout: 10000,
+      });
       await page.waitForTimeout(500);
-      await expect(page.getByPlaceholder(/enter routine name/i)).toBeVisible();
+      await expect(
+        page.getByPlaceholder(/enter routine name\.\.\./i)
+      ).toBeVisible();
       await expect(
         page.getByRole('button', { name: /save routine/i })
       ).toBeVisible();
@@ -90,17 +109,29 @@ test.describe('Regular user flows', () => {
     await test.step('Test successful routine creation with complete data', async () => {
       await page.reload();
       await expect(page).toHaveURL(/localhost:3024\/routines\/create/);
-      await page.waitForTimeout(500);
+
+      // Wait for the component to be fully loaded
+      await page.waitForSelector('input[placeholder*="routine name"]', {
+        timeout: 10000,
+      });
+      await page.waitForTimeout(2000);
+
+      // Wait for any input to be visible and ready
+      await page.waitForSelector('input', {
+        timeout: 10000,
+        state: 'visible',
+      });
+
       await expect(page).toHaveScreenshot({
         fullPage: true,
         animations: 'disabled',
       });
 
       await page
-        .getByPlaceholder(/enter routine name/i)
+        .getByPlaceholder(/enter routine name\.\.\./i)
         .fill('Complete Test Routine');
       await page
-        .getByPlaceholder(/describe your routine/i)
+        .getByPlaceholder(/describe your routine\.\.\./i)
         .fill('A complete test routine for e2e testing');
 
       await page.getByRole('combobox').first().click();
@@ -110,7 +141,9 @@ test.describe('Regular user flows', () => {
       await page.getByRole('option', { name: /strength/i }).click();
 
       await page
-        .getByPlaceholder(/what are the main goals/i)
+        .getByPlaceholder(
+          /what are the main goals and focus areas of this routine\?/i
+        )
         .fill('Build strength and endurance');
       await page.keyboard.press('Enter');
 

@@ -10,6 +10,7 @@ alwaysApply: true
    - Non-test, non-config, non-rules files should be under 300 lines.
    - 200–300 lines is a refactor signal: extract components, hooks, utils, or types.
    - When refactoring, start with the smallest and deepest units of code first (e.g., extract `Input` and `Button` before `reusableComponent`, then work up to larger components).
+   - Ensure all tests (integration, e2e) pass without modification during refactoring.
 
 2. Split by responsibility
    - UI into smaller components (co-locate in `components/`).

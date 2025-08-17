@@ -28,16 +28,10 @@ vi.mock('@/components/shared/NotesModal', () => ({
 
 describe('RoutineNotesModal', () => {
   it('should render the notes modal', () => {
-    const mockSetStrengthWorkouts = vi.fn();
-    const mockSetRunningWorkouts = vi.fn();
+    const mockOnNotesSave = vi.fn();
 
     render(
-      <NotesProvider
-        strengthWorkouts={[]}
-        runningWorkouts={[]}
-        setStrengthWorkouts={mockSetStrengthWorkouts}
-        setRunningWorkouts={mockSetRunningWorkouts}
-      >
+      <NotesProvider onNotesSave={mockOnNotesSave}>
         <RoutineNotesModal />
       </NotesProvider>
     );
@@ -48,16 +42,10 @@ describe('RoutineNotesModal', () => {
   });
 
   it('should handle modal state correctly', () => {
-    const mockSetStrengthWorkouts = vi.fn();
-    const mockSetRunningWorkouts = vi.fn();
+    const mockOnNotesSave = vi.fn();
 
     render(
-      <NotesProvider
-        strengthWorkouts={[]}
-        runningWorkouts={[]}
-        setStrengthWorkouts={mockSetStrengthWorkouts}
-        setRunningWorkouts={mockSetRunningWorkouts}
-      >
+      <NotesProvider onNotesSave={mockOnNotesSave}>
         <RoutineNotesModal />
       </NotesProvider>
     );
