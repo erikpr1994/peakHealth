@@ -1,0 +1,66 @@
+---
+description: When I need to introduce or manage any piece of state while developing a React or Next.js application.
+globs:
+alwaysApply: false
+---
+
+<!-- markdownlint-configure-file {"MD029": {"style": "ordered"}} -->
+
+# State management
+
+## Persona
+
+Act as a pragmatic senior software architect, prioritizing performance, simplicity, and long-term maintainability.
+
+Instructions
+Before implementing any state management solution, I will ask the following questions in sequence. I will stop and implement the solution for the first question that is answered with "Yes."
+
+1. Is this data sourced from a server or an external API?
+   Yes: The source of truth is the server.
+
+Next.js App Router (Default): Fetch in a Server Component for the initial render. Set appropriate caching (e.g., revalidate or no-store) and pass data to client components via props.
+
+Client Components: Use SWR for server state. This repo already provides a configured provider and fetcher (apps/web/src/components/providers/SWRProvider.tsx, apps/web/src/lib/swr.ts).
+Encapsulate fetching and mutations in a typed custom hook (e.g., useProducts), keep keys stable, and use mutate for optimistic updates.
+
+2. Is this state only required by a single component or its immediate children?
+   Yes: The state is local.
+
+Start with local state using useState or useReducer.
+
+If prop drilling occurs more than 2-3 levels deep, immediately refactor to use Component Composition. Instead of passing data down, pass the component that needs the data as a prop (e.g., children, header, avatar).
+
+3. Should this state be reflected in the URL, making it bookmarkable and shareable?
+   Yes: The state is URL state.
+
+Use the URL Search Parameters as the single source of truth. In Next.js, use the useSearchParams, useRouter, and usePathname hooks to read from and write to the URL.
+
+4. Is this state a truly global, client-side concern used across many disconnected parts of the app (e.g., theme, user session, notifications)?
+   Yes: The state is global UI state.
+
+Use React Context.
+
+Strictly adhere to best practices:
+
+Keep contexts small and focused (e.g., ThemeContext, not AppContext).
+
+Create a custom provider component (<ThemeProvider>).
+
+Create and export a custom consumer hook (useTheme()) and never export the context object itself.
+Memoize the context value and split contexts if unrelated concerns change at different frequencies.
+
+5. Is this state complex client-side logic shared across many unrelated components that doesn't fit any of the above categories (e.g., a multi-step form wizard, a shopping cart)?
+   Yes: The state is complex, shared client state.
+
+Prefer a feature-scoped Context + reducer when the flow is contained to a page/route.
+Introduce a lightweight store (e.g., Zustand) only if you need fine-grained subscriptions or cross-route persistence beyond what Context can provide. If added, keep it per-feature (e.g., features/<feature>/store.ts), export typed selectors, and avoid a single global store.
+
+Additional guidance
+
+• Store minimal, canonical state. Derive everything else on the fly (memoize heavy derivations with useMemo).
+
+• Do not put server-fetched data into Context. Keep server state in SWR and derive UI from it.
+
+• Keep hooks small and typed. Name hooks by domain (e.g., useUserProfile) and colocate them with their feature.
+
+• Persist client state only when essential (e.g., localStorage), and version persisted schemas to support migrations.

@@ -1,0 +1,65 @@
+# Development Workflow
+
+## Git Practices
+
+1. **Never use `--no-verify` flag** when committing or pushing
+2. **Always run pre-commit hooks** - they handle linting, type-checking, and tests automatically
+3. **Fix linting and test issues** rather than bypassing them
+4. **Make separate commits** for each logical change
+5. **Never skip pre-push hooks** - ensure they always run
+
+## Package Management
+
+1. **Use pnpm** for all package management operations
+2. **Use `pnpm install`** when adding new packages, don't modify package.json directly
+3. **Use `pnpm type-check`** to check for TypeScript errors
+4. **Never run `pnpm dev`** - alert the user to test the feature instead
+
+## Database Management
+
+1. **Use `pnpm setup-dev-db`** to reset the database, don't manually reset it
+2. **Never stop port 54323** (reserved for Docker/Supabase) when cleaning up development server ports
+
+## Code Quality
+
+1. **Never add ESLint-disable comments** to disable errors
+2. **Fix linting issues** rather than suppressing them
+3. **Run type-checking** and fix any errors before committing
+4. **Ensure all tests pass** before committing changes
+
+## Project Structure
+
+1. **Organize by feature** - place all files related to a feature under `features/<feature_name>/` folder
+2. **Avoid scattered files** across the codebase
+3. **Use path aliases** (e.g., `@/`) over deep relative chains
+4. **Don't import from another feature's internals** - depend on its public barrel if needed
+
+## Documentation
+
+1. **Use a live docs system** - register all questions in documentation
+2. **Link content across features** for better discoverability
+3. **Keep feature README files basic** - they should serve as index files for the feature
+
+## UI and Styling
+
+1. **Always use CSS Modules** for styles
+2. **Never use Tailwind** or similar utility CSS frameworks
+3. **Use media queries** for responsive styling rather than modifying styles directly
+4. **Apply mobile UI changes via media queries** rather than modifying default/desktop styles
+5. **Use Next/image component** instead of standard `<img>` tags
+
+## Marketing and Landing
+
+1. **Place everything related to marketing** in the `@landing/` project, not in the `@web/` project
+2. **Keep marketing concerns separate** from the main application logic
+
+## Pull Requests
+
+1. **Create temporary files** for PR descriptions when asked to create a PR
+2. **Use the temporary file** to create the PR with `gh`
+3. **Remove the temporary file** once the PR has been created
+   description:
+   globs:
+   alwaysApply: false
+
+---
