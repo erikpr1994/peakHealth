@@ -58,7 +58,7 @@ writeFileSync(
 const packageJsonPath = resolve(__dirname, '../package.json');
 const packageJson = JSON.parse(readFileSync(packageJsonPath, 'utf8'));
 packageJson.exports = exports;
-writeFileSync(packageJsonPath, `${JSON.stringify(packageJson, null, 2)}\n`);
+writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, 2));
 
 // eslint-disable-next-line no-console
 console.log('Exports generated and package.json updated successfully');
