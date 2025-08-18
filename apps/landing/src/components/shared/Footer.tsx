@@ -40,8 +40,8 @@ export const Footer = (): React.JSX.Element => {
           <div className={styles.section}>
             <h3 className={styles.sectionTitle}>Product</h3>
             <div className={styles.links}>
-              <Link href="/vision">Vision</Link>
               <Link href="/features">Features</Link>
+              <Link href="/vision">Vision</Link>
               <Link href="/roadmap">Roadmap</Link>
               <Link href="/feedback">Feedback</Link>
             </div>
