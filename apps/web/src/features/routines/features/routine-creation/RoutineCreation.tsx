@@ -12,7 +12,6 @@ import { routineService } from '../../services/routineService';
 import { DatabaseWorkout } from '../../types/database';
 import { transformDatabaseWorkout } from '../../utils/dataTransformers';
 import { useAuth } from '@/features/auth/context/AuthContext';
-import { useToast } from '@peakhealth/ui';
 
 // Import our new components and hooks
 import RoutineHeader from './components/RoutineHeader';
@@ -38,7 +37,6 @@ const RoutineCreation = ({
 }: RoutineCreationProps): React.ReactElement => {
   const router = useRouter();
   const { isAuthenticated, user } = useAuth();
-  const { showToast } = useToast();
 
   // Routine metadata state
   const [name, setName] = useState('');
@@ -531,14 +529,7 @@ const RoutineCreation = ({
     });
 
     if (validationError) {
-      // eslint-disable-next-line no-console
-      console.log('Validation error detected:', validationError);
-      showToast({
-        message: validationError.message,
-        variant: 'error',
-      });
-      // eslint-disable-next-line no-console
-      console.log('showToast called for validation error');
+      alert(validationError.message);
       return;
     }
 
@@ -559,10 +550,7 @@ const RoutineCreation = ({
     try {
       // setIsSaving(true); // This state variable is not defined in the original file
       await routineService.createRoutine(routineData);
-      showToast({
-        message: 'Routine saved successfully!',
-        variant: 'success',
-      });
+      alert('Routine saved successfully!');
       router.push('/routines');
     } catch (error) {
       showToast({

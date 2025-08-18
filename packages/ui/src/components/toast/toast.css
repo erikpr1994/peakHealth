@@ -3,14 +3,12 @@
   position: fixed;
   top: 1rem;
   right: 1rem;
-  z-index: 999999;
+  z-index: 9999;
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
   max-width: 24rem;
   pointer-events: none;
-  /* Ensure it's above everything */
-  isolation: isolate;
 }
 
 /* Individual Toast */
@@ -27,12 +25,7 @@
   opacity: 0;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   max-width: 100%;
-  /* Force visibility for debugging */
-  position: relative;
-  z-index: 100000;
-  /* Ensure it's visible */
-  min-height: 60px;
-  min-width: 300px;
+
 }
 
 .peakhealth-toast--visible {
@@ -92,36 +85,36 @@
 
 /* Toast Variants */
 .peakhealth-toast--default {
-  background-color: white;
-  border-color: #e5e7eb;
+  background-color: hsl(var(--background, 0 0% 100%));
+  border-color: hsl(var(--border, 240 5.9% 90%));
 }
 
 .peakhealth-toast--success {
-  background-color: #f0fdf4;
-  border-color: #bbf7d0;
-  color: #166534;
+  background-color: hsl(142 76% 36% / 0.1);
+  border-color: hsl(142 76% 36% / 0.2);
+  color: hsl(142 76% 36%);
 }
 
 .peakhealth-toast--success .peakhealth-toast-icon {
-  color: #166534;
+  color: hsl(142 76% 36%);
 }
 
 .peakhealth-toast--success .peakhealth-toast-message {
-  color: #166534;
+  color: hsl(142 76% 36%);
 }
 
 .peakhealth-toast--error {
-  background-color: #fef2f2;
-  border-color: #fecaca;
-  color: #dc2626;
+  background-color: hsl(0 84% 60% / 0.1);
+  border-color: hsl(0 84% 60% / 0.2);
+  color: hsl(0 84% 60%);
 }
 
 .peakhealth-toast--error .peakhealth-toast-icon {
-  color: #dc2626;
+  color: hsl(0 84% 60%);
 }
 
 .peakhealth-toast--error .peakhealth-toast-message {
-  color: #dc2626;
+  color: hsl(0 84% 60%);
 }
 
 .peakhealth-toast--warning {

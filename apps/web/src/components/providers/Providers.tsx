@@ -2,7 +2,6 @@
 
 import { SWRProvider } from './SWRProvider';
 import { AuthProvider } from '@/features/auth/context/AuthContext';
-import { ToastProvider } from '@peakhealth/ui';
 
 interface ProvidersProps {
   children: React.ReactNode;
@@ -11,9 +10,7 @@ interface ProvidersProps {
 export const Providers = ({ children }: ProvidersProps): React.ReactElement => {
   return (
     <SWRProvider>
-      <AuthProvider>
-        <ToastProvider>{children}</ToastProvider>
-      </AuthProvider>
+      <AuthProvider>{children}</AuthProvider>
     </SWRProvider>
   );
 };

@@ -116,22 +116,6 @@ const ToastContainer: React.FC<ToastContainerProps> = ({ toasts, onClose }) => {
 
   return (
     <div className="peakhealth-toast-container">
-      {/* Debug element to verify container positioning */}
-      <div 
-        style={{ 
-          background: 'red', 
-          color: 'white', 
-          padding: '10px', 
-          margin: '10px',
-          position: 'fixed',
-          top: '10px',
-          right: '10px',
-          zIndex: 999999,
-          border: '2px solid black'
-        }}
-      >
-        Toast Container Active - {toasts.length} toasts
-      </div>
       {toasts.map(toast => (
         <ToastItemComponent
           key={toast.id}
@@ -246,6 +230,7 @@ const ToastItemComponent: React.FC<ToastItemComponentProps> = ({
         isVisible && 'peakhealth-toast--visible',
         toast.className
       )}
+
     >
       <div className="peakhealth-toast-content">
         {getIcon() && <div className="peakhealth-toast-icon">{getIcon()}</div>}
