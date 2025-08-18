@@ -230,7 +230,6 @@ const ToastItemComponent: React.FC<ToastItemComponentProps> = ({
         isVisible && 'peakhealth-toast--visible',
         toast.className
       )}
-
     >
       <div className="peakhealth-toast-content">
         {getIcon() && <div className="peakhealth-toast-icon">{getIcon()}</div>}
