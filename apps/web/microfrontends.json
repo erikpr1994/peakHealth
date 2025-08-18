@@ -15,18 +15,30 @@
       "routing": [
         {
           "paths": [
-            "/",
-            "/blog",
-            "/blog/:path*",
-            "/features",
-            "/roadmap",
-            "/feedback",
-            "/careers",
-            "/contact",
-            "/help",
-            "/privacy",
-            "/terms",
-            "/vision"
+            "/en",
+            "/es",
+            "/en/blog",
+            "/en/blog/:path*",
+            "/es/blog",
+            "/es/blog/:path*",
+            "/en/features",
+            "/es/features",
+            "/en/roadmap",
+            "/es/roadmap",
+            "/en/feedback",
+            "/es/feedback",
+            "/en/careers",
+            "/es/careers",
+            "/en/contact",
+            "/es/contact",
+            "/en/help",
+            "/es/help",
+            "/en/privacy",
+            "/es/privacy",
+            "/en/terms",
+            "/es/terms",
+            "/en/vision",
+            "/es/vision"
           ]
         }
       ]
