@@ -531,10 +531,14 @@ const RoutineCreation = ({
     });
 
     if (validationError) {
+      // eslint-disable-next-line no-console
+      console.log('Validation error detected:', validationError);
       showToast({
         message: validationError.message,
         variant: 'error',
       });
+      // eslint-disable-next-line no-console
+      console.log('showToast called for validation error');
       return;
     }
 
