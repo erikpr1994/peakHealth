@@ -59,7 +59,12 @@ export default defineConfig({
       fileName: (format, entryName) => `${entryName}.js`,
     },
     rollupOptions: {
-      external: ['react', 'react-dom'],
+      external: [
+        'react',
+        'react-dom',
+        'react/jsx-runtime',
+        'react/jsx-dev-runtime',
+      ],
       output: {
         preserveModules: true,
         preserveModulesRoot: 'src',
@@ -69,6 +74,12 @@ export default defineConfig({
             return 'ui.css';
           }
           return '[name][extname]';
+        },
+        globals: {
+          react: 'React',
+          'react-dom': 'ReactDOM',
+          'react/jsx-runtime': 'jsxRuntime',
+          'react/jsx-dev-runtime': 'jsxDevRuntime',
         },
       },
     },
