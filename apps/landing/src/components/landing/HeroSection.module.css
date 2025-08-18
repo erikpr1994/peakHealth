@@ -2,7 +2,7 @@
   min-height: 90vh;
   display: flex;
   align-items: center;
-  padding-top: 3rem;
+  padding: 4rem 0;
   background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
   position: relative;
   overflow: hidden;
@@ -22,7 +22,7 @@
 .container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 1rem;
+  padding: 0 2rem;
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 4rem;
@@ -39,13 +39,13 @@
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  background: rgba(59, 130, 246, 0.1);
-  color: var(--primary);
+  background: #3b82f6;
+  color: white;
   padding: 0.5rem 1rem;
   border-radius: 50px;
   font-size: 0.875rem;
   font-weight: 500;
-  margin-bottom: 1.5rem;
+  margin-bottom: 2rem;
 }
 
 .starIcon {
@@ -59,11 +59,11 @@
   font-weight: 800;
   line-height: 1.1;
   margin-bottom: 1.5rem;
-  color: var(--foreground);
+  color: #1e293b;
 }
 
 .gradientText {
-  background: linear-gradient(135deg, var(--primary) 0%, #8b5cf6 100%);
+  background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -72,58 +72,61 @@
 .description {
   font-size: 1.25rem;
   line-height: 1.6;
-  color: var(--muted-foreground);
-  margin-bottom: 2.5rem;
+  color: #64748b;
+  margin-bottom: 3rem;
 }
 
 .valueProps {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
-  margin-bottom: 2rem;
 }
 
 .valueProp {
   display: flex;
   align-items: flex-start;
   gap: 1rem;
-  padding: 1rem;
-  background: rgba(255, 255, 255, 0.7);
+  padding: 1.5rem;
+  background: white;
   border-radius: 12px;
-  border: 1px solid rgba(59, 130, 246, 0.1);
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   transition: all 0.3s ease;
 }
 
 .valueProp:hover {
-  background: rgba(255, 255, 255, 0.9);
-  transform: translateX(4px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 .valueIcon {
-  font-size: 1.5rem;
   flex-shrink: 0;
-  width: 40px;
-  height: 40px;
+  width: 48px;
+  height: 48px;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--primary);
+  background: #3b82f6;
   color: white;
-  border-radius: 8px;
+  border-radius: 12px;
+}
+
+.icon {
+  width: 24px;
+  height: 24px;
 }
 
 .valueContent h3 {
-  font-size: 1.125rem;
+  font-size: 1.25rem;
   font-weight: 600;
-  color: var(--foreground);
+  color: #1e293b;
   margin-bottom: 0.5rem;
 }
 
 .valueContent p {
-  font-size: 0.875rem;
-  color: var(--muted-foreground);
-  line-height: 1.5;
+  font-size: 1rem;
+  color: #64748b;
+  line-height: 1.6;
   margin: 0;
 }
 
@@ -164,7 +167,7 @@
 }
 
 .appHeader {
-  background: var(--primary);
+  background: #3b82f6;
   color: white;
   padding: 1rem;
   display: flex;
@@ -193,7 +196,7 @@
 }
 
 .workoutCard {
-  background: var(--secondary);
+  background: #f8fafc;
   padding: 1.5rem;
   border-radius: 16px;
 }
@@ -201,7 +204,7 @@
 .workoutTitle {
   font-weight: 600;
   margin-bottom: 1rem;
-  color: var(--foreground);
+  color: #1e293b;
 }
 
 .workoutProgress {
@@ -213,7 +216,7 @@
 .progressBar {
   width: 100%;
   height: 8px;
-  background: var(--muted);
+  background: #e2e8f0;
   border-radius: 4px;
   overflow: hidden;
 }
@@ -221,7 +224,7 @@
 .progressFill {
   width: 60%;
   height: 100%;
-  background: var(--primary);
+  background: #3b82f6;
   border-radius: 4px;
   transition: width 0.3s ease;
 }
@@ -235,7 +238,7 @@
 .miniStat {
   text-align: center;
   padding: 1rem;
-  background: var(--secondary);
+  background: #f8fafc;
   border-radius: 12px;
 }
 
@@ -243,12 +246,12 @@
   display: block;
   font-size: 1.5rem;
   font-weight: 700;
-  color: var(--primary);
+  color: #3b82f6;
 }
 
 .miniStatLabel {
   font-size: 0.75rem;
-  color: var(--muted-foreground);
+  color: #64748b;
   margin-top: 0.25rem;
 }
 
@@ -256,41 +259,7 @@
 @media (min-width: 1024px) {
   .hero {
     min-height: auto;
-    padding-top: 1.5rem;
-    padding-bottom: 3rem;
-  }
-
-  .badge {
-    margin-bottom: 1.5rem;
-  }
-
-  .title {
-    margin-bottom: 1.5rem;
-  }
-
-  .description {
-    margin-bottom: 2.5rem;
-  }
-}
-
-/* Tablet styles (768px to 1023px) */
-@media (min-width: 768px) and (max-width: 1023px) {
-  .hero {
-    min-height: auto;
-    padding-top: 1rem;
-    padding-bottom: 1.5rem;
-  }
-
-  .badge {
-    margin-bottom: 0.75rem;
-  }
-
-  .title {
-    margin-bottom: 0.75rem;
-  }
-
-  .description {
-    margin-bottom: 1.5rem;
+    padding: 4rem 0;
   }
 }
 
@@ -327,9 +296,11 @@
 /* Mobile styles */
 @media (max-width: 768px) {
   .hero {
-    padding-top: 1rem;
-    min-height: auto;
-    padding-bottom: 3rem;
+    padding: 2rem 0;
+  }
+
+  .container {
+    padding: 0 1rem;
   }
 
   .title {
@@ -341,7 +312,7 @@
   }
 
   .badge {
-    margin-bottom: 1rem;
+    margin-bottom: 1.5rem;
   }
 
   .title {
@@ -357,13 +328,17 @@
   }
 
   .valueProp {
-    padding: 0.75rem;
+    padding: 1rem;
   }
 
   .valueIcon {
-    width: 32px;
-    height: 32px;
-    font-size: 1.25rem;
+    width: 40px;
+    height: 40px;
+  }
+
+  .icon {
+    width: 20px;
+    height: 20px;
   }
 
   .mockup {

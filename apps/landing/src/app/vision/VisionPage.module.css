@@ -1,6 +1,6 @@
 .container {
   min-height: 100vh;
-  background: var(--background);
+  background: white;
 }
 
 /* Hero Section */
@@ -13,7 +13,7 @@
 .heroContent {
   max-width: 800px;
   margin: 0 auto;
-  padding: 0 1rem;
+  padding: 0 2rem;
 }
 
 .heroTitle {
@@ -21,11 +21,11 @@
   font-weight: 800;
   line-height: 1.1;
   margin-bottom: 2rem;
-  color: var(--foreground);
+  color: #1e293b;
 }
 
 .gradientText {
-  background: linear-gradient(135deg, var(--primary) 0%, #8b5cf6 100%);
+  background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -34,7 +34,7 @@
 .heroDescription {
   font-size: 1.5rem;
   line-height: 1.6;
-  color: var(--muted-foreground);
+  color: #64748b;
   margin-bottom: 1.5rem;
   font-style: italic;
 }
@@ -42,7 +42,7 @@
 .heroSubtitle {
   font-size: 1.25rem;
   line-height: 1.6;
-  color: var(--foreground);
+  color: #1e293b;
   font-weight: 500;
 }
 
@@ -55,7 +55,7 @@
 .missionContent {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 1rem;
+  padding: 0 2rem;
 }
 
 .sectionTitle {
@@ -63,7 +63,7 @@
   font-weight: 700;
   text-align: center;
   margin-bottom: 3rem;
-  color: var(--foreground);
+  color: #1e293b;
 }
 
 .missionGrid {
@@ -75,27 +75,27 @@
 
 .missionCard {
   padding: 2rem;
-  background: var(--secondary);
+  background: #f8fafc;
   border-radius: 16px;
-  border: 1px solid var(--border);
+  border: 1px solid #e2e8f0;
   transition: all 0.3s ease;
 }
 
 .missionCard:hover {
   transform: translateY(-4px);
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-  border-color: var(--primary);
+  border-color: #3b82f6;
 }
 
 .missionCard h3 {
   font-size: 1.5rem;
   font-weight: 600;
   margin-bottom: 1rem;
-  color: var(--foreground);
+  color: #1e293b;
 }
 
 .missionCard p {
-  color: var(--muted-foreground);
+  color: #64748b;
   line-height: 1.6;
   margin: 0;
 }
@@ -103,13 +103,13 @@
 /* Pillars Section */
 .pillars {
   padding: 4rem 0;
-  background: var(--secondary);
+  background: #f8fafc;
 }
 
 .pillarsContent {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 1rem;
+  padding: 0 2rem;
 }
 
 .pillarsGrid {
@@ -123,7 +123,7 @@
   padding: 2rem;
   background: white;
   border-radius: 16px;
-  border: 1px solid var(--border);
+  border: 1px solid #e2e8f0;
   transition: all 0.3s ease;
   text-align: center;
 }
@@ -131,13 +131,13 @@
 .pillarCard:hover {
   transform: translateY(-4px);
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-  border-color: var(--primary);
+  border-color: #3b82f6;
 }
 
 .pillarIcon {
   width: 60px;
   height: 60px;
-  background: var(--primary);
+  background: #3b82f6;
   border-radius: 12px;
   display: flex;
   align-items: center;
@@ -150,11 +150,11 @@
   font-size: 1.25rem;
   font-weight: 600;
   margin-bottom: 1rem;
-  color: var(--foreground);
+  color: #1e293b;
 }
 
 .pillarDescription {
-  color: var(--muted-foreground);
+  color: #64748b;
   line-height: 1.6;
   margin: 0;
 }
@@ -168,7 +168,7 @@
 .impactContent {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 1rem;
+  padding: 0 2rem;
 }
 
 .impactGrid {
@@ -180,27 +180,27 @@
 
 .impactItem {
   padding: 2rem;
-  background: var(--secondary);
+  background: #f8fafc;
   border-radius: 16px;
-  border: 1px solid var(--border);
+  border: 1px solid #e2e8f0;
   transition: all 0.3s ease;
 }
 
 .impactItem:hover {
   transform: translateY(-4px);
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-  border-color: var(--primary);
+  border-color: #3b82f6;
 }
 
 .impactItem h3 {
   font-size: 1.25rem;
   font-weight: 600;
   margin-bottom: 1rem;
-  color: var(--foreground);
+  color: #1e293b;
 }
 
 .impactItem p {
-  color: var(--muted-foreground);
+  color: #64748b;
   line-height: 1.6;
   margin: 0;
 }
@@ -208,7 +208,7 @@
 /* CTA Section */
 .cta {
   padding: 4rem 0;
-  background: linear-gradient(135deg, var(--primary) 0%, #8b5cf6 100%);
+  background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
   color: white;
   text-align: center;
 }
@@ -216,7 +216,7 @@
 .ctaContent {
   max-width: 600px;
   margin: 0 auto;
-  padding: 0 1rem;
+  padding: 0 2rem;
 }
 
 .ctaContent h2 {
@@ -243,10 +243,10 @@
   display: inline-flex;
   align-items: center;
   background: white;
-  color: var(--primary);
+  color: #3b82f6;
   text-decoration: none;
   padding: 1rem 2rem;
-  border-radius: var(--radius);
+  border-radius: 8px;
   font-weight: 600;
   font-size: 1.125rem;
   transition: all 0.3s ease;
@@ -266,7 +266,7 @@
   border: 2px solid white;
   text-decoration: none;
   padding: 1rem 2rem;
-  border-radius: var(--radius);
+  border-radius: 8px;
   font-weight: 600;
   font-size: 1.125rem;
   transition: all 0.3s ease;
@@ -274,7 +274,7 @@
 
 .secondaryButton:hover {
   background: white;
-  color: var(--primary);
+  color: #3b82f6;
   transform: translateY(-2px);
 }
 
@@ -282,6 +282,10 @@
 @media (max-width: 768px) {
   .hero {
     padding: 4rem 0 2rem;
+  }
+
+  .heroContent {
+    padding: 0 1rem;
   }
 
   .heroTitle {
@@ -298,6 +302,13 @@
 
   .sectionTitle {
     font-size: 2rem;
+  }
+
+  .missionContent,
+  .pillarsContent,
+  .impactContent,
+  .ctaContent {
+    padding: 0 1rem;
   }
 
   .missionGrid {
