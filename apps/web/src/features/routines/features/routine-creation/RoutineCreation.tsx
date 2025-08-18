@@ -12,6 +12,7 @@ import { routineService } from '../../services/routineService';
 import { DatabaseWorkout } from '../../types/database';
 import { transformDatabaseWorkout } from '../../utils/dataTransformers';
 import { useAuth } from '@/features/auth/context/AuthContext';
+import { useToast } from '@peakhealth/ui';
 
 // Import our new components and hooks
 import RoutineHeader from './components/RoutineHeader';
@@ -37,6 +38,7 @@ const RoutineCreation = ({
 }: RoutineCreationProps): React.ReactElement => {
   const router = useRouter();
   const { isAuthenticated, user } = useAuth();
+  const { showToast } = useToast();
 
   // Routine metadata state
   const [name, setName] = useState('');
@@ -510,7 +512,11 @@ const RoutineCreation = ({
   const handleSaveRoutine = async (): Promise<void> => {
     // Check authentication first
     if (!isAuthenticated || !user) {
-      alert('You must be logged in to create a routine. Please log in first.');
+      showToast({
+        message:
+          'You must be logged in to create a routine. Please log in first.',
+        variant: 'error',
+      });
       return;
     }
 
