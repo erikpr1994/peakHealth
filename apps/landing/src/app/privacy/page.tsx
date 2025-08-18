@@ -1,5 +1,9 @@
 import React from 'react';
 
+// Force static generation
+export const dynamic = 'force-static';
+export const revalidate = false;
+
 const PrivacyPage = (): React.JSX.Element => {
   return (
     <div className="max-w-4xl mx-auto px-4 py-16">
