@@ -3,6 +3,8 @@ import './button.css';
 
 import { cn } from '../../utils';
 
+// Button component with CSS co-located styles
+
 export interface ButtonProps extends React.ComponentProps<'button'> {
   variant?:
     | 'primary'
