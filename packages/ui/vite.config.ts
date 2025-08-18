@@ -63,12 +63,12 @@ export default defineConfig({
       output: {
         preserveModules: true,
         preserveModulesRoot: 'src',
-        assetFileNames: assetInfo => {
-          return '[name][extname]';
-        },
       },
     },
-    cssCodeSplit: true,
+    cssCodeSplit: false, // Bundle all CSS into a single file
     sourcemap: true,
+  },
+  css: {
+    modules: false, // Disable CSS modules since we're using regular CSS
   },
 });

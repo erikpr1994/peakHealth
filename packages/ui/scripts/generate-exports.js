@@ -38,6 +38,11 @@ function generateExports() {
     exports['./design-system'] = {
       import: './dist/design-system.css',
     };
+
+    // Add components CSS export
+    exports['./components'] = {
+      import: './dist/ui.css',
+    };
   }
   return exports;
 }

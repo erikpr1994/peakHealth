@@ -31,5 +31,8 @@
   },
   "./design-system": {
     "import": "./dist/design-system.css"
+  },
+  "./components": {
+    "import": "./dist/ui.css"
   }
 }

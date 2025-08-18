@@ -6,6 +6,9 @@
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "style": "./dist/design-system.css",
+  "sideEffects": [
+    "**/*.css"
+  ],
   "files": [
     "dist"
   ],
@@ -93,6 +96,9 @@
     },
     "./design-system": {
       "import": "./dist/design-system.css"
+    },
+    "./components": {
+      "import": "./dist/ui.css"
     }
   }
 }
