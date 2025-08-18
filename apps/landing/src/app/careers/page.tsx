@@ -41,7 +41,7 @@ const CareersPage = (): React.JSX.Element => {
               Send your CV and a brief introduction to:
             </p>
             <div className={styles.emailContainer}>
-              <p className={styles.emailText}>
+              <p className={styles.emailLink}>
                 📧{' '}
                 <a
                   href="mailto:info@peakhealth.es"

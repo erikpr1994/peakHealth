@@ -33,7 +33,7 @@ const ContactPage = (): React.JSX.Element => {
                 For general inquiries, support, or feedback:
               </p>
               <div className={styles.emailContainer}>
-                <p className={styles.emailText}>
+                <p className={styles.emailLink}>
                   📧{' '}
                   <a
                     href="mailto:info@peakhealth.es"

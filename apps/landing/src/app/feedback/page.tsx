@@ -44,7 +44,7 @@ const FeedbackPage = (): React.JSX.Element => {
                 team:
               </p>
               <div className={styles.emailContainer}>
-                <p className={styles.emailText}>
+                <p className={styles.emailLink}>
                   📧{' '}
                   <a
                     href="mailto:info@peakhealth.es"
