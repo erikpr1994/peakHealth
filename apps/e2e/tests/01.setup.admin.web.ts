@@ -29,18 +29,19 @@ test.describe('Setup: Admin User Landing → Login → Web App', () => {
         state: 'visible',
       });
 
-      // Clear and fill email field
+      // Clear and fill email field with retry logic
       const emailInput = page.getByPlaceholder('Enter your email');
       await emailInput.clear();
       await emailInput.fill(email);
+
+      // Wait a bit and verify the email was filled correctly
+      await page.waitForTimeout(100);
+      await expect(emailInput).toHaveValue(email, { timeout: 10000 });
 
       // Clear and fill password field
       const passwordInput = page.getByPlaceholder('Enter your password');
       await passwordInput.clear();
       await passwordInput.fill(password);
-
-      // Verify the email was filled correctly
-      await expect(emailInput).toHaveValue(email);
 
       // Click sign in button
       await page.getByRole('button', { name: /sign in|log in/i }).click();

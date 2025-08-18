@@ -1,8 +1,7 @@
 import type { Metadata } from 'next';
 
 import './(app)/globals.css';
-import { SWRProvider } from '@/components/providers/SWRProvider';
-import { AuthProvider } from '@/features/auth/context/AuthContext';
+import { Providers } from '@/components/providers/Providers';
 
 export const metadata: Metadata = {
   title: 'Peak Health',
@@ -10,13 +9,15 @@ export const metadata: Metadata = {
     'Your ultimate companion for tracking workouts, monitoring progress, and achieving your fitness goals.',
 };
 
-const RootLayout = ({ children }: { children: React.ReactNode }) => {
+const RootLayout = ({
+  children,
+}: {
+  children: React.ReactNode;
+}): React.ReactElement => {
   return (
     <html lang="en">
       <body suppressHydrationWarning={true}>
-        <SWRProvider>
-          <AuthProvider>{children}</AuthProvider>
-        </SWRProvider>
+        <Providers>{children}</Providers>
       </body>
     </html>
   );
