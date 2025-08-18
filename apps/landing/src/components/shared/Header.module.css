@@ -4,14 +4,14 @@
   z-index: 50;
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(8px);
-  border-bottom: 1px solid var(--border);
+  border-bottom: 1px solid #e2e8f0;
   padding: 1rem 0;
 }
 
 .container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 1rem;
+  padding: 0 2rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -24,9 +24,9 @@
 .logoLink {
   font-size: 1.5rem;
   font-weight: 800;
-  color: var(--foreground);
+  color: #1e293b;
   text-decoration: none;
-  background: linear-gradient(135deg, var(--primary) 0%, #8b5cf6 100%);
+  background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -39,14 +39,14 @@
 }
 
 .navLink {
-  color: var(--muted-foreground);
+  color: #64748b;
   text-decoration: none;
   font-weight: 500;
   transition: color 0.2s ease;
 }
 
 .navLink:hover {
-  color: var(--foreground);
+  color: #1e293b;
 }
 
 .actions {
@@ -60,11 +60,11 @@
   align-items: center;
   gap: 0.5rem;
   background: transparent;
-  color: var(--foreground);
-  border: 1px solid var(--border);
+  color: #1e293b;
+  border: 1px solid #e2e8f0;
   text-decoration: none;
   padding: 0.5rem 1rem;
-  border-radius: var(--radius);
+  border-radius: 8px;
   font-weight: 500;
   font-size: 0.875rem;
   transition: all 0.3s ease;
@@ -72,19 +72,19 @@
 }
 
 .signInLink:hover {
-  background: var(--secondary);
-  border-color: var(--primary);
+  background: #f8fafc;
+  border-color: #3b82f6;
 }
 
 .signUpLink {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  background: var(--primary);
+  background: #3b82f6;
   color: white;
   text-decoration: none;
   padding: 0.5rem 1rem;
-  border-radius: var(--radius);
+  border-radius: 8px;
   font-weight: 500;
   font-size: 0.875rem;
   transition: all 0.3s ease;
@@ -121,7 +121,7 @@
 .hamburgerLine {
   width: 1.5rem;
   height: 0.2rem;
-  background: var(--foreground);
+  background: #1e293b;
   border-radius: 2px;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
@@ -129,7 +129,7 @@
 }
 
 .closeIcon {
-  color: var(--foreground);
+  color: #1e293b;
   transition: all 0.3s ease;
 }
 
@@ -170,7 +170,7 @@
 }
 
 .mobileNavLink {
-  color: var(--foreground);
+  color: #1e293b;
   text-decoration: none;
   font-weight: 600;
   font-size: 1.1rem;
@@ -183,7 +183,7 @@
 }
 
 .mobileNavLink:hover {
-  color: var(--primary);
+  color: #3b82f6;
   background: rgba(59, 130, 246, 0.05);
   margin: 0 -1.5rem;
   padding: 1rem 1.5rem;
@@ -209,8 +209,8 @@
   justify-content: center;
   gap: 0.5rem;
   background: transparent;
-  color: var(--foreground);
-  border: 2px solid var(--border);
+  color: #1e293b;
+  border: 2px solid #e2e8f0;
   text-decoration: none;
   padding: 0.875rem 1.5rem;
   border-radius: 12px;
@@ -221,8 +221,8 @@
 }
 
 .mobileSignInLink:hover {
-  background: var(--secondary);
-  border-color: var(--primary);
+  background: #f8fafc;
+  border-color: #3b82f6;
   transform: translateY(-1px);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
@@ -232,7 +232,7 @@
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  background: linear-gradient(135deg, var(--primary) 0%, #2563eb 100%);
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
   color: white;
   text-decoration: none;
   padding: 0.875rem 1.5rem;
@@ -271,6 +271,10 @@
 
   .mobileMenuButton {
     display: flex;
+  }
+
+  .container {
+    padding: 0 1rem;
   }
 }
 

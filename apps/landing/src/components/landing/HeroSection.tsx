@@ -1,6 +1,6 @@
 'use client';
 
-import { Star } from 'lucide-react';
+import { BarChart3, Dumbbell, Star } from 'lucide-react';
 import React from 'react';
 
 import styles from './HeroSection.module.css';
@@ -28,7 +28,9 @@ export const HeroSection = (): React.JSX.Element => {
 
           <div className={styles.valueProps}>
             <div className={styles.valueProp}>
-              <div className={styles.valueIcon}>📝</div>
+              <div className={styles.valueIcon}>
+                <Dumbbell className={styles.icon} />
+              </div>
               <div className={styles.valueContent}>
                 <h3>Log Workouts</h3>
                 <p>
@@ -38,7 +40,9 @@ export const HeroSection = (): React.JSX.Element => {
               </div>
             </div>
             <div className={styles.valueProp}>
-              <div className={styles.valueIcon}>📊</div>
+              <div className={styles.valueIcon}>
+                <BarChart3 className={styles.icon} />
+              </div>
               <div className={styles.valueContent}>
                 <h3>Track Progress</h3>
                 <p>

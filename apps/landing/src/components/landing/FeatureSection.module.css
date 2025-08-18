@@ -6,7 +6,7 @@
 .container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 1rem;
+  padding: 0 2rem;
 }
 
 .header {
@@ -19,13 +19,13 @@
   font-weight: 800;
   line-height: 1.1;
   margin-bottom: 1.5rem;
-  color: var(--foreground);
+  color: #1e293b;
 }
 
 .description {
   font-size: 1.25rem;
   line-height: 1.6;
-  color: var(--muted-foreground);
+  color: #64748b;
   max-width: 600px;
   margin: 0 auto;
 }
@@ -39,25 +39,26 @@
 
 .feature {
   padding: 2rem;
-  background: var(--secondary);
+  background: white;
   border-radius: 16px;
   transition: all 0.3s ease;
-  border: 1px solid var(--border);
+  border: 1px solid #e2e8f0;
   display: flex;
   align-items: flex-start;
   gap: 1.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 .feature:hover {
   transform: translateY(-4px);
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-  border-color: var(--primary);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  border-color: #3b82f6;
 }
 
 .icon {
   width: 60px;
   height: 60px;
-  background: var(--primary);
+  background: #3b82f6;
   border-radius: 12px;
   display: flex;
   align-items: center;
@@ -75,11 +76,11 @@
   font-size: 1.25rem;
   font-weight: 700;
   margin-bottom: 0.75rem;
-  color: var(--foreground);
+  color: #1e293b;
 }
 
 .featureDescription {
-  color: var(--muted-foreground);
+  color: #64748b;
   line-height: 1.6;
   margin: 0;
 }
@@ -87,7 +88,7 @@
 .communitySection {
   text-align: center;
   padding: 3rem;
-  background: linear-gradient(135deg, var(--primary) 0%, #8b5cf6 100%);
+  background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
   border-radius: 20px;
   color: white;
 }
@@ -118,10 +119,10 @@
   align-items: center;
   gap: 0.5rem;
   background: white;
-  color: var(--primary);
+  color: #3b82f6;
   text-decoration: none;
   padding: 0.75rem 1.5rem;
-  border-radius: var(--radius);
+  border-radius: 8px;
   font-weight: 600;
   font-size: 1rem;
   transition: all 0.3s ease;
@@ -138,6 +139,10 @@
 @media (max-width: 768px) {
   .features {
     padding: 4rem 0;
+  }
+
+  .container {
+    padding: 0 1rem;
   }
 
   .title {

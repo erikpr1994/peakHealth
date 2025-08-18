@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowRight, Calendar, BarChart3, Target } from 'lucide-react';
+import { ArrowRight, Calendar, BarChart3, Clock } from 'lucide-react';
 import styles from './HowItWorksSection.module.css';
 
 export const HowItWorksSection = (): React.JSX.Element => {
@@ -11,7 +11,7 @@ export const HowItWorksSection = (): React.JSX.Element => {
         'Build custom workout routines or choose from our library of exercises. Set your goals and track your progress.',
     },
     {
-      icon: <Target />,
+      icon: <Clock />,
       title: 'Log Your Workouts',
       description:
         'Track each exercise with sets, reps, and weights. Mark warmup sets, drop sets, and failure sets for complete accuracy.',
