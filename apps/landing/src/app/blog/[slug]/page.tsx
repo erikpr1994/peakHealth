@@ -4,8 +4,7 @@ import { notFound } from 'next/navigation';
 import { BlogPost } from '@/components/blog/BlogPost';
 import { getBlogPost, getBlogPosts } from '@/lib/blog';
 
-// Build first 5 articles statically, rest on demand
-export const dynamic = 'force-static';
+// Build first 6 articles statically, rest on demand
 export const revalidate = 3600; // Revalidate every hour for on-demand articles
 
 interface BlogPostPageProps {
@@ -14,10 +13,10 @@ interface BlogPostPageProps {
   }>;
 }
 
-export async function generateStaticParams() {
+export async function generateStaticParams(): Promise<Array<{ slug: string }>> {
   const posts = await getBlogPosts();
-  // Only generate the first 5 articles statically
-  const staticPosts = posts.slice(0, 5);
+  // Only generate the first 6 articles statically
+  const staticPosts = posts.slice(0, 6);
   return staticPosts.map(post => ({
     slug: post.slug,
   }));
@@ -50,7 +49,9 @@ export async function generateMetadata({
   };
 }
 
-const BlogPostPage = async ({ params }: BlogPostPageProps) => {
+const BlogPostPage = async ({
+  params,
+}: BlogPostPageProps): Promise<React.JSX.Element> => {
   const { slug } = await params;
   const post = await getBlogPost(slug);
 
