@@ -1,53 +1,50 @@
 import React from 'react';
 
+import styles from './ContactPage.module.css';
+
 // Force static generation
 export const dynamic = 'force-static';
 export const revalidate = false;
 
 const ContactPage = (): React.JSX.Element => {
   return (
-    <div className="max-w-4xl mx-auto px-4 py-16">
-      <div className="text-center mb-12">
-        <h1 className="text-4xl font-bold mb-4">Contact Us</h1>
-        <p className="text-xl text-gray-600">
-          Get in touch with the PeakHealth team
-        </p>
+    <div className={styles.container}>
+      <div className={styles.header}>
+        <h1 className={styles.title}>Contact Us</h1>
+        <p className={styles.subtitle}>Get in touch with the PeakHealth team</p>
       </div>
 
-      <div className="bg-white rounded-lg shadow-lg p-8">
-        <div className="text-center mb-8">
-          <h2 className="text-2xl font-semibold mb-4">
-            We'd Love to Hear from You
-          </h2>
-          <p className="text-gray-600 mb-6">
+      <div className={styles.content}>
+        <div className={styles.introSection}>
+          <h2 className={styles.introTitle}>We'd Love to Hear from You</h2>
+          <p className={styles.introDescription}>
             Whether you have questions about our platform, want to provide
             feedback, or are interested in partnerships, we're here to help.
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-8 mb-8">
-          <div className="bg-gray-50 rounded-lg p-6">
-            <h3 className="text-xl font-semibold mb-4 text-gray-800">
-              Get in Touch
-            </h3>
-            <p className="text-gray-600 mb-4">
+        <div className={styles.mainGrid}>
+          <div className={styles.contactSection}>
+            <h3 className={styles.contactTitle}>Get in Touch</h3>
+            <p className={styles.contactDescription}>
               For general inquiries, support, or feedback:
             </p>
-            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-              <p className="text-blue-800 font-semibold">
+            <div className={styles.emailContainer}>
+              <p className={styles.emailLink}>
                 📧{' '}
-                <a href="mailto:info@peakhealth.es" className="hover:underline">
+                <a
+                  href="mailto:info@peakhealth.es"
+                  className={styles.emailLink}
+                >
                   info@peakhealth.es
                 </a>
               </p>
             </div>
           </div>
 
-          <div className="bg-gray-50 rounded-lg p-6">
-            <h3 className="text-xl font-semibold mb-4 text-gray-800">
-              Response Time
-            </h3>
-            <p className="text-gray-600">
+          <div className={styles.responseSection}>
+            <h3 className={styles.responseTitle}>Response Time</h3>
+            <p className={styles.responseDescription}>
               We typically respond to all inquiries within 24-48 hours during
               business days. For urgent matters, please include "URGENT" in your
               subject line.
@@ -55,41 +52,35 @@ const ContactPage = (): React.JSX.Element => {
           </div>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-6">
-          <div className="text-center p-4">
-            <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3">
-              <span className="text-blue-600 text-xl">💬</span>
-            </div>
-            <h4 className="font-semibold mb-2">General Support</h4>
-            <p className="text-sm text-gray-600">
+        <div className={styles.categoriesGrid}>
+          <div className={styles.category}>
+            <div className={styles.categoryIcon}>💬</div>
+            <h4 className={styles.categoryTitle}>General Support</h4>
+            <p className={styles.categoryDescription}>
               Questions about features, account issues, or general help
             </p>
           </div>
 
-          <div className="text-center p-4">
-            <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
-              <span className="text-green-600 text-xl">💡</span>
-            </div>
-            <h4 className="font-semibold mb-2">Feature Requests</h4>
-            <p className="text-sm text-gray-600">
+          <div className={styles.category}>
+            <div className={`${styles.categoryIcon} ${styles.green}`}>💡</div>
+            <h4 className={styles.categoryTitle}>Feature Requests</h4>
+            <p className={styles.categoryDescription}>
               Suggestions for new features or improvements
             </p>
           </div>
 
-          <div className="text-center p-4">
-            <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-3">
-              <span className="text-purple-600 text-xl">🤝</span>
-            </div>
-            <h4 className="font-semibold mb-2">Partnerships</h4>
-            <p className="text-sm text-gray-600">
+          <div className={styles.category}>
+            <div className={`${styles.categoryIcon} ${styles.purple}`}>🤝</div>
+            <h4 className={styles.categoryTitle}>Partnerships</h4>
+            <p className={styles.categoryDescription}>
               Business opportunities and collaboration inquiries
             </p>
           </div>
         </div>
 
-        <div className="mt-8 text-center">
-          <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
-            <p className="text-yellow-800">
+        <div className={styles.noteSection}>
+          <div className={styles.noteContainer}>
+            <p className={styles.noteText}>
               <strong>Note:</strong> Our contact form is currently being
               developed. For now, please use the email address above to reach us
               directly.
