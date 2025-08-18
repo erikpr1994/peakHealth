@@ -1,20 +1,27 @@
 .container {
   position: relative;
   display: inline-block;
+  width: auto;
 }
 
 .trigger {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  padding: 0.5rem 0.75rem;
   background: transparent;
-  border: 1px solid var(--border);
-  border-radius: 8px;
   color: var(--foreground);
+  border: 1px solid var(--border);
+  text-decoration: none;
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius);
+  font-weight: 500;
   font-size: 0.875rem;
+  transition: all 0.3s ease;
+  height: 2rem;
+  width: auto;
+  justify-content: center;
   cursor: pointer;
-  transition: all 0.2s ease;
+  white-space: nowrap;
 }
 
 .trigger:hover {
@@ -30,6 +37,7 @@
 
 .currentLanguage {
   font-weight: 500;
+  font-size: 0.875rem;
 }
 
 .arrow {
@@ -46,16 +54,30 @@
 .dropdown {
   position: absolute;
   top: 100%;
+  left: 0;
   right: 0;
   margin-top: 0.25rem;
   background: var(--background);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius);
   box-shadow:
     0 4px 6px -1px rgba(0, 0, 0, 0.1),
     0 2px 4px -1px rgba(0, 0, 0, 0.06);
   z-index: 50;
-  min-width: 120px;
+  padding: 0.25rem;
+  animation: slideDown 0.2s ease-out;
+  min-width: 100%;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .option {
@@ -63,13 +85,15 @@
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  padding: 0.75rem 1rem;
+  padding: 0.5rem 0.75rem;
   background: transparent;
   border: none;
   color: var(--foreground);
   font-size: 0.875rem;
+  font-weight: 500;
   cursor: pointer;
   transition: background-color 0.2s ease;
+  border-radius: 4px;
 }
 
 .option:hover {
@@ -83,6 +107,7 @@
 
 .languageName {
   font-weight: 500;
+  font-size: 0.875rem;
 }
 
 .checkmark {
@@ -97,4 +122,94 @@
   right: 0;
   bottom: 0;
   z-index: 40;
+}
+
+/* Mobile styles */
+@media (max-width: 768px) {
+  .container {
+    display: block;
+    width: 100%;
+  }
+
+  .trigger {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    background: transparent;
+    color: var(--foreground);
+    border: 2px solid var(--border);
+    text-decoration: none;
+    padding: 0.875rem 1.5rem;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    width: 100%;
+    height: auto;
+    white-space: normal;
+  }
+
+  .trigger:hover {
+    background: var(--secondary);
+    border-color: var(--primary);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+
+  .icon {
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+
+  .currentLanguage {
+    font-weight: 600;
+    font-size: 0.95rem;
+  }
+
+  .arrow {
+    width: 1rem;
+    height: 1rem;
+  }
+
+  .dropdown {
+    width: 100%;
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    padding: 0.5rem;
+  }
+
+  .option {
+    padding: 0.875rem 1.25rem;
+    font-size: 0.95rem;
+    font-weight: 600;
+    border-radius: 8px;
+    margin-bottom: 0.25rem;
+  }
+
+  .option:last-child {
+    margin-bottom: 0;
+  }
+
+  .option:hover {
+    background: var(--secondary);
+    transform: translateX(4px);
+  }
+
+  .option.active {
+    background: linear-gradient(135deg, var(--primary) 0%, #2563eb 100%);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+  }
+
+  .languageName {
+    font-weight: 600;
+    font-size: 0.95rem;
+  }
+
+  .checkmark {
+    font-size: 1rem;
+    margin-left: 0.5rem;
+  }
 }
