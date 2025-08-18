@@ -1,5 +1,7 @@
 import type { Metadata } from 'next';
 import './globals.css';
+import '@peakhealth/ui/design-system';
+import '@peakhealth/ui/components';
 
 import { Header } from '@/components/layout/Header';
 import { Sidebar } from '@/components/layout/Sidebar';
@@ -15,7 +17,7 @@ const RootLayout = ({
   children,
 }: Readonly<{
   children: React.ReactNode;
-}>) => {
+}>): React.JSX.Element => {
   return (
     <html lang="en">
       <body className="antialiased" suppressHydrationWarning={true}>
