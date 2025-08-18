@@ -3,6 +3,7 @@ import { createClient } from '@/lib/supabase/client';
 import { Routine, StrengthWorkout, RunningWorkout } from '../types';
 import {
   DatabaseRoutineResponse,
+  DatabaseRoutineRPCResponse,
   DatabaseRoutine,
   DatabaseRoutineWithWorkouts,
 } from '../types/database';
@@ -113,7 +114,7 @@ export class RoutineService {
     }
   }
 
-  async getRoutineById(routineId: string): Promise<DatabaseRoutineResponse> {
+  async getRoutineById(routineId: string): Promise<DatabaseRoutineRPCResponse> {
     if (!this.supabase) {
       throw new Error('Database connection not available');
     }

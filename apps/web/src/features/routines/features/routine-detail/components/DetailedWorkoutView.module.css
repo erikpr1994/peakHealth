@@ -1,0 +1,200 @@
+.workoutCard {
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  background-color: white;
+}
+
+.workoutHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.workoutTitle {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #1f2937;
+  margin-bottom: 0.5rem;
+}
+
+.workoutMeta {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-size: 0.875rem;
+  color: #6b7280;
+  margin-bottom: 0.5rem;
+}
+
+.metaItem {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.sectionContainer {
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.sectionHeader:hover {
+  background-color: #f9fafb;
+}
+
+.sectionTitle {
+  font-weight: 500;
+  color: #1f2937;
+}
+
+.sectionMeta {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.25rem;
+}
+
+.sectionType {
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.sectionContent {
+  border-top: 1px solid #e5e7eb;
+  padding: 1rem;
+}
+
+.exerciseCard {
+  background-color: #f9fafb;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  margin-bottom: 1rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.exerciseCard:hover {
+  background-color: #f3f4f6;
+}
+
+.exerciseHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+}
+
+.exerciseTitle {
+  font-weight: 500;
+  color: #1f2937;
+}
+
+.muscleGroups {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+}
+
+.muscleGroupTag {
+  padding: 0.25rem 0.5rem;
+  background-color: white;
+  color: #6b7280;
+  border-radius: 0.25rem;
+  font-size: 0.75rem;
+}
+
+.exerciseDetails {
+  margin-bottom: 0.75rem;
+}
+
+.exerciseDetail {
+  font-size: 0.875rem;
+  color: #6b7280;
+  margin-bottom: 0.5rem;
+}
+
+.exerciseNotes {
+  color: #374151;
+  font-style: italic;
+}
+
+.setsContainer {
+  margin-top: 0.75rem;
+}
+
+.setItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: white;
+  padding: 0.5rem;
+  border-radius: 0.25rem;
+  border: 1px solid #e5e7eb;
+  margin-bottom: 0.5rem;
+}
+
+.setInfo {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.setNumber {
+  font-size: 0.75rem;
+  color: #6b7280;
+}
+
+.setDetails {
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+/* Section type colors */
+.sectionTypeWarmup {
+  background-color: #dbeafe;
+  color: #1d4ed8;
+}
+
+.sectionTypeBasic {
+  background-color: #dcfce7;
+  color: #15803d;
+}
+
+.sectionTypeCooldown {
+  background-color: #f3e8ff;
+  color: #7c3aed;
+}
+
+.sectionTypeEmom {
+  background-color: #fed7aa;
+  color: #ea580c;
+}
+
+.sectionTypeTabata {
+  background-color: #fecaca;
+  color: #dc2626;
+}
+
+.sectionTypeAmrap {
+  background-color: #fef3c7;
+  color: #d97706;
+}
+
+.sectionTypeDefault {
+  background-color: #f3f4f6;
+  color: #374151;
+}

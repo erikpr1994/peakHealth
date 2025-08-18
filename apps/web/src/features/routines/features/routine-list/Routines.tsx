@@ -16,7 +16,6 @@ const Routines = (): React.ReactElement => {
       const routines = await routineService.getUserRoutines();
       setRoutines(routines);
     } catch (err) {
-      console.error('Error fetching routines:', err);
       setError(err instanceof Error ? err.message : 'Failed to fetch routines');
     } finally {
       setLoading(false);
@@ -24,6 +23,9 @@ const Routines = (): React.ReactElement => {
   };
 
   useEffect(() => {
+    // Scroll to top when component mounts
+    window.scrollTo(0, 0);
+
     fetchRoutines();
   }, []);
 

@@ -14,7 +14,6 @@ export {
   RoutineOverviewCards,
   RoutineProgress,
   WeeklySchedule,
-  WorkoutDaysList,
 } from './features/routine-detail';
 
 export {

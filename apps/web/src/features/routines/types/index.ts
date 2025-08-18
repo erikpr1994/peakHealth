@@ -205,6 +205,7 @@ export interface RoutineData {
   goal: 'Strength' | 'Hypertrophy' | 'Endurance' | 'Weight Loss';
   isActive: boolean;
   isFavorite: boolean;
+  objectives?: string[];
   progress: {
     currentWeek: number;
     totalWeeks: number;
