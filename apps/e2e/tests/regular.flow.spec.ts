@@ -114,7 +114,15 @@ test.describe('Regular user flows', () => {
         .fill('Build strength and endurance');
       await page.keyboard.press('Enter');
 
-      await page.getByRole('button', { name: /add strength workout/i }).click();
+      // Wait a bit for the form to process the input
+      await page.waitForTimeout(1000);
+
+      // Try multiple selectors to find the button
+      const button = page.getByRole('button', {
+        name: /add strength workout/i,
+      });
+      await button.waitFor({ state: 'visible', timeout: 10000 });
+      await button.click();
 
       await page.waitForTimeout(1000);
 

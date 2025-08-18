@@ -510,11 +510,7 @@ const RoutineCreation = ({
   const handleSaveRoutine = async (): Promise<void> => {
     // Check authentication first
     if (!isAuthenticated || !user) {
-      showToast({
-        message:
-          'You must be logged in to create a routine. Please log in first.',
-        variant: 'error',
-      });
+      alert('You must be logged in to create a routine. Please log in first.');
       return;
     }
 
@@ -553,10 +549,9 @@ const RoutineCreation = ({
       alert('Routine saved successfully!');
       router.push('/routines');
     } catch (error) {
-      showToast({
-        message: `Failed to save routine: ${error instanceof Error ? error.message : 'Unknown error'}`,
-        variant: 'error',
-      });
+      alert(
+        `Failed to save routine: ${error instanceof Error ? error.message : 'Unknown error'}`
+      );
     } finally {
       // setIsSaving(false); // This state variable is not defined in the original file
     }
