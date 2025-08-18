@@ -40,3 +40,4 @@ describe('ContactPage', () => {
     expect(screen.getByText(/Our contact form is currently being developed/)).toBeInTheDocument();
   });
 });
+

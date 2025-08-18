@@ -31,3 +31,4 @@ describe('CareersPage', () => {
     expect(emailLink).toHaveAttribute('href', 'mailto:info@peakhealth.es');
   });
 });
+
