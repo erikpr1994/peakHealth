@@ -2,6 +2,8 @@ import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import React from 'react';
 import './globals.css';
+import '@peakhealth/ui/design-system';
+import '@peakhealth/ui/components';
 import { Header } from '@/components/shared/Header';
 import { Footer } from '@/components/shared/Footer';
 

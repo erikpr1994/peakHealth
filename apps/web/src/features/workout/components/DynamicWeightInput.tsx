@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Tooltip } from '@peakhealth/ui';
+import { Button, Input, Tooltip } from '@peakhealth/ui';
 
 // Equipment types that affect weight input behavior
 export type WeightInputType =

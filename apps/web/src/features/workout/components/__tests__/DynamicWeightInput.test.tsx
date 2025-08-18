@@ -4,8 +4,46 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 
 import { DynamicWeightInput, getWeightInputType } from '../DynamicWeightInput';
 
-// Mock the Tooltip component
+// Mock the UI components
 vi.mock('@peakhealth/ui', () => ({
+  Button: ({
+    children,
+    onClick,
+    ...props
+  }: {
+    children: React.ReactNode;
+    onClick?: () => void;
+    [key: string]: unknown;
+  }): React.ReactElement => (
+    <button data-testid="button" onClick={onClick} {...props}>
+      {children}
+    </button>
+  ),
+  Input: ({
+    value,
+    onChange,
+    placeholder,
+    type,
+    disabled,
+    ...props
+  }: {
+    value?: string | number;
+    onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    placeholder?: string;
+    type?: string;
+    disabled?: boolean;
+    [key: string]: unknown;
+  }): React.ReactElement => (
+    <input
+      data-testid="input"
+      value={value}
+      onChange={onChange}
+      placeholder={placeholder}
+      type={type}
+      disabled={disabled}
+      {...props}
+    />
+  ),
   Tooltip: ({
     children,
     content,

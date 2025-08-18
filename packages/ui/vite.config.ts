@@ -59,16 +59,34 @@ export default defineConfig({
       fileName: (format, entryName) => `${entryName}.js`,
     },
     rollupOptions: {
-      external: ['react', 'react-dom'],
+      external: [
+        'react',
+        'react-dom',
+        'react/jsx-runtime',
+        'react/jsx-dev-runtime',
+      ],
       output: {
         preserveModules: true,
         preserveModulesRoot: 'src',
         assetFileNames: assetInfo => {
+          // Ensure CSS files get predictable names
+          if (assetInfo.name && assetInfo.name.endsWith('.css')) {
+            return 'ui.css';
+          }
           return '[name][extname]';
+        },
+        globals: {
+          react: 'React',
+          'react-dom': 'ReactDOM',
+          'react/jsx-runtime': 'jsxRuntime',
+          'react/jsx-dev-runtime': 'jsxDevRuntime',
         },
       },
     },
-    cssCodeSplit: true,
+    cssCodeSplit: false, // Bundle all CSS into a single file
     sourcemap: true,
+  },
+  css: {
+    modules: false, // Disable CSS modules since we're using regular CSS
   },
 });

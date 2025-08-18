@@ -9,6 +9,7 @@ A comprehensive design system and UI component library for the PeakHealth platfo
 - **CSS Modules** - Scoped styling with CSS custom properties
 - **Storybook integration** - Interactive component documentation
 - **Dynamic build system** - Automatically handles new components
+- **Automatic CSS bundling** - CSS is bundled with components for easy import
 
 ## 📦 Installation
 
@@ -18,22 +19,26 @@ pnpm add @peakhealth/ui
 
 ## 🎯 Usage
 
-### Tree-shakable imports (Recommended)
-
-```tsx
-import { Button } from '@peakhealth/ui/button';
-// CSS is included internally by components
-
-// Or import multiple components
-import { Button, Input, Toast } from '@peakhealth/ui';
-// All components include their own CSS internally
-```
-
-### Design System CSS
+### Setup (Required once per app)
 
 ```tsx
 // Import the design system CSS for global styles and variables
-import '@peakhealth/ui/design-system.css';
+import '@peakhealth/ui/design-system';
+
+// Import the components CSS (includes all component styles)
+import '@peakhealth/ui/components';
+```
+
+### Tree-shakable imports (Recommended)
+
+```tsx
+// Import individual components - CSS is automatically included
+import { Button } from '@peakhealth/ui/button';
+import { Input } from '@peakhealth/ui/input';
+import { Modal } from '@peakhealth/ui/modal';
+
+// Or import multiple components from the main package
+import { Button, Input, Toast } from '@peakhealth/ui';
 ```
 
 ## 🧩 Components
@@ -213,7 +218,7 @@ pnpm type-check
 1. Create component directory: `src/components/component-name/`
 2. Add component files:
    - `component-name.tsx` - Component implementation
-   - `component-name.css` - Component styles
+   - `component-name.css` - Component styles (if needed)
    - `index.ts` - Component exports
    - `ComponentName.stories.ts` - Storybook stories (co-located)
 3. Update `src/index.ts` to export the component
@@ -226,7 +231,7 @@ The build system automatically:
 - Discovers all components in `src/components/`
 - Generates TypeScript declarations
 - Creates tree-shakable exports
-- Copies CSS files to the correct locations
+- Bundles CSS into a single file for easy import
 - Builds with Vite for optimal performance
 
 ## 📚 Storybook
@@ -264,17 +269,17 @@ packages/ui/
 │   │   │   └── index.ts
 │   │   ├── modal/
 │   │   │   ├── modal.tsx
-│   │   │   ├── modal.css
 │   │   │   ├── Modal.stories.ts
 │   │   │   └── index.ts
 │   │   └── tooltip/
 │   │       ├── tooltip.tsx
-│   │       ├── tooltip.css
 │   │       ├── Tooltip.stories.ts
 │   │       └── index.ts
 │   ├── utils.ts           # Shared utilities
 │   └── index.ts           # Main exports
 ├── dist/                  # Built output
+│   ├── components/ui.css  # Bundled component styles
+│   └── design-system.css  # Design system variables
 ├── .storybook/           # Storybook configuration
 └── scripts/              # Build scripts
 ```

@@ -3,6 +3,8 @@ import { Inter } from 'next/font/google';
 import React from 'react';
 
 import './globals.css';
+import '@peakhealth/ui/design-system';
+import '@peakhealth/ui/components';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -15,7 +17,7 @@ const RootLayout = ({
   children,
 }: Readonly<{
   children: React.ReactNode;
-}>) => {
+}>): React.JSX.Element => {
   return (
     <html lang="en">
       <body className={inter.className}>
