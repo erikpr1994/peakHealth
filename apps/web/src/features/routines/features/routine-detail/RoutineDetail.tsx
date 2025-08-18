@@ -6,9 +6,14 @@ import RoutineDetailHeader from './components/RoutineDetailHeader';
 import RoutineOverviewCards from './components/RoutineOverviewCards';
 import RoutineProgress from './components/RoutineProgress';
 import WeeklySchedule from './components/WeeklySchedule';
-import RoutineInfo from './components/RoutineInfo';
-import WorkoutDaysList from './components/WorkoutDaysList';
-import { RoutineData, WorkoutDay } from '@/features/routines/types';
+import RoutineObjectives from './components/RoutineObjectives';
+import DetailedWorkoutsList from './components/DetailedWorkoutsList';
+import {
+  RoutineData,
+  WorkoutDay,
+  StrengthWorkout,
+  RunningWorkout,
+} from '@/features/routines/types';
 import { routineService } from '../../services/routineService';
 import { transformDatabaseRoutineToRoutineData } from '../../utils/dataTransformers';
 
@@ -47,11 +52,20 @@ const RoutineDetail = ({
     return schedule;
   };
   const router = useRouter();
-  const [routineData, setRoutineData] = useState<RoutineData | null>(null);
+  const [routineData, setRoutineData] = useState<
+    | (RoutineData & {
+        strengthWorkouts: StrengthWorkout[];
+        runningWorkouts: RunningWorkout[];
+      })
+    | null
+  >(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    // Scroll to top when component mounts
+    window.scrollTo(0, 0);
+
     const fetchRoutine = async (): Promise<void> => {
       try {
         setLoading(true);
@@ -59,8 +73,6 @@ const RoutineDetail = ({
 
         // Use safe transformation function
         const transformedData = transformDatabaseRoutineToRoutineData(data);
-
-        // Debug logging removed for production
 
         setRoutineData(transformedData);
       } catch (err) {
@@ -82,7 +94,7 @@ const RoutineDetail = ({
       // Refresh the routine data
       const data = await routineService.getRoutineById(routineId);
       setRoutineData(prev =>
-        prev ? { ...prev, isFavorite: data.routine.is_favorite } : null
+        prev ? { ...prev, isFavorite: data.routine.isFavorite } : null
       );
     } catch {
       // Error handling without console.log
@@ -148,6 +160,8 @@ const RoutineDetail = ({
         isActive={routineData.isActive}
         isFavorite={routineData.isFavorite}
         onToggleFavorite={handleToggleFavorite}
+        onDuplicate={handleDuplicate}
+        onDelete={handleDelete}
       />
 
       <RoutineOverviewCards
@@ -156,49 +170,35 @@ const RoutineDetail = ({
           calculateWeeklySchedule(routineData.workoutDays).filter(day => day)
             .length
         }
-        goal={routineData.goal}
         difficulty={routineData.difficulty}
       />
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
-        {/* Progress & Schedule */}
-        <div className="lg:col-span-2 space-y-6">
-          {routineData.isActive ? (
-            <RoutineProgress
-              currentWeek={routineData.progress.currentWeek}
-              totalWeeks={routineData.progress.totalWeeks}
-              completedWorkouts={routineData.progress.completedWorkouts}
-              totalWorkouts={routineData.progress.totalWorkouts}
-            />
-          ) : (
-            <div className="bg-gray-50 border border-gray-200 rounded-lg p-6">
-              <h2 className="text-lg font-semibold text-gray-800 mb-2">
-                Progress
-              </h2>
-              <p className="text-gray-600">
-                This routine is not currently active. Progress tracking will be
-                available once you activate the routine.
-              </p>
-            </div>
-          )}
+      {/* Training Objectives & Progress */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+        <RoutineObjectives objectives={routineData.objectives || []} />
 
-          <WeeklySchedule
-            schedule={calculateWeeklySchedule(routineData.workoutDays)}
-          />
-        </div>
-
-        {/* Routine Info */}
-        <RoutineInfo
-          difficulty={routineData.difficulty}
-          createdDate={routineData.createdDate}
-          lastModified={routineData.lastModified}
-          onDuplicate={handleDuplicate}
-          onDelete={handleDelete}
+        <RoutineProgress
+          currentWeek={routineData.progress.currentWeek}
+          totalWeeks={routineData.progress.totalWeeks}
+          completedWorkouts={routineData.progress.completedWorkouts}
+          totalWorkouts={routineData.progress.totalWorkouts}
+          isActive={routineData.isActive}
         />
       </div>
 
-      <WorkoutDaysList
-        workoutDays={routineData.workoutDays}
+      {/* Weekly Schedule - Full Width */}
+      <div className="mb-8">
+        <WeeklySchedule
+          schedule={calculateWeeklySchedule(routineData.workoutDays)}
+          strengthWorkouts={routineData.strengthWorkouts}
+          runningWorkouts={routineData.runningWorkouts}
+        />
+      </div>
+
+      {/* Detailed Workouts */}
+      <DetailedWorkoutsList
+        strengthWorkouts={routineData.strengthWorkouts}
+        runningWorkouts={routineData.runningWorkouts}
         routineId={routineId}
       />
     </div>

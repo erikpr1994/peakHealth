@@ -1,0 +1,67 @@
+.workoutsContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.workoutSection {
+  margin-bottom: 2rem;
+}
+
+.workoutSectionHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.workoutSectionTitle {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.workoutSectionIcon {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.strengthIcon {
+  color: #3b82f6;
+}
+
+.runningIcon {
+  color: #10b981;
+}
+
+.workoutSectionContent {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.emptyState {
+  padding: 2rem;
+  text-align: center;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  background-color: white;
+}
+
+.emptyStateIcon {
+  width: 3rem;
+  height: 3rem;
+  margin: 0 auto 1rem;
+  color: #d1d5db;
+}
+
+.emptyStateTitle {
+  font-size: 1.125rem;
+  font-weight: 500;
+  color: #374151;
+  margin-bottom: 0.5rem;
+}
+
+.emptyStateDescription {
+  color: #6b7280;
+}

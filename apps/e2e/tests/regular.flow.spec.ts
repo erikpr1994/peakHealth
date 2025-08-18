@@ -119,7 +119,7 @@ test.describe('Regular user flows', () => {
 
       // Try multiple selectors to find the button
       const button = page.getByRole('button', {
-        name: /add strength workout/i,
+        name: /Add Strength Workout/i,
       });
       await button.waitFor({ state: 'visible', timeout: 10000 });
       await button.click();

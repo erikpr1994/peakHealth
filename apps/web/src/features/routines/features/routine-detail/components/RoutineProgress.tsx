@@ -8,6 +8,7 @@ interface RoutineProgressProps {
   totalWeeks: number;
   completedWorkouts: number;
   totalWorkouts: number;
+  isActive: boolean;
 }
 
 const RoutineProgress = ({
@@ -15,8 +16,21 @@ const RoutineProgress = ({
   totalWeeks,
   completedWorkouts,
   totalWorkouts,
+  isActive,
 }: RoutineProgressProps): React.ReactElement => {
   const progressPercentage = (completedWorkouts / totalWorkouts) * 100;
+
+  if (!isActive) {
+    return (
+      <Card className="p-6 flex flex-col justify-center min-h-[120px]">
+        <h2 className="text-lg font-semibold text-gray-800 mb-2">Progress</h2>
+        <p className="text-gray-600">
+          This routine is not currently active. Progress tracking will be
+          available once you activate the routine.
+        </p>
+      </Card>
+    );
+  }
 
   return (
     <Card className="p-6">

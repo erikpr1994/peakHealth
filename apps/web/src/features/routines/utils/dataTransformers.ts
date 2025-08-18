@@ -1,5 +1,5 @@
 import {
-  DatabaseRoutineResponse,
+  DatabaseRoutineRPCResponse,
   DatabaseWorkout,
   DatabaseSection,
   DatabaseExercise,
@@ -158,8 +158,11 @@ export function transformDatabaseWorkout(
 }
 
 export function transformDatabaseRoutineToRoutineData(
-  data: DatabaseRoutineResponse
-): RoutineData {
+  data: DatabaseRoutineRPCResponse
+): RoutineData & {
+  strengthWorkouts: StrengthWorkout[];
+  runningWorkouts: RunningWorkout[];
+} {
   // Validate routine data
   if (!isValidDifficulty(data.routine.difficulty)) {
     throw new Error(`Invalid difficulty: ${data.routine.difficulty}`);
@@ -210,7 +213,7 @@ export function transformDatabaseRoutineToRoutineData(
   const totalWorkoutsForDuration =
     workoutsPerWeek * (data.routine.duration || 12);
 
-  // Transform workout days
+  // Transform workout days with detailed information
   const workoutDays: WorkoutDay[] = (data.workouts || []).map(
     (workout: DatabaseWorkout) => ({
       id: workout.id,
@@ -245,6 +248,21 @@ export function transformDatabaseRoutineToRoutineData(
     })
   );
 
+  // Transform detailed workouts
+  const strengthWorkouts: StrengthWorkout[] = [];
+  const runningWorkouts: RunningWorkout[] = [];
+
+  data.workouts?.forEach((workout: DatabaseWorkout) => {
+    const transformedWorkout = transformDatabaseWorkout(workout);
+    if (transformedWorkout) {
+      if (transformedWorkout.type === 'strength') {
+        strengthWorkouts.push(transformedWorkout);
+      } else if (transformedWorkout.type === 'running') {
+        runningWorkouts.push(transformedWorkout);
+      }
+    }
+  });
+
   // Safe date parsing
   const parseDate = (dateString: string | null | undefined): string => {
     if (!dateString) return 'Unknown';
@@ -272,23 +290,26 @@ export function transformDatabaseRoutineToRoutineData(
     // daysPerWeek is calculated dynamically from workout days
     difficulty: data.routine.difficulty,
     goal: data.routine.goal,
-    isActive: data.routine.is_active,
-    isFavorite: data.routine.is_favorite,
+    isActive: data.routine.isActive,
+    isFavorite: data.routine.isFavorite,
+    objectives: data.routine.objectives || [],
     progress: {
       currentWeek:
         workoutsPerWeek > 0
           ? Math.floor(
-              (data.routine.completed_workouts || 0) / workoutsPerWeek
+              (data.routine.completedWorkouts || 0) / workoutsPerWeek
             ) + 1
           : 1,
       totalWeeks: data.routine.duration || 12,
-      completedWorkouts: data.routine.completed_workouts || 0,
+      completedWorkouts: data.routine.completedWorkouts || 0,
       totalWorkouts: totalWorkoutsForDuration,
     },
     // Schedule is calculated dynamically from workout days
     workoutDays,
-    createdDate: parseDate(data.routine.created_at),
-    lastModified: parseDate(data.routine.updated_at),
+    createdDate: parseDate(data.routine.createdAt),
+    lastModified: parseDate(data.routine.updatedAt),
+    strengthWorkouts,
+    runningWorkouts,
   };
 }
 

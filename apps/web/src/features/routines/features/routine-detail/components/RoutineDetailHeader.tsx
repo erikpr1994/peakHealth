@@ -1,6 +1,6 @@
 'use client';
 
-import { ArrowLeft, Play, Edit, Heart } from 'lucide-react';
+import { ArrowLeft, Play, Edit, Heart, Copy, Trash } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
 import { Button } from '@/components/ui/button';
@@ -12,6 +12,8 @@ interface RoutineDetailHeaderProps {
   isActive: boolean;
   isFavorite: boolean;
   onToggleFavorite: () => void;
+  onDuplicate: () => void;
+  onDelete: () => void;
 }
 
 const RoutineDetailHeader = ({
@@ -21,6 +23,8 @@ const RoutineDetailHeader = ({
   isActive,
   isFavorite,
   onToggleFavorite,
+  onDuplicate,
+  onDelete,
 }: RoutineDetailHeaderProps): React.ReactElement => {
   const router = useRouter();
 
@@ -61,12 +65,30 @@ const RoutineDetailHeader = ({
           Edit
         </Button>
         <Button
-          className="bg-indigo-600 hover:bg-indigo-700 whitespace-nowrap min-w-[120px]"
-          onClick={() => router.push(`/workout-tracker/${routineId}`)}
+          variant="outline"
+          onClick={onDuplicate}
+          className="whitespace-nowrap"
         >
-          <Play className="w-4 h-4 mr-2" />
-          Start Workout
+          <Copy className="w-4 h-4 mr-2" />
+          Duplicate
         </Button>
+        <Button
+          variant="outline"
+          onClick={onDelete}
+          className="whitespace-nowrap text-red-600 hover:text-red-700"
+        >
+          <Trash className="w-4 h-4 mr-2" />
+          Delete
+        </Button>
+        {isActive && (
+          <Button
+            className="bg-indigo-600 hover:bg-indigo-700 whitespace-nowrap min-w-[120px]"
+            onClick={() => router.push(`/workout-tracker/${routineId}`)}
+          >
+            <Play className="w-4 h-4 mr-2" />
+            Start next workout
+          </Button>
+        )}
       </div>
     </div>
   );

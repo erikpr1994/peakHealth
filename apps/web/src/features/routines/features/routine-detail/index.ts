@@ -7,4 +7,3 @@ export { default as RoutineInfo } from './components/RoutineInfo';
 export { default as RoutineOverviewCards } from './components/RoutineOverviewCards';
 export { default as RoutineProgress } from './components/RoutineProgress';
 export { default as WeeklySchedule } from './components/WeeklySchedule';
-export { default as WorkoutDaysList } from './components/WorkoutDaysList';

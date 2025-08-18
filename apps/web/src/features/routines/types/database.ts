@@ -1,6 +1,7 @@
 // Database response types to avoid using 'any'
 export interface DatabaseRoutine {
   id: string;
+  user_id: string;
   name: string;
   description: string;
   difficulty: 'Beginner' | 'Intermediate' | 'Advanced';
@@ -74,6 +75,28 @@ export interface DatabaseWorkout {
 
 export interface DatabaseRoutineResponse {
   routine: DatabaseRoutine;
+  workouts: DatabaseWorkout[];
+}
+
+// Interface for RPC function response (camelCase fields)
+export interface DatabaseRoutineRPCResponse {
+  routine: {
+    id: string;
+    name: string;
+    description: string;
+    difficulty: 'Beginner' | 'Intermediate' | 'Advanced';
+    goal: 'Strength' | 'Hypertrophy' | 'Endurance' | 'Weight Loss';
+    duration: number;
+    isActive: boolean;
+    isFavorite: boolean;
+    objectives: string[];
+    totalWorkouts: number;
+    completedWorkouts: number;
+    estimatedDuration: string;
+    createdAt: string;
+    updatedAt: string;
+    lastUsed: string | null;
+  };
   workouts: DatabaseWorkout[];
 }
 
