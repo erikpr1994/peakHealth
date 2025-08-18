@@ -1,8 +1,12 @@
-import React from 'react';
 import { Metadata } from 'next';
+import React from 'react';
 
 import { BlogHeader } from '@/components/blog/BlogHeader';
 import { BlogList } from '@/components/blog/BlogList';
+
+// Force static generation for blog listing page
+export const dynamic = 'force-static';
+export const revalidate = false;
 
 export const metadata: Metadata = {
   title: 'Blog - Peak Health',

@@ -1,0 +1,366 @@
+.container {
+  min-height: 100vh;
+  background: var(--background);
+}
+
+/* Hero Section */
+.hero {
+  padding: 6rem 0 4rem;
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+  text-align: center;
+}
+
+.heroContent {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.heroTitle {
+  font-size: 3.5rem;
+  font-weight: 800;
+  line-height: 1.1;
+  margin-bottom: 2rem;
+  color: var(--foreground);
+}
+
+.gradientText {
+  background: linear-gradient(135deg, var(--primary) 0%, #8b5cf6 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.heroDescription {
+  font-size: 1.5rem;
+  line-height: 1.6;
+  color: var(--muted-foreground);
+  margin-bottom: 1.5rem;
+  font-style: italic;
+}
+
+.heroSubtitle {
+  font-size: 1.25rem;
+  line-height: 1.6;
+  color: var(--foreground);
+  font-weight: 500;
+}
+
+/* Mission Section */
+.mission {
+  padding: 4rem 0;
+  background: white;
+}
+
+.missionContent {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.sectionTitle {
+  font-size: 2.5rem;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 3rem;
+  color: var(--foreground);
+}
+
+.missionGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+  margin-top: 2rem;
+}
+
+.missionCard {
+  padding: 2rem;
+  background: var(--secondary);
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  transition: all 0.3s ease;
+}
+
+.missionCard:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  border-color: var(--primary);
+}
+
+.missionCard h3 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: var(--foreground);
+}
+
+.missionCard p {
+  color: var(--muted-foreground);
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* Pillars Section */
+.pillars {
+  padding: 4rem 0;
+  background: var(--secondary);
+}
+
+.pillarsContent {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.pillarsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.pillarCard {
+  padding: 2rem;
+  background: white;
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  transition: all 0.3s ease;
+  text-align: center;
+}
+
+.pillarCard:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  border-color: var(--primary);
+}
+
+.pillarIcon {
+  width: 60px;
+  height: 60px;
+  background: var(--primary);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1.5rem;
+  color: white;
+}
+
+.pillarTitle {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: var(--foreground);
+}
+
+.pillarDescription {
+  color: var(--muted-foreground);
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* Impact Section */
+.impact {
+  padding: 4rem 0;
+  background: white;
+}
+
+.impactContent {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.impactGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.impactItem {
+  padding: 2rem;
+  background: var(--secondary);
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  transition: all 0.3s ease;
+}
+
+.impactItem:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  border-color: var(--primary);
+}
+
+.impactItem h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: var(--foreground);
+}
+
+.impactItem p {
+  color: var(--muted-foreground);
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* CTA Section */
+.cta {
+  padding: 4rem 0;
+  background: linear-gradient(135deg, var(--primary) 0%, #8b5cf6 100%);
+  color: white;
+  text-align: center;
+}
+
+.ctaContent {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.ctaContent h2 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+}
+
+.ctaContent p {
+  font-size: 1.25rem;
+  line-height: 1.6;
+  margin-bottom: 2rem;
+  opacity: 0.9;
+}
+
+.ctaButtons {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.primaryButton {
+  display: inline-flex;
+  align-items: center;
+  background: white;
+  color: var(--primary);
+  text-decoration: none;
+  padding: 1rem 2rem;
+  border-radius: var(--radius);
+  font-weight: 600;
+  font-size: 1.125rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.primaryButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+}
+
+.secondaryButton {
+  display: inline-flex;
+  align-items: center;
+  background: transparent;
+  color: white;
+  border: 2px solid white;
+  text-decoration: none;
+  padding: 1rem 2rem;
+  border-radius: var(--radius);
+  font-weight: 600;
+  font-size: 1.125rem;
+  transition: all 0.3s ease;
+}
+
+.secondaryButton:hover {
+  background: white;
+  color: var(--primary);
+  transform: translateY(-2px);
+}
+
+/* Mobile styles */
+@media (max-width: 768px) {
+  .hero {
+    padding: 4rem 0 2rem;
+  }
+
+  .heroTitle {
+    font-size: 2.5rem;
+  }
+
+  .heroDescription {
+    font-size: 1.25rem;
+  }
+
+  .heroSubtitle {
+    font-size: 1.125rem;
+  }
+
+  .sectionTitle {
+    font-size: 2rem;
+  }
+
+  .missionGrid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .pillarsGrid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .impactGrid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .ctaContent h2 {
+    font-size: 2rem;
+  }
+
+  .ctaContent p {
+    font-size: 1.125rem;
+  }
+
+  .ctaButtons {
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero {
+    padding: 3rem 0 1.5rem;
+  }
+
+  .heroTitle {
+    font-size: 2rem;
+  }
+
+  .heroDescription {
+    font-size: 1.125rem;
+  }
+
+  .heroSubtitle {
+    font-size: 1rem;
+  }
+
+  .sectionTitle {
+    font-size: 1.75rem;
+  }
+
+  .missionCard,
+  .pillarCard,
+  .impactItem {
+    padding: 1.5rem;
+  }
+
+  .ctaContent h2 {
+    font-size: 1.75rem;
+  }
+
+  .ctaContent p {
+    font-size: 1rem;
+  }
+}
