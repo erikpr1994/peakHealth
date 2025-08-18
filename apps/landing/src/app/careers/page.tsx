@@ -21,15 +21,16 @@ const CareersPage = (): React.JSX.Element => {
           <div className={styles.statusSection}>
             <h2 className={styles.statusTitle}>Current Status</h2>
             <p className={styles.statusDescription}>
-              We're currently not actively searching for new employees, but we're
-              always interested in connecting with talented individuals who share
-              our passion for fitness and technology.
+              We're currently not actively searching for new employees, but
+              we're always interested in connecting with talented individuals
+              who share our passion for fitness and technology.
             </p>
             <div className={styles.openCvPolicy}>
               <p className={styles.openCvPolicyText}>
                 <strong>Open CV Policy:</strong> We welcome and review all open
-                CVs from passionate developers, designers, and fitness enthusiasts
-                who want to make a difference in the fitness industry.
+                CVs from passionate developers, designers, and fitness
+                enthusiasts who want to make a difference in the fitness
+                industry.
               </p>
             </div>
           </div>
@@ -40,9 +41,12 @@ const CareersPage = (): React.JSX.Element => {
               Send your CV and a brief introduction to:
             </p>
             <div className={styles.emailContainer}>
-              <p className={styles.emailLink}>
+              <p className={styles.emailText}>
                 📧{' '}
-                <a href="mailto:info@peakhealth.es" className={styles.emailLink}>
+                <a
+                  href="mailto:info@peakhealth.es"
+                  className={styles.emailLink}
+                >
                   info@peakhealth.es
                 </a>
               </p>
