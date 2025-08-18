@@ -1,7 +1,7 @@
 'use client';
 
 import { User } from '@supabase/supabase-js';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import React, {
   createContext,
   useContext,
@@ -76,7 +76,7 @@ const handleUserNotFoundCleanup = async (): Promise<void> => {
     sessionStorage.removeItem('supabase.auth.token');
   } catch (error) {
     // Log error but continue with redirect
-    console.error('Error clearing storage:', error);
+    // Error clearing storage, continue with redirect
   }
 
   // Redirect to external landing app
@@ -112,6 +112,7 @@ export const AuthProvider = ({
 }): React.ReactElement => {
   const supabase = createClient();
   const router = useRouter();
+  const pathname = usePathname();
   const [isAuthOperationLoading, setIsAuthOperationLoading] = useState(false);
 
   // Use SWR for user data fetching with proper error handling
@@ -146,7 +147,33 @@ export const AuthProvider = ({
       if (event === 'SIGNED_IN' && session) {
         // Revalidate user data when signed in
         await mutateUser();
-        router.push('/dashboard');
+
+        // Only redirect to dashboard if user is not already on a protected route
+        const protectedRoutes = [
+          '/dashboard',
+          '/profile',
+          '/calendar',
+          '/exercises',
+          '/routines',
+          '/workout-tracker',
+          '/equipment',
+          '/gyms',
+          '/health',
+          '/performance',
+          '/suggestions',
+          '/trainer-and-clubs',
+          '/account-settings',
+          '/app-settings',
+          '/help-support',
+        ];
+
+        const isOnProtectedRoute = protectedRoutes.some(route =>
+          pathname.startsWith(route)
+        );
+
+        if (!isOnProtectedRoute) {
+          router.push('/dashboard');
+        }
       } else if (event === 'SIGNED_OUT') {
         // Clear user data when signed out
         await mutateUser(null);
@@ -162,7 +189,7 @@ export const AuthProvider = ({
     });
 
     return (): void => subscription.unsubscribe();
-  }, [mutateUser, router, supabase]);
+  }, [mutateUser, router, supabase, pathname]);
 
   const login = async (email?: string, password?: string): Promise<void> => {
     // Input validation
@@ -191,7 +218,7 @@ export const AuthProvider = ({
       // Revalidate user data after successful login
       await mutateUser();
     } catch (error) {
-      console.error('Login error:', error);
+      // Login error occurred
       throw error;
     } finally {
       setIsAuthOperationLoading(false);
@@ -243,7 +270,7 @@ export const AuthProvider = ({
       const responseData = await response.json();
       await mutateUser(responseData.user);
     } catch (error) {
-      console.error('Signup error:', error);
+      // Signup error occurred
       throw error;
     } finally {
       setIsAuthOperationLoading(false);
@@ -295,7 +322,7 @@ export const AuthProvider = ({
         window.location.href = landingUrl;
       }
     } catch (error) {
-      console.error('Logout error:', error);
+      // Logout error occurred
       throw error;
     } finally {
       setIsAuthOperationLoading(false);

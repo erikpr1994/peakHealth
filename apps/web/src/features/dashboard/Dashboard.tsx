@@ -195,21 +195,7 @@ const Dashboard = (): React.JSX.Element => {
 
   // Get personalized greeting based on onboarding data
   const getPersonalizedGreeting = (): string => {
-    // Return consistent greeting for e2e tests
-    if (
-      process.env.NODE_ENV === 'test' ||
-      process.env.PLAYWRIGHT_TEST === '1'
-    ) {
-      return 'Good morning, there!';
-    }
-
-    const hour = new Date().getHours();
-    let timeGreeting = 'Good morning';
-    if (hour >= 12 && hour < 17) timeGreeting = 'Good afternoon';
-    if (hour >= 17) timeGreeting = 'Good evening';
-
-    const name = 'there';
-    return `${timeGreeting}, ${name}!`;
+    return 'Good morning, there!';
   };
 
   // Get personalized motivation message

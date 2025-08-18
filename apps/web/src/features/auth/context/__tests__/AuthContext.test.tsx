@@ -7,16 +7,29 @@ import {
 } from '@testing-library/react';
 import React from 'react';
 import useSWR from 'swr';
-import { vi, describe, it, expect, beforeEach, afterEach, Mock } from 'vitest';
+import {
+  vi,
+  describe,
+  it,
+  expect,
+  beforeEach,
+  afterEach,
+  type Mock,
+} from 'vitest';
 
-import { AuthProvider, useAuth } from '../AuthContext';
-import { AuthContextType, ExtendedUser } from '../AuthContext';
+import {
+  AuthProvider,
+  useAuth,
+  type AuthContextType,
+  type ExtendedUser,
+} from '../AuthContext';
 
 // Mock external dependencies
 vi.mock('next/navigation', () => ({
-  useRouter: () => ({
+  useRouter: (): { push: Mock } => ({
     push: vi.fn(),
   }),
+  usePathname: (): string => '/test-path',
 }));
 
 // Mock fetch globally
@@ -24,9 +37,11 @@ global.fetch = vi.fn();
 
 // Mock Supabase client with proper auth methods
 const mockSupabaseAuth = {
-  onAuthStateChange: vi.fn(() => ({
-    data: { subscription: { unsubscribe: vi.fn() } },
-  })),
+  onAuthStateChange: vi.fn(
+    (): { data: { subscription: { unsubscribe: () => void } } } => ({
+      data: { subscription: { unsubscribe: vi.fn() } },
+    })
+  ),
   signInWithPassword: vi.fn(),
   signUp: vi.fn(),
   signOut: vi.fn(),
@@ -45,7 +60,7 @@ vi.mock('swr');
 const mockUseSWR = useSWR as Mock;
 
 // Test component to access context
-const TestComponent = () => {
+const TestComponent = (): React.ReactElement => {
   const auth = useAuth();
   return (
     <div>
@@ -70,7 +85,7 @@ const TestComponent = () => {
 describe('AuthContext', () => {
   let mutateUser: Mock;
 
-  beforeEach(() => {
+  beforeEach((): void => {
     vi.clearAllMocks();
     mutateUser = vi.fn();
     mockUseSWR.mockReturnValue({
@@ -90,11 +105,13 @@ describe('AuthContext', () => {
     });
   });
 
-  afterEach(() => {
+  afterEach((): void => {
     vi.resetAllMocks();
   });
 
-  const renderWithAuthProvider = (user: ExtendedUser | null = null) => {
+  const renderWithAuthProvider = (
+    user: ExtendedUser | null = null
+  ): ReturnType<typeof render> => {
     mockUseSWR.mockReturnValue({
       data: user,
       mutate: mutateUser,
@@ -203,7 +220,7 @@ describe('AuthContext', () => {
       });
 
       let auth: AuthContextType;
-      const TestComponentWithAuth = () => {
+      const TestComponentWithAuth = (): React.ReactElement => {
         auth = useAuth();
         return <TestComponent />;
       };
@@ -265,7 +282,7 @@ describe('AuthContext', () => {
       });
 
       let auth: AuthContextType | undefined;
-      const TestComponentWithAuth = () => {
+      const TestComponentWithAuth = (): React.ReactElement => {
         auth = useAuth();
         return <TestComponent />;
       };
@@ -276,18 +293,18 @@ describe('AuthContext', () => {
         </AuthProvider>
       );
 
-      expect(auth!.userTypes).toEqual(['regular', 'trainer']);
-      expect(auth!.primaryUserType).toBe('regular');
-      expect(auth!.subscriptionTier).toBe('premium');
-      expect(auth!.permissions).toEqual({
+      expect(auth?.userTypes).toEqual(['regular', 'trainer']);
+      expect(auth?.primaryUserType).toBe('regular');
+      expect(auth?.subscriptionTier).toBe('premium');
+      expect(auth?.permissions).toEqual({
         view_exercises: true,
         manage_clients: true,
       });
-      expect(auth!.features).toEqual([
+      expect(auth?.features).toEqual([
         'advanced_analytics',
         'client_management',
       ]);
-      expect(auth!.dataAccessRules).toEqual({
+      expect(auth?.dataAccessRules).toEqual({
         own_profile: 'full',
         client_profiles: 'training_only',
       });
@@ -318,7 +335,7 @@ describe('AuthContext', () => {
       });
 
       let auth: AuthContextType | undefined;
-      const TestComponentWithAuth = () => {
+      const TestComponentWithAuth = (): React.ReactElement => {
         auth = useAuth();
         return <TestComponent />;
       };
@@ -329,17 +346,17 @@ describe('AuthContext', () => {
         </AuthProvider>
       );
 
-      expect(auth!.hasPermission('view_exercises')).toBe(true);
-      expect(auth!.hasPermission('invalid_permission')).toBe(false);
-      expect(auth!.hasFeature('advanced_analytics')).toBe(true);
-      expect(auth!.hasFeature('invalid_feature')).toBe(false);
-      expect(auth!.hasUserType('trainer')).toBe(true);
-      expect(auth!.hasUserType('doctor')).toBe(false);
-      expect(auth!.hasSubscriptionTier('premium')).toBe(true);
-      expect(auth!.hasSubscriptionTier('free')).toBe(false);
-      expect(auth!.canAccessData('own_profile', 'full')).toBe(true);
-      expect(auth!.canAccessData('own_profile', 'read_only')).toBe(true);
-      expect(auth!.canAccessData('client_profiles', 'full')).toBe(false);
+      expect(auth?.hasPermission('view_exercises')).toBe(true);
+      expect(auth?.hasPermission('invalid_permission')).toBe(false);
+      expect(auth?.hasFeature('advanced_analytics')).toBe(true);
+      expect(auth?.hasFeature('invalid_feature')).toBe(false);
+      expect(auth?.hasUserType('trainer')).toBe(true);
+      expect(auth?.hasUserType('doctor')).toBe(false);
+      expect(auth?.hasSubscriptionTier('premium')).toBe(true);
+      expect(auth?.hasSubscriptionTier('free')).toBe(false);
+      expect(auth?.canAccessData('own_profile', 'full')).toBe(true);
+      expect(auth?.canAccessData('own_profile', 'read_only')).toBe(true);
+      expect(auth?.canAccessData('client_profiles', 'full')).toBe(false);
     });
   });
 });
