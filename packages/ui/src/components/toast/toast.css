@@ -3,12 +3,14 @@
   position: fixed;
   top: 1rem;
   right: 1rem;
-  z-index: 9999;
+  z-index: 999999;
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
   max-width: 24rem;
   pointer-events: none;
+  /* Ensure it's above everything */
+  isolation: isolate;
 }
 
 /* Individual Toast */
@@ -27,7 +29,10 @@
   max-width: 100%;
   /* Force visibility for debugging */
   position: relative;
-  z-index: 10000;
+  z-index: 100000;
+  /* Ensure it's visible */
+  min-height: 60px;
+  min-width: 300px;
 }
 
 .peakhealth-toast--visible {
