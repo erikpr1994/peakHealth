@@ -1,3 +1,8 @@
+---
+description: description: When I need to create, modify, use, or work with UI components, design system patterns, CSS imports, styling, or component architecture in the PeakHealth project.
+alwaysApply: false
+---
+
 # UI Components and Design System
 
 ## Component Organization
@@ -7,27 +12,86 @@
 3. **Components in `@ui/` should import their own CSS internally** - only `design-system.css` is exported from the package
 4. **CSS files in the dist directory should not be exported** - they should be used inside components
 
+## CSS Import Pattern for @peakhealth/ui
+
+### Component Structure
+
+Each component in `@peakhealth/ui` imports its own CSS internally:
+
+```typescript
+// packages/ui/src/components/button/button.tsx
+import * as React from 'react';
+import './button.css'; // Component imports its own CSS
+
+import { cn } from '../../utils';
+
+export interface ButtonProps {
+  // ... props
+}
+
+const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
+  ({ className, variant = 'default', size = 'default', ...props }, ref) => {
+    // Component implementation
+  }
+);
+```
+
+### Consuming Application Usage
+
+When using components from `@peakhealth/ui`, you must import both the design system CSS (for CSS variables) and the component CSS:
+
+```typescript
+// In your root layout (e.g., apps/web/src/app/layout.tsx)
+import '@peakhealth/ui/design-system'; // CSS variables (required globally)
+
+// In individual pages/components where you use UI components
+import { Button } from '@peakhealth/ui/button';
+import '@peakhealth/ui/button.css'; // Component styles (required per component)
+```
+
+**Best Practice**: Import the design system CSS in your root layout so it's available throughout the entire application. Only import component-specific CSS in the files where you actually use those components.
+
+### Why This Pattern?
+
+1. **Design System CSS** (`@peakhealth/ui/design-system`) provides CSS variables like `--primary`, `--foreground`, etc.
+2. **Component CSS** (`@peakhealth/ui/button.css`) provides the actual component styles that use those variables
+3. **Tree-shaking friendly** - only import the CSS for components you actually use
+4. **Explicit dependencies** - consuming applications know exactly what CSS they're loading
+
+### Build System
+
+The `@peakhealth/ui` package uses Vite with:
+
+- `cssCodeSplit: true` - generates separate CSS files for each component
+- CSS files are placed in `dist/assets/components/component/component.css`
+- Design system CSS is copied to `dist/design-system.css`
+- Package.json exports point to the correct CSS file locations
+
 ## Component Structure
 
 1. **React components**: Use `PascalCase.tsx` (one primary component per file)
-2. **Styles**: Use `ComponentName.module.css` next to the component
+2. **Styles**: Use `ComponentName.css` next to the component (not CSS Modules for UI package)
 3. **Keep components small and focused** - extract smaller components when they exceed 200-300 lines
 4. **Use named exports** for shared modules; avoid large default-export barrels
 
 ## Styling Guidelines
 
-1. **Always use CSS Modules** - no utility CSS frameworks like Tailwind
-2. **Use media queries for responsive styling** rather than modifying styles directly across all screen sizes
-3. **Apply mobile UI changes via media queries** rather than modifying default or desktop styles
-4. **Use Next/image component** instead of standard `<img>` tags when rendering images
+1. **Always use CSS Modules** for app-level components - no utility CSS frameworks like Tailwind
+2. **Use regular CSS files** for `@peakhealth/ui` components (not CSS Modules)
+3. **Use media queries for responsive styling** rather than modifying styles directly across all screen sizes
+4. **Apply mobile UI changes via media queries** rather than modifying default or desktop styles
+5. **Use Next/image component** instead of standard `<img>` tags when rendering images
 
 ## Component Patterns
 
 ```typescript
-// Example of a reusable UI component
-import styles from './Button.module.css';
+// Example of a reusable UI component in @peakhealth/ui
+import * as React from 'react';
+import './Button.css'; // Import own CSS
 
-interface ButtonProps {
+import { cn } from '../../utils';
+
+export interface ButtonProps {
   variant?: 'primary' | 'secondary' | 'outline';
   size?: 'small' | 'medium' | 'large';
   children: React.ReactNode;
@@ -35,77 +99,71 @@ interface ButtonProps {
   disabled?: boolean;
 }
 
-export function Button({
-  variant = 'primary',
-  size = 'medium',
-  children,
-  onClick,
-  disabled = false
-}: ButtonProps) {
-  return (
-    <button
-      className={`${styles.button} ${styles[variant]} ${styles[size]}`}
-      onClick={onClick}
-      disabled={disabled}
-    >
-      {children}
-    </button>
-  );
-}
+const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
+  ({ className, variant = 'primary', size = 'medium', children, ...props }, ref) => {
+    const buttonClasses = cn(
+      'peakhealth-button',
+      `peakhealth-button--${variant}`,
+      `peakhealth-button--${size}`,
+      className
+    );
+
+    return (
+      <button className={buttonClasses} ref={ref} {...props}>
+        {children}
+      </button>
+    );
+  }
+);
+
+Button.displayName = 'Button';
+
+export { Button };
 ```
 
-## CSS Module Patterns
+## CSS Patterns for @peakhealth/ui
 
 ```css
-/* Button.module.css */
-.button {
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
+/* Button.css - Uses CSS variables from design system */
+.peakhealth-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  white-space: nowrap;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
   font-weight: 500;
   transition: all 0.2s ease;
+  outline: none;
+  cursor: pointer;
+  border: none;
+  font-family: inherit;
+  text-decoration: none;
+  min-height: 2.5rem;
+  padding: 0.5rem 1rem;
 }
 
-.primary {
-  background-color: var(--color-primary);
-  color: white;
+.peakhealth-button:disabled {
+  pointer-events: none;
+  opacity: 0.5;
 }
 
-.secondary {
-  background-color: var(--color-secondary);
-  color: var(--color-text);
+.peakhealth-button--primary {
+  background-color: hsl(var(--primary, 240 5.9% 10%));
+  color: hsl(var(--primary-foreground, 0 0% 98%));
+  border: 1px solid hsl(var(--primary, 240 5.9% 10%));
 }
 
-.outline {
-  background-color: transparent;
-  border: 1px solid var(--color-primary);
-  color: var(--color-primary);
-}
-
-.small {
-  padding: 8px 16px;
-  font-size: 14px;
-}
-
-.medium {
-  padding: 12px 24px;
-  font-size: 16px;
-}
-
-.large {
-  padding: 16px 32px;
-  font-size: 18px;
+.peakhealth-button--primary:hover {
+  background-color: hsl(var(--primary, 240 5.9% 10%) / 0.9);
+  border-color: hsl(var(--primary, 240 5.9% 10%) / 0.9);
 }
 
 /* Responsive design with media queries */
 @media (max-width: 768px) {
-  .button {
+  .peakhealth-button {
     width: 100%;
-  }
-
-  .large {
-    padding: 14px 28px;
-    font-size: 16px;
   }
 }
 ```
@@ -125,8 +183,17 @@ export function Button({
 3. **Extract to `@ui/` package** when a component becomes generic
 4. **Update imports** across the codebase to use the new shared component
 5. **Remove the original** feature-specific component
-   description:
-   globs:
-   alwaysApply: false
 
----
+## CSS Import Checklist for New Components
+
+When adding a new component to `@peakhealth/ui`:
+
+1. ✅ Create component file with internal CSS import: `import './ComponentName.css';`
+2. ✅ Create CSS file with component styles using design system variables
+3. ✅ Export component from `src/index.ts`
+4. ✅ Run `pnpm generate-exports` to update package.json exports
+5. ✅ Document that consuming apps need to import both design system and component CSS
+6. ✅ Test the component in a consuming application to verify CSS loads correctly
+
+7. ✅ Document that consuming apps need to import both design system and component CSS
+8. ✅ Test the component in a consuming application to verify CSS loads correctly

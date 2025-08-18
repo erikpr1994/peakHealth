@@ -1,0 +1,50 @@
+.peakhealth-tooltip-container {
+  position: relative;
+  display: inline-block;
+}
+
+.peakhealth-tooltip {
+  position: absolute;
+  background-color: #1f2937;
+  color: white;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  white-space: nowrap;
+  z-index: 1000;
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity 0.2s,
+    visibility 0.2s;
+  pointer-events: none;
+}
+
+.peakhealth-tooltip--visible {
+  opacity: 1;
+  visibility: visible;
+}
+
+.peakhealth-tooltip--top {
+  bottom: 125%;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.peakhealth-tooltip--bottom {
+  top: 125%;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.peakhealth-tooltip--left {
+  right: 125%;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.peakhealth-tooltip--right {
+  left: 125%;
+  top: 50%;
+  transform: translateY(-50%);
+}

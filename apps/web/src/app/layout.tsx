@@ -1,7 +1,9 @@
 import type { Metadata } from 'next';
 
 import './(app)/globals.css';
-import { Providers } from '@/components/providers/Providers';
+import '@peakhealth/ui/design-system';
+import { SWRProvider } from '@/components/providers/SWRProvider';
+import { AuthProvider } from '@/features/auth/context/AuthContext';
 
 export const metadata: Metadata = {
   title: 'Peak Health',
@@ -13,11 +15,13 @@ const RootLayout = ({
   children,
 }: {
   children: React.ReactNode;
-}): React.ReactElement => {
+}): React.JSX.Element => {
   return (
     <html lang="en">
       <body suppressHydrationWarning={true}>
-        <Providers>{children}</Providers>
+        <SWRProvider>
+          <AuthProvider>{children}</AuthProvider>
+        </SWRProvider>
       </body>
     </html>
   );

@@ -1,59 +1,55 @@
-import { readdirSync, existsSync, writeFileSync, readFileSync } from 'fs';
-import { resolve, dirname } from 'path';
+import fs from 'fs';
+import path from 'path';
 import { fileURLToPath } from 'url';
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
-const componentsDir = resolve(__dirname, '../src/components');
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const componentsDir = path.join(__dirname, '..', 'src/components');
+const packageJsonPath = path.join(__dirname, '..', 'package.json');
 
-function generateExports() {
-  const exports = {
-    '.': {
-      types: './dist/index.d.ts',
-      import: './dist/index.js',
-      require: './dist/index.js',
-    },
+// Read existing package.json
+const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'));
+
+// Get all component directories
+const components = fs
+  .readdirSync(componentsDir, { withFileTypes: true })
+  .filter(dirent => dirent.isDirectory())
+  .map(dirent => dirent.name);
+
+// Generate exports
+const exports = {
+  '.': {
+    types: './dist/index.d.ts',
+    import: './dist/index.js',
+    require: './dist/index.js',
+  },
+};
+
+// Add exports for each component
+components.forEach(component => {
+  // Component export
+  exports[`./${component}`] = {
+    types: `./dist/${component}.d.ts`,
+    import: `./dist/${component}.js`,
+    require: `./dist/${component}.js`,
   };
 
-  if (existsSync(componentsDir)) {
-    const components = readdirSync(componentsDir, { withFileTypes: true })
-      .filter(dirent => dirent.isDirectory())
-      .map(dirent => dirent.name);
+  // CSS export - with CSS code splitting, files are in assets/components/component/component.css
+  exports[`./${component}.css`] = {
+    import: `./dist/assets/components/${component}/${component}.css`,
+  };
+});
 
-    components.forEach(component => {
-      const indexPath = resolve(componentsDir, component, 'index.ts');
-      const cssPath = resolve(componentsDir, component, `${component}.css`);
+// Add design system and styles exports
+exports['./design-system'] = {
+  import: './dist/design-system.css',
+};
 
-      if (existsSync(indexPath)) {
-        exports[`./${component}`] = {
-          types: `./dist/components/${component}/index.d.ts`,
-          import: `./dist/components/${component}/index.js`,
-          require: `./dist/components/${component}/index.js`,
-        };
+exports['./styles'] = {
+  import: './dist/ui.css',
+};
 
-        // CSS files are used internally by components, not exported
-      }
-    });
-
-    // Add design system CSS export
-    exports['./design-system'] = {
-      import: './dist/design-system.css',
-    };
-  }
-  return exports;
-}
-
-// Generate exports and write to exports.json
-const exports = generateExports();
-writeFileSync(
-  resolve(__dirname, '../exports.json'),
-  JSON.stringify(exports, null, 2)
-);
-
-// Update package.json exports field
-const packageJsonPath = resolve(__dirname, '../package.json');
-const packageJson = JSON.parse(readFileSync(packageJsonPath, 'utf8'));
+// Update package.json
 packageJson.exports = exports;
-writeFileSync(packageJsonPath, `${JSON.stringify(packageJson, null, 2)}\n`);
 
-// eslint-disable-next-line no-console
-console.log('Exports generated and package.json updated successfully');
+// Write back to package.json
+fs.writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, 2));

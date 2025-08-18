@@ -41,13 +41,13 @@ export default defineConfig({
       rollupTypes: true,
     }),
     {
-      name: 'copy-design-system-css',
+      name: 'copy-design-system',
       writeBundle(): void {
         // Copy design system CSS to dist
-        const sourcePath = resolve(__dirname, 'src/design-system.css');
-        const destPath = resolve(__dirname, 'dist/design-system.css');
-        if (existsSync(sourcePath)) {
-          copyFileSync(sourcePath, destPath);
+        const designSystemSource = resolve(__dirname, 'src/design-system.css');
+        const designSystemDest = resolve(__dirname, 'dist/design-system.css');
+        if (existsSync(designSystemSource)) {
+          copyFileSync(designSystemSource, designSystemDest);
         }
       },
     },
@@ -64,11 +64,15 @@ export default defineConfig({
         preserveModules: true,
         preserveModulesRoot: 'src',
         assetFileNames: assetInfo => {
-          return '[name][extname]';
+          // Keep CSS files with predictable names
+          if (assetInfo.name && assetInfo.name.endsWith('.css')) {
+            return 'assets/[name][extname]';
+          }
+          return 'assets/[name]-[hash][extname]';
         },
       },
     },
-    cssCodeSplit: true,
+    cssCodeSplit: true, // Enable CSS code splitting for proper CSS imports
     sourcemap: true,
   },
 });
