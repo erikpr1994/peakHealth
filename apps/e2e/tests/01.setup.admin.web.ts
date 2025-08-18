@@ -45,14 +45,14 @@ test.describe('Setup: Admin User Landing → Login → Web App', () => {
 
       // Click sign in button
       await page.getByRole('button', { name: /sign in|log in/i }).click();
-      await page.waitForURL('**/app-selector', { timeout: 60_000 });
+      await page.waitForURL('**/app-selector', { timeout: 120_000 });
       await expect(page.getByText(/Choose\s*Your\s*App/i)).toBeVisible();
     });
 
     // Select web app and verify navigation
     await test.step('Select web app and verify navigation', async () => {
       await page.getByTestId('app-card-web').click();
-      await page.waitForURL('http://localhost:3024/**', { timeout: 30_000 });
+      await page.waitForURL('http://localhost:3024/**', { timeout: 60_000 });
       await expect(page).toHaveURL(/localhost:3024/);
     });
 

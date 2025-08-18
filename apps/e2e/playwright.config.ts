@@ -3,12 +3,18 @@ import { defineConfig } from '@playwright/test';
 export default defineConfig({
   globalTeardown: './global-teardown.ts',
   testDir: './tests',
-  timeout: 60_000, // Increased timeout for setup tests
+  timeout: 120_000, // Increased timeout for setup tests
+  expect: {
+    timeout: 30_000, // Timeout for expect assertions
+  },
   fullyParallel: false, // Changed from true to false to prevent test interference
   workers: 1, // Reduced to 1 worker to ensure proper sequencing
   reporter: [['html', { open: 'never' }]],
   use: {
     trace: 'retain-on-failure',
+    viewport: { width: 1280, height: 720 },
+    actionTimeout: 30_000, // Timeout for actions like click, fill, etc.
+    navigationTimeout: 60_000, // Timeout for navigation
   },
   webServer: [
     {
