@@ -1,27 +1,27 @@
 import React from 'react';
-import Link from 'next/link';
 import { ArrowRight, Dumbbell, BarChart3, Users } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import { Link } from '@/i18n/navigation';
 import styles from './FeatureSection.module.css';
 
 export const FeatureSection = (): React.JSX.Element => {
+  const t = useTranslations('features');
+
   const features = [
     {
       icon: <Dumbbell />,
-      title: 'Log Workouts',
-      description:
-        'Track your exercises, sets, reps, and weights with our intuitive workout logging interface.',
+      title: t('logWorkouts.title'),
+      description: t('logWorkouts.description'),
     },
     {
       icon: <BarChart3 />,
-      title: 'Track Progress',
-      description:
-        'Monitor your gains with detailed charts, personal records, and exercise history.',
+      title: t('trackProgress.title'),
+      description: t('trackProgress.description'),
     },
     {
       icon: <Users />,
-      title: 'Community Driven',
-      description:
-        'Help shape the future of PeakHealth by voting on features and suggesting improvements.',
+      title: t('communityDriven.title'),
+      description: t('communityDriven.description'),
     },
   ];
 
@@ -29,12 +29,8 @@ export const FeatureSection = (): React.JSX.Element => {
     <section className={styles.features}>
       <div className={styles.container}>
         <div className={styles.header}>
-          <h2 className={styles.title}>Why Choose PeakHealth?</h2>
-          <p className={styles.description}>
-            A workout tracker that focuses on what matters most - logging
-            workouts, tracking progress, and building a better experience
-            together.
-          </p>
+          <h2 className={styles.title}>{t('title')}</h2>
+          <p className={styles.description}>{t('description')}</p>
         </div>
 
         <div className={styles.grid}>
@@ -52,19 +48,15 @@ export const FeatureSection = (): React.JSX.Element => {
         </div>
 
         <div className={styles.communitySection}>
-          <h3>Help Shape the Future</h3>
-          <p>
-            PeakHealth is community-driven. We believe the best features come
-            from the people who use the app every day. Vote on upcoming
-            features, suggest improvements, and see what we're working on.
-          </p>
+          <h3>{t('communitySection.title')}</h3>
+          <p>{t('communitySection.description')}</p>
           <div className={styles.communityLinks}>
             <Link href="/roadmap" className={styles.roadmapLink}>
-              View Roadmap
+              {t('communitySection.viewRoadmap')}
               <ArrowRight />
             </Link>
             <Link href="/feedback" className={styles.feedbackLink}>
-              Suggest Features
+              {t('communitySection.suggestFeatures')}
               <ArrowRight />
             </Link>
           </div>

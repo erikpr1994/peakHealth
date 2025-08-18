@@ -1,0 +1,115 @@
+{
+  "navigation": {
+    "features": "Características",
+    "vision": "Visión",
+    "roadmap": "Hoja de Ruta",
+    "feedback": "Comentarios",
+    "blog": "Blog",
+    "signIn": "Iniciar Sesión",
+    "getStarted": "Comenzar"
+  },
+  "hero": {
+    "badge": "Próximamente - Sé el Primero en Experimentar",
+    "title": "Tu Rastreador de",
+    "titleHighlight": "Entrenamientos Definitivo",
+    "description": "Registra entrenamientos, rastrea tu progreso y mantén la motivación con PeakHealth. Construye rutinas, mide tus ganancias y disfruta de una mejor experiencia que otras apps de entrenamiento.",
+    "logWorkouts": {
+      "title": "Registra Entrenamientos",
+      "description": "Rastrea tus ejercicios, series, repeticiones y pesos con nuestra interfaz intuitiva de registro de entrenamientos"
+    },
+    "trackProgress": {
+      "title": "Rastrea Progreso",
+      "description": "Monitorea tus ganancias con gráficos detallados, récords personales e historial de ejercicios"
+    },
+    "mockup": {
+      "appTitle": "PeakHealth",
+      "workoutTitle": "Entrenamiento de Hoy",
+      "exercises": "3/5 ejercicios",
+      "dayStreak": "Racha de Días",
+      "goalProgress": "Progreso de Meta"
+    }
+  },
+  "features": {
+    "title": "¿Por Qué Elegir PeakHealth?",
+    "description": "Un rastreador de entrenamientos que se enfoca en lo que más importa: registrar entrenamientos, rastrear progreso y construir una mejor experiencia juntos.",
+    "logWorkouts": {
+      "title": "Registra Entrenamientos",
+      "description": "Rastrea tus ejercicios, series, repeticiones y pesos con nuestra interfaz intuitiva de registro de entrenamientos."
+    },
+    "trackProgress": {
+      "title": "Rastrea Progreso",
+      "description": "Monitorea tus ganancias con gráficos detallados, récords personales e historial de ejercicios."
+    },
+    "communityDriven": {
+      "title": "Impulsado por la Comunidad",
+      "description": "Ayuda a dar forma al futuro de PeakHealth votando por características y sugiriendo mejoras."
+    },
+    "communitySection": {
+      "title": "Ayuda a Dar Forma al Futuro",
+      "description": "PeakHealth es impulsado por la comunidad. Creemos que las mejores características vienen de las personas que usan la app todos los días. Vota por características próximas, sugiere mejoras y ve en qué estamos trabajando.",
+      "viewRoadmap": "Ver Hoja de Ruta",
+      "suggestFeatures": "Sugerir Características"
+    }
+  },
+  "howItWorks": {
+    "title": "Cómo",
+    "titleHighlight": "Funciona PeakHealth",
+    "description": "Comienza en tres simples pasos y transforma tu viaje fitness con nuestra plataforma intuitiva de seguimiento de entrenamientos.",
+    "steps": {
+      "createRoutine": {
+        "title": "Crea Tu Rutina",
+        "description": "Construye rutinas de entrenamiento personalizadas o elige de nuestra biblioteca de ejercicios. Establece tus metas y rastrea tu progreso."
+      },
+      "logWorkouts": {
+        "title": "Registra Tus Entrenamientos",
+        "description": "Rastrea cada ejercicio con series, repeticiones y pesos. Marca series de calentamiento, series de descenso y series hasta el fallo para precisión completa."
+      },
+      "monitorProgress": {
+        "title": "Monitorea el Progreso",
+        "description": "Ve gráficos detallados, récords personales e historial de ejercicios. Ve tu progreso a lo largo del tiempo y mantén la motivación."
+      }
+    },
+    "features": {
+      "smartRestTimers": {
+        "title": "Temporizadores de Descanso Inteligentes",
+        "description": "Temporizadores automáticos de descanso entre series para optimizar el flujo de tu entrenamiento"
+      },
+      "exerciseLibrary": {
+        "title": "Biblioteca de Ejercicios",
+        "description": "Base de datos completa con videos de ejercicios de alta calidad e instrucciones"
+      },
+      "personalRecords": {
+        "title": "Récords Personales",
+        "description": "Rastrea y celebra tus logros con detección automática de PR"
+      }
+    }
+  },
+  "cta": {
+    "title": "¿Listo para Transformar Tu Viaje Fitness?",
+    "description": "Únete a miles de usuarios que ya han logrado sus metas fitness con PeakHealth. Comienza tu prueba gratuita hoy y experimenta la diferencia.",
+    "getStartedFree": "Comenzar Gratis",
+    "learnMore": "Saber Más"
+  },
+  "footer": {
+    "description": "Transforma tu viaje fitness con entrenamientos personalizados, orientación experta y una comunidad de apoyo.",
+    "getStarted": "Comenzar",
+    "product": "Producto",
+    "company": "Empresa",
+    "support": "Soporte",
+    "features": "Características",
+    "vision": "Visión",
+    "roadmap": "Hoja de Ruta",
+    "feedback": "Comentarios",
+    "blog": "Blog",
+    "careers": "Carreras",
+    "contact": "Contacto",
+    "helpCenter": "Centro de Ayuda",
+    "copyright": "© {year} PeakHealth. Todos los derechos reservados.",
+    "privacy": "Política de Privacidad",
+    "terms": "Términos de Servicio"
+  },
+  "language": {
+    "en": "English",
+    "es": "Español"
+  }
+}
