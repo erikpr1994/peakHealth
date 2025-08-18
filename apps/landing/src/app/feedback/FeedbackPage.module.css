@@ -125,6 +125,11 @@
   box-shadow: 0 4px 12px rgba(59, 130, 246, 0.1);
 }
 
+.emailText {
+  margin: 0;
+  font-size: 1.125rem;
+}
+
 .emailLink {
   color: #1e40af;
   font-weight: 700;
@@ -311,4 +316,3 @@
     padding: 1.25rem;
   }
 }
-
