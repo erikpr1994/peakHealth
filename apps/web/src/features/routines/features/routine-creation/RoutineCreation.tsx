@@ -21,7 +21,7 @@ import RunningWorkoutsSection from './components/RunningWorkoutsSection';
 import { useWorkoutOperations } from '../../hooks/useWorkoutOperations';
 import { addApproachSets } from '../../utils/workoutCalculations';
 import { ProgressionMethod } from '../../types';
-import { useRoutineModals } from './hooks/useRoutineModals';
+import { useRoutineModals, useRoutineValidation } from './hooks';
 import { NotesContext } from './types/modal';
 import ExerciseSelectionModal from '@/features/exercises/ExerciseSelectionModal';
 import NotesModal from '@/components/shared/NotesModal';
@@ -110,6 +110,9 @@ const RoutineCreation = ({
     updateRunningExerciseEmomReps,
     updateStrengthExerciseProgressionMethod,
   } = useWorkoutOperations();
+
+  // Use our new validation hook
+  const { validateRoutineData } = useRoutineValidation();
 
   // Load routine data if editing
   useEffect(() => {
@@ -511,130 +514,19 @@ const RoutineCreation = ({
       return;
     }
 
-    // Validate routine data
-    if (!name.trim()) {
-      alert('Routine name is required');
+    // Validate routine data using our extracted validation hook
+    const validationError = validateRoutineData({
+      name,
+      difficulty,
+      goal,
+      objectives,
+      strengthWorkouts,
+      runningWorkouts,
+    });
+
+    if (validationError) {
+      alert(validationError.message);
       return;
-    }
-    if (!difficulty || !goal) {
-      alert('Difficulty and goal are required');
-      return;
-    }
-    if (!objectives || objectives.length === 0) {
-      alert('At least one objective is required');
-      return;
-    }
-
-    // Validate workouts
-    if (!strengthWorkouts || strengthWorkouts.length === 0) {
-      alert('At least one strength workout is required');
-      return;
-    }
-
-    // Validate each workout
-    for (const workout of strengthWorkouts) {
-      if (!workout.name?.trim()) {
-        alert(`Workout "${workout.name || 'Unnamed'}" must have a name`);
-        return;
-      }
-      if (!workout.objective?.trim()) {
-        alert(`Workout "${workout.name}" must have an objective`);
-        return;
-      }
-      if (!workout.sections || workout.sections.length === 0) {
-        alert(`Workout "${workout.name}" must have at least one section`);
-        return;
-      }
-
-      // Validate each section
-      for (const section of workout.sections) {
-        if (!section.name?.trim()) {
-          alert(
-            `Section "${section.name || 'Unnamed'}" in workout "${workout.name}" must have a name`
-          );
-          return;
-        }
-        if (!section.exercises || section.exercises.length === 0) {
-          alert(
-            `Section "${section.name}" in workout "${workout.name}" must have at least one exercise`
-          );
-          return;
-        }
-
-        // Validate each exercise
-        for (const exercise of section.exercises) {
-          if (!exercise.variantId && !exercise.exerciseId) {
-            alert(
-              `Exercise "${exercise.name || 'Unnamed'}" in section "${section.name}" must be selected from the exercise library`
-            );
-            return;
-          }
-          if (!exercise.sets || exercise.sets.length === 0) {
-            alert(
-              `Exercise "${exercise.name || 'Unnamed'}" in section "${section.name}" must have at least one set`
-            );
-            return;
-          }
-
-          // Validate each set
-          for (const set of exercise.sets) {
-            if (!set.reps || set.reps <= 0) {
-              alert(
-                `Set ${set.setNumber} in exercise "${exercise.name || 'Unnamed'}" must have valid reps`
-              );
-              return;
-            }
-          }
-        }
-      }
-    }
-
-    // Validate running workouts if any
-    if (runningWorkouts && runningWorkouts.length > 0) {
-      for (const workout of runningWorkouts) {
-        if (!workout.name?.trim()) {
-          alert(
-            `Running workout "${workout.name || 'Unnamed'}" must have a name`
-          );
-          return;
-        }
-        if (!workout.objective?.trim()) {
-          alert(`Running workout "${workout.name}" must have an objective`);
-          return;
-        }
-        if (!workout.sections || workout.sections.length === 0) {
-          alert(
-            `Running workout "${workout.name}" must have at least one section`
-          );
-          return;
-        }
-
-        // Validate each section
-        for (const section of workout.sections) {
-          if (!section.name?.trim()) {
-            alert(
-              `Section "${section.name || 'Unnamed'}" in running workout "${workout.name}" must have a name`
-            );
-            return;
-          }
-          if (!section.exercises || section.exercises.length === 0) {
-            alert(
-              `Section "${section.name}" in running workout "${workout.name}" must have at least one exercise`
-            );
-            return;
-          }
-
-          // Validate each exercise
-          for (const exercise of section.exercises) {
-            if (!exercise.variantId && !exercise.exerciseId) {
-              alert(
-                `Exercise "${exercise.name || 'Unnamed'}" in section "${section.name}" must be selected from the exercise library`
-              );
-              return;
-            }
-          }
-        }
-      }
     }
 
     // Prepare routine data
