@@ -1,0 +1,115 @@
+{
+  "navigation": {
+    "features": "Features",
+    "vision": "Vision",
+    "roadmap": "Roadmap",
+    "feedback": "Feedback",
+    "blog": "Blog",
+    "signIn": "Sign In",
+    "getStarted": "Get Started"
+  },
+  "hero": {
+    "badge": "Coming Soon - Be the First to Experience",
+    "title": "Your Ultimate",
+    "titleHighlight": "Workout Tracker",
+    "description": "Log workouts, track progress, and stay motivated with PeakHealth. Build routines, measure your gains, and enjoy a better experience than other workout apps.",
+    "logWorkouts": {
+      "title": "Log Workouts",
+      "description": "Track your exercises, sets, reps, and weights with our intuitive workout logging interface"
+    },
+    "trackProgress": {
+      "title": "Track Progress",
+      "description": "Monitor your gains with detailed charts, personal records, and exercise history"
+    },
+    "mockup": {
+      "appTitle": "PeakHealth",
+      "workoutTitle": "Today's Workout",
+      "exercises": "3/5 exercises",
+      "dayStreak": "Day Streak",
+      "goalProgress": "Goal Progress"
+    }
+  },
+  "features": {
+    "title": "Why Choose PeakHealth?",
+    "description": "A workout tracker that focuses on what matters most - logging workouts, tracking progress, and building a better experience together.",
+    "logWorkouts": {
+      "title": "Log Workouts",
+      "description": "Track your exercises, sets, reps, and weights with our intuitive workout logging interface."
+    },
+    "trackProgress": {
+      "title": "Track Progress",
+      "description": "Monitor your gains with detailed charts, personal records, and exercise history."
+    },
+    "communityDriven": {
+      "title": "Community Driven",
+      "description": "Help shape the future of PeakHealth by voting on features and suggesting improvements."
+    },
+    "communitySection": {
+      "title": "Help Shape the Future",
+      "description": "PeakHealth is community-driven. We believe the best features come from the people who use the app every day. Vote on upcoming features, suggest improvements, and see what we're working on.",
+      "viewRoadmap": "View Roadmap",
+      "suggestFeatures": "Suggest Features"
+    }
+  },
+  "howItWorks": {
+    "title": "How",
+    "titleHighlight": "PeakHealth Works",
+    "description": "Get started in three simple steps and transform your fitness journey with our intuitive workout tracking platform.",
+    "steps": {
+      "createRoutine": {
+        "title": "Create Your Routine",
+        "description": "Build custom workout routines or choose from our library of exercises. Set your goals and track your progress."
+      },
+      "logWorkouts": {
+        "title": "Log Your Workouts",
+        "description": "Track each exercise with sets, reps, and weights. Mark warmup sets, drop sets, and failure sets for complete accuracy."
+      },
+      "monitorProgress": {
+        "title": "Monitor Progress",
+        "description": "View detailed charts, personal records, and exercise history. See your progress over time and stay motivated."
+      }
+    },
+    "features": {
+      "smartRestTimers": {
+        "title": "Smart Rest Timers",
+        "description": "Automatic rest timers between sets to optimize your workout flow"
+      },
+      "exerciseLibrary": {
+        "title": "Exercise Library",
+        "description": "Comprehensive database with high-quality exercise videos and instructions"
+      },
+      "personalRecords": {
+        "title": "Personal Records",
+        "description": "Track and celebrate your achievements with automatic PR detection"
+      }
+    }
+  },
+  "cta": {
+    "title": "Ready to Transform Your Fitness Journey?",
+    "description": "Join thousands of users who have already achieved their fitness goals with PeakHealth. Start your free trial today and experience the difference.",
+    "getStartedFree": "Get Started Free",
+    "learnMore": "Learn More"
+  },
+  "footer": {
+    "description": "Transform your fitness journey with personalized workouts, expert guidance, and a supportive community.",
+    "getStarted": "Get Started",
+    "product": "Product",
+    "company": "Company",
+    "support": "Support",
+    "features": "Features",
+    "vision": "Vision",
+    "roadmap": "Roadmap",
+    "feedback": "Feedback",
+    "blog": "Blog",
+    "careers": "Careers",
+    "contact": "Contact",
+    "helpCenter": "Help Center",
+    "copyright": "© {year} PeakHealth. All rights reserved.",
+    "privacy": "Privacy Policy",
+    "terms": "Terms of Service"
+  },
+  "language": {
+    "en": "English",
+    "es": "Español"
+  }
+}

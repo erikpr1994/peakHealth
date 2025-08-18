@@ -1,26 +1,26 @@
 import React from 'react';
-import { ArrowRight, Calendar, BarChart3, Clock } from 'lucide-react';
+import { ArrowRight, Calendar, BarChart3, Target } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import styles from './HowItWorksSection.module.css';
 
 export const HowItWorksSection = (): React.JSX.Element => {
+  const t = useTranslations('howItWorks');
+
   const steps = [
     {
       icon: <Calendar />,
-      title: 'Create Your Routine',
-      description:
-        'Build custom workout routines or choose from our library of exercises. Set your goals and track your progress.',
+      title: t('steps.createRoutine.title'),
+      description: t('steps.createRoutine.description'),
     },
     {
-      icon: <Clock />,
-      title: 'Log Your Workouts',
-      description:
-        'Track each exercise with sets, reps, and weights. Mark warmup sets, drop sets, and failure sets for complete accuracy.',
+      icon: <Target />,
+      title: t('steps.logWorkouts.title'),
+      description: t('steps.logWorkouts.description'),
     },
     {
       icon: <BarChart3 />,
-      title: 'Monitor Progress',
-      description:
-        'View detailed charts, personal records, and exercise history. See your progress over time and stay motivated.',
+      title: t('steps.monitorProgress.title'),
+      description: t('steps.monitorProgress.description'),
     },
   ];
 
@@ -29,13 +29,10 @@ export const HowItWorksSection = (): React.JSX.Element => {
       <div className={styles.container}>
         <div className={styles.header}>
           <h2 className={styles.title}>
-            How
-            <span className={styles.gradientText}> PeakHealth Works</span>
+            {t('title')}
+            <span className={styles.gradientText}> {t('titleHighlight')}</span>
           </h2>
-          <p className={styles.description}>
-            Get started in three simple steps and transform your fitness journey
-            with our intuitive workout tracking platform.
-          </p>
+          <p className={styles.description}>{t('description')}</p>
         </div>
 
         <div className={styles.steps}>
@@ -58,23 +55,16 @@ export const HowItWorksSection = (): React.JSX.Element => {
 
         <div className={styles.features}>
           <div className={styles.feature}>
-            <h4>Smart Rest Timers</h4>
-            <p>
-              Automatic rest timers between sets to optimize your workout flow
-            </p>
+            <h4>{t('features.smartRestTimers.title')}</h4>
+            <p>{t('features.smartRestTimers.description')}</p>
           </div>
           <div className={styles.feature}>
-            <h4>Exercise Library</h4>
-            <p>
-              Comprehensive database with high-quality exercise videos and
-              instructions
-            </p>
+            <h4>{t('features.exerciseLibrary.title')}</h4>
+            <p>{t('features.exerciseLibrary.description')}</p>
           </div>
           <div className={styles.feature}>
-            <h4>Personal Records</h4>
-            <p>
-              Track and celebrate your achievements with automatic PR detection
-            </p>
+            <h4>{t('features.personalRecords.title')}</h4>
+            <p>{t('features.personalRecords.description')}</p>
           </div>
         </div>
       </div>

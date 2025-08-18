@@ -1,29 +1,26 @@
 import React from 'react';
-import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import { Link } from '@/i18n/navigation';
 import { getSignupUrl } from '@/lib/auth';
 import styles from './CTASection.module.css';
 
 export const CTASection = (): React.JSX.Element => {
+  const t = useTranslations('cta');
+
   return (
     <section className={styles.cta}>
       <div className={styles.container}>
         <div className={styles.content}>
-          <h2 className={styles.title}>
-            Ready to Transform Your Fitness Journey?
-          </h2>
-          <p className={styles.description}>
-            Join thousands of users who have already achieved their fitness
-            goals with PeakHealth. Start your free trial today and experience
-            the difference.
-          </p>
+          <h2 className={styles.title}>{t('title')}</h2>
+          <p className={styles.description}>{t('description')}</p>
           <div className={styles.actions}>
             <Link href={getSignupUrl()} className={styles.primaryButton}>
-              Get Started Free
+              {t('getStartedFree')}
               <ArrowRight />
             </Link>
             <Link href="/features" className={styles.secondaryButton}>
-              Learn More
+              {t('learnMore')}
             </Link>
           </div>
         </div>

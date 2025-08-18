@@ -1,13 +1,15 @@
 'use client';
 
-import Link from 'next/link';
 import React, { useState, useEffect } from 'react';
+import { useTranslations } from 'next-intl';
+import { Link } from '@/i18n/navigation';
 
 import styles from './Footer.module.css';
 
 import { getSignupUrl } from '@/lib/auth';
 
 export const Footer = (): React.JSX.Element => {
+  const t = useTranslations('footer');
   const [currentYear, setCurrentYear] = useState('');
   const [signupUrl, setSignupUrl] = useState('');
   const [isMounted, setIsMounted] = useState(false);
@@ -25,56 +27,52 @@ export const Footer = (): React.JSX.Element => {
         <div className={styles.content}>
           <div className={styles.section}>
             <div className={styles.title}>PeakHealth</div>
-            <p className={styles.description}>
-              Transform your fitness journey with personalized workouts, expert
-              guidance, and a supportive community.
-            </p>
+            <p className={styles.description}>{t('description')}</p>
             <Link
               href={isMounted ? signupUrl : '#'}
               className={styles.ctaButton}
             >
-              Get Started
+              {t('getStarted')}
             </Link>
           </div>
 
           <div className={styles.section}>
-            <h3 className={styles.sectionTitle}>Product</h3>
+            <h3 className={styles.sectionTitle}>{t('product')}</h3>
             <div className={styles.links}>
-              <Link href="/features">Features</Link>
-              <Link href="/vision">Vision</Link>
-              <Link href="/roadmap">Roadmap</Link>
-              <Link href="/feedback">Feedback</Link>
+              <Link href="/features">{t('features')}</Link>
+              <Link href="/vision">{t('vision')}</Link>
+              <Link href="/roadmap">{t('roadmap')}</Link>
+              <Link href="/feedback">{t('feedback')}</Link>
             </div>
           </div>
 
           <div className={styles.section}>
-            <h3 className={styles.sectionTitle}>Company</h3>
+            <h3 className={styles.sectionTitle}>{t('company')}</h3>
             <div className={styles.links}>
-              <Link href="/blog">Blog</Link>
-              <Link href="/careers">Careers</Link>
+              <Link href="/blog">{t('blog')}</Link>
+              <Link href="/careers">{t('careers')}</Link>
               <Link href="/contact" className={styles.link}>
-                Contact
+                {t('contact')}
               </Link>
             </div>
           </div>
 
           <div className={styles.section}>
-            <h3 className={styles.sectionTitle}>Support</h3>
+            <h3 className={styles.sectionTitle}>{t('support')}</h3>
             <div className={styles.links}>
-              <Link href="/help">Help Center</Link>
-              <Link href="/feedback">Feedback</Link>
+              <Link href="/help">{t('helpCenter')}</Link>
+              <Link href="/feedback">{t('feedback')}</Link>
             </div>
           </div>
         </div>
 
         <div className={styles.bottom}>
           <div className={styles.copyright}>
-            © {isMounted ? currentYear : '2025'} PeakHealth. All rights
-            reserved.
+            {t('copyright', { year: isMounted ? currentYear : '2025' })}
           </div>
           <div className={styles.legal}>
-            <Link href="/privacy">Privacy Policy</Link>
-            <Link href="/terms">Terms of Service</Link>
+            <Link href="/privacy">{t('privacy')}</Link>
+            <Link href="/terms">{t('terms')}</Link>
           </div>
         </div>
       </div>

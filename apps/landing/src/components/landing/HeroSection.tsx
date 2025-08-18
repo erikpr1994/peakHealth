@@ -2,29 +2,28 @@
 
 import { BarChart3, Dumbbell, Star } from 'lucide-react';
 import React from 'react';
+import { useTranslations } from 'next-intl';
 
 import styles from './HeroSection.module.css';
 
 export const HeroSection = (): React.JSX.Element => {
+  const t = useTranslations('hero');
+
   return (
     <section className={styles.hero}>
       <div className={styles.container}>
         <div className={styles.content}>
           <div className={styles.badge}>
             <Star className={styles.starIcon} />
-            <span>Coming Soon - Be the First to Experience</span>
+            <span>{t('badge')}</span>
           </div>
 
           <h1 className={styles.title}>
-            Your Ultimate
-            <span className={styles.gradientText}> Workout Tracker</span>
+            {t('title')}
+            <span className={styles.gradientText}> {t('titleHighlight')}</span>
           </h1>
 
-          <p className={styles.description}>
-            Log workouts, track progress, and stay motivated with PeakHealth.
-            Build routines, measure your gains, and enjoy a better experience
-            than other workout apps.
-          </p>
+          <p className={styles.description}>{t('description')}</p>
 
           <div className={styles.valueProps}>
             <div className={styles.valueProp}>
@@ -32,11 +31,8 @@ export const HeroSection = (): React.JSX.Element => {
                 <Dumbbell className={styles.icon} />
               </div>
               <div className={styles.valueContent}>
-                <h3>Log Workouts</h3>
-                <p>
-                  Track your exercises, sets, reps, and weights with our
-                  intuitive workout logging interface
-                </p>
+                <h3>{t('logWorkouts.title')}</h3>
+                <p>{t('logWorkouts.description')}</p>
               </div>
             </div>
             <div className={styles.valueProp}>
@@ -44,11 +40,8 @@ export const HeroSection = (): React.JSX.Element => {
                 <BarChart3 className={styles.icon} />
               </div>
               <div className={styles.valueContent}>
-                <h3>Track Progress</h3>
-                <p>
-                  Monitor your gains with detailed charts, personal records, and
-                  exercise history
-                </p>
+                <h3>{t('trackProgress.title')}</h3>
+                <p>{t('trackProgress.description')}</p>
               </div>
             </div>
           </div>
@@ -60,26 +53,32 @@ export const HeroSection = (): React.JSX.Element => {
               <div className={styles.screen}>
                 <div className={styles.appHeader}>
                   <div className={styles.appIcon}></div>
-                  <div className={styles.appTitle}>PeakHealth</div>
+                  <div className={styles.appTitle}>{t('mockup.appTitle')}</div>
                 </div>
                 <div className={styles.appContent}>
                   <div className={styles.workoutCard}>
-                    <div className={styles.workoutTitle}>Today's Workout</div>
+                    <div className={styles.workoutTitle}>
+                      {t('mockup.workoutTitle')}
+                    </div>
                     <div className={styles.workoutProgress}>
                       <div className={styles.progressBar}>
                         <div className={styles.progressFill}></div>
                       </div>
-                      <span>3/5 exercises</span>
+                      <span>{t('mockup.exercises')}</span>
                     </div>
                   </div>
                   <div className={styles.statsGrid}>
                     <div className={styles.miniStat}>
                       <div className={styles.miniStatValue}>12</div>
-                      <div className={styles.miniStatLabel}>Day Streak</div>
+                      <div className={styles.miniStatLabel}>
+                        {t('mockup.dayStreak')}
+                      </div>
                     </div>
                     <div className={styles.miniStat}>
                       <div className={styles.miniStatValue}>85%</div>
-                      <div className={styles.miniStatLabel}>Goal Progress</div>
+                      <div className={styles.miniStatLabel}>
+                        {t('mockup.goalProgress')}
+                      </div>
                     </div>
                   </div>
                 </div>
