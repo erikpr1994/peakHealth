@@ -1,9 +1,11 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { getSignupUrl } from '@/lib/auth';
+import React, { useState, useEffect } from 'react';
+
 import styles from './Footer.module.css';
+
+import { getSignupUrl } from '@/lib/auth';
 
 export const Footer = (): React.JSX.Element => {
   const [currentYear, setCurrentYear] = useState('');
@@ -38,6 +40,7 @@ export const Footer = (): React.JSX.Element => {
           <div className={styles.section}>
             <h3 className={styles.sectionTitle}>Product</h3>
             <div className={styles.links}>
+              <Link href="/vision">Vision</Link>
               <Link href="/features">Features</Link>
               <Link href="/roadmap">Roadmap</Link>
               <Link href="/feedback">Feedback</Link>

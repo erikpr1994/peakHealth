@@ -1,10 +1,11 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
+import React, { useState, useEffect } from 'react';
+
+import styles from './Header.module.css';
 
 import { getLoginUrl, getSignupUrl } from '@/lib/auth';
-import styles from './Header.module.css';
 
 export const Header = (): React.JSX.Element => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -56,6 +57,9 @@ export const Header = (): React.JSX.Element => {
         </div>
 
         <nav className={styles.nav}>
+          <Link href="/vision" className={styles.navLink}>
+            Vision
+          </Link>
           <Link href="/features" className={styles.navLink}>
             Features
           </Link>
@@ -117,6 +121,23 @@ export const Header = (): React.JSX.Element => {
             className={`${styles.mobileNav} ${isClosing ? styles.closing : ''}`}
             onClick={e => e.stopPropagation()}
           >
+            <Link
+              href="/vision"
+              className={styles.mobileNavLink}
+              onClick={closeMobileMenu}
+            >
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+              </svg>
+              Vision
+            </Link>
             <Link
               href="/features"
               className={styles.mobileNavLink}
