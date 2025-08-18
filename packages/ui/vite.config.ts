@@ -63,6 +63,13 @@ export default defineConfig({
       output: {
         preserveModules: true,
         preserveModulesRoot: 'src',
+        assetFileNames: assetInfo => {
+          // Ensure CSS files get predictable names
+          if (assetInfo.name && assetInfo.name.endsWith('.css')) {
+            return 'ui.css';
+          }
+          return '[name][extname]';
+        },
       },
     },
     cssCodeSplit: false, // Bundle all CSS into a single file
