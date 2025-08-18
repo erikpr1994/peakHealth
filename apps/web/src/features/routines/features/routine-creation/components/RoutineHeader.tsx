@@ -4,6 +4,7 @@ import { ArrowLeft, Save } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
 import { Button } from '@/components/ui/button';
+import { useToast } from '@peakhealth/ui';
 
 interface RoutineHeaderProps {
   mode: 'create' | 'edit';
@@ -15,6 +16,7 @@ const RoutineHeader = ({
   onSave,
 }: RoutineHeaderProps): React.ReactElement => {
   const router = useRouter();
+  const { showToast } = useToast();
 
   return (
     <div className="flex items-center justify-between mb-8">
@@ -33,10 +35,31 @@ const RoutineHeader = ({
           </p>
         </div>
       </div>
-      <Button onClick={onSave} className="bg-indigo-600 hover:bg-indigo-700">
-        <Save className="h-4 w-4 mr-2" />
-        {mode === 'edit' ? 'Update Routine' : 'Save Routine'}
-      </Button>
+      <div className="flex space-x-2">
+        <Button
+          onClick={() => {
+            console.log('Test Toast button clicked!');
+            console.log('showToast function:', showToast);
+            try {
+              showToast({
+                message: 'Test toast message!',
+                variant: 'success',
+                duration: 10000,
+              });
+              console.log('showToast called successfully');
+            } catch (error) {
+              console.error('Error calling showToast:', error);
+            }
+          }}
+          className="bg-green-600 hover:bg-green-700"
+        >
+          Test Toast
+        </Button>
+        <Button onClick={onSave} className="bg-indigo-600 hover:bg-indigo-700">
+          <Save className="h-4 w-4 mr-2" />
+          {mode === 'edit' ? 'Update Routine' : 'Save Routine'}
+        </Button>
+      </div>
     </div>
   );
 };

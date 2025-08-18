@@ -9,10 +9,15 @@ interface ProvidersProps {
 }
 
 export const Providers = ({ children }: ProvidersProps): React.ReactElement => {
+  console.log('Providers component rendering');
   return (
     <SWRProvider>
       <AuthProvider>
-        <ToastProvider>{children}</ToastProvider>
+        <ToastProvider>
+          {children}
+          {/* Debug element to verify ToastProvider is working */}
+          <div id="toast-debug" style={{ display: 'none' }}>ToastProvider is active</div>
+        </ToastProvider>
       </AuthProvider>
     </SWRProvider>
   );

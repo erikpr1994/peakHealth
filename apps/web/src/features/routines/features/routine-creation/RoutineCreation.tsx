@@ -531,7 +531,14 @@ const RoutineCreation = ({
     });
 
     if (validationError) {
-      alert(validationError.message);
+      console.log('Validation error detected:', validationError);
+      console.log('Calling showToast with error message');
+      showToast({
+        message: validationError.message,
+        variant: 'error',
+        duration: 10000, // 10 seconds to make it more visible
+      });
+      console.log('showToast called for validation error');
       return;
     }
 
@@ -552,11 +559,18 @@ const RoutineCreation = ({
     try {
       // setIsSaving(true); // This state variable is not defined in the original file
       await routineService.createRoutine(routineData);
+              console.log('Routine saved successfully, showing success toast');
+        showToast({
+          message: 'Routine saved successfully!',
+          variant: 'success',
+        });
+        console.log('Success toast called');
       router.push('/routines');
     } catch (error) {
-      alert(
-        `Failed to save routine: ${error instanceof Error ? error.message : 'Unknown error'}`
-      );
+      showToast({
+        message: `Failed to save routine: ${error instanceof Error ? error.message : 'Unknown error'}`,
+        variant: 'error',
+      });
     } finally {
       // setIsSaving(false); // This state variable is not defined in the original file
     }
