@@ -38,13 +38,42 @@
   "signup": {
     "title": "Crear Cuenta",
     "subtitle": "¡Únete a Peak Health hoy!",
-    "emailPlaceholder": "Introduce tu correo electrónico",
-    "passwordPlaceholder": "Crea una contraseña",
-    "confirmPasswordPlaceholder": "Confirma tu contraseña",
-    "createAccount": "Crear Cuenta",
-    "haveAccount": "¿Ya tienes una cuenta?",
-    "signIn": "Iniciar sesión",
-    "termsAndConditions": "Al crear una cuenta, aceptas nuestros Términos de Servicio y Política de Privacidad",
+    "email": {
+      "required": "El correo electrónico es obligatorio",
+      "invalid": "Por favor, introduce un correo electrónico válido",
+      "placeholder": "Introduce tu correo electrónico"
+    },
+    "password": {
+      "required": "La contraseña es obligatoria",
+      "invalid": "La contraseña es inválida",
+      "placeholder": "Crea una contraseña",
+      "tooShort": "La contraseña debe tener al menos 8 caracteres",
+      "noLowercase": "La contraseña debe contener al menos una letra minúscula",
+      "noUppercase": "La contraseña debe contener al menos una letra mayúscula",
+      "noNumber": "La contraseña debe contener al menos un número"
+    },
+    "confirmPassword": {
+      "required": "Por favor, confirma tu contraseña",
+      "mismatch": "Las contraseñas no coinciden",
+      "placeholder": "Confirma tu contraseña"
+    },
+    "firstName": {
+      "required": "El nombre es obligatorio",
+      "placeholder": "Introduce tu nombre"
+    },
+    "lastName": {
+      "required": "El apellido es obligatorio",
+      "placeholder": "Introduce tu apellido"
+    },
+    "button": {
+      "default": "Crear Cuenta",
+      "loading": "Creando Cuenta..."
+    },
+    "footer": {
+      "haveAccount": "¿Ya tienes una cuenta?",
+      "signIn": "Iniciar sesión"
+    },
+    "successMessage": "¡Cuenta creada exitosamente! Por favor, revisa tu correo electrónico para verificar tu cuenta.",
     "errors": {
       "emailInUse": "Este correo electrónico ya está en uso",
       "weakPassword": "La contraseña es demasiado débil",
@@ -69,7 +98,7 @@
     "network": "Error de red. Por favor, comprueba tu conexión e inténtalo de nuevo.",
     "unauthorized": "No estás autorizado para realizar esta acción.",
     "notFound": "El recurso solicitado no fue encontrado.",
-    "validation": "Por favor, comprueba tu entrada e inténtalo de nuevo."
+    "validation": "Por favor, comprueba tu entrada e inténtalo de nuevo.",
+    "signupFailed": "Error al registrarse"
   }
 }
-

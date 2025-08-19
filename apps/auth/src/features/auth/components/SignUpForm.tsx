@@ -9,6 +9,7 @@ import { useTranslations } from 'next-intl';
 import { useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 
+// eslint-disable-next-line css-modules/no-unused-class
 import styles from './page.module.css';
 
 import { AuthCard, Input, Button } from '@/features/shared';
@@ -17,7 +18,7 @@ import { Link, useRouter } from '@/i18n/navigation';
 const SignUpForm = (): React.JSX.Element => {
   const t = useTranslations('signup');
   const tErrors = useTranslations('errors');
-  
+
   const router = useRouter();
   const searchParams = useSearchParams();
   const returnUrl = searchParams.get('returnUrl') ?? '/login';
@@ -41,6 +42,30 @@ const SignUpForm = (): React.JSX.Element => {
     }
   };
 
+  // Helper function to map password validation errors to translation keys
+  const getPasswordErrorMessage = (validationErrors: string[]): string => {
+    if (validationErrors.length === 0) return '';
+
+    // Map the first error to the appropriate translation key
+    const firstError = validationErrors[0];
+
+    if (firstError.includes('at least 8 characters')) {
+      return t('password.tooShort');
+    }
+    if (firstError.includes('lowercase letter')) {
+      return t('password.noLowercase');
+    }
+    if (firstError.includes('uppercase letter')) {
+      return t('password.noUppercase');
+    }
+    if (firstError.includes('number')) {
+      return t('password.noNumber');
+    }
+
+    // Fallback to generic error
+    return t('password.invalid');
+  };
+
   const validateForm = (): boolean => {
     const newErrors: Record<string, string> = {};
 
@@ -55,7 +80,7 @@ const SignUpForm = (): React.JSX.Element => {
     } else {
       const passwordValidation = validatePassword(formData.password);
       if (!passwordValidation.isValid) {
-        newErrors.password = t('password.invalid');
+        newErrors.password = getPasswordErrorMessage(passwordValidation.errors);
       }
     }
 
@@ -86,7 +111,7 @@ const SignUpForm = (): React.JSX.Element => {
 
     setIsLoading(true);
 
-    void (async () => {
+    void (async (): Promise<void> => {
       try {
         const response = await fetch('/api/auth/signup', {
           method: 'POST',
