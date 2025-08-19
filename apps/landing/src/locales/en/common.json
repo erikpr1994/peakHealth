@@ -219,6 +219,24 @@
         "getStarted": "Get Started",
         "learnMore": "Learn More"
       }
+    },
+    "careers": {
+      "title": "Join Our Team",
+      "subtitle": "Help us build the future of fitness technology",
+      "currentStatus": {
+        "title": "Current Status",
+        "description": "We're currently not actively searching for new employees, but we're always interested in connecting with talented individuals who share our passion for fitness and technology.",
+        "openCvPolicy": {
+          "title": "Open CV Policy:",
+          "description": "We welcome and review all open CVs from passionate developers, designers, and fitness enthusiasts who want to make a difference in the fitness industry."
+        }
+      },
+      "howToApply": {
+        "title": "How to Apply",
+        "description": "Send your CV and a brief introduction to:",
+        "email": "info@peakhealth.es",
+        "note": "We'll review your application and reach out if there's a potential fit for future opportunities."
+      }
     }
   }
 }
