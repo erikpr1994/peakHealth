@@ -108,6 +108,46 @@ The app uses CSS custom properties for consistent theming:
 - Semantic HTML structure
 - Optimized images and performance
 
+## Internationalization (i18n)
+
+The landing app supports multiple languages with automatic browser language detection:
+
+### Supported Languages
+
+- **English (en)**: Default language
+- **Spanish (es)**: Full translation support
+
+### Features
+
+- **Automatic Language Detection**: The app automatically detects the user's browser language and redirects to the appropriate locale
+- **URL-based Locales**: Each locale has its own URL prefix (e.g., `/en/`, `/es/`)
+- **Language Switcher**: Users can manually switch between supported languages
+- **SEO Optimized**: Each locale has proper meta tags and structured data
+
+### How It Works
+
+1. **Browser Detection**: When a user visits the root URL (`/`), the middleware automatically detects their browser language
+2. **Locale Matching**: If the browser language matches a supported locale, the user is redirected to that locale
+3. **Fallback**: If no match is found, the user is redirected to the default locale (English)
+4. **Manual Switching**: Users can use the language switcher in the header to change languages
+
+### Configuration
+
+The internationalization is configured in:
+
+- `src/i18n/routing.ts`: Locale configuration
+- `src/i18n/navigation.ts`: Navigation utilities
+- `src/i18n/request.ts`: Request handling
+- `middleware.ts`: Browser language detection
+
+### Adding New Languages
+
+To add a new language:
+
+1. Add the locale to `src/i18n/routing.ts`
+2. Create translation files in `src/locales/[locale]/common.json`
+3. Update the language switcher component
+
 ## Future Enhancements
 
 - [ ] Blog integration with MDX
@@ -116,7 +156,6 @@ The app uses CSS custom properties for consistent theming:
 - [ ] Analytics integration
 - [ ] Contact form functionality
 - [ ] Newsletter signup integration
-- [ ] Internationalization (i18n)
 
 ## Deployment
 
