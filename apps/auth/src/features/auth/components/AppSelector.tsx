@@ -4,7 +4,6 @@ import {
   getUserAccessibleApps,
   buildAppRedirectUrl,
 } from '@peakhealth/auth-utils';
-import type { User } from '@supabase/supabase-js';
 import { useTranslations } from 'next-intl';
 import { useEffect, useState } from 'react';
 
@@ -152,9 +151,8 @@ const AppIcons = {
 const AppSelector = (): React.JSX.Element => {
   const t = useTranslations('appSelector');
   const tErrors = useTranslations('errors');
-  
+
   const router = useRouter();
-  const [user, setUser] = useState<User | null>(null);
   const [apps, setApps] = useState<AppOption[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string>('');
@@ -175,8 +173,6 @@ const AppSelector = (): React.JSX.Element => {
           router.push('/login');
           return;
         }
-
-        setUser(data.user);
 
         // Get accessible apps for the user
         const accessibleApps = getUserAccessibleApps(data.user);
@@ -199,9 +195,7 @@ const AppSelector = (): React.JSX.Element => {
       const redirectUrl = buildAppRedirectUrl(appKey);
       window.location.href = redirectUrl;
     } catch (err) {
-      setError(
-        err instanceof Error ? err.message : tErrors('redirectFailed')
-      );
+      setError(err instanceof Error ? err.message : tErrors('redirectFailed'));
     }
   };
 
@@ -248,20 +242,17 @@ const AppSelector = (): React.JSX.Element => {
   }
 
   const accessibleApps = apps.filter(app => app.accessible);
-  const userName = user?.user_metadata?.firstName ?? user?.email;
 
   return (
     <div className={styles.container}>
       <AuthCard
         title={t('title')}
-        subtitle={t.rich('subtitle', { name: userName })}
+        subtitle={t('subtitle')}
         variant="full-width"
       >
         {accessibleApps.length === 0 ? (
           <div className={styles.noAppsContainer}>
-            <p className={styles.noAppsText}>
-              {t('noApps.message')}
-            </p>
+            <p className={styles.noAppsText}>{t('noApps.message')}</p>
             <button
               onClick={() => void handleLogout()}
               className={styles.logoutButton}
@@ -297,7 +288,9 @@ const AppSelector = (): React.JSX.Element => {
                   <div
                     className={`${styles.appStatus} ${app.accessible ? styles.accessible : styles.inaccessible}`}
                   >
-                    {app.accessible ? t('appStatus.accessible') : t('appStatus.noAccess')}
+                    {app.accessible
+                      ? t('appStatus.accessible')
+                      : t('appStatus.noAccess')}
                   </div>
                   {!app.accessible && app.reason && (
                     <div className={styles.reasonText}>{app.reason}</div>
@@ -322,4 +315,3 @@ const AppSelector = (): React.JSX.Element => {
 };
 
 export { AppSelector };
-
