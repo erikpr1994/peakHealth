@@ -8,6 +8,9 @@ vi.mock('next/font/google', () => ({
   })),
 }));
 
+// Mock server-only to prevent test failures
+vi.mock('server-only', () => ({}));
+
 // Mock Supabase and other dependencies
 vi.mock('@/contexts/AuthContext', () => ({
   AuthProvider: ({ children }: { children: React.ReactNode }): ReactElement => (
@@ -21,6 +24,24 @@ vi.mock('@/components/layout/Header', () => ({
 
 vi.mock('@/components/layout/Sidebar', () => ({
   Sidebar: (): ReactElement => <div data-testid="sidebar">Sidebar</div>,
+}));
+
+// Mock Hypertune components
+vi.mock('../../generated/hypertune.react', () => ({
+  HypertuneProvider: ({
+    children,
+  }: {
+    children: React.ReactNode;
+  }): ReactElement => <div>{children}</div>,
+}));
+
+vi.mock('@/lib/hypertune/getHypertune', () => ({
+  default: vi.fn(() =>
+    Promise.resolve({
+      dehydrate: () => ({}),
+      getRootArgs: () => ({}),
+    })
+  ),
 }));
 
 describe('RootLayout', () => {
