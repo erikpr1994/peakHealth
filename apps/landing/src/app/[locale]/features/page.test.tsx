@@ -1,12 +1,20 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { render, screen } from '../../../test/test-utils';
+import { act } from '@testing-library/react';
 import React from 'react';
+
+// Mock setRequestLocale to avoid client component error in tests
+vi.mock('next-intl/server', () => ({
+  setRequestLocale: vi.fn(),
+}));
 
 import FeaturesPage from './page';
 
 describe('FeaturesPage', () => {
-  it('renders the features page with correct content', () => {
-    render(<FeaturesPage />);
+  it('renders the features page with correct content', async () => {
+    await act(async () => {
+      render(<FeaturesPage params={Promise.resolve({ locale: 'en' })} />);
+    });
 
     // Check for main title
     expect(screen.getByText('Features')).toBeInTheDocument();
@@ -33,8 +41,10 @@ describe('FeaturesPage', () => {
     ).toBeInTheDocument();
   });
 
-  it('has proper semantic structure', () => {
-    render(<FeaturesPage />);
+  it('has proper semantic structure', async () => {
+    await act(async () => {
+      render(<FeaturesPage params={Promise.resolve({ locale: 'en' })} />);
+    });
 
     // Check that the page has proper semantic structure
     const mainHeading = screen.getByRole('heading', { level: 1 });

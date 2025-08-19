@@ -1,11 +1,21 @@
-import React from 'react';
+import React, { use } from 'react';
 import { useTranslations } from 'next-intl';
+import { setRequestLocale } from 'next-intl/server';
 
 // Force static generation
 export const dynamic = 'force-static';
 export const revalidate = false;
 
-const TermsPage = (): React.JSX.Element => {
+const TermsPage = ({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): React.JSX.Element => {
+  const { locale } = use(params);
+
+  // Enable static rendering
+  setRequestLocale(locale);
+
   const t = useTranslations('pages.terms');
 
   return (

@@ -1,11 +1,21 @@
-import React from 'react';
+import React, { use } from 'react';
 import { useTranslations } from 'next-intl';
+import { setRequestLocale } from 'next-intl/server';
 
 // Force static generation
 export const dynamic = 'force-static';
 export const revalidate = false;
 
-const HelpPage = (): React.JSX.Element => {
+const HelpPage = ({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): React.JSX.Element => {
+  const { locale } = use(params);
+
+  // Enable static rendering
+  setRequestLocale(locale);
+
   const t = useTranslations('pages.help');
 
   return (

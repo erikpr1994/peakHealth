@@ -1,6 +1,7 @@
 import { Metadata } from 'next';
-import React from 'react';
+import React, { use } from 'react';
 import { useTranslations } from 'next-intl';
+import { setRequestLocale } from 'next-intl/server';
 
 import { BlogHeader } from '@/components/blog/BlogHeader';
 import { BlogList } from '@/components/blog/BlogList';
@@ -22,15 +23,21 @@ export const metadata: Metadata = {
   },
 };
 
-const BlogPage = (): React.JSX.Element => {
+const BlogPage = ({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): React.JSX.Element => {
+  const { locale } = use(params);
+
+  // Enable static rendering
+  setRequestLocale(locale);
+
   const t = useTranslations('pages.blog');
 
   return (
     <>
-      <BlogHeader
-        title={t('title')}
-        description={t('description')}
-      />
+      <BlogHeader title={t('title')} description={t('description')} />
       <BlogList />
     </>
   );
