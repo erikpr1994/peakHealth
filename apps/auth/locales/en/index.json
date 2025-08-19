@@ -129,6 +129,9 @@
     "notFound": "The requested resource was not found.",
     "validation": "Please check your input and try again.",
     "signupFailed": "Signup failed",
-    "loginFailed": "Login failed"
+    "loginFailed": "Login failed",
+    "sessionFailed": "Failed to get session",
+    "appLoadFailed": "Failed to load apps",
+    "redirectFailed": "Failed to redirect to app"
   }
 }

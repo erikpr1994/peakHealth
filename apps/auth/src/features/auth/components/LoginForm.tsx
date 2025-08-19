@@ -1,6 +1,12 @@
 'use client';
 
-import { validateEmail, formatAuthError } from '@peakhealth/auth-utils';
+import {
+  validateEmail,
+  formatAuthError,
+  getUserAccessibleApps,
+  buildAppRedirectUrl,
+} from '@peakhealth/auth-utils';
+import type { User } from '@peakhealth/auth-types';
 import { useTranslations } from 'next-intl';
 import { useSearchParams } from 'next/navigation';
 import { useState } from 'react';
@@ -13,7 +19,7 @@ import { Link } from '@/i18n/navigation';
 const LoginForm = (): React.JSX.Element => {
   const t = useTranslations('login');
   const tErrors = useTranslations('errors');
-  
+
   const searchParams = useSearchParams();
   const message = searchParams.get('message');
   const returnUrl = searchParams.get('returnUrl') ?? '/app-selector';
@@ -55,6 +61,30 @@ const LoginForm = (): React.JSX.Element => {
     return Object.keys(newErrors).length === 0;
   };
 
+  const determineRedirectUrl = (user: User): string => {
+    // Get accessible apps for the user
+    const accessibleApps = getUserAccessibleApps(user);
+
+    // Filter to only accessible apps
+    const availableApps = accessibleApps.filter(
+      (app): boolean => app.accessible
+    );
+
+    if (availableApps.length === 0) {
+      // No accessible apps, redirect to app selector to show the "no access" message
+      return '/app-selector';
+    }
+
+    if (availableApps.length === 1) {
+      // Only one app available, redirect directly to it
+      const appKey = availableApps[0].appKey;
+      return buildAppRedirectUrl(appKey, { returnUrl });
+    }
+
+    // Multiple apps available, redirect to app selector
+    return '/app-selector';
+  };
+
   const handleSubmit = (e: React.FormEvent): void => {
     e.preventDefault();
 
@@ -65,7 +95,7 @@ const LoginForm = (): React.JSX.Element => {
     setIsLoading(true);
     setGeneralError('');
 
-    void (async () => {
+    void (async (): Promise<void> => {
       try {
         const response = await fetch('/api/auth/login', {
           method: 'POST',
@@ -75,7 +105,6 @@ const LoginForm = (): React.JSX.Element => {
           body: JSON.stringify({
             email: formData.email,
             password: formData.password,
-            returnUrl,
           }),
         });
 
@@ -85,8 +114,11 @@ const LoginForm = (): React.JSX.Element => {
           throw new Error(data.error ?? tErrors('loginFailed'));
         }
 
-        // Redirect to the return URL or app selector
-        window.location.href = data.redirectUrl || returnUrl;
+        // Determine redirect URL based on user's accessible apps
+        const redirectUrl = determineRedirectUrl(data.user);
+
+        // Redirect to the determined URL
+        window.location.href = redirectUrl;
       } catch (error) {
         setGeneralError(formatAuthError(error));
       } finally {
@@ -97,10 +129,7 @@ const LoginForm = (): React.JSX.Element => {
 
   return (
     <div className={styles.container}>
-      <AuthCard
-        title={t('title')}
-        subtitle={t('subtitle')}
-      >
+      <AuthCard title={t('title')} subtitle={t('subtitle')}>
         <form onSubmit={handleSubmit} className={styles.form}>
           {message && <div className={styles.successMessage}>{message}</div>}
 
@@ -139,7 +168,8 @@ const LoginForm = (): React.JSX.Element => {
 
         <div className={styles.footer}>
           <p>
-            {t('footer.noAccount')} <Link href="/signup">{t('footer.signUp')}</Link>
+            {t('footer.noAccount')}{' '}
+            <Link href="/signup">{t('footer.signUp')}</Link>
           </p>
         </div>
       </AuthCard>
@@ -148,4 +178,3 @@ const LoginForm = (): React.JSX.Element => {
 };
 
 export { LoginForm };
-

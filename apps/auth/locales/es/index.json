@@ -129,6 +129,9 @@
     "notFound": "El recurso solicitado no fue encontrado.",
     "validation": "Por favor, comprueba tu entrada e inténtalo de nuevo.",
     "signupFailed": "Error al registrarse",
-    "loginFailed": "Error al iniciar sesión"
+    "loginFailed": "Error al iniciar sesión",
+    "sessionFailed": "Error al obtener la sesión",
+    "appLoadFailed": "Error al cargar las aplicaciones",
+    "redirectFailed": "Error al redirigir a la aplicación"
   }
 }
