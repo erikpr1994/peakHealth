@@ -1,10 +1,11 @@
 'use client';
 
+import React from 'react';
 import { useParams, useRouter } from 'next/navigation';
 
-import WorkoutTracker from '@/features/workout/WorkoutTracker';
+import { WorkoutTrackerContainer } from '@/features/workout';
 
-const WorkoutTrackerPage = () => {
+const WorkoutTrackerPage = (): React.JSX.Element => {
   const { routineId } = useParams();
   const router = useRouter();
 
@@ -13,7 +14,9 @@ const WorkoutTrackerPage = () => {
     return <div>Invalid routine</div>;
   }
 
-  return <WorkoutTracker onNavigate={router.push} routineId={routineId} />;
+  return (
+    <WorkoutTrackerContainer onNavigate={router.push} routineId={routineId} />
+  );
 };
 
 export default WorkoutTrackerPage;
