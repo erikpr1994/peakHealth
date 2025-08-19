@@ -8,3 +8,4 @@ const NotFound = (): React.JSX.Element => {
 };
 
 export default NotFound;
+

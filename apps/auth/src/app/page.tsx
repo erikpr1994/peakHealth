@@ -8,3 +8,4 @@ const RootPage = (): React.JSX.Element => {
 };
 
 export default RootPage;
+
