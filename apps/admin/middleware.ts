@@ -10,9 +10,8 @@ export async function middleware(request: NextRequest): Promise<NextResponse> {
   // Check Hypertune flag (remove in production if not needed)
   hypertune.roadmap({ fallback: false });
 
-  // Flush logs
-  // Use NextResponse.next() context for waitUntil
-  response.waitUntil(hypertune.flushLogs());
+  // Flush logs - call directly since waitUntil is not available in middleware
+  hypertune.flushLogs();
 
   return response;
 }
