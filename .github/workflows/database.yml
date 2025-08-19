@@ -1,0 +1,71 @@
+name: Database Migrations
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'supabase/migrations/**'
+      - '.github/workflows/database.yml'
+  # Allow manual triggering
+  workflow_dispatch:
+
+env:
+  PNPM_VERSION: 10.14.0
+  NODE_VERSION: 24.x
+  SUPABASE_CLI_VERSION: 1.142.2
+
+jobs:
+  validate-migrations:
+    name: Validate Migrations
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Install Supabase CLI
+        run: npm install -g supabase@${{ env.SUPABASE_CLI_VERSION }}
+
+      - name: Validate migrations
+        run: |
+          # Start Supabase locally
+          supabase start
+          
+          # Verify migrations can be applied cleanly
+          supabase db reset
+          
+          # Check if schema matches expected state
+          supabase db lint
+          
+          # Stop Supabase
+          supabase stop
+
+  deploy-migrations:
+    name: Deploy Migrations
+    needs: validate-migrations
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Install Supabase CLI
+        run: npm install -g supabase@${{ env.SUPABASE_CLI_VERSION }}
+
+      - name: Link to Supabase project
+        run: |
+          supabase link --project-ref ${{ secrets.SUPABASE_PROJECT_ID }} --password ${{ secrets.SUPABASE_DB_PASSWORD }}
+
+      - name: Deploy migrations
+        run: |
+          supabase db push
+
