@@ -136,6 +136,14 @@
       "description": "Nuestra política de privacidad integral está siendo desarrollada. Estamos comprometidos con la transparencia y la protección de tu información personal.",
       "ourCommitment": "Nuestro compromiso:",
       "commitmentText": "Valoramos tu privacidad y proporcionaremos información clara sobre cómo recopilamos, usamos y protegemos tus datos."
+    },
+    "roadmap": {
+      "title": "Hoja de Ruta del Producto",
+      "subtitle": "Ve qué estamos construyendo y vota por características próximas",
+      "comingSoon": "Próximamente",
+      "description": "Nuestra hoja de ruta interactiva está en desarrollo. Pronto podrás ver nuestra línea de tiempo de desarrollo, votar por características y rastrear nuestro progreso.",
+      "whatToExpect": "Qué esperar:",
+      "featuresList": "Votación de características, línea de tiempo de desarrollo, seguimiento de progreso e integración de comentarios de la comunidad."
     }
   }
 }
