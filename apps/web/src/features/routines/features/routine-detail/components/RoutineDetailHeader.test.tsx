@@ -1,17 +1,16 @@
 import { render, screen, fireEvent } from '@testing-library/react';
-import { vi } from 'vitest';
-import { useRouter } from 'next/navigation';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 import RoutineDetailHeader from './RoutineDetailHeader';
 
 // Mock dependencies
 vi.mock('next/navigation');
 
-const mockUseRouter = useRouter as ReturnType<typeof vi.fn>;
+const mockUseRouter = vi.fn();
 
 describe('RoutineDetailHeader', () => {
   const mockRouter = {
-    push: jest.fn(),
-    back: jest.fn(),
+    push: vi.fn(),
+    back: vi.fn(),
   };
 
   const defaultProps = {

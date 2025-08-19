@@ -58,7 +58,7 @@
   "dependencies": {
     "@supabase/supabase-js": "^2.55.0"
   },
-  "packageManager": "pnpm@10.13.1",
+  "packageManager": "pnpm@10.14.0",
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
       "eslint --fix",

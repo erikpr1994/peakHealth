@@ -1,35 +1,73 @@
 import { render, screen } from '@testing-library/react';
-import { vi } from 'vitest';
+import { describe, it, expect } from 'vitest';
 import WeeklySchedule from './WeeklySchedule';
 
 describe('WeeklySchedule', () => {
-  const mockWorkouts = [
+  const mockSchedule = [true, true, false, true, false, false, false]; // Mon, Tue, Thu active
+  const mockStrengthWorkouts = [
     {
       id: 'workout-1',
       name: 'Upper Body',
+      type: 'strength' as const,
+      objective: 'Build upper body strength',
       schedule: {
-        days: ['Monday', 'Wednesday'],
+        repeatPattern: 'week',
+        repeatValue: '1',
+        selectedDays: ['monday', 'wednesday'],
         time: 'Morning',
       },
+      sections: [],
     },
     {
       id: 'workout-2',
       name: 'Lower Body',
+      type: 'strength' as const,
+      objective: 'Build lower body strength',
       schedule: {
-        days: ['Tuesday', 'Thursday'],
+        repeatPattern: 'week',
+        repeatValue: '1',
+        selectedDays: ['tuesday', 'thursday'],
         time: 'Evening',
       },
+      sections: [],
+    },
+  ];
+  const mockRunningWorkouts = [
+    {
+      id: 'run-1',
+      name: 'Morning Run',
+      type: 'running' as const,
+      objective: 'Improve cardiovascular fitness',
+      schedule: {
+        repeatPattern: 'week',
+        repeatValue: '1',
+        selectedDays: ['monday', 'friday'],
+        time: '06:00',
+      },
+      sections: [],
     },
   ];
 
   it('should render weekly schedule title', () => {
-    render(<WeeklySchedule workouts={mockWorkouts} />);
+    render(
+      <WeeklySchedule
+        schedule={mockSchedule}
+        strengthWorkouts={mockStrengthWorkouts}
+        runningWorkouts={mockRunningWorkouts}
+      />
+    );
 
     expect(screen.getByText('Weekly Schedule')).toBeInTheDocument();
   });
 
   it('should render all days of the week', () => {
-    render(<WeeklySchedule workouts={mockWorkouts} />);
+    render(
+      <WeeklySchedule
+        schedule={mockSchedule}
+        strengthWorkouts={mockStrengthWorkouts}
+        runningWorkouts={mockRunningWorkouts}
+      />
+    );
 
     expect(screen.getByText('Monday')).toBeInTheDocument();
     expect(screen.getByText('Tuesday')).toBeInTheDocument();
@@ -41,16 +79,27 @@ describe('WeeklySchedule', () => {
   });
 
   it('should render workouts for scheduled days', () => {
-    render(<WeeklySchedule workouts={mockWorkouts} />);
+    render(
+      <WeeklySchedule
+        schedule={mockSchedule}
+        strengthWorkouts={mockStrengthWorkouts}
+        runningWorkouts={mockRunningWorkouts}
+      />
+    );
 
     expect(screen.getByText('Upper Body')).toBeInTheDocument();
-    expect(screen.getByText('Lower Body')).toBeInTheDocument();
-    expect(screen.getByText('Morning')).toBeInTheDocument();
-    expect(screen.getByText('Evening')).toBeInTheDocument();
+    expect(screen.getAllByText('Lower Body')).toHaveLength(2); // Appears on Tuesday and Thursday
+    expect(screen.getByText('Morning Run')).toBeInTheDocument();
   });
 
   it('should handle empty workouts', () => {
-    render(<WeeklySchedule workouts={[]} />);
+    render(
+      <WeeklySchedule
+        schedule={mockSchedule}
+        strengthWorkouts={[]}
+        runningWorkouts={[]}
+      />
+    );
 
     expect(screen.getByText('Weekly Schedule')).toBeInTheDocument();
     expect(screen.getByText('Monday')).toBeInTheDocument();
@@ -65,17 +114,27 @@ describe('WeeklySchedule', () => {
       {
         id: 'workout-1',
         name: 'Full Body',
+        type: 'strength' as const,
+        objective: 'Full body workout',
         schedule: {
-          days: ['Monday', 'Wednesday', 'Friday'],
+          repeatPattern: 'week',
+          repeatValue: '1',
+          selectedDays: ['monday', 'wednesday', 'friday'],
           time: 'Morning',
         },
+        sections: [],
       },
     ];
 
-    render(<WeeklySchedule workouts={multiDayWorkout} />);
+    render(
+      <WeeklySchedule
+        schedule={[true, false, true, false, true, false, false]}
+        strengthWorkouts={multiDayWorkout}
+        runningWorkouts={[]}
+      />
+    );
 
-    expect(screen.getByText('Full Body')).toBeInTheDocument();
-    expect(screen.getByText('Morning')).toBeInTheDocument();
+    expect(screen.getAllByText('Full Body')).toHaveLength(3); // Appears on Monday, Wednesday, Friday
   });
 
   it('should handle workouts without schedule', () => {
@@ -83,14 +142,25 @@ describe('WeeklySchedule', () => {
       {
         id: 'workout-1',
         name: 'No Schedule Workout',
+        type: 'strength' as const,
+        objective: 'Test workout',
         schedule: {
-          days: [],
+          repeatPattern: 'week',
+          repeatValue: '1',
+          selectedDays: [],
           time: 'Morning',
         },
+        sections: [],
       },
     ];
 
-    render(<WeeklySchedule workouts={workoutWithoutSchedule} />);
+    render(
+      <WeeklySchedule
+        schedule={mockSchedule}
+        strengthWorkouts={workoutWithoutSchedule}
+        runningWorkouts={[]}
+      />
+    );
 
     expect(screen.getByText('Weekly Schedule')).toBeInTheDocument();
     expect(screen.queryByText('No Schedule Workout')).not.toBeInTheDocument();

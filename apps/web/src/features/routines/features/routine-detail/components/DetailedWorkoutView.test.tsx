@@ -1,17 +1,16 @@
 import { render, screen } from '@testing-library/react';
-import { vi } from 'vitest';
-import { useRouter } from 'next/navigation';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 import DetailedWorkoutView from './DetailedWorkoutView';
 import { DetailedWorkout } from '../../../types';
 
 // Mock dependencies
 vi.mock('next/navigation');
 
-const mockUseRouter = useRouter as ReturnType<typeof vi.fn>;
+const mockUseRouter = vi.fn();
 
 describe('DetailedWorkoutView', () => {
   const mockRouter = {
-    push: jest.fn(),
+    push: vi.fn(),
   };
 
   const mockWorkout: DetailedWorkout = {
@@ -61,7 +60,7 @@ describe('DetailedWorkoutView', () => {
 
   it('should render workout details correctly', () => {
     render(<DetailedWorkoutView workout={mockWorkout} routineId="routine-1" />);
-    
+
     expect(screen.getByText('Upper Body Strength')).toBeInTheDocument();
     expect(screen.getByText('Build upper body strength')).toBeInTheDocument();
     expect(screen.getByText('Chest and Triceps')).toBeInTheDocument();
@@ -70,14 +69,14 @@ describe('DetailedWorkoutView', () => {
 
   it('should render schedule information', () => {
     render(<DetailedWorkoutView workout={mockWorkout} routineId="routine-1" />);
-    
+
     expect(screen.getByText(/monday, wednesday/i)).toBeInTheDocument();
     expect(screen.getByText(/morning/i)).toBeInTheDocument();
   });
 
   it('should render exercise sets correctly', () => {
     render(<DetailedWorkoutView workout={mockWorkout} routineId="routine-1" />);
-    
+
     expect(screen.getByText('Set 1')).toBeInTheDocument();
     expect(screen.getByText('Set 2')).toBeInTheDocument();
     expect(screen.getByText('10 reps')).toBeInTheDocument();
@@ -91,9 +90,14 @@ describe('DetailedWorkoutView', () => {
       ...mockWorkout,
       sections: [],
     };
-    
-    render(<DetailedWorkoutView workout={workoutWithoutSections} routineId="routine-1" />);
-    
+
+    render(
+      <DetailedWorkoutView
+        workout={workoutWithoutSections}
+        routineId="routine-1"
+      />
+    );
+
     expect(screen.getByText('Upper Body Strength')).toBeInTheDocument();
     expect(screen.queryByText('Chest and Triceps')).not.toBeInTheDocument();
   });
@@ -108,9 +112,14 @@ describe('DetailedWorkoutView', () => {
         },
       ],
     };
-    
-    render(<DetailedWorkoutView workout={workoutWithoutExercises} routineId="routine-1" />);
-    
+
+    render(
+      <DetailedWorkoutView
+        workout={workoutWithoutExercises}
+        routineId="routine-1"
+      />
+    );
+
     expect(screen.getByText('Chest and Triceps')).toBeInTheDocument();
     expect(screen.queryByText('Bench Press')).not.toBeInTheDocument();
   });
