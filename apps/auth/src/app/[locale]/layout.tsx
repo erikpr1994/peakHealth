@@ -1,6 +1,6 @@
 import { NextIntlClientProvider, hasLocale } from 'next-intl';
 import { Inter } from 'next/font/google';
-import { notFound } from 'next/navigation';
+import { notFound, redirect } from 'next/navigation';
 import { ReactNode } from 'react';
 import { Metadata } from 'next';
 import { setRequestLocale } from 'next-intl/server';
@@ -22,9 +22,9 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale } = await params;
   
-  // Validate locale
+  // Validate locale and redirect to default if invalid
   if (!hasLocale(routing.locales, locale)) {
-    notFound();
+    redirect(`/${routing.defaultLocale}`);
   }
   
   try {
@@ -55,7 +55,7 @@ const LocaleLayout = async ({
   
   // Validate locale and redirect to default if invalid
   if (!hasLocale(routing.locales, locale)) {
-    notFound();
+    redirect(`/${routing.defaultLocale}`);
   }
 
   // Enable static rendering
