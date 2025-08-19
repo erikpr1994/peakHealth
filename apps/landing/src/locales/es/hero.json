@@ -1,0 +1,21 @@
+{
+  "badge": "Próximamente - Sé el Primero en Experimentar",
+  "title": "Tu Rastreador de",
+  "titleHighlight": "Entrenamientos Definitivo",
+  "description": "Registra entrenamientos, rastrea tu progreso y mantén la motivación con PeakHealth. Construye rutinas, mide tus ganancias y disfruta de una mejor experiencia que otras apps de entrenamiento.",
+  "logWorkouts": {
+    "title": "Registra Entrenamientos",
+    "description": "Rastrea tus ejercicios, series, repeticiones y pesos con nuestra interfaz intuitiva de registro de entrenamientos"
+  },
+  "trackProgress": {
+    "title": "Rastrea Progreso",
+    "description": "Monitorea tus ganancias con gráficos detallados, récords personales e historial de ejercicios"
+  },
+  "mockup": {
+    "appTitle": "PeakHealth",
+    "workoutTitle": "Entrenamiento de Hoy",
+    "exercises": "3/5 ejercicios",
+    "dayStreak": "Racha de Días",
+    "goalProgress": "Progreso de Meta"
+  }
+}

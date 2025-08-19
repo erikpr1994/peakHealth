@@ -13,6 +13,18 @@ vi.mock('./src/i18n/routing', () => ({
   },
 }));
 
+// Mock server-only imports
+vi.mock('./src/lib/hypertune/getHypertune', () => ({
+  default: vi.fn(() => ({
+    roadmap: vi.fn(() => true),
+    flushLogs: vi.fn(),
+  })),
+}));
+
+vi.mock('./src/lib/hypertune/anonymousId', () => ({
+  setAnonymousIdIfNeeded: vi.fn(),
+}));
+
 describe('Middleware', () => {
   it('should export middleware with correct configuration', async () => {
     const middleware = await import('./middleware');

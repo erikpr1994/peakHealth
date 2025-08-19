@@ -60,6 +60,8 @@ module.exports = [
         exports: 'readonly',
         fetch: 'readonly',
         global: 'readonly',
+        Headers: 'readonly',
+        HeadersInit: 'readonly',
 
         HTMLButtonElement: 'readonly',
 
