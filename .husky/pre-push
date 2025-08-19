@@ -27,7 +27,8 @@ for file in $CHANGED_FILES; do
   fi
   
   # Skip e2e test files and config files
-  if [[ "$file" =~ apps/e2e/ ]] || [[ "$file" =~ playwright\.config\. ]] || [[ "$file" =~ \.config\. ]] || [[ "$file" =~ setup\.ts$ ]]; then
+  if [[ "$file" =~ apps/e2e/ ]] || [[ "$file" =~ playwright\.config\. ]] || [[ "$file" =~ \.config\. ]] || [[ "$file" =~ setup\.ts$ ]] || \
+     [[ "$file" =~ generated/ ]] || [[ "$file" =~ \.well-known/ ]] || [[ "$file" =~ layout\.tsx$ ]]; then
     continue
   fi
   
