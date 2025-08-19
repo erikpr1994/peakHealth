@@ -26,7 +26,7 @@ export function setAnonymousIdIfNeeded(
     name: anonymousIdCookieName,
     value: newAnonymousId,
     domain:
-      process.env.NODE_ENV === 'development' ? undefined : 'yourdomain.com',
+      process.env.NODE_ENV === 'development' ? 'localhost' : '.peakhealth.es',
     path: '/',
   });
 
