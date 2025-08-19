@@ -1,9 +1,20 @@
-import { render, screen } from '@testing-library/react';
+import { describe, expect, it, vi } from 'vitest';
+import { render, screen } from '../../../test/test-utils';
+import { act } from '@testing-library/react';
+import React from 'react';
+
+// Mock setRequestLocale to avoid client component error in tests
+vi.mock('next-intl/server', () => ({
+  setRequestLocale: vi.fn(),
+}));
+
 import CareersPage from './page';
 
 describe('CareersPage', () => {
-  it('renders the careers page with correct content', () => {
-    render(<CareersPage />);
+  it('renders the careers page with correct content', async () => {
+    await act(async () => {
+      render(<CareersPage params={Promise.resolve({ locale: 'en' })} />);
+    });
 
     // Check for main title
     expect(screen.getByText('Join Our Team')).toBeInTheDocument();
@@ -26,8 +37,10 @@ describe('CareersPage', () => {
     expect(screen.getByText('info@peakhealth.es')).toBeInTheDocument();
   });
 
-  it('has correct email link', () => {
-    render(<CareersPage />);
+  it('has correct email link', async () => {
+    await act(async () => {
+      render(<CareersPage params={Promise.resolve({ locale: 'en' })} />);
+    });
 
     const emailLink = screen.getByText('info@peakhealth.es');
     expect(emailLink).toHaveAttribute('href', 'mailto:info@peakhealth.es');

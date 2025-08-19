@@ -111,5 +111,215 @@
   "language": {
     "en": "English",
     "es": "Español"
+  },
+  "pages": {
+    "features": {
+      "title": "Features",
+      "subtitle": "Discover what makes PeakHealth the ultimate workout tracking platform",
+      "comingSoon": "Coming Soon",
+      "description": "We're working hard to bring you detailed information about all our features. Check back soon for a comprehensive overview of what PeakHealth has to offer.",
+      "coreFeatures": "Core Features:",
+      "coreFeaturesList": "Workout logging, progress tracking, personal records, exercise library, and community-driven development."
+    },
+    "help": {
+      "title": "Help Center",
+      "subtitle": "Find answers to your questions and get support",
+      "comingSoon": "Coming Soon",
+      "description": "Our comprehensive help center is being built. Soon you'll have access to guides, tutorials, FAQs, and direct support.",
+      "whatYoullFind": "What you'll find here:",
+      "featuresList": "User guides, tutorials, frequently asked questions, troubleshooting, and support contact."
+    },
+    "privacy": {
+      "title": "Privacy Policy",
+      "subtitle": "How we protect and handle your data",
+      "comingSoon": "Coming Soon",
+      "description": "Our comprehensive privacy policy is being developed. We're committed to transparency and protecting your personal information.",
+      "ourCommitment": "Our commitment:",
+      "commitmentText": "We value your privacy and will provide clear information about how we collect, use, and protect your data."
+    },
+    "roadmap": {
+      "title": "Product Roadmap",
+      "subtitle": "See what we're building and vote on upcoming features",
+      "comingSoon": "Coming Soon",
+      "description": "Our interactive roadmap is under development. Soon you'll be able to see our development timeline, vote on features, and track our progress.",
+      "whatToExpect": "What to expect:",
+      "featuresList": "Feature voting, development timeline, progress tracking, and community feedback integration."
+    },
+    "terms": {
+      "title": "Terms of Service",
+      "subtitle": "Our terms and conditions for using PeakHealth",
+      "comingSoon": "Coming Soon",
+      "description": "Our terms of service are being finalized. We're working to ensure clear and fair terms for all users.",
+      "whatWereWorkingOn": "What we're working on:",
+      "featuresList": "Clear terms of use, user rights and responsibilities, service limitations, and dispute resolution processes."
+    },
+    "vision": {
+      "hero": {
+        "title": "Our Vision for",
+        "titleHighlight": "Global Health",
+        "description": "Health today is severely deteriorated and focused on solving problems after they occur rather than addressing the root cause. That's why we want to help expand global and integrative health.",
+        "subtitle": "We're building a future where health is proactive, holistic, and accessible to everyone."
+      },
+      "mission": {
+        "title": "Why PeakHealth Exists",
+        "problem": {
+          "title": "The Problem",
+          "description": "Today's health systems focus on treating symptoms after they appear, rather than preventing issues at their root. This reactive approach leads to increased healthcare costs, reduced quality of life, and missed opportunities for true wellness."
+        },
+        "solution": {
+          "title": "Our Solution",
+          "description": "PeakHealth empowers individuals to take control of their health journey through comprehensive fitness and wellness approaches. We believe in building sustainable health habits that address the root causes of health issues, not just their symptoms."
+        }
+      },
+      "pillars": {
+        "title": "Our Core Principles",
+        "holisticHealth": {
+          "title": "Holistic Health",
+          "description": "We believe in treating the whole person, not just symptoms. Our vision encompasses physical, mental, and lifestyle factors for complete wellness."
+        },
+        "preventiveFocus": {
+          "title": "Preventive Focus",
+          "description": "Instead of waiting for health issues to arise, we empower people to build healthy habits and prevent problems before they start."
+        },
+        "globalImpact": {
+          "title": "Global Impact",
+          "description": "Our vision extends beyond individual users to create a global movement toward better health practices and awareness."
+        },
+        "evidenceBased": {
+          "title": "Evidence-Based",
+          "description": "Every approach and recommendation is grounded in scientific research and proven health principles."
+        },
+        "continuousEvolution": {
+          "title": "Continuous Evolution",
+          "description": "We constantly evolve our understanding and approach based on the latest health research and user needs."
+        },
+        "accessibleHealth": {
+          "title": "Accessible Health",
+          "description": "We believe that comprehensive health and fitness should be accessible to everyone, regardless of their starting point."
+        }
+      },
+      "impact": {
+        "title": "Our Impact Vision",
+        "individual": {
+          "title": "Individual Level",
+          "description": "Help millions of people build sustainable health habits, prevent chronic diseases, and achieve their wellness goals through comprehensive fitness and wellness approaches."
+        },
+        "community": {
+          "title": "Community Level",
+          "description": "Create supportive networks where people can share knowledge, motivate each other, and build healthier communities together."
+        },
+        "global": {
+          "title": "Global Level",
+          "description": "Contribute to a paradigm shift in how society approaches health, moving from reactive treatment to proactive prevention and comprehensive wellness."
+        }
+      },
+      "cta": {
+        "title": "Join Our Mission",
+        "description": "Be part of the movement to transform global health. Start your journey with PeakHealth and help us build a healthier future for everyone.",
+        "getStarted": "Get Started",
+        "learnMore": "Learn More"
+      }
+    },
+    "careers": {
+      "title": "Join Our Team",
+      "subtitle": "Help us build the future of fitness technology",
+      "currentStatus": {
+        "title": "Current Status",
+        "description": "We're currently not actively searching for new employees, but we're always interested in connecting with talented individuals who share our passion for fitness and technology.",
+        "openCvPolicy": {
+          "title": "Open CV Policy:",
+          "description": "We welcome and review all open CVs from passionate developers, designers, and fitness enthusiasts who want to make a difference in the fitness industry."
+        }
+      },
+      "howToApply": {
+        "title": "How to Apply",
+        "description": "Send your CV and a brief introduction to:",
+        "email": "info@peakhealth.es",
+        "note": "We'll review your application and reach out if there's a potential fit for future opportunities."
+      }
+    },
+    "contact": {
+      "title": "Contact Us",
+      "subtitle": "Get in touch with the PeakHealth team",
+      "intro": {
+        "title": "We'd Love to Hear from You",
+        "description": "Whether you have questions about our platform, want to provide feedback, or are interested in partnerships, we're here to help."
+      },
+      "getInTouch": {
+        "title": "Get in Touch",
+        "description": "For general inquiries, support, or feedback:",
+        "email": "info@peakhealth.es"
+      },
+      "responseTime": {
+        "title": "Response Time",
+        "description": "We typically respond to all inquiries within 24-48 hours during business days. For urgent matters, please include \"URGENT\" in your subject line."
+      },
+      "categories": {
+        "generalSupport": {
+          "title": "General Support",
+          "description": "Questions about features, account issues, or general help"
+        },
+        "featureRequests": {
+          "title": "Feature Requests",
+          "description": "Suggestions for new features or improvements"
+        },
+        "partnerships": {
+          "title": "Partnerships",
+          "description": "Business opportunities and collaboration inquiries"
+        }
+      },
+      "note": {
+        "title": "Note:",
+        "description": "Our contact form is currently being developed. For now, please use the email address above to reach us directly."
+      }
+    },
+    "feedback": {
+      "title": "Feedback & Suggestions",
+      "subtitle": "Help shape the future of PeakHealth with your ideas",
+      "intro": {
+        "title": "We Value Your Input",
+        "description": "Your feedback helps us build a better platform. Share your ideas, report issues, and help us prioritize what matters most to our community."
+      },
+      "currentStatus": {
+        "title": "Current Status",
+        "description": "Our feedback system is being built. Soon you'll be able to submit feature requests, report bugs, and vote on community suggestions."
+      },
+      "getInTouch": {
+        "title": "Get in Touch",
+        "description": "For now, send your feedback and suggestions directly to our team:",
+        "email": "info@peakhealth.es"
+      },
+      "categories": {
+        "featureRequests": {
+          "title": "Feature Requests",
+          "description": "Suggest new features, improvements, or enhancements to make PeakHealth better"
+        },
+        "bugReports": {
+          "title": "Bug Reports",
+          "description": "Report issues, bugs, or problems you encounter while using the platform"
+        },
+        "voteAndDiscuss": {
+          "title": "Vote & Discuss",
+          "description": "Vote on existing suggestions and participate in community discussions"
+        }
+      },
+      "comingSoon": {
+        "title": "Coming Soon:",
+        "description": "Our dedicated feedback platform will include feature voting, issue tracking, and community discussions. For now, please use the email above to share your thoughts with us."
+      }
+    },
+    "blog": {
+      "title": "Peak Health Blog",
+      "description": "Fitness tips, workout guides, and health insights from our experts",
+      "readTime": "min read",
+      "readMore": "Read More →",
+      "backToBlog": "Back to Blog",
+      "writtenBy": "Written by",
+      "authorDescription": "Fitness expert and Peak Health contributor",
+      "noPosts": {
+        "title": "No blog posts found",
+        "description": "Check back soon for new content!"
+      }
+    }
   }
 }

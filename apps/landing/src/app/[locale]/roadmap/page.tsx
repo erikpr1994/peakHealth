@@ -1,31 +1,37 @@
-import React from 'react';
+import React, { use } from 'react';
+import { useTranslations } from 'next-intl';
+import { setRequestLocale } from 'next-intl/server';
 
 // Force static generation
 export const dynamic = 'force-static';
 export const revalidate = false;
 
-const RoadmapPage = (): React.JSX.Element => {
+const RoadmapPage = ({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): React.JSX.Element => {
+  const { locale } = use(params);
+
+  // Enable static rendering
+  setRequestLocale(locale);
+
+  const t = useTranslations('pages.roadmap');
+
   return (
     <div className="max-w-4xl mx-auto px-4 py-16">
       <div className="text-center mb-12">
-        <h1 className="text-4xl font-bold mb-4">Product Roadmap</h1>
-        <p className="text-xl text-gray-600">
-          See what we're building and vote on upcoming features
-        </p>
+        <h1 className="text-4xl font-bold mb-4">{t('title')}</h1>
+        <p className="text-xl text-gray-600">{t('subtitle')}</p>
       </div>
 
       <div className="bg-white rounded-lg shadow-lg p-8">
         <div className="text-center">
-          <h2 className="text-2xl font-semibold mb-4">Coming Soon</h2>
-          <p className="text-gray-600 mb-6">
-            Our interactive roadmap is under development. Soon you'll be able to
-            see our development timeline, vote on features, and track our
-            progress.
-          </p>
+          <h2 className="text-2xl font-semibold mb-4">{t('comingSoon')}</h2>
+          <p className="text-gray-600 mb-6">{t('description')}</p>
           <div className="bg-green-50 border border-green-200 rounded-lg p-4">
             <p className="text-green-800">
-              <strong>What to expect:</strong> Feature voting, development
-              timeline, progress tracking, and community feedback integration.
+              <strong>{t('whatToExpect')}</strong> {t('featuresList')}
             </p>
           </div>
         </div>

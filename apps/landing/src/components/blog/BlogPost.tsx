@@ -1,6 +1,7 @@
 import { Calendar, Clock, User, Tag, ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 import React from 'react';
+import { useTranslations } from 'next-intl';
 
 import styles from './BlogPost.module.css';
 
@@ -10,15 +11,16 @@ interface BlogPostProps {
   post: BlogPostType;
 }
 
-const BlogPost = ({ post }: BlogPostProps) => {
+const BlogPost = ({ post }: BlogPostProps): React.JSX.Element => {
+  const t = useTranslations('pages.blog');
   // Improved markdown to HTML conversion
-  const renderContent = (content: string) => {
+  const renderContent = (content: string): React.ReactElement[] => {
     const lines = content.split('\n');
     const elements: React.ReactElement[] = [];
     let currentList: React.ReactElement[] = [];
     let inList = false;
 
-    const processInlineMarkdown = (text: string) => {
+    const processInlineMarkdown = (text: string): React.ReactNode => {
       // Handle inline bold text
       const parts = text.split(/(\*\*.*?\*\*)/g);
       return parts.map((part, index) => {
@@ -33,7 +35,7 @@ const BlogPost = ({ post }: BlogPostProps) => {
       });
     };
 
-    const flushList = () => {
+    const flushList = (): void => {
       if (currentList.length > 0) {
         elements.push(
           <ul key={`list-${elements.length}`} className={styles.ul}>
@@ -45,7 +47,7 @@ const BlogPost = ({ post }: BlogPostProps) => {
       }
     };
 
-    lines.forEach((line, index) => {
+    lines.forEach((line, index): void => {
       if (line.startsWith('# ')) {
         flushList();
         elements.push(
@@ -100,7 +102,7 @@ const BlogPost = ({ post }: BlogPostProps) => {
       <div className={styles.container}>
         <Link href="/blog" className={styles.backLink}>
           <ArrowLeft className={styles.backIcon} />
-          Back to Blog
+          {t('backToBlog')}
         </Link>
 
         <header className={styles.header}>
@@ -115,7 +117,9 @@ const BlogPost = ({ post }: BlogPostProps) => {
             </div>
             <div className={styles.metaItem}>
               <Clock className={styles.metaIcon} />
-              <span>{post.readTime} min read</span>
+              <span>
+                {post.readTime} {t('readTime')}
+              </span>
             </div>
           </div>
 
@@ -143,8 +147,10 @@ const BlogPost = ({ post }: BlogPostProps) => {
                 .join('')}
             </div>
             <div>
-              <h3>Written by {post.author}</h3>
-              <p>Fitness expert and Peak Health contributor</p>
+              <h3>
+                {t('writtenBy')} {post.author}
+              </h3>
+              <p>{t('authorDescription')}</p>
             </div>
           </div>
         </footer>
