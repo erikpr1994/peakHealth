@@ -60,7 +60,7 @@ const nextConfig: NextConfig = {
   }),
 };
 
-export default withSentryConfig(withMicrofrontends(withNextIntl(nextConfig)), {
+export default withSentryConfig(withNextIntl(withMicrofrontends(nextConfig)), {
   // For all available options, see:
   // https://www.npmjs.com/package/@sentry/webpack-plugin#options
 
