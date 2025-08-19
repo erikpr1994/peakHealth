@@ -1,25 +1,29 @@
 .section {
-  padding: 6rem 0;
+  padding: 4rem 0;
   background: white;
+  position: relative;
 }
 
 .container {
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 2rem;
+  position: relative;
+  z-index: 1;
 }
 
 .header {
   text-align: center;
-  margin-bottom: 4rem;
+  margin-bottom: 3rem;
 }
 
 .title {
-  font-size: 3rem;
+  font-size: 2.5rem;
   font-weight: 800;
   line-height: 1.1;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
   color: #1e293b;
+  letter-spacing: -0.02em;
 }
 
 .gradientText {
@@ -30,86 +34,133 @@
 }
 
 .description {
-  font-size: 1.25rem;
+  font-size: 1.125rem;
   line-height: 1.6;
   color: #64748b;
   max-width: 600px;
   margin: 0 auto;
+  font-weight: 400;
 }
 
 .steps {
   display: flex;
-  flex-direction: column;
-  gap: 3rem;
-  margin-bottom: 4rem;
+  align-items: stretch;
+  gap: 1.5rem;
+  margin-bottom: 3rem;
+  position: relative;
+}
+
+.steps::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    #3b82f6 20%,
+    #3b82f6 80%,
+    transparent 100%
+  );
+  transform: translateY(-50%);
+  z-index: 0;
 }
 
 .step {
+  flex: 1;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 2rem;
-  padding: 2rem;
+  text-align: center;
+  padding: 2rem 1.5rem;
   background: white;
   border-radius: 16px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
   border: 1px solid #e2e8f0;
   transition: all 0.3s ease;
+  position: relative;
+  z-index: 1;
+  min-height: 280px;
 }
 
 .step:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  transform: translateY(-4px);
+  box-shadow: 0 8px 25px rgba(59, 130, 246, 0.12);
+  border-color: rgba(59, 130, 246, 0.2);
+}
+
+.stepHeader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 1rem;
+  width: 100%;
 }
 
 .stepNumber {
-  width: 60px;
-  height: 60px;
-  background: #3b82f6;
+  width: 48px;
+  height: 48px;
+  background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
   color: white;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.5rem;
+  font-size: 1.25rem;
   font-weight: 700;
   flex-shrink: 0;
+  margin-bottom: 1rem;
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.25);
 }
 
 .stepIcon {
-  width: 50px;
-  height: 50px;
+  width: 40px;
+  height: 40px;
   background: #f8fafc;
-  border-radius: 12px;
+  border-radius: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
   color: #3b82f6;
   flex-shrink: 0;
+  margin-bottom: 1rem;
+  border: 1px solid #e2e8f0;
+  transition: all 0.3s ease;
+}
+
+.step:hover .stepIcon {
+  background: #dbeafe;
+  border-color: #3b82f6;
+  transform: scale(1.05);
 }
 
 .stepTitle {
-  font-size: 1.5rem;
-  font-weight: 700;
-  margin-bottom: 0.5rem;
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
   color: #1e293b;
+  line-height: 1.3;
 }
 
 .stepDescription {
   color: #64748b;
   line-height: 1.6;
   margin: 0;
+  font-size: 0.95rem;
+  font-weight: 400;
 }
 
 .stepArrow {
-  color: #3b82f6;
-  font-size: 1.5rem;
-  flex-shrink: 0;
+  display: none;
 }
 
 .features {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 2rem;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  margin-top: 1rem;
 }
 
 .feature {
@@ -118,83 +169,136 @@
   border-radius: 12px;
   border: 1px solid #e2e8f0;
   transition: all 0.3s ease;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  text-align: center;
 }
 
 .feature:hover {
   border-color: #3b82f6;
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 6px 20px rgba(59, 130, 246, 0.1);
 }
 
 .feature h4 {
   font-size: 1.125rem;
   font-weight: 600;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.75rem;
   color: #1e293b;
+  line-height: 1.4;
 }
 
 .feature p {
   color: #64748b;
   line-height: 1.6;
   margin: 0;
+  font-size: 0.95rem;
 }
 
-/* Mobile styles */
+/* Mobile styles - keeping all existing mobile styles unchanged */
 @media (max-width: 768px) {
   .section {
-    padding: 4rem 0;
+    padding: 3rem 0;
+    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
   }
 
   .container {
-    padding: 0 1rem;
+    padding: 0 1.5rem;
+  }
+
+  .header {
+    margin-bottom: 2.5rem;
+    text-align: left;
   }
 
   .title {
-    font-size: 2rem;
+    font-size: 2.25rem;
+    margin-bottom: 1rem;
+    text-align: left;
   }
 
   .description {
     font-size: 1.125rem;
+    max-width: 100%;
+    text-align: left;
   }
 
   .steps {
-    gap: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    margin-bottom: 3rem;
+  }
+
+  .steps::before {
+    display: none;
   }
 
   .step {
+    display: flex;
     flex-direction: column;
-    text-align: left;
-    gap: 0.75rem;
-    padding: 1.25rem;
-    align-items: flex-start;
+    align-items: center;
+    text-align: center;
+    padding: 1.5rem 1rem;
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+    border: 1px solid rgba(59, 130, 246, 0.1);
+    min-height: auto;
+    transition: all 0.3s ease;
+  }
+
+  .step:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(59, 130, 246, 0.15);
+    border-color: rgba(59, 130, 246, 0.2);
   }
 
   .stepHeader {
     display: flex;
+    flex-direction: row;
     align-items: center;
-    gap: 0.75rem;
+    gap: 1rem;
     width: 100%;
+    margin-bottom: 1rem;
   }
 
   .stepNumber {
-    width: 45px;
-    height: 45px;
+    width: 48px;
+    height: 48px;
+    background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     font-size: 1.125rem;
+    font-weight: 700;
+    margin-bottom: 0;
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.25);
     flex-shrink: 0;
   }
 
   .stepIcon {
-    width: 35px;
-    height: 35px;
-    font-size: 1rem;
+    width: 40px;
+    height: 40px;
+    background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #3b82f6;
+    margin-bottom: 0;
+    border: 1px solid rgba(59, 130, 246, 0.1);
     flex-shrink: 0;
   }
 
   .stepTitle {
     font-size: 1.125rem;
-    margin: 0;
     font-weight: 600;
+    margin-bottom: 0;
+    color: #1e293b;
+    line-height: 1.3;
+    text-align: left;
     flex: 1;
   }
 
@@ -203,7 +307,8 @@
     line-height: 1.5;
     color: #64748b;
     margin: 0;
-    padding-left: 5.5rem; /* Aligns with the content (45px number + 0.75rem gap) */
+    text-align: center;
+    font-weight: 400;
   }
 
   .stepArrow {
@@ -212,52 +317,150 @@
 
   .features {
     grid-template-columns: 1fr;
-    gap: 1rem;
+    gap: 1.25rem;
   }
 
   .feature {
-    padding: 1rem;
+    padding: 1.5rem;
+    text-align: left;
+    border-radius: 16px;
+    border: 1px solid rgba(59, 130, 246, 0.1);
+    background: white;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    transition: all 0.3s ease;
+  }
+
+  .feature:hover {
+    border-color: rgba(59, 130, 246, 0.2);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(59, 130, 246, 0.1);
+  }
+
+  .feature h4 {
+    font-size: 1.125rem;
+    margin-bottom: 0.75rem;
+    color: #1e293b;
+  }
+
+  .feature p {
+    font-size: 1rem;
+    line-height: 1.6;
+    color: #64748b;
   }
 }
 
 @media (max-width: 480px) {
+  .section {
+    padding: 2.5rem 0;
+  }
+
   .container {
-    padding: 0 0.75rem;
+    padding: 0 1rem;
+  }
+
+  .header {
+    margin-bottom: 2rem;
   }
 
   .title {
-    font-size: 1.75rem;
+    font-size: 2rem;
+    margin-bottom: 0.75rem;
   }
 
-  .step {
-    padding: 1rem;
-    gap: 0.5rem;
-  }
-
-  .stepNumber {
-    width: 40px;
-    height: 40px;
+  .description {
     font-size: 1rem;
   }
 
+  .steps {
+    gap: 1rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .step {
+    padding: 1.25rem 0.75rem;
+  }
+
+  .stepNumber {
+    width: 44px;
+    height: 44px;
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+  }
+
   .stepIcon {
-    width: 30px;
-    height: 30px;
+    width: 36px;
+    height: 36px;
     font-size: 0.875rem;
+    margin-bottom: 0.5rem;
   }
 
   .stepTitle {
     font-size: 1rem;
-    margin-bottom: 0.2rem;
+    margin-bottom: 0.5rem;
   }
 
   .stepDescription {
     font-size: 0.85rem;
     line-height: 1.4;
-    padding-left: 4.75rem; /* Aligns with the content (40px number + 0.75rem gap) */
+  }
+
+  .features {
+    gap: 1rem;
   }
 
   .feature {
-    padding: 0.875rem;
+    padding: 1.25rem;
+  }
+
+  .feature h4 {
+    font-size: 1.0625rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .feature p {
+    font-size: 0.95rem;
+    line-height: 1.5;
+  }
+}
+
+@media (max-width: 360px) {
+  .container {
+    padding: 0 0.75rem;
+  }
+
+  .title {
+    font-size: 1.875rem;
+  }
+
+  .steps {
+    gap: 0.75rem;
+  }
+
+  .step {
+    padding: 1rem 0.5rem;
+  }
+
+  .stepNumber {
+    width: 40px;
+    height: 40px;
+    font-size: 0.875rem;
+  }
+
+  .stepIcon {
+    width: 32px;
+    height: 32px;
+    font-size: 0.75rem;
+  }
+
+  .stepTitle {
+    font-size: 0.95rem;
+  }
+
+  .stepDescription {
+    font-size: 0.8rem;
+  }
+
+  .feature {
+    padding: 1rem;
   }
 }
