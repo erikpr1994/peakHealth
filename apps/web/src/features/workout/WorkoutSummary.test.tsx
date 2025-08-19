@@ -7,12 +7,23 @@ const mockGoToRoutines = vi.fn();
 const mockGoToCalendar = vi.fn();
 const mockOnComplete = vi.fn();
 
-vi.mock('./hooks/useWorkoutNavigation', (): { useWorkoutNavigation: () => { goToRoutines: () => void; goToCalendar: () => void } } => ({
-  useWorkoutNavigation: (): { goToRoutines: () => void; goToCalendar: () => void } => ({
-    goToRoutines: mockGoToRoutines,
-    goToCalendar: mockGoToCalendar,
-  }),
-}));
+vi.mock(
+  './hooks/useWorkoutNavigation',
+  (): {
+    useWorkoutNavigation: () => {
+      goToRoutines: () => void;
+      goToCalendar: () => void;
+    };
+  } => ({
+    useWorkoutNavigation: (): {
+      goToRoutines: () => void;
+      goToCalendar: () => void;
+    } => ({
+      goToRoutines: mockGoToRoutines,
+      goToCalendar: mockGoToCalendar,
+    }),
+  })
+);
 
 const mockWorkoutSession = {
   routineId: 'routine-1',
@@ -83,8 +94,11 @@ describe('WorkoutSummary', () => {
     );
 
     expect(screen.getByText('Workout Complete!')).toBeInTheDocument();
+    // The component shows different celebration messages randomly, so we check for any celebration message
     expect(
-      screen.getByText(/Outstanding work|You crushed it|Another step closer/)
+      screen.getByText(
+        /You crushed it|Your dedication|Outstanding work|Another step closer/
+      )
     ).toBeInTheDocument();
   });
 
@@ -96,10 +110,9 @@ describe('WorkoutSummary', () => {
       />
     );
 
-    expect(screen.getByText('1h 0m')).toBeInTheDocument(); // total duration
-    expect(screen.getByText('1')).toBeInTheDocument(); // sets completed
+    expect(screen.getAllByText('1h 0m')).toHaveLength(2); // total duration appears twice
+    expect(screen.getAllByText('1')).toHaveLength(2); // sets completed and exercises both show "1"
     expect(screen.getByText('10')).toBeInTheDocument(); // total reps
-    expect(screen.getByText('1')).toBeInTheDocument(); // exercises
   });
 
   it('should display workout details', () => {
@@ -210,6 +223,6 @@ describe('WorkoutSummary', () => {
 
     expect(screen.getByText(/10:00/)).toBeInTheDocument(); // start time
     expect(screen.getByText(/11:00/)).toBeInTheDocument(); // end time
-    expect(screen.getByText('1h 0m')).toBeInTheDocument(); // active time
+    expect(screen.getAllByText('1h 0m')).toHaveLength(2); // active time appears twice
   });
 });

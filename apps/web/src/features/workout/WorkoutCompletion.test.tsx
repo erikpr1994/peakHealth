@@ -13,19 +13,20 @@ describe('WorkoutCompletion', () => {
   });
 
   it('should render check icon', () => {
-    render(<WorkoutCompletion />);
+    const { container } = render(<WorkoutCompletion />);
 
-    const icon = screen.getByRole('img', { hidden: true });
-    expect(icon).toBeInTheDocument();
+    const svg = container.querySelector('svg');
+    expect(svg).toBeInTheDocument();
   });
 
   it('should have proper styling classes', () => {
     const { container } = render(<WorkoutCompletion />);
 
-    expect(container.firstChild).toHaveClass('container');
-    expect(container.querySelector('.content')).toBeInTheDocument();
-    expect(container.querySelector('.icon')).toBeInTheDocument();
-    expect(container.querySelector('.title')).toBeInTheDocument();
-    expect(container.querySelector('.message')).toBeInTheDocument();
+    // CSS Modules generate hashed class names, so we check for the presence of elements instead
+    expect(container.querySelector('[class*="container"]')).toBeInTheDocument();
+    expect(container.querySelector('[class*="content"]')).toBeInTheDocument();
+    expect(container.querySelector('[class*="icon"]')).toBeInTheDocument();
+    expect(container.querySelector('[class*="title"]')).toBeInTheDocument();
+    expect(container.querySelector('[class*="message"]')).toBeInTheDocument();
   });
 });

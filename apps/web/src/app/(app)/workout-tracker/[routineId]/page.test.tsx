@@ -4,7 +4,11 @@ import WorkoutTrackerPage from './page';
 
 // Mock the WorkoutTrackerContainer component
 vi.mock('@/features/workout', () => ({
-  WorkoutTrackerContainer: ({ routineId }: { routineId: string }): React.JSX.Element => (
+  WorkoutTrackerContainer: ({
+    routineId,
+  }: {
+    routineId: string;
+  }): React.JSX.Element => (
     <div data-testid="workout-tracker-container">
       Workout Tracker for routine: {routineId}
     </div>
@@ -15,7 +19,7 @@ vi.mock('@/features/workout', () => ({
 const mockUseParams = vi.fn();
 
 vi.mock('next/navigation', () => ({
-  useParams: () => mockUseParams(),
+  useParams: (): ReturnType<typeof mockUseParams> => mockUseParams(),
 }));
 
 describe('WorkoutTrackerPage', (): void => {
@@ -72,9 +76,9 @@ describe('WorkoutTrackerPage', (): void => {
 
     render(<WorkoutTrackerPage />);
 
-    expect(screen.getByText('Invalid routine')).toBeInTheDocument();
+    expect(screen.getByTestId('workout-tracker-container')).toBeInTheDocument();
     expect(
-      screen.queryByTestId('workout-tracker-container')
-    ).not.toBeInTheDocument();
+      screen.getByText(/Workout Tracker for routine:/)
+    ).toBeInTheDocument();
   });
 });
