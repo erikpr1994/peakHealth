@@ -56,7 +56,8 @@
     "typescript": "^5.9.2"
   },
   "dependencies": {
-    "@supabase/supabase-js": "^2.55.0"
+    "@supabase/supabase-js": "^2.55.0",
+    "next": "^15.4.6"
   },
   "packageManager": "pnpm@10.14.0",
   "lint-staged": {

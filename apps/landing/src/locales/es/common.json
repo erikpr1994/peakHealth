@@ -119,7 +119,38 @@
       "comingSoon": "Próximamente",
       "description": "Estamos trabajando arduamente para traerte información detallada sobre todas nuestras características. Vuelve pronto para una descripción completa de lo que PeakHealth tiene para ofrecer.",
       "coreFeatures": "Características Principales:",
-      "coreFeaturesList": "Registro de entrenamientos, seguimiento de progreso, récords personales, biblioteca de ejercicios y desarrollo impulsado por la comunidad."
+      "coreFeaturesList": "Registro de entrenamientos, seguimiento de progreso, récords personales, biblioteca de ejercicios y desarrollo impulsado por la comunidad.",
+      "upcomingFeatures": {
+        "workoutLogging": {
+          "title": "Registro de Entrenamientos",
+          "description": "Rastrea tus ejercicios, series, repeticiones y pesos con nuestra interfaz intuitiva de registro de entrenamientos."
+        },
+        "progressTracking": {
+          "title": "Seguimiento de Progreso",
+          "description": "Monitorea tus ganancias con gráficos detallados, récords personales e historial de ejercicios."
+        },
+        "goalSetting": {
+          "title": "Establecimiento de Metas",
+          "description": "Establece y rastrea tus metas fitness con hitos personalizados y logros."
+        },
+        "scheduling": {
+          "title": "Programación de Entrenamientos",
+          "description": "Planifica tus entrenamientos con anticipación con nuestro sistema inteligente de programación."
+        },
+        "community": {
+          "title": "Características Comunitarias",
+          "description": "Conéctate con otros entusiastas del fitness y comparte tu progreso."
+        },
+        "analytics": {
+          "title": "Analíticas Avanzadas",
+          "description": "Obtén información sobre tu rendimiento con analíticas detalladas y reportes."
+        }
+      },
+      "cta": {
+        "title": "Mantente Actualizado",
+        "description": "Sé el primero en saber cuando se lancen nuevas características y obtén acceso temprano a versiones beta.",
+        "viewRoadmap": "Ver Hoja de Ruta"
+      }
     },
     "help": {
       "title": "Centro de Ayuda",
@@ -127,7 +158,38 @@
       "comingSoon": "Próximamente",
       "description": "Nuestro centro de ayuda integral está siendo construido. Pronto tendrás acceso a guías, tutoriales, preguntas frecuentes y soporte directo.",
       "whatYoullFind": "Lo que encontrarás aquí:",
-      "featuresList": "Guías de usuario, tutoriales, preguntas frecuentes, solución de problemas y contacto de soporte."
+      "featuresList": "Guías de usuario, tutoriales, preguntas frecuentes, solución de problemas y contacto de soporte.",
+      "categories": {
+        "userGuides": {
+          "title": "Guías de Usuario",
+          "description": "Guías paso a paso para ayudarte a aprovechar al máximo PeakHealth"
+        },
+        "tutorials": {
+          "title": "Tutoriales en Video",
+          "description": "Guías visuales y recorridos para todas las características principales"
+        },
+        "faq": {
+          "title": "Preguntas Frecuentes",
+          "description": "Respuestas rápidas a preguntas y preocupaciones comunes"
+        },
+        "search": {
+          "title": "Búsqueda de Ayuda",
+          "description": "Encuentra información específica rápidamente con nuestra funcionalidad de búsqueda"
+        },
+        "documentation": {
+          "title": "Documentación",
+          "description": "Documentación técnica completa y referencias de API"
+        },
+        "support": {
+          "title": "Soporte Directo",
+          "description": "Obtén ayuda de nuestro equipo de soporte cuando más la necesites"
+        }
+      },
+      "contact": {
+        "title": "¿Necesitas Más Ayuda?",
+        "description": "¿No encuentras lo que buscas? Nuestro equipo de soporte está aquí para ayudar.",
+        "getHelp": "Contactar Soporte"
+      }
     },
     "privacy": {
       "title": "Política de Privacidad",
@@ -135,7 +197,38 @@
       "comingSoon": "Próximamente",
       "description": "Nuestra política de privacidad integral está siendo desarrollada. Estamos comprometidos con la transparencia y la protección de tu información personal.",
       "ourCommitment": "Nuestro compromiso:",
-      "commitmentText": "Valoramos tu privacidad y proporcionaremos información clara sobre cómo recopilamos, usamos y protegemos tus datos."
+      "commitmentText": "Valoramos tu privacidad y proporcionaremos información clara sobre cómo recopilamos, usamos y protegemos tus datos.",
+      "principles": {
+        "dataProtection": {
+          "title": "Protección de Datos",
+          "description": "Implementamos medidas de seguridad estándar de la industria para proteger tu información personal de acceso, alteración o divulgación no autorizada."
+        },
+        "security": {
+          "title": "Seguridad Primero",
+          "description": "Tus datos están encriptados en tránsito y en reposo, con auditorías de seguridad regulares y actualizaciones para mantener los más altos estándares de protección."
+        },
+        "transparency": {
+          "title": "Transparencia",
+          "description": "Somos abiertos sobre qué datos recopilamos, cómo los usamos y con quién los compartimos. Sin agendas ocultas o uso sorpresa de datos."
+        },
+        "control": {
+          "title": "Control del Usuario",
+          "description": "Tienes control total sobre tus datos. Accede, modifica o elimina tu información en cualquier momento a través de la configuración de tu cuenta."
+        },
+        "community": {
+          "title": "Confianza de la Comunidad",
+          "description": "Construimos confianza con nuestra comunidad siendo transparentes sobre nuestras prácticas de datos y respetando tus elecciones de privacidad."
+        },
+        "compliance": {
+          "title": "Cumplimiento Legal",
+          "description": "Cumplimos con todas las leyes y regulaciones de privacidad aplicables, incluyendo GDPR, CCPA y otros estándares de protección de datos."
+        }
+      },
+      "contact": {
+        "title": "¿Preguntas Sobre Privacidad?",
+        "description": "Si tienes preguntas sobre nuestras prácticas de privacidad o quieres ejercer tus derechos de datos, estamos aquí para ayudar.",
+        "getInTouch": "Contáctanos"
+      }
     },
     "roadmap": {
       "title": "Hoja de Ruta del Producto",
@@ -143,7 +236,38 @@
       "comingSoon": "Próximamente",
       "description": "Nuestra hoja de ruta interactiva está en desarrollo. Pronto podrás ver nuestra línea de tiempo de desarrollo, votar por características y rastrear nuestro progreso.",
       "whatToExpect": "Qué esperar:",
-      "featuresList": "Votación de características, línea de tiempo de desarrollo, seguimiento de progreso e integración de comentarios de la comunidad."
+      "featuresList": "Votación de características, línea de tiempo de desarrollo, seguimiento de progreso e integración de comentarios de la comunidad.",
+      "features": {
+        "voting": {
+          "title": "Votación de Características",
+          "description": "Vota por características próximas y ayúdanos a priorizar lo que más importa a nuestra comunidad."
+        },
+        "timeline": {
+          "title": "Línea de Tiempo de Desarrollo",
+          "description": "Ve nuestro cronograma de lanzamiento planificado y rastrea el progreso en características que te emocionan."
+        },
+        "progress": {
+          "title": "Seguimiento de Progreso",
+          "description": "Monitorea el estado de desarrollo de características y obtén actualizaciones sobre el progreso de implementación."
+        },
+        "feedback": {
+          "title": "Comentarios de la Comunidad",
+          "description": "Comparte tus pensamientos sobre características y participa en discusiones sobre próximos lanzamientos."
+        },
+        "community": {
+          "title": "Integración Comunitaria",
+          "description": "Conéctate con otros usuarios y colabora en sugerencias y mejoras de características."
+        },
+        "analytics": {
+          "title": "Analíticas de Hoja de Ruta",
+          "description": "Ve tendencias de votación, popularidad de características y métricas de participación de la comunidad."
+        }
+      },
+      "cta": {
+        "title": "Ayuda a Dar Forma a Nuestro Futuro",
+        "description": "Tus comentarios impulsan nuestro desarrollo. Comparte tus ideas y ayúdanos a construir las características que quieres.",
+        "suggestFeatures": "Sugerir Características"
+      }
     },
     "terms": {
       "title": "Términos de Servicio",
@@ -151,7 +275,38 @@
       "comingSoon": "Próximamente",
       "description": "Nuestros términos de servicio están siendo finalizados. Estamos trabajando para asegurar términos claros y justos para todos los usuarios.",
       "whatWereWorkingOn": "En qué estamos trabajando:",
-      "featuresList": "Términos de uso claros, derechos y responsabilidades del usuario, limitaciones del servicio y procesos de resolución de disputas."
+      "featuresList": "Términos de uso claros, derechos y responsabilidades del usuario, limitaciones del servicio y procesos de resolución de disputas.",
+      "sections": {
+        "termsOfUse": {
+          "title": "Términos de Uso",
+          "description": "Pautas claras sobre cómo usar nuestra plataforma de manera responsable y qué constituye comportamiento aceptable."
+        },
+        "userRights": {
+          "title": "Derechos y Responsabilidades del Usuario",
+          "description": "Tus derechos como usuario y tus responsabilidades al usar nuestra plataforma y servicios."
+        },
+        "serviceLimitations": {
+          "title": "Limitaciones del Servicio",
+          "description": "Información clara sobre disponibilidad del servicio, limitaciones y qué podemos y no podemos proporcionar."
+        },
+        "disputeResolution": {
+          "title": "Resolución de Disputas",
+          "description": "Procesos justos y transparentes para resolver cualquier problema o disputa que pueda surgir."
+        },
+        "legal": {
+          "title": "Marco Legal",
+          "description": "La base legal para nuestros servicios y cómo manejamos asuntos legales y cumplimiento."
+        },
+        "contact": {
+          "title": "Contacto y Soporte",
+          "description": "Cómo contactarnos para preguntas sobre nuestros términos o para reportar violaciones y preocupaciones."
+        }
+      },
+      "contact": {
+        "title": "¿Preguntas Sobre Términos?",
+        "description": "Si tienes preguntas sobre nuestros términos de servicio o necesitas aclaración sobre algún punto, estamos aquí para ayudar.",
+        "getInTouch": "Contáctanos"
+      }
     },
     "vision": {
       "hero": {
