@@ -7,7 +7,7 @@ import {
   buildAppRedirectUrl,
 } from '@peakhealth/auth-utils';
 import type { User } from '@peakhealth/auth-types';
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
 import { useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 
@@ -19,10 +19,11 @@ import { Link } from '@/i18n/navigation';
 const LoginForm = (): React.JSX.Element => {
   const t = useTranslations('login');
   const tErrors = useTranslations('errors');
+  const locale = useLocale();
 
   const searchParams = useSearchParams();
   const message = searchParams.get('message');
-  const returnUrl = searchParams.get('returnUrl') ?? '/app-selector';
+  const returnUrl = searchParams.get('returnUrl') ?? `/${locale}/app-selector`;
 
   const [formData, setFormData] = useState({
     email: '',
@@ -72,7 +73,7 @@ const LoginForm = (): React.JSX.Element => {
 
     if (availableApps.length === 0) {
       // No accessible apps, redirect to app selector to show the "no access" message
-      return '/app-selector';
+      return `/${locale}/app-selector`;
     }
 
     if (availableApps.length === 1) {
@@ -82,7 +83,7 @@ const LoginForm = (): React.JSX.Element => {
     }
 
     // Multiple apps available, redirect to app selector
-    return '/app-selector';
+    return `/${locale}/app-selector`;
   };
 
   const handleSubmit = (e: React.FormEvent): void => {
