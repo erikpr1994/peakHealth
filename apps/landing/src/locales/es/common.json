@@ -111,5 +111,15 @@
   "language": {
     "en": "English",
     "es": "Español"
+  },
+  "pages": {
+    "features": {
+      "title": "Características",
+      "subtitle": "Descubre qué hace de PeakHealth la plataforma definitiva de seguimiento de entrenamientos",
+      "comingSoon": "Próximamente",
+      "description": "Estamos trabajando arduamente para traerte información detallada sobre todas nuestras características. Vuelve pronto para una descripción completa de lo que PeakHealth tiene para ofrecer.",
+      "coreFeatures": "Características Principales:",
+      "coreFeaturesList": "Registro de entrenamientos, seguimiento de progreso, récords personales, biblioteca de ejercicios y desarrollo impulsado por la comunidad."
+    }
   }
 }

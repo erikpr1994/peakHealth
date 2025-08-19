@@ -111,5 +111,15 @@
   "language": {
     "en": "English",
     "es": "Español"
+  },
+  "pages": {
+    "features": {
+      "title": "Features",
+      "subtitle": "Discover what makes PeakHealth the ultimate workout tracking platform",
+      "comingSoon": "Coming Soon",
+      "description": "We're working hard to bring you detailed information about all our features. Check back soon for a comprehensive overview of what PeakHealth has to offer.",
+      "coreFeatures": "Core Features:",
+      "coreFeaturesList": "Workout logging, progress tracking, personal records, exercise library, and community-driven development."
+    }
   }
 }
