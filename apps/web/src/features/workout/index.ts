@@ -9,5 +9,8 @@ export { default as SetManagement } from './SetManagement';
 export { default as RestTimer } from './RestTimer';
 export { default as WorkoutTypeSelectionModal } from './WorkoutTypeSelectionModal';
 
+// Export hooks
+export { useWorkoutNavigation } from './hooks/useWorkoutNavigation';
+
 // Export types
 export * from './types';

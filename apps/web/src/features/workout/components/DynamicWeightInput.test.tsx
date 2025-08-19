@@ -2,7 +2,7 @@ import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 
-import { DynamicWeightInput, getWeightInputType } from '../DynamicWeightInput';
+import { DynamicWeightInput, getWeightInputType } from './DynamicWeightInput';
 
 // Mock the UI components
 vi.mock('@peakhealth/ui', () => ({

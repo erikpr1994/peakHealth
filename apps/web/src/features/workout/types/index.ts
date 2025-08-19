@@ -1,9 +1,6 @@
-import { Page } from '@/types/app';
-
 export interface WorkoutPreparationProps {
   routineId: string;
   onStartWorkout: () => void;
-  onNavigate: (page: Page) => void;
 }
 
 export interface RoutineDetails {
@@ -21,7 +18,6 @@ export interface RoutineDetails {
 
 export interface WorkoutTrackerContainerProps {
   routineId: string;
-  onNavigate: (page: Page) => void;
 }
 
 export type WorkoutFlowState = 'preparation' | 'active' | 'completed';

@@ -15,7 +15,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Textarea } from '@/components/ui/textarea';
-import { Page } from '@/types/app';
+import { useWorkoutNavigation } from './hooks/useWorkoutNavigation';
 
 interface SetData {
   id: string;
@@ -86,17 +86,16 @@ interface WorkoutSession {
 interface WorkoutSummaryProps {
   workoutSession: WorkoutSession;
   onComplete: () => void;
-  onNavigate: (page: Page) => void;
 }
 
 export default function WorkoutSummary({
   workoutSession,
   onComplete,
-  onNavigate,
 }: WorkoutSummaryProps) {
   const [workoutNotes, setWorkoutNotes] = useState('');
   const [rating, setRating] = useState(0);
   const [showCelebration] = useState(true);
+  const { goToRoutines, goToDashboard } = useWorkoutNavigation();
 
   const formatDuration = (seconds: number) => {
     const hours = Math.floor(seconds / 3600);
@@ -403,7 +402,7 @@ export default function WorkoutSummary({
               </div>
             </div>
             <Button
-              onClick={() => onNavigate('calendar')}
+              onClick={() => goToDashboard()}
               variant="outline"
               className="w-full"
             >
@@ -429,11 +428,7 @@ export default function WorkoutSummary({
 
         {/* Final Actions */}
         <div className="flex gap-4">
-          <Button
-            variant="outline"
-            onClick={() => onNavigate('routines')}
-            className="flex-1"
-          >
+          <Button variant="outline" onClick={goToRoutines} className="flex-1">
             Back to Routines
           </Button>
           <Button

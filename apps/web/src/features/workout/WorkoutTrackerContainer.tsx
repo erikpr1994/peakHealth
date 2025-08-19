@@ -4,14 +4,15 @@ import WorkoutPreparation from './WorkoutPreparation';
 import WorkoutTracker from './WorkoutTracker';
 import WorkoutCompletion from './WorkoutCompletion';
 import { WorkoutTrackerContainerProps, WorkoutFlowState } from './types';
+import { useWorkoutNavigation } from './hooks/useWorkoutNavigation';
 
 const WorkoutTrackerContainer = ({
   routineId,
-  onNavigate,
 }: WorkoutTrackerContainerProps): React.JSX.Element | null => {
   const [workoutState, setWorkoutState] =
     useState<WorkoutFlowState>('preparation');
   const [workoutSessionId, setWorkoutSessionId] = useState<string | null>(null);
+  const { goToDashboard, goToRoutines } = useWorkoutNavigation();
 
   const handleStartWorkout = (): void => {
     // In real app, create workout session in database here
@@ -24,13 +25,13 @@ const WorkoutTrackerContainer = ({
     setWorkoutState('completed');
     // In real app, update workout session as completed
     setTimeout(() => {
-      onNavigate('dashboard');
+      goToDashboard();
     }, 3000);
   };
 
   const handleExitWorkout = (): void => {
     // In real app, handle workout exit logic
-    onNavigate('routines');
+    goToRoutines();
   };
 
   if (workoutState === 'preparation') {
@@ -38,7 +39,6 @@ const WorkoutTrackerContainer = ({
       <WorkoutPreparation
         routineId={routineId}
         onStartWorkout={handleStartWorkout}
-        onNavigate={onNavigate}
       />
     );
   }
@@ -48,7 +48,6 @@ const WorkoutTrackerContainer = ({
       <WorkoutTracker
         routineId={routineId}
         sessionId={workoutSessionId}
-        onNavigate={onNavigate}
         onComplete={handleWorkoutComplete}
         onExit={handleExitWorkout}
       />

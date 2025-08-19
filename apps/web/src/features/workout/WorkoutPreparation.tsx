@@ -5,12 +5,12 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { WorkoutPreparationProps, RoutineDetails } from './types';
+import { useWorkoutNavigation } from './hooks/useWorkoutNavigation';
 import styles from './WorkoutPreparation.module.css';
 
 const WorkoutPreparation = ({
   routineId,
   onStartWorkout,
-  onNavigate,
 }: WorkoutPreparationProps): React.JSX.Element => {
   const [isLoading, setIsLoading] = useState(false);
 
@@ -38,8 +38,10 @@ const WorkoutPreparation = ({
     }, 500);
   };
 
+  const { goToRoutines } = useWorkoutNavigation();
+
   const handleGoBack = (): void => {
-    onNavigate('routines');
+    goToRoutines();
   };
 
   return (

@@ -1,5 +1,6 @@
+import React, { useState, useEffect } from 'react';
 import { X, Play, Pause, Square, AlertTriangle, MapPin } from 'lucide-react';
-import { useState, useEffect } from 'react';
+import { useWorkoutNavigation } from './hooks/useWorkoutNavigation';
 
 import ExerciseView from './ExerciseView';
 import { RestType } from './RestTimer';
@@ -16,11 +17,12 @@ import {
   DialogDescription,
 } from '@/components/ui/dialog';
 import { Textarea } from '@/components/ui/textarea';
-import { Page } from '@/types/app';
 
 interface WorkoutTrackerProps {
-  onNavigate: (page: Page) => void;
   routineId: string;
+  sessionId?: string | null;
+  onComplete?: () => void;
+  onExit?: () => void;
 }
 
 type WorkoutState =
@@ -101,7 +103,12 @@ interface WorkoutSession {
   totalPauseTime: number; // in seconds
 }
 
-const WorkoutTracker = ({ onNavigate, routineId }: WorkoutTrackerProps) => {
+const WorkoutTracker = ({
+  routineId,
+  sessionId,
+  onComplete,
+  onExit,
+}: WorkoutTrackerProps) => {
   const [workoutState, setWorkoutState] = useState<WorkoutState>('exercise');
   const [showExitDialog, setShowExitDialog] = useState(false);
   const [showPauseDialog, setShowPauseDialog] = useState(false);
@@ -109,6 +116,7 @@ const WorkoutTracker = ({ onNavigate, routineId }: WorkoutTrackerProps) => {
   const [workoutDuration, setWorkoutDuration] = useState(0);
   const [restType, setRestType] = useState<RestType>('set');
   const [customRestTime, setCustomRestTime] = useState(60);
+  const { goToRoutines, goToDashboard } = useWorkoutNavigation();
 
   // Mock workout session data - in real app, this would come from the routine
   // For trail running workouts, show a placeholder for now
@@ -310,14 +318,14 @@ const WorkoutTracker = ({ onNavigate, routineId }: WorkoutTrackerProps) => {
           </p>
           <div className="space-y-3">
             <Button
-              onClick={() => onNavigate('routines')}
+              onClick={goToRoutines}
               className="w-full bg-orange-600 hover:bg-orange-700"
             >
               Back to Routines
             </Button>
             <Button
               variant="outline"
-              onClick={() => onNavigate('dashboard')}
+              onClick={goToDashboard}
               className="w-full"
             >
               Go to Dashboard
@@ -500,7 +508,7 @@ const WorkoutTracker = ({ onNavigate, routineId }: WorkoutTrackerProps) => {
   const handleWorkoutCompleted = () => {
     // Save workout data and navigate back
     console.log('Workout completed:', workoutSession);
-    onNavigate('routines');
+    goToRoutines();
   };
 
   if (workoutState === 'completed') {
@@ -508,7 +516,6 @@ const WorkoutTracker = ({ onNavigate, routineId }: WorkoutTrackerProps) => {
       <WorkoutSummary
         workoutSession={workoutSession}
         onComplete={handleWorkoutCompleted}
-        onNavigate={onNavigate}
       />
     );
   }
