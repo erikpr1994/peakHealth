@@ -5,12 +5,13 @@ import {
   buildAppRedirectUrl,
 } from '@peakhealth/auth-utils';
 import type { User } from '@supabase/supabase-js';
-import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 import { useEffect, useState } from 'react';
 
 import styles from './app-selector.module.css';
 
 import { AuthCard } from '@/features/shared';
+import { useRouter } from '@/i18n/navigation';
 
 interface AppOption {
   appKey: string;
@@ -149,6 +150,9 @@ const AppIcons = {
 };
 
 const AppSelector = (): React.JSX.Element => {
+  const t = useTranslations('appSelector');
+  const tErrors = useTranslations('errors');
+  
   const router = useRouter();
   const [user, setUser] = useState<User | null>(null);
   const [apps, setApps] = useState<AppOption[]>([]);
@@ -163,7 +167,7 @@ const AppSelector = (): React.JSX.Element => {
         const data = await response.json();
 
         if (!response.ok) {
-          throw new Error(data.error ?? 'Failed to get session');
+          throw new Error(data.error ?? tErrors('sessionFailed'));
         }
 
         if (!data.user) {
@@ -178,12 +182,12 @@ const AppSelector = (): React.JSX.Element => {
         const accessibleApps = getUserAccessibleApps(data.user);
         setApps(accessibleApps);
       } catch (err) {
-        setError(err instanceof Error ? err.message : 'Failed to load apps');
+        setError(err instanceof Error ? err.message : tErrors('appLoadFailed'));
       } finally {
         setIsLoading(false);
       }
     })();
-  }, [router]);
+  }, [router, tErrors]);
 
   const handleAppSelect = (appKey: string): void => {
     const app = apps.find(a => a.appKey === appKey);
@@ -196,7 +200,7 @@ const AppSelector = (): React.JSX.Element => {
       window.location.href = redirectUrl;
     } catch (err) {
       setError(
-        err instanceof Error ? err.message : 'Failed to redirect to app'
+        err instanceof Error ? err.message : tErrors('redirectFailed')
       );
     }
   };
@@ -210,10 +214,10 @@ const AppSelector = (): React.JSX.Element => {
       if (response.ok) {
         router.push('/login');
       } else {
-        setError('Failed to logout');
+        setError(tErrors('logoutFailed'));
       }
     } catch {
-      setError('Failed to logout');
+      setError(tErrors('logoutFailed'));
     }
   };
 
@@ -221,7 +225,7 @@ const AppSelector = (): React.JSX.Element => {
     return (
       <div className={styles.container}>
         <div className={styles.content}>
-          <div>Loading your apps...</div>
+          <div>{t('loading')}</div>
         </div>
       </div>
     );
@@ -230,13 +234,13 @@ const AppSelector = (): React.JSX.Element => {
   if (error) {
     return (
       <div className={styles.container}>
-        <AuthCard title="Error" subtitle="Something went wrong">
+        <AuthCard title={t('error.title')} subtitle={t('error.subtitle')}>
           <div className={styles.error}>{error}</div>
           <button
             onClick={() => window.location.reload()}
             className={styles.retryButton}
           >
-            Try Again
+            {t('error.tryAgain')}
           </button>
         </AuthCard>
       </div>
@@ -244,24 +248,25 @@ const AppSelector = (): React.JSX.Element => {
   }
 
   const accessibleApps = apps.filter(app => app.accessible);
+  const userName = user?.user_metadata?.firstName ?? user?.email;
 
   return (
     <div className={styles.container}>
       <AuthCard
-        title="Choose Your App"
-        subtitle={`Welcome back, ${user?.user_metadata?.firstName ?? user?.email}!`}
+        title={t('title')}
+        subtitle={t.rich('subtitle', { name: userName })}
         variant="full-width"
       >
         {accessibleApps.length === 0 ? (
           <div className={styles.noAppsContainer}>
             <p className={styles.noAppsText}>
-              You don&apos;t have access to any apps at the moment.
+              {t('noApps.message')}
             </p>
             <button
               onClick={() => void handleLogout()}
               className={styles.logoutButton}
             >
-              Logout
+              {t('noApps.logout')}
             </button>
           </div>
         ) : (
@@ -292,7 +297,7 @@ const AppSelector = (): React.JSX.Element => {
                   <div
                     className={`${styles.appStatus} ${app.accessible ? styles.accessible : styles.inaccessible}`}
                   >
-                    {app.accessible ? 'Accessible' : 'No Access'}
+                    {app.accessible ? t('appStatus.accessible') : t('appStatus.noAccess')}
                   </div>
                   {!app.accessible && app.reason && (
                     <div className={styles.reasonText}>{app.reason}</div>
@@ -306,7 +311,7 @@ const AppSelector = (): React.JSX.Element => {
                 onClick={() => void handleLogout()}
                 className={styles.signOutButton}
               >
-                Sign out
+                {t('signOut')}
               </button>
             </div>
           </>
@@ -317,3 +322,4 @@ const AppSelector = (): React.JSX.Element => {
 };
 
 export { AppSelector };
+

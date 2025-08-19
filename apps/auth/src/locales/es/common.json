@@ -1,0 +1,102 @@
+{
+  "metadata": {
+    "title": "Autenticación PeakHealth",
+    "description": "Autenticación centralizada para la plataforma PeakHealth"
+  },
+  "login": {
+    "title": "Bienvenido de nuevo",
+    "subtitle": "Inicia sesión en tu cuenta PeakHealth",
+    "email": {
+      "label": "Correo electrónico",
+      "placeholder": "Introduce tu correo electrónico",
+      "required": "El correo electrónico es obligatorio",
+      "invalid": "Por favor, introduce un correo electrónico válido"
+    },
+    "password": {
+      "label": "Contraseña",
+      "placeholder": "Introduce tu contraseña",
+      "required": "La contraseña es obligatoria"
+    },
+    "button": {
+      "loading": "Iniciando sesión...",
+      "default": "Iniciar sesión"
+    },
+    "footer": {
+      "noAccount": "¿No tienes una cuenta?",
+      "signUp": "Regístrate"
+    },
+    "successMessage": "¡Cuenta creada con éxito! Por favor, revisa tu correo electrónico para verificar tu cuenta."
+  },
+  "signup": {
+    "title": "Crear Cuenta",
+    "subtitle": "Únete a PeakHealth hoy",
+    "firstName": {
+      "placeholder": "Nombre",
+      "required": "El nombre es obligatorio"
+    },
+    "lastName": {
+      "placeholder": "Apellido",
+      "required": "El apellido es obligatorio"
+    },
+    "email": {
+      "placeholder": "Correo electrónico",
+      "required": "El correo electrónico es obligatorio",
+      "invalid": "Por favor, introduce un correo electrónico válido"
+    },
+    "password": {
+      "placeholder": "Contraseña",
+      "required": "La contraseña es obligatoria",
+      "invalid": "La contraseña debe tener al menos 8 caracteres e incluir un número, una letra mayúscula y un carácter especial"
+    },
+    "confirmPassword": {
+      "placeholder": "Confirmar contraseña",
+      "required": "Por favor, confirma tu contraseña",
+      "mismatch": "Las contraseñas no coinciden"
+    },
+    "button": {
+      "loading": "Creando cuenta...",
+      "default": "Crear cuenta"
+    },
+    "footer": {
+      "haveAccount": "¿Ya tienes una cuenta?",
+      "signIn": "Inicia sesión"
+    }
+  },
+  "accessDenied": {
+    "title": "Acceso Denegado",
+    "subtitle": "No tienes permiso para acceder a este recurso",
+    "heading": "❌ Acceso Denegado",
+    "message": "No tienes los permisos necesarios para acceder a esta aplicación.",
+    "signOut": "Cerrar sesión",
+    "backToAppSelection": "Volver a la selección de aplicaciones"
+  },
+  "appSelector": {
+    "title": "Elige tu aplicación",
+    "subtitle": "¡Bienvenido de nuevo, {name}!",
+    "loading": "Cargando tus aplicaciones...",
+    "error": {
+      "title": "Error",
+      "subtitle": "Algo salió mal",
+      "tryAgain": "Intentar de nuevo"
+    },
+    "noApps": {
+      "message": "No tienes acceso a ninguna aplicación en este momento.",
+      "logout": "Cerrar sesión"
+    },
+    "appStatus": {
+      "accessible": "Accesible",
+      "noAccess": "Sin acceso"
+    },
+    "signOut": "Cerrar sesión"
+  },
+  "errors": {
+    "general": "Ocurrió un error. Por favor, inténtalo de nuevo.",
+    "loginFailed": "Error al iniciar sesión",
+    "signupFailed": "Error al registrarse",
+    "sessionFailed": "Error al obtener la sesión",
+    "appLoadFailed": "Error al cargar las aplicaciones",
+    "redirectFailed": "Error al redirigir a la aplicación",
+    "logoutFailed": "Error al cerrar sesión"
+  }
+}
+

@@ -1,0 +1,102 @@
+{
+  "metadata": {
+    "title": "PeakHealth Auth",
+    "description": "Centralized authentication for PeakHealth platform"
+  },
+  "login": {
+    "title": "Welcome back",
+    "subtitle": "Sign in to your PeakHealth account",
+    "email": {
+      "label": "Email",
+      "placeholder": "Enter your email",
+      "required": "Email is required",
+      "invalid": "Please enter a valid email address"
+    },
+    "password": {
+      "label": "Password",
+      "placeholder": "Enter your password",
+      "required": "Password is required"
+    },
+    "button": {
+      "loading": "Signing in...",
+      "default": "Sign in"
+    },
+    "footer": {
+      "noAccount": "Don't have an account?",
+      "signUp": "Sign up"
+    },
+    "successMessage": "Account created successfully! Please check your email to verify your account."
+  },
+  "signup": {
+    "title": "Create Account",
+    "subtitle": "Join PeakHealth today",
+    "firstName": {
+      "placeholder": "First Name",
+      "required": "First name is required"
+    },
+    "lastName": {
+      "placeholder": "Last Name",
+      "required": "Last name is required"
+    },
+    "email": {
+      "placeholder": "Email Address",
+      "required": "Email is required",
+      "invalid": "Please enter a valid email address"
+    },
+    "password": {
+      "placeholder": "Password",
+      "required": "Password is required",
+      "invalid": "Password must be at least 8 characters and include a number, uppercase letter, and special character"
+    },
+    "confirmPassword": {
+      "placeholder": "Confirm Password",
+      "required": "Please confirm your password",
+      "mismatch": "Passwords do not match"
+    },
+    "button": {
+      "loading": "Creating Account...",
+      "default": "Create Account"
+    },
+    "footer": {
+      "haveAccount": "Already have an account?",
+      "signIn": "Sign in"
+    }
+  },
+  "accessDenied": {
+    "title": "Access Denied",
+    "subtitle": "You don't have permission to access this resource",
+    "heading": "❌ Access Denied",
+    "message": "You don't have the necessary permissions to access this application.",
+    "signOut": "Sign Out",
+    "backToAppSelection": "Back to App Selection"
+  },
+  "appSelector": {
+    "title": "Choose Your App",
+    "subtitle": "Welcome back, {name}!",
+    "loading": "Loading your apps...",
+    "error": {
+      "title": "Error",
+      "subtitle": "Something went wrong",
+      "tryAgain": "Try Again"
+    },
+    "noApps": {
+      "message": "You don't have access to any apps at the moment.",
+      "logout": "Logout"
+    },
+    "appStatus": {
+      "accessible": "Accessible",
+      "noAccess": "No Access"
+    },
+    "signOut": "Sign out"
+  },
+  "errors": {
+    "general": "An error occurred. Please try again.",
+    "loginFailed": "Login failed",
+    "signupFailed": "Signup failed",
+    "sessionFailed": "Failed to get session",
+    "appLoadFailed": "Failed to load apps",
+    "redirectFailed": "Failed to redirect to app",
+    "logoutFailed": "Failed to logout"
+  }
+}
+
