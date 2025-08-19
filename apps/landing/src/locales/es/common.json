@@ -307,6 +307,16 @@
         "title": "Próximamente:",
         "description": "Nuestra plataforma dedicada de comentarios incluirá votación de características, seguimiento de problemas y discusiones de la comunidad. Por ahora, por favor usa el correo electrónico de arriba para compartir tus pensamientos con nosotros."
       }
+    },
+    "blog": {
+      "title": "Blog de Peak Health",
+      "description": "Consejos de fitness, guías de entrenamiento e información de salud de nuestros expertos",
+      "readTime": "min de lectura",
+      "readMore": "Leer Más →",
+      "noPosts": {
+        "title": "No se encontraron publicaciones",
+        "description": "¡Vuelve pronto para nuevo contenido!"
+      }
     }
   }
 }

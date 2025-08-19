@@ -307,6 +307,16 @@
         "title": "Coming Soon:",
         "description": "Our dedicated feedback platform will include feature voting, issue tracking, and community discussions. For now, please use the email above to share your thoughts with us."
       }
+    },
+    "blog": {
+      "title": "Peak Health Blog",
+      "description": "Fitness tips, workout guides, and health insights from our experts",
+      "readTime": "min read",
+      "readMore": "Read More →",
+      "noPosts": {
+        "title": "No blog posts found",
+        "description": "Check back soon for new content!"
+      }
     }
   }
 }

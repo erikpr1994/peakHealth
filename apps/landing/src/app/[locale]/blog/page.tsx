@@ -1,5 +1,6 @@
 import { Metadata } from 'next';
 import React from 'react';
+import { useTranslations } from 'next-intl';
 
 import { BlogHeader } from '@/components/blog/BlogHeader';
 import { BlogList } from '@/components/blog/BlogList';
@@ -22,11 +23,13 @@ export const metadata: Metadata = {
 };
 
 const BlogPage = (): React.JSX.Element => {
+  const t = useTranslations('pages.blog');
+
   return (
     <>
       <BlogHeader
-        title="Peak Health Blog"
-        description="Fitness tips, workout guides, and health insights from our experts"
+        title={t('title')}
+        description={t('description')}
       />
       <BlogList />
     </>
