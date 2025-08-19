@@ -2,6 +2,5 @@
   "buildCommand": "cd ../.. && pnpm install && pnpm turbo build --filter=@peakhealth/landing",
   "installCommand": "cd ../.. && pnpm install",
   "framework": "nextjs",
-  "outputDirectory": ".next",
-  "rootDirectory": "apps/landing"
+  "outputDirectory": ".next"
 }
