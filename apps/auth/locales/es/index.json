@@ -22,13 +22,25 @@
   "login": {
     "title": "Iniciar Sesión",
     "subtitle": "¡Bienvenido de nuevo! Por favor, inicia sesión para continuar.",
-    "emailPlaceholder": "Introduce tu correo electrónico",
-    "passwordPlaceholder": "Introduce tu contraseña",
-    "forgotPassword": "¿Olvidaste tu contraseña?",
-    "signIn": "Iniciar Sesión",
-    "noAccount": "¿No tienes una cuenta?",
-    "createAccount": "Crear una cuenta",
-    "rememberMe": "Recordarme",
+    "email": {
+      "label": "Correo electrónico",
+      "required": "El correo electrónico es obligatorio",
+      "invalid": "Por favor, introduce un correo electrónico válido",
+      "placeholder": "Introduce tu correo electrónico"
+    },
+    "password": {
+      "label": "Contraseña",
+      "required": "La contraseña es obligatoria",
+      "placeholder": "Introduce tu contraseña"
+    },
+    "button": {
+      "default": "Iniciar Sesión",
+      "loading": "Iniciando Sesión..."
+    },
+    "footer": {
+      "noAccount": "¿No tienes una cuenta?",
+      "signUp": "Regístrate"
+    },
     "errors": {
       "invalidCredentials": "Correo electrónico o contraseña inválidos",
       "accountLocked": "Tu cuenta ha sido bloqueada. Por favor, contacta con soporte.",
@@ -82,7 +94,11 @@
   },
   "accessDenied": {
     "title": "Acceso Denegado",
+    "subtitle": "No tienes permiso para acceder a este recurso.",
+    "heading": "Acceso Denegado",
     "message": "No tienes permiso para acceder a este recurso.",
+    "signOut": "Cerrar Sesión",
+    "backToAppSelection": "Volver a la Selección de Aplicaciones",
     "contactAdmin": "Por favor, contacta con tu administrador si crees que esto es un error.",
     "backToHome": "Volver al Inicio"
   },
@@ -90,7 +106,20 @@
     "title": "Seleccionar una Aplicación",
     "subtitle": "Elige qué aplicación de Peak Health quieres usar",
     "loading": "Cargando aplicaciones disponibles...",
-    "noApps": "No hay aplicaciones disponibles para tu cuenta",
+    "signOut": "Cerrar Sesión",
+    "noApps": {
+      "message": "No hay aplicaciones disponibles para tu cuenta",
+      "logout": "Cerrar Sesión"
+    },
+    "error": {
+      "title": "Error",
+      "subtitle": "Error al cargar aplicaciones",
+      "tryAgain": "Intentar de Nuevo"
+    },
+    "appStatus": {
+      "accessible": "Accesible",
+      "noAccess": "Sin Acceso"
+    },
     "contactAdmin": "Por favor, contacta con tu administrador para solicitar acceso a las aplicaciones."
   },
   "errors": {
@@ -99,6 +128,7 @@
     "unauthorized": "No estás autorizado para realizar esta acción.",
     "notFound": "El recurso solicitado no fue encontrado.",
     "validation": "Por favor, comprueba tu entrada e inténtalo de nuevo.",
-    "signupFailed": "Error al registrarse"
+    "signupFailed": "Error al registrarse",
+    "loginFailed": "Error al iniciar sesión"
   }
 }

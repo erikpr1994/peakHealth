@@ -22,13 +22,25 @@
   "login": {
     "title": "Sign In",
     "subtitle": "Welcome back! Please sign in to continue.",
-    "emailPlaceholder": "Enter your email",
-    "passwordPlaceholder": "Enter your password",
-    "forgotPassword": "Forgot password?",
-    "signIn": "Sign In",
-    "noAccount": "Don't have an account?",
-    "createAccount": "Create an account",
-    "rememberMe": "Remember me",
+    "email": {
+      "label": "Email",
+      "required": "Email is required",
+      "invalid": "Please enter a valid email address",
+      "placeholder": "Enter your email"
+    },
+    "password": {
+      "label": "Password",
+      "required": "Password is required",
+      "placeholder": "Enter your password"
+    },
+    "button": {
+      "default": "Sign In",
+      "loading": "Signing In..."
+    },
+    "footer": {
+      "noAccount": "Don't have an account?",
+      "signUp": "Sign up"
+    },
     "errors": {
       "invalidCredentials": "Invalid email or password",
       "accountLocked": "Your account has been locked. Please contact support.",
@@ -82,7 +94,11 @@
   },
   "accessDenied": {
     "title": "Access Denied",
+    "subtitle": "You do not have permission to access this resource.",
+    "heading": "Access Denied",
     "message": "You do not have permission to access this resource.",
+    "signOut": "Sign Out",
+    "backToAppSelection": "Back to App Selection",
     "contactAdmin": "Please contact your administrator if you believe this is an error.",
     "backToHome": "Back to Home"
   },
@@ -90,7 +106,20 @@
     "title": "Select an Application",
     "subtitle": "Choose which Peak Health application you want to use",
     "loading": "Loading available applications...",
-    "noApps": "No applications available for your account",
+    "signOut": "Sign Out",
+    "noApps": {
+      "message": "No applications available for your account",
+      "logout": "Sign Out"
+    },
+    "error": {
+      "title": "Error",
+      "subtitle": "Failed to load applications",
+      "tryAgain": "Try Again"
+    },
+    "appStatus": {
+      "accessible": "Accessible",
+      "noAccess": "No Access"
+    },
     "contactAdmin": "Please contact your administrator to request access to applications."
   },
   "errors": {
@@ -99,6 +128,7 @@
     "unauthorized": "You are not authorized to perform this action.",
     "notFound": "The requested resource was not found.",
     "validation": "Please check your input and try again.",
-    "signupFailed": "Signup failed"
+    "signupFailed": "Signup failed",
+    "loginFailed": "Login failed"
   }
 }

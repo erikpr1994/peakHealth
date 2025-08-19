@@ -1,8 +1,7 @@
-import { createSharedPathnamesNavigation } from 'next-intl/navigation';
+import { createNavigation } from 'next-intl/navigation';
 import { routing } from './routing';
 
-export const { Link, redirect, usePathname, useRouter } = createSharedPathnamesNavigation({
-  locales: routing.locales,
-  localePrefix: routing.localePrefix,
-});
-
+// Lightweight wrappers around Next.js' navigation
+// APIs that consider the routing configuration
+export const { Link, redirect, usePathname, useRouter, getPathname } =
+  createNavigation(routing);
