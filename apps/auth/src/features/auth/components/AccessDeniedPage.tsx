@@ -1,13 +1,16 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 import React from 'react';
 
-import styles from './page.module.css';
+import styles from './access-denied.module.css';
 
-import { AuthCard, Button, Link } from '@/features/shared';
+import { AuthCard, Button } from '@/features/shared';
+import { Link, useRouter } from '@/i18n/navigation';
 
 const AccessDeniedPage = (): React.JSX.Element => {
+  const t = useTranslations('accessDenied');
+  const tErrors = useTranslations('errors');
   const router = useRouter();
 
   const handleLogout = (): void => {
@@ -27,22 +30,21 @@ const AccessDeniedPage = (): React.JSX.Element => {
 
   return (
     <AuthCard
-      title="Access Denied"
-      subtitle="You don't have permission to access this resource"
+      title={t('title')}
+      subtitle={t('subtitle')}
     >
       <div className={styles.content}>
-        <h3 className={styles.title}>❌ Access Denied</h3>
+        <h3 className={styles.title}>{t('heading')}</h3>
         <p className={styles.message}>
-          You don&apos;t have the necessary permissions to access this
-          application.
+          {t('message')}
         </p>
 
         <div className={styles.actions}>
           <Button onClick={handleLogout} className={styles.logoutButton}>
-            Sign Out
+            {t('signOut')}
           </Button>
           <Link href="/app-selector" className={styles.backLink}>
-            Back to App Selection
+            {t('backToAppSelection')}
           </Link>
         </div>
       </div>
@@ -50,4 +52,5 @@ const AccessDeniedPage = (): React.JSX.Element => {
   );
 };
 
-export default AccessDeniedPage;
+export { AccessDeniedPage };
+

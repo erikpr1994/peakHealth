@@ -1,0 +1,137 @@
+{
+  "metadata": {
+    "title": "Peak Health - Autenticación",
+    "description": "Inicia sesión o crea una cuenta para acceder a Peak Health"
+  },
+  "common": {
+    "email": "Correo electrónico",
+    "password": "Contraseña",
+    "confirmPassword": "Confirmar contraseña",
+    "submit": "Enviar",
+    "cancel": "Cancelar",
+    "back": "Atrás",
+    "next": "Siguiente",
+    "loading": "Cargando...",
+    "error": "Error",
+    "success": "Éxito",
+    "required": "Obligatorio",
+    "invalidEmail": "Dirección de correo electrónico inválida",
+    "passwordMismatch": "Las contraseñas no coinciden",
+    "passwordRequirements": "La contraseña debe tener al menos 8 caracteres e incluir un número, una letra minúscula, una letra mayúscula y un carácter especial"
+  },
+  "login": {
+    "title": "Iniciar Sesión",
+    "subtitle": "¡Bienvenido de nuevo! Por favor, inicia sesión para continuar.",
+    "email": {
+      "label": "Correo electrónico",
+      "required": "El correo electrónico es obligatorio",
+      "invalid": "Por favor, introduce un correo electrónico válido",
+      "placeholder": "Introduce tu correo electrónico"
+    },
+    "password": {
+      "label": "Contraseña",
+      "required": "La contraseña es obligatoria",
+      "placeholder": "Introduce tu contraseña"
+    },
+    "button": {
+      "default": "Iniciar Sesión",
+      "loading": "Iniciando Sesión..."
+    },
+    "footer": {
+      "noAccount": "¿No tienes una cuenta?",
+      "signUp": "Regístrate"
+    },
+    "errors": {
+      "invalidCredentials": "Correo electrónico o contraseña inválidos",
+      "accountLocked": "Tu cuenta ha sido bloqueada. Por favor, contacta con soporte.",
+      "general": "Ha ocurrido un error. Por favor, inténtalo de nuevo más tarde."
+    }
+  },
+  "signup": {
+    "title": "Crear Cuenta",
+    "subtitle": "¡Únete a Peak Health hoy!",
+    "email": {
+      "required": "El correo electrónico es obligatorio",
+      "invalid": "Por favor, introduce un correo electrónico válido",
+      "placeholder": "Introduce tu correo electrónico"
+    },
+    "password": {
+      "required": "La contraseña es obligatoria",
+      "invalid": "La contraseña es inválida",
+      "placeholder": "Crea una contraseña",
+      "tooShort": "La contraseña debe tener al menos 8 caracteres",
+      "noLowercase": "La contraseña debe contener al menos una letra minúscula",
+      "noUppercase": "La contraseña debe contener al menos una letra mayúscula",
+      "noNumber": "La contraseña debe contener al menos un número"
+    },
+    "confirmPassword": {
+      "required": "Por favor, confirma tu contraseña",
+      "mismatch": "Las contraseñas no coinciden",
+      "placeholder": "Confirma tu contraseña"
+    },
+    "firstName": {
+      "required": "El nombre es obligatorio",
+      "placeholder": "Introduce tu nombre"
+    },
+    "lastName": {
+      "required": "El apellido es obligatorio",
+      "placeholder": "Introduce tu apellido"
+    },
+    "button": {
+      "default": "Crear Cuenta",
+      "loading": "Creando Cuenta..."
+    },
+    "footer": {
+      "haveAccount": "¿Ya tienes una cuenta?",
+      "signIn": "Iniciar sesión"
+    },
+    "successMessage": "¡Cuenta creada exitosamente! Por favor, revisa tu correo electrónico para verificar tu cuenta.",
+    "errors": {
+      "emailInUse": "Este correo electrónico ya está en uso",
+      "weakPassword": "La contraseña es demasiado débil",
+      "general": "Ha ocurrido un error. Por favor, inténtalo de nuevo más tarde."
+    }
+  },
+  "accessDenied": {
+    "title": "Acceso Denegado",
+    "subtitle": "No tienes permiso para acceder a este recurso.",
+    "heading": "Acceso Denegado",
+    "message": "No tienes permiso para acceder a este recurso.",
+    "signOut": "Cerrar Sesión",
+    "backToAppSelection": "Volver a la Selección de Aplicaciones",
+    "contactAdmin": "Por favor, contacta con tu administrador si crees que esto es un error.",
+    "backToHome": "Volver al Inicio"
+  },
+  "appSelector": {
+    "title": "Seleccionar una Aplicación",
+    "subtitle": "¡Bienvenido de nuevo, {name}! Elige qué aplicación de Peak Health quieres usar",
+    "loading": "Cargando aplicaciones disponibles...",
+    "signOut": "Cerrar Sesión",
+    "noApps": {
+      "message": "No hay aplicaciones disponibles para tu cuenta",
+      "logout": "Cerrar Sesión"
+    },
+    "error": {
+      "title": "Error",
+      "subtitle": "Error al cargar aplicaciones",
+      "tryAgain": "Intentar de Nuevo"
+    },
+    "appStatus": {
+      "accessible": "Accesible",
+      "noAccess": "Sin Acceso"
+    },
+    "contactAdmin": "Por favor, contacta con tu administrador para solicitar acceso a las aplicaciones."
+  },
+  "errors": {
+    "general": "Algo salió mal. Por favor, inténtalo de nuevo más tarde.",
+    "network": "Error de red. Por favor, comprueba tu conexión e inténtalo de nuevo.",
+    "unauthorized": "No estás autorizado para realizar esta acción.",
+    "notFound": "El recurso solicitado no fue encontrado.",
+    "validation": "Por favor, comprueba tu entrada e inténtalo de nuevo.",
+    "signupFailed": "Error al registrarse",
+    "loginFailed": "Error al iniciar sesión",
+    "sessionFailed": "Error al obtener la sesión",
+    "appLoadFailed": "Error al cargar las aplicaciones",
+    "redirectFailed": "Error al redirigir a la aplicación"
+  }
+}

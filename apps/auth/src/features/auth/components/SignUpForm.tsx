@@ -5,14 +5,20 @@ import {
   validatePassword,
   formatAuthError,
 } from '@peakhealth/auth-utils';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useTranslations } from 'next-intl';
+import { useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 
+// eslint-disable-next-line css-modules/no-unused-class
 import styles from './page.module.css';
 
-import { AuthCard, Input, Button, Link } from '@/features/shared';
+import { AuthCard, Input, Button } from '@/features/shared';
+import { Link, useRouter } from '@/i18n/navigation';
 
 const SignUpForm = (): React.JSX.Element => {
+  const t = useTranslations('signup');
+  const tErrors = useTranslations('errors');
+
   const router = useRouter();
   const searchParams = useSearchParams();
   const returnUrl = searchParams.get('returnUrl') ?? '/login';
@@ -36,37 +42,60 @@ const SignUpForm = (): React.JSX.Element => {
     }
   };
 
+  // Helper function to map password validation errors to translation keys
+  const getPasswordErrorMessage = (validationErrors: string[]): string => {
+    if (validationErrors.length === 0) return '';
+
+    // Map the first error to the appropriate translation key
+    const firstError = validationErrors[0];
+
+    if (firstError.includes('at least 8 characters')) {
+      return t('password.tooShort');
+    }
+    if (firstError.includes('lowercase letter')) {
+      return t('password.noLowercase');
+    }
+    if (firstError.includes('uppercase letter')) {
+      return t('password.noUppercase');
+    }
+    if (firstError.includes('number')) {
+      return t('password.noNumber');
+    }
+
+    // Fallback to generic error
+    return t('password.invalid');
+  };
+
   const validateForm = (): boolean => {
     const newErrors: Record<string, string> = {};
 
     if (!formData.email) {
-      newErrors.email = 'Email is required';
+      newErrors.email = t('email.required');
     } else if (!validateEmail(formData.email)) {
-      newErrors.email = 'Please enter a valid email address';
+      newErrors.email = t('email.invalid');
     }
 
     if (!formData.password) {
-      newErrors.password = 'Password is required';
+      newErrors.password = t('password.required');
     } else {
       const passwordValidation = validatePassword(formData.password);
       if (!passwordValidation.isValid) {
-        newErrors.password =
-          passwordValidation.errors[0] || 'Password is invalid';
+        newErrors.password = getPasswordErrorMessage(passwordValidation.errors);
       }
     }
 
     if (!formData.confirmPassword) {
-      newErrors.confirmPassword = 'Please confirm your password';
+      newErrors.confirmPassword = t('confirmPassword.required');
     } else if (formData.password !== formData.confirmPassword) {
-      newErrors.confirmPassword = 'Passwords do not match';
+      newErrors.confirmPassword = t('confirmPassword.mismatch');
     }
 
     if (!formData.firstName.trim()) {
-      newErrors.firstName = 'First name is required';
+      newErrors.firstName = t('firstName.required');
     }
 
     if (!formData.lastName.trim()) {
-      newErrors.lastName = 'Last name is required';
+      newErrors.lastName = t('lastName.required');
     }
 
     setErrors(newErrors);
@@ -80,8 +109,9 @@ const SignUpForm = (): React.JSX.Element => {
       return;
     }
 
-    void (async () => {
-      setIsLoading(true);
+    setIsLoading(true);
+
+    void (async (): Promise<void> => {
       try {
         const response = await fetch('/api/auth/signup', {
           method: 'POST',
@@ -100,12 +130,12 @@ const SignUpForm = (): React.JSX.Element => {
         const data = await response.json();
 
         if (!response.ok) {
-          throw new Error(data.error ?? 'Signup failed');
+          throw new Error(data.error ?? tErrors('signupFailed'));
         }
 
         // Redirect to login page with success message
         router.push(
-          `/login?message=Account created successfully! Please check your email to verify your account.&returnUrl=${encodeURIComponent(returnUrl)}`
+          `/login?message=${encodeURIComponent(t('successMessage'))}&returnUrl=${encodeURIComponent(returnUrl)}`
         );
       } catch (error) {
         setErrors({ submit: formatAuthError(error) });
@@ -116,14 +146,14 @@ const SignUpForm = (): React.JSX.Element => {
   };
 
   return (
-    <AuthCard title="Create Account" subtitle="Join PeakHealth today">
+    <AuthCard title={t('title')} subtitle={t('subtitle')}>
       <form onSubmit={handleSubmit} className={styles.form}>
         <div className={styles.nameGrid}>
           <div>
             <Input
               type="text"
               name="firstName"
-              placeholder="First Name"
+              placeholder={t('firstName.placeholder')}
               value={formData.firstName}
               onChange={handleInputChange}
               error={!!errors.firstName}
@@ -134,7 +164,7 @@ const SignUpForm = (): React.JSX.Element => {
             <Input
               type="text"
               name="lastName"
-              placeholder="Last Name"
+              placeholder={t('lastName.placeholder')}
               value={formData.lastName}
               onChange={handleInputChange}
               error={!!errors.lastName}
@@ -146,7 +176,7 @@ const SignUpForm = (): React.JSX.Element => {
         <Input
           type="email"
           name="email"
-          placeholder="Email Address"
+          placeholder={t('email.placeholder')}
           value={formData.email}
           onChange={handleInputChange}
           error={!!errors.email}
@@ -156,7 +186,7 @@ const SignUpForm = (): React.JSX.Element => {
         <Input
           type="password"
           name="password"
-          placeholder="Password"
+          placeholder={t('password.placeholder')}
           value={formData.password}
           onChange={handleInputChange}
           error={!!errors.password}
@@ -166,7 +196,7 @@ const SignUpForm = (): React.JSX.Element => {
         <Input
           type="password"
           name="confirmPassword"
-          placeholder="Confirm Password"
+          placeholder={t('confirmPassword.placeholder')}
           value={formData.confirmPassword}
           onChange={handleInputChange}
           error={!!errors.confirmPassword}
@@ -176,13 +206,13 @@ const SignUpForm = (): React.JSX.Element => {
         {errors.submit && <div className={styles.error}>{errors.submit}</div>}
 
         <Button type="submit" disabled={isLoading}>
-          {isLoading ? 'Creating Account...' : 'Create Account'}
+          {isLoading ? t('button.loading') : t('button.default')}
         </Button>
 
         <div className={styles.loginLinkContainer}>
-          <span className={styles.loginText}>Already have an account? </span>
+          <span className={styles.loginText}>{t('footer.haveAccount')} </span>
           <Link href={`/login?returnUrl=${encodeURIComponent(returnUrl)}`}>
-            Sign in
+            {t('footer.signIn')}
           </Link>
         </div>
       </form>
