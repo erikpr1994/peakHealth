@@ -105,9 +105,13 @@ test.describe('Regular user flows', () => {
 
       await page.getByRole('combobox').first().click();
       await page.getByRole('option', { name: /beginner/i }).click();
+      // Close dropdown by clicking outside or pressing Escape
+      await page.keyboard.press('Escape');
 
       await page.getByRole('combobox').nth(1).click();
       await page.getByRole('option', { name: /strength/i }).click();
+      // Close dropdown by clicking outside or pressing Escape
+      await page.keyboard.press('Escape');
 
       await page
         .getByPlaceholder(/what are the main goals/i)
