@@ -120,6 +120,14 @@
       "description": "We're working hard to bring you detailed information about all our features. Check back soon for a comprehensive overview of what PeakHealth has to offer.",
       "coreFeatures": "Core Features:",
       "coreFeaturesList": "Workout logging, progress tracking, personal records, exercise library, and community-driven development."
+    },
+    "help": {
+      "title": "Help Center",
+      "subtitle": "Find answers to your questions and get support",
+      "comingSoon": "Coming Soon",
+      "description": "Our comprehensive help center is being built. Soon you'll have access to guides, tutorials, FAQs, and direct support.",
+      "whatYoullFind": "What you'll find here:",
+      "featuresList": "User guides, tutorials, frequently asked questions, troubleshooting, and support contact."
     }
   }
 }

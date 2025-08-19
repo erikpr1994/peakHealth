@@ -120,6 +120,14 @@
       "description": "Estamos trabajando arduamente para traerte información detallada sobre todas nuestras características. Vuelve pronto para una descripción completa de lo que PeakHealth tiene para ofrecer.",
       "coreFeatures": "Características Principales:",
       "coreFeaturesList": "Registro de entrenamientos, seguimiento de progreso, récords personales, biblioteca de ejercicios y desarrollo impulsado por la comunidad."
+    },
+    "help": {
+      "title": "Centro de Ayuda",
+      "subtitle": "Encuentra respuestas a tus preguntas y obtén soporte",
+      "comingSoon": "Próximamente",
+      "description": "Nuestro centro de ayuda integral está siendo construido. Pronto tendrás acceso a guías, tutoriales, preguntas frecuentes y soporte directo.",
+      "whatYoullFind": "Lo que encontrarás aquí:",
+      "featuresList": "Guías de usuario, tutoriales, preguntas frecuentes, solución de problemas y contacto de soporte."
     }
   }
 }
