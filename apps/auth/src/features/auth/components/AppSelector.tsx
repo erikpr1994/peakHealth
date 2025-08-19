@@ -23,6 +23,13 @@ interface AppOption {
   reason?: string;
 }
 
+interface User {
+  id: string;
+  email: string;
+  first_name?: string;
+  last_name?: string;
+}
+
 // SVG Icons for each app
 const AppIcons = {
   web: (
@@ -154,6 +161,7 @@ const AppSelector = (): React.JSX.Element => {
 
   const router = useRouter();
   const [apps, setApps] = useState<AppOption[]>([]);
+  const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string>('');
 
@@ -173,6 +181,9 @@ const AppSelector = (): React.JSX.Element => {
           router.push('/login');
           return;
         }
+
+        // Store user data
+        setUser(data.user);
 
         // Get accessible apps for the user
         const accessibleApps = getUserAccessibleApps(data.user);
@@ -247,7 +258,9 @@ const AppSelector = (): React.JSX.Element => {
     <div className={styles.container}>
       <AuthCard
         title={t('title')}
-        subtitle={t('subtitle')}
+        subtitle={t('subtitle', {
+          name: user?.first_name || user?.email?.split('@')[0] || 'User',
+        })}
         variant="full-width"
       >
         {accessibleApps.length === 0 ? (

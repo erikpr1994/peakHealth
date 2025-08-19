@@ -104,7 +104,7 @@
   },
   "appSelector": {
     "title": "Select an Application",
-    "subtitle": "Choose which Peak Health application you want to use",
+    "subtitle": "Welcome back, {name}! Choose which Peak Health application you want to use",
     "loading": "Loading available applications...",
     "signOut": "Sign Out",
     "noApps": {
