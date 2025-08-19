@@ -1,4 +1,4 @@
-import { vi } from 'vitest';
+import { describe, it, expect } from 'vitest';
 import { DatabaseRoutine, DatabaseRoutineRPCResponse } from './database';
 
 describe('Database Types', () => {
@@ -111,13 +111,6 @@ describe('Database Types', () => {
       // These should be different field names
       expect(snakeCaseRoutine.is_active).toBeDefined();
       expect(camelCaseRoutine.isActive).toBeDefined();
-
-      // TypeScript should prevent mixing them
-      // @ts-expect-error - should not allow camelCase in snake_case type
-      // snakeCaseRoutine.isActive = true;
-
-      // @ts-expect-error - should not allow snake_case in camelCase type
-      // camelCaseRoutine.is_active = true;
     });
   });
 });

@@ -8,6 +8,9 @@ vi.mock('@supabase/supabase-js');
 const mockSupabase = {
   from: vi.fn(),
   rpc: vi.fn(),
+  auth: {
+    getUser: vi.fn(),
+  },
 };
 
 (createClient as ReturnType<typeof vi.fn>).mockReturnValue(
@@ -17,6 +20,15 @@ const mockSupabase = {
 describe('routineService', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    // Mock authentication
+    mockSupabase.auth.getUser.mockResolvedValue({
+      data: { user: { id: 'user-1', email: 'test@example.com' } },
+      error: null,
+    });
+
+    // Mock the service's supabase client directly
+    (routineService as unknown as { supabase: typeof mockSupabase }).supabase =
+      mockSupabase;
   });
 
   describe('getUserRoutines', () => {
@@ -25,16 +37,27 @@ describe('routineService', () => {
         {
           id: 'routine-1',
           name: 'Test Routine',
+          description: 'Test Description',
+          difficulty: 'Intermediate',
+          goal: 'Strength',
           is_active: true,
           is_favorite: false,
+          objectives: ['Build strength'],
+          duration: 12,
+          estimated_duration: '45-60 min',
+          created_at: '2024-01-01',
+          updated_at: '2024-01-01',
+          last_used: null,
         },
       ];
 
       mockSupabase.from.mockReturnValue({
         select: vi.fn().mockReturnValue({
-          eq: vi.fn().mockResolvedValue({
-            data: mockRoutines,
-            error: null,
+          eq: vi.fn().mockReturnValue({
+            order: vi.fn().mockResolvedValue({
+              data: mockRoutines,
+              error: null,
+            }),
           }),
         }),
       } as unknown as ReturnType<typeof mockSupabase.from>);
@@ -48,9 +71,11 @@ describe('routineService', () => {
     it('should handle error when fetching routines', async () => {
       mockSupabase.from.mockReturnValue({
         select: vi.fn().mockReturnValue({
-          eq: vi.fn().mockResolvedValue({
-            data: null,
-            error: { message: 'Database error' },
+          eq: vi.fn().mockReturnValue({
+            order: vi.fn().mockResolvedValue({
+              data: null,
+              error: { message: 'Database error' },
+            }),
           }),
         }),
       } as unknown as ReturnType<typeof mockSupabase.from>);
@@ -73,6 +98,21 @@ describe('routineService', () => {
         workouts: [],
       };
 
+      // Mock the routine check
+      mockSupabase.from.mockReturnValueOnce({
+        select: vi.fn().mockReturnValue({
+          eq: vi.fn().mockReturnValue({
+            eq: vi.fn().mockReturnValue({
+              single: vi.fn().mockResolvedValue({
+                data: { id: 'routine-1', user_id: 'user-1' },
+                error: null,
+              }),
+            }),
+          }),
+        }),
+      } as unknown as ReturnType<typeof mockSupabase.from>);
+
+      // Mock the RPC call
       mockSupabase.rpc.mockResolvedValue({
         data: mockRoutineData,
         error: null,
@@ -87,10 +127,18 @@ describe('routineService', () => {
     });
 
     it('should handle error when fetching routine by id', async () => {
-      mockSupabase.rpc.mockResolvedValue({
-        data: null,
-        error: { message: 'Routine not found' },
-      });
+      mockSupabase.from.mockReturnValue({
+        select: vi.fn().mockReturnValue({
+          eq: vi.fn().mockReturnValue({
+            eq: vi.fn().mockReturnValue({
+              single: vi.fn().mockResolvedValue({
+                data: null,
+                error: { message: 'Routine not found' },
+              }),
+            }),
+          }),
+        }),
+      } as unknown as ReturnType<typeof mockSupabase.from>);
 
       await expect(routineService.getRoutineById('invalid-id')).rejects.toThrow(
         'Routine not found'
@@ -100,43 +148,90 @@ describe('routineService', () => {
 
   describe('toggleRoutineFavorite', () => {
     it('should toggle routine favorite status successfully', async () => {
-      mockSupabase.from.mockReturnValue({
-        update: vi.fn().mockReturnValue({
-          eq: vi.fn().mockResolvedValue({
-            data: null,
-            error: null,
+      // Mock the select call
+      mockSupabase.from.mockReturnValueOnce({
+        select: vi.fn().mockReturnValue({
+          eq: vi.fn().mockReturnValue({
+            eq: vi.fn().mockReturnValue({
+              single: vi.fn().mockResolvedValue({
+                data: { is_favorite: false },
+                error: null,
+              }),
+            }),
           }),
         }),
       } as unknown as ReturnType<typeof mockSupabase.from>);
 
-      await routineService.toggleRoutineFavorite('routine-1', true);
+      // Mock the update call
+      mockSupabase.from.mockReturnValueOnce({
+        update: vi.fn().mockReturnValue({
+          eq: vi.fn().mockReturnValue({
+            eq: vi.fn().mockResolvedValue({
+              data: null,
+              error: null,
+            }),
+          }),
+        }),
+      } as unknown as ReturnType<typeof mockSupabase.from>);
+
+      await routineService.toggleRoutineFavorite('routine-1');
 
       expect(mockSupabase.from).toHaveBeenCalledWith('routines');
     });
 
     it('should handle error when toggling favorite status', async () => {
-      mockSupabase.from.mockReturnValue({
+      // Mock the select call
+      mockSupabase.from.mockReturnValueOnce({
+        select: vi.fn().mockReturnValue({
+          eq: vi.fn().mockReturnValue({
+            eq: vi.fn().mockReturnValue({
+              single: vi.fn().mockResolvedValue({
+                data: { is_favorite: false },
+                error: null,
+              }),
+            }),
+          }),
+        }),
+      } as unknown as ReturnType<typeof mockSupabase.from>);
+
+      // Mock the update call with error
+      mockSupabase.from.mockReturnValueOnce({
         update: vi.fn().mockReturnValue({
-          eq: vi.fn().mockResolvedValue({
-            data: null,
-            error: { message: 'Update failed' },
+          eq: vi.fn().mockReturnValue({
+            eq: vi.fn().mockResolvedValue({
+              data: null,
+              error: { message: 'Update failed' },
+            }),
           }),
         }),
       } as unknown as ReturnType<typeof mockSupabase.from>);
 
       await expect(
-        routineService.toggleRoutineFavorite('routine-1', true)
+        routineService.toggleRoutineFavorite('routine-1')
       ).rejects.toThrow('Update failed');
     });
   });
 
   describe('setActiveRoutine', () => {
     it('should set active routine successfully', async () => {
-      mockSupabase.from.mockReturnValue({
+      // Mock the deactivate call
+      mockSupabase.from.mockReturnValueOnce({
         update: vi.fn().mockReturnValue({
           eq: vi.fn().mockResolvedValue({
             data: null,
             error: null,
+          }),
+        }),
+      } as unknown as ReturnType<typeof mockSupabase.from>);
+
+      // Mock the activate call
+      mockSupabase.from.mockReturnValueOnce({
+        update: vi.fn().mockReturnValue({
+          eq: vi.fn().mockReturnValue({
+            eq: vi.fn().mockResolvedValue({
+              data: null,
+              error: null,
+            }),
           }),
         }),
       } as unknown as ReturnType<typeof mockSupabase.from>);
@@ -147,11 +242,24 @@ describe('routineService', () => {
     });
 
     it('should handle error when setting active routine', async () => {
-      mockSupabase.from.mockReturnValue({
+      // Mock the deactivate call
+      mockSupabase.from.mockReturnValueOnce({
         update: vi.fn().mockReturnValue({
           eq: vi.fn().mockResolvedValue({
             data: null,
-            error: { message: 'Activation failed' },
+            error: null,
+          }),
+        }),
+      } as unknown as ReturnType<typeof mockSupabase.from>);
+
+      // Mock the activate call with error
+      mockSupabase.from.mockReturnValueOnce({
+        update: vi.fn().mockReturnValue({
+          eq: vi.fn().mockReturnValue({
+            eq: vi.fn().mockResolvedValue({
+              data: null,
+              error: { message: 'Activation failed' },
+            }),
           }),
         }),
       } as unknown as ReturnType<typeof mockSupabase.from>);

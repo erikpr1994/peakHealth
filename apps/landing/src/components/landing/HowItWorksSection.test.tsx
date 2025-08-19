@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { render, screen } from '../../test/test-utils';
 import React from 'react';
 
 import { HowItWorksSection } from './HowItWorksSection';

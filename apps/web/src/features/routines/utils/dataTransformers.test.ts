@@ -1,4 +1,3 @@
-import { vi } from 'vitest';
 import {
   transformDatabaseRoutineToRoutineData,
   transformDatabaseRoutineToRoutine,
@@ -30,7 +29,38 @@ describe('dataTransformers', () => {
           updatedAt: '2024-01-01T00:00:00Z',
           lastUsed: '2024-01-01T00:00:00Z',
         },
-        workouts: [],
+        workouts: [
+          {
+            id: 'workout-1',
+            name: 'Workout 1',
+            type: 'strength',
+            objective: 'Build strength',
+            order_index: 1,
+            schedule: {
+              repeatPattern: 'weekly',
+              repeatValue: '1',
+              selectedDays: ['monday', 'wednesday', 'friday'],
+              time: '09:00',
+            },
+            sections: [],
+            trail_running_data: undefined,
+          },
+          {
+            id: 'workout-2',
+            name: 'Workout 2',
+            type: 'strength',
+            objective: 'Build strength',
+            order_index: 2,
+            schedule: {
+              repeatPattern: 'weekly',
+              repeatValue: '1',
+              selectedDays: ['tuesday', 'thursday'],
+              time: '09:00',
+            },
+            sections: [],
+            trail_running_data: undefined,
+          },
+        ],
       };
 
       const result = transformDatabaseRoutineToRoutineData(mockRpcResponse);
@@ -43,11 +73,13 @@ describe('dataTransformers', () => {
       expect(result.isActive).toBe(true);
       expect(result.isFavorite).toBe(false);
       expect(result.objectives).toEqual(['Build strength']);
-      expect(result.progress.currentWeek).toBe(1);
+      expect(result.progress.currentWeek).toBe(2);
       expect(result.progress.totalWeeks).toBe(12);
       expect(result.progress.completedWorkouts).toBe(8);
-      expect(result.progress.totalWorkouts).toBe(24);
-      expect(result.strengthWorkouts).toEqual([]);
+      expect(result.progress.totalWorkouts).toBe(60);
+      expect(result.strengthWorkouts).toHaveLength(2);
+      expect(result.strengthWorkouts[0].id).toBe('workout-1');
+      expect(result.strengthWorkouts[1].id).toBe('workout-2');
       expect(result.runningWorkouts).toEqual([]);
     });
 
@@ -126,7 +158,7 @@ describe('dataTransformers', () => {
         id: 'routine-1',
         user_id: 'user-1',
         name: 'Test Routine',
-        description: null,
+        description: '',
         difficulty: 'Beginner',
         goal: 'Strength',
         duration: 12,
@@ -135,7 +167,7 @@ describe('dataTransformers', () => {
         objectives: [],
         total_workouts: 0,
         completed_workouts: 0,
-        estimated_duration: null,
+        estimated_duration: '',
         created_at: '2024-01-01T00:00:00Z',
         updated_at: '2024-01-01T00:00:00Z',
         last_used: null,
@@ -162,47 +194,60 @@ describe('dataTransformers', () => {
       const mockDatabaseWorkout = {
         id: 'workout-1',
         name: 'Test Workout',
+        type: 'strength',
         objective: 'Test Objective',
         schedule: {
-          days: ['Monday', 'Wednesday'],
+          repeatPattern: 'weekdays',
+          repeatValue: '',
+          selectedDays: ['Monday', 'Wednesday'],
           time: 'Morning',
         },
         sections: [
           {
             id: 'section-1',
             name: 'Test Section',
-            type: 'Strength',
+            type: 'basic',
             exercises: [
               {
                 id: 'exercise-1',
                 name: 'Test Exercise',
+                category: 'strength',
+                muscle_groups: ['chest'],
+                exerciseLibraryId: 'ex-1',
                 sets: [
                   {
                     id: 'set-1',
+                    setNumber: 1,
+                    setType: 'normal',
+                    repType: 'fixed',
                     reps: 10,
                     weight: 100,
-                    restTime: 90,
+                    rest_time: '90s',
+                    rpe: null,
+                    notes: '',
                   },
                 ],
-                progressionMethod: 'Linear',
-                restAfter: 120,
+                progression_method: 'linear',
+                rest_after: '120s',
               },
             ],
-            restAfter: 180,
+            rest_after: '180s',
           },
         ],
+        order_index: 0,
       };
 
       const result = transformDatabaseWorkout(mockDatabaseWorkout);
 
-      expect(result.id).toBe('workout-1');
-      expect(result.name).toBe('Test Workout');
-      expect(result.objective).toBe('Test Objective');
-      expect(result.schedule.days).toEqual(['Monday', 'Wednesday']);
-      expect(result.schedule.time).toBe('Morning');
-      expect(result.sections).toHaveLength(1);
-      expect(result.sections[0].name).toBe('Test Section');
-      expect(result.sections[0].type).toBe('Strength');
+      expect(result).not.toBeNull();
+      expect(result?.id).toBe('workout-1');
+      expect(result?.name).toBe('Test Workout');
+      expect(result?.objective).toBe('Test Objective');
+      expect(result?.schedule.selectedDays).toEqual(['Monday', 'Wednesday']);
+      expect(result?.schedule.time).toBe('Morning');
+      expect(result?.sections).toHaveLength(1);
+      expect(result?.sections[0].name).toBe('Test Section');
+      expect(result?.sections[0].type).toBe('basic');
     });
   });
 });

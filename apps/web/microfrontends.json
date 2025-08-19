@@ -15,6 +15,7 @@
       "routing": [
         {
           "paths": [
+            "/",
             "/en",
             "/es",
             "/en/blog",
