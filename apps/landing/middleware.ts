@@ -19,10 +19,16 @@ export default async function middleware(
   // Ensure logs are flushed
   context.waitUntil(hypertune.flushLogs());
 
-  setAnonymousIdIfNeeded(request, NextResponse.next());
+  // Call the next-intl middleware first to get the response
+  const response = intlMiddleware(request);
 
-  // Call the next-intl middleware
-  return intlMiddleware(request);
+  // If we got a response, modify it to include the anonymous ID cookie
+  if (response) {
+    setAnonymousIdIfNeeded(request, response);
+  }
+
+  // Return the modified response
+  return response;
 }
 
 export const config = {
