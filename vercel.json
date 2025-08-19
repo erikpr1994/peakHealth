@@ -1,0 +1,26 @@
+{
+  "version": 2,
+  "buildCommand": "pnpm build",
+  "ignoreCommand": "pnpm turbo-ignore",
+  "outputDirectory": ".vercel/output",
+  "installCommand": "pnpm install",
+  "monorepo": true,
+  "projects": {
+    "apps/web": {
+      "buildCommand": "cd ../.. && pnpm turbo build --filter=@peakhealth/web",
+      "outputDirectory": "apps/web/.next"
+    },
+    "apps/landing": {
+      "buildCommand": "cd ../.. && pnpm turbo build --filter=@peakhealth/landing",
+      "outputDirectory": "apps/landing/.next"
+    },
+    "apps/auth": {
+      "buildCommand": "cd ../.. && pnpm turbo build --filter=@peakhealth/auth",
+      "outputDirectory": "apps/auth/.next"
+    },
+    "apps/admin": {
+      "buildCommand": "cd ../.. && pnpm turbo build --filter=@peakhealth/admin",
+      "outputDirectory": "apps/admin/.next"
+    }
+  }
+}

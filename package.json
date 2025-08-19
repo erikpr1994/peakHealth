@@ -16,7 +16,8 @@
     "prepare": "husky",
     "supabase:start": "supabase start",
     "setup-dev-db": "node scripts/setup-dev-db.mjs",
-    "cleanup": "node scripts/cleanup-dev-ports.mjs"
+    "cleanup": "node scripts/cleanup-dev-ports.mjs",
+    "turbo-ignore": "node -e \"process.exit(process.env.VERCEL_ENV !== 'production' || process.env.VERCEL_GIT_COMMIT_REF !== 'main' ? 1 : 0)\""
   },
   "devDependencies": {
     "@eslint/js": "^9.33.0",
