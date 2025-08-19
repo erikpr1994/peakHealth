@@ -54,7 +54,7 @@ const SignUpForm = (): React.JSX.Element => {
       newErrors.password = t('password.required');
     } else {
       const passwordValidation = validatePassword(formData.password);
-      if (!passwordValidation.valid) {
+      if (!passwordValidation.isValid) {
         newErrors.password = t('password.invalid');
       }
     }
@@ -65,11 +65,11 @@ const SignUpForm = (): React.JSX.Element => {
       newErrors.confirmPassword = t('confirmPassword.mismatch');
     }
 
-    if (!formData.firstName) {
+    if (!formData.firstName.trim()) {
       newErrors.firstName = t('firstName.required');
     }
 
-    if (!formData.lastName) {
+    if (!formData.lastName.trim()) {
       newErrors.lastName = t('lastName.required');
     }
 
@@ -196,4 +196,3 @@ const SignUpForm = (): React.JSX.Element => {
 };
 
 export { SignUpForm };
-
