@@ -128,6 +128,14 @@
       "description": "Nuestro centro de ayuda integral está siendo construido. Pronto tendrás acceso a guías, tutoriales, preguntas frecuentes y soporte directo.",
       "whatYoullFind": "Lo que encontrarás aquí:",
       "featuresList": "Guías de usuario, tutoriales, preguntas frecuentes, solución de problemas y contacto de soporte."
+    },
+    "privacy": {
+      "title": "Política de Privacidad",
+      "subtitle": "Cómo protegemos y manejamos tus datos",
+      "comingSoon": "Próximamente",
+      "description": "Nuestra política de privacidad integral está siendo desarrollada. Estamos comprometidos con la transparencia y la protección de tu información personal.",
+      "ourCommitment": "Nuestro compromiso:",
+      "commitmentText": "Valoramos tu privacidad y proporcionaremos información clara sobre cómo recopilamos, usamos y protegemos tus datos."
     }
   }
 }

@@ -128,6 +128,14 @@
       "description": "Our comprehensive help center is being built. Soon you'll have access to guides, tutorials, FAQs, and direct support.",
       "whatYoullFind": "What you'll find here:",
       "featuresList": "User guides, tutorials, frequently asked questions, troubleshooting, and support contact."
+    },
+    "privacy": {
+      "title": "Privacy Policy",
+      "subtitle": "How we protect and handle your data",
+      "comingSoon": "Coming Soon",
+      "description": "Our comprehensive privacy policy is being developed. We're committed to transparency and protecting your personal information.",
+      "ourCommitment": "Our commitment:",
+      "commitmentText": "We value your privacy and will provide clear information about how we collect, use, and protect your data."
     }
   }
 }
