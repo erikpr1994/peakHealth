@@ -1,4 +1,3 @@
-import { vi } from 'vitest';
 import {
   transformDatabaseRoutineToRoutineData,
   transformDatabaseRoutineToRoutine,
@@ -162,47 +161,57 @@ describe('dataTransformers', () => {
       const mockDatabaseWorkout = {
         id: 'workout-1',
         name: 'Test Workout',
+        type: 'strength',
         objective: 'Test Objective',
         schedule: {
-          days: ['Monday', 'Wednesday'],
+          repeatPattern: 'weekdays',
+          repeatValue: '',
+          selectedDays: ['Monday', 'Wednesday'],
           time: 'Morning',
         },
         sections: [
           {
             id: 'section-1',
             name: 'Test Section',
-            type: 'Strength',
+            type: 'basic',
             exercises: [
               {
                 id: 'exercise-1',
                 name: 'Test Exercise',
+                category: 'strength',
+                muscle_groups: ['chest'],
+                exerciseLibraryId: 'ex-1',
                 sets: [
                   {
                     id: 'set-1',
+                    setNumber: 1,
+                    setType: 'normal',
+                    repType: 'fixed',
                     reps: 10,
                     weight: 100,
-                    restTime: 90,
+                    rest_time: 90,
                   },
                 ],
-                progressionMethod: 'Linear',
-                restAfter: 120,
+                progression_method: 'linear',
+                rest_after: 120,
               },
             ],
-            restAfter: 180,
+            rest_after: 180,
           },
         ],
       };
 
       const result = transformDatabaseWorkout(mockDatabaseWorkout);
 
-      expect(result.id).toBe('workout-1');
-      expect(result.name).toBe('Test Workout');
-      expect(result.objective).toBe('Test Objective');
-      expect(result.schedule.days).toEqual(['Monday', 'Wednesday']);
-      expect(result.schedule.time).toBe('Morning');
-      expect(result.sections).toHaveLength(1);
-      expect(result.sections[0].name).toBe('Test Section');
-      expect(result.sections[0].type).toBe('Strength');
+      expect(result).not.toBeNull();
+      expect(result?.id).toBe('workout-1');
+      expect(result?.name).toBe('Test Workout');
+      expect(result?.objective).toBe('Test Objective');
+      expect(result?.schedule.selectedDays).toEqual(['Monday', 'Wednesday']);
+      expect(result?.schedule.time).toBe('Morning');
+      expect(result?.sections).toHaveLength(1);
+      expect(result?.sections[0].name).toBe('Test Section');
+      expect(result?.sections[0].type).toBe('basic');
     });
   });
 });

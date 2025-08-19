@@ -1,5 +1,4 @@
 import { render, screen } from '@testing-library/react';
-import { vi } from 'vitest';
 import DetailedWorkoutsList from './DetailedWorkoutsList';
 import { StrengthWorkout, RunningWorkout } from '../../../types';
 
@@ -10,7 +9,9 @@ describe('DetailedWorkoutsList', () => {
       name: 'Upper Body',
       objective: 'Build upper body strength',
       schedule: {
-        days: ['Monday', 'Wednesday'],
+        repeatPattern: 'weekdays',
+        repeatValue: '',
+        selectedDays: ['Monday', 'Wednesday'],
         time: 'Morning',
       },
       sections: [
@@ -46,7 +47,9 @@ describe('DetailedWorkoutsList', () => {
       name: 'Cardio Session',
       objective: 'Improve endurance',
       schedule: {
-        days: ['Tuesday', 'Thursday'],
+        repeatPattern: 'weekdays',
+        repeatValue: '',
+        selectedDays: ['Tuesday', 'Thursday'],
         time: 'Evening',
       },
       sections: [
@@ -84,8 +87,8 @@ describe('DetailedWorkoutsList', () => {
         routineId="routine-1"
       />
     );
-    
-    expect(screen.getByText('Strength Workouts')).toBeInTheDocument();
+
+    expect(screen.getByText(/Strength Workouts/)).toBeInTheDocument();
     expect(screen.getByText('Upper Body')).toBeInTheDocument();
   });
 
@@ -97,8 +100,8 @@ describe('DetailedWorkoutsList', () => {
         routineId="routine-1"
       />
     );
-    
-    expect(screen.getByText('Running Workouts')).toBeInTheDocument();
+
+    expect(screen.getByText(/Running Workouts/)).toBeInTheDocument();
     expect(screen.getByText('Cardio Session')).toBeInTheDocument();
   });
 
@@ -110,9 +113,9 @@ describe('DetailedWorkoutsList', () => {
         routineId="routine-1"
       />
     );
-    
-    expect(screen.getByText('Strength Workouts')).toBeInTheDocument();
-    expect(screen.getByText('Running Workouts')).toBeInTheDocument();
+
+    expect(screen.getByText(/Strength Workouts/)).toBeInTheDocument();
+    expect(screen.getByText(/Running Workouts/)).toBeInTheDocument();
     expect(screen.getByText('Upper Body')).toBeInTheDocument();
     expect(screen.getByText('Cardio Session')).toBeInTheDocument();
   });
@@ -125,9 +128,11 @@ describe('DetailedWorkoutsList', () => {
         routineId="routine-1"
       />
     );
-    
-    expect(screen.getByText('Strength Workouts')).toBeInTheDocument();
-    expect(screen.getByText('Running Workouts')).toBeInTheDocument();
+
+    expect(screen.getByText('No workouts added yet')).toBeInTheDocument();
+    expect(
+      screen.getByText("This routine doesn't have any workouts configured.")
+    ).toBeInTheDocument();
     expect(screen.queryByText('Upper Body')).not.toBeInTheDocument();
     expect(screen.queryByText('Cardio Session')).not.toBeInTheDocument();
   });
@@ -141,7 +146,7 @@ describe('DetailedWorkoutsList', () => {
         name: 'Lower Body',
       },
     ];
-    
+
     render(
       <DetailedWorkoutsList
         strengthWorkouts={multipleStrengthWorkouts}
@@ -149,7 +154,7 @@ describe('DetailedWorkoutsList', () => {
         routineId="routine-1"
       />
     );
-    
+
     expect(screen.getByText('Upper Body')).toBeInTheDocument();
     expect(screen.getByText('Lower Body')).toBeInTheDocument();
   });

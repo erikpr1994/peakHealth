@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import DetailedWorkoutView from './DetailedWorkoutView';
 import { DetailedWorkout } from '../../../types';
@@ -18,7 +18,9 @@ describe('DetailedWorkoutView', () => {
     name: 'Upper Body Strength',
     objective: 'Build upper body strength',
     schedule: {
-      days: ['Monday', 'Wednesday'],
+      repeatPattern: 'weekdays',
+      repeatValue: '',
+      selectedDays: ['Monday', 'Wednesday'],
       time: 'Morning',
     },
     sections: [
@@ -33,12 +35,18 @@ describe('DetailedWorkoutView', () => {
             sets: [
               {
                 id: 'set-1',
+                setNumber: 1,
+                setType: 'normal',
+                repType: 'fixed',
                 reps: 10,
                 weight: 100,
                 restTime: 90,
               },
               {
                 id: 'set-2',
+                setNumber: 2,
+                setType: 'normal',
+                repType: 'fixed',
                 reps: 8,
                 weight: 110,
                 restTime: 90,
@@ -64,6 +72,11 @@ describe('DetailedWorkoutView', () => {
     expect(screen.getByText('Upper Body Strength')).toBeInTheDocument();
     expect(screen.getByText('Build upper body strength')).toBeInTheDocument();
     expect(screen.getByText('Chest and Triceps')).toBeInTheDocument();
+
+    // Click on the section to expand it
+    const sectionHeader = screen.getByText('Chest and Triceps');
+    fireEvent.click(sectionHeader);
+
     expect(screen.getByText('Bench Press')).toBeInTheDocument();
   });
 
@@ -77,12 +90,16 @@ describe('DetailedWorkoutView', () => {
   it('should render exercise sets correctly', () => {
     render(<DetailedWorkoutView workout={mockWorkout} routineId="routine-1" />);
 
+    // Click on the section to expand it
+    const sectionHeader = screen.getByText('Chest and Triceps');
+    fireEvent.click(sectionHeader);
+
     expect(screen.getByText('Set 1')).toBeInTheDocument();
     expect(screen.getByText('Set 2')).toBeInTheDocument();
-    expect(screen.getByText('10 reps')).toBeInTheDocument();
-    expect(screen.getByText('8 reps')).toBeInTheDocument();
-    expect(screen.getByText('100 lbs')).toBeInTheDocument();
-    expect(screen.getByText('110 lbs')).toBeInTheDocument();
+    expect(screen.getByText(/10 reps/)).toBeInTheDocument();
+    expect(screen.getByText(/8 reps/)).toBeInTheDocument();
+    expect(screen.getByText(/100 kg/)).toBeInTheDocument();
+    expect(screen.getByText(/110 kg/)).toBeInTheDocument();
   });
 
   it('should handle workout without sections', () => {
