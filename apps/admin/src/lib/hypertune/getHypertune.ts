@@ -1,4 +1,5 @@
 // Using Next.js server-only features
+import 'server-only';
 import type { ReadonlyHeaders } from 'next/dist/server/web/spec-extension/adapters/headers';
 import type { ReadonlyRequestCookies } from 'next/dist/server/web/spec-extension/adapters/request-cookies';
 import { unstable_noStore as noStore } from 'next/cache';
@@ -29,6 +30,7 @@ export default async function getHypertune(params?: {
       context: {
         environment: process.env.NODE_ENV,
         user: {
+          anonymousId: '0',
           id: '0', // This will be replaced with the actual user ID in a real implementation
           email: 'admin@example.com', // This will be replaced with the actual user email
         },
