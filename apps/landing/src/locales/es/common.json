@@ -152,6 +152,73 @@
       "description": "Nuestros términos de servicio están siendo finalizados. Estamos trabajando para asegurar términos claros y justos para todos los usuarios.",
       "whatWereWorkingOn": "En qué estamos trabajando:",
       "featuresList": "Términos de uso claros, derechos y responsabilidades del usuario, limitaciones del servicio y procesos de resolución de disputas."
+    },
+    "vision": {
+      "hero": {
+        "title": "Nuestra Visión para la",
+        "titleHighlight": "Salud Global",
+        "description": "La salud hoy está severamente deteriorada y enfocada en resolver problemas después de que ocurran en lugar de abordar la causa raíz. Por eso queremos ayudar a expandir la salud global e integral.",
+        "subtitle": "Estamos construyendo un futuro donde la salud es proactiva, holística y accesible para todos."
+      },
+      "mission": {
+        "title": "Por Qué Existe PeakHealth",
+        "problem": {
+          "title": "El Problema",
+          "description": "Los sistemas de salud actuales se enfocan en tratar síntomas después de que aparecen, en lugar de prevenir problemas en su raíz. Este enfoque reactivo lleva a costos de salud aumentados, calidad de vida reducida y oportunidades perdidas para el verdadero bienestar."
+        },
+        "solution": {
+          "title": "Nuestra Solución",
+          "description": "PeakHealth empodera a los individuos para tomar control de su viaje de salud a través de enfoques integrales de fitness y bienestar. Creemos en construir hábitos de salud sostenibles que aborden las causas raíz de los problemas de salud, no solo sus síntomas."
+        }
+      },
+      "pillars": {
+        "title": "Nuestros Principios Fundamentales",
+        "holisticHealth": {
+          "title": "Salud Holística",
+          "description": "Creemos en tratar a la persona completa, no solo los síntomas. Nuestra visión abarca factores físicos, mentales y de estilo de vida para un bienestar completo."
+        },
+        "preventiveFocus": {
+          "title": "Enfoque Preventivo",
+          "description": "En lugar de esperar a que surjan problemas de salud, empoderamos a las personas para construir hábitos saludables y prevenir problemas antes de que comiencen."
+        },
+        "globalImpact": {
+          "title": "Impacto Global",
+          "description": "Nuestra visión se extiende más allá de los usuarios individuales para crear un movimiento global hacia mejores prácticas de salud y conciencia."
+        },
+        "evidenceBased": {
+          "title": "Basado en Evidencia",
+          "description": "Cada enfoque y recomendación está fundamentado en investigación científica y principios de salud probados."
+        },
+        "continuousEvolution": {
+          "title": "Evolución Continua",
+          "description": "Evolucionamos constantemente nuestra comprensión y enfoque basándonos en la última investigación de salud y necesidades de los usuarios."
+        },
+        "accessibleHealth": {
+          "title": "Salud Accesible",
+          "description": "Creemos que la salud y el fitness integrales deben ser accesibles para todos, independientemente de su punto de partida."
+        }
+      },
+      "impact": {
+        "title": "Nuestra Visión de Impacto",
+        "individual": {
+          "title": "Nivel Individual",
+          "description": "Ayudar a millones de personas a construir hábitos de salud sostenibles, prevenir enfermedades crónicas y lograr sus objetivos de bienestar a través de enfoques integrales de fitness y bienestar."
+        },
+        "community": {
+          "title": "Nivel Comunitario",
+          "description": "Crear redes de apoyo donde las personas puedan compartir conocimiento, motivarse mutuamente y construir comunidades más saludables juntas."
+        },
+        "global": {
+          "title": "Nivel Global",
+          "description": "Contribuir a un cambio de paradigma en cómo la sociedad aborda la salud, moviéndose del tratamiento reactivo a la prevención proactiva y el bienestar integral."
+        }
+      },
+      "cta": {
+        "title": "Únete a Nuestra Misión",
+        "description": "Sé parte del movimiento para transformar la salud global. Comienza tu viaje con PeakHealth y ayúdanos a construir un futuro más saludable para todos.",
+        "getStarted": "Comenzar",
+        "learnMore": "Saber Más"
+      }
     }
   }
 }

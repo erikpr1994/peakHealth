@@ -152,6 +152,73 @@
       "description": "Our terms of service are being finalized. We're working to ensure clear and fair terms for all users.",
       "whatWereWorkingOn": "What we're working on:",
       "featuresList": "Clear terms of use, user rights and responsibilities, service limitations, and dispute resolution processes."
+    },
+    "vision": {
+      "hero": {
+        "title": "Our Vision for",
+        "titleHighlight": "Global Health",
+        "description": "Health today is severely deteriorated and focused on solving problems after they occur rather than addressing the root cause. That's why we want to help expand global and integrative health.",
+        "subtitle": "We're building a future where health is proactive, holistic, and accessible to everyone."
+      },
+      "mission": {
+        "title": "Why PeakHealth Exists",
+        "problem": {
+          "title": "The Problem",
+          "description": "Today's health systems focus on treating symptoms after they appear, rather than preventing issues at their root. This reactive approach leads to increased healthcare costs, reduced quality of life, and missed opportunities for true wellness."
+        },
+        "solution": {
+          "title": "Our Solution",
+          "description": "PeakHealth empowers individuals to take control of their health journey through comprehensive fitness and wellness approaches. We believe in building sustainable health habits that address the root causes of health issues, not just their symptoms."
+        }
+      },
+      "pillars": {
+        "title": "Our Core Principles",
+        "holisticHealth": {
+          "title": "Holistic Health",
+          "description": "We believe in treating the whole person, not just symptoms. Our vision encompasses physical, mental, and lifestyle factors for complete wellness."
+        },
+        "preventiveFocus": {
+          "title": "Preventive Focus",
+          "description": "Instead of waiting for health issues to arise, we empower people to build healthy habits and prevent problems before they start."
+        },
+        "globalImpact": {
+          "title": "Global Impact",
+          "description": "Our vision extends beyond individual users to create a global movement toward better health practices and awareness."
+        },
+        "evidenceBased": {
+          "title": "Evidence-Based",
+          "description": "Every approach and recommendation is grounded in scientific research and proven health principles."
+        },
+        "continuousEvolution": {
+          "title": "Continuous Evolution",
+          "description": "We constantly evolve our understanding and approach based on the latest health research and user needs."
+        },
+        "accessibleHealth": {
+          "title": "Accessible Health",
+          "description": "We believe that comprehensive health and fitness should be accessible to everyone, regardless of their starting point."
+        }
+      },
+      "impact": {
+        "title": "Our Impact Vision",
+        "individual": {
+          "title": "Individual Level",
+          "description": "Help millions of people build sustainable health habits, prevent chronic diseases, and achieve their wellness goals through comprehensive fitness and wellness approaches."
+        },
+        "community": {
+          "title": "Community Level",
+          "description": "Create supportive networks where people can share knowledge, motivate each other, and build healthier communities together."
+        },
+        "global": {
+          "title": "Global Level",
+          "description": "Contribute to a paradigm shift in how society approaches health, moving from reactive treatment to proactive prevention and comprehensive wellness."
+        }
+      },
+      "cta": {
+        "title": "Join Our Mission",
+        "description": "Be part of the movement to transform global health. Start your journey with PeakHealth and help us build a healthier future for everyone.",
+        "getStarted": "Get Started",
+        "learnMore": "Learn More"
+      }
     }
   }
 }
