@@ -272,6 +272,41 @@
         "title": "Nota:",
         "description": "Nuestro formulario de contacto está siendo desarrollado actualmente. Por ahora, por favor usa la dirección de correo electrónico de arriba para contactarnos directamente."
       }
+    },
+    "feedback": {
+      "title": "Comentarios y Sugerencias",
+      "subtitle": "Ayuda a dar forma al futuro de PeakHealth con tus ideas",
+      "intro": {
+        "title": "Valoramos Tu Opinión",
+        "description": "Tus comentarios nos ayudan a construir una mejor plataforma. Comparte tus ideas, reporta problemas y ayúdanos a priorizar lo que más importa a nuestra comunidad."
+      },
+      "currentStatus": {
+        "title": "Estado Actual",
+        "description": "Nuestro sistema de comentarios está siendo construido. Pronto podrás enviar solicitudes de características, reportar errores y votar por sugerencias de la comunidad."
+      },
+      "getInTouch": {
+        "title": "Ponte en Contacto",
+        "description": "Por ahora, envía tus comentarios y sugerencias directamente a nuestro equipo:",
+        "email": "info@peakhealth.es"
+      },
+      "categories": {
+        "featureRequests": {
+          "title": "Solicitudes de Características",
+          "description": "Sugiere nuevas características, mejoras o mejoras para hacer PeakHealth mejor"
+        },
+        "bugReports": {
+          "title": "Reportes de Errores",
+          "description": "Reporta problemas, errores o problemas que encuentres mientras usas la plataforma"
+        },
+        "voteAndDiscuss": {
+          "title": "Votar y Discutir",
+          "description": "Vota por sugerencias existentes y participa en discusiones de la comunidad"
+        }
+      },
+      "comingSoon": {
+        "title": "Próximamente:",
+        "description": "Nuestra plataforma dedicada de comentarios incluirá votación de características, seguimiento de problemas y discusiones de la comunidad. Por ahora, por favor usa el correo electrónico de arriba para compartir tus pensamientos con nosotros."
+      }
     }
   }
 }
