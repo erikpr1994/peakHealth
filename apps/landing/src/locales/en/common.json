@@ -144,6 +144,14 @@
       "description": "Our interactive roadmap is under development. Soon you'll be able to see our development timeline, vote on features, and track our progress.",
       "whatToExpect": "What to expect:",
       "featuresList": "Feature voting, development timeline, progress tracking, and community feedback integration."
+    },
+    "terms": {
+      "title": "Terms of Service",
+      "subtitle": "Our terms and conditions for using PeakHealth",
+      "comingSoon": "Coming Soon",
+      "description": "Our terms of service are being finalized. We're working to ensure clear and fair terms for all users.",
+      "whatWereWorkingOn": "What we're working on:",
+      "featuresList": "Clear terms of use, user rights and responsibilities, service limitations, and dispute resolution processes."
     }
   }
 }

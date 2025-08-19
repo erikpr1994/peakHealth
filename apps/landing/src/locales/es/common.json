@@ -144,6 +144,14 @@
       "description": "Nuestra hoja de ruta interactiva está en desarrollo. Pronto podrás ver nuestra línea de tiempo de desarrollo, votar por características y rastrear nuestro progreso.",
       "whatToExpect": "Qué esperar:",
       "featuresList": "Votación de características, línea de tiempo de desarrollo, seguimiento de progreso e integración de comentarios de la comunidad."
+    },
+    "terms": {
+      "title": "Términos de Servicio",
+      "subtitle": "Nuestros términos y condiciones para usar PeakHealth",
+      "comingSoon": "Próximamente",
+      "description": "Nuestros términos de servicio están siendo finalizados. Estamos trabajando para asegurar términos claros y justos para todos los usuarios.",
+      "whatWereWorkingOn": "En qué estamos trabajando:",
+      "featuresList": "Términos de uso claros, derechos y responsabilidades del usuario, limitaciones del servicio y procesos de resolución de disputas."
     }
   }
 }
