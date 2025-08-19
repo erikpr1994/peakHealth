@@ -22,11 +22,6 @@ describe('Workout Index', () => {
     expect(exports.useWorkoutNavigation).toBeDefined();
   });
 
-  test('should export types', async () => {
-    const exports = await import('./index');
-    expect(exports).toHaveProperty('WorkoutFlowState');
-    expect(exports).toHaveProperty('WorkoutTrackerContainerProps');
-    expect(exports).toHaveProperty('WorkoutPreparationProps');
-    expect(exports).toHaveProperty('RoutineDetails');
-  });
+  // Note: TypeScript types are compile-time constructs and don't exist at runtime.
+  // Type assertions are removed as they should be tested through TypeScript compilation.
 });
