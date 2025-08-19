@@ -1,30 +1,64 @@
 import { Heart, Target, Users, Globe, Shield, TrendingUp } from 'lucide-react';
 import { Metadata } from 'next';
 import Link from 'next/link';
-import React from 'react';
+import React, { use } from 'react';
 import { useTranslations } from 'next-intl';
+import { setRequestLocale } from 'next-intl/server';
 
 import styles from './VisionPage.module.css';
 
-export const metadata: Metadata = {
-  title: 'Our Vision - Peak Health',
-  description:
-    'Discover our mission to transform global health through integrative wellness and preventive care. Learn why PeakHealth exists and our commitment to holistic health.',
-  keywords:
-    'health vision, integrative wellness, preventive care, holistic health, fitness mission',
-  openGraph: {
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+
+  if (locale === 'es') {
+    return {
+      title: 'Nuestra Visión - Peak Health',
+      description:
+        'Descubre nuestra misión para transformar la salud global a través del bienestar integral y la atención preventiva. Aprende por qué existe PeakHealth y nuestro compromiso con la salud holística.',
+      keywords:
+        'visión de salud, bienestar integral, atención preventiva, salud holística, misión fitness',
+      openGraph: {
+        title: 'Nuestra Visión - Peak Health',
+        description:
+          'Descubre nuestra misión para transformar la salud global a través del bienestar integral y la atención preventiva.',
+        type: 'website',
+      },
+    };
+  }
+
+  return {
     title: 'Our Vision - Peak Health',
     description:
-      'Discover our mission to transform global health through integrative wellness and preventive care.',
-    type: 'website',
-  },
-};
+      'Discover our mission to transform global health through integrative wellness and preventive care. Learn why PeakHealth exists and our commitment to holistic health.',
+    keywords:
+      'health vision, integrative wellness, preventive care, holistic health, fitness mission',
+    openGraph: {
+      title: 'Our Vision - Peak Health',
+      description:
+        'Discover our mission to transform global health through integrative wellness and preventive care.',
+      type: 'website',
+    },
+  };
+}
 
 // Force static generation
 export const dynamic = 'force-static';
 export const revalidate = false;
 
-const VisionPage = (): React.JSX.Element => {
+const VisionPage = ({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): React.JSX.Element => {
+  const { locale } = use(params);
+
+  // Enable static rendering
+  setRequestLocale(locale);
+
   const t = useTranslations('pages.vision');
 
   const visionPillars = [

@@ -15,17 +15,13 @@ const ContactPage = (): React.JSX.Element => {
       <div className={styles.container}>
         <div className={styles.header}>
           <h1 className={styles.title}>{t('title')}</h1>
-          <p className={styles.subtitle}>
-            {t('subtitle')}
-          </p>
+          <p className={styles.subtitle}>{t('subtitle')}</p>
         </div>
 
         <div className={styles.content}>
           <div className={styles.introSection}>
             <h2 className={styles.introTitle}>{t('intro.title')}</h2>
-            <p className={styles.introDescription}>
-              {t('intro.description')}
-            </p>
+            <p className={styles.introDescription}>{t('intro.description')}</p>
           </div>
 
           <div className={styles.mainGrid}>
@@ -48,7 +44,9 @@ const ContactPage = (): React.JSX.Element => {
             </div>
 
             <div className={styles.responseSection}>
-              <h3 className={styles.responseTitle}>{t('responseTime.title')}</h3>
+              <h3 className={styles.responseTitle}>
+                {t('responseTime.title')}
+              </h3>
               <p className={styles.responseDescription}>
                 {t('responseTime.description')}
               </p>
@@ -58,7 +56,9 @@ const ContactPage = (): React.JSX.Element => {
           <div className={styles.categoriesGrid}>
             <div className={styles.category}>
               <div className={styles.categoryIcon}>💬</div>
-              <h4 className={styles.categoryTitle}>{t('categories.generalSupport.title')}</h4>
+              <h4 className={styles.categoryTitle}>
+                {t('categories.generalSupport.title')}
+              </h4>
               <p className={styles.categoryDescription}>
                 {t('categories.generalSupport.description')}
               </p>
@@ -66,7 +66,9 @@ const ContactPage = (): React.JSX.Element => {
 
             <div className={styles.category}>
               <div className={`${styles.categoryIcon} ${styles.green}`}>💡</div>
-              <h4 className={styles.categoryTitle}>{t('categories.featureRequests.title')}</h4>
+              <h4 className={styles.categoryTitle}>
+                {t('categories.featureRequests.title')}
+              </h4>
               <p className={styles.categoryDescription}>
                 {t('categories.featureRequests.description')}
               </p>
@@ -76,7 +78,9 @@ const ContactPage = (): React.JSX.Element => {
               <div className={`${styles.categoryIcon} ${styles.purple}`}>
                 🤝
               </div>
-              <h4 className={styles.categoryTitle}>{t('categories.partnerships.title')}</h4>
+              <h4 className={styles.categoryTitle}>
+                {t('categories.partnerships.title')}
+              </h4>
               <p className={styles.categoryDescription}>
                 {t('categories.partnerships.description')}
               </p>
