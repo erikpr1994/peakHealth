@@ -1,26 +1,11 @@
-import { getTranslations } from 'next-intl/server';
+import { AccessDeniedPage } from '@/features/auth/components/AccessDeniedPage';
 
-import { AccessDeniedPage as AccessDeniedComponent } from '@/features/auth';
-
+// Force static generation with no revalidation
 export const dynamic = 'force-static';
 export const revalidate = false;
 
-export async function generateMetadata({
-  params: { locale },
-}: {
-  params: { locale: string };
-}) {
-  const t = await getTranslations({ locale, namespace: 'accessDenied' });
-
-  return {
-    title: t('title'),
-    description: t('subtitle'),
-  };
-}
-
-const AccessDeniedPage = (): React.JSX.Element => {
-  return <AccessDeniedComponent />;
+const AccessDenied = (): React.JSX.Element => {
+  return <AccessDeniedPage />;
 };
 
-export default AccessDeniedPage;
-
+export default AccessDenied;

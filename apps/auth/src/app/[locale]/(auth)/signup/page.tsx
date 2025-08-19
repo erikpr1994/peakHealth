@@ -1,34 +1,11 @@
-import { Suspense } from 'react';
-import { getTranslations } from 'next-intl/server';
+import { SignUpForm } from '@/features/auth/components/SignUpForm';
 
-import { SignUpForm } from '@/features/auth';
-import styles from '@/features/auth/components/page.module.css';
-
+// Force static generation with no revalidation
 export const dynamic = 'force-static';
 export const revalidate = false;
 
-export async function generateMetadata({
-  params: { locale },
-}: {
-  params: { locale: string };
-}) {
-  const t = await getTranslations({ locale, namespace: 'signup' });
-
-  return {
-    title: t('title'),
-    description: t('subtitle'),
-  };
-}
-
 const SignUpPage = (): React.JSX.Element => {
-  return (
-    <div className={styles.container}>
-      <Suspense fallback={<div>Loading...</div>}>
-        <SignUpForm />
-      </Suspense>
-    </div>
-  );
+  return <SignUpForm />;
 };
 
 export default SignUpPage;
-
