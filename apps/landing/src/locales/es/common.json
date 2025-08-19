@@ -313,6 +313,9 @@
       "description": "Consejos de fitness, guías de entrenamiento e información de salud de nuestros expertos",
       "readTime": "min de lectura",
       "readMore": "Leer Más →",
+      "backToBlog": "Volver al Blog",
+      "writtenBy": "Escrito por",
+      "authorDescription": "Experto en fitness y colaborador de Peak Health",
       "noPosts": {
         "title": "No se encontraron publicaciones",
         "description": "¡Vuelve pronto para nuevo contenido!"

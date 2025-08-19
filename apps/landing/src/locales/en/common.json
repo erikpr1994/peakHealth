@@ -313,6 +313,9 @@
       "description": "Fitness tips, workout guides, and health insights from our experts",
       "readTime": "min read",
       "readMore": "Read More →",
+      "backToBlog": "Back to Blog",
+      "writtenBy": "Written by",
+      "authorDescription": "Fitness expert and Peak Health contributor",
       "noPosts": {
         "title": "No blog posts found",
         "description": "Check back soon for new content!"
