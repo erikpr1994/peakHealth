@@ -237,6 +237,41 @@
         "email": "info@peakhealth.es",
         "note": "We'll review your application and reach out if there's a potential fit for future opportunities."
       }
+    },
+    "contact": {
+      "title": "Contact Us",
+      "subtitle": "Get in touch with the PeakHealth team",
+      "intro": {
+        "title": "We'd Love to Hear from You",
+        "description": "Whether you have questions about our platform, want to provide feedback, or are interested in partnerships, we're here to help."
+      },
+      "getInTouch": {
+        "title": "Get in Touch",
+        "description": "For general inquiries, support, or feedback:",
+        "email": "info@peakhealth.es"
+      },
+      "responseTime": {
+        "title": "Response Time",
+        "description": "We typically respond to all inquiries within 24-48 hours during business days. For urgent matters, please include \"URGENT\" in your subject line."
+      },
+      "categories": {
+        "generalSupport": {
+          "title": "General Support",
+          "description": "Questions about features, account issues, or general help"
+        },
+        "featureRequests": {
+          "title": "Feature Requests",
+          "description": "Suggestions for new features or improvements"
+        },
+        "partnerships": {
+          "title": "Partnerships",
+          "description": "Business opportunities and collaboration inquiries"
+        }
+      },
+      "note": {
+        "title": "Note:",
+        "description": "Our contact form is currently being developed. For now, please use the email address above to reach us directly."
+      }
     }
   }
 }

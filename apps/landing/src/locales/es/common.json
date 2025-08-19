@@ -237,6 +237,41 @@
         "email": "info@peakhealth.es",
         "note": "Revisaremos tu aplicación y nos pondremos en contacto si hay un potencial ajuste para oportunidades futuras."
       }
+    },
+    "contact": {
+      "title": "Contáctanos",
+      "subtitle": "Ponte en contacto con el equipo de PeakHealth",
+      "intro": {
+        "title": "Nos Encantaría Escucharte",
+        "description": "Ya sea que tengas preguntas sobre nuestra plataforma, quieras proporcionar comentarios o estés interesado en asociaciones, estamos aquí para ayudar."
+      },
+      "getInTouch": {
+        "title": "Ponte en Contacto",
+        "description": "Para consultas generales, soporte o comentarios:",
+        "email": "info@peakhealth.es"
+      },
+      "responseTime": {
+        "title": "Tiempo de Respuesta",
+        "description": "Típicamente respondemos a todas las consultas dentro de 24-48 horas durante días laborables. Para asuntos urgentes, por favor incluye \"URGENTE\" en tu línea de asunto."
+      },
+      "categories": {
+        "generalSupport": {
+          "title": "Soporte General",
+          "description": "Preguntas sobre características, problemas de cuenta o ayuda general"
+        },
+        "featureRequests": {
+          "title": "Solicitudes de Características",
+          "description": "Sugerencias para nuevas características o mejoras"
+        },
+        "partnerships": {
+          "title": "Asociaciones",
+          "description": "Oportunidades de negocio e consultas de colaboración"
+        }
+      },
+      "note": {
+        "title": "Nota:",
+        "description": "Nuestro formulario de contacto está siendo desarrollado actualmente. Por ahora, por favor usa la dirección de correo electrónico de arriba para contactarnos directamente."
+      }
     }
   }
 }
