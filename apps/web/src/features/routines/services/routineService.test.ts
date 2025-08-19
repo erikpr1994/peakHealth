@@ -26,8 +26,9 @@ describe('routineService', () => {
       error: null,
     });
 
-          // Mock the service's supabase client directly
-      (routineService as unknown as { supabase: typeof mockSupabase }).supabase = mockSupabase;
+    // Mock the service's supabase client directly
+    (routineService as unknown as { supabase: typeof mockSupabase }).supabase =
+      mockSupabase;
   });
 
   describe('getUserRoutines', () => {
