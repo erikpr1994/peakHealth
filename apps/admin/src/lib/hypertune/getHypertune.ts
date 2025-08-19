@@ -3,7 +3,7 @@ import 'server-only';
 import type { ReadonlyHeaders } from 'next/dist/server/web/spec-extension/adapters/headers';
 import type { ReadonlyRequestCookies } from 'next/dist/server/web/spec-extension/adapters/request-cookies';
 import { unstable_noStore as noStore } from 'next/cache';
-import { createSource } from '../../../generated/hypertune';
+import { createSource, type Environment } from '../../../generated/hypertune';
 import { getVercelOverride } from '../../../generated/hypertune.vercel';
 
 const hypertuneToken = process.env.NEXT_PUBLIC_HYPERTUNE_TOKEN;
@@ -14,6 +14,21 @@ if (!hypertuneToken) {
 const hypertuneSource = createSource({
   token: hypertuneToken,
 });
+
+// Map NODE_ENV to the expected Environment type
+function getEnvironment(): Environment {
+  const nodeEnv = process.env.NODE_ENV;
+
+  switch (nodeEnv) {
+    case 'development':
+    case 'production':
+    case 'test':
+      return nodeEnv;
+    default:
+      // Default to development for unknown environments
+      return 'development';
+  }
+}
 
 export default async function getHypertune(params?: {
   headers?: ReadonlyHeaders;
@@ -28,7 +43,7 @@ export default async function getHypertune(params?: {
   return hypertuneSource.root({
     args: {
       context: {
-        environment: process.env.NODE_ENV,
+        environment: getEnvironment(),
         user: {
           anonymousId: '0',
           id: '0', // This will be replaced with the actual user ID in a real implementation
