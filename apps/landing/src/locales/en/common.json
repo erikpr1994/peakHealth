@@ -119,7 +119,38 @@
       "comingSoon": "Coming Soon",
       "description": "We're working hard to bring you detailed information about all our features. Check back soon for a comprehensive overview of what PeakHealth has to offer.",
       "coreFeatures": "Core Features:",
-      "coreFeaturesList": "Workout logging, progress tracking, personal records, exercise library, and community-driven development."
+      "coreFeaturesList": "Workout logging, progress tracking, personal records, exercise library, and community-driven development.",
+      "upcomingFeatures": {
+        "workoutLogging": {
+          "title": "Workout Logging",
+          "description": "Track your exercises, sets, reps, and weights with our intuitive workout logging interface."
+        },
+        "progressTracking": {
+          "title": "Progress Tracking",
+          "description": "Monitor your gains with detailed charts, personal records, and exercise history."
+        },
+        "goalSetting": {
+          "title": "Goal Setting",
+          "description": "Set and track your fitness goals with personalized milestones and achievements."
+        },
+        "scheduling": {
+          "title": "Workout Scheduling",
+          "description": "Plan your workouts in advance with our smart scheduling system."
+        },
+        "community": {
+          "title": "Community Features",
+          "description": "Connect with other fitness enthusiasts and share your progress."
+        },
+        "analytics": {
+          "title": "Advanced Analytics",
+          "description": "Get insights into your performance with detailed analytics and reports."
+        }
+      },
+      "cta": {
+        "title": "Stay Updated",
+        "description": "Be the first to know when new features are released and get early access to beta versions.",
+        "viewRoadmap": "View Roadmap"
+      }
     },
     "help": {
       "title": "Help Center",
@@ -127,7 +158,38 @@
       "comingSoon": "Coming Soon",
       "description": "Our comprehensive help center is being built. Soon you'll have access to guides, tutorials, FAQs, and direct support.",
       "whatYoullFind": "What you'll find here:",
-      "featuresList": "User guides, tutorials, frequently asked questions, troubleshooting, and support contact."
+      "featuresList": "User guides, tutorials, frequently asked questions, troubleshooting, and support contact.",
+      "categories": {
+        "userGuides": {
+          "title": "User Guides",
+          "description": "Step-by-step guides to help you get the most out of PeakHealth"
+        },
+        "tutorials": {
+          "title": "Video Tutorials",
+          "description": "Visual guides and walkthroughs for all major features"
+        },
+        "faq": {
+          "title": "Frequently Asked Questions",
+          "description": "Quick answers to common questions and concerns"
+        },
+        "search": {
+          "title": "Search Help",
+          "description": "Find specific information quickly with our search functionality"
+        },
+        "documentation": {
+          "title": "Documentation",
+          "description": "Comprehensive technical documentation and API references"
+        },
+        "support": {
+          "title": "Direct Support",
+          "description": "Get help from our support team when you need it most"
+        }
+      },
+      "contact": {
+        "title": "Need More Help?",
+        "description": "Can't find what you're looking for? Our support team is here to help.",
+        "getHelp": "Contact Support"
+      }
     },
     "privacy": {
       "title": "Privacy Policy",
@@ -135,7 +197,38 @@
       "comingSoon": "Coming Soon",
       "description": "Our comprehensive privacy policy is being developed. We're committed to transparency and protecting your personal information.",
       "ourCommitment": "Our commitment:",
-      "commitmentText": "We value your privacy and will provide clear information about how we collect, use, and protect your data."
+      "commitmentText": "We value your privacy and will provide clear information about how we collect, use, and protect your data.",
+      "principles": {
+        "dataProtection": {
+          "title": "Data Protection",
+          "description": "We implement industry-standard security measures to protect your personal information from unauthorized access, alteration, or disclosure."
+        },
+        "security": {
+          "title": "Security First",
+          "description": "Your data is encrypted in transit and at rest, with regular security audits and updates to maintain the highest protection standards."
+        },
+        "transparency": {
+          "title": "Transparency",
+          "description": "We're open about what data we collect, how we use it, and who we share it with. No hidden agendas or surprise data usage."
+        },
+        "control": {
+          "title": "User Control",
+          "description": "You have full control over your data. Access, modify, or delete your information at any time through your account settings."
+        },
+        "community": {
+          "title": "Community Trust",
+          "description": "We build trust with our community by being transparent about our data practices and respecting your privacy choices."
+        },
+        "compliance": {
+          "title": "Legal Compliance",
+          "description": "We comply with all applicable privacy laws and regulations, including GDPR, CCPA, and other data protection standards."
+        }
+      },
+      "contact": {
+        "title": "Questions About Privacy?",
+        "description": "If you have any questions about our privacy practices or want to exercise your data rights, we're here to help.",
+        "getInTouch": "Contact Us"
+      }
     },
     "roadmap": {
       "title": "Product Roadmap",
@@ -143,7 +236,38 @@
       "comingSoon": "Coming Soon",
       "description": "Our interactive roadmap is under development. Soon you'll be able to see our development timeline, vote on features, and track our progress.",
       "whatToExpect": "What to expect:",
-      "featuresList": "Feature voting, development timeline, progress tracking, and community feedback integration."
+      "featuresList": "Feature voting, development timeline, progress tracking, and community feedback integration.",
+      "features": {
+        "voting": {
+          "title": "Feature Voting",
+          "description": "Vote on upcoming features and help us prioritize what matters most to our community."
+        },
+        "timeline": {
+          "title": "Development Timeline",
+          "description": "See our planned release schedule and track progress on features you're excited about."
+        },
+        "progress": {
+          "title": "Progress Tracking",
+          "description": "Monitor the development status of features and get updates on implementation progress."
+        },
+        "feedback": {
+          "title": "Community Feedback",
+          "description": "Share your thoughts on features and participate in discussions about upcoming releases."
+        },
+        "community": {
+          "title": "Community Integration",
+          "description": "Connect with other users and collaborate on feature suggestions and improvements."
+        },
+        "analytics": {
+          "title": "Roadmap Analytics",
+          "description": "View voting trends, feature popularity, and community engagement metrics."
+        }
+      },
+      "cta": {
+        "title": "Help Shape Our Future",
+        "description": "Your feedback drives our development. Share your ideas and help us build the features you want.",
+        "suggestFeatures": "Suggest Features"
+      }
     },
     "terms": {
       "title": "Terms of Service",
@@ -151,7 +275,38 @@
       "comingSoon": "Coming Soon",
       "description": "Our terms of service are being finalized. We're working to ensure clear and fair terms for all users.",
       "whatWereWorkingOn": "What we're working on:",
-      "featuresList": "Clear terms of use, user rights and responsibilities, service limitations, and dispute resolution processes."
+      "featuresList": "Clear terms of use, user rights and responsibilities, service limitations, and dispute resolution processes.",
+      "sections": {
+        "termsOfUse": {
+          "title": "Terms of Use",
+          "description": "Clear guidelines on how to use our platform responsibly and what constitutes acceptable behavior."
+        },
+        "userRights": {
+          "title": "User Rights & Responsibilities",
+          "description": "Your rights as a user and your responsibilities when using our platform and services."
+        },
+        "serviceLimitations": {
+          "title": "Service Limitations",
+          "description": "Clear information about service availability, limitations, and what we can and cannot provide."
+        },
+        "disputeResolution": {
+          "title": "Dispute Resolution",
+          "description": "Fair and transparent processes for resolving any issues or disputes that may arise."
+        },
+        "legal": {
+          "title": "Legal Framework",
+          "description": "The legal basis for our services and how we handle legal matters and compliance."
+        },
+        "contact": {
+          "title": "Contact & Support",
+          "description": "How to reach us for questions about our terms or to report violations and concerns."
+        }
+      },
+      "contact": {
+        "title": "Questions About Terms?",
+        "description": "If you have questions about our terms of service or need clarification on any points, we're here to help.",
+        "getInTouch": "Contact Us"
+      }
     },
     "vision": {
       "hero": {
