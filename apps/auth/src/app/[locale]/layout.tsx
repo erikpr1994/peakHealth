@@ -1,8 +1,9 @@
-import { NextIntlClientProvider } from 'next-intl';
+import { NextIntlClientProvider, hasLocale } from 'next-intl';
 import { Inter } from 'next/font/google';
 import { notFound } from 'next/navigation';
 import { ReactNode } from 'react';
 import { Metadata } from 'next';
+import { setRequestLocale } from 'next-intl/server';
 
 import { routing } from '@/i18n/routing';
 
@@ -11,15 +12,19 @@ import '../globals.css';
 const inter = Inter({ subsets: ['latin'] });
 
 export function generateStaticParams(): { locale: string }[] {
-  return routing.locales.map((locale) => ({ locale }));
+  return routing.locales.map(locale => ({ locale }));
 }
 
-export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
   const { locale } = await params;
   try {
     // eslint-disable-next-line @typescript-eslint/no-var-requires
     const messages = require(`../../../locales/${locale}/index.json`);
-    
+
     return {
       title: messages.metadata.title,
       description: messages.metadata.description,
@@ -39,12 +44,14 @@ const LocaleLayout = async ({
   children: ReactNode;
   params: Promise<{ locale: string }>;
 }): Promise<React.JSX.Element> => {
+  // Ensure that the incoming `locale` is valid
   const { locale } = await params;
-  
-  // Validate that the incoming locale is supported
-  if (!routing.locales.includes(locale)) {
+  if (!hasLocale(routing.locales, locale)) {
     notFound();
   }
+
+  // Enable static rendering
+  setRequestLocale(locale);
 
   let messages;
   try {
@@ -66,4 +73,3 @@ const LocaleLayout = async ({
 };
 
 export default LocaleLayout;
-
