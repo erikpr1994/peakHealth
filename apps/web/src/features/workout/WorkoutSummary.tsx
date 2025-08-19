@@ -9,13 +9,13 @@ import {
   MessageCircle,
   Calendar,
 } from 'lucide-react';
-import { useState } from 'react';
+import React, { useState } from 'react';
 
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Textarea } from '@/components/ui/textarea';
-import { Page } from '@/types/app';
+import { useWorkoutNavigation } from './hooks/useWorkoutNavigation';
 
 interface SetData {
   id: string;
@@ -86,19 +86,18 @@ interface WorkoutSession {
 interface WorkoutSummaryProps {
   workoutSession: WorkoutSession;
   onComplete: () => void;
-  onNavigate: (page: Page) => void;
 }
 
-export default function WorkoutSummary({
+const WorkoutSummary = ({
   workoutSession,
   onComplete,
-  onNavigate,
-}: WorkoutSummaryProps) {
+}: WorkoutSummaryProps): React.JSX.Element => {
   const [workoutNotes, setWorkoutNotes] = useState('');
   const [rating, setRating] = useState(0);
   const [showCelebration] = useState(true);
+  const { goToRoutines, goToCalendar } = useWorkoutNavigation();
 
-  const formatDuration = (seconds: number) => {
+  const formatDuration = (seconds: number): string => {
     const hours = Math.floor(seconds / 3600);
     const minutes = Math.floor((seconds % 3600) / 60);
 
@@ -108,7 +107,14 @@ export default function WorkoutSummary({
     return `${minutes}m`;
   };
 
-  const calculateStats = () => {
+  const calculateStats = (): {
+    totalSets: number;
+    totalReps: number;
+    avgRating: number;
+    exercisesCompleted: number;
+    duration: string;
+    activeTime: string;
+  } => {
     // Safely access setData with fallback
     const setData = workoutSession.setData || [];
     const totalSets = setData.filter(set => set.completed).length;
@@ -146,19 +152,19 @@ export default function WorkoutSummary({
 
   const stats = calculateStats();
 
-  const handleSaveWorkout = () => {
-    const finalWorkoutData = {
+  const handleSaveWorkout = (): void => {
+    const _finalWorkoutData = {
       ...workoutSession,
       workoutNotes,
       rating,
       completedAt: new Date(),
     };
 
-    console.log('Saving workout:', finalWorkoutData);
+    // TODO: Save workout data to database
     onComplete();
   };
 
-  const getMotivationalMessage = () => {
+  const getMotivationalMessage = (): string => {
     const messages = [
       'Outstanding work! 💪',
       'You crushed it today! 🔥',
@@ -403,7 +409,7 @@ export default function WorkoutSummary({
               </div>
             </div>
             <Button
-              onClick={() => onNavigate('calendar')}
+              onClick={() => goToCalendar()}
               variant="outline"
               className="w-full"
             >
@@ -429,11 +435,7 @@ export default function WorkoutSummary({
 
         {/* Final Actions */}
         <div className="flex gap-4">
-          <Button
-            variant="outline"
-            onClick={() => onNavigate('routines')}
-            className="flex-1"
-          >
+          <Button variant="outline" onClick={goToRoutines} className="flex-1">
             Back to Routines
           </Button>
           <Button
@@ -447,4 +449,6 @@ export default function WorkoutSummary({
       </div>
     </div>
   );
-}
+};
+
+export default WorkoutSummary;
