@@ -26,8 +26,7 @@ interface AppOption {
 interface User {
   id: string;
   email: string;
-  first_name?: string;
-  last_name?: string;
+  user_metadata?: Record<string, unknown>;
 }
 
 // SVG Icons for each app
@@ -259,7 +258,10 @@ const AppSelector = (): React.JSX.Element => {
       <AuthCard
         title={t('title')}
         subtitle={t('subtitle', {
-          name: user?.first_name || user?.email?.split('@')[0] || 'User',
+          name:
+            (user?.user_metadata?.firstName as string) ||
+            user?.email?.split('@')[0] ||
+            'User',
         })}
         variant="full-width"
       >
