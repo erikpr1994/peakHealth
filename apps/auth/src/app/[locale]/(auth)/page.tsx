@@ -1,10 +1,12 @@
 import { redirect } from 'next/navigation';
 
-export default function LocaleAuthRootPage({
-  params: { locale },
+const LocaleAuthRootPage = async ({
+  params,
 }: {
-  params: { locale: string };
-}) {
+  params: Promise<{ locale: string }>;
+}): Promise<never> => {
+  const { locale } = await params;
   redirect(`/${locale}/login`);
-}
+};
 
+export default LocaleAuthRootPage;
