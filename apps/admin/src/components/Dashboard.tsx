@@ -1,11 +1,9 @@
 'use client';
 
-import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 import { Button } from './ui/button';
 import { Badge } from './ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
-import { Progress } from './ui/progress';
 import {
   TrendingUp,
   Users,
@@ -13,9 +11,6 @@ import {
   Activity,
   BarChart3,
   Plus,
-  Search,
-  Filter,
-  Download,
   Calendar,
   Target,
   Zap,
@@ -26,8 +21,7 @@ const platformActivities = [
   {
     id: 1,
     trainerName: 'Sarah Mitchell',
-    trainerAvatar:
-      'https://images.unsplash.com/photo-1494790108755-2616b96b61d4?w=150&h=150&fit=crop&crop=face',
+    trainerAvatar: 'https://via.placeholder.com/150x150',
     action: 'New trainer joined',
     details: 'Certified Personal Trainer',
     timeAgo: '3 hours ago',
@@ -51,8 +45,7 @@ const platformActivities = [
   {
     id: 4,
     trainerName: 'Mike Johnson',
-    trainerAvatar:
-      'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face',
+    trainerAvatar: 'https://via.placeholder.com/150x150',
     action: 'High performance alert',
     details: 'Top 5% trainer this month',
     timeAgo: '3 days ago',
@@ -68,12 +61,15 @@ const platformActivities = [
 ];
 
 interface DashboardProps {
-  scopeInfo: any;
+  scopeInfo: Record<string, unknown>;
   userRole: string;
 }
 
-export function Dashboard({ scopeInfo, userRole }: DashboardProps) {
-  const getActivityIcon = (type: string) => {
+export const Dashboard = ({
+  scopeInfo,
+  userRole,
+}: DashboardProps): React.JSX.Element => {
+  const getActivityIcon = (type: string): React.JSX.Element => {
     switch (type) {
       case 'trainer_joined':
         return <Users className="h-4 w-4 text-green-500" />;
@@ -109,6 +105,9 @@ export function Dashboard({ scopeInfo, userRole }: DashboardProps) {
           </Button>
         </div>
       </div>
+
+      {/* Hypertune Test Component */}
+      {/* <HypertuneTest /> */}
 
       {/* Key Metrics Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -430,4 +429,4 @@ export function Dashboard({ scopeInfo, userRole }: DashboardProps) {
       </div>
     </div>
   );
-}
+};

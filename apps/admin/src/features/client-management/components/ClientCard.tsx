@@ -132,10 +132,10 @@ export const ClientCard = ({
           </div>
           <div>
             <p className="text-sm text-muted-foreground mb-1">Achievements</p>
-            <p className="font-semibold text-sm text-foreground flex items-center gap-1">
+            <div className="font-semibold text-sm text-foreground flex items-center gap-1">
               <Zap className="h-3 w-3 text-yellow-500" />
               {client.stats?.achievements_count || 0}
-            </p>
+            </div>
           </div>
         </div>
 
