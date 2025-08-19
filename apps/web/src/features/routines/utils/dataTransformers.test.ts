@@ -29,7 +29,38 @@ describe('dataTransformers', () => {
           updatedAt: '2024-01-01T00:00:00Z',
           lastUsed: '2024-01-01T00:00:00Z',
         },
-        workouts: [],
+        workouts: [
+          {
+            id: 'workout-1',
+            name: 'Workout 1',
+            type: 'strength',
+            objective: 'Build strength',
+            order_index: 1,
+            schedule: {
+              repeatPattern: 'weekly',
+              repeatValue: '1',
+              selectedDays: ['monday', 'wednesday', 'friday'],
+              time: '09:00',
+            },
+            sections: [],
+            trail_running_data: undefined,
+          },
+          {
+            id: 'workout-2',
+            name: 'Workout 2',
+            type: 'strength',
+            objective: 'Build strength',
+            order_index: 2,
+            schedule: {
+              repeatPattern: 'weekly',
+              repeatValue: '1',
+              selectedDays: ['tuesday', 'thursday'],
+              time: '09:00',
+            },
+            sections: [],
+            trail_running_data: undefined,
+          },
+        ],
       };
 
       const result = transformDatabaseRoutineToRoutineData(mockRpcResponse);
@@ -42,11 +73,13 @@ describe('dataTransformers', () => {
       expect(result.isActive).toBe(true);
       expect(result.isFavorite).toBe(false);
       expect(result.objectives).toEqual(['Build strength']);
-      expect(result.progress.currentWeek).toBe(1);
+      expect(result.progress.currentWeek).toBe(2);
       expect(result.progress.totalWeeks).toBe(12);
       expect(result.progress.completedWorkouts).toBe(8);
-      expect(result.progress.totalWorkouts).toBe(24);
-      expect(result.strengthWorkouts).toEqual([]);
+      expect(result.progress.totalWorkouts).toBe(60);
+      expect(result.strengthWorkouts).toHaveLength(2);
+      expect(result.strengthWorkouts[0].id).toBe('workout-1');
+      expect(result.strengthWorkouts[1].id).toBe('workout-2');
       expect(result.runningWorkouts).toEqual([]);
     });
 

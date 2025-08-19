@@ -302,7 +302,7 @@ export function transformDatabaseRoutineToRoutineData(
           : 1,
       totalWeeks: data.routine.duration || 12,
       completedWorkouts: data.routine.completedWorkouts || 0,
-      totalWorkouts: data.routine.totalWorkouts || totalWorkoutsForDuration,
+      totalWorkouts: totalWorkoutsForDuration,
     },
     // Schedule is calculated dynamically from workout days
     workoutDays,
