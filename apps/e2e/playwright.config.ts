@@ -88,7 +88,7 @@ export default defineConfig({
       name: 'regular-web',
       dependencies: ['setup-regular-web'],
       use: {
-        baseURL: 'http://localhost:3024',
+        baseURL: 'http://localhost:3024/en',
         storageState: 'storage-states/regular-web.json',
       },
       testMatch: [
@@ -100,7 +100,7 @@ export default defineConfig({
       name: 'trainer-web',
       dependencies: ['setup-trainer-web'],
       use: {
-        baseURL: 'http://localhost:3024',
+        baseURL: 'http://localhost:3024/en',
         storageState: 'storage-states/trainer-web.json',
       },
       testMatch: [

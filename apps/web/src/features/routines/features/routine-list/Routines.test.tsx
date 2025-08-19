@@ -2,13 +2,55 @@ import { render, screen, waitFor } from '@testing-library/react';
 import { vi } from 'vitest';
 import Routines from './Routines';
 import { routineService } from '../../services/routineService';
+import { WorkoutDay } from '../../types';
 
 // Mock dependencies
 vi.mock('../../services/routineService');
 
-const mockRoutineService = routineService as ReturnType<typeof vi.fn>;
+const mockRoutineService = vi.mocked(routineService);
 
 describe('Routines', () => {
+  const mockWorkoutDays: WorkoutDay[] = [
+    {
+      id: 'day-1',
+      name: 'Monday',
+      exercises: [],
+      estimatedTime: '45 min',
+      difficulty: 'Beginner',
+    },
+    {
+      id: 'day-2',
+      name: 'Wednesday',
+      exercises: [],
+      estimatedTime: '45 min',
+      difficulty: 'Beginner',
+    },
+    {
+      id: 'day-3',
+      name: 'Friday',
+      exercises: [],
+      estimatedTime: '45 min',
+      difficulty: 'Beginner',
+    },
+  ];
+
+  const mockWorkoutDays2: WorkoutDay[] = [
+    {
+      id: 'day-4',
+      name: 'Tuesday',
+      exercises: [],
+      estimatedTime: '30 min',
+      difficulty: 'Advanced',
+    },
+    {
+      id: 'day-5',
+      name: 'Thursday',
+      exercises: [],
+      estimatedTime: '30 min',
+      difficulty: 'Advanced',
+    },
+  ];
+
   const mockRoutines = [
     {
       id: 'routine-1',
@@ -26,7 +68,7 @@ describe('Routines', () => {
       totalWorkouts: 12,
       completedWorkouts: 5,
       estimatedDuration: '45-60 min',
-      workoutDays: ['Monday', 'Wednesday', 'Friday'],
+      workoutDays: mockWorkoutDays,
     },
     {
       id: 'routine-2',
@@ -44,7 +86,7 @@ describe('Routines', () => {
       totalWorkouts: 8,
       completedWorkouts: 0,
       estimatedDuration: '30-45 min',
-      workoutDays: ['Tuesday', 'Thursday'],
+      workoutDays: mockWorkoutDays2,
     },
   ];
 
@@ -53,17 +95,22 @@ describe('Routines', () => {
   });
 
   it('should render loading state initially', () => {
-    mockRoutineService.getUserRoutines.mockImplementation(() => new Promise(() => {}));
-    
+    mockRoutineService.getUserRoutines.mockImplementation(
+      () =>
+        new Promise(() => {
+          // Intentionally never resolves to simulate loading state
+        })
+    );
+
     render(<Routines />);
     expect(screen.getByText(/loading routines/i)).toBeInTheDocument();
   });
 
   it('should render routines list after loading', async () => {
     mockRoutineService.getUserRoutines.mockResolvedValue(mockRoutines);
-    
+
     render(<Routines />);
-    
+
     await waitFor(() => {
       expect(screen.getByText('Strength Training')).toBeInTheDocument();
       expect(screen.getByText('Cardio Blast')).toBeInTheDocument();
@@ -71,25 +118,31 @@ describe('Routines', () => {
   });
 
   it('should handle error state', async () => {
-    mockRoutineService.getUserRoutines.mockRejectedValue(new Error('Failed to fetch routines'));
-    
+    mockRoutineService.getUserRoutines.mockRejectedValue(
+      new Error('Failed to fetch routines')
+    );
+
     render(<Routines />);
-    
+
     await waitFor(() => {
-      expect(screen.getByText(/error: failed to fetch routines/i)).toBeInTheDocument();
+      expect(
+        screen.getByText(/error: failed to fetch routines/i)
+      ).toBeInTheDocument();
     });
   });
 
   it('should scroll to top on mount', async () => {
-    const scrollToSpy = vi.spyOn(window, 'scrollTo').mockImplementation(() => {});
+    const scrollToSpy = vi.spyOn(window, 'scrollTo').mockImplementation(() => {
+      // Mock implementation for scrollTo
+    });
     mockRoutineService.getUserRoutines.mockResolvedValue(mockRoutines);
-    
+
     render(<Routines />);
-    
+
     await waitFor(() => {
       expect(scrollToSpy).toHaveBeenCalledWith(0, 0);
     });
-    
+
     scrollToSpy.mockRestore();
   });
 });

@@ -7,6 +7,7 @@ describe('DetailedWorkoutsList', () => {
     {
       id: 'strength-1',
       name: 'Upper Body',
+      type: 'strength',
       objective: 'Build upper body strength',
       schedule: {
         repeatPattern: 'weekdays',
@@ -18,7 +19,7 @@ describe('DetailedWorkoutsList', () => {
         {
           id: 'section-1',
           name: 'Chest and Triceps',
-          type: 'Strength',
+          type: 'basic',
           exercises: [
             {
               id: 'exercise-1',
@@ -26,16 +27,22 @@ describe('DetailedWorkoutsList', () => {
               sets: [
                 {
                   id: 'set-1',
+                  setNumber: 1,
+                  setType: 'normal',
+                  repType: 'fixed',
                   reps: 10,
                   weight: 100,
-                  restTime: 90,
+                  rpe: null,
+                  notes: '',
                 },
               ],
-              progressionMethod: 'Linear',
-              restAfter: 120,
+              restTimer: '90s',
+              restAfter: '120s',
+              notes: '',
+              progressionMethod: 'linear',
             },
           ],
-          restAfter: 180,
+          restAfter: '180s',
         },
       ],
     },
@@ -45,6 +52,7 @@ describe('DetailedWorkoutsList', () => {
     {
       id: 'running-1',
       name: 'Cardio Session',
+      type: 'running',
       objective: 'Improve endurance',
       schedule: {
         repeatPattern: 'weekdays',
@@ -56,7 +64,7 @@ describe('DetailedWorkoutsList', () => {
         {
           id: 'section-1',
           name: 'Warm Up',
-          type: 'Cardio',
+          type: 'warmup',
           exercises: [
             {
               id: 'exercise-1',
@@ -64,16 +72,22 @@ describe('DetailedWorkoutsList', () => {
               sets: [
                 {
                   id: 'set-1',
-                  duration: 10,
-                  distance: 1,
-                  restTime: 60,
+                  setNumber: 1,
+                  setType: 'normal',
+                  repType: 'fixed',
+                  reps: null,
+                  weight: null,
+                  rpe: null,
+                  notes: '',
                 },
               ],
-              progressionMethod: 'Linear',
-              restAfter: 120,
+              restTimer: '60s',
+              restAfter: '120s',
+              notes: '',
+              progressionMethod: 'linear',
             },
           ],
-          restAfter: 180,
+          restAfter: '180s',
         },
       ],
     },

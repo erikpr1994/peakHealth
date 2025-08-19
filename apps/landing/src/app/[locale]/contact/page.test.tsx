@@ -9,7 +9,9 @@ describe('ContactPage', () => {
     expect(screen.getByText('Contact Us')).toBeInTheDocument();
 
     // Check for subtitle
-    expect(screen.getByText('Get in touch with the PeakHealth team')).toBeInTheDocument();
+    expect(
+      screen.getByText('Get in touch with the PeakHealth team')
+    ).toBeInTheDocument();
 
     // Check for intro section
     expect(screen.getByText("We'd Love to Hear from You")).toBeInTheDocument();
@@ -29,15 +31,16 @@ describe('ContactPage', () => {
 
   it('has correct email link', () => {
     render(<ContactPage />);
-    
+
     const emailLink = screen.getByText('info@peakhealth.es');
     expect(emailLink).toHaveAttribute('href', 'mailto:info@peakhealth.es');
   });
 
   it('displays contact form development note', () => {
     render(<ContactPage />);
-    
-    expect(screen.getByText(/Our contact form is currently being developed/)).toBeInTheDocument();
+
+    expect(
+      screen.getByText(/Our contact form is currently being developed/)
+    ).toBeInTheDocument();
   });
 });
-

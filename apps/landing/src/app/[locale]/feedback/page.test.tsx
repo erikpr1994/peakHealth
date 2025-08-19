@@ -9,7 +9,9 @@ describe('FeedbackPage', () => {
     expect(screen.getByText('Feedback & Suggestions')).toBeInTheDocument();
 
     // Check for subtitle
-    expect(screen.getByText('Help shape the future of PeakHealth with your ideas')).toBeInTheDocument();
+    expect(
+      screen.getByText('Help shape the future of PeakHealth with your ideas')
+    ).toBeInTheDocument();
 
     // Check for intro section
     expect(screen.getByText('We Value Your Input')).toBeInTheDocument();
@@ -29,16 +31,17 @@ describe('FeedbackPage', () => {
 
   it('has correct email link', () => {
     render(<FeedbackPage />);
-    
+
     const emailLink = screen.getByText('info@peakhealth.es');
     expect(emailLink).toHaveAttribute('href', 'mailto:info@peakhealth.es');
   });
 
   it('displays coming soon message', () => {
     render(<FeedbackPage />);
-    
-    expect(screen.getByText(/Our feedback system is being built/)).toBeInTheDocument();
+
+    expect(
+      screen.getByText(/Our feedback system is being built/)
+    ).toBeInTheDocument();
     expect(screen.getByText(/Coming Soon/)).toBeInTheDocument();
   });
 });
-

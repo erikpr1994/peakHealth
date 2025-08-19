@@ -9,7 +9,9 @@ describe('CareersPage', () => {
     expect(screen.getByText('Join Our Team')).toBeInTheDocument();
 
     // Check for subtitle
-    expect(screen.getByText('Help us build the future of fitness technology')).toBeInTheDocument();
+    expect(
+      screen.getByText('Help us build the future of fitness technology')
+    ).toBeInTheDocument();
 
     // Check for current status section
     expect(screen.getByText('Current Status')).toBeInTheDocument();
@@ -26,9 +28,8 @@ describe('CareersPage', () => {
 
   it('has correct email link', () => {
     render(<CareersPage />);
-    
+
     const emailLink = screen.getByText('info@peakhealth.es');
     expect(emailLink).toHaveAttribute('href', 'mailto:info@peakhealth.es');
   });
 });
-

@@ -1,12 +1,64 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import DetailedWorkoutView from './DetailedWorkoutView';
-import { DetailedWorkout } from '../../../types';
 
 // Mock dependencies
 vi.mock('next/navigation');
 
 const mockUseRouter = vi.fn();
+
+// Define the interface locally to match the component
+interface WorkoutSet {
+  id: string;
+  setNumber: number;
+  setType: string;
+  repType: string;
+  reps: number | null;
+  weight: number | null;
+  rpe: number | null;
+  notes: string;
+  restTime?: string;
+  duration?: number;
+}
+
+interface WorkoutExercise {
+  id: string;
+  name: string;
+  category?: string;
+  muscleGroups?: string[];
+  exerciseId?: string;
+  variantId?: string;
+  sets: WorkoutSet[];
+  restTimer: string;
+  restAfter: string;
+  notes: string;
+  progressionMethod?: string;
+  hasApproachSets?: boolean;
+  emomReps?: number;
+}
+
+interface WorkoutSection {
+  id: string;
+  name: string;
+  type: string;
+  exercises: WorkoutExercise[];
+  restAfter: string;
+  emomDuration?: number;
+}
+
+interface DetailedWorkout {
+  id: string;
+  name: string;
+  type: 'strength' | 'running' | 'trail-running' | 'swimming' | 'cycling';
+  objective: string;
+  schedule: {
+    repeatPattern: string;
+    repeatValue: string;
+    selectedDays: string[];
+    time: string;
+  };
+  sections: WorkoutSection[];
+}
 
 describe('DetailedWorkoutView', () => {
   const mockRouter = {
@@ -16,6 +68,7 @@ describe('DetailedWorkoutView', () => {
   const mockWorkout: DetailedWorkout = {
     id: 'workout-1',
     name: 'Upper Body Strength',
+    type: 'strength',
     objective: 'Build upper body strength',
     schedule: {
       repeatPattern: 'weekdays',
@@ -27,7 +80,7 @@ describe('DetailedWorkoutView', () => {
       {
         id: 'section-1',
         name: 'Chest and Triceps',
-        type: 'Strength',
+        type: 'basic',
         exercises: [
           {
             id: 'exercise-1',
@@ -40,7 +93,8 @@ describe('DetailedWorkoutView', () => {
                 repType: 'fixed',
                 reps: 10,
                 weight: 100,
-                restTime: 90,
+                rpe: null,
+                notes: '',
               },
               {
                 id: 'set-2',
@@ -49,14 +103,17 @@ describe('DetailedWorkoutView', () => {
                 repType: 'fixed',
                 reps: 8,
                 weight: 110,
-                restTime: 90,
+                rpe: null,
+                notes: '',
               },
             ],
-            progressionMethod: 'Linear',
-            restAfter: 120,
+            restTimer: '90s',
+            restAfter: '120s',
+            notes: '',
+            progressionMethod: 'linear',
           },
         ],
-        restAfter: 180,
+        restAfter: '180s',
       },
     ],
   };
