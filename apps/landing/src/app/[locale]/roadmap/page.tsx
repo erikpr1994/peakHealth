@@ -10,7 +10,8 @@ import {
   Users,
   BarChart3,
 } from 'lucide-react';
-import { Link } from '@/i18n/navigation';
+import { Link, redirect } from '@/i18n/navigation';
+import { roadmapFlag } from '../../../../generated/hypertune.vercel';
 
 import styles from './RoadmapPage.module.css';
 
@@ -28,7 +29,15 @@ const RoadmapPage = ({
   // Enable static rendering
   setRequestLocale(locale);
 
+  const roadmap = use(roadmapFlag());
   const t = useTranslations('pages.roadmap');
+
+  if (!roadmap) {
+    return redirect({
+      href: '/',
+      locale,
+    });
+  }
 
   const roadmapFeatures = [
     {

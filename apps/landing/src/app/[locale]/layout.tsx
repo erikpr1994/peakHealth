@@ -9,6 +9,9 @@ import { Footer } from '@/components/shared/Footer';
 import { routing } from '@/i18n/routing';
 import '../globals.css';
 
+import { HypertuneProvider } from '../../../generated/hypertune.react';
+import getHypertune from '@/lib/hypertune/getHypertune';
+
 const inter = Inter({ subsets: ['latin'] });
 
 interface LocaleLayoutProps {
@@ -35,17 +38,35 @@ const LocaleLayout = async ({
   // Enable static rendering
   setRequestLocale(locale);
 
+  const hypertune = await getHypertune();
+
+  const serverDehydratedState = hypertune.dehydrate();
+  const serverRootArgs = hypertune.getRootArgs();
+
+  const hypertuneToken = process.env.NEXT_PUBLIC_HYPERTUNE_TOKEN;
+  if (!hypertuneToken) {
+    throw new Error('NEXT_PUBLIC_HYPERTUNE_TOKEN is not defined');
+  }
+
   return (
     <html lang={locale} className="scroll-smooth">
       <body>
         <NextIntlClientProvider locale={locale}>
-          <div
-            className={`min-h-screen bg-background font-sans antialiased ${inter.className}`}
+          <HypertuneProvider
+            createSourceOptions={{
+              token: hypertuneToken,
+            }}
+            dehydratedState={serverDehydratedState}
+            rootArgs={serverRootArgs}
           >
-            <Header />
-            <main>{children}</main>
-            <Footer />
-          </div>
+            <div
+              className={`min-h-screen bg-background font-sans antialiased ${inter.className}`}
+            >
+              <Header />
+              <main>{children}</main>
+              <Footer />
+            </div>
+          </HypertuneProvider>
         </NextIntlClientProvider>
       </body>
     </html>

@@ -1,11 +1,16 @@
 import { describe, expect, it, vi } from 'vitest';
 import { render, screen } from '../../../test/test-utils';
 import { act } from '@testing-library/react';
-import React from 'react';
+import React, { Suspense } from 'react';
 
 // Mock setRequestLocale to avoid client component error in tests
 vi.mock('next-intl/server', () => ({
   setRequestLocale: vi.fn(),
+}));
+
+// Mock Hypertune imports
+vi.mock('../../../../generated/hypertune.vercel', () => ({
+  roadmapFlag: vi.fn(() => Promise.resolve(true)),
 }));
 
 import RoadmapPage from './page';
@@ -13,7 +18,11 @@ import RoadmapPage from './page';
 describe('RoadmapPage', () => {
   it('renders the roadmap page with correct content', async () => {
     await act(async () => {
-      render(<RoadmapPage params={Promise.resolve({ locale: 'en' })} />);
+      render(
+        <Suspense fallback={<div>Loading...</div>}>
+          <RoadmapPage params={Promise.resolve({ locale: 'en' })} />
+        </Suspense>
+      );
     });
 
     // Check for main title
@@ -43,7 +52,11 @@ describe('RoadmapPage', () => {
 
   it('has proper semantic structure', async () => {
     await act(async () => {
-      render(<RoadmapPage params={Promise.resolve({ locale: 'en' })} />);
+      render(
+        <Suspense fallback={<div>Loading...</div>}>
+          <RoadmapPage params={Promise.resolve({ locale: 'en' })} />
+        </Suspense>
+      );
     });
 
     // Check that the page has proper semantic structure
