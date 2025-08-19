@@ -7,6 +7,7 @@ export const useWorkoutNavigation = (): {
   navigate: (page: Page) => void;
   goToRoutines: () => void;
   goToDashboard: () => void;
+  goToCalendar: () => void;
   goBack: () => void;
 } => {
   const router = useRouter();
@@ -26,6 +27,10 @@ export const useWorkoutNavigation = (): {
     navigate('dashboard');
   }, [navigate]);
 
+  const goToCalendar = useCallback(() => {
+    navigate('calendar');
+  }, [navigate]);
+
   const goBack = useCallback(() => {
     router.back();
   }, [router]);
@@ -34,6 +39,7 @@ export const useWorkoutNavigation = (): {
     navigate,
     goToRoutines,
     goToDashboard,
+    goToCalendar,
     goBack,
   };
 };
