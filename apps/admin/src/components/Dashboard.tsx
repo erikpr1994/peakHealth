@@ -6,6 +6,7 @@ import { Button } from './ui/button';
 import { Badge } from './ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 import { Progress } from './ui/progress';
+import { HypertuneTest } from './HypertuneTest';
 import {
   TrendingUp,
   Users,
@@ -109,6 +110,9 @@ export function Dashboard({ scopeInfo, userRole }: DashboardProps) {
           </Button>
         </div>
       </div>
+      
+      {/* Hypertune Test Component */}
+      <HypertuneTest />
 
       {/* Key Metrics Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
