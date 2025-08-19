@@ -29,7 +29,6 @@ describe('Middleware', () => {
     const { config } = await import('./middleware');
 
     // Verify the matcher includes the root path and locale paths
-    expect(config.matcher).toContain('/((?!api|_next|_vercel|.*\\..*).*)');
-    expect(config.matcher).toContain('/([\\w-]+)?/users/(.+)');
+    expect(config.matcher).toBe('/((?!api|_next|_vercel|.*\\..*).*)');
   });
 });
