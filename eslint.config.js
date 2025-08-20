@@ -203,6 +203,10 @@ export default [
       'react-hooks/exhaustive-deps': 'warn',
 
       'react-hooks/rules-of-hooks': 'error',
+      'react-refresh/only-export-components': [
+        'warn',
+        { allowConstantExport: true },
+      ],
       'react/function-component-definition': [
         'warn',
         {

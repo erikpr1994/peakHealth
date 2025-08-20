@@ -28,11 +28,6 @@ export default async function getHypertune(
   // Respect flag overrides set by the Vercel Toolbar
   hypertuneSource.setOverride(await getVercelOverride());
 
-  // Use params to satisfy linter (even though we don't actually use it)
-  if (params && Object.keys(params).length > 0) {
-    // This is just to satisfy the linter - we don't actually use params
-  }
-
   return hypertuneSource.root({
     args: {
       context: {
