@@ -18,12 +18,18 @@ export const Header = (): React.JSX.Element => {
   const [loginUrl, setLoginUrl] = useState('');
   const [signupUrl, setSignupUrl] = useState('');
 
-  // Set mounted state and auth URLs on client side only
+  // One-time initialization
   useEffect((): void => {
     setIsMounted(true);
-    setLoginUrl(getLoginUrl(undefined, locale));
-    setSignupUrl(getSignupUrl(undefined, locale));
-  }, [locale]);
+  }, []);
+
+  // Update auth URLs when locale changes
+  useEffect((): void => {
+    if (isMounted) {
+      setLoginUrl(getLoginUrl(undefined, locale));
+      setSignupUrl(getSignupUrl(undefined, locale));
+    }
+  }, [locale, isMounted]);
 
   const toggleMobileMenu = (): void => {
     setIsMobileMenuOpen(!isMobileMenuOpen);

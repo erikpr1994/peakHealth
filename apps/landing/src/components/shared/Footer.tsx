@@ -15,12 +15,18 @@ export const Footer = (): React.JSX.Element => {
   const [signupUrl, setSignupUrl] = useState('');
   const [isMounted, setIsMounted] = useState(false);
 
-  // Set values on client side only to prevent hydration mismatches
+  // One-time initialization
   useEffect((): void => {
     setIsMounted(true);
     setCurrentYear(new Date().getFullYear().toString());
-    setSignupUrl(getSignupUrl(undefined, locale));
-  }, [locale]);
+  }, []);
+
+  // Update signup URL when locale changes
+  useEffect((): void => {
+    if (isMounted) {
+      setSignupUrl(getSignupUrl(undefined, locale));
+    }
+  }, [locale, isMounted]);
 
   return (
     <footer className={styles.footer}>
