@@ -14,22 +14,25 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  setup-and-validate:
-    name: Setup, Lint, Type-Check, and Test
+  # Parallel job structure for faster CI:
+  # 1. determine-affected: Determines what packages are affected (runs first)
+  # 2. setup-environment: Sets up the environment and caches (runs in parallel with determine-affected)
+  # 3. lint, type-check, test: Run in parallel after setup (depend on both determine-affected and setup-environment)
+  # 4. yaml-lint: Runs in parallel if YAML files changed (only depends on determine-affected)
+  # 5. build: Runs after all validation jobs pass
+  # 6. e2e-tests: Runs after build completes
+
+  determine-affected:
+    name: Determine Affected Packages
     runs-on: ubuntu-latest
     outputs:
       affected: ${{ steps.affected.outputs.affected }}
+      yaml-changed: ${{ steps.yaml-changes.outputs.yaml-changed }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-
-      - name: Setup environment
-        uses: ./.github/actions/setup
-        with:
-          setup-build-cache: true
-          setup-test-cache: true
 
       - name: Determine affected packages
         id: affected
@@ -44,25 +47,6 @@ jobs:
           echo "affected=${AFFECTED_PACKAGES}" >> $GITHUB_OUTPUT
           echo "Affected packages: ${AFFECTED_PACKAGES}"
 
-      # Run linting using Turborepo
-      - name: Run linting
-        if: ${{ steps.affected.outputs.affected != '' }}
-        run: |
-          pnpm turbo run lint --concurrency=3 --cache-dir=.turbo
-
-      # Run type checking using Turborepo
-      - name: Run type checking
-        if: ${{ steps.affected.outputs.affected != '' }}
-        run: |
-          pnpm turbo run type-check --concurrency=3 --cache-dir=.turbo
-
-      # Run unit tests using Turborepo
-      - name: Run unit tests
-        if: ${{ steps.affected.outputs.affected != '' }}
-        run: |
-          pnpm turbo run test --concurrency=3 --cache-dir=.turbo
-
-      # Run YAML linting if YAML files are changed (separate from code linting)
       - name: Check for YAML changes
         id: yaml-changes
         run: |
@@ -80,20 +64,121 @@ jobs:
             echo "No YAML files changed"
           fi
 
+  setup-environment:
+    name: Setup Environment
+    runs-on: ubuntu-latest
+    outputs:
+      cache-key: ${{ steps.cache-key.outputs.key }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup environment
+        uses: ./.github/actions/setup
+        with:
+          setup-build-cache: true
+          setup-test-cache: true
+
+      - name: Generate cache key
+        id: cache-key
+        run: |
+          echo "key=${{ github.sha }}" >> $GITHUB_OUTPUT
+
+  lint:
+    name: Lint Code
+    needs: [determine-affected, setup-environment]
+    runs-on: ubuntu-latest
+    if: ${{ needs.determine-affected.outputs.affected != '' }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup environment
+        uses: ./.github/actions/setup
+        with:
+          setup-build-cache: true
+          setup-test-cache: true
+          cache-key: ${{ needs.setup-environment.outputs.cache-key }}
+
+      - name: Run linting
+        run: |
+          pnpm turbo run lint --concurrency=3 --cache-dir=.turbo
+
+  type-check:
+    name: Type Check
+    needs: [determine-affected, setup-environment]
+    runs-on: ubuntu-latest
+    if: ${{ needs.determine-affected.outputs.affected != '' }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup environment
+        uses: ./.github/actions/setup
+        with:
+          setup-build-cache: true
+          setup-test-cache: true
+          cache-key: ${{ needs.setup-environment.outputs.cache-key }}
+
+      - name: Run type checking
+        run: |
+          pnpm turbo run type-check --concurrency=3 --cache-dir=.turbo
+
+  test:
+    name: Unit Tests
+    needs: [determine-affected, setup-environment]
+    runs-on: ubuntu-latest
+    if: ${{ needs.determine-affected.outputs.affected != '' }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup environment
+        uses: ./.github/actions/setup
+        with:
+          setup-build-cache: true
+          setup-test-cache: true
+          cache-key: ${{ needs.setup-environment.outputs.cache-key }}
+
+      - name: Run unit tests
+        run: |
+          pnpm turbo run test --concurrency=3 --cache-dir=.turbo
+
+      - name: Run coverage tests
+        run: pnpm test:coverage
+
+      - name: Upload test results
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: |
+            **/coverage
+            **/test-results
+          retention-days: 7
+
+  yaml-lint:
+    name: Lint YAML
+    needs: [determine-affected]
+    runs-on: ubuntu-latest
+    if: ${{ needs.determine-affected.outputs.yaml-changed == 'true' }}
+    # This job can run in parallel with other jobs since it doesn't depend on setup
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
       - name: Setup Python for YAML linting
-        if: ${{ steps.yaml-changes.outputs.yaml-changed == 'true' }}
         uses: actions/setup-python@v4
         with:
           python-version: '3.11'
 
       - name: Install yamllint
-        if: ${{ steps.yaml-changes.outputs.yaml-changed == 'true' }}
         run: |
           python -m pip install --upgrade pip
           pip install yamllint
 
       - name: Lint YAML files
-        if: ${{ steps.yaml-changes.outputs.yaml-changed == 'true' }}
         run: |
           echo "Linting YAML files..."
           # Lint all YAML files in the .github directory
@@ -105,25 +190,11 @@ jobs:
             echo "No root YAML files found, skipping..."
           fi
 
-      - name: Run coverage tests
-        if: ${{ steps.affected.outputs.affected != '' }}
-        run: pnpm test:coverage
-
-      - name: Upload test results
-        if: ${{ steps.affected.outputs.affected != '' }}
-        uses: actions/upload-artifact@v4
-        with:
-          name: test-results
-          path: |
-            **/coverage
-            **/test-results
-          retention-days: 7
-
   build:
     name: Build
-    needs: setup-and-validate
+    needs: [determine-affected, setup-environment, lint, type-check, test]
     runs-on: ubuntu-latest
-    if: ${{ needs.setup-and-validate.outputs.affected != '' }}
+    if: ${{ needs.determine-affected.outputs.affected != '' }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -132,11 +203,18 @@ jobs:
         uses: ./.github/actions/setup
         with:
           setup-build-cache: true
+          cache-key: ${{ needs.setup-environment.outputs.cache-key }}
+        continue-on-error: false
 
       # Build only workspace packages (no environment variables needed)
       # Apps will be built by Vercel during deployment with proper env vars
       - name: Build packages only
-        run: pnpm turbo run build --filter="@peakhealth/ui" --filter="@peakhealth/auth-types" --filter="@peakhealth/auth-utils"
+        run: |
+          # Try to build with cache first, fallback to clean build if needed
+          pnpm turbo run build --filter="@peakhealth/ui" --filter="@peakhealth/auth-types" --filter="@peakhealth/auth-utils" || {
+            echo "Build failed, trying clean build..."
+            pnpm turbo run build --filter="@peakhealth/ui" --filter="@peakhealth/auth-types" --filter="@peakhealth/auth-utils" --force
+          }
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
