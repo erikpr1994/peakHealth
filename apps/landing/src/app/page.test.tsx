@@ -2,6 +2,10 @@ import { describe, expect, it, vi } from 'vitest';
 import { render } from '@testing-library/react';
 import React from 'react';
 
+// Type for mock headers - we need to cast to any for testing purposes
+
+type MockHeaders = Headers;
+
 // Mock next/navigation
 vi.mock('next/navigation', () => ({
   redirect: vi.fn(),
@@ -24,8 +28,7 @@ describe('RootPage', () => {
     const mockHeaders = {
       get: vi.fn().mockReturnValue('en-US,en;q=0.9'),
     };
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    vi.mocked(headers).mockResolvedValue(mockHeaders as any);
+    vi.mocked(headers).mockResolvedValue(mockHeaders as unknown as MockHeaders);
 
     // Render the component (this should trigger the redirect)
     render(<RootPage />);
@@ -45,8 +48,8 @@ describe('RootPage', () => {
     const mockHeaders = {
       get: vi.fn().mockReturnValue('es-ES,es;q=0.9,en;q=0.8'),
     };
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    vi.mocked(headers).mockResolvedValue(mockHeaders as any);
+
+    vi.mocked(headers).mockResolvedValue(mockHeaders as unknown as MockHeaders);
 
     // Render the component (this should trigger the redirect)
     render(<RootPage />);
@@ -66,8 +69,8 @@ describe('RootPage', () => {
     const mockHeaders = {
       get: vi.fn().mockReturnValue('en-US,en;q=0.9,es;q=0.8'),
     };
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    vi.mocked(headers).mockResolvedValue(mockHeaders as any);
+
+    vi.mocked(headers).mockResolvedValue(mockHeaders as unknown as MockHeaders);
 
     // Render the component (this should trigger the redirect)
     render(<RootPage />);
@@ -87,8 +90,8 @@ describe('RootPage', () => {
     const mockHeaders = {
       get: vi.fn().mockReturnValue('es-ES,es;q=0.9,en;q=0.8'),
     };
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    vi.mocked(headers).mockResolvedValue(mockHeaders as any);
+
+    vi.mocked(headers).mockResolvedValue(mockHeaders as unknown as MockHeaders);
 
     // Render the component (this should trigger the redirect)
     render(<RootPage />);
@@ -108,8 +111,8 @@ describe('RootPage', () => {
     const mockHeaders = {
       get: vi.fn().mockReturnValue('fr-FR,fr;q=0.9'),
     };
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    vi.mocked(headers).mockResolvedValue(mockHeaders as any);
+
+    vi.mocked(headers).mockResolvedValue(mockHeaders as unknown as MockHeaders);
 
     // Render the component (this should trigger the redirect)
     render(<RootPage />);
@@ -129,8 +132,8 @@ describe('RootPage', () => {
     const mockHeaders = {
       get: vi.fn().mockReturnValue(null),
     };
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    vi.mocked(headers).mockResolvedValue(mockHeaders as any);
+
+    vi.mocked(headers).mockResolvedValue(mockHeaders as unknown as MockHeaders);
 
     // Render the component (this should trigger the redirect)
     render(<RootPage />);

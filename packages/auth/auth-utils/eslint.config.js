@@ -13,13 +13,14 @@ export default [
       parserOptions: {
         ecmaVersion: 2020,
         sourceType: 'module',
-        project: './tsconfig.json',
       },
       globals: {
         process: 'readonly',
         document: 'readonly',
         window: 'readonly',
         console: 'readonly',
+        URL: 'readonly',
+        URLSearchParams: 'readonly',
       },
     },
   },

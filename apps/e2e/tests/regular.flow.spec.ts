@@ -27,6 +27,7 @@ test.describe('Regular user flows', () => {
     await test.step('Access dashboard with authenticated session', async () => {
       await page.goto('http://localhost:3024/dashboard');
       await expect(page).toHaveURL(/localhost:3024\/dashboard/);
+
       await page.waitForTimeout(500);
       await expect(page).toHaveScreenshot({
         fullPage: true,
@@ -37,6 +38,7 @@ test.describe('Regular user flows', () => {
     await test.step('Navigate to routines page', async () => {
       await page.getByRole('button', { name: /routines/i }).click();
       await expect(page).toHaveURL(/localhost:3024\/routines/);
+
       await page.waitForTimeout(500);
       await expect(page).toHaveScreenshot({
         fullPage: true,
@@ -52,6 +54,7 @@ test.describe('Regular user flows', () => {
       await createButton.click();
 
       await expect(page).toHaveURL(/localhost:3024\/routines\/create/);
+
       await page.waitForTimeout(500);
       await expect(page).toHaveScreenshot({
         fullPage: true,
@@ -83,6 +86,7 @@ test.describe('Regular user flows', () => {
       await expect(page.locator('.peakhealth-toast-message')).toContainText('At least one workout');
       
       await expect(page).toHaveURL(/localhost:3024\/routines\/create/);
+
       await page.waitForTimeout(500);
       await expect(page.getByPlaceholder(/enter routine name/i)).toBeVisible();
       await expect(
@@ -93,6 +97,7 @@ test.describe('Regular user flows', () => {
     await test.step('Test successful routine creation with complete data', async () => {
       await page.reload();
       await expect(page).toHaveURL(/localhost:3024\/routines\/create/);
+
       await page.waitForTimeout(500);
       await expect(page).toHaveScreenshot({
         fullPage: true,
@@ -122,9 +127,10 @@ test.describe('Regular user flows', () => {
       await page.keyboard.press('Enter');
 
       // Wait a bit for the form to process the input
+
       await page.waitForTimeout(1000);
 
-      // Try multiple selectors to find the button
+      // Try to find the Add Strength Workout button
       const button = page.getByRole('button', {
         name: /Add Strength Workout/i,
       });

@@ -53,9 +53,9 @@ export default [
     },
   },
   {
-    files: ['**/*.test.ts', '**/*.test.tsx', '**/*.spec.ts', '**/*.spec.tsx'],
+    files: ['**/*.test.{js,jsx,ts,tsx}', '**/*.spec.{js,jsx,ts,tsx}'],
     rules: {
-      // Disable no-secrets rule for test files
+      // Disable problematic rules for test files
       'no-secrets/no-secrets': 'off',
     },
   },

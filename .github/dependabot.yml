@@ -1,3 +1,4 @@
+---
 # This is a Dependabot configuration file tailored for a JS/TS monorepo using pnpm.
 # Place this file in your repository at: .github/dependabot.yml
 
@@ -12,10 +13,6 @@ updates:
     commit-message:
       prefix: 'chore(actions)'
       include: 'scope'
-    reviewers:
-      - 'your-github-username' # Optional: Add reviewers
-    assignees:
-      - 'your-github-username' # Optional: Add assignees
 
   # --- PNPM (for Node.js/JavaScript/TypeScript Monorepo) ---
   # For a pnpm monorepo, you only need one entry pointing to the root directory.

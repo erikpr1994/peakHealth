@@ -1,25 +1,26 @@
 import 'server-only';
-import { ReadonlyHeaders } from 'next/dist/server/web/spec-extension/adapters/headers';
-import { ReadonlyRequestCookies } from 'next/dist/server/web/spec-extension/adapters/request-cookies';
 import { unstable_noStore as noStore } from 'next/cache';
 import { createSource } from '../../../generated/hypertune';
 import { getVercelOverride } from '../../../generated/hypertune.vercel';
 import { getAnonymousId } from './anonymousId';
 
-const hypertuneToken = process.env.NEXT_PUBLIC_HYPERTUNE_TOKEN;
+let hypertuneToken = process.env.NEXT_PUBLIC_HYPERTUNE_TOKEN;
 if (!hypertuneToken) {
-  throw new Error('NEXT_PUBLIC_HYPERTUNE_TOKEN is not defined');
+  if (process.env.NODE_ENV === 'test') {
+    hypertuneToken = 'mock-token-for-tests';
+  } else {
+    throw new Error('NEXT_PUBLIC_HYPERTUNE_TOKEN is not defined');
+  }
 }
 
 const hypertuneSource = createSource({
   token: hypertuneToken,
 });
 
-// eslint-disable-next-line no-unused-vars
-export default async function getHypertune(_params?: {
-  headers?: ReadonlyHeaders;
-  cookies?: ReadonlyRequestCookies;
-}): Promise<ReturnType<typeof hypertuneSource.root>> {
+export default async function getHypertune(
+  // eslint-disable-next-line no-unused-vars
+  _params?: Record<string, unknown>
+): Promise<ReturnType<typeof hypertuneSource.root>> {
   noStore();
   await hypertuneSource.initIfNeeded(); // Check for flag updates
 

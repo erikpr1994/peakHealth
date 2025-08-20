@@ -84,7 +84,53 @@ describe('RoutineDetail', (): void => {
         updatedAt: '2024-01-01',
         lastUsed: null,
       },
-      workouts: [],
+      workouts: [
+        {
+          id: 'workout-1',
+          name: 'Strength Workout',
+          type: 'strength' as const,
+          objective: 'Build strength',
+          order_index: 1,
+          schedule: {
+            selectedDays: ['monday', 'wednesday', 'friday'],
+            repeatPattern: 'weekdays',
+            repeatValue: '',
+            time: '09:00',
+          },
+          sections: [
+            {
+              id: 'section-1',
+              name: 'Warm Up',
+              type: 'warmup' as const,
+              exercises: [
+                {
+                  id: 'exercise-1',
+                  name: 'Push-ups',
+                  category: 'Bodyweight',
+                  muscle_groups: ['Chest', 'Triceps'],
+                  exerciseLibraryId: 'ex-1',
+                  sets: [
+                    {
+                      id: 'set-1',
+                      setNumber: 1,
+                      setType: 'normal',
+                      repType: 'fixed',
+                      reps: 10,
+                      weight: null,
+                      rpe: null,
+                      notes: '',
+                    },
+                  ],
+                  rest_timer: '90s',
+                  rest_after: '2 min',
+                  notes: '',
+                  progression_method: 'linear',
+                },
+              ],
+            },
+          ],
+        },
+      ],
     };
 
     mockRoutineService.getRoutineById.mockResolvedValue(mockRoutineData);
@@ -133,7 +179,53 @@ describe('RoutineDetail', (): void => {
         updatedAt: '2024-01-01',
         lastUsed: null,
       },
-      workouts: [],
+      workouts: [
+        {
+          id: 'workout-1',
+          name: 'Strength Workout',
+          type: 'strength' as const,
+          objective: 'Build strength',
+          order_index: 1,
+          schedule: {
+            selectedDays: ['monday', 'wednesday', 'friday'],
+            repeatPattern: 'weekdays',
+            repeatValue: '',
+            time: '09:00',
+          },
+          sections: [
+            {
+              id: 'section-1',
+              name: 'Warm Up',
+              type: 'warmup' as const,
+              exercises: [
+                {
+                  id: 'exercise-1',
+                  name: 'Push-ups',
+                  category: 'Bodyweight',
+                  muscle_groups: ['Chest', 'Triceps'],
+                  exerciseLibraryId: 'ex-1',
+                  sets: [
+                    {
+                      id: 'set-1',
+                      setNumber: 1,
+                      setType: 'normal',
+                      repType: 'fixed',
+                      reps: 10,
+                      weight: null,
+                      rpe: null,
+                      notes: '',
+                    },
+                  ],
+                  rest_timer: '90s',
+                  rest_after: '2 min',
+                  notes: '',
+                  progression_method: 'linear',
+                },
+              ],
+            },
+          ],
+        },
+      ],
     };
 
     mockRoutineService.getRoutineById.mockResolvedValue(mockRoutineData);

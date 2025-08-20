@@ -1,14 +1,17 @@
 // Using Next.js server-only features
 import 'server-only';
-import type { ReadonlyHeaders } from 'next/dist/server/web/spec-extension/adapters/headers';
-import type { ReadonlyRequestCookies } from 'next/dist/server/web/spec-extension/adapters/request-cookies';
 import { unstable_noStore as noStore } from 'next/cache';
 import { createSource, type Environment } from '../../../generated/hypertune';
 import { getVercelOverride } from '../../../generated/hypertune.vercel';
 
-const hypertuneToken = process.env.NEXT_PUBLIC_HYPERTUNE_TOKEN;
+let hypertuneToken = process.env.NEXT_PUBLIC_HYPERTUNE_TOKEN;
 if (!hypertuneToken) {
-  throw new Error('NEXT_PUBLIC_HYPERTUNE_TOKEN is not defined');
+  // In test environment, provide a mock token to prevent errors
+  if (process.env.NODE_ENV === 'test') {
+    hypertuneToken = 'mock-token-for-tests';
+  } else {
+    throw new Error('NEXT_PUBLIC_HYPERTUNE_TOKEN is not defined');
+  }
 }
 
 const hypertuneSource = createSource({
@@ -30,10 +33,9 @@ function getEnvironment(): Environment {
   }
 }
 
-export default async function getHypertune(params?: {
-  headers?: ReadonlyHeaders;
-  cookies?: ReadonlyRequestCookies;
-}): Promise<ReturnType<typeof hypertuneSource.root>> {
+export default async function getHypertune(
+  params?: Record<string, unknown>
+): Promise<ReturnType<typeof hypertuneSource.root>> {
   noStore();
   await hypertuneSource.initIfNeeded(); // Check for flag updates
 
