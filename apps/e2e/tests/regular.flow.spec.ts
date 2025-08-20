@@ -34,8 +34,6 @@ test.describe('Regular user flows', () => {
     });
 
     await test.step('Navigate to routines page', async () => {
-      const _buttons = await page.getByRole('button').all();
-
       await page.getByRole('button', { name: /routines/i }).click();
       await expect(page).toHaveURL(/localhost:3024\/routines/);
       await page.waitForTimeout(500);

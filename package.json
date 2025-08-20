@@ -3,6 +3,7 @@
   "name": "peak-health",
   "private": true,
   "version": "0.0.0",
+  "type": "module",
   "scripts": {
     "dev": "node scripts/cleanup-dev-ports.mjs && turbo dev",
     "build": "turbo build",

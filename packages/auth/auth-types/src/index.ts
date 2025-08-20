@@ -39,13 +39,19 @@ export interface AuthState {
 // Auth context types
 export interface AuthContextType extends AuthState {
   login: (email: string, password: string) => Promise<void>;
+
   signup: (email: string, password: string, name: string) => Promise<void>;
   logout: () => Promise<void>;
+
   selectApp: (appKey: string) => Promise<void>;
   refreshSession: () => Promise<void>;
+
   hasRole: (role: string) => boolean;
+
   hasGroup: (group: string) => boolean;
+
   hasAnyRole: (roles: readonly string[]) => boolean;
+
   hasAnyGroup: (groups: readonly string[]) => boolean;
 }
 
