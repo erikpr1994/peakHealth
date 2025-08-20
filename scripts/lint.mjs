@@ -10,9 +10,9 @@ const args = process.argv.slice(2);
 
 // Run ESLint with the provided arguments
 try {
-  execSync(`eslint ${args.join(' ')}`, { 
+  execSync(`eslint ${args.join(' ')}`, {
     stdio: 'inherit',
-    env: process.env 
+    env: process.env,
   });
 } catch (error) {
   process.exit(error.status || 1);
