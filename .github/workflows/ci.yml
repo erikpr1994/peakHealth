@@ -96,8 +96,9 @@ jobs:
         if: ${{ steps.yaml-changes.outputs.yaml-changed == 'true' }}
         run: |
           echo "Linting YAML files..."
-          yamllint .github/workflows/ || exit 1
-          # Only lint root YAML files if they exist
+          # Lint all YAML files in the .github directory
+          yamllint .github/ || exit 1
+          # Lint root YAML files if they exist
           if ls *.yml *.yaml 1> /dev/null 2>&1; then
             yamllint *.yml *.yaml || exit 1
           else
