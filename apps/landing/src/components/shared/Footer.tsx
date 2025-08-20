@@ -15,18 +15,12 @@ export const Footer = (): React.JSX.Element => {
   const [signupUrl, setSignupUrl] = useState('');
   const [isMounted, setIsMounted] = useState(false);
 
-  // One-time initialization
+  // Initialize component and auth URLs
   useEffect((): void => {
-    setIsMounted(true);
+    setSignupUrl(getSignupUrl(undefined, locale));
     setCurrentYear(new Date().getFullYear().toString());
-  }, []);
-
-  // Update signup URL when locale changes
-  useEffect((): void => {
-    if (isMounted) {
-      setSignupUrl(getSignupUrl(undefined, locale));
-    }
-  }, [locale, isMounted]);
+    setIsMounted(true);
+  }, [locale]);
 
   return (
     <footer className={styles.footer}>

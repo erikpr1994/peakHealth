@@ -18,18 +18,12 @@ export const Header = (): React.JSX.Element => {
   const [loginUrl, setLoginUrl] = useState('');
   const [signupUrl, setSignupUrl] = useState('');
 
-  // One-time initialization
+  // Initialize component and auth URLs
   useEffect((): void => {
+    setLoginUrl(getLoginUrl(undefined, locale));
+    setSignupUrl(getSignupUrl(undefined, locale));
     setIsMounted(true);
-  }, []);
-
-  // Update auth URLs when locale changes
-  useEffect((): void => {
-    if (isMounted) {
-      setLoginUrl(getLoginUrl(undefined, locale));
-      setSignupUrl(getSignupUrl(undefined, locale));
-    }
-  }, [locale, isMounted]);
+  }, [locale]);
 
   const toggleMobileMenu = (): void => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
