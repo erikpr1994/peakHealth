@@ -34,7 +34,7 @@ const getAppConfigs = (): Record<string, AppConfig> => {
 
   const webRaw = normalizeEnvUrl(
     process.env.NEXT_PUBLIC_WEB_APP_URL,
-    isDevelopment ? 'localhost:3001' : 'peakhealth.es'
+    isDevelopment ? 'localhost:3024' : 'peakhealth.es'
   );
   const adminRaw = normalizeEnvUrl(
     process.env.NEXT_PUBLIC_ADMIN_APP_URL,
@@ -57,7 +57,7 @@ const getAppConfigs = (): Record<string, AppConfig> => {
 
   const webDomain = ensureDomain(
     extractDomain(webRaw) || webRaw,
-    'localhost:3001',
+    'localhost:3024',
     'peakhealth.es'
   );
   const adminDomain = ensureDomain(
@@ -244,7 +244,7 @@ export const buildAppRedirectUrl = (
       ? appConfig.domain
       : appKey === 'web'
         ? isDev
-          ? 'localhost:3001'
+          ? 'localhost:3024'
           : 'peakhealth.es'
         : appKey === 'admin'
           ? isDev

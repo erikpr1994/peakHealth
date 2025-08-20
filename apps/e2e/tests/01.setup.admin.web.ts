@@ -34,7 +34,7 @@ test.describe('Setup: Admin User Landing → Login → Web App', () => {
     // Select web app and verify navigation
     await test.step('Select web app and verify navigation', async () => {
       await page.getByTestId('app-card-web').click();
-      await expect(page).toHaveURL(/localhost:3001\/dashboard/i);
+      await expect(page).toHaveURL(/localhost:3024\/dashboard/i);
     });
 
     // Save storage state for admin web user

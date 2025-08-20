@@ -670,7 +670,7 @@ async function setupDevDatabase() {
     console.log('');
     console.log('🔗 Access your applications:');
     console.log('   • Auth App: http://localhost:3000');
-    console.log('   • Web App: http://localhost:3001');
+    console.log('   • Web App: http://localhost:3024');
     console.log('   • Admin Panel: http://localhost:3002');
     console.log('   • Pro Platform: http://localhost:3003');
     console.log('');
