@@ -10,7 +10,7 @@ const args = process.argv.slice(2);
 
 // Run ESLint with the provided arguments
 try {
-  execSync(`eslint ${args.join(' ')}`, {
+  execSync(`pnpm exec eslint ${args.join(' ')}`, {
     stdio: 'inherit',
     env: process.env,
   });
