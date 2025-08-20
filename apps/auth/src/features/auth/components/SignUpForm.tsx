@@ -12,7 +12,7 @@ import { useState } from 'react';
 // eslint-disable-next-line css-modules/no-unused-class
 import styles from './page.module.css';
 
-import { AuthCard, Input, Button } from '@/features/shared';
+import { AuthCard, Input, Button, BackButton } from '@/features/shared';
 import { Link, useRouter } from '@/i18n/navigation';
 
 const SignUpForm = (): React.JSX.Element => {
@@ -147,6 +147,10 @@ const SignUpForm = (): React.JSX.Element => {
 
   return (
     <AuthCard title={t('title')} subtitle={t('subtitle')}>
+      <div className={styles.backButtonContainer}>
+        <BackButton variant="secondary" size="sm" />
+      </div>
+
       <form onSubmit={handleSubmit} className={styles.form}>
         <div className={styles.nameGrid}>
           <div>

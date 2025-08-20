@@ -9,7 +9,7 @@ import { useEffect, useState } from 'react';
 
 import styles from './app-selector.module.css';
 
-import { AuthCard } from '@/features/shared';
+import { AuthCard, BackButton } from '@/features/shared';
 import { useRouter } from '@/i18n/navigation';
 
 interface AppOption {
@@ -265,6 +265,10 @@ const AppSelector = (): React.JSX.Element => {
         })}
         variant="full-width"
       >
+        <div className={styles.backButtonContainer}>
+          <BackButton variant="secondary" size="sm" />
+        </div>
+
         {accessibleApps.length === 0 ? (
           <div className={styles.noAppsContainer}>
             <p className={styles.noAppsText}>{t('noApps.message')}</p>
