@@ -2,7 +2,7 @@
 
 import { SWRProvider } from './SWRProvider';
 import { AuthProvider } from '@/features/auth/context/AuthContext';
-import { ToastProvider } from '@peakhealth/ui/toast';
+import { ToastProvider } from '@peakhealth/ui';
 
 interface ProvidersProps {
   children: React.ReactNode;

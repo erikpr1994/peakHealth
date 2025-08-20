@@ -3,11 +3,19 @@ import { vi } from 'vitest';
 import Routines from './Routines';
 import { routineService } from '../../services/routineService';
 import { WorkoutDay } from '../../types';
+import { ToastProvider } from '@peakhealth/ui';
 
 // Mock dependencies
 vi.mock('../../services/routineService');
 
 const mockRoutineService = vi.mocked(routineService);
+
+// Test wrapper with providers
+const renderWithProviders = (
+  component: React.ReactElement
+): ReturnType<typeof render> => {
+  return render(<ToastProvider>{component}</ToastProvider>);
+};
 
 describe('Routines', () => {
   const mockWorkoutDays: WorkoutDay[] = [
@@ -102,14 +110,14 @@ describe('Routines', () => {
         })
     );
 
-    render(<Routines />);
+    renderWithProviders(<Routines />);
     expect(screen.getByText(/loading routines/i)).toBeInTheDocument();
   });
 
   it('should render routines list after loading', async () => {
     mockRoutineService.getUserRoutines.mockResolvedValue(mockRoutines);
 
-    render(<Routines />);
+    renderWithProviders(<Routines />);
 
     await waitFor(() => {
       expect(screen.getByText('Strength Training')).toBeInTheDocument();
@@ -122,7 +130,7 @@ describe('Routines', () => {
       new Error('Failed to fetch routines')
     );
 
-    render(<Routines />);
+    renderWithProviders(<Routines />);
 
     await waitFor(() => {
       expect(
@@ -137,7 +145,7 @@ describe('Routines', () => {
     });
     mockRoutineService.getUserRoutines.mockResolvedValue(mockRoutines);
 
-    render(<Routines />);
+    renderWithProviders(<Routines />);
 
     await waitFor(() => {
       expect(scrollToSpy).toHaveBeenCalledWith(0, 0);

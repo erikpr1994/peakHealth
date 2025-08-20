@@ -13,7 +13,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { useToast } from '@peakhealth/ui/toast';
+import { useToast } from '@peakhealth/ui';
 import { Routine } from '@/features/routines/types';
 import { routineService } from '../../../services/routineService';
 import ActiveRoutineCard from './ActiveRoutineCard';
@@ -74,7 +74,7 @@ const RoutinesList = ({
       await routineService.setActiveRoutine(routineId);
 
       // If we get here, the database update was successful
-    } catch (_) {
+    } catch {
       // Error occurred while setting active routine
 
       // Revert the optimistic update on error
@@ -90,7 +90,7 @@ const RoutinesList = ({
       // Show error message to user
       showToast({
         message: 'Failed to set routine as active. Please try again.',
-        variant: 'error'
+        variant: 'error',
       });
     }
   };
@@ -100,11 +100,11 @@ const RoutinesList = ({
       await routineService.toggleRoutineFavorite(routineId);
       // Refresh the data to get updated favorite status
       onRoutineUpdate?.();
-    } catch (_) {
+    } catch {
       // Error occurred while toggling favorite
       showToast({
         message: 'Failed to toggle favorite status. Please try again.',
-        variant: 'error'
+        variant: 'error',
       });
     }
   };

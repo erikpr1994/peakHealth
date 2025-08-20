@@ -12,7 +12,7 @@ import { routineService } from '../../services/routineService';
 import { DatabaseWorkout } from '../../types/database';
 import { transformDatabaseWorkout } from '../../utils/dataTransformers';
 import { useAuth } from '@/features/auth/context/AuthContext';
-import { useToast } from '@peakhealth/ui/toast';
+import { useToast } from '@peakhealth/ui';
 
 // Import our new components and hooks
 import RoutineHeader from './components/RoutineHeader';
@@ -513,8 +513,9 @@ const RoutineCreation = ({
     // Check authentication first
     if (!isAuthenticated || !user) {
       showToast({
-        message: 'You must be logged in to create a routine. Please log in first.',
-        variant: 'error'
+        message:
+          'You must be logged in to create a routine. Please log in first.',
+        variant: 'error',
       });
       return;
     }
@@ -532,7 +533,7 @@ const RoutineCreation = ({
     if (validationError) {
       showToast({
         message: validationError.message,
-        variant: 'error'
+        variant: 'error',
       });
       return;
     }
@@ -556,13 +557,13 @@ const RoutineCreation = ({
       await routineService.createRoutine(routineData);
       showToast({
         message: 'Routine saved successfully!',
-        variant: 'success'
+        variant: 'success',
       });
       router.push('/routines');
     } catch (error) {
       showToast({
         message: `Failed to save routine: ${error instanceof Error ? error.message : 'Unknown error'}`,
-        variant: 'error'
+        variant: 'error',
       });
     } finally {
       // setIsSaving(false); // This state variable is not defined in the original file
