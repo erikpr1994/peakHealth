@@ -6,3 +6,5 @@ export {
   Divider,
   Link,
 } from './components/AuthCard';
+
+export { BackButton } from './components/BackButton';

@@ -5,16 +5,15 @@ import React from 'react';
 
 import styles from './access-denied.module.css';
 
-import { AuthCard, Button } from '@/features/shared';
+import { AuthCard, Button, BackButton } from '@/features/shared';
 import { Link, useRouter } from '@/i18n/navigation';
 
 const AccessDeniedPage = (): React.JSX.Element => {
   const t = useTranslations('accessDenied');
-  const tErrors = useTranslations('errors');
   const router = useRouter();
 
   const handleLogout = (): void => {
-    void (async () => {
+    void (async (): Promise<void> => {
       try {
         await fetch('/api/auth/logout', {
           method: 'POST',
@@ -29,15 +28,14 @@ const AccessDeniedPage = (): React.JSX.Element => {
   };
 
   return (
-    <AuthCard
-      title={t('title')}
-      subtitle={t('subtitle')}
-    >
+    <AuthCard title={t('title')} subtitle={t('subtitle')}>
+      <div className={styles.backButtonContainer}>
+        <BackButton variant="secondary" size="sm" />
+      </div>
+
       <div className={styles.content}>
         <h3 className={styles.title}>{t('heading')}</h3>
-        <p className={styles.message}>
-          {t('message')}
-        </p>
+        <p className={styles.message}>{t('message')}</p>
 
         <div className={styles.actions}>
           <Button onClick={handleLogout} className={styles.logoutButton}>
@@ -53,4 +51,3 @@ const AccessDeniedPage = (): React.JSX.Element => {
 };
 
 export { AccessDeniedPage };
-

@@ -6,6 +6,12 @@
   padding: 1rem;
 }
 
+.backButtonContainer {
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: 1rem;
+}
+
 .form {
   display: flex;
   flex-direction: column;
