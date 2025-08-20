@@ -7,7 +7,11 @@
       "outputs": [".next/**", "!.next/cache/**", "dist/**"]
     },
     "lint": {
-      "dependsOn": ["^build"],
+      "dependsOn": [
+        "@peakhealth/ui#build",
+        "@peakhealth/auth-types#build",
+        "@peakhealth/auth-utils#build"
+      ],
       "inputs": [
         "src/**/*.{ts,tsx,js,jsx}",
         "**/*.config.{ts,js,mjs}",
@@ -15,7 +19,11 @@
       ]
     },
     "type-check": {
-      "dependsOn": ["^build"],
+      "dependsOn": [
+        "@peakhealth/ui#build",
+        "@peakhealth/auth-types#build",
+        "@peakhealth/auth-utils#build"
+      ],
       "inputs": [
         "src/**/*.{ts,tsx}",
         "**/*.config.{ts,js,mjs}",
@@ -40,7 +48,11 @@
       "cache": false
     },
     "test": {
-      "dependsOn": ["^build"],
+      "dependsOn": [
+        "@peakhealth/ui#build",
+        "@peakhealth/auth-types#build",
+        "@peakhealth/auth-utils#build"
+      ],
       "outputs": [],
       "inputs": [
         "src/**/*.{ts,tsx,js,jsx}",

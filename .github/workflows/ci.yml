@@ -115,16 +115,14 @@ jobs:
         with:
           setup-build-cache: true
 
-      - name: Build
-        run: pnpm build
+      - name: Build packages only
+        run: pnpm turbo run build --filter="@peakhealth/ui" --filter="@peakhealth/auth-types" --filter="@peakhealth/auth-utils"
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
         with:
           name: build-artifacts
           path: |
-            apps/*/dist
-            apps/*/.next
             packages/*/dist
           retention-days: 1
 
