@@ -8,8 +8,7 @@ test.describe('Regular user flows', () => {
   }) => {
     const consoleLogs: string[] = [];
     const errors: string[] = [];
-    const alerts: string[] = [];
-
+    
     page.on('console', msg => {
       consoleLogs.push(`${msg.type()}: ${msg.text()}`);
     });
@@ -17,9 +16,11 @@ test.describe('Regular user flows', () => {
     page.on('pageerror', error => {
       errors.push(error.message);
     });
-
+    
+    // We're now using toasts instead of dialogs, but keeping the listener
+    // in case there are any unexpected dialogs
     page.on('dialog', dialog => {
-      alerts.push(dialog.message());
+      // Accept any dialogs that might appear
       dialog.accept();
     });
 
@@ -79,7 +80,11 @@ test.describe('Regular user flows', () => {
       await page.getByRole('button', { name: /save routine/i }).click();
 
       await page.waitForTimeout(1000);
-
+      
+      // Check for validation error toast
+      await expect(page.locator('.peakhealth-toast-message')).toBeVisible();
+      await expect(page.locator('.peakhealth-toast-message')).toContainText('At least one workout');
+      
       await expect(page).toHaveURL(/localhost:3024\/routines\/create/);
 
       await page.waitForTimeout(500);
@@ -198,6 +203,10 @@ test.describe('Regular user flows', () => {
       });
 
       await page.getByRole('button', { name: /save routine/i }).click();
+      
+      // Check for success toast
+      await expect(page.locator('.peakhealth-toast-message')).toBeVisible();
+      await expect(page.locator('.peakhealth-toast-message')).toContainText('Routine saved successfully');
 
       await expect(page).not.toHaveURL(/localhost:3024\/routines\/create/);
       await expect(page).toHaveURL(/localhost:3024\/routines/);

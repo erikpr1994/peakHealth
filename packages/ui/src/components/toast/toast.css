@@ -34,7 +34,7 @@
 
 .peakhealth-toast-content {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   gap: 0.5rem;
 }
 
@@ -45,7 +45,6 @@
   justify-content: center;
   width: 1.25rem;
   height: 1.25rem;
-  margin-top: 0.125rem;
 }
 
 .peakhealth-toast-message {
@@ -54,6 +53,8 @@
   line-height: 1.25rem;
   color: #111827;
   word-wrap: break-word;
+  display: flex;
+  align-items: center;
 }
 
 .peakhealth-toast-close {
@@ -89,59 +90,59 @@
 }
 
 .peakhealth-toast--success {
-  background-color: hsl(142 76% 36% / 0.1);
-  border-color: hsl(142 76% 36% / 0.2);
-  color: hsl(142 76% 36%);
+  background-color: hsl(142 76% 36%);
+  border-color: hsl(142 76% 36%);
+  color: white;
 }
 
 .peakhealth-toast--success .peakhealth-toast-icon {
-  color: hsl(142 76% 36%);
+  color: white;
 }
 
 .peakhealth-toast--success .peakhealth-toast-message {
-  color: hsl(142 76% 36%);
+  color: white;
 }
 
 .peakhealth-toast--error {
-  background-color: hsl(0 84% 60% / 0.1);
-  border-color: hsl(0 84% 60% / 0.2);
-  color: hsl(0 84% 60%);
+  background-color: hsl(0 84% 60%);
+  border-color: hsl(0 84% 60%);
+  color: white;
 }
 
 .peakhealth-toast--error .peakhealth-toast-icon {
-  color: hsl(0 84% 60%);
+  color: white;
 }
 
 .peakhealth-toast--error .peakhealth-toast-message {
-  color: hsl(0 84% 60%);
+  color: white;
 }
 
 .peakhealth-toast--warning {
-  background-color: hsl(38 92% 50% / 0.1);
-  border-color: hsl(38 92% 50% / 0.2);
-  color: hsl(38 92% 50%);
+  background-color: hsl(38 92% 50%);
+  border-color: hsl(38 92% 50%);
+  color: white;
 }
 
 .peakhealth-toast--warning .peakhealth-toast-icon {
-  color: hsl(38 92% 50%);
+  color: white;
 }
 
 .peakhealth-toast--warning .peakhealth-toast-message {
-  color: hsl(38 92% 50%);
+  color: white;
 }
 
 .peakhealth-toast--info {
-  background-color: hsl(217 91% 60% / 0.1);
-  border-color: hsl(217 91% 60% / 0.2);
-  color: hsl(217 91% 60%);
+  background-color: hsl(217 91% 60%);
+  border-color: hsl(217 91% 60%);
+  color: white;
 }
 
 .peakhealth-toast--info .peakhealth-toast-icon {
-  color: hsl(217 91% 60%);
+  color: white;
 }
 
 .peakhealth-toast--info .peakhealth-toast-message {
-  color: hsl(217 91% 60%);
+  color: white;
 }
 
 /* Responsive Design */

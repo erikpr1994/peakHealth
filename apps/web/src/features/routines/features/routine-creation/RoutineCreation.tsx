@@ -12,6 +12,7 @@ import { routineService } from '../../services/routineService';
 import { DatabaseWorkout } from '../../types/database';
 import { transformDatabaseWorkout } from '../../utils/dataTransformers';
 import { useAuth } from '@/features/auth/context/AuthContext';
+import { useToast } from '@peakhealth/ui';
 
 // Import our new components and hooks
 import RoutineHeader from './components/RoutineHeader';
@@ -37,6 +38,7 @@ const RoutineCreation = ({
 }: RoutineCreationProps): React.ReactElement => {
   const router = useRouter();
   const { isAuthenticated, user } = useAuth();
+  const { showToast } = useToast();
 
   // Routine metadata state
   const [name, setName] = useState('');
@@ -510,7 +512,11 @@ const RoutineCreation = ({
   const handleSaveRoutine = async (): Promise<void> => {
     // Check authentication first
     if (!isAuthenticated || !user) {
-      alert('You must be logged in to create a routine. Please log in first.');
+      showToast({
+        message:
+          'You must be logged in to create a routine. Please log in first.',
+        variant: 'error',
+      });
       return;
     }
 
@@ -525,7 +531,10 @@ const RoutineCreation = ({
     });
 
     if (validationError) {
-      alert(validationError.message);
+      showToast({
+        message: validationError.message,
+        variant: 'error',
+      });
       return;
     }
 
@@ -546,12 +555,16 @@ const RoutineCreation = ({
     try {
       // setIsSaving(true); // This state variable is not defined in the original file
       await routineService.createRoutine(routineData);
-      alert('Routine saved successfully!');
+      showToast({
+        message: 'Routine saved successfully!',
+        variant: 'success',
+      });
       router.push('/routines');
     } catch (error) {
-      alert(
-        `Failed to save routine: ${error instanceof Error ? error.message : 'Unknown error'}`
-      );
+      showToast({
+        message: `Failed to save routine: ${error instanceof Error ? error.message : 'Unknown error'}`,
+        variant: 'error',
+      });
     } finally {
       // setIsSaving(false); // This state variable is not defined in the original file
     }
