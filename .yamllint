@@ -20,11 +20,6 @@ rules:
   # Comments
   comments-indentation: enable
 
-  # Quoting
-  quotes:
-    quote-type: single
-    check-keys: false
-
   # Empty mapping values
   empty-lines:
     max: 1
