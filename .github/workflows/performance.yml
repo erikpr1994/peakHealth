@@ -21,7 +21,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Setup environment
-        uses: ./.github/workflows/reusable-setup.yml
+        uses: ./.github/actions/setup
 
       - name: Build with bundle analysis
         run: |
@@ -121,7 +121,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Setup environment
-        uses: ./.github/workflows/reusable-setup.yml
+        uses: ./.github/actions/setup
 
       - name: Build
         run: pnpm build
@@ -207,7 +207,7 @@ jobs:
           fetch-depth: 0
 
       - name: Setup environment
-        uses: ./.github/workflows/reusable-setup.yml
+        uses: ./.github/actions/setup
 
       - name: Build current branch
         run: pnpm build

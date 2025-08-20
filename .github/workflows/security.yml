@@ -39,7 +39,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Setup environment
-        uses: ./.github/workflows/reusable-setup.yml
+        uses: ./.github/actions/setup
 
       # Run npm audit
       - name: Run pnpm audit
@@ -168,7 +168,7 @@ jobs:
           languages: ${{ matrix.language }}
 
       - name: Setup environment
-        uses: ./.github/workflows/reusable-setup.yml
+        uses: ./.github/actions/setup
 
       - name: Build
         run: pnpm build
