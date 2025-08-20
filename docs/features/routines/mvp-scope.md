@@ -27,7 +27,7 @@ This document defines the Minimum Viable Product (MVP) scope for the Routines fe
 
 ## 📋 **MVP Features**
 
-### **✅ Core Features (Must Have)**
+### **✅ Core Features (Implemented)**
 
 #### **1. Routine Management**
 
@@ -49,7 +49,7 @@ This document defines the Minimum Viable Product (MVP) scope for the Routines fe
 - [x] Configure advanced progression methods (linear, dual, inverse pyramid, myo-reps, widowmaker, AMRAP)
 - [x] Reorder workouts and sections
 
-#### **3. Data Persistence**
+#### **3. Data Persistence (To Be Implemented)**
 
 - [ ] Database schema implementation
 - [ ] API endpoints for CRUD operations
@@ -66,7 +66,7 @@ This document defines the Minimum Viable Product (MVP) scope for the Routines fe
 - [x] Basic loading states and error handling
 - [x] Modal dialogs and form validation
 
-### **🔄 Enhanced Features (Should Have)**
+### **🔄 Enhanced Features (Partially Implemented)**
 
 #### **5. Exercise Library Integration**
 
@@ -92,12 +92,14 @@ This document defines the Minimum Viable Product (MVP) scope for the Routines fe
 
 - [ ] Add basic curated routine templates (UI ready, needs data)
 
-### **❌ Excluded Features (Future Releases)**
+### **❌ Excluded Features (Future Releases)** 🔄 **RECOMMENDED**
 
 #### **Advanced Features**
 
 - Routine sharing and collaboration
-- AI recommendations
+- Progressive overload tracking
+- Wearable device integration
+- AI recommendations and personalization
 - Advanced analytics
 - Social features
 - Import/export functionality
@@ -225,21 +227,23 @@ This document defines the Minimum Viable Product (MVP) scope for the Routines fe
 
 ### **Phase 2: Enhanced Features**
 
-- Trail running workout creation
-- Advanced progression methods
-- Routine templates
-- Enhanced progress tracking
+- [x] Trail running workout creation ✅ **IMPLEMENTED**
+- [x] Advanced progression methods ✅ **IMPLEMENTED**
+- [ ] Routine templates
+- [ ] Enhanced progress tracking
 
-### **Phase 3: Social Features**
+### **Phase 3: Social Features** 🔄 **RECOMMENDED**
 
 - Routine sharing
 - Community features
 - Collaboration tools
 - Social analytics
 
-### **Phase 4: Advanced Features**
+### **Phase 4: Advanced Features** 🔄 **RECOMMENDED**
 
-- AI recommendations
+- Progressive overload tracking
+- Wearable device integration
+- AI recommendations and personalization
 - Advanced analytics
 - Import/export functionality
 - Offline support
@@ -251,3 +255,4 @@ This document defines the Minimum Viable Product (MVP) scope for the Routines fe
 - [Questions & Feedback](./questions.md)
 - [User App MVP Scope](../../app-overview/user-app/mvp-scope.md)
 - [Project TODO](../../todo.md)
+
