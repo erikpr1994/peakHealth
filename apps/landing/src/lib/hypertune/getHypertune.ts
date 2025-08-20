@@ -18,7 +18,8 @@ const hypertuneSource = createSource({
 });
 
 export default async function getHypertune(
-  params?: Record<string, unknown>
+  // eslint-disable-next-line no-unused-vars
+  _params?: Record<string, unknown>
 ): Promise<ReturnType<typeof hypertuneSource.root>> {
   noStore();
   await hypertuneSource.initIfNeeded(); // Check for flag updates
