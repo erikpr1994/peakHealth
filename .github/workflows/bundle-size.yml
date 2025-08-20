@@ -22,6 +22,8 @@ jobs:
 
       - name: Setup environment
         uses: ./.github/workflows/reusable-setup.yml
+        with:
+          setup-build-cache: true
 
       - name: Build with bundle analysis
         run: |
