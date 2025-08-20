@@ -92,10 +92,8 @@ export class Page {
       animations: options?.animations ?? 'disabled',
     };
 
-    await expect(this.page).toHaveScreenshot(
-      name || 'screenshot',
-      screenshotOptions
-    );
+    const screenshotName = name ? `${name}.png` : 'screenshot.png';
+    await expect(this.page).toHaveScreenshot(screenshotName, screenshotOptions);
   }
 
   /**

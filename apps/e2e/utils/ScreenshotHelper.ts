@@ -19,7 +19,8 @@ export class ScreenshotHelper {
    * @returns Promise that resolves when the screenshot is taken
    */
   async takeFullPageScreenshot(name?: string): Promise<void> {
-    await expect(this.page).toHaveScreenshot(name || 'screenshot', {
+    const screenshotName = name ? `${name}.png` : 'screenshot.png';
+    await expect(this.page).toHaveScreenshot(screenshotName, {
       fullPage: true,
       animations: 'disabled',
     });
@@ -34,7 +35,8 @@ export class ScreenshotHelper {
   async takeElementScreenshot(selector: string, name?: string): Promise<void> {
     const locator = this.page.locator(selector);
     await expect(locator).toBeVisible();
-    await expect(locator).toHaveScreenshot(name || 'element-screenshot', {
+    const screenshotName = name ? `${name}.png` : 'element-screenshot.png';
+    await expect(locator).toHaveScreenshot(screenshotName, {
       animations: 'disabled',
     });
   }
@@ -47,7 +49,8 @@ export class ScreenshotHelper {
    */
   async takeLocatorScreenshot(locator: Locator, name?: string): Promise<void> {
     await expect(locator).toBeVisible();
-    await expect(locator).toHaveScreenshot(name || 'locator-screenshot', {
+    const screenshotName = name ? `${name}.png` : 'locator-screenshot.png';
+    await expect(locator).toHaveScreenshot(screenshotName, {
       animations: 'disabled',
     });
   }
@@ -58,7 +61,8 @@ export class ScreenshotHelper {
    * @returns Promise that resolves when the screenshot is taken
    */
   async takeViewportScreenshot(name?: string): Promise<void> {
-    await expect(this.page).toHaveScreenshot(name || 'viewport-screenshot', {
+    const screenshotName = name ? `${name}.png` : 'viewport-screenshot.png';
+    await expect(this.page).toHaveScreenshot(screenshotName, {
       fullPage: false,
       animations: 'disabled',
     });
@@ -79,7 +83,8 @@ export class ScreenshotHelper {
       this.page.locator(selector)
     );
 
-    await expect(this.page).toHaveScreenshot(name || 'masked-screenshot', {
+    const screenshotName = name ? `${name}.png` : 'masked-screenshot.png';
+    await expect(this.page).toHaveScreenshot(screenshotName, {
       fullPage: true,
       animations: 'disabled',
       mask: maskLocators,
@@ -96,7 +101,8 @@ export class ScreenshotHelper {
     name?: string,
     timeout: number = 30000
   ): Promise<void> {
-    await expect(this.page).toHaveScreenshot(name || 'timeout-screenshot', {
+    const screenshotName = name ? `${name}.png` : 'timeout-screenshot.png';
+    await expect(this.page).toHaveScreenshot(screenshotName, {
       fullPage: true,
       animations: 'disabled',
       timeout,
