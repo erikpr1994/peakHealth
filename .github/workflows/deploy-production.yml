@@ -57,7 +57,6 @@ jobs:
     name: Deploy ${{ matrix.app }} to Production
     needs: detect-changes
     runs-on: ubuntu-latest
-    if: contains(needs.detect-changes.outputs.changed-apps, matrix.app) || github.event_name == 'workflow_dispatch'
     environment:
       name: production
       url: ${{ steps.deploy.outputs.url }}
@@ -89,6 +88,7 @@ jobs:
             sentry-project-secret: SENTRY_PROJECT_LANDING
             app-name: Landing App
             package-name: '@peakhealth/landing'
+    if: contains(needs.detect-changes.outputs.changed-apps, matrix.app) || github.event_name == 'workflow_dispatch'
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
