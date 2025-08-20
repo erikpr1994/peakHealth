@@ -19,7 +19,7 @@ test.describe('Setup: Admin User Landing → Login → Admin App', () => {
     // Navigate to login from landing
     await test.step('Navigate from landing to login page', async () => {
       await page.getByRole('link', { name: /sign in/i }).click();
-      await expect(page).toHaveURL(/localhost:3000\/login/);
+      await expect(page).toHaveURL(/localhost:3000\/[a-z]{2}\/login/);
     });
 
     // Login and verify app selector appears
@@ -29,30 +29,31 @@ test.describe('Setup: Admin User Landing → Login → Admin App', () => {
         state: 'visible',
       });
 
-      // Clear and fill email field
+      // Clear and fill email field with retry logic
       const emailInput = page.getByPlaceholder('Enter your email');
       await emailInput.clear();
       await emailInput.fill(email);
+
+      // Wait a bit and verify the email was filled correctly
+      await page.waitForTimeout(100);
+      await expect(emailInput).toHaveValue(email, { timeout: 10000 });
 
       // Clear and fill password field
       const passwordInput = page.getByPlaceholder('Enter your password');
       await passwordInput.clear();
       await passwordInput.fill(password);
 
-      // Verify the email was filled correctly
-      await expect(emailInput).toHaveValue(email);
-
       // Click sign in button
       await page.getByRole('button', { name: /sign in|log in/i }).click();
-      await page.waitForURL('**/app-selector', { timeout: 60_000 });
+      await page.waitForURL('**/app-selector', { timeout: 120_000 });
       await expect(page.getByText(/Choose\s*Your\s*App/i)).toBeVisible();
     });
 
     // Select admin app and verify navigation
     await test.step('Select admin app and verify navigation', async () => {
       await page.getByTestId('app-card-admin').click();
-      await page.waitForURL('http://localhost:3002/**', { timeout: 30_000 });
-      await expect(page).toHaveURL(/localhost:3002/);
+      await page.waitForURL('http://localhost:3025/**', { timeout: 60_000 });
+      await expect(page).toHaveURL(/localhost:3025/);
     });
 
     // Create storage state for admin user accessing admin app

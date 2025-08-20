@@ -7,11 +7,11 @@ test('landing CTA navigates to auth signup and can go back to login', async ({
   await expect(page).toHaveTitle(/Peak Health/i);
   // Click primary CTA 'Get Started Free'
   await page.getByRole('link', { name: /get started free/i }).click();
-  await expect(page).toHaveURL(/localhost:3000\/signup/i);
+  await expect(page).toHaveURL(/localhost:3000\/[a-z]{2}\/signup/i);
   // Navigate to login from signup footer link
   await page
     .getByRole('link', { name: /sign in|login/i })
     .first()
     .click();
-  await expect(page).toHaveURL(/localhost:3000\/login/i);
+  await expect(page).toHaveURL(/localhost:3000\/[a-z]{2}\/login/i);
 });
