@@ -1,6 +1,7 @@
 /**
  * Auth app URL configuration
  */
+import { routing } from '@/i18n/routing';
 
 const getAuthAppUrl = (): string => {
   // In development, auth app runs on port 3000
@@ -12,9 +13,16 @@ const getAuthAppUrl = (): string => {
   return 'https://auth.peakhealth.es';
 };
 
-export const getLoginUrl = (returnUrl?: string): string => {
+/**
+ * Get the login URL with the current locale
+ * @param returnUrl Optional return URL after login
+ * @param locale The locale to use (defaults to 'en' if not provided)
+ * @returns The login URL with locale
+ */
+export const getLoginUrl = (returnUrl?: string, locale?: string): string => {
   const authUrl = getAuthAppUrl();
-  const loginUrl = `${authUrl}/login`;
+  const currentLocale = locale || routing.defaultLocale;
+  const loginUrl = `${authUrl}/${currentLocale}/login`;
 
   if (returnUrl) {
     return `${loginUrl}?returnUrl=${encodeURIComponent(returnUrl)}`;
@@ -23,9 +31,16 @@ export const getLoginUrl = (returnUrl?: string): string => {
   return loginUrl;
 };
 
-export const getSignupUrl = (returnUrl?: string): string => {
+/**
+ * Get the signup URL with the current locale
+ * @param returnUrl Optional return URL after signup
+ * @param locale The locale to use (defaults to 'en' if not provided)
+ * @returns The signup URL with locale
+ */
+export const getSignupUrl = (returnUrl?: string, locale?: string): string => {
   const authUrl = getAuthAppUrl();
-  const signupUrl = `${authUrl}/signup`;
+  const currentLocale = locale || routing.defaultLocale;
+  const signupUrl = `${authUrl}/${currentLocale}/signup`;
 
   if (returnUrl) {
     return `${signupUrl}?returnUrl=${encodeURIComponent(returnUrl)}`;

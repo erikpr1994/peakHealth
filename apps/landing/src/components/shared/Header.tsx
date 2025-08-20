@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
 import { Link } from '@/i18n/navigation';
 
 import styles from './Header.module.css';
@@ -11,18 +11,19 @@ import { LanguageSwitcher } from './LanguageSwitcher';
 
 export const Header = (): React.JSX.Element => {
   const t = useTranslations('navigation');
+  const locale = useLocale();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isClosing, setIsClosing] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
   const [loginUrl, setLoginUrl] = useState('');
   const [signupUrl, setSignupUrl] = useState('');
 
-  // Set mounted state and auth URLs on client side only
+  // Initialize component and auth URLs
   useEffect((): void => {
+    setLoginUrl(getLoginUrl(undefined, locale));
+    setSignupUrl(getSignupUrl(undefined, locale));
     setIsMounted(true);
-    setLoginUrl(getLoginUrl());
-    setSignupUrl(getSignupUrl());
-  }, []);
+  }, [locale]);
 
   const toggleMobileMenu = (): void => {
     setIsMobileMenuOpen(!isMobileMenuOpen);

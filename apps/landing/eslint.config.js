@@ -27,6 +27,7 @@ export default [
         window: 'readonly',
         HTMLButtonElement: 'readonly',
         Headers: 'readonly',
+        URL: 'readonly',
       },
     },
     rules: {
@@ -48,6 +49,13 @@ export default [
       ],
       // Disable problematic rules for this package
       'no-unsanitized/method': 'off',
+      'no-secrets/no-secrets': 'off',
+    },
+  },
+  {
+    files: ['**/*.test.ts', '**/*.test.tsx', '**/*.spec.ts', '**/*.spec.tsx'],
+    rules: {
+      // Disable no-secrets rule for test files
       'no-secrets/no-secrets': 'off',
     },
   },

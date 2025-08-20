@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
 import { Link } from '@/i18n/navigation';
 
 import styles from './Footer.module.css';
@@ -10,16 +10,17 @@ import { getSignupUrl } from '@/lib/auth';
 
 export const Footer = (): React.JSX.Element => {
   const t = useTranslations('footer');
+  const locale = useLocale();
   const [currentYear, setCurrentYear] = useState('');
   const [signupUrl, setSignupUrl] = useState('');
   const [isMounted, setIsMounted] = useState(false);
 
-  // Set values on client side only to prevent hydration mismatches
+  // Initialize component and auth URLs
   useEffect((): void => {
-    setIsMounted(true);
+    setSignupUrl(getSignupUrl(undefined, locale));
     setCurrentYear(new Date().getFullYear().toString());
-    setSignupUrl(getSignupUrl());
-  }, []);
+    setIsMounted(true);
+  }, [locale]);
 
   return (
     <footer className={styles.footer}>
