@@ -132,18 +132,6 @@ jobs:
     name: E2E Tests
     needs: build
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        shard: [1, 2, 3, 4]
-        include:
-          - shard: 1
-            tests: 'tests/01.setup.admin.web.ts'
-          - shard: 2
-            tests: 'tests/02.setup.admin.admin.ts'
-          - shard: 3
-            tests: 'tests/regular.flow.spec.ts'
-          - shard: 4
-            tests: 'tests/other.spec.ts'
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -159,113 +147,21 @@ jobs:
       - name: Install Playwright browsers
         run: pnpm --filter @peakhealth/e2e exec playwright install --with-deps
 
-      - name: Start Supabase
-        run: pnpm supabase:start
-
       - name: Setup dev database
         run: pnpm setup-dev-db
 
-      - name: Run E2E tests (shard ${{ matrix.shard }})
+      - name: Run E2E tests
         run: |
           cd apps/e2e
-          pnpm exec playwright test ${{ matrix.tests }} \
+          pnpm exec playwright test \
             --reporter=html,line \
-            --workers=1 \
-            --timeout=60000 \
+            --timeout=120000 \
             --retries=1
 
-      - name: Upload Playwright report (shard ${{ matrix.shard }})
+      - name: Upload Playwright report
         uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: playwright-report-shard-${{ matrix.shard }}
-          path: apps/e2e/playwright-report/
-          retention-days: 30
-
-  e2e-tests-parallel:
-    name: E2E Tests (Parallel)
-    needs: build
-    runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request'
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Setup environment
-        uses: ./.github/actions/setup
-
-      - name: Download build artifacts
-        uses: actions/download-artifact@v4
-        with:
-          name: build-artifacts
-
-      - name: Install Playwright browsers
-        run: pnpm --filter @peakhealth/e2e exec playwright install --with-deps
-
-      - name: Start Supabase
-        run: pnpm supabase:start
-
-      - name: Setup dev database
-        run: pnpm setup-dev-db
-
-      - name: Run E2E tests in parallel
-        run: |
-          cd apps/e2e
-          pnpm exec playwright test \
-            --reporter=html,line \
-            --workers=4 \
-            --timeout=60000 \
-            --retries=1 \
-            --shard=1/2
-
-      - name: Upload Playwright report (parallel)
-        uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: playwright-report-parallel
-          path: apps/e2e/playwright-report/
-          retention-days: 30
-
-  e2e-tests-parallel-2:
-    name: E2E Tests (Parallel 2)
-    needs: build
-    runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request'
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Setup environment
-        uses: ./.github/actions/setup
-
-      - name: Download build artifacts
-        uses: actions/download-artifact@v4
-        with:
-          name: build-artifacts
-
-      - name: Install Playwright browsers
-        run: pnpm --filter @peakhealth/e2e exec playwright install --with-deps
-
-      - name: Start Supabase
-        run: pnpm supabase:start
-
-      - name: Setup dev database
-        run: pnpm setup-dev-db
-
-      - name: Run E2E tests in parallel (shard 2)
-        run: |
-          cd apps/e2e
-          pnpm exec playwright test \
-            --reporter=html,line \
-            --workers=4 \
-            --timeout=60000 \
-            --retries=1 \
-            --shard=2/2
-
-      - name: Upload Playwright report (parallel 2)
-        uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: playwright-report-parallel-2
+          name: playwright-report
           path: apps/e2e/playwright-report/
           retention-days: 30
