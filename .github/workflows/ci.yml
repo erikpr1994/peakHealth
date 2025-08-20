@@ -15,7 +15,7 @@ concurrency:
 
 jobs:
   setup-and-validate:
-    name: Setup and Validate
+    name: Setup, Lint, Type-Check, and Test
     runs-on: ubuntu-latest
     outputs:
       affected: ${{ steps.affected.outputs.affected }}
@@ -36,7 +36,7 @@ jobs:
         run: |
           if [[ "${{ github.event_name }}" == "pull_request" ]]; then
             BASE_SHA=$(git merge-base ${{ github.event.pull_request.base.sha }} ${{ github.sha }})
-            AFFECTED_PACKAGES=$(pnpm turbo run build --filter="...[${BASE_SHA}]" --dry-run=json | jq -r '.tasks | keys | join(",")')
+            AFFECTED_PACKAGES=$(pnpm turbo run build --filter="...[${BASE_SHA}]" --dry-run=json | jq -r '.tasks[] | .package' | sort -u | tr '\n' ',' | sed 's/,$//')
           else
             # For push to main, consider all packages affected
             AFFECTED_PACKAGES="all"
@@ -44,13 +44,25 @@ jobs:
           echo "affected=${AFFECTED_PACKAGES}" >> $GITHUB_OUTPUT
           echo "Affected packages: ${AFFECTED_PACKAGES}"
 
-      # Run lint, type-check, and unit tests in parallel using Turborepo
-      - name: Run lint, type-check, and unit tests
+      # Run linting using Turborepo
+      - name: Run linting
         if: ${{ steps.affected.outputs.affected != '' }}
         run: |
-          pnpm turbo run lint type-check test --concurrency=3 --cache-dir=.turbo
+          pnpm turbo run lint --concurrency=3 --cache-dir=.turbo
 
-      # Run YAML linting if YAML files are changed
+      # Run type checking using Turborepo
+      - name: Run type checking
+        if: ${{ steps.affected.outputs.affected != '' }}
+        run: |
+          pnpm turbo run type-check --concurrency=3 --cache-dir=.turbo
+
+      # Run unit tests using Turborepo
+      - name: Run unit tests
+        if: ${{ steps.affected.outputs.affected != '' }}
+        run: |
+          pnpm turbo run test --concurrency=3 --cache-dir=.turbo
+
+      # Run YAML linting if YAML files are changed (separate from code linting)
       - name: Check for YAML changes
         id: yaml-changes
         run: |

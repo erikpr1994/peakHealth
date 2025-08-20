@@ -24,8 +24,27 @@ test.describe('Setup: Admin User Landing → Login → Web App', () => {
 
     // Login and verify app selector appears
     await test.step('Login and verify app selector appears', async () => {
-      await page.getByLabel(/email/i).fill(email);
-      await page.getByLabel(/password/i).fill(password);
+      // Wait for the login form to be ready
+      await page.waitForSelector('input[placeholder="Enter your email"]', {
+        state: 'visible',
+      });
+
+      // Clear and fill email field with retry logic
+      const emailInput = page.getByPlaceholder('Enter your email');
+      await emailInput.clear();
+      await emailInput.fill(email);
+
+      // Wait a bit and verify the email was filled correctly
+
+      await page.waitForTimeout(100);
+      await expect(emailInput).toHaveValue(email, { timeout: 10000 });
+
+      // Clear and fill password field
+      const passwordInput = page.getByPlaceholder('Enter your password');
+      await passwordInput.clear();
+      await passwordInput.fill(password);
+
+      // Click sign in button
       await page.getByRole('button', { name: /sign in|log in/i }).click();
       await page.waitForURL('**/app-selector', { timeout: 120_000 });
       await expect(page.getByTestId('app-card-web')).toBeVisible();
