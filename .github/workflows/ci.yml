@@ -30,7 +30,7 @@ jobs:
       yaml-changed: ${{ steps.yaml-changes.outputs.yaml-changed }}
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           fetch-depth: 0
 
@@ -87,7 +87,7 @@ jobs:
       cache-key: ${{ steps.cache-key.outputs.key }}
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           fetch-depth: 0
 
@@ -109,7 +109,7 @@ jobs:
     if: ${{ needs.determine-affected.outputs.affected != '' }}
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Setup environment
         uses: ./.github/actions/setup
@@ -131,7 +131,7 @@ jobs:
     if: ${{ needs.determine-affected.outputs.affected != '' }}
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Setup environment
         uses: ./.github/actions/setup
@@ -151,7 +151,7 @@ jobs:
     if: ${{ needs.determine-affected.outputs.affected != '' }}
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Setup environment
         uses: ./.github/actions/setup
@@ -180,7 +180,7 @@ jobs:
     # This job can run in parallel with other jobs since it doesn't depend on setup
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Setup Python for YAML linting
         uses: actions/setup-python@v4
@@ -211,7 +211,7 @@ jobs:
     if: ${{ needs.determine-affected.outputs.affected != '' }}
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Setup environment
         uses: ./.github/actions/setup
@@ -246,7 +246,7 @@ jobs:
   #    if: ${{ github.ref == 'refs/heads/main' && github.event_name == 'push' }}
   #    steps:
   #      - name: Checkout repository
-  #        uses: actions/checkout@v4
+  #        uses: actions/checkout@v5
   #
   #      - name: Setup environment
   #        uses: ./.github/actions/setup
