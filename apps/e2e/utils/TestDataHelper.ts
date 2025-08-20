@@ -1,3 +1,4 @@
+import * as crypto from 'crypto';
 /**
  * Helper class for generating and managing test data
  */
@@ -9,9 +10,9 @@ export class TestDataHelper {
    * @returns A random string with the prefix
    */
   static generateRandomString(prefix: string, length: number = 8): string {
-    const randomPart = Math.random()
-      .toString(36)
-      .substring(2, 2 + length);
+    // Use crypto.randomBytes for cryptographically secure random values
+    const bytes = crypto.randomBytes(Math.ceil(length * 0.75)); // base36: log2(36) ≈ 5.17 bits/char, so 6 bits/char is safe
+    const randomPart = bytes.toString('base36').slice(0, length);
     return `${prefix}-${randomPart}`;
   }
 
