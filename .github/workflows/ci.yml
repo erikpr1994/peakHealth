@@ -34,15 +34,31 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Setup environment
+        uses: ./.github/actions/setup
+        with:
+          install-dependencies: false
+
       - name: Determine affected packages
         id: affected
         run: |
           if [[ "${{ github.event_name }}" == "pull_request" ]]; then
             BASE_SHA=$(git merge-base ${{ github.event.pull_request.base.sha }} ${{ github.sha }})
-            AFFECTED_PACKAGES=$(pnpm turbo run build --filter="...[${BASE_SHA}]" --dry-run=json | jq -r '.tasks[] | .package' | sort -u | tr '\n' ',' | sed 's/,$//')
+            echo "Determining affected packages from base SHA: ${BASE_SHA}"
+            
+            # Get affected packages with better error handling
+            TURBO_OUTPUT=$(pnpm turbo run build --filter="...[${BASE_SHA}]" --dry-run=json 2>/dev/null || echo '{"tasks": []}')
+            AFFECTED_PACKAGES=$(echo "$TURBO_OUTPUT" | jq -r '.tasks[] | .package // empty' 2>/dev/null | sort -u | tr '\n' ',' | sed 's/,$//')
+            
+            # If no packages found or empty result, set to empty string
+            if [[ -z "$AFFECTED_PACKAGES" ]]; then
+              AFFECTED_PACKAGES=""
+              echo "No affected packages found"
+            fi
           else
             # For push to main, consider all packages affected
             AFFECTED_PACKAGES="all"
+            echo "Push to main detected, considering all packages affected"
           fi
           echo "affected=${AFFECTED_PACKAGES}" >> $GITHUB_OUTPUT
           echo "Affected packages: ${AFFECTED_PACKAGES}"
