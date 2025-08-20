@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
 import { Link } from '@/i18n/navigation';
 
 import styles from './Footer.module.css';
@@ -10,6 +10,7 @@ import { getSignupUrl } from '@/lib/auth';
 
 export const Footer = (): React.JSX.Element => {
   const t = useTranslations('footer');
+  const locale = useLocale();
   const [currentYear, setCurrentYear] = useState('');
   const [signupUrl, setSignupUrl] = useState('');
   const [isMounted, setIsMounted] = useState(false);
@@ -18,8 +19,8 @@ export const Footer = (): React.JSX.Element => {
   useEffect((): void => {
     setIsMounted(true);
     setCurrentYear(new Date().getFullYear().toString());
-    setSignupUrl(getSignupUrl());
-  }, []);
+    setSignupUrl(getSignupUrl(undefined, locale));
+  }, [locale]);
 
   return (
     <footer className={styles.footer}>
