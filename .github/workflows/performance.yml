@@ -213,6 +213,7 @@ jobs:
         run: pnpm build
 
       - name: Measure current performance
+        id: measure-current
         run: |
           # Simple performance measurement
           echo "Measuring current branch performance..."
@@ -245,6 +246,7 @@ jobs:
           pnpm build
 
       - name: Measure base performance
+        id: measure-base
         run: |
           # Simple performance measurement for base branch
           echo "Measuring base branch performance..."
@@ -271,6 +273,7 @@ jobs:
           echo "Base branch load time: ${LOAD_TIME}s"
 
       - name: Compare performance
+        id: compare-performance
         run: |
           CURRENT_TIME=${{ steps.measure-current.outputs.current_load_time }}
           BASE_TIME=${{ steps.measure-base.outputs.base_load_time }}
@@ -278,6 +281,7 @@ jobs:
           # Calculate percentage change
           CHANGE=$(echo "scale=2; (($CURRENT_TIME - $BASE_TIME) / $BASE_TIME) * 100" | bc)
 
+          echo "change=$CHANGE" >> $GITHUB_OUTPUT
           echo "Performance change: ${CHANGE}%"
 
           # Check for significant regression (>10% slower)

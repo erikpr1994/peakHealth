@@ -167,6 +167,7 @@ jobs:
           pnpm build
 
       - name: Measure current bundle sizes
+        id: measure-current
         run: |
           # Measure current branch bundle sizes
           for app in web admin auth landing; do
@@ -198,6 +199,7 @@ jobs:
           pnpm build
 
       - name: Measure base bundle sizes
+        id: measure-base
         run: |
           # Measure base branch bundle sizes
           for app in web admin auth landing; do
