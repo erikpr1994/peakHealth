@@ -19,7 +19,7 @@ export class ScreenshotHelper {
    * @returns Promise that resolves when the screenshot is taken
    */
   async takeFullPageScreenshot(name?: string): Promise<void> {
-    await expect(this.page).toHaveScreenshot(name, {
+    await expect(this.page).toHaveScreenshot(name || 'screenshot', {
       fullPage: true,
       animations: 'disabled',
     });
@@ -34,7 +34,7 @@ export class ScreenshotHelper {
   async takeElementScreenshot(selector: string, name?: string): Promise<void> {
     const locator = this.page.locator(selector);
     await expect(locator).toBeVisible();
-    await expect(locator).toHaveScreenshot(name, {
+    await expect(locator).toHaveScreenshot(name || 'element-screenshot', {
       animations: 'disabled',
     });
   }
@@ -47,7 +47,7 @@ export class ScreenshotHelper {
    */
   async takeLocatorScreenshot(locator: Locator, name?: string): Promise<void> {
     await expect(locator).toBeVisible();
-    await expect(locator).toHaveScreenshot(name, {
+    await expect(locator).toHaveScreenshot(name || 'locator-screenshot', {
       animations: 'disabled',
     });
   }
@@ -58,7 +58,7 @@ export class ScreenshotHelper {
    * @returns Promise that resolves when the screenshot is taken
    */
   async takeViewportScreenshot(name?: string): Promise<void> {
-    await expect(this.page).toHaveScreenshot(name, {
+    await expect(this.page).toHaveScreenshot(name || 'viewport-screenshot', {
       fullPage: false,
       animations: 'disabled',
     });
@@ -79,7 +79,7 @@ export class ScreenshotHelper {
       this.page.locator(selector)
     );
 
-    await expect(this.page).toHaveScreenshot(name, {
+    await expect(this.page).toHaveScreenshot(name || 'masked-screenshot', {
       fullPage: true,
       animations: 'disabled',
       mask: maskLocators,
@@ -96,7 +96,7 @@ export class ScreenshotHelper {
     name?: string,
     timeout: number = 30000
   ): Promise<void> {
-    await expect(this.page).toHaveScreenshot(name, {
+    await expect(this.page).toHaveScreenshot(name || 'timeout-screenshot', {
       fullPage: true,
       animations: 'disabled',
       timeout,

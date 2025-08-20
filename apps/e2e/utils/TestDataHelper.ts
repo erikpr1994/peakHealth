@@ -11,8 +11,14 @@ export class TestDataHelper {
    */
   static generateRandomString(prefix: string, length: number = 8): string {
     // Use crypto.randomBytes for cryptographically secure random values
-    const bytes = crypto.randomBytes(Math.ceil(length * 0.75)); // base36: log2(36) ≈ 5.17 bits/char, so 6 bits/char is safe
-    const randomPart = bytes.toString('base36').slice(0, length);
+    // Generate enough bytes to ensure we get the desired length
+    // Each base36 character represents ~5.17 bits, so we need more bytes
+    const bytes = crypto.randomBytes(Math.ceil(length * 0.75));
+
+    // Convert bytes to a number, then to base36 string
+    const number = bytes.readUIntBE(0, bytes.length);
+    const randomPart = number.toString(36).toLowerCase().slice(0, length);
+
     return `${prefix}-${randomPart}`;
   }
 

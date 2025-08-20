@@ -24,7 +24,7 @@ test('landing CTA navigates to auth signup and can go back to login', async ({
     expect(await page.title()).toMatch(/Peak Health/i);
 
     // Verify hero section is visible
-    await expect(await landingPage.isHeroSectionVisible()).toBeTruthy();
+    expect(await landingPage.isHeroSectionVisible()).toBeTruthy();
 
     // Take screenshot
     await screenshotHelper.takeFullPageScreenshot('landing');

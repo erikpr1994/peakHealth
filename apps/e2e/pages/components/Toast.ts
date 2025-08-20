@@ -56,12 +56,34 @@ export class Toast {
       await toast.waitFor({
         state: 'visible',
         timeout,
-        predicate: async element => {
-          const content = await element.textContent();
-          return content !== null && content.includes(text);
-        },
       });
+
+      // Additional check for text content
+      await this.waitForCondition(async () => {
+        const content = await toast.textContent();
+        return content !== null && content.includes(text);
+      }, timeout);
     }
+  }
+
+  /**
+   * Wait for a condition to be true
+   * @param condition - The condition function
+   * @param timeout - Optional timeout in milliseconds
+   * @returns Promise that resolves when the condition is true
+   */
+  private async waitForCondition(
+    condition: () => Promise<boolean>,
+    timeout: number = 30000
+  ): Promise<void> {
+    const startTime = Date.now();
+    while (Date.now() - startTime < timeout) {
+      if (await condition()) {
+        return;
+      }
+      await this.page.waitForTimeout(100);
+    }
+    throw new Error('Condition not met within timeout');
   }
 
   /**

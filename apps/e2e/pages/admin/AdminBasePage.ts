@@ -89,11 +89,13 @@ export class AdminBasePage extends Page {
       await toastLocator.waitFor({
         state: 'visible',
         timeout,
-        predicate: async element => {
-          const content = await element.textContent();
-          return content !== null && content.includes(text);
-        },
       });
+
+      // Additional check for text content
+      await this.waitForCondition(async () => {
+        const content = await toastLocator.textContent();
+        return content !== null && content.includes(text);
+      }, timeout);
     }
   }
 }

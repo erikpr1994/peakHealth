@@ -28,7 +28,7 @@ test.describe('Regular user flows', () => {
       expect(dashboardPage.getUrl()).toMatch(/localhost:3024\/dashboard/);
 
       // Verify welcome message is visible
-      await expect(await dashboardPage.isWelcomeMessageVisible()).toBeTruthy();
+      expect(await dashboardPage.isWelcomeMessageVisible()).toBeTruthy();
 
       // Take screenshot
       await screenshotHelper.takeFullPageScreenshot('dashboard');
@@ -42,7 +42,7 @@ test.describe('Regular user flows', () => {
       expect(routinesPage.getUrl()).toMatch(/localhost:3024\/routines/);
 
       // Verify routine list is visible
-      await expect(await routinesPage.isRoutineListVisible()).toBeTruthy();
+      expect(await routinesPage.isRoutineListVisible()).toBeTruthy();
 
       // Take screenshot
       await screenshotHelper.takeFullPageScreenshot('routines');
@@ -111,9 +111,7 @@ test.describe('Regular user flows', () => {
       expect(routinesPage.getUrl()).toMatch(/localhost:3024\/routines/);
 
       // Verify the new routine exists in the list
-      await expect(
-        await routinesPage.routineExists(routineData.name)
-      ).toBeTruthy();
+      expect(await routinesPage.routineExists(routineData.name)).toBeTruthy();
 
       // Take screenshot
       await screenshotHelper.takeFullPageScreenshot('routines-after-create');

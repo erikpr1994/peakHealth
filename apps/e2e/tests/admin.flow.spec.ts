@@ -23,7 +23,7 @@ test.describe('Admin User Direct Page Access Tests', () => {
       expect(dashboardPage.getUrl()).toMatch(/localhost:3024\/dashboard/);
 
       // Verify welcome message is visible
-      await expect(await dashboardPage.isWelcomeMessageVisible()).toBeTruthy();
+      expect(await dashboardPage.isWelcomeMessageVisible()).toBeTruthy();
 
       // Take screenshot
       await screenshotHelper.takeFullPageScreenshot('admin-web-dashboard');
@@ -49,7 +49,7 @@ test.describe('Admin User Direct Page Access Tests', () => {
       expect(dashboardPage.getUrl()).toMatch(/localhost:3002\/dashboard/);
 
       // Verify welcome message is visible
-      await expect(await dashboardPage.isWelcomeMessageVisible()).toBeTruthy();
+      expect(await dashboardPage.isWelcomeMessageVisible()).toBeTruthy();
 
       // Take screenshot
       await screenshotHelper.takeFullPageScreenshot('admin-admin-dashboard');

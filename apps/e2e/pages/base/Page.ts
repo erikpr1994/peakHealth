@@ -92,7 +92,10 @@ export class Page {
       animations: options?.animations ?? 'disabled',
     };
 
-    await expect(this.page).toHaveScreenshot(name, screenshotOptions);
+    await expect(this.page).toHaveScreenshot(
+      name || 'screenshot',
+      screenshotOptions
+    );
   }
 
   /**
@@ -165,7 +168,8 @@ export class Page {
   async getText(selector: string): Promise<string> {
     const element = this.page.locator(selector);
     await element.waitFor({ state: 'visible' });
-    return element.textContent() as Promise<string>;
+    const textContent = await element.textContent();
+    return textContent ?? '';
   }
 
   /**
