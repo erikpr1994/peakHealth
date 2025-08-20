@@ -267,7 +267,7 @@ export const buildAppRedirectUrl = (
       path = options.returnUrl;
     } else {
       // If returnUrl is invalid, fall back to default path
-      // eslint-disable-next-line no-console
+
       console.warn(
         `Invalid returnUrl: ${options.returnUrl}, using default path`
       );
