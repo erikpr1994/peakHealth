@@ -125,7 +125,7 @@ test.describe('Regular user flows', () => {
 
       await page.waitForTimeout(1000);
 
-      // Try multiple selectors to find the button
+      // Try to find the Add Strength Workout button
       const button = page.getByRole('button', {
         name: /Add Strength Workout/i,
       });
