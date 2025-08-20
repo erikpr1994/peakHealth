@@ -9,6 +9,12 @@
   overflow: hidden;
 }
 
+.backButtonContainer {
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: 1rem;
+}
+
 .content {
   display: flex;
   flex-direction: column;

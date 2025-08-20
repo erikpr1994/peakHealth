@@ -13,7 +13,13 @@ import { useState } from 'react';
 
 import styles from './page.module.css';
 
-import { AuthCard, Input, Button, FormGroup } from '@/features/shared';
+import {
+  AuthCard,
+  Input,
+  Button,
+  FormGroup,
+  BackButton,
+} from '@/features/shared';
 import { Link } from '@/i18n/navigation';
 
 const LoginForm = (): React.JSX.Element => {
@@ -131,6 +137,10 @@ const LoginForm = (): React.JSX.Element => {
   return (
     <div className={styles.container}>
       <AuthCard title={t('title')} subtitle={t('subtitle')}>
+        <div className={styles.backButtonContainer}>
+          <BackButton variant="secondary" size="sm" />
+        </div>
+
         <form onSubmit={handleSubmit} className={styles.form}>
           {message && <div className={styles.successMessage}>{message}</div>}
 
