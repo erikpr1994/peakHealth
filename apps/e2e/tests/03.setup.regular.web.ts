@@ -19,40 +19,31 @@ test.describe('Setup: Regular User Landing → Login → Web App', () => {
     // Navigate to login from landing
     await test.step('Navigate from landing to login page', async () => {
       await page.getByRole('link', { name: /sign in/i }).click();
-      await expect(page).toHaveURL(/localhost:3000\/[a-z]{2}\/login/);
+      await expect(page).toHaveURL(/localhost:3000\/[a-z]{2}\/login/i);
     });
 
-    // Login with redirect parameter to go directly to web app
-    await test.step('Login with redirect parameter to go directly to web app', async () => {
-      // Wait for the login form to be ready
-      await page.waitForSelector('input[placeholder="Enter your email"]', {
-        state: 'visible',
-      });
-
-      // Clear and fill email field with retry logic
-      const emailInput = page.getByPlaceholder('Enter your email');
-      await emailInput.clear();
-      await emailInput.fill(email);
-
-      // Wait a bit and verify the email was filled correctly
-      await page.waitForTimeout(100);
-      await expect(emailInput).toHaveValue(email, { timeout: 10000 });
-
-      // Clear and fill password field
-      const passwordInput = page.getByPlaceholder('Enter your password');
-      await passwordInput.clear();
-      await passwordInput.fill(password);
-
-      // Click sign in button
+    // Login and verify app selector appears
+    await test.step('Login and verify app selector appears', async () => {
+      await page.getByLabel(/email/i).fill(email);
+      await page.getByLabel(/password/i).fill(password);
       await page.getByRole('button', { name: /sign in|log in/i }).click();
-      await page.waitForURL('http://localhost:3024/**', { timeout: 60_000 });
-      await expect(page).toHaveURL(/localhost:3024/);
+      await page.waitForURL('**/app-selector', { timeout: 120_000 });
+      await expect(page.getByText(/Select an Application/i)).toBeVisible();
     });
 
-    // Create storage state for regular user accessing web app
-    await test.step('Create storage state for regular user accessing web app', async () => {
-      await context.storageState({ path: 'storage-states/regular-web.json' });
-      await context.close();
+    // Select web app and verify navigation
+    await test.step('Select web app and verify navigation', async () => {
+      await page.getByTestId('app-card-web').click();
+      await expect(page).toHaveURL(/localhost:3001\/dashboard/i);
     });
+
+    // Save storage state for regular web user
+    await test.step('Save storage state for regular web user', async () => {
+      await context.storageState({
+        path: 'storage-states/regular-web.json',
+      });
+    });
+
+    await context.close();
   });
 });
