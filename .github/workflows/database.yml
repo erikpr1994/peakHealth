@@ -10,7 +10,6 @@ on:
   workflow_dispatch:
 
 env:
-  PNPM_VERSION: 10.14.0
   NODE_VERSION: 24.x
   SUPABASE_CLI_VERSION: 1.142.2
 
@@ -21,6 +20,14 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+
+      - name: Extract pnpm version from package.json
+        id: pnpm-version
+        shell: bash
+        run: |
+          PNPM_VERSION=$(node -e "try { const pkg = require('./package.json'); console.log(pkg.packageManager.split('@')[1]); } catch (e) { console.log('10.14.0'); }")
+          echo "version=${PNPM_VERSION}" >> $GITHUB_OUTPUT
+          echo "Using pnpm version: ${PNPM_VERSION}"
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -53,6 +60,14 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Extract pnpm version from package.json
+        id: pnpm-version
+        shell: bash
+        run: |
+          PNPM_VERSION=$(node -e "try { const pkg = require('./package.json'); console.log(pkg.packageManager.split('@')[1]); } catch (e) { console.log('10.14.0'); }")
+          echo "version=${PNPM_VERSION}" >> $GITHUB_OUTPUT
+          echo "Using pnpm version: ${PNPM_VERSION}"
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
@@ -68,4 +83,3 @@ jobs:
       - name: Deploy migrations
         run: |
           supabase db push
-

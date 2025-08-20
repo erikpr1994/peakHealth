@@ -7,10 +7,6 @@ on:
         required: false
         default: '24.x'
         type: string
-      pnpm-version:
-        required: false
-        default: '10.14.0'
-        type: string
       install-dependencies:
         required: false
         default: true
@@ -33,6 +29,14 @@ jobs:
         with:
           fetch-depth: ${{ inputs.fetch-depth }}
 
+      - name: Extract pnpm version from package.json
+        id: pnpm-version
+        shell: bash
+        run: |
+          PNPM_VERSION=$(node -e "try { const pkg = require('./package.json'); console.log(pkg.packageManager.split('@')[1]); } catch (e) { console.log('10.14.0'); }")
+          echo "version=${PNPM_VERSION}" >> $GITHUB_OUTPUT
+          echo "Using pnpm version: ${PNPM_VERSION}"
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
@@ -41,7 +45,7 @@ jobs:
       - name: Setup pnpm
         uses: pnpm/action-setup@v3
         with:
-          version: ${{ inputs.pnpm-version }}
+          version: ${{ steps.pnpm-version.outputs.version }}
           run_install: false
 
       - name: Get pnpm store directory
@@ -70,4 +74,3 @@ jobs:
       - name: Install dependencies
         if: ${{ inputs.install-dependencies }}
         run: pnpm install --frozen-lockfile
-

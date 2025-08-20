@@ -12,7 +12,6 @@ on:
   workflow_dispatch:
 
 env:
-  PNPM_VERSION: 10.14.0
   NODE_VERSION: 24.x
 
 jobs:
@@ -42,6 +41,14 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Extract pnpm version from package.json
+        id: pnpm-version
+        shell: bash
+        run: |
+          PNPM_VERSION=$(node -e "try { const pkg = require('./package.json'); console.log(pkg.packageManager.split('@')[1]); } catch (e) { console.log('10.14.0'); }")
+          echo "version=${PNPM_VERSION}" >> $GITHUB_OUTPUT
+          echo "Using pnpm version: ${PNPM_VERSION}"
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
@@ -50,7 +57,7 @@ jobs:
       - name: Setup pnpm
         uses: pnpm/action-setup@v3
         with:
-          version: ${{ env.PNPM_VERSION }}
+          version: ${{ steps.pnpm-version.outputs.version }}
           run_install: false
 
       - name: Get pnpm store directory
@@ -116,6 +123,14 @@ jobs:
         with:
           languages: ${{ matrix.language }}
 
+      - name: Extract pnpm version from package.json
+        id: pnpm-version
+        shell: bash
+        run: |
+          PNPM_VERSION=$(node -e "try { const pkg = require('./package.json'); console.log(pkg.packageManager.split('@')[1]); } catch (e) { console.log('10.14.0'); }")
+          echo "version=${PNPM_VERSION}" >> $GITHUB_OUTPUT
+          echo "Using pnpm version: ${PNPM_VERSION}"
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
@@ -124,7 +139,7 @@ jobs:
       - name: Setup pnpm
         uses: pnpm/action-setup@v3
         with:
-          version: ${{ env.PNPM_VERSION }}
+          version: ${{ steps.pnpm-version.outputs.version }}
           run_install: false
 
       - name: Get pnpm store directory
