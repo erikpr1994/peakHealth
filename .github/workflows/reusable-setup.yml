@@ -1,0 +1,73 @@
+name: Reusable Setup
+
+on:
+  workflow_call:
+    inputs:
+      node-version:
+        required: false
+        default: '24.x'
+        type: string
+      pnpm-version:
+        required: false
+        default: '10.14.0'
+        type: string
+      install-dependencies:
+        required: false
+        default: true
+        type: boolean
+      setup-turborepo-cache:
+        required: false
+        default: true
+        type: boolean
+      fetch-depth:
+        required: false
+        default: 1
+        type: number
+
+jobs:
+  setup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: ${{ inputs.fetch-depth }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ inputs.node-version }}
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: ${{ inputs.pnpm-version }}
+          run_install: false
+
+      - name: Get pnpm store directory
+        id: pnpm-cache
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_OUTPUT
+
+      - name: Setup pnpm cache
+        uses: actions/cache@v4
+        with:
+          path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+
+      - name: Setup Turborepo cache
+        if: ${{ inputs.setup-turborepo-cache }}
+        uses: actions/cache@v4
+        with:
+          path: .turbo
+          key: ${{ runner.os }}-turbo-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-turbo-
+
+      - name: Install dependencies
+        if: ${{ inputs.install-dependencies }}
+        run: pnpm install --frozen-lockfile
+
