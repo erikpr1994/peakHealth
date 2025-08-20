@@ -13,6 +13,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { useToast } from '@peakhealth/ui/toast';
 import { Routine } from '@/features/routines/types';
 import { routineService } from '../../../services/routineService';
 import ActiveRoutineCard from './ActiveRoutineCard';
@@ -30,6 +31,7 @@ const RoutinesList = ({
   onRoutinesChange,
 }: RoutinesListProps): React.ReactElement => {
   const router = useRouter();
+  const { showToast } = useToast();
   const [searchQuery, setSearchQuery] = useState('');
   const [levelFilter, setLevelFilter] = useState('all');
   const [goalFilter, setGoalFilter] = useState('all');
@@ -72,9 +74,8 @@ const RoutinesList = ({
       await routineService.setActiveRoutine(routineId);
 
       // If we get here, the database update was successful
-      console.log('Routine set as active successfully');
-    } catch (error) {
-      console.error('Error setting active routine:', error);
+    } catch (_) {
+      // Error occurred while setting active routine
 
       // Revert the optimistic update on error
       const revertedRoutines = routines.map(routine => ({
@@ -86,8 +87,11 @@ const RoutinesList = ({
         onRoutinesChange(revertedRoutines);
       }
 
-      // TODO: Show error message to user
-      alert('Failed to set routine as active. Please try again.');
+      // Show error message to user
+      showToast({
+        message: 'Failed to set routine as active. Please try again.',
+        variant: 'error'
+      });
     }
   };
 
@@ -96,8 +100,12 @@ const RoutinesList = ({
       await routineService.toggleRoutineFavorite(routineId);
       // Refresh the data to get updated favorite status
       onRoutineUpdate?.();
-    } catch (error) {
-      console.error('Error toggling favorite:', error);
+    } catch (_) {
+      // Error occurred while toggling favorite
+      showToast({
+        message: 'Failed to toggle favorite status. Please try again.',
+        variant: 'error'
+      });
     }
   };
 
