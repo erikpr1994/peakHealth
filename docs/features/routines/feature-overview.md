@@ -2,7 +2,7 @@
 
 ## Overview
 
-The Routines feature is a comprehensive workout management system that allows users to create, manage, and track various types of workout routines. It supports both strength training and cardio/running workouts with advanced features like trail running planning.
+The Routines feature is a comprehensive workout management system that allows users to create, manage, and track various types of workout routines. It supports both strength training and cardio/running workouts with advanced features like trail running planning, AI-powered recommendations, progressive overload tracking, and wearable device integration.
 
 ## 🏗️ Architecture ✅ **RESOLVED**
 
@@ -34,6 +34,8 @@ features/routines/
 - **StrengthWorkoutsSection**: Strength workout management
 - **RunningWorkoutsSection**: Running workout management
 - **RoutineModals**: Exercise selection and notes modals
+- **AIRecommendationPanel**: AI-powered routine suggestions based on user goals and history
+- **TemplateGallery**: Curated and AI-recommended templates for quick routine creation
 
 #### 2. **Routine Detail** (`routine-detail/`)
 
@@ -44,6 +46,8 @@ features/routines/
 - **WeeklySchedule**: Weekly schedule display
 - **WorkoutDaysList**: List of workout days
 - **ExerciseList**: Exercise details display
+- **ProgressiveOverloadTracker**: Visual tracking of strength progression over time
+- **PerformanceInsights**: AI-powered analysis of routine effectiveness and suggestions
 
 #### 3. **Routine List** (`routine-list/`)
 
@@ -52,6 +56,8 @@ features/routines/
 - **RoutineCard**: Individual routine card display
 - **ActiveRoutineCard**: Special display for active routine
 - **WorkoutCard**: Workout management within routines
+- **SmartFilters**: AI-powered filtering based on user preferences and history
+- **RecommendedRoutines**: Personalized routine recommendations section
 
 #### 4. **Trail Running** (`trail-running/`)
 
@@ -60,6 +66,9 @@ features/routines/
 - **RepeatIntervalsForm**: Interval repetition management
 - **SectionForm**: Trail running section configuration
 - **SectionsList**: Trail running sections display
+- **TerrainAnalysis**: Elevation and terrain difficulty visualization
+- **WearableIntegration**: Heart rate zone and GPS tracking integration
+- **IntervalOptimizer**: AI-powered interval suggestions based on fitness level
 
 #### 5. **Workout Management** (`workout-management/`)
 
@@ -67,6 +76,25 @@ features/routines/
 - **WorkoutDetails**: Workout metadata management
 - **WorkoutSection**: Section management component
 - **ExerciseManagement**: Exercise-level management
+- **ProgressiveOverloadControls**: Tools for managing weight, reps, and sets progression
+- **RestTimerIntegration**: Smart rest timer with adaptive recommendations
+- **FormAnalysis**: Integration with device cameras for form checking (future)
+
+#### 6. **AI & Personalization** (`ai-personalization/`)
+
+- **AICoach**: Virtual coaching with real-time feedback during workouts
+- **AdaptiveProgression**: Smart adjustment of workout difficulty based on performance
+- **PersonalizedGoals**: Goal setting with AI-assisted target recommendations
+- **UserInsights**: Performance analytics and progress visualization
+- **SmartScheduling**: Workout scheduling based on recovery and availability
+
+#### 7. **Wearable Integration** (`wearable-integration/`)
+
+- **DeviceConnector**: Interface for connecting various wearable devices
+- **MetricsDisplay**: Real-time display of heart rate, calories, and other metrics
+- **WorkoutSync**: Synchronization of completed workouts with wearable data
+- **BiometricFeedback**: Integration of biometric data for workout optimization
+- **RecoveryAnalysis**: Recovery tracking based on sleep and HRV data
 
 ## 📊 Data Models
 
@@ -81,7 +109,13 @@ interface Routine {
   description: string;
   daysPerWeek: number;
   difficulty: 'Beginner' | 'Intermediate' | 'Advanced';
-  goal: 'Strength' | 'Hypertrophy' | 'Endurance' | 'Weight Loss';
+  goal:
+    | 'Strength'
+    | 'Hypertrophy'
+    | 'Endurance'
+    | 'Weight Loss'
+    | 'Power'
+    | 'Sport-Specific';
   isActive: boolean;
   isFavorite: boolean;
   schedule: boolean[]; // [Mon, Tue, Wed, Thu, Fri, Sat, Sun]
@@ -91,6 +125,11 @@ interface Routine {
   totalWorkouts?: number;
   completedWorkouts?: number;
   estimatedDuration?: string;
+  createdBy: 'user' | 'ai' | 'template';
+  tags?: string[];
+  aiRecommended?: boolean;
+  adaptiveProgression?: boolean;
+  recoveryTracking?: boolean;
 }
 ```
 
@@ -99,24 +138,144 @@ interface Routine {
 - **StrengthWorkout**: Traditional strength training workouts
 - **RunningWorkout**: Cardio/running workouts
 - **TrailRunningWorkoutData**: Specialized trail running data
+- **IntervalWorkout**: High-intensity interval training workouts
+- **CircuitWorkout**: Circuit-based training with minimal rest
+- **SupersetWorkout**: Workouts with supersets and compound movements
 
 #### **Exercise & Section Structure**
 
 - **Exercise**: Individual exercises with sets, reps, weights
 - **WorkoutSection**: Sections (warmup, basic, cooldown, emom, tabata)
 - **WorkoutSet**: Individual sets with reps, weight, duration, rest
+- **ProgressionHistory**: Historical tracking of weight, reps, and sets for progressive overload
+- **FormFeedback**: Form quality feedback from AI analysis
+- **RestPeriod**: Configurable rest periods with adaptive recommendations
 
 ### Advanced Features
 
 #### **Progression Methods**
 
 - Linear, Dual, Inverse Pyramid, Myo-Reps, Widowmaker, AMRAP
+- **Progressive Overload Tracking**:
+
+```typescript
+interface ProgressiveOverloadData {
+  exerciseId: string;
+  history: {
+    date: string;
+    weight: number;
+    reps: number;
+    sets: number;
+    volume: number; // calculated as weight * reps * sets
+    oneRepMax: number; // estimated 1RM
+    notes?: string;
+  }[];
+  trends: {
+    weeklyGrowth: number;
+    monthlyGrowth: number;
+    plateauDetected: boolean;
+    recommendedIncrease?: number;
+  };
+}
+```
 
 #### **Trail Running Features**
 
 - **Interval Types**: Run, Uphill, Downhill, Sprint, Recovery, Rest, Walk
 - **Intensity Targets**: Heart rate, Speed, Power, Cadence, RPE
 - **Section Types**: Warm-up, Cool-down, Run, Walk, Uphill-repeat, etc.
+- **Terrain Analysis**:
+
+```typescript
+interface TerrainData {
+  elevationGain: number;
+  elevationLoss: number;
+  maxGradient: number;
+  terrainType: 'road' | 'trail' | 'track' | 'mixed';
+  difficulty: 'easy' | 'moderate' | 'challenging' | 'difficult';
+  surfaceTypes: ('paved' | 'gravel' | 'dirt' | 'rocky' | 'rooty' | 'sandy')[];
+  recommendedFootwear?: string;
+  weatherImpact?: 'low' | 'medium' | 'high';
+}
+```
+
+#### **AI & Personalization Features**
+
+```typescript
+interface AIRecommendation {
+  type: 'routine' | 'exercise' | 'progression' | 'recovery';
+  confidence: number; // 0-100
+  recommendation: string;
+  reasoning: string;
+  dataPoints: string[]; // what data was used to make this recommendation
+  userFeedback?: 'accepted' | 'rejected' | 'modified';
+}
+
+interface PersonalizationProfile {
+  fitnessLevel: 'beginner' | 'intermediate' | 'advanced' | 'elite';
+  preferences: {
+    workoutDuration: number; // preferred minutes
+    exerciseTypes: string[];
+    avoidedExercises: string[];
+    preferredDays: boolean[]; // [Mon, Tue, Wed, Thu, Fri, Sat, Sun]
+    preferredTimeOfDay: 'morning' | 'afternoon' | 'evening';
+  };
+  limitations: {
+    injuries: string[];
+    equipmentAccess: string[];
+    timeConstraints: number; // max minutes available
+  };
+  goals: {
+    primary: string;
+    secondary: string[];
+    targetDate?: string;
+  };
+}
+```
+
+#### **Wearable Integration**
+
+```typescript
+interface WearableData {
+  deviceType:
+    | 'smartwatch'
+    | 'fitness_tracker'
+    | 'heart_rate_monitor'
+    | 'smart_clothing';
+  deviceModel?: string;
+  metrics: {
+    heartRate?: {
+      current: number;
+      average: number;
+      max: number;
+      zones: {
+        zone1: number; // time spent in zone 1 (seconds)
+        zone2: number;
+        zone3: number;
+        zone4: number;
+        zone5: number;
+      };
+    };
+    steps?: number;
+    calories?: number;
+    distance?: number;
+    pace?: number;
+    cadence?: number;
+    power?: number;
+    elevation?: {
+      gain: number;
+      loss: number;
+      current: number;
+    };
+    recovery?: {
+      hrv: number;
+      sleepQuality: number;
+      readiness: number;
+    };
+  };
+  lastSynced: string;
+}
+```
 
 ## 🔧 Hooks & State Management
 
@@ -145,6 +304,35 @@ Utility hook for routine-level operations:
 - Set generation for progression methods
 - Workout duration calculations
 - Approach sets management
+
+### **useProgressiveOverload**
+
+Advanced hook for tracking strength progression:
+
+- Weight and rep progression tracking
+- Performance trend analysis
+- Plateau detection and recommendations
+- One-rep max estimation and tracking
+- Volume calculation and visualization
+
+### **useWearableIntegration**
+
+Hook for integrating with wearable devices:
+
+- Device connection and data synchronization
+- Real-time metrics monitoring
+- Workout data recording and analysis
+- Recovery metrics integration
+
+### **useAIRecommendations**
+
+Hook for AI-powered recommendations:
+
+- Personalized routine suggestions
+- Exercise selection optimization
+- Progressive overload recommendations
+- Recovery and deload suggestions
+- Performance analysis and insights
 
 ## 🎯 Current Functionality
 
@@ -221,6 +409,8 @@ Utility hook for routine-level operations:
 - 🔄 **Workout Tracker**: Referenced but not integrated
 - 🔄 **Exercise Library**: Referenced but not implemented
 - 🔄 **User Authentication**: Not integrated with user system
+- 🔄 **Wearable Devices**: UI ready but not connected to actual devices
+- 🔄 **AI Features**: UI components ready but not connected to AI backend
 
 ## 🚧 **Remaining Work**
 
@@ -249,16 +439,32 @@ Utility hook for routine-level operations:
 - [ ] **Performance Metrics**: Record and display performance data
 - [ ] **Workout History**: Maintain workout history
 
+#### **4. Progressive Overload Tracking**
+
+- [ ] **Weight Progression**: Track weight increases over time
+- [ ] **Volume Tracking**: Calculate and visualize workout volume
+- [ ] **Performance Trends**: Analyze strength progression trends
+- [ ] **Plateau Detection**: Identify and suggest solutions for plateaus
+- [ ] **1RM Estimation**: Calculate and track estimated one-rep maxes
+
 ### **Medium Priority**
 
-#### **4. Enhanced Features**
+#### **5. Enhanced Features**
 
 - [ ] **Routine Templates**: Pre-built routine templates (UI ready, needs data)
 - [ ] **Routine Sharing**: Implement routine sharing functionality
 - [ ] **Routine Import/Export**: Import/export routine data
 - [ ] **Advanced Scheduling**: More flexible scheduling options
 
-#### **5. User Experience**
+#### **6. Wearable Integration**
+
+- [ ] **Device Connection**: Connect to various wearable devices
+- [ ] **Metrics Display**: Show real-time metrics during workouts
+- [ ] **Data Synchronization**: Sync workout data with wearables
+- [ ] **Recovery Tracking**: Use sleep and HRV data for recovery analysis
+- [ ] **Performance Insights**: Generate insights from wearable data
+
+#### **7. User Experience**
 
 - [ ] **Onboarding**: Routine creation onboarding flow
 - [ ] **Validation**: Enhanced form validation and error handling
@@ -267,13 +473,21 @@ Utility hook for routine-level operations:
 
 ### **Low Priority**
 
-#### **6. Advanced Features**
+#### **8. AI & Personalization**
 
 - [ ] **AI Recommendations**: Smart routine recommendations
+- [ ] **Adaptive Progression**: Dynamic workout adjustments based on performance
+- [ ] **Personalized Goals**: AI-assisted goal setting and tracking
+- [ ] **Virtual Coaching**: Real-time feedback during workouts
+- [ ] **Smart Scheduling**: Recovery-based workout scheduling
+
+#### **9. Advanced Features**
+
 - [ ] **Social Features**: Community routine sharing
 - [ ] **Analytics**: Advanced routine analytics
 - [ ] **Integration**: Third-party platform integration
-- [ ] **Offline Support**: Basic offline functionality
+- [ ] **Form Analysis**: Camera-based exercise form analysis
+- [ ] **Voice Control**: Voice commands for hands-free workout control
 
 ## 🔗 **Dependencies**
 
@@ -283,6 +497,8 @@ Utility hook for routine-level operations:
 - **Exercise Feature**: For exercise library and management
 - **User System**: For user authentication and data association
 - **Dashboard**: For routine overview and quick access
+- **Wearable Integration**: For device connection and data synchronization
+- **AI Services**: For personalized recommendations and insights
 
 ### **External Dependencies**
 
@@ -290,6 +506,8 @@ Utility hook for routine-level operations:
 - **Next.js**: Routing and page structure
 - **React**: Component framework
 - **TypeScript**: Type safety
+- **Wearable APIs**: For device integration (Garmin, Fitbit, Apple Health, etc.)
+- **AI/ML Services**: For recommendation engines and form analysis
 
 ## 🎯 **MVP Goals**
 
@@ -300,6 +518,7 @@ Utility hook for routine-level operations:
 - [ ] Implement exercise library integration
 - [ ] Connect with workout tracker for execution
 - [ ] Replace mock data with real API calls
+- [ ] Implement basic progressive overload tracking
 
 ### **Phase 2: Enhanced UX**
 
@@ -307,6 +526,8 @@ Utility hook for routine-level operations:
 - [ ] Implement proper validation and error handling
 - [ ] Add routine sharing and collaboration features
 - [ ] Optimize performance and loading states
+- [ ] Implement basic wearable integration
+- [ ] Add comprehensive progressive overload tracking
 
 ### **Phase 3: Advanced Features**
 
@@ -314,6 +535,8 @@ Utility hook for routine-level operations:
 - [ ] Implement advanced analytics and insights
 - [ ] Add social features and community sharing
 - [ ] Integrate with third-party platforms
+- [ ] Implement advanced wearable integration
+- [ ] Add virtual coaching and form analysis
 
 ## 📚 **Related Documentation**
 
@@ -322,3 +545,5 @@ Utility hook for routine-level operations:
 - [Workout Feature](../workout/README.md)
 - [Exercise Feature](../exercises/README.md)
 - [Project TODO](../../todo.md)
+- [Wearable Integration](../wearable-integration/README.md)
+- [AI & Personalization](../ai-personalization/README.md)

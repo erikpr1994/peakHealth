@@ -38,7 +38,7 @@ Feature-specific business strategy, competitive positioning, and success metrics
 
 ## Feature Overview
 
-The Routines feature enables users to create, manage, and track various types of workout routines. It supports both strength training and cardio/running workouts with advanced features like trail running planning.
+The Routines feature enables users to create, manage, and track various types of workout routines. It supports both strength training and cardio/running workouts with advanced features like trail running planning, AI-powered recommendations, progressive overload tracking, and wearable device integration.
 
 ### Core Capabilities
 
@@ -46,9 +46,14 @@ The Routines feature enables users to create, manage, and track various types of
 - **Workout Management**: Add, remove, and reorder workouts and sections
 - **Exercise Management**: Manage exercises within sections with sets and progression
 - **Advanced Progression Methods**: Linear, dual, inverse pyramid, myo-reps, widowmaker, AMRAP
+- **Progressive Overload Tracking**: Track weight, reps, and sets progression over time
 - **Trail Running**: Specialized trail running workout creation with intervals
 - **Progress Tracking**: Visual indicators of routine progress and completion
 - **Basic Templates**: Curated routine templates for common goals
+- **AI Recommendations**: Personalized routine and exercise suggestions
+- **Wearable Integration**: Connect with fitness devices for real-time data
+- **Performance Analytics**: Insights and trends from workout history
+- **Adaptive Programming**: Smart adjustments based on performance and recovery
 
 ### Target Users
 
@@ -71,8 +76,10 @@ This feature primarily serves:
 ## Current Status
 
 - **Phase**: MVP Development Ready
-- **Status**: Core functionality implemented, needs data persistence
+- **Status**: Core functionality implemented, needs data persistence and integration
 - **Next Step**: Begin MVP development (Phase 1: Core Foundation)
+- **Priority Features**: Progressive overload tracking, wearable integration, and AI recommendations
+- **Technical Focus**: API integration, database schema, and real-time data synchronization
 
 ## Quick Links
 
