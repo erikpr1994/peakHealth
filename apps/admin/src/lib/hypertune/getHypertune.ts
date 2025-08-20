@@ -8,11 +8,19 @@ import { getVercelOverride } from '../../../generated/hypertune.vercel';
 
 const hypertuneToken = process.env.NEXT_PUBLIC_HYPERTUNE_TOKEN;
 if (!hypertuneToken) {
-  throw new Error('NEXT_PUBLIC_HYPERTUNE_TOKEN is not defined');
+  // In test environment, provide a mock token to prevent errors
+  if (process.env.NODE_ENV === 'test') {
+    // eslint-disable-next-line no-console
+    console.warn(
+      'NEXT_PUBLIC_HYPERTUNE_TOKEN is not defined in test environment, using mock token'
+    );
+  } else {
+    throw new Error('NEXT_PUBLIC_HYPERTUNE_TOKEN is not defined');
+  }
 }
 
 const hypertuneSource = createSource({
-  token: hypertuneToken,
+  token: hypertuneToken || 'mock-token-for-tests',
 });
 
 // Map NODE_ENV to the expected Environment type
