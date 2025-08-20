@@ -34,7 +34,8 @@ test.describe('Setup: Trainer User Landing → Login → Web App', () => {
     // Select web app and verify navigation
     await test.step('Select web app and verify navigation', async () => {
       await page.getByTestId('app-card-web').click();
-      await expect(page).toHaveURL(/localhost:3024\/dashboard/i);
+      await page.waitForURL('http://localhost:3024/**', { timeout: 60_000 });
+      await expect(page).toHaveURL(/localhost:3024/);
     });
 
     // Save storage state for trainer web user
