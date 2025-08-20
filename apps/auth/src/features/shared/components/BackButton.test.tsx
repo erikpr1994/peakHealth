@@ -6,12 +6,14 @@ import { BackButton } from './BackButton';
 // Mock next-intl
 vi.mock('next-intl', () => ({
   useTranslations:
-    () =>
+    (namespace: string) =>
     (key: string): string => {
-      const translations: Record<string, string> = {
-        'common.back': 'back',
+      const translations: Record<string, Record<string, string>> = {
+        common: {
+          back: 'back',
+        },
       };
-      return translations[key] || key;
+      return translations[namespace]?.[key] || key;
     },
   useLocale: (): string => 'en',
 }));
