@@ -19,7 +19,7 @@ test.describe('Setup: Admin User Landing → Login → Admin App', () => {
     // Navigate to login from landing
     await test.step('Navigate from landing to login page', async () => {
       await page.getByRole('link', { name: /sign in/i }).click();
-      await expect(page).toHaveURL(/localhost:3000\/[a-z]{2}\/login/i);
+      await expect(page).toHaveURL(/localhost:3000\/en\/login/);
     });
 
     // Login and verify app selector appears

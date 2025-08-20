@@ -19,13 +19,34 @@ test.describe('Setup: Regular User Landing → Login → Web App', () => {
     // Navigate to login from landing
     await test.step('Navigate from landing to login page', async () => {
       await page.getByRole('link', { name: /sign in/i }).click();
-      await expect(page).toHaveURL(/localhost:3000\/[a-z]{2}\/login/i);
+      await expect(page).toHaveURL(/localhost:3000\/en\/login/);
     });
 
-    // Login and verify app selector appears
-    await test.step('Login and verify app selector appears', async () => {
-      await page.getByLabel(/email/i).fill(email);
-      await page.getByLabel(/password/i).fill(password);
+    // Login with redirect parameter to go directly to web app
+    await test.step('Login with redirect parameter to go directly to web app', async () => {
+      await page.goto(
+        'http://localhost:3000/en/login?redirect=http://localhost:3024'
+      );
+
+      // Wait for the login form to be ready
+      await page.waitForSelector('input[placeholder="Enter your email"]', {
+        state: 'visible',
+      });
+
+      // Clear and fill email field
+      const emailInput = page.getByPlaceholder('Enter your email');
+      await emailInput.clear();
+      await emailInput.fill(email);
+
+      // Clear and fill password field
+      const passwordInput = page.getByPlaceholder('Enter your password');
+      await passwordInput.clear();
+      await passwordInput.fill(password);
+
+      // Verify the email was filled correctly
+      await expect(emailInput).toHaveValue(email);
+
+      // Click sign in button
       await page.getByRole('button', { name: /sign in|log in/i }).click();
       await page.waitForURL('**/app-selector', { timeout: 120_000 });
       await expect(page.getByText(/Select an Application/i)).toBeVisible();
