@@ -1,0 +1,199 @@
+name: Vercel Preview Deployment
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'apps/**'
+      - 'packages/**'
+      - 'package.json'
+      - 'pnpm-lock.yaml'
+      - 'turbo.json'
+      - '.github/workflows/deploy-preview.yml'
+  # Allow manual triggering
+  workflow_dispatch: {}
+
+# Cancel in-progress runs on new pushes
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  detect-changes:
+    name: Detect Changed Apps
+    runs-on: ubuntu-latest
+    outputs:
+      changed-apps: ${{ steps.changes.outputs.changed-apps }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup environment
+        uses: ./.github/actions/setup
+
+      - name: Detect changed apps
+        id: changes
+        run: |
+          # Get the base commit for comparison
+          BASE_SHA="${{ github.event.pull_request.base.sha }}"
+          echo "Comparing with base: $BASE_SHA"
+
+          # Use Turborepo to detect which apps have changed
+          CHANGED_APPS=$(pnpm turbo run build --filter="...[${BASE_SHA}]" --dry-run=json | jq -r '.tasks | keys | map(select(test("^@peakhealth/(web|admin|auth|landing)$"))) | .[]' | sed 's/@peakhealth\///' | sort -u | tr '\n' ',' | sed 's/,$//')
+
+          # If no apps changed or manual trigger, deploy all apps
+          if [[ -z "$CHANGED_APPS" ]] || [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            CHANGED_APPS="web,admin,auth,landing"
+            echo "No specific changes detected or manual trigger - deploying all apps"
+          fi
+
+          echo "Changed apps: $CHANGED_APPS"
+          echo "changed-apps=$CHANGED_APPS" >> $GITHUB_OUTPUT
+
+  deploy-preview:
+    name: Deploy ${{ matrix.app }} Preview
+    needs: detect-changes
+    runs-on: ubuntu-latest
+    environment: preview
+    strategy:
+      matrix:
+        app: [web, admin, auth, landing]
+        include:
+          - app: web
+            working-directory: apps/web
+            project-id-secret: VERCEL_PROJECT_ID_WEB
+            sentry-project-secret: SENTRY_PROJECT_WEB
+            app-name: Web App
+            package-name: '@peakhealth/web'
+          - app: admin
+            working-directory: apps/admin
+            project-id-secret: VERCEL_PROJECT_ID_ADMIN
+            sentry-project-secret: SENTRY_PROJECT_ADMIN
+            app-name: Admin App
+            package-name: '@peakhealth/admin'
+          - app: auth
+            working-directory: apps/auth
+            project-id-secret: VERCEL_PROJECT_ID_AUTH
+            sentry-project-secret: SENTRY_PROJECT_AUTH
+            app-name: Auth App
+            package-name: '@peakhealth/auth'
+          - app: landing
+            working-directory: apps/landing
+            project-id-secret: VERCEL_PROJECT_ID_LANDING
+            sentry-project-secret: SENTRY_PROJECT_LANDING
+            app-name: Landing App
+            package-name: '@peakhealth/landing'
+    if: contains(needs.detect-changes.outputs.changed-apps, matrix.app) || github.event_name == 'workflow_dispatch'
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup environment
+        uses: ./.github/actions/setup
+        with:
+          setup-build-cache: true
+
+      - name: Install Vercel CLI
+        run: npm install --global vercel@latest
+
+      - name: Change to app directory
+        run: cd ${{ matrix.working-directory }}
+
+      - name: Pull Vercel Environment Information
+        run: |
+          cd ${{ matrix.working-directory }}
+          vercel pull --yes --environment=preview --token=${{ secrets.VERCEL_TOKEN }}
+
+      - name: Build Project Artifacts
+        run: |
+          cd ${{ matrix.working-directory }}
+          vercel build --token=${{ secrets.VERCEL_TOKEN }}
+
+      - name: Deploy Project Artifacts to Vercel
+        id: deploy
+        run: |
+          cd ${{ matrix.working-directory }}
+          DEPLOYMENT_URL=$(vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }} --json | jq -r '.url')
+          echo "url=$DEPLOYMENT_URL" >> $GITHUB_OUTPUT
+          echo "Deployment URL: $DEPLOYMENT_URL"
+
+      - name: Comment preview URL
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const previewUrl = '${{ steps.deploy.outputs.url }}';
+            const prNumber = ${{ github.event.pull_request.number }};
+            const appName = '${{ matrix.app-name }}';
+
+            const comment = `## 🚀 ${appName} Preview Deployment Ready!
+
+            **${appName} Preview:** ${previewUrl}
+
+            This preview deployment will be automatically updated with each push to this PR.
+
+            ---
+            *Deployed by GitHub Actions*`;
+
+            // Check if we already commented for this app
+            const comments = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: prNumber
+            });
+
+            const existingComment = comments.data.find(comment => 
+              comment.body.includes(`${appName} Preview Deployment Ready!`)
+            );
+
+            if (existingComment) {
+              // Update existing comment
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: existingComment.id,
+                body: comment
+              });
+            } else {
+              // Create new comment
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: prNumber,
+                body: comment
+              });
+            }
+
+  cleanup-preview:
+    name: Cleanup Preview Deployments
+    runs-on: ubuntu-latest
+    if: github.event.action == 'closed'
+    environment: preview
+    steps:
+      - name: Cleanup Vercel preview deployments
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const prNumber = ${{ github.event.pull_request.number }};
+
+            // Remove preview deployment comments
+            const comments = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: prNumber
+            });
+
+            for (const comment of comments.data) {
+              if (comment.body.includes('Preview Deployment Ready!')) {
+                await github.rest.issues.deleteComment({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  comment_id: comment.id
+                });
+              }
+            }
+
+            console.log('Preview deployment comments cleaned up');

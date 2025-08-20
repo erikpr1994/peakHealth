@@ -1,0 +1,314 @@
+name: Bundle Size Management
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'apps/**'
+      - 'packages/**'
+      - 'package.json'
+      - 'pnpm-lock.yaml'
+      - 'turbo.json'
+  # Allow manual triggering
+  workflow_dispatch: {}
+
+jobs:
+  analyze-bundle-size:
+    name: Analyze Bundle Size
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup environment
+        uses: ./.github/actions/setup
+        with:
+          setup-build-cache: true
+
+      - name: Build with bundle analysis
+        run: |
+          # Set environment variable for Next.js bundle analyzer
+          export ANALYZE=true
+          export BUNDLE_ANALYZE=true
+
+          # Build all apps
+          pnpm build
+
+      - name: Analyze bundle sizes
+        run: |
+          # Create bundle size report
+          echo "## 📊 Bundle Size Analysis" > bundle-size-report.md
+          echo "" >> bundle-size-report.md
+
+          # Define bundle size budgets (in KB)
+          declare -A BUNDLE_BUDGETS=(
+            ["web"]=1000
+            ["admin"]=800
+            ["auth"]=500
+            ["landing"]=600
+          )
+
+          # Analyze each app's bundle
+          for app in web admin auth landing; do
+            if [ -d "apps/$app/.next" ]; then
+              echo "### $app App" >> bundle-size-report.md
+
+              # Calculate total bundle size
+              TOTAL_SIZE=0
+              JS_SIZE=0
+              CSS_SIZE=0
+
+              # Calculate JS size
+              if [ -d "apps/$app/.next/static/chunks" ]; then
+                JS_SIZE=$(find apps/$app/.next/static/chunks -name "*.js" -exec wc -c {} + | tail -1 | awk '{print $1}')
+                TOTAL_SIZE=$((TOTAL_SIZE + JS_SIZE))
+              fi
+
+              # Calculate CSS size
+              if [ -d "apps/$app/.next/static/css" ]; then
+                CSS_SIZE=$(find apps/$app/.next/static/css -name "*.css" -exec wc -c {} + | tail -1 | awk '{print $1}')
+                TOTAL_SIZE=$((TOTAL_SIZE + CSS_SIZE))
+              fi
+
+              # Convert to KB
+              TOTAL_KB=$((TOTAL_SIZE / 1024))
+              JS_KB=$((JS_SIZE / 1024))
+              CSS_KB=$((CSS_SIZE / 1024))
+
+              # Get budget for this app
+              BUDGET=${BUNDLE_BUDGETS[$app]}
+
+              echo "- 📦 **Total size:** ${TOTAL_KB}KB" >> bundle-size-report.md
+              echo "- 📄 **JavaScript:** ${JS_KB}KB" >> bundle-size-report.md
+              echo "- 🎨 **CSS:** ${CSS_KB}KB" >> bundle-size-report.md
+              echo "- 💰 **Budget:** ${BUDGET}KB" >> bundle-size-report.md
+
+              # Check against budget
+              if [ $TOTAL_KB -gt $BUDGET ]; then
+                echo "- ❌ **Exceeds budget by $((TOTAL_KB - BUDGET))KB**" >> bundle-size-report.md
+                echo "BUDGET_EXCEEDED=true" >> $GITHUB_ENV
+              else
+                echo "- ✅ **Within budget**" >> bundle-size-report.md
+              fi
+
+              echo "" >> bundle-size-report.md
+            fi
+          done
+
+          # Add recommendations
+          echo "### 💡 Bundle Size Recommendations" >> bundle-size-report.md
+          echo "" >> bundle-size-report.md
+          echo "To reduce bundle size:" >> bundle-size-report.md
+          echo "- Use dynamic imports for code splitting" >> bundle-size-report.md
+          echo "- Remove unused dependencies" >> bundle-size-report.md
+          echo "- Optimize images and assets" >> bundle-size-report.md
+          echo "- Use tree shaking effectively" >> bundle-size-report.md
+          echo "- Consider using smaller alternatives for large libraries" >> bundle-size-report.md
+
+      - name: Upload bundle analysis results
+        uses: actions/upload-artifact@v4
+        with:
+          name: bundle-analysis
+          path: |
+            apps/*/analyze
+            apps/*/.next/analyze
+            bundle-size-report.md
+          retention-days: 14
+
+      - name: Comment bundle size on PR
+        uses: actions/github-script@v7
+        if: github.event_name == 'pull_request'
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const fs = require('fs');
+
+            let comment = '';
+
+            // Read bundle report if available
+            if (fs.existsSync('bundle-size-report.md')) {
+              const report = fs.readFileSync('bundle-size-report.md', 'utf8');
+              comment = report;
+            } else {
+              comment = '## 📊 Bundle Size Analysis\n\nBundle analysis completed. Check the artifacts for detailed reports.';
+            }
+
+            // Add budget warning if exceeded
+            if (process.env.BUDGET_EXCEEDED === 'true') {
+              comment += '\n\n⚠️ **Bundle size budget exceeded!** Please review the recommendations above.';
+            }
+
+            comment += '\n\n📥 Download the bundle-analysis artifact for detailed reports.';
+
+            // Post comment on PR
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: comment
+            });
+
+  bundle-size-regression:
+    name: Bundle Size Regression Check
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup environment
+        uses: ./.github/actions/setup
+
+      - name: Build current branch
+        run: |
+          export ANALYZE=true
+          pnpm build
+
+      - name: Measure current bundle sizes
+        id: measure-current
+        run: |
+          # Measure current branch bundle sizes
+          for app in web admin auth landing; do
+            if [ -d "apps/$app/.next" ]; then
+              TOTAL_SIZE=0
+
+              # Calculate total size
+              if [ -d "apps/$app/.next/static/chunks" ]; then
+                JS_SIZE=$(find apps/$app/.next/static/chunks -name "*.js" -exec wc -c {} + | tail -1 | awk '{print $1}')
+                TOTAL_SIZE=$((TOTAL_SIZE + JS_SIZE))
+              fi
+
+              if [ -d "apps/$app/.next/static/css" ]; then
+                CSS_SIZE=$(find apps/$app/.next/static/css -name "*.css" -exec wc -c {} + | tail -1 | awk '{print $1}')
+                TOTAL_SIZE=$((TOTAL_SIZE + CSS_SIZE))
+              fi
+
+              TOTAL_KB=$((TOTAL_SIZE / 1024))
+              echo "current_${app}_size=$TOTAL_KB" >> $GITHUB_OUTPUT
+              echo "Current $app size: ${TOTAL_KB}KB"
+            fi
+          done
+
+      - name: Checkout base branch
+        run: |
+          git checkout ${{ github.event.pull_request.base.sha }}
+          pnpm install --frozen-lockfile
+          export ANALYZE=true
+          pnpm build
+
+      - name: Measure base bundle sizes
+        id: measure-base
+        run: |
+          # Measure base branch bundle sizes
+          for app in web admin auth landing; do
+            if [ -d "apps/$app/.next" ]; then
+              TOTAL_SIZE=0
+
+              # Calculate total size
+              if [ -d "apps/$app/.next/static/chunks" ]; then
+                JS_SIZE=$(find apps/$app/.next/static/chunks -name "*.js" -exec wc -c {} + | tail -1 | awk '{print $1}')
+                TOTAL_SIZE=$((TOTAL_SIZE + JS_SIZE))
+              fi
+
+              if [ -d "apps/$app/.next/static/css" ]; then
+                CSS_SIZE=$(find apps/$app/.next/static/css -name "*.css" -exec wc -c {} + | tail -1 | awk '{print $1}')
+                TOTAL_SIZE=$((TOTAL_SIZE + CSS_SIZE))
+              fi
+
+              TOTAL_KB=$((TOTAL_SIZE / 1024))
+              echo "base_${app}_size=$TOTAL_KB" >> $GITHUB_OUTPUT
+              echo "Base $app size: ${TOTAL_KB}KB"
+            fi
+          done
+
+      - name: Compare bundle sizes
+        run: |
+          # Compare bundle sizes and check for regressions
+          REGRESSION_DETECTED=false
+
+          for app in web admin auth landing; do
+            CURRENT_SIZE_VAR="current_${app}_size"
+            BASE_SIZE_VAR="base_${app}_size"
+
+            CURRENT_SIZE="${!CURRENT_SIZE_VAR}"
+            BASE_SIZE="${!BASE_SIZE_VAR}"
+
+            if [ ! -z "$CURRENT_SIZE" ] && [ ! -z "$BASE_SIZE" ]; then
+              CHANGE=$((CURRENT_SIZE - BASE_SIZE))
+              PERCENTAGE=$((CHANGE * 100 / BASE_SIZE))
+
+              echo "$app: $CURRENT_SIZE KB (was $BASE_SIZE KB, change: ${CHANGE:+$CHANGE} KB, ${PERCENTAGE:+$PERCENTAGE}%)"
+
+              # Check for significant regression (>10% increase)
+              if [ $CHANGE -gt 0 ] && [ $PERCENTAGE -gt 10 ]; then
+                echo "❌ Bundle size regression detected for $app: ${PERCENTAGE}% increase"
+                REGRESSION_DETECTED=true
+              fi
+            fi
+          done
+
+          if [ "$REGRESSION_DETECTED" = "true" ]; then
+            echo "BUNDLE_REGRESSION=true" >> $GITHUB_ENV
+            exit 1
+          else
+            echo "✅ No significant bundle size regressions detected"
+          fi
+
+      - name: Comment bundle size comparison
+        if: always()
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const apps = ['web', 'admin', 'auth', 'landing'];
+            let comment = '## 📦 Bundle Size Comparison\n\n';
+
+            // Get bundle size data from environment variables
+            const webCurrent = '${{ steps.measure-current.outputs.current_web_size }}';
+            const webBase = '${{ steps.measure-base.outputs.base_web_size }}';
+            const adminCurrent = '${{ steps.measure-current.outputs.current_admin_size }}';
+            const adminBase = '${{ steps.measure-base.outputs.base_admin_size }}';
+            const authCurrent = '${{ steps.measure-current.outputs.current_auth_size }}';
+            const authBase = '${{ steps.measure-base.outputs.base_auth_size }}';
+            const landingCurrent = '${{ steps.measure-current.outputs.current_landing_size }}';
+            const landingBase = '${{ steps.measure-base.outputs.base_landing_size }}';
+
+            const bundleData = [
+              { app: 'web', current: webCurrent, base: webBase },
+              { app: 'admin', current: adminCurrent, base: adminBase },
+              { app: 'auth', current: authCurrent, base: authBase },
+              { app: 'landing', current: landingCurrent, base: landingBase }
+            ];
+
+            for (const data of bundleData) {
+              if (data.current && data.base) {
+                const current = parseInt(data.current);
+                const base = parseInt(data.base);
+                const change = current - base;
+                const percentage = Math.round((change / base) * 100);
+
+                comment += `### ${data.app} App\n`;
+                comment += `- **Current:** ${current}KB\n`;
+                comment += `- **Base:** ${base}KB\n`;
+                comment += `- **Change:** ${change > 0 ? '+' : ''}${change}KB (${percentage > 0 ? '+' : ''}${percentage}%)\n\n`;
+
+                if (change > 0 && percentage > 10) {
+                  comment += `⚠️ **Significant increase detected!**\n\n`;
+                }
+              }
+            }
+
+            if ('${{ env.BUNDLE_REGRESSION }}' === 'true') {
+              comment += '❌ **Bundle size regression detected!** Please review the changes.\n';
+            } else {
+              comment += '✅ **No significant regressions detected.**\n';
+            }
+
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: comment
+            });

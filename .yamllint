@@ -1,0 +1,31 @@
+extends: default
+
+rules:
+  # Line length
+  line-length:
+    max: 120
+    level: warning
+
+  # Indentation
+  indentation:
+    spaces: 2
+    indent-sequences: true
+
+  # Trailing spaces
+  trailing-spaces: enable
+
+  # Empty lines at end of file
+  document-end: disable
+
+  # Comments
+  comments-indentation: enable
+
+  # Empty mapping values
+  empty-lines:
+    max: 1
+    max-end: 1
+
+  # Truthy values
+  truthy:
+    check-keys: false
+    allowed-values: ['true', 'false', 'yes', 'no', 'on', 'off']

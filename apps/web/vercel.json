@@ -1,4 +1,12 @@
 {
+  "git": {
+    "deploymentEnabled": {
+      "main": false,
+      "preview": false
+    }
+  },
   "buildCommand": "cd ../.. && pnpm turbo build --filter=@peakhealth/web",
+  "installCommand": "cd ../.. && pnpm install --frozen-lockfile",
+  "framework": "nextjs",
   "outputDirectory": ".next"
 }

@@ -15,7 +15,8 @@ const hypertuneSource = createSource({
   token: hypertuneToken,
 });
 
-export default async function getHypertune(params?: {
+// eslint-disable-next-line no-unused-vars
+export default async function getHypertune(_params?: {
   headers?: ReadonlyHeaders;
   cookies?: ReadonlyRequestCookies;
 }): Promise<ReturnType<typeof hypertuneSource.root>> {

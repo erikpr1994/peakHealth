@@ -1,0 +1,325 @@
+name: Performance Analysis
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'apps/**'
+      - 'packages/**'
+      - 'package.json'
+      - 'pnpm-lock.yaml'
+      - 'turbo.json'
+  # Allow manual triggering
+  workflow_dispatch: {}
+
+jobs:
+  bundle-analysis:
+    name: Bundle Analysis
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup environment
+        uses: ./.github/actions/setup
+
+      - name: Build with bundle analysis
+        run: |
+          # Set environment variable for Next.js bundle analyzer
+          export ANALYZE=true
+
+          # Build all apps
+          pnpm build
+
+      - name: Analyze bundle sizes
+        run: |
+          # Create bundle size report
+          echo "## 📊 Bundle Size Analysis" > bundle-report.md
+          echo "" >> bundle-report.md
+
+          # Analyze each app's bundle
+          for app in web admin auth landing; do
+            if [ -d "apps/$app/.next" ]; then
+              echo "### $app App" >> bundle-report.md
+
+              # Get bundle stats if available
+              if [ -f "apps/$app/.next/analyze/client.html" ]; then
+                echo "- ✅ Bundle analysis available" >> bundle-report.md
+
+                # Extract basic stats (this is a simplified version)
+                TOTAL_SIZE=$(find apps/$app/.next/static -name "*.js" -exec wc -c {} + | tail -1 | awk '{print $1}')
+                if [ ! -z "$TOTAL_SIZE" ]; then
+                  SIZE_KB=$((TOTAL_SIZE / 1024))
+                  echo "- 📦 Total JS size: ${SIZE_KB}KB" >> bundle-report.md
+
+                  # Check against budget
+                  if [ $SIZE_KB -gt 1000 ]; then
+                    echo "- ⚠️ Bundle size exceeds 1MB budget" >> bundle-report.md
+                  else
+                    echo "- ✅ Bundle size within budget" >> bundle-report.md
+                  fi
+                fi
+              else
+                echo "- ❌ No bundle analysis available" >> bundle-report.md
+              fi
+
+              echo "" >> bundle-report.md
+            fi
+          done
+
+      - name: Upload bundle analysis results
+        uses: actions/upload-artifact@v4
+        with:
+          name: bundle-analysis
+          path: |
+            apps/*/analyze
+            apps/*/.next/analyze
+            bundle-report.md
+          retention-days: 14
+
+      - name: Comment bundle size on PR
+        uses: actions/github-script@v7
+        if: github.event_name == 'pull_request'
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const fs = require('fs');
+
+            let comment = '## 📊 Bundle Size Analysis\n\n';
+
+            // Read bundle report if available
+            if (fs.existsSync('bundle-report.md')) {
+              const report = fs.readFileSync('bundle-report.md', 'utf8');
+              comment += report;
+            } else {
+              // Fallback analysis
+              const apps = ['web', 'admin', 'auth', 'landing'];
+
+              for (const app of apps) {
+                const statsPath = `apps/${app}/.next/analyze/client.html`;
+                if (fs.existsSync(statsPath)) {
+                  comment += `### ${app} App\n✅ Bundle analysis available\n\n`;
+                }
+              }
+            }
+
+            comment += '\n📥 Download the bundle-analysis artifact for detailed reports.';
+
+            // Post comment on PR
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: comment
+            });
+
+  lighthouse:
+    name: Lighthouse Analysis
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup environment
+        uses: ./.github/actions/setup
+
+      - name: Build
+        run: pnpm build
+
+      - name: Start local server
+        run: |
+          # Start the web app in the background
+          cd apps/web
+          pnpm start &
+          echo $! > .web-server.pid
+
+          # Wait for server to be ready
+          echo "Waiting for server to be ready..."
+          npx wait-on http://localhost:3000 -t 60000
+
+      - name: Run Lighthouse CI
+        uses: treosh/lighthouse-ci-action@v11
+        with:
+          urls: |
+            http://localhost:3000
+          uploadArtifacts: true
+          temporaryPublicStorage: true
+          configPath: '.github/lighthouse-config.json'
+
+      - name: Stop local server
+        if: always()
+        run: |
+          if [ -f apps/web/.web-server.pid ]; then
+            kill $(cat apps/web/.web-server.pid)
+            rm apps/web/.web-server.pid
+          fi
+
+      - name: Generate performance summary
+        if: always()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+
+            let summary = '## ⚡ Performance Analysis\n\n';
+
+            // Check for Lighthouse results
+            if (fs.existsSync('.lighthouseci')) {
+              try {
+                const results = JSON.parse(fs.readFileSync('.lighthouseci/manifest.json', 'utf8'));
+
+                summary += '### 🏠 Lighthouse Results\n';
+
+                for (const result of results) {
+                  const url = result.url;
+                  const scores = result.summary;
+
+                  summary += `**URL:** ${url}\n`;
+                  summary += `- Performance: ${Math.round(scores.performance * 100)}%\n`;
+                  summary += `- Accessibility: ${Math.round(scores.accessibility * 100)}%\n`;
+                  summary += `- Best Practices: ${Math.round(scores['best-practices'] * 100)}%\n`;
+                  summary += `- SEO: ${Math.round(scores.seo * 100)}%\n\n`;
+
+                  // Check for performance regressions
+                  if (scores.performance < 0.8) {
+                    summary += '⚠️ **Performance below 80% threshold**\n\n';
+                  }
+                }
+              } catch (error) {
+                summary += '❌ Failed to parse Lighthouse results\n\n';
+              }
+            }
+
+            summary += '📊 Check the Lighthouse CI artifacts for detailed reports.';
+
+            await core.summary
+              .addRaw(summary)
+              .write();
+
+  performance-regression:
+    name: Performance Regression Detection
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup environment
+        uses: ./.github/actions/setup
+
+      - name: Build current branch
+        run: pnpm build
+
+      - name: Measure current performance
+        id: measure-current
+        run: |
+          # Simple performance measurement
+          echo "Measuring current branch performance..."
+
+          # Start server
+          cd apps/web
+          pnpm start &
+          SERVER_PID=$!
+
+          # Wait for server
+          sleep 30
+
+          # Measure load time
+          START_TIME=$(date +%s.%N)
+          curl -s http://localhost:3000 > /dev/null
+          END_TIME=$(date +%s.%N)
+
+          LOAD_TIME=$(echo "$END_TIME - $START_TIME" | bc)
+          echo "current_load_time=$LOAD_TIME" >> $GITHUB_OUTPUT
+
+          # Kill server
+          kill $SERVER_PID
+
+          echo "Current branch load time: ${LOAD_TIME}s"
+
+      - name: Checkout base branch
+        run: |
+          git checkout ${{ github.event.pull_request.base.sha }}
+          pnpm install --frozen-lockfile
+          pnpm build
+
+      - name: Measure base performance
+        id: measure-base
+        run: |
+          # Simple performance measurement for base branch
+          echo "Measuring base branch performance..."
+
+          # Start server
+          cd apps/web
+          pnpm start &
+          SERVER_PID=$!
+
+          # Wait for server
+          sleep 30
+
+          # Measure load time
+          START_TIME=$(date +%s.%N)
+          curl -s http://localhost:3000 > /dev/null
+          END_TIME=$(date +%s.%N)
+
+          LOAD_TIME=$(echo "$END_TIME - $START_TIME" | bc)
+          echo "base_load_time=$LOAD_TIME" >> $GITHUB_OUTPUT
+
+          # Kill server
+          kill $SERVER_PID
+
+          echo "Base branch load time: ${LOAD_TIME}s"
+
+      - name: Compare performance
+        id: compare-performance
+        run: |
+          CURRENT_TIME=${{ steps.measure-current.outputs.current_load_time }}
+          BASE_TIME=${{ steps.measure-base.outputs.base_load_time }}
+
+          # Calculate percentage change
+          CHANGE=$(echo "scale=2; (($CURRENT_TIME - $BASE_TIME) / $BASE_TIME) * 100" | bc)
+
+          echo "change=$CHANGE" >> $GITHUB_OUTPUT
+          echo "Performance change: ${CHANGE}%"
+
+          # Check for significant regression (>10% slower)
+          if (( $(echo "$CHANGE > 10" | bc -l) )); then
+            echo "❌ Performance regression detected: ${CHANGE}% slower"
+            exit 1
+          elif (( $(echo "$CHANGE < -10" | bc -l) )); then
+            echo "✅ Performance improvement: ${CHANGE}% faster"
+          else
+            echo "✅ Performance within acceptable range: ${CHANGE}% change"
+          fi
+
+      - name: Comment performance results
+        if: always()
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const currentTime = '${{ steps.measure-current.outputs.current_load_time }}';
+            const baseTime = '${{ steps.measure-base.outputs.base_load_time }}';
+            const change = '${{ steps.compare-performance.outputs.change }}';
+
+            let comment = '## ⚡ Performance Regression Check\n\n';
+            comment += `**Current branch load time:** ${currentTime}s\n`;
+            comment += `**Base branch load time:** ${baseTime}s\n`;
+            comment += `**Change:** ${change}%\n\n`;
+
+            if (parseFloat(change) > 10) {
+              comment += '❌ **Performance regression detected!** Consider optimizing before merging.\n';
+            } else if (parseFloat(change) < -10) {
+              comment += '✅ **Performance improvement detected!** Great work!\n';
+            } else {
+              comment += '✅ **Performance within acceptable range.**\n';
+            }
+
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: comment
+            });

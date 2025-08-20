@@ -13,14 +13,16 @@
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
-    "@peakhealth/web": "workspace:*",
     "@peakhealth/admin": "workspace:*",
+    "@peakhealth/auth": "workspace:*",
     "@peakhealth/landing": "workspace:*",
-    "@peakhealth/auth": "workspace:*"
+    "@peakhealth/web": "workspace:*"
   },
   "devDependencies": {
     "@playwright/test": "^1.54.2",
     "@types/node": "^24.3.0",
+    "@typescript-eslint/parser": "^8.40.0",
+    "eslint-plugin-playwright": "^2.2.2",
     "typescript": "^5.9.2"
   }
 }

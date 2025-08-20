@@ -1,29 +1,30 @@
-const js = require('@eslint/js');
-const nextPlugin = require('@next/eslint-plugin-next');
-const typescriptPlugin = require('@typescript-eslint/eslint-plugin');
-const typescriptParser = require('@typescript-eslint/parser');
-const codeCompletePlugin = require('eslint-plugin-code-complete');
-const compatPlugin = require('eslint-plugin-compat');
-const constCasePlugin = require('eslint-plugin-const-case');
-const cssModulesPlugin = require('eslint-plugin-css-modules');
-const dependPlugin = require('eslint-plugin-depend');
-const diffPlugin = require('eslint-plugin-diff');
-const githubPlugin = require('eslint-plugin-github');
-const importXPlugin = require('eslint-plugin-import-x');
-const jsxA11yPlugin = require('eslint-plugin-jsx-a11y');
-const noSecretsPlugin = require('eslint-plugin-no-secrets');
-const noUnsanitizedPlugin = require('eslint-plugin-no-unsanitized');
+import js from '@eslint/js';
+import nextPlugin from '@next/eslint-plugin-next';
+import typescriptPlugin from '@typescript-eslint/eslint-plugin';
+import typescriptParser from '@typescript-eslint/parser';
+import codeCompletePlugin from 'eslint-plugin-code-complete';
+import compatPlugin from 'eslint-plugin-compat';
+import constCasePlugin from 'eslint-plugin-const-case';
+import cssModulesPlugin from 'eslint-plugin-css-modules';
+import dependPlugin from 'eslint-plugin-depend';
+import diffPlugin from 'eslint-plugin-diff';
+import githubPlugin from 'eslint-plugin-github';
+import importXPlugin from 'eslint-plugin-import-x';
+import jsxA11yPlugin from 'eslint-plugin-jsx-a11y';
+import noSecretsPlugin from 'eslint-plugin-no-secrets';
+import noUnsanitizedPlugin from 'eslint-plugin-no-unsanitized';
+import piiPlugin from 'eslint-plugin-pii';
+import playwrightPlugin from 'eslint-plugin-playwright';
+import prettierPlugin from 'eslint-plugin-prettier';
+import reactPlugin from 'eslint-plugin-react';
+import reactHooksPlugin from 'eslint-plugin-react-hooks';
+import reactRefreshPlugin from 'eslint-plugin-react-refresh';
+import ruleAdoptionPlugin from 'eslint-plugin-rule-adoption';
+import unicornPlugin from 'eslint-plugin-unicorn';
+import ymlPlugin from 'eslint-plugin-yml';
+import yamlParser from 'yaml-eslint-parser';
 
-const piiPlugin = require('eslint-plugin-pii');
-const playwrightPlugin = require('eslint-plugin-playwright');
-const prettierPlugin = require('eslint-plugin-prettier');
-const reactPlugin = require('eslint-plugin-react');
-const reactHooksPlugin = require('eslint-plugin-react-hooks');
-const reactRefreshPlugin = require('eslint-plugin-react-refresh');
-const ruleAdoptionPlugin = require('eslint-plugin-rule-adoption');
-const unicornPlugin = require('eslint-plugin-unicorn');
-
-module.exports = [
+export default [
   js.configs.recommended,
   {
     files: [
@@ -259,6 +260,30 @@ module.exports = [
       '@typescript-eslint/no-non-null-assertion': 'off',
       '@typescript-eslint/no-unused-vars': 'off',
       '@typescript-eslint/no-var-requires': 'off',
+    },
+  },
+  // YAML configuration for GitHub Actions workflows
+  {
+    files: ['.github/workflows/**/*.yml', '.github/workflows/**/*.yaml'],
+    plugins: {
+      yml: ymlPlugin,
+    },
+    languageOptions: {
+      parser: yamlParser,
+    },
+    rules: {
+      ...ymlPlugin.configs.recommended.rules,
+      'yml/indent': ['error', 2],
+      'yml/quotes': ['error', { prefer: 'single' }],
+      'yml/no-empty-document': 'error',
+      'yml/no-empty-key': 'error',
+      'yml/no-empty-mapping-value': 'error',
+      'yml/no-empty-sequence-entry': 'error',
+      'yml/no-tab-indent': 'error',
+      'yml/require-string-key': 'error',
+      'yml/key-spacing': ['error', { beforeColon: false, afterColon: true }],
+      'yml/no-irregular-whitespace': 'error',
+      'yml/spaced-comment': ['error', 'always'],
     },
   },
 ];

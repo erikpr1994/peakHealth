@@ -1,0 +1,85 @@
+name: YAML Lint
+
+on:
+  pull_request:
+    paths:
+      - '**.yml'
+      - '**.yaml'
+      - '.github/workflows/**'
+  push:
+    branches: [main]
+    paths:
+      - '**.yml'
+      - '**.yaml'
+      - '.github/workflows/**'
+  workflow_dispatch: {}
+
+jobs:
+  yaml-lint:
+    name: Lint YAML files
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install yamllint
+        run: |
+          python -m pip install --upgrade pip
+          pip install yamllint
+
+      - name: Create yamllint config
+        run: |
+          cat > .yamllint << EOF
+          extends: default
+
+          rules:
+            # Line length
+            line-length:
+              max: 120
+              level: warning
+            
+            # Indentation
+            indentation:
+              spaces: 2
+              indent-sequences: true
+            
+            # Trailing spaces
+            trailing-spaces: enable
+            
+            # Empty lines at end of file
+            document-end: disable
+            
+            # Comments
+            comments-indentation: enable
+            
+            # Empty mapping values
+            empty-lines:
+              max: 1
+              max-end: 1
+            
+            # Truthy values
+            truthy:
+              check-keys: false
+              allowed-values: ['true', 'false', 'yes', 'no', 'on', 'off']
+          EOF
+
+      - name: Lint YAML files
+        run: |
+          echo "Linting YAML files..."
+          yamllint -f parsable .github/workflows/ || true
+          yamllint -f parsable *.yml *.yaml || true
+
+          echo "Running yamllint with detailed output..."
+          yamllint .github/workflows/ || exit 1
+          yamllint *.yml *.yaml || exit 1
+
+      - name: Lint specific directories
+        run: |
+          echo "Linting specific YAML files..."
+          find . -name "*.yml" -o -name "*.yaml" | grep -v node_modules | xargs yamllint || exit 1

@@ -1,4 +1,3 @@
-/* eslint-disable no-secrets/no-secrets */
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { getLoginUrl, getSignupUrl } from './auth';
 
