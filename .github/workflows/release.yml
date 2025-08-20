@@ -76,8 +76,8 @@ jobs:
         id: changelog
         uses: mikepenz/release-changelog-builder-action@v4
         with:
-          configuration: ".github/changelog-config.json"
-          outputFile: "CHANGELOG.md"
+          configuration: '.github/changelog-config.json'
+          outputFile: 'CHANGELOG.md'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -103,13 +103,13 @@ jobs:
         app: [web, admin, auth, landing]
         include:
           - app: web
-            project: ${{ secrets.SENTRY_PROJECT_WEB }}
+            project: '${{ secrets.SENTRY_PROJECT_WEB }}'
           - app: admin
-            project: ${{ secrets.SENTRY_PROJECT_ADMIN }}
+            project: '${{ secrets.SENTRY_PROJECT_ADMIN }}'
           - app: auth
-            project: ${{ secrets.SENTRY_PROJECT_AUTH }}
+            project: '${{ secrets.SENTRY_PROJECT_AUTH }}'
           - app: landing
-            project: ${{ secrets.SENTRY_PROJECT_LANDING }}
+            project: '${{ secrets.SENTRY_PROJECT_LANDING }}'
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4

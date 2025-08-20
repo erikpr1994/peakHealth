@@ -13,7 +13,6 @@ const importXPlugin = require('eslint-plugin-import-x');
 const jsxA11yPlugin = require('eslint-plugin-jsx-a11y');
 const noSecretsPlugin = require('eslint-plugin-no-secrets');
 const noUnsanitizedPlugin = require('eslint-plugin-no-unsanitized');
-
 const piiPlugin = require('eslint-plugin-pii');
 const playwrightPlugin = require('eslint-plugin-playwright');
 const prettierPlugin = require('eslint-plugin-prettier');
@@ -22,6 +21,8 @@ const reactHooksPlugin = require('eslint-plugin-react-hooks');
 const reactRefreshPlugin = require('eslint-plugin-react-refresh');
 const ruleAdoptionPlugin = require('eslint-plugin-rule-adoption');
 const unicornPlugin = require('eslint-plugin-unicorn');
+const ymlPlugin = require('eslint-plugin-yml');
+const yamlParser = require('yaml-eslint-parser');
 
 module.exports = [
   js.configs.recommended,
@@ -259,6 +260,30 @@ module.exports = [
       '@typescript-eslint/no-non-null-assertion': 'off',
       '@typescript-eslint/no-unused-vars': 'off',
       '@typescript-eslint/no-var-requires': 'off',
+    },
+  },
+  // YAML configuration for GitHub Actions workflows
+  {
+    files: ['.github/workflows/**/*.yml', '.github/workflows/**/*.yaml'],
+    plugins: {
+      yml: ymlPlugin,
+    },
+    languageOptions: {
+      parser: yamlParser,
+    },
+    rules: {
+      ...ymlPlugin.configs.recommended.rules,
+      'yml/indent': ['error', 2],
+      'yml/quotes': ['error', { prefer: 'single' }],
+      'yml/no-empty-document': 'error',
+      'yml/no-empty-key': 'error',
+      'yml/no-empty-mapping-value': 'error',
+      'yml/no-empty-sequence-entry': 'error',
+      'yml/no-tab-indent': 'error',
+      'yml/require-string-key': 'error',
+      'yml/key-spacing': ['error', { beforeColon: false, afterColon: true }],
+      'yml/no-irregular-whitespace': 'error',
+      'yml/spaced-comment': ['error', 'always'],
     },
   },
 ];

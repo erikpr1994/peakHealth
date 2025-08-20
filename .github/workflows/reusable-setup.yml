@@ -5,7 +5,11 @@ on:
     inputs:
       node-version:
         required: false
-        default: '24.x'
+        default: ''
+        type: string
+      pnpm-version:
+        required: false
+        default: ''
         type: string
       install-dependencies:
         required: false
@@ -15,10 +19,22 @@ on:
         required: false
         default: true
         type: boolean
+      setup-build-cache:
+        required: false
+        default: false
+        type: boolean
+      setup-test-cache:
+        required: false
+        default: false
+        type: boolean
       fetch-depth:
         required: false
         default: 1
         type: number
+      cache-key:
+        required: false
+        default: ''
+        type: string
 
 jobs:
   setup:
@@ -29,23 +45,61 @@ jobs:
         with:
           fetch-depth: ${{ inputs.fetch-depth }}
 
-      - name: Extract pnpm version from package.json
-        id: pnpm-version
-        shell: bash
+      - name: Extract Node.js version
+        id: node-version
         run: |
-          PNPM_VERSION=$(node -e "try { const pkg = require('./package.json'); console.log(pkg.packageManager.split('@')[1]); } catch (e) { console.log('10.14.0'); }")
-          echo "version=${PNPM_VERSION}" >> $GITHUB_OUTPUT
-          echo "Using pnpm version: ${PNPM_VERSION}"
+          # Try to get Node.js version from .nvmrc first
+          if [ -f ".nvmrc" ]; then
+            NODE_VERSION=$(cat .nvmrc | tr -d '\n')
+            echo "Using Node.js version from .nvmrc: $NODE_VERSION"
+          elif [ -f "package.json" ]; then
+            # Try to extract from package.json engines field
+            NODE_VERSION=$(node -e "try { const pkg = require('./package.json'); console.log(pkg.engines?.node || '24.x'); } catch (e) { console.log('24.x'); }")
+            echo "Using Node.js version from package.json: $NODE_VERSION"
+          else
+            NODE_VERSION="24.x"
+            echo "Using default Node.js version: $NODE_VERSION"
+          fi
+
+          # Use input version if provided, otherwise use extracted version
+          if [ "${{ inputs.node-version }}" != "" ]; then
+            NODE_VERSION="${{ inputs.node-version }}"
+            echo "Using provided Node.js version: $NODE_VERSION"
+          fi
+
+          echo "node-version=$NODE_VERSION" >> $GITHUB_OUTPUT
+          echo "Final Node.js version: $NODE_VERSION"
+
+      - name: Extract pnpm version
+        id: pnpm-version
+        run: |
+          # Try to get pnpm version from package.json packageManager field
+          if [ -f "package.json" ]; then
+            PNPM_VERSION=$(node -e "try { const pkg = require('./package.json'); const pm = pkg.packageManager; if (pm && pm.startsWith('pnpm@')) { console.log(pm.split('@')[1]); } else { console.log('10.14.0'); } } catch (e) { console.log('10.14.0'); }")
+            echo "Using pnpm version from package.json: $PNPM_VERSION"
+          else
+            PNPM_VERSION="10.14.0"
+            echo "Using default pnpm version: $PNPM_VERSION"
+          fi
+
+          # Use input version if provided, otherwise use extracted version
+          if [ "${{ inputs.pnpm-version }}" != "" ]; then
+            PNPM_VERSION="${{ inputs.pnpm-version }}"
+            echo "Using provided pnpm version: $PNPM_VERSION"
+          fi
+
+          echo "pnpm-version=$PNPM_VERSION" >> $GITHUB_OUTPUT
+          echo "Final pnpm version: $PNPM_VERSION"
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: ${{ inputs.node-version }}
+          node-version: ${{ steps.node-version.outputs.node-version }}
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v3
         with:
-          version: ${{ steps.pnpm-version.outputs.version }}
+          version: ${{ steps.pnpm-version.outputs.pnpm-version }}
           run_install: false
 
       - name: Get pnpm store directory
@@ -71,6 +125,100 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-turbo-
 
+      - name: Setup build cache
+        if: ${{ inputs.setup-build-cache }}
+        uses: actions/cache@v4
+        with:
+          path: |
+            apps/*/dist
+            apps/*/.next
+            packages/*/dist
+            .next
+            node_modules/.cache
+          key: ${{ runner.os }}-build-${{ inputs.cache-key || github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-build-
+
+      - name: Setup test cache
+        if: ${{ inputs.setup-test-cache }}
+        uses: actions/cache@v4
+        with:
+          path: |
+            **/coverage
+            **/test-results
+            **/.nyc_output
+            **/junit.xml
+          key: ${{ runner.os }}-test-${{ inputs.cache-key || github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-test-
+
+      - name: Setup dependency cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            node_modules
+            **/node_modules
+          key: ${{ runner.os }}-deps-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-deps-
+
       - name: Install dependencies
         if: ${{ inputs.install-dependencies }}
         run: pnpm install --frozen-lockfile
+
+      - name: Cache warming
+        if: ${{ inputs.setup-build-cache }}
+        run: |
+          # Warm up build cache by running a dry build
+          echo "Warming up build cache..."
+          pnpm turbo run build --dry-run --cache-dir=.turbo
+
+          # Warm up test cache
+          if [ "${{ inputs.setup-test-cache }}" = "true" ]; then
+            echo "Warming up test cache..."
+            pnpm turbo run test --dry-run --cache-dir=.turbo
+          fi
+
+      - name: Cache status report
+        if: always()
+        run: |
+          echo "## 📦 Cache Status Report"
+          echo ""
+
+          # Check pnpm cache
+          if [ -d "$(pnpm store path)" ]; then
+            PNPM_CACHE_SIZE=$(du -sh "$(pnpm store path)" | cut -f1)
+            echo "✅ pnpm cache: $PNPM_CACHE_SIZE"
+          else
+            echo "❌ pnpm cache: Not found"
+          fi
+
+          # Check Turborepo cache
+          if [ "${{ inputs.setup-turborepo-cache }}" = "true" ] && [ -d ".turbo" ]; then
+            TURBO_CACHE_SIZE=$(du -sh .turbo | cut -f1)
+            echo "✅ Turborepo cache: $TURBO_CACHE_SIZE"
+          else
+            echo "❌ Turborepo cache: Not enabled or not found"
+          fi
+
+          # Check build cache
+          if [ "${{ inputs.setup-build-cache }}" = "true" ]; then
+            BUILD_CACHE_COUNT=$(find . -name "dist" -o -name ".next" | wc -l)
+            echo "✅ Build cache: $BUILD_CACHE_COUNT directories"
+          else
+            echo "❌ Build cache: Not enabled"
+          fi
+
+          # Check test cache
+          if [ "${{ inputs.setup-test-cache }}" = "true" ]; then
+            TEST_CACHE_COUNT=$(find . -name "coverage" -o -name "test-results" | wc -l)
+            echo "✅ Test cache: $TEST_CACHE_COUNT directories"
+          else
+            echo "❌ Test cache: Not enabled"
+          fi
+
+          # Display version information
+          echo ""
+          echo "## 🔧 Version Information"
+          echo "Node.js: ${{ steps.node-version.outputs.node-version }}"
+          echo "pnpm: ${{ steps.pnpm-version.outputs.pnpm-version }}"

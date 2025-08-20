@@ -9,10 +9,7 @@ on:
   schedule:
     - cron: '0 0 * * 0'
   # Allow manual triggering
-  workflow_dispatch:
-
-env:
-  NODE_VERSION: 24.x
+  workflow_dispatch: {}
 
 jobs:
   dependency-review:
@@ -41,67 +38,114 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Extract pnpm version from package.json
-        id: pnpm-version
-        shell: bash
-        run: |
-          PNPM_VERSION=$(node -e "try { const pkg = require('./package.json'); console.log(pkg.packageManager.split('@')[1]); } catch (e) { console.log('10.14.0'); }")
-          echo "version=${PNPM_VERSION}" >> $GITHUB_OUTPUT
-          echo "Using pnpm version: ${PNPM_VERSION}"
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v3
-        with:
-          version: ${{ steps.pnpm-version.outputs.version }}
-          run_install: false
-
-      - name: Get pnpm store directory
-        id: pnpm-cache
-        shell: bash
-        run: |
-          echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_OUTPUT
-
-      - name: Setup pnpm cache
-        uses: actions/cache@v4
-        with:
-          path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
-          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-pnpm-store-
-
-      - name: Setup Turborepo cache
-        uses: actions/cache@v4
-        with:
-          path: .turbo
-          key: ${{ runner.os }}-turbo-${{ github.sha }}
-          restore-keys: |
-            ${{ runner.os }}-turbo-
-
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+      - name: Setup environment
+        uses: ./.github/workflows/reusable-setup.yml
 
       # Run npm audit
       - name: Run pnpm audit
         run: pnpm audit --audit-level high
         continue-on-error: true
 
-      # Run ESLint security rules
-      - name: Run ESLint security rules
-        run: |
-          pnpm eslint . \
-            --config eslint.config.js \
-            --ext .js,.jsx,.ts,.tsx \
-            --no-error-on-unmatched-pattern \
-            --rule 'no-secrets/no-secrets: error' \
-            --rule 'no-unsanitized/method: error' \
-            --rule 'no-unsanitized/property: error' \
-            --rule 'pii/no-phone-number: error' \
-            --rule 'pii/no-email: error'
+      # SAST - Static Application Security Testing
+      - name: Run Semgrep SAST
+        uses: returntocorp/semgrep-action@v1
+        with:
+          config: >-
+            p/security-audit
+            p/secrets
+            p/owasp-top-ten
+            p/javascript
+            p/typescript
+            p/react
+            p/nextjs
+
+      # Secret scanning
+      - name: Run TruffleHog secret scanner
+        uses: trufflesecurity/trufflehog@main
+        with:
+          path: .
+          base: ${{ github.event.pull_request.base.sha || 'HEAD~1' }}
+          head: ${{ github.sha }}
+          extra_args: --only-verified --fail
+
+      # Infrastructure as Code security scanning
+      - name: Run Checkov for IaC security
+        uses: bridgecrewio/checkov-action@master
+        with:
+          directory: .
+          framework: terraform,kubernetes,githubactions,cloudformation,arm,dockerfile,helm
+          output_format: sarif
+          output_file_path: checkov-results.sarif
+          soft_fail: true
+
+      # Container security scanning
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: 'fs'
+          scan-ref: '.'
+          format: 'sarif'
+          output: 'trivy-results.sarif'
+          severity: 'CRITICAL,HIGH'
+
+      # Upload security scan results
+      - name: Upload Semgrep results to GitHub Security tab
+        uses: github/codeql-action/upload-sarif@v3
+        if: always()
+        with:
+          sarif_file: semgrep-results.sarif
+
+      - name: Upload Checkov results to GitHub Security tab
+        uses: github/codeql-action/upload-sarif@v3
+        if: always()
+        with:
+          sarif_file: checkov-results.sarif
+
+      - name: Upload Trivy results to GitHub Security tab
+        uses: github/codeql-action/upload-sarif@v3
+        if: always()
+        with:
+          sarif_file: trivy-results.sarif
+
+      # Security summary
+      - name: Generate security summary
+        if: always()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+
+            let summary = '## 🔒 Security Scan Results\n\n';
+
+            // Check if security scan files exist and add to summary
+            const scanFiles = [
+              { name: 'Semgrep SAST', file: 'semgrep-results.sarif' },
+              { name: 'Checkov IaC', file: 'checkov-results.sarif' },
+              { name: 'Trivy Container', file: 'trivy-results.sarif' }
+            ];
+
+            for (const scan of scanFiles) {
+              try {
+                if (fs.existsSync(scan.file)) {
+                  const data = JSON.parse(fs.readFileSync(scan.file, 'utf8'));
+                  const results = data.runs?.[0]?.results || [];
+                  const errorCount = results.filter(r => r.level === 'error').length;
+                  const warningCount = results.filter(r => r.level === 'warning').length;
+
+                  summary += `### ${scan.name}\n`;
+                  summary += `- ❌ Errors: ${errorCount}\n`;
+                  summary += `- ⚠️ Warnings: ${warningCount}\n`;
+                  summary += `- 📊 Total Issues: ${results.length}\n\n`;
+                }
+              } catch (error) {
+                summary += `### ${scan.name}\n- ❌ Failed to parse results\n\n`;
+              }
+            }
+
+            await core.summary
+              .addRaw(summary)
+              .addRaw('Check the Security tab for detailed results.')
+              .write();
 
   codeql-analysis:
     name: CodeQL Analysis
@@ -123,41 +167,8 @@ jobs:
         with:
           languages: ${{ matrix.language }}
 
-      - name: Extract pnpm version from package.json
-        id: pnpm-version
-        shell: bash
-        run: |
-          PNPM_VERSION=$(node -e "try { const pkg = require('./package.json'); console.log(pkg.packageManager.split('@')[1]); } catch (e) { console.log('10.14.0'); }")
-          echo "version=${PNPM_VERSION}" >> $GITHUB_OUTPUT
-          echo "Using pnpm version: ${PNPM_VERSION}"
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v3
-        with:
-          version: ${{ steps.pnpm-version.outputs.version }}
-          run_install: false
-
-      - name: Get pnpm store directory
-        id: pnpm-cache
-        shell: bash
-        run: |
-          echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_OUTPUT
-
-      - name: Setup pnpm cache
-        uses: actions/cache@v4
-        with:
-          path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
-          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-pnpm-store-
-
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+      - name: Setup environment
+        uses: ./.github/workflows/reusable-setup.yml
 
       - name: Build
         run: pnpm build
@@ -165,4 +176,4 @@ jobs:
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v3
         with:
-          category: "/language:${{matrix.language}}"
+          category: '/language:${{matrix.language}}'
