@@ -28,7 +28,7 @@ test.describe('Setup: Admin User Landing → Login → Web App', () => {
       await page.getByLabel(/password/i).fill(password);
       await page.getByRole('button', { name: /sign in|log in/i }).click();
       await page.waitForURL('**/app-selector', { timeout: 120_000 });
-      await expect(page.getByText(/Select an Application/i)).toBeVisible();
+      await expect(page.getByTestId('app-card-web')).toBeVisible();
     });
 
     // Select web app and verify navigation
