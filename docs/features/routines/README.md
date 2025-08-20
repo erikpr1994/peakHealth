@@ -40,7 +40,7 @@ Feature-specific business strategy, competitive positioning, and success metrics
 
 The Routines feature enables users to create, manage, and track various types of workout routines. It supports both strength training and cardio/running workouts with advanced features like trail running planning.
 
-### Core Capabilities
+### Core Capabilities (Implemented)
 
 - **Routine Creation**: Create and edit workout routines with metadata
 - **Workout Management**: Add, remove, and reorder workouts and sections
@@ -48,7 +48,17 @@ The Routines feature enables users to create, manage, and track various types of
 - **Advanced Progression Methods**: Linear, dual, inverse pyramid, myo-reps, widowmaker, AMRAP
 - **Trail Running**: Specialized trail running workout creation with intervals
 - **Progress Tracking**: Visual indicators of routine progress and completion
-- **Basic Templates**: Curated routine templates for common goals
+- **Basic Templates**: Curated routine templates for common goals (UI ready)
+
+### Future Enhancements (Recommended)
+
+Based on industry trends, the following capabilities are recommended for future development:
+
+- **Progressive Overload Tracking**: Track weight, reps, and sets progression over time
+- **AI Recommendations**: Personalized routine and exercise suggestions
+- **Wearable Integration**: Connect with fitness devices for real-time data
+- **Performance Analytics**: Insights and trends from workout history
+- **Adaptive Programming**: Smart adjustments based on performance and recovery
 
 ### Target Users
 
@@ -71,8 +81,10 @@ This feature primarily serves:
 ## Current Status
 
 - **Phase**: MVP Development Ready
-- **Status**: Core functionality implemented, needs data persistence
+- **Status**: Core functionality implemented, needs data persistence and integration
 - **Next Step**: Begin MVP development (Phase 1: Core Foundation)
+- **Current Priority**: API integration, database schema, and exercise library integration
+- **Future Roadmap**: Progressive overload tracking, wearable integration, and AI recommendations (based on industry trends)
 
 ## Quick Links
 
