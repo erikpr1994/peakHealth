@@ -115,6 +115,8 @@ jobs:
         with:
           setup-build-cache: true
 
+      # Build only workspace packages (no environment variables needed)
+      # Apps will be built by Vercel during deployment with proper env vars
       - name: Build packages only
         run: pnpm turbo run build --filter="@peakhealth/ui" --filter="@peakhealth/auth-types" --filter="@peakhealth/auth-utils"
 
@@ -125,6 +127,35 @@ jobs:
           path: |
             packages/*/dist
           retention-days: 1
+
+  # Optional: Full build job for testing (uncomment if needed)
+  #  build-apps:
+  #    name: Build Apps (Optional)
+  #    needs: build
+  #    runs-on: ubuntu-latest
+  #    if: ${{ github.ref == 'refs/heads/main' && github.event_name == 'push' }}
+  #    steps:
+  #      - name: Checkout repository
+  #        uses: actions/checkout@v4
+  #
+  #      - name: Setup environment
+  #        uses: ./.github/actions/setup
+  #        with:
+  #          setup-build-cache: true
+  #
+  #      - name: Download package artifacts
+  #        uses: actions/download-artifact@v4
+  #        with:
+  #          name: build-artifacts
+  #
+  #      # Add environment variables for app builds
+  #      - name: Build all apps
+  #        env:
+  #          # Add your environment variables here
+  #          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+  #          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
+  #          # Add other required env vars
+  #        run: pnpm turbo run build --filter="@peakhealth/web" --filter="@peakhealth/admin" --filter="@peakhealth/landing"
 
   e2e-tests:
     name: E2E Tests
