@@ -288,13 +288,13 @@ export const validateReturnUrl = (
   url: string,
   allowedDomains: string[]
 ): boolean => {
+  // Check if the URL is relative (starts with /)
+  if (url.startsWith('/')) {
+    return true;
+  }
+
   try {
     const parsedUrl = new URL(url);
-
-    // Check if the URL is relative (starts with /)
-    if (url.startsWith('/')) {
-      return true;
-    }
 
     // Check if the domain is in the allowed list
     return allowedDomains.some(domain => {

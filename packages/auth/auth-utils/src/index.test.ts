@@ -41,8 +41,8 @@ describe('Auth Utils', () => {
 
   describe('validateReturnUrl', () => {
     it('should validate relative URLs', () => {
-      expect(validateReturnUrl('/dashboard', [])).toBe(false);
-      expect(validateReturnUrl('/profile', [])).toBe(false);
+      expect(validateReturnUrl('/dashboard', [])).toBe(true);
+      expect(validateReturnUrl('/profile', [])).toBe(true);
     });
 
     it('should validate allowed domains', () => {
@@ -58,6 +58,11 @@ describe('Auth Utils', () => {
       expect(
         validateReturnUrl('https://malicious.com/dashboard', ['example.com'])
       ).toBe(false);
+    });
+
+    it('should reject invalid URLs that are not relative', () => {
+      expect(validateReturnUrl('invalid-url', ['example.com'])).toBe(false);
+      expect(validateReturnUrl('not-a-url', [])).toBe(false);
     });
   });
 
