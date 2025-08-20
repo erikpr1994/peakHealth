@@ -97,7 +97,12 @@ jobs:
         run: |
           echo "Linting YAML files..."
           yamllint .github/workflows/ || exit 1
-          yamllint *.yml *.yaml || exit 1
+          # Only lint root YAML files if they exist
+          if ls *.yml *.yaml 1> /dev/null 2>&1; then
+            yamllint *.yml *.yaml || exit 1
+          else
+            echo "No root YAML files found, skipping..."
+          fi
 
       - name: Run coverage tests
         if: ${{ steps.affected.outputs.affected != '' }}
