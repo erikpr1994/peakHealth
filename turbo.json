@@ -16,7 +16,8 @@
         "src/**/*.{ts,tsx,js,jsx}",
         "**/*.config.{ts,js,mjs}",
         "**/*.config.{ts,js,mjs}.json"
-      ]
+      ],
+      "env": ["ESLINT_FLAGS"]
     },
     "type-check": {
       "dependsOn": [

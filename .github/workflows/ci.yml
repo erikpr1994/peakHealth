@@ -119,6 +119,8 @@ jobs:
           cache-key: ${{ needs.setup-environment.outputs.cache-key }}
 
       - name: Run linting
+        env:
+          ESLINT_FLAGS: v10_config_lookup_from_file
         run: |
           pnpm turbo run lint --concurrency=3 --cache-dir=.turbo
 

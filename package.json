@@ -7,7 +7,7 @@
   "scripts": {
     "dev": "node scripts/cleanup-dev-ports.mjs && turbo dev",
     "build": "turbo build",
-    "lint": "turbo lint",
+    "lint": "ESLINT_FLAGS=v10_config_lookup_from_file turbo lint",
     "lint:adopt": "UPDATE_ADOPTION_BLACKLIST=true eslint .",
     "lint:yaml": "yamllint .github/workflows/ *.yml *.yaml",
     "type-check": "turbo type-check",
@@ -67,7 +67,7 @@
   "packageManager": "pnpm@10.14.0",
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
-      "eslint --fix",
+      "node scripts/lint-with-flags.mjs --fix",
       "prettier --write"
     ],
     "*.{json,css,md}": [
