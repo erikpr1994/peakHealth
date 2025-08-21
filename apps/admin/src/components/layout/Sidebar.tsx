@@ -3,6 +3,7 @@
 import React from 'react';
 import { LogOut, Shield } from 'lucide-react';
 import { usePathname, useRouter } from 'next/navigation';
+import type { AppRoutes } from '../../../.next/types/routes';
 
 import { useAuth } from '../../contexts/AuthContext';
 import { navigationSections } from '../../lib/navigation-config';
@@ -15,8 +16,8 @@ export const Sidebar = (): React.JSX.Element => {
   const pathname = usePathname();
   const { logout, user } = useAuth();
 
-  const handleNavigation = (path: string): void => {
-    router.push(path as any);
+  const handleNavigation = (path: AppRoutes): void => {
+    router.push(path);
   };
 
   const handleLogout = async (): Promise<void> => {
@@ -57,7 +58,7 @@ export const Sidebar = (): React.JSX.Element => {
                 return (
                   <button
                     key={item.id}
-                    onClick={() => handleNavigation(item.path)}
+                    onClick={() => handleNavigation(item.path as AppRoutes)}
                     className={`w-full flex items-center justify-start gap-3 px-3 py-2 rounded-md text-sm transition-colors ${
                       isActive
                         ? 'bg-primary text-primary-foreground'
