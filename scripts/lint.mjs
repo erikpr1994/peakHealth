@@ -33,9 +33,15 @@ const isNextApp = (path) => {
   return false;
 };
 
+// Check if any of the arguments are Next.js apps
+const hasNextApp = args.some(arg => isNextApp(arg));
+
 // Run ESLint with the provided arguments
 try {
-  execSync(`pnpm exec eslint ${args.join(' ')}`, {
+  // If we're linting a Next.js app, add the appropriate flags
+  const eslintCommand = `pnpm exec eslint ${args.join(' ')}`;
+  
+  execSync(eslintCommand, {
     stdio: 'inherit',
     env: process.env,
   });
