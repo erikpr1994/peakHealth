@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 import { execSync } from 'child_process';
-import { existsSync } from 'fs';
+import { existsSync, readFileSync } from 'fs';
 import { join } from 'path';
 
 // Set the ESLint feature flag for flat config
@@ -21,7 +21,7 @@ const isNextApp = (path) => {
       const packageJsonPath = join(process.cwd(), appPath, 'package.json');
       if (existsSync(packageJsonPath)) {
         try {
-          const packageJson = JSON.parse(execSync(`cat ${packageJsonPath}`).toString());
+          const packageJson = JSON.parse(readFileSync(packageJsonPath).toString());
           return !!packageJson.dependencies?.next;
         } catch (error) {
           return false;
