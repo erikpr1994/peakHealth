@@ -6,6 +6,7 @@ import {
   CollapsibleContent,
 } from './collapsible';
 import { Button } from '../button';
+import './stories.css';
 
 const meta: Meta<typeof Collapsible> = {
   title: 'Components/Collapsible',
@@ -33,26 +34,24 @@ type Story = StoryObj<typeof Collapsible>;
 
 export const Default: Story = {
   render: args => (
-    <Collapsible {...args} className="max-w-[350px]">
-      <div className="flex items-center justify-between space-x-4 px-4">
-        <h4 className="text-sm font-semibold">@peakhealth/ui collapsible</h4>
+    <Collapsible {...args} className="collapsible-demo">
+      <div className="collapsible-header">
+        <h4 className="collapsible-title">@peakhealth/ui collapsible</h4>
         <CollapsibleTrigger asChild>
           <Button variant="ghost" size="sm">
             Toggle
           </Button>
         </CollapsibleTrigger>
       </div>
-      <div className="px-4 py-2">
-        <div className="rounded-md border px-4 py-3 font-mono text-sm">
+      <div className="collapsible-container">
+        <div className="collapsible-item">
           Main content that is always visible
         </div>
-        <CollapsibleContent className="space-y-2">
-          <div className="rounded-md border px-4 py-3 font-mono text-sm mt-2">
+        <CollapsibleContent className="collapsible-content-demo">
+          <div className="collapsible-item collapsible-item-hidden">
             Hidden collapsible content
           </div>
-          <div className="rounded-md border px-4 py-3 font-mono text-sm">
-            More hidden content
-          </div>
+          <div className="collapsible-item">More hidden content</div>
         </CollapsibleContent>
       </div>
     </Collapsible>
@@ -67,33 +66,35 @@ export const Controlled: Story = {
     const [isOpen, setIsOpen] = useState(false);
 
     return (
-      <div className="space-y-4">
-        <div className="flex space-x-4">
+      <div className="collapsible-story-container">
+        <div className="collapsible-controls">
           <Button onClick={() => setIsOpen(!isOpen)}>
             {isOpen ? 'Close' : 'Open'}
           </Button>
-          <div>Current state: {isOpen ? 'Open' : 'Closed'}</div>
+          <div className="collapsible-state">
+            Current state: {isOpen ? 'Open' : 'Closed'}
+          </div>
         </div>
 
         <Collapsible
           open={isOpen}
           onOpenChange={setIsOpen}
-          className="max-w-[350px]"
+          className="collapsible-demo"
         >
-          <div className="flex items-center justify-between space-x-4 px-4">
-            <h4 className="text-sm font-semibold">Controlled Collapsible</h4>
+          <div className="collapsible-header">
+            <h4 className="collapsible-title">Controlled Collapsible</h4>
             <CollapsibleTrigger asChild>
               <Button variant="ghost" size="sm">
                 Toggle
               </Button>
             </CollapsibleTrigger>
           </div>
-          <div className="px-4 py-2">
-            <div className="rounded-md border px-4 py-3 font-mono text-sm">
+          <div className="collapsible-container">
+            <div className="collapsible-item">
               This collapsible is controlled externally
             </div>
-            <CollapsibleContent className="space-y-2">
-              <div className="rounded-md border px-4 py-3 font-mono text-sm mt-2">
+            <CollapsibleContent className="collapsible-content-demo">
+              <div className="collapsible-item collapsible-item-hidden">
                 This content can be controlled with the button above
               </div>
             </CollapsibleContent>

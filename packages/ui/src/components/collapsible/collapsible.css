@@ -1,6 +1,7 @@
 /* Base collapsible component */
 .collapsible {
   width: 100%;
+  position: relative;
 }
 
 /* Trigger element */
@@ -10,19 +11,31 @@
   justify-content: space-between;
   width: 100%;
   cursor: pointer;
+  background: none;
+  border: none;
+  padding: 0;
+  text-align: left;
+}
+
+.collapsible__trigger:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
 }
 
 /* Content container */
 .collapsible__content {
   overflow: hidden;
+  transition: height 300ms ease-out;
 }
 
 /* Animation for content */
 .collapsible__content[data-state='open'] {
+  height: var(--content-height);
   animation: collapsibleSlideDown 300ms ease-out;
 }
 
 .collapsible__content[data-state='closed'] {
+  height: 0;
   animation: collapsibleSlideUp 300ms ease-out;
 }
 
@@ -31,13 +44,13 @@
     height: 0;
   }
   to {
-    height: var(--radix-collapsible-content-height);
+    height: var(--content-height);
   }
 }
 
 @keyframes collapsibleSlideUp {
   from {
-    height: var(--radix-collapsible-content-height);
+    height: var(--content-height);
   }
   to {
     height: 0;
