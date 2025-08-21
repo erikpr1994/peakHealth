@@ -135,12 +135,6 @@ export const AVAILABLE_PERMISSIONS: Permission[] = [
 
   // Feature Permissions
   {
-    id: 'feature_flags',
-    name: 'Feature Flags',
-    description: 'Access to experimental features',
-    category: 'Features',
-  },
-  {
     id: 'beta_features',
     name: 'Beta Features',
     description: 'Access to beta features and early releases',
