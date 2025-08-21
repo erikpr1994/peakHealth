@@ -20,33 +20,9 @@ export interface DatabaseRoutine {
   last_used: string | null;
 }
 
-export interface DatabaseSet {
-  id: string;
-  setNumber: number;
-  setType: string;
-  repType?: string;
-  reps: number | null;
-  weight: number | null;
-  rpe: number | null;
-  notes: string;
-  rest_time?: string;
-  duration?: number;
-}
-
-export interface DatabaseExercise {
-  id: string;
-  name: string;
-  category?: string | null;
-  muscle_groups?: string[];
-  notes?: string;
-  sets?: DatabaseSet[];
-  exerciseLibraryId?: string; // Link to exercise library (exercise or variant ID)
-  rest_timer?: string;
-  rest_after?: string;
-  progression_method?: string;
-  has_approach_sets?: boolean;
-  emom_reps?: number;
-}
+// Import exercise types from dedicated file
+import type { DatabaseSet, DatabaseExercise } from './exercise';
+export type { DatabaseSet, DatabaseExercise };
 
 export interface DatabaseSection {
   id: string;

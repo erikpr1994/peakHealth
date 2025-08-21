@@ -7,21 +7,12 @@ export interface NotesContext {
   currentNotes: string;
 }
 
-export interface ExerciseSelectionData {
-  id: string;
-  name: string;
-  category?: string;
-  muscleGroups?: string[];
-}
-
-export interface ExerciseVariantData {
-  id: string;
-  name: string;
-  muscleGroups: string[];
-  difficulty: string;
-  equipment: string[];
-  instructions: string[];
-}
+// Import exercise types from dedicated file
+import type {
+  ExerciseSelectionData,
+  ExerciseVariantData,
+} from '../../../types/exercise';
+export type { ExerciseSelectionData, ExerciseVariantData };
 
 export interface ExerciseModalContext {
   workoutId: string;
