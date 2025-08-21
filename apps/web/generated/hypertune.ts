@@ -31,8 +31,8 @@ export const query: sdk.Query<sdk.ObjectValueWithVariables> = {
 };
 
 export const initData = {
-  commitId: 34246,
-  hash: '4618605671514281',
+  commitId: 34320,
+  hash: '85707307664848',
   reducedExpression: {
     id: 'XIUJRXBLr6KJ9V8ZMNqXG',
     logs: {},
@@ -356,7 +356,6 @@ export type VariableValues = {};
 
 export type User = {
   id: string;
-  anonymousId: string;
   email: string;
 };
 
@@ -366,6 +365,10 @@ export const EnvironmentEnumValues = [
   'test',
 ] as const;
 export type Environment = (typeof EnvironmentEnumValues)[number];
+
+export type AnonymousUser = {
+  id: string;
+};
 
 /**
  * This `Context` input type is used for the `context` argument on your root field.
@@ -377,6 +380,7 @@ export type Environment = (typeof EnvironmentEnumValues)[number];
 export type Context = {
   user: User;
   environment: Environment;
+  anonymousUser: AnonymousUser;
 };
 
 export type RootArgs = {

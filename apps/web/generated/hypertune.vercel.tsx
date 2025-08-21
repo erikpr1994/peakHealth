@@ -11,7 +11,7 @@ import {
   Value,
 } from 'hypertune';
 import * as hypertuneTypes from './hypertune';
-import getHypertune from '@/lib/hypertune/getHypertune';
+import getHypertune from '../src/lib/hypertune/getHypertune';
 
 export async function getVercelOverride(): Promise<DeepPartial<hypertuneTypes.Source> | null> {
   const overridesCookieValue = (await cookies()).get(

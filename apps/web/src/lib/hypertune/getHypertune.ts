@@ -15,15 +15,22 @@ async function getUserFromCookies(): Promise<hypertune.User | null> {
   try {
     const cookieStore = await cookies();
     const userCookie = cookieStore.get('user');
-    if (!userCookie?.value) return null;
+
+    if (!userCookie?.value) {
+      // No user cookie - this shouldn't happen in the web app
+      // as anonymous users are redirected to landing
+      return null;
+    }
 
     const user = JSON.parse(userCookie.value);
+
+    // Authenticated user - use actual user ID and email
     return {
-      id: user.id || 'anonymous',
-      anonymousId: user.id ? undefined : user.anonymousId || 'anonymous',
+      id: user.id || '',
       email: user.email || '',
     };
   } catch {
+    // Fallback for any parsing errors
     return null;
   }
 }
@@ -43,11 +50,13 @@ export default async function getHypertune(
 
   const context: hypertune.Context = {
     user: user || {
-      id: 'anonymous',
-      anonymousId: 'anonymous',
+      id: '',
       email: '',
     },
     environment,
+    anonymousUser: {
+      id: '', // Empty string since we don't need anonymous tracking for authenticated users
+    },
   };
 
   return hypertuneSource.root({ args: { context } });
