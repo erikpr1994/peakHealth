@@ -276,10 +276,10 @@
 
   /* Mobile-specific height fixes */
   .mobileNav {
-    /* Modern solution that accounts for mobile browser UI elements */
-    height: 100dvh;
     /* Fallback for browsers that don't support dvh */
     height: -webkit-fill-available;
+    /* Modern solution that accounts for mobile browser UI elements */
+    height: 100dvh;
   }
 }
 
@@ -292,6 +292,7 @@
     font-size: 1.25rem;
   }
 
+  /* These styles will be merged with the ones from the 768px media query */
   .mobileNav {
     max-width: 100%;
     padding: 2rem 1rem;
