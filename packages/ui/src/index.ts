@@ -8,7 +8,8 @@ export * from './components/label';
 export * from './components/radio';
 export * from './components/select';
 export * from './components/textarea';
+export * from './components/toast';
+export * from './components/tooltip';
 
 // Utilities
 export * from './utils';
-
