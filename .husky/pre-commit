@@ -40,13 +40,13 @@ WORKSPACE_PACKAGES=$(get_workspace_packages)
 CHANGED_PROJECTS=""
 
 echo "🔍 Detecting workspace packages:"
-while read -r package; do
+for package in $WORKSPACE_PACKAGES; do
   if [ -n "$package" ]; then
     if has_project_changes "$package"; then
       CHANGED_PROJECTS="$CHANGED_PROJECTS $package"
     fi
   fi
-done <<< "$WORKSPACE_PACKAGES"
+done
 
 # Define the build matrix - tasks to run for each project
 BUILD_MATRIX=(

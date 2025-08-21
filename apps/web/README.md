@@ -18,6 +18,7 @@ The main user-facing application for Peak Health, built with Next.js and CSS Mod
 - **State Management**: React Context + SWR for data fetching
 - **Database**: Supabase (PostgreSQL)
 - **Authentication**: Supabase Auth
+- **Feature Flags**: Hypertune for feature flag management
 - **TypeScript**: Full TypeScript support
 
 ## Getting Started
@@ -40,6 +41,9 @@ pnpm install
 ```bash
 cp .env.local.example .env.local
 # Edit .env.local with your configuration
+
+# Required environment variables:
+# NEXT_PUBLIC_HYPERTUNE_TOKEN - Your Hypertune project token for feature flags
 ```
 
 3. Run the development server:

@@ -117,32 +117,63 @@ Breaking down large components into smaller, focused pieces following project ru
 
 ## Phase 2: Utility Extraction (Priority: High)
 
-### 🔄 PR #5: Extract Workout Calculations
+### ✅ PR #5: Extract Workout Calculations
 
-**Status:** PENDING
-**Files:** `features/routines/domain/calculations.ts`
+**Status:** COMPLETED
+**Branch:** `refactor/extract-workout-calculations`
+**Files:**
+
+- `features/routines/domain/calculations.ts` (175 lines)
+- `features/routines/domain/calculations.test.ts` (350 lines)
+- `features/routines/utils/workoutCalculations.ts` (reduced from 419 to 8 lines - re-exports only)
+- `features/routines/utils/workoutCalculations.test.ts` (updated imports)
+
 **Changes:**
 
-- Extract calculation functions from `utils/workoutCalculations.ts` (419 lines)
-- Create focused domain functions
-- Add co-located tests
-- Update imports
+- Extract calculation functions from `utils/workoutCalculations.ts` (419 lines) to domain layer
+- Create focused domain functions with proper JSDoc documentation
+- Add comprehensive co-located tests (25 new tests) covering all functions and edge cases
+- Maintain backward compatibility by re-exporting from utils file
+- Update existing test imports to use new domain file
+- Achieve target of < 200 lines ✅ (175 lines achieved)
 
-**Target:** < 200 lines
+**Functions extracted:**
+
+- `calculateWorkoutDuration`: Calculate estimated workout duration
+- `parseRestTime`: Parse time strings to minutes
+- `generateSetsForProgression`: Generate sets based on progression methods
+- `addApproachSets`: Add warmup approach sets
+
+**Target:** < 200 lines ✅ (175 lines achieved)
 **Dependencies:** Types extraction
 
-### 🔄 PR #6: Extract Data Transformers
+### ✅ PR #6: Extract Data Transformers
 
-**Status:** PENDING
-**Files:** `features/routines/domain/transformers.ts`
+**Status:** COMPLETED
+**Branch:** `refactor/extract-data-transformers`
+**Files:**
+
+- `features/routines/domain/transformers.ts` (376 lines)
+- `features/routines/domain/transformers.test.ts` (450 lines)
+- `features/routines/utils/dataTransformers.ts` (reduced from 372 to 15 lines - re-exports only)
+- `features/routines/utils/dataTransformers.test.ts` (updated imports)
+
 **Changes:**
 
-- Extract transformation functions from `utils/dataTransformers.ts` (372 lines)
-- Create focused transformation functions
-- Add co-located tests
-- Update imports
+- Extract transformation functions from `utils/dataTransformers.ts` (372 lines) to domain layer
+- Create focused transformation functions with proper JSDoc documentation
+- Add comprehensive co-located tests (32 new tests) covering all functions and edge cases
+- Maintain backward compatibility by re-exporting from utils file
+- Update existing test imports to use new domain file
+- Achieve target of < 400 lines ✅ (376 lines achieved)
 
-**Target:** < 200 lines
+**Functions extracted:**
+
+- **Type guard functions**: `isValidWorkoutType`, `isValidSectionType`, `isValidDifficulty`, `isValidGoal`, `isValidProgressionMethod`, `isValidSetType`, `isValidRepType`
+- **Individual entity transformations**: `transformDatabaseSet`, `transformDatabaseExercise`, `transformDatabaseSection`, `transformDatabaseWorkout`
+- **Complex routine transformations**: `transformDatabaseRoutineToRoutineData`, `transformDatabaseRoutineToRoutine`
+
+**Target:** < 400 lines ✅ (376 lines achieved)
 **Dependencies:** Types extraction
 
 ---
@@ -364,6 +395,8 @@ Breaking down large components into smaller, focused pieces following project ru
 - [x] PR #1: Extract Routine Types
 - [x] PR #2: Extract Workout Types
 - [x] PR #3: Extract Exercise Types
+- [x] PR #5: Extract Workout Calculations
+- [x] PR #6: Extract Data Transformers
 
 ### In Progress
 
@@ -371,8 +404,6 @@ Breaking down large components into smaller, focused pieces following project ru
 
 ### Pending
 
-- [ ] PR #5: Extract Workout Calculations
-- [ ] PR #6: Extract Data Transformers
 - [ ] PR #7: Extract Strength Workout Operations
 - [ ] PR #8: Extract Running Workout Operations
 - [ ] PR #9: Extract Exercise Operations

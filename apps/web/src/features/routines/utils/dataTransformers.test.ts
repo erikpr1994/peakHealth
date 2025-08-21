@@ -2,7 +2,7 @@ import {
   transformDatabaseRoutineToRoutineData,
   transformDatabaseRoutineToRoutine,
   transformDatabaseWorkout,
-} from './dataTransformers';
+} from '../domain/transformers';
 import {
   DatabaseRoutineRPCResponse,
   DatabaseRoutineWithWorkouts,
