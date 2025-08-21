@@ -46,18 +46,17 @@ test.describe('Setup: Regular User Landing → Login → Web App', () => {
       // Click sign in button
       await page.getByRole('button', { name: /sign in|log in/i }).click();
 
-      // Regular users with only one app access should go directly to their app
-      // Wait for redirect to web app
-      await page.waitForURL(/localhost:3024/, { timeout: 60_000 });
+      // Regular users should be redirected directly to the web app dashboard
+      await page.waitForURL(/localhost:3024\/dashboard/, { timeout: 60_000 });
 
-      // Verify we're on the web app
-      await expect(page).toHaveURL(/localhost:3024/);
+      // Verify we're on the web app dashboard
+      await expect(page).toHaveURL(/localhost:3024\/dashboard/);
     });
 
     // Verify final navigation to dashboard
     await test.step('Verify navigation to web app dashboard', async () => {
-      // We should already be on the web app, just verify the final URL
-      await expect(page).toHaveURL(/localhost:3024/);
+      // We should already be on the web app dashboard, just verify the final URL
+      await expect(page).toHaveURL(/localhost:3024\/dashboard/i);
     });
 
     // Save storage state for regular web user

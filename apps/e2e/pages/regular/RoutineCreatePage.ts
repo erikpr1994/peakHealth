@@ -11,8 +11,9 @@ export class RoutineCreatePage extends RegularUserBasePage {
   private readonly routineDescriptionSelector =
     'textarea[placeholder*="describe your routine" i]';
   private readonly difficultyDropdownSelector =
-    'div[role="combobox"]:first-of-type';
-  private readonly typeDropdownSelector = 'div[role="combobox"]:nth-of-type(2)';
+    'div[role="combobox"]:has-text("Beginner")';
+  private readonly typeDropdownSelector =
+    'div[role="combobox"]:has-text("Strength")';
   private readonly goalsInputSelector =
     'input[placeholder*="what are the main goals" i]';
   private readonly saveRoutineButtonSelector =
@@ -21,10 +22,16 @@ export class RoutineCreatePage extends RegularUserBasePage {
     'button:has-text("Add Strength Workout")';
   private readonly workoutNameSelector =
     'input[placeholder*="workout name" i], input:not([placeholder]):first-of-type';
+  // Routine-level objectives (general training objectives)
+  private readonly routineObjectivesSelector =
+    'input[placeholder*="main goals and focus areas" i], input[placeholder*="training objectives" i], input[placeholder*="objectives" i]';
+
+  // Workout-level objective (specific workout goal)
   private readonly workoutObjectiveSelector =
-    'textarea[aria-label*="objective" i], textarea:first-of-type';
+    'textarea[placeholder*="primary goal" i], textarea[placeholder*="objective" i], textarea[aria-label*="objective" i]';
   private readonly addSectionButtonSelector = 'button:has-text("Add Section")';
-  private readonly sectionNameSelector = 'input[aria-label*="section name" i]';
+  private readonly sectionNameSelector =
+    'input[id="section-name"], input[placeholder*="section name" i]';
   private readonly addExerciseButtonSelector =
     'button:has-text("Add Exercise")';
   private readonly exerciseDialogSelector = '[role="dialog"]';
@@ -34,7 +41,8 @@ export class RoutineCreatePage extends RegularUserBasePage {
     '[role="dialog"] li, [role="dialog"] div[role="listitem"]';
   private readonly confirmAddExerciseButtonSelector =
     '[role="dialog"] button:has-text("Add Exercise")';
-  private readonly exerciseHeadingSelector = 'h3, h4';
+  private readonly exerciseHeadingSelector =
+    'h3.font-semibold.text-gray-900.text-lg, h4.font-semibold.text-gray-900.text-lg';
   private readonly exerciseInputsSelector =
     'input[type="text"], input:not([type])';
 
@@ -66,28 +74,42 @@ export class RoutineCreatePage extends RegularUserBasePage {
 
   /**
    * Select a difficulty level
-   * @param difficulty - The difficulty to select (e.g., 'beginner', 'intermediate', 'advanced')
+   * @param difficulty - The difficulty to select (e.g., 'Beginner', 'Intermediate', 'Advanced')
    * @returns Promise that resolves when the difficulty is selected
    */
   async selectDifficulty(difficulty: string): Promise<void> {
-    await this.page.locator(this.difficultyDropdownSelector).click();
-    await this.page
-      .getByRole('option', { name: new RegExp(difficulty, 'i') })
-      .click();
-    await this.page.keyboard.press('Escape'); // Close dropdown
+    // Find the difficulty dropdown by label
+    const difficultyTrigger = this.page
+      .locator('button[role="combobox"]')
+      .filter({ hasText: 'Beginner' });
+    await difficultyTrigger.waitFor({ state: 'visible', timeout: 10000 });
+    await difficultyTrigger.click();
+
+    // Select the difficulty option
+    const option = this.page.locator(
+      `[role="option"]:has-text("${difficulty}")`
+    );
+    await option.waitFor({ state: 'visible', timeout: 5000 });
+    await option.click();
   }
 
   /**
    * Select a routine type
-   * @param type - The type to select (e.g., 'strength', 'cardio', 'flexibility')
+   * @param type - The type to select (e.g., 'Strength', 'Hypertrophy', 'Endurance', 'Weight Loss')
    * @returns Promise that resolves when the type is selected
    */
   async selectType(type: string): Promise<void> {
-    await this.page.locator(this.typeDropdownSelector).click();
-    await this.page
-      .getByRole('option', { name: new RegExp(type, 'i') })
-      .click();
-    await this.page.keyboard.press('Escape'); // Close dropdown
+    // Find the type dropdown by label
+    const typeTrigger = this.page
+      .locator('button[role="combobox"]')
+      .filter({ hasText: 'Strength' });
+    await typeTrigger.waitFor({ state: 'visible', timeout: 10000 });
+    await typeTrigger.click();
+
+    // Select the type option
+    const option = this.page.locator(`[role="option"]:has-text("${type}")`);
+    await option.waitFor({ state: 'visible', timeout: 5000 });
+    await option.click();
   }
 
   /**
@@ -122,15 +144,33 @@ export class RoutineCreatePage extends RegularUserBasePage {
   }
 
   /**
-   * Fill the workout objective field
+   * Fill the routine-level training objectives
+   * @param objectives - Array of objectives to add
+   * @returns Promise that resolves when the objectives are filled
+   */
+  async fillRoutineObjectives(objectives: string[]): Promise<void> {
+    const objectivesField = this.page
+      .locator(this.routineObjectivesSelector)
+      .first();
+
+    for (const objective of objectives) {
+      await objectivesField.fill(objective);
+      await objectivesField.press('Enter');
+    }
+  }
+
+  /**
+   * Fill the workout-level objective field
    * @param objective - The objective to fill
    * @returns Promise that resolves when the field is filled
    */
   async fillWorkoutObjective(objective: string): Promise<void> {
-    await this.page
+    const objectiveField = this.page
       .locator(this.workoutObjectiveSelector)
-      .first()
-      .fill(objective);
+      .first();
+
+    await objectiveField.fill(objective);
+    await objectiveField.press('Enter');
   }
 
   /**
@@ -237,10 +277,8 @@ export class RoutineCreatePage extends RegularUserBasePage {
     await this.selectDifficulty(routineData.difficulty);
     await this.selectType(routineData.type);
 
-    // Add goals
-    for (const goal of routineData.goals) {
-      await this.addGoal(goal);
-    }
+    // Add routine-level objectives
+    await this.fillRoutineObjectives(routineData.goals);
 
     // Add workout
     await this.clickAddStrengthWorkout();

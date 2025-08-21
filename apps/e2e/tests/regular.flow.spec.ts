@@ -104,7 +104,7 @@ test.describe('Regular user flows', () => {
       await routineCreatePage.createCompleteRoutine(routineData);
 
       // Verify success toast
-      await routineCreatePage.waitForToast('Routine saved successfully');
+      await routineCreatePage.waitForToast('Routine saved successfully!');
 
       // Verify redirect to routines page
       await page.waitForURL(/localhost:3024\/routines/);

@@ -32,8 +32,8 @@ export class TestDataHelper {
     return {
       name: routineName,
       description: `Description for ${routineName}`,
-      difficulty: 'beginner',
-      type: 'strength',
+      difficulty: 'Beginner',
+      type: 'Strength',
       goals: ['Build strength', 'Improve endurance'],
       workout: {
         name: `Workout for ${routineName}`,

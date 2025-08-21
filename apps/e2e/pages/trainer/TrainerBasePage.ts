@@ -10,7 +10,8 @@ export class TrainerBasePage extends Page {
   protected readonly navbarSelector = 'nav';
   protected readonly dashboardLinkSelector = 'a[href*="dashboard"]';
   protected readonly clientsLinkSelector = 'a[href*="clients"]';
-  protected readonly routinesLinkSelector = 'button:has-text("Routines")';
+  protected readonly routinesLinkSelector =
+    'nav a[href="/routines"], a[href="/routines"]';
   protected readonly profileLinkSelector = 'a[href*="profile"]';
   protected readonly toastSelector = '.peakhealth-toast-message';
 
@@ -46,7 +47,14 @@ export class TrainerBasePage extends Page {
    * @returns Promise that resolves when navigation is complete
    */
   async navigateToRoutines(): Promise<void> {
+    // Wait for the element to be visible
+    await this.waitForSelector(this.routinesLinkSelector);
+
+    // Click the routines link
     await this.click(this.routinesLinkSelector);
+
+    // Wait for navigation to complete
+    await this.page.waitForURL(/localhost:3024\/routines/);
     await this.waitForPageLoad();
   }
 

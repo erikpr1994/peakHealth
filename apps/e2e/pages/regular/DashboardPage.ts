@@ -6,7 +6,7 @@ import { RegularUserBasePage } from './RegularUserBasePage';
  */
 export class DashboardPage extends RegularUserBasePage {
   // Selectors specific to the dashboard page
-  private readonly welcomeMessageSelector = 'h1:has-text("Welcome")';
+  private readonly welcomeMessageSelector = 'h1:has-text("Good morning")';
   private readonly statsCardSelector = '[data-testid="stats-card"]';
   private readonly recentActivitySelector = '[data-testid="recent-activity"]';
   private readonly quickActionsSelector = '[data-testid="quick-actions"]';
@@ -20,16 +20,16 @@ export class DashboardPage extends RegularUserBasePage {
   }
 
   /**
-   * Check if the welcome message is visible
-   * @returns Promise that resolves to true if the welcome message is visible
+   * Check if the greeting message is visible
+   * @returns Promise that resolves to true if the greeting message is visible
    */
   async isWelcomeMessageVisible(): Promise<boolean> {
     return this.isVisible(this.welcomeMessageSelector);
   }
 
   /**
-   * Get the welcome message text
-   * @returns Promise that resolves to the welcome message text
+   * Get the greeting message text
+   * @returns Promise that resolves to the greeting message text
    */
   async getWelcomeMessage(): Promise<string> {
     return this.getText(this.welcomeMessageSelector);

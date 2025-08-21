@@ -6,10 +6,14 @@ import { AdminBasePage } from './AdminBasePage';
  */
 export class DashboardPage extends AdminBasePage {
   // Selectors specific to the admin dashboard page
-  private readonly welcomeMessageSelector = 'h1:has-text("Welcome")';
+  private readonly adminWelcomeMessageSelector =
+    'p:has-text("Welcome back! Here\'s what\'s happening with your platform today.")';
+  private readonly webWelcomeMessageSelector = 'h1:has-text("Good morning")';
   private readonly statsCardSelector = '[data-testid="stats-card"]';
   private readonly userStatsSelector = '[data-testid="user-stats"]';
   private readonly activityLogSelector = '[data-testid="activity-log"]';
+
+  private readonly isAdminApp: boolean;
 
   /**
    * Constructor for the AdminDashboardPage
@@ -18,22 +22,29 @@ export class DashboardPage extends AdminBasePage {
    */
   constructor(page: PlaywrightPage, isAdminApp: boolean = true) {
     super(page, '/dashboard', isAdminApp);
+    this.isAdminApp = isAdminApp;
   }
 
   /**
-   * Check if the welcome message is visible
-   * @returns Promise that resolves to true if the welcome message is visible
+   * Check if the greeting message is visible
+   * @returns Promise that resolves to true if the greeting message is visible
    */
   async isWelcomeMessageVisible(): Promise<boolean> {
-    return this.isVisible(this.welcomeMessageSelector);
+    const selector = this.isAdminApp
+      ? this.adminWelcomeMessageSelector
+      : this.webWelcomeMessageSelector;
+    return this.isVisible(selector);
   }
 
   /**
-   * Get the welcome message text
-   * @returns Promise that resolves to the welcome message text
+   * Get the greeting message text
+   * @returns Promise that resolves to the greeting message text
    */
   async getWelcomeMessage(): Promise<string> {
-    return this.getText(this.welcomeMessageSelector);
+    const selector = this.isAdminApp
+      ? this.adminWelcomeMessageSelector
+      : this.webWelcomeMessageSelector;
+    return this.getText(selector);
   }
 
   /**

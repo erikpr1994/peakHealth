@@ -67,7 +67,14 @@ export class AuthPage extends Page {
    * @returns Promise that resolves when the link is clicked
    */
   async clickSignInLink(): Promise<void> {
+    // Wait for the link to be visible and clickable
+    await this.waitForSelector(this.signInLinkSelector);
+
+    // Click the link
     await this.click(this.signInLinkSelector);
+
+    // Wait for navigation to complete
+    await this.page.waitForURL(/localhost:3000\/en\/login/);
     await this.waitForPageLoad();
   }
 
@@ -76,7 +83,14 @@ export class AuthPage extends Page {
    * @returns Promise that resolves when the link is clicked
    */
   async clickSignUpLink(): Promise<void> {
+    // Wait for the link to be visible and clickable
+    await this.waitForSelector(this.signUpLinkSelector);
+
+    // Click the link
     await this.click(this.signUpLinkSelector);
+
+    // Wait for navigation to complete
+    await this.page.waitForURL(/localhost:3000\/en\/signup/);
     await this.waitForPageLoad();
   }
 
