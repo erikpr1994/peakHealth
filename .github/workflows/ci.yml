@@ -49,7 +49,8 @@ jobs:
 
           if [[ "${{ github.event_name }}" == "pull_request" ]]; then
             echo "Pull request detected"
-            BASE_SHA="${{ github.event.pull_request.base.sha }}"
+            # Use merge-base to find the common ancestor
+            BASE_SHA=$(git merge-base ${{ github.event.pull_request.base.sha }} ${{ github.sha }})
           else
             # For push to main, consider all packages affected
             if [[ "${{ github.ref }}" == "refs/heads/main" ]]; then
