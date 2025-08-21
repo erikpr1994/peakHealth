@@ -136,7 +136,6 @@ export const menuSections = {
       icon: Rocket,
       scope: 'platform',
     },
-    { id: 'features', label: 'Feature Flags', icon: Flag, scope: 'general' },
   ],
   system: [
     {
@@ -505,11 +504,6 @@ export const SidebarNavigation: React.FC<SidebarNavigationProps> = ({
                 {item.id === 'roadmap' && (
                   <Badge variant="secondary" className="ml-auto text-xs">
                     8
-                  </Badge>
-                )}
-                {item.id === 'features' && (
-                  <Badge variant="secondary" className="ml-auto text-xs">
-                    23
                   </Badge>
                 )}
               </button>

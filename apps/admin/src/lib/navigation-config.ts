@@ -185,17 +185,6 @@ export const navigationSections: NavigationSection[] = [
         },
       },
       {
-        id: 'features',
-        label: 'Feature Flags',
-        icon: Flag,
-        path: '/features',
-        scope: 'general',
-        badge: {
-          text: '23',
-          variant: 'secondary',
-        },
-      },
-      {
         id: 'roadmap',
         label: 'Product Roadmap',
         icon: Rocket,
