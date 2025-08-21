@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { Radio, RadioGroup } from './radio';
 
-const meta: Meta<typeof Radio> = {
+const meta = {
   title: 'Components/Radio',
   component: Radio,
   parameters: {
@@ -26,10 +26,10 @@ const meta: Meta<typeof Radio> = {
       description: 'The value of the radio',
     },
   },
-};
+} satisfies Meta<typeof Radio>;
 
 export default meta;
-type Story = StoryObj<typeof Radio>;
+type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {
@@ -75,7 +75,19 @@ export const WithLabel: Story = {
   },
 };
 
-export const RadioGroupExample: StoryObj<typeof RadioGroup> = {
+// Using a separate meta for RadioGroup
+const radioGroupMeta = {
+  title: 'Components/RadioGroup',
+  component: RadioGroup,
+  parameters: {
+    layout: 'centered',
+  },
+  tags: ['autodocs'],
+} satisfies Meta<typeof RadioGroup>;
+
+type RadioGroupStory = StoryObj<typeof radioGroupMeta>;
+
+export const RadioGroupExample: RadioGroupStory = {
   args: {
     name: 'radio-group-example',
     options: [
@@ -85,5 +97,6 @@ export const RadioGroupExample: StoryObj<typeof RadioGroup> = {
     ],
     defaultValue: 'option1',
   },
+  render: (args) => <RadioGroup {...args} />,
 };
 

@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { Checkbox } from './checkbox';
 
-const meta: Meta<typeof Checkbox> = {
+const meta = {
   title: 'Components/Checkbox',
   component: Checkbox,
   parameters: {
@@ -13,60 +13,55 @@ const meta: Meta<typeof Checkbox> = {
       control: 'boolean',
       description: 'Whether the checkbox is disabled',
     },
-    error: {
-      control: 'boolean',
-      description: 'Whether the checkbox is in an error state',
-    },
-    label: {
-      control: 'text',
-      description: 'Label text for the checkbox',
-    },
     checked: {
       control: 'boolean',
       description: 'Whether the checkbox is checked',
     },
+    defaultChecked: {
+      control: 'boolean',
+      description: 'Whether the checkbox is checked by default',
+    },
   },
-};
+} satisfies Meta<typeof Checkbox>;
 
 export default meta;
-type Story = StoryObj<typeof Checkbox>;
+type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
+  args: {},
+};
+
+export const WithLabel: Story = {
   args: {
-    label: 'Accept terms and conditions',
+    children: 'Accept terms and conditions',
   },
 };
 
 export const Checked: Story = {
   args: {
-    label: 'Accept terms and conditions',
     checked: true,
-  },
-};
-
-export const WithError: Story = {
-  args: {
-    label: 'Accept terms and conditions',
-    error: true,
+    children: 'Checked checkbox',
   },
 };
 
 export const Disabled: Story = {
   args: {
-    label: 'Accept terms and conditions',
     disabled: true,
+    children: 'Disabled checkbox',
   },
 };
 
 export const DisabledChecked: Story = {
   args: {
-    label: 'Accept terms and conditions',
     disabled: true,
     checked: true,
+    children: 'Disabled checked checkbox',
   },
 };
 
-export const WithoutLabel: Story = {
-  args: {},
+export const WithLongLabel: Story = {
+  args: {
+    children: 'This is a checkbox with a very long label that wraps to multiple lines to demonstrate how the component handles longer text content.',
+  },
 };
 

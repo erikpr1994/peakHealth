@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { Badge } from './badge';
 
-const meta: Meta<typeof Badge> = {
+const meta = {
   title: 'Components/Badge',
   component: Badge,
   parameters: {
@@ -15,10 +15,10 @@ const meta: Meta<typeof Badge> = {
       description: 'The variant of the badge',
     },
   },
-};
+} satisfies Meta<typeof Badge>;
 
 export default meta;
-type Story = StoryObj<typeof Badge>;
+type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {

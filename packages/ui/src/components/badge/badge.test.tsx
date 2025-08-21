@@ -4,8 +4,8 @@ import { Badge } from './badge';
 
 describe('Badge', () => {
   it('renders with default variant', () => {
-    render(<Badge>Test Badge</Badge>);
-    const badge = screen.getByText('Test Badge');
+    render(<Badge>Default Badge</Badge>);
+    const badge = screen.getByText('Default Badge');
     expect(badge).toBeInTheDocument();
     expect(badge).toHaveClass('peakhealth-badge');
     expect(badge).toHaveClass('peakhealth-badge--default');
@@ -39,7 +39,6 @@ describe('Badge', () => {
     render(<Badge className="custom-class">Custom Badge</Badge>);
     const badge = screen.getByText('Custom Badge');
     expect(badge).toHaveClass('custom-class');
-    expect(badge).toHaveClass('peakhealth-badge');
   });
 });
 

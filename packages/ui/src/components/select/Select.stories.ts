@@ -1,7 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { Select } from './select';
+import React from 'react';
 
-const meta: Meta<typeof Select> = {
+const meta = {
   title: 'Components/Select',
   component: Select,
   parameters: {
@@ -22,71 +23,67 @@ const meta: Meta<typeof Select> = {
       description: 'Placeholder text for the select',
     },
   },
-};
+} satisfies Meta<typeof Select>;
 
 export default meta;
-type Story = StoryObj<typeof Select>;
+type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {
     placeholder: 'Select an option',
-    children: [
-      { type: 'option', props: { value: 'option1', children: 'Option 1' } },
-      { type: 'option', props: { value: 'option2', children: 'Option 2' } },
-      { type: 'option', props: { value: 'option3', children: 'Option 3' } },
-    ],
   },
+  render: (args) => (
+    <Select {...args}>
+      <option value="option1">Option 1</option>
+      <option value="option2">Option 2</option>
+      <option value="option3">Option 3</option>
+    </Select>
+  ),
 };
 
 export const WithError: Story = {
   args: {
     placeholder: 'Select an option',
     error: true,
-    children: [
-      { type: 'option', props: { value: 'option1', children: 'Option 1' } },
-      { type: 'option', props: { value: 'option2', children: 'Option 2' } },
-      { type: 'option', props: { value: 'option3', children: 'Option 3' } },
-    ],
   },
+  render: (args) => (
+    <Select {...args}>
+      <option value="option1">Option 1</option>
+      <option value="option2">Option 2</option>
+      <option value="option3">Option 3</option>
+    </Select>
+  ),
 };
 
 export const Disabled: Story = {
   args: {
     placeholder: 'Select an option',
     disabled: true,
-    children: [
-      { type: 'option', props: { value: 'option1', children: 'Option 1' } },
-      { type: 'option', props: { value: 'option2', children: 'Option 2' } },
-      { type: 'option', props: { value: 'option3', children: 'Option 3' } },
-    ],
   },
+  render: (args) => (
+    <Select {...args}>
+      <option value="option1">Option 1</option>
+      <option value="option2">Option 2</option>
+      <option value="option3">Option 3</option>
+    </Select>
+  ),
 };
 
 export const WithGroups: Story = {
   args: {
     placeholder: 'Select an option',
-    children: [
-      { 
-        type: 'optgroup', 
-        props: { 
-          label: 'Group 1',
-          children: [
-            { type: 'option', props: { value: 'option1', children: 'Option 1' } },
-            { type: 'option', props: { value: 'option2', children: 'Option 2' } },
-          ]
-        } 
-      },
-      { 
-        type: 'optgroup', 
-        props: { 
-          label: 'Group 2',
-          children: [
-            { type: 'option', props: { value: 'option3', children: 'Option 3' } },
-            { type: 'option', props: { value: 'option4', children: 'Option 4' } },
-          ]
-        } 
-      },
-    ],
   },
+  render: (args) => (
+    <Select {...args}>
+      <optgroup label="Group 1">
+        <option value="option1">Option 1</option>
+        <option value="option2">Option 2</option>
+      </optgroup>
+      <optgroup label="Group 2">
+        <option value="option3">Option 3</option>
+        <option value="option4">Option 4</option>
+      </optgroup>
+    </Select>
+  ),
 };
 

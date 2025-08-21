@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { Textarea } from './textarea';
 
-const meta: Meta<typeof Textarea> = {
+const meta = {
   title: 'Components/Textarea',
   component: Textarea,
   parameters: {
@@ -26,10 +26,10 @@ const meta: Meta<typeof Textarea> = {
       description: 'Number of rows to display',
     },
   },
-};
+} satisfies Meta<typeof Textarea>;
 
 export default meta;
-type Story = StoryObj<typeof Textarea>;
+type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {
