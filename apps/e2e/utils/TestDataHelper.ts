@@ -13,7 +13,9 @@ export class TestDataHelper {
     // Use crypto.randomBytes for cryptographically secure random values
     // Generate enough bytes to ensure we get the desired length
     // Each base36 character represents ~5.17 bits, so we need more bytes
-    const bytes = crypto.randomBytes(Math.ceil(length * 0.75));
+    // Limit to 6 bytes max for readUIntBE compatibility
+    const maxBytes = Math.min(6, Math.ceil(length * 0.75));
+    const bytes = crypto.randomBytes(maxBytes);
 
     // Convert bytes to a number, then to base36 string
     const number = bytes.readUIntBE(0, bytes.length);
