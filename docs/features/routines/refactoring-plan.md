@@ -55,18 +55,24 @@ Breaking down large components into smaller, focused pieces following project ru
 
 ---
 
-### 🔄 PR #2: Extract Workout Types
+### ✅ PR #2: Extract Workout Types
 
-**Status:** PENDING
-**Files:** `features/routines/types/workout.ts`
+**Status:** COMPLETED
+**Branch:** `refactor/extract-workout-types`
+**Files:**
+
+- `features/routines/types/workout.ts` (147 lines)
+- `features/routines/types/workout.test.ts` (292 lines)
+- `features/routines/types/index.ts` (reduced from 153 to 22 lines)
+
 **Changes:**
 
 - Extract workout-related types from `types/index.ts`
-- Create focused type definitions for `StrengthWorkout`, `RunningWorkout`, `WorkoutSection`
-- Add co-located tests
-- Update main types index
+- Create focused type definitions for `WorkoutType`, `WorkoutSection`, `Exercise`, `ProgressionMethod`, `StrengthWorkout`, `RunningWorkout`, and all trail running types
+- Add comprehensive co-located tests (13 new tests)
+- Update main types index to re-export workout types
 
-**Target:** < 100 lines
+**Target:** < 200 lines ✅ (147 lines achieved)
 **Dependencies:** None
 
 ### 🔄 PR #3: Extract Exercise Types
@@ -558,10 +564,10 @@ The key insight is that we need to extract **types**, **utilities**, **state man
 ### Completed
 
 - [x] PR #1: Extract Routine Types
+- [x] PR #2: Extract Workout Types
 
 ### In Progress
 
-- [ ] PR #2: Extract Workout Types
 - [ ] PR #3: Extract Exercise Types
 - [ ] PR #4: Extract Utility Functions
 
