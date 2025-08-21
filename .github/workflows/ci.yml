@@ -66,10 +66,11 @@ jobs:
           
           # Run the enhanced detection script
           echo "Running enhanced affected package detection..."
+          # Capture only stdout in AFFECTED_PACKAGES, stderr will go to the logs
           AFFECTED_PACKAGES=$(.github/scripts/get-affected-packages.sh "$BASE_SHA")
           
-          # Log the result
-          echo "Script output: $AFFECTED_PACKAGES"
+          # Log the result without any formatting that could confuse GitHub Actions
+          echo "Script returned: $AFFECTED_PACKAGES"
           
           # If no packages found or empty result, set to empty string
           if [[ -z "$AFFECTED_PACKAGES" ]]; then
@@ -80,7 +81,11 @@ jobs:
             echo "Affected packages: $AFFECTED_PACKAGES"
           fi
           
-          echo "affected=${AFFECTED_PACKAGES}" >> $GITHUB_OUTPUT
+          # Write to GitHub output without any additional formatting
+          {
+            echo "affected=$AFFECTED_PACKAGES"
+          } >> $GITHUB_OUTPUT
+          
           echo "::endgroup::"
 
       - name: Check for YAML changes

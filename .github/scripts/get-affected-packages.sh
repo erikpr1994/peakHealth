@@ -7,9 +7,9 @@ set -e
 # Usage: ./get-affected-packages.sh [base_sha]
 # If base_sha is not provided, it will be calculated based on the event type
 
-# Function to log without timestamp to avoid CI parsing issues
+# Function to log without special formatting to avoid CI parsing issues
 log() {
-  echo "LOG: $1"
+  echo "INFO: $1" >&2  # Send logs to stderr instead of stdout
 }
 
 # Determine the base SHA to compare against
@@ -56,7 +56,7 @@ if [ -z "$CHANGED_FILES" ]; then
 fi
 
 log "Changed files:"
-echo "$CHANGED_FILES"
+echo "$CHANGED_FILES" >&2  # Send to stderr
 
 # Step 2: Map changed files to workspace packages
 log "Mapping changed files to workspace packages..."
