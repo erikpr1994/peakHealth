@@ -46,7 +46,7 @@ jobs:
         id: affected
         run: |
           echo "::group::Affected Package Detection"
-          
+
           if [[ "${{ github.event_name }}" == "pull_request" ]]; then
             echo "Pull request detected"
             BASE_SHA="${{ github.event.pull_request.base.sha }}"
@@ -59,19 +59,19 @@ jobs:
               echo "::endgroup::"
               exit 0
             fi
-            
+
             # For other branches, use the previous commit
             BASE_SHA="HEAD~1"
           fi
-          
+
           # Run the enhanced detection script
           echo "Running enhanced affected package detection..."
           # Capture only stdout in AFFECTED_PACKAGES, stderr will go to the logs
           AFFECTED_PACKAGES=$(.github/scripts/get-affected-packages.sh "$BASE_SHA")
-          
+
           # Log the result without any formatting that could confuse GitHub Actions
           echo "Script returned: $AFFECTED_PACKAGES"
-          
+
           # If no packages found or empty result, set to empty string
           if [[ -z "$AFFECTED_PACKAGES" ]]; then
             echo "No affected packages found"
@@ -80,12 +80,12 @@ jobs:
           else
             echo "Affected packages: $AFFECTED_PACKAGES"
           fi
-          
+
           # Write to GitHub output without any additional formatting
           {
             echo "affected=$AFFECTED_PACKAGES"
           } >> $GITHUB_OUTPUT
-          
+
           echo "::endgroup::"
 
       - name: Check for YAML changes
@@ -151,7 +151,7 @@ jobs:
         run: |
           echo "::group::Linting Affected Packages"
           AFFECTED="${{ needs.determine-affected.outputs.affected }}"
-          
+
           if [[ "$AFFECTED" == "all" ]]; then
             echo "Linting all packages"
             pnpm turbo run lint --concurrency=3 --cache-dir=.turbo
@@ -165,7 +165,7 @@ jobs:
                 FILTER_STRING="${FILTER_STRING} --filter=${PKG}"
               fi
             done
-            
+
             if [[ -n "$FILTER_STRING" ]]; then
               echo "Running: pnpm turbo run lint $FILTER_STRING --concurrency=3 --cache-dir=.turbo"
               pnpm turbo run lint $FILTER_STRING --concurrency=3 --cache-dir=.turbo
@@ -195,7 +195,7 @@ jobs:
         run: |
           echo "::group::Type Checking Affected Packages"
           AFFECTED="${{ needs.determine-affected.outputs.affected }}"
-          
+
           if [[ "$AFFECTED" == "all" ]]; then
             echo "Type checking all packages"
             pnpm turbo run type-check --concurrency=3 --cache-dir=.turbo
@@ -209,7 +209,7 @@ jobs:
                 FILTER_STRING="${FILTER_STRING} --filter=${PKG}"
               fi
             done
-            
+
             if [[ -n "$FILTER_STRING" ]]; then
               echo "Running: pnpm turbo run type-check $FILTER_STRING --concurrency=3 --cache-dir=.turbo"
               pnpm turbo run type-check $FILTER_STRING --concurrency=3 --cache-dir=.turbo
@@ -239,7 +239,7 @@ jobs:
         run: |
           echo "::group::Testing Affected Packages"
           AFFECTED="${{ needs.determine-affected.outputs.affected }}"
-          
+
           if [[ "$AFFECTED" == "all" ]]; then
             echo "Testing all packages"
             pnpm turbo run test --concurrency=3 --cache-dir=.turbo
@@ -253,7 +253,7 @@ jobs:
                 FILTER_STRING="${FILTER_STRING} --filter=${PKG}"
               fi
             done
-            
+
             if [[ -n "$FILTER_STRING" ]]; then
               echo "Running: pnpm turbo run test $FILTER_STRING --concurrency=3 --cache-dir=.turbo"
               pnpm turbo run test $FILTER_STRING --concurrency=3 --cache-dir=.turbo
@@ -325,24 +325,31 @@ jobs:
         run: |
           echo "::group::Building Affected Packages"
           AFFECTED="${{ needs.determine-affected.outputs.affected }}"
-          
+
           # Core packages that should always be built first if they're affected
           CORE_PACKAGES="@peakhealth/ui @peakhealth/auth-types @peakhealth/auth-utils"
-          
+
           if [[ "$AFFECTED" == "all" ]]; then
             echo "Building all core packages"
             # Try to build with cache first, fallback to clean build if needed
-            pnpm turbo run build --filter="@peakhealth/ui" --filter="@peakhealth/auth-types" --filter="@peakhealth/auth-utils" || {
+            pnpm turbo run build \
+              --filter="@peakhealth/ui" \
+              --filter="@peakhealth/auth-types" \
+              --filter="@peakhealth/auth-utils" || {
               echo "Build failed, trying clean build..."
-              pnpm turbo run build --filter="@peakhealth/ui" --filter="@peakhealth/auth-types" --filter="@peakhealth/auth-utils" --force
+              pnpm turbo run build \
+                --filter="@peakhealth/ui" \
+                --filter="@peakhealth/auth-types" \
+                --filter="@peakhealth/auth-utils" \
+                --force
             }
           else
             echo "Building affected packages: $AFFECTED"
-            
+
             # Create filter string for affected packages
             FILTER_STRING=""
             AFFECTED_CORE=false
-            
+
             # Check if any core packages are affected
             for CORE_PKG in $CORE_PACKAGES; do
               if [[ "$AFFECTED" == *"$CORE_PKG"* ]]; then
@@ -350,13 +357,20 @@ jobs:
                 break
               fi
             done
-            
+
             if [[ "$AFFECTED_CORE" == "true" ]]; then
               echo "Core packages affected, building all core packages"
               # Try to build with cache first, fallback to clean build if needed
-              pnpm turbo run build --filter="@peakhealth/ui" --filter="@peakhealth/auth-types" --filter="@peakhealth/auth-utils" || {
+              pnpm turbo run build \
+                --filter="@peakhealth/ui" \
+                --filter="@peakhealth/auth-types" \
+                --filter="@peakhealth/auth-utils" || {
                 echo "Build failed, trying clean build..."
-                pnpm turbo run build --filter="@peakhealth/ui" --filter="@peakhealth/auth-types" --filter="@peakhealth/auth-utils" --force
+                pnpm turbo run build \
+                  --filter="@peakhealth/ui" \
+                  --filter="@peakhealth/auth-types" \
+                  --filter="@peakhealth/auth-utils" \
+                  --force
               }
             else
               # Build only affected packages
@@ -366,7 +380,7 @@ jobs:
                   FILTER_STRING="${FILTER_STRING} --filter=${PKG}"
                 fi
               done
-              
+
               if [[ -n "$FILTER_STRING" ]]; then
                 echo "Running: pnpm turbo run build $FILTER_STRING"
                 pnpm turbo run build $FILTER_STRING || {
@@ -415,4 +429,7 @@ jobs:
   #          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
   #          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
   #          # Add other required env vars
-  #        run: pnpm turbo run build --filter="@peakhealth/web" --filter="@peakhealth/admin" --filter="@peakhealth/landing"
+  #        run: pnpm turbo run build \
+  #          --filter="@peakhealth/web" \
+  #          --filter="@peakhealth/admin" \
+  #          --filter="@peakhealth/landing"

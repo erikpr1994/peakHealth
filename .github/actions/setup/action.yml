@@ -45,7 +45,14 @@ runs:
           echo "Using Node.js version from .nvmrc: $NODE_VERSION"
         elif [ -f "package.json" ]; then
           # Try to extract from package.json engines field
-          NODE_VERSION=$(node -e "try { const pkg = require('./package.json'); console.log(pkg.engines?.node || '24.x'); } catch (e) { console.log('24.x'); }")
+          NODE_VERSION=$(node -e "
+            try { 
+              const pkg = require('./package.json'); 
+              console.log(pkg.engines?.node || '24.x'); 
+            } catch (e) { 
+              console.log('24.x'); 
+            }
+          ")
           echo "Using Node.js version from package.json: $NODE_VERSION"
         else
           NODE_VERSION="24.x"
@@ -67,7 +74,19 @@ runs:
       run: |
         # Try to get pnpm version from package.json packageManager field
         if [ -f "package.json" ]; then
-          PNPM_VERSION=$(node -e "try { const pkg = require('./package.json'); const pm = pkg.packageManager; if (pm && pm.startsWith('pnpm@')) { console.log(pm.split('@')[1]); } else { console.log('10.14.0'); } } catch (e) { console.log('10.14.0'); }")
+          PNPM_VERSION=$(node -e "
+            try { 
+              const pkg = require('./package.json'); 
+              const pm = pkg.packageManager; 
+              if (pm && pm.startsWith('pnpm@')) { 
+                console.log(pm.split('@')[1]); 
+              } else { 
+                console.log('10.14.0'); 
+              } 
+            } catch (e) { 
+              console.log('10.14.0'); 
+            }
+          ")
           echo "Using pnpm version from package.json: $PNPM_VERSION"
         else
           PNPM_VERSION="10.14.0"
