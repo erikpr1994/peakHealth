@@ -19,7 +19,7 @@ describe('Radio', () => {
     
     expect(radio).toBeInTheDocument();
     expect(label).toBeInTheDocument();
-    expect(label.parentElement).toHaveClass('peakhealth-radio__container');
+    expect(label.parentElement).toHaveClass('peakhealth-radio-container');
   });
 
   it('renders in checked state when defaultChecked is true', () => {
@@ -29,7 +29,7 @@ describe('Radio', () => {
   });
 
   it('renders in checked state when checked prop is true', () => {
-    render(<Radio name="test" value="option1" checked />);
+    render(<Radio name="test" value="option1" checked onChange={() => {}} />);
     const radio = screen.getByRole('radio');
     expect(radio).toBeChecked();
   });
@@ -167,4 +167,3 @@ describe('RadioGroup', () => {
     expect(radioButtons[2]).not.toBeDisabled();
   });
 });
-

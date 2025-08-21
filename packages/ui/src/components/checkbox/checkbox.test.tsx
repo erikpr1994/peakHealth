@@ -19,7 +19,7 @@ describe('Checkbox', () => {
     
     expect(checkbox).toBeInTheDocument();
     expect(label).toBeInTheDocument();
-    expect(label.parentElement).toHaveClass('peakhealth-checkbox__container');
+    expect(label.parentElement).toHaveClass('peakhealth-checkbox-container');
   });
 
   it('renders in checked state when defaultChecked is true', () => {
@@ -29,7 +29,7 @@ describe('Checkbox', () => {
   });
 
   it('renders in checked state when checked prop is true', () => {
-    render(<Checkbox checked />);
+    render(<Checkbox checked onChange={() => {}} />);
     const checkbox = screen.getByRole('checkbox');
     expect(checkbox).toBeChecked();
   });
@@ -91,4 +91,3 @@ describe('Checkbox', () => {
     expect(checkbox).toHaveAttribute('name', 'test-checkbox');
   });
 });
-
