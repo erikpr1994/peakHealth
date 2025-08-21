@@ -1,10 +1,20 @@
 // Deep import to avoid bundling browser client in Edge runtime
 import { NextResponse, type NextRequest } from 'next/server';
+import getHypertune from './lib/hypertune/getHypertune';
 
 export async function middleware(request: NextRequest): Promise<NextResponse> {
   const response = NextResponse.next({
     request: { headers: request.headers },
   });
+
+  // Initialize Hypertune
+  const hypertune = await getHypertune();
+
+  // Check Hypertune flag (remove in production if not needed)
+  hypertune.roadmap({ fallback: false });
+
+  // Flush logs - call directly since waitUntil is not available in middleware
+  hypertune.flushLogs();
 
   // Lightweight auth check in Edge without importing Supabase SDK
   const cookies = request.cookies.getAll();
