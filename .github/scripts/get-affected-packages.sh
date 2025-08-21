@@ -97,20 +97,17 @@ printf "%s\n" "${AFFECTED_PACKAGES[@]}" > "$TEMP_FILE"
 if [ ${#AFFECTED_PACKAGES[@]} -gt 0 ]; then
   log "Directly affected packages: ${AFFECTED_PACKAGES[*]}"
   
-  # Create a filter string for Turborepo
-  FILTER_STRING=""
+  # Create multiple filter arguments for Turborepo
+  FILTER_ARGS=""
   for PKG in "${AFFECTED_PACKAGES[@]}"; do
-    FILTER_STRING="${FILTER_STRING}${PKG}..."
-    if [ "$PKG" != "${AFFECTED_PACKAGES[-1]}" ]; then
-      FILTER_STRING="${FILTER_STRING} "
-    fi
+    FILTER_ARGS="${FILTER_ARGS} --filter=${PKG}..."
   done
   
-  if [ -n "$FILTER_STRING" ]; then
-    log "Running Turborepo with filter: $FILTER_STRING"
+  if [ -n "$FILTER_ARGS" ]; then
+    log "Running Turborepo with filters: $FILTER_ARGS"
     
     # Run Turborepo to get all affected packages including dependencies
-    TURBO_OUTPUT=$(pnpm turbo run build --filter="$FILTER_STRING" --dry-run=json 2>/dev/null || echo '{"tasks": []}')
+    TURBO_OUTPUT=$(pnpm turbo run build $FILTER_ARGS --dry-run=json 2>/dev/null || echo '{"tasks": []}')
     DEPENDENT_PACKAGES=$(echo "$TURBO_OUTPUT" | jq -r '.tasks[] | .package // empty' 2>/dev/null | sort -u | tr '\n' ',' | sed 's/,$//')
     
     if [ -n "$DEPENDENT_PACKAGES" ]; then
