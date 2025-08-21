@@ -85,9 +85,10 @@ const LoginForm = (): React.JSX.Element => {
     if (availableApps.length === 1) {
       // Only one app available, redirect directly to it
       const appKey = availableApps[0].appKey;
-      return buildAppRedirectUrl(appKey, { returnUrl });
-    }
 
+      // Don't pass returnUrl when redirecting directly to app
+      return buildAppRedirectUrl(appKey);
+    }
     // Multiple apps available, redirect to app selector
     return `/${locale}/app-selector`;
   };

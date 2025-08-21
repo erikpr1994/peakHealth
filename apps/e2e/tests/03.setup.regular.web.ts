@@ -31,33 +31,39 @@ test.describe('Setup: Regular User Landing → Login → Web App', () => {
 
       // Clear and fill email field with retry logic
       const emailInput = page.getByPlaceholder('Enter your email');
-      await emailInput.clear();
+
+      // Wait for the input to be ready
+      await emailInput.waitFor({ state: 'visible', timeout: 10000 });
+
+      // Fill the email
       await emailInput.fill(email);
 
-      // Wait a bit and verify the email was filled correctly
-      await page.waitForTimeout(100);
+      // Verify the email was filled correctly
       await expect(emailInput).toHaveValue(email, { timeout: 10000 });
 
       // Clear and fill password field
       const passwordInput = page.getByPlaceholder('Enter your password');
-      await passwordInput.clear();
+
+      // Wait for the input to be ready
+      await passwordInput.waitFor({ state: 'visible', timeout: 10000 });
+
+      // Fill the password
       await passwordInput.fill(password);
+
+      // Verify the password was filled correctly
+      await expect(passwordInput).toHaveValue(password, { timeout: 10000 });
 
       // Click sign in button
       await page.getByRole('button', { name: /sign in|log in/i }).click();
 
-      // Regular users with only one app access should go directly to their app
-      // Wait for redirect to web app
-      await page.waitForURL(/localhost:3024/, { timeout: 60_000 });
-
-      // Verify we're on the web app
-      await expect(page).toHaveURL(/localhost:3024/);
+      // Regular users should be redirected directly to the web app dashboard
+      await page.waitForURL(/localhost:3024\/dashboard/, { timeout: 60_000 });
     });
 
     // Verify final navigation to dashboard
     await test.step('Verify navigation to web app dashboard', async () => {
-      // We should already be on the web app, just verify the final URL
-      await expect(page).toHaveURL(/localhost:3024/);
+      // We should already be on the web app dashboard, just verify the final URL
+      await expect(page).toHaveURL(/localhost:3024\/dashboard/i);
     });
 
     // Save storage state for regular web user

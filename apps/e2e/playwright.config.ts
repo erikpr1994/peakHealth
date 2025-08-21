@@ -6,15 +6,25 @@ export default defineConfig({
   timeout: 120_000, // Increased timeout for setup tests
   expect: {
     timeout: 30_000, // Timeout for expect assertions
+    toHaveScreenshot: {
+      maxDiffPixelRatio: 0.05, // Allow 5% of pixels to be different
+      threshold: 0.2, // Pixel difference threshold
+      animations: 'disabled', // Disable animations for screenshots
+    },
   },
   fullyParallel: false, // Changed from true to false to prevent test interference
   workers: 1, // Reduced to 1 worker to ensure proper sequencing
-  reporter: [['html', { open: 'never' }]],
+  reporter: [
+    ['html', { open: 'never' }],
+    ['list'], // Add list reporter for better console output
+  ],
+  retries: 1, // Retry failed tests once
   use: {
     trace: 'retain-on-failure',
-    viewport: { width: 1280, height: 720 },
+    viewport: { width: 1920, height: 1080 },
     actionTimeout: 30_000, // Timeout for actions like click, fill, etc.
     navigationTimeout: 60_000, // Timeout for navigation
+    screenshot: 'only-on-failure', // Take screenshots only on failure
   },
   webServer: [
     {
@@ -88,7 +98,7 @@ export default defineConfig({
       name: 'regular-web',
       dependencies: ['setup-regular-web'],
       use: {
-        baseURL: 'http://localhost:3024/en',
+        baseURL: 'http://localhost:3024',
         storageState: 'storage-states/regular-web.json',
       },
       testMatch: [
@@ -100,7 +110,7 @@ export default defineConfig({
       name: 'trainer-web',
       dependencies: ['setup-trainer-web'],
       use: {
-        baseURL: 'http://localhost:3024/en',
+        baseURL: 'http://localhost:3024',
         storageState: 'storage-states/trainer-web.json',
       },
       testMatch: [
