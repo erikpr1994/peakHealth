@@ -208,6 +208,11 @@ export class RoutineCreatePage extends RegularUserBasePage {
     await this.page.getByText(new RegExp(exerciseName, 'i')).first().click();
     await this.page.locator(this.confirmAddExerciseButtonSelector).click();
 
+    // Wait for the modal to close
+    await this.page
+      .locator('[role="dialog"]')
+      .waitFor({ state: 'hidden', timeout: 10000 });
+
     // Wait for the exercise to be added to the form
     await this.page
       .locator(this.exerciseHeadingSelector)
@@ -296,7 +301,8 @@ export class RoutineCreatePage extends RegularUserBasePage {
     // Fill exercise details
     for (let i = 0; i < routineData.workout.section.exercise.sets.length; i++) {
       const set = routineData.workout.section.exercise.sets[i];
-      await this.fillExerciseDetails(i, set.reps, set.weight);
+      // Use set number (1-based) instead of index (0-based)
+      await this.fillExerciseDetails(i + 1, set.reps, set.weight);
     }
 
     // Save the routine

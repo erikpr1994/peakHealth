@@ -78,24 +78,27 @@ export class RoutinesPage extends RegularUserBasePage {
    * @returns Promise that resolves to true if the routine exists
    */
   async routineExists(name: string): Promise<boolean> {
-    // Wait a bit for the page to load
-    await this.page.waitForTimeout(2000);
+    try {
+      // Wait for the routine to appear with a timeout
+      await this.page
+        .locator('h3.text-lg.font-semibold.text-gray-900')
+        .filter({ hasText: name })
+        .waitFor({ state: 'visible', timeout: 10000 });
 
-    // Look for the routine name in any h3 element
-    const count = await this.page
-      .locator('h3.text-lg.font-semibold.text-gray-900')
-      .filter({ hasText: name })
-      .count();
+      return true;
+    } catch {
+      // If the specific selector doesn't work, try the fallback
+      try {
+        await this.page
+          .locator('h3')
+          .filter({ hasText: name })
+          .waitFor({ state: 'visible', timeout: 5000 });
 
-    // Also check for any h3 element as fallback
-    const fallbackCount = await this.page
-      .locator('h3')
-      .filter({ hasText: name })
-      .count();
-
-    // Debug logging removed
-
-    return count > 0 || fallbackCount > 0;
+        return true;
+      } catch {
+        return false;
+      }
+    }
   }
 
   /**
