@@ -40,14 +40,14 @@ describe('Input', () => {
     let input = screen.getByRole('textbox');
     expect(input).toHaveAttribute('type', 'email');
 
-    rerender(<Input type="password" />);
+    rerender(<Input type="password" data-testid="password-input" />);
     // Password inputs don't have the textbox role
-    input = screen.getByRole('textbox', { hidden: true }) || screen.getByDisplayValue('');
+    input = screen.getByTestId('password-input');
     expect(input).toHaveAttribute('type', 'password');
 
-    rerender(<Input type="number" />);
+    rerender(<Input type="number" data-testid="number-input" />);
     // Number inputs have a spinbutton role
-    input = screen.getByRole('spinbutton');
+    input = screen.getByTestId('number-input');
     expect(input).toHaveAttribute('type', 'number');
   });
 
