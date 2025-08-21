@@ -50,43 +50,23 @@ export default [
     ],
     languageOptions: {
       globals: {
+        // Node.js globals
         __dirname: 'readonly',
         __filename: 'readonly',
-        alert: 'readonly',
         Buffer: 'readonly',
+        process: 'readonly',
+        exports: 'readonly',
+        module: 'readonly',
+        require: 'readonly',
+        global: 'readonly',
+        NodeJS: 'readonly',
+
+        // Common browser globals - moved to eslint.next.config.js
         clearInterval: 'readonly',
         clearTimeout: 'readonly',
         console: 'readonly',
-        document: 'readonly',
-        exports: 'readonly',
-        fetch: 'readonly',
-        global: 'readonly',
-        Headers: 'readonly',
-        HeadersInit: 'readonly',
-
-        HTMLButtonElement: 'readonly',
-
-        HTMLDivElement: 'readonly',
-        HTMLInputElement: 'readonly',
-        HTMLSpanElement: 'readonly',
-        KeyboardEvent: 'readonly',
-        localStorage: 'readonly',
-        module: 'readonly',
-        navigator: 'readonly',
-        NodeJS: 'readonly',
-
-        process: 'readonly',
-
-        React: 'readonly',
-
-        require: 'readonly',
-        sessionStorage: 'readonly',
         setInterval: 'readonly',
         setTimeout: 'readonly',
-        URL: 'readonly',
-        URLSearchParams: 'readonly',
-
-        window: 'readonly',
 
         // Vitest globals
         describe: 'readonly',
@@ -101,50 +81,35 @@ export default [
       },
       parser: typescriptParser,
       parserOptions: {
-        ecmaFeatures: {
-          jsx: true,
-        },
         ecmaVersion: 2020,
         sourceType: 'module',
       },
     },
     plugins: {
-      '@next/next': nextPlugin,
       '@typescript-eslint': typescriptPlugin,
       'code-complete': codeCompletePlugin,
       compat: compatPlugin,
       'const-case': constCasePlugin,
       'css-modules': cssModulesPlugin,
-
       depend: dependPlugin,
       diff: diffPlugin,
       github: githubPlugin,
       'import-x': importXPlugin,
-      'jsx-a11y': jsxA11yPlugin,
       'no-secrets': noSecretsPlugin,
       'no-unsanitized': noUnsanitizedPlugin,
       pii: piiPlugin,
       playwright: playwrightPlugin,
       prettier: prettierPlugin,
-      react: reactPlugin,
-      'react-hooks': reactHooksPlugin,
-      'react-refresh': reactRefreshPlugin,
       'rule-adoption': ruleAdoptionPlugin,
       unicorn: unicornPlugin,
     },
     processor: 'rule-adoption/processor',
     rules: {
-      '@next/next/no-html-link-for-pages': 'off',
-      '@next/next/no-img-element': 'error',
-      '@next/next/no-sync-scripts': 'error',
-      '@next/next/no-unwanted-polyfillio': 'error',
-
       '@typescript-eslint/explicit-function-return-type': 'error',
       '@typescript-eslint/explicit-module-boundary-types': 'error',
       '@typescript-eslint/no-empty-function': 'error',
       '@typescript-eslint/no-explicit-any': 'error',
       '@typescript-eslint/no-non-null-assertion': 'error',
-
       '@typescript-eslint/no-unused-vars': [
         'error',
         {
@@ -155,74 +120,32 @@ export default [
       ],
       '@typescript-eslint/no-var-requires': 'error',
       'compat/compat': 'error',
-
       'css-modules/no-unused-class': 'error',
-
       'depend/ban-dependencies': [
         'error',
         { allowed: ['eslint-plugin-react'] },
       ],
       'import-x/default': 'error',
       'import-x/named': 'error',
-
       'import-x/namespace': 'error',
       'import-x/no-extraneous-dependencies': 'error',
-
       // Import correctness via import-x
       'import-x/no-unresolved': ['error', { ignore: ['^@/'] }],
-      'jsx-a11y/alt-text': 'error',
-
-      'jsx-a11y/anchor-has-content': 'error',
-      'jsx-a11y/anchor-is-valid': 'error',
-      'jsx-a11y/aria-props': 'error',
-      'jsx-a11y/aria-proptypes': 'error',
-
-      'jsx-a11y/aria-unsupported-elements': 'error',
-      'jsx-a11y/role-has-required-aria-props': 'error',
-      'jsx-a11y/role-supports-aria-props': 'error',
       'no-console': 'error',
       'no-debugger': 'error',
       'no-duplicate-imports': 'error',
       'no-secrets/no-secrets': 'error',
       'no-unsanitized/method': 'error',
       'no-unsanitized/property': 'error',
-
       'no-unused-expressions': 'error',
       'no-unused-labels': 'error',
       'no-unused-vars': 'off',
-
       'no-useless-escape': 'error',
-
       'no-useless-return': 'error',
       'no-var': 'error',
-
       'prefer-const': 'error',
       'prefer-template': 'error',
-
       'prettier/prettier': 'error',
-      'react-hooks/exhaustive-deps': 'warn',
-
-      'react-hooks/rules-of-hooks': 'error',
-      'react-refresh/only-export-components': [
-        'warn',
-        { allowConstantExport: true },
-      ],
-      'react/function-component-definition': [
-        'warn',
-        {
-          namedComponents: 'arrow-function',
-          unnamedComponents: 'arrow-function',
-        },
-      ],
-      'react/jsx-filename-extension': ['error', { extensions: ['.tsx'] }],
-
-      'react/jsx-props-no-spreading': 'off',
-
-      'react/jsx-uses-react': 'off',
-
-      'react/prop-types': 'off',
-      'react/react-in-jsx-scope': 'off',
-      'react/require-default-props': 'off',
     },
     settings: {
       'import-x/internal-regex': '^@peakhealth/',
@@ -234,9 +157,6 @@ export default [
           alwaysTryTypes: true,
           project: ['./apps/*/tsconfig.json', './packages/*/tsconfig.json'],
         },
-      },
-      react: {
-        version: 'detect',
       },
     },
   },
