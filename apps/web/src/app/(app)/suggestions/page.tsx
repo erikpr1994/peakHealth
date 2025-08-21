@@ -1,24 +1,14 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
 
-import { FEATURE_FLAGS, useFeatureFlag } from '@/features/feature-flags';
-import Suggestions from '@/features/suggestions/Suggestions';
-
-const SuggestionsPage = () => {
+export default function SuggestionsPage(): React.JSX.Element {
   const router = useRouter();
-  const { flags, isLoading } = useFeatureFlag([
-    FEATURE_FLAGS.SUGGESTIONS_FEATURE,
-  ]);
-  const isEnabled = flags[FEATURE_FLAGS.SUGGESTIONS_FEATURE];
 
-  useEffect(() => {
-    if (!isLoading && !isEnabled) router.push('/profile');
-  }, [isLoading, isEnabled, router]);
-
-  if (isLoading || !isEnabled) return null;
-  return <Suggestions />;
-};
-
-export default SuggestionsPage;
+  return (
+    <div className="container mx-auto px-4 py-8">
+      <h1 className="text-3xl font-bold mb-6">Suggestions</h1>
+      <p>Workout suggestions feature coming soon!</p>
+    </div>
+  );
+}

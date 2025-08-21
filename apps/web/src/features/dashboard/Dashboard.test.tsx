@@ -3,7 +3,6 @@ import { render, screen } from '@testing-library/react';
 import { vi, describe, it, expect, type Mock } from 'vitest';
 
 import Dashboard from './Dashboard';
-import { FeatureFlagProvider } from '@/features/feature-flags/context/FeatureFlagContext';
 
 // Mock the auth context
 vi.mock('@/features/auth/context/AuthContext', () => ({
@@ -61,69 +60,16 @@ vi.mock('@/features/routines/hooks/useRoutines', () => ({
   }),
 }));
 
-// Mock the feature flags hook
-vi.mock('@/features/feature-flags/hooks/useFeatureFlag', () => ({
-  useFeatureFlag: (): {
-    flags: Record<string, boolean>;
-    isLoading: boolean;
-  } => ({
-    flags: {
-      trainer_and_clubs_feature: true,
-      gyms_feature: true,
-    },
-    isLoading: false,
-  }),
-}));
-
-// Mock the feature flags context
-vi.mock('@/features/feature-flags/context/FeatureFlagContext', () => ({
-  FeatureFlagProvider: ({
-    children,
-  }: {
-    children: React.ReactNode;
-  }): React.ReactElement => children as React.ReactElement,
-  useFeatureFlags: (): {
-    flags: Record<string, boolean>;
-    isLoading: boolean;
-    error: null;
-  } => ({
-    flags: {
-      trainer_and_clubs_feature: true,
-      gyms_feature: true,
-      notification_system_feature: true,
-      calendar_feature: true,
-      performance_feature: true,
-      health_feature: true,
-      equipment_feature: true,
-      suggestions_feature: true,
-      account_settings_feature: true,
-      app_settings_feature: true,
-      help_support_feature: true,
-      dashboard_feature: true,
-    },
-    isLoading: false,
-    error: null,
-  }),
-}));
-
 describe('Dashboard', () => {
   it('renders dashboard component', (): void => {
-    render(
-      <FeatureFlagProvider>
-        <Dashboard />
-      </FeatureFlagProvider>
-    );
+    render(<Dashboard />);
 
     // Check if the dashboard renders without crashing
     expect(screen.getByText(/good morning/i)).toBeInTheDocument();
   });
 
   it('shows welcome message for authenticated user', (): void => {
-    render(
-      <FeatureFlagProvider>
-        <Dashboard />
-      </FeatureFlagProvider>
-    );
+    render(<Dashboard />);
 
     // Check if the welcome message is displayed
     expect(screen.getByText(/good morning/i)).toBeInTheDocument();
