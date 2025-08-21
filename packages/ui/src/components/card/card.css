@@ -1,0 +1,43 @@
+.peakhealth-card {
+  border-radius: 0.5rem;
+  background-color: hsl(var(--card, 0 0% 100%));
+  color: hsl(var(--card-foreground, 240 10% 3.9%));
+  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+  overflow: hidden;
+  border: 1px solid hsl(var(--border, 240 5.9% 90%));
+}
+
+.peakhealth-card__header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 1.5rem 1.5rem 0 1.5rem;
+}
+
+.peakhealth-card__title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 0;
+  color: hsl(var(--card-foreground, 240 10% 3.9%));
+}
+
+.peakhealth-card__description {
+  font-size: 0.875rem;
+  color: hsl(var(--muted-foreground, 240 3.8% 46.1%));
+  margin: 0;
+}
+
+.peakhealth-card__content {
+  padding: 1.5rem;
+}
+
+.peakhealth-card__footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  padding: 0 1.5rem 1.5rem 1.5rem;
+  border-top: 1px solid hsl(var(--border, 240 5.9% 90%));
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+}
+

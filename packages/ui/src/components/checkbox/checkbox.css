@@ -1,0 +1,68 @@
+.peakhealth-checkbox-container {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.peakhealth-checkbox {
+  appearance: none;
+  width: 1rem;
+  height: 1rem;
+  border: 1px solid hsl(var(--border, 240 5.9% 90%));
+  border-radius: 0.25rem;
+  background-color: hsl(var(--background, 0 0% 100%));
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+  position: relative;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.peakhealth-checkbox:focus {
+  outline: none;
+  border-color: hsl(var(--ring, 240 10% 3.9%));
+  box-shadow: 0 0 0 2px hsl(var(--ring, 240 10% 3.9%) / 0.1);
+}
+
+.peakhealth-checkbox:checked {
+  background-color: hsl(var(--primary, 240 5.9% 10%));
+  border-color: hsl(var(--primary, 240 5.9% 10%));
+}
+
+.peakhealth-checkbox:checked::after {
+  content: '';
+  position: absolute;
+  width: 0.3rem;
+  height: 0.5rem;
+  border: solid hsl(var(--primary-foreground, 0 0% 98%));
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg) translate(-1px, -1px);
+}
+
+.peakhealth-checkbox:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.peakhealth-checkbox--error {
+  border-color: hsl(var(--destructive, 0 84.2% 60.2%));
+}
+
+.peakhealth-checkbox--error:focus {
+  box-shadow: 0 0 0 2px hsl(var(--destructive, 0 84.2% 60.2%) / 0.1);
+}
+
+.peakhealth-checkbox-label {
+  font-size: 0.875rem;
+  color: hsl(var(--foreground, 240 10% 3.9%));
+  cursor: pointer;
+  user-select: none;
+}
+
+.peakhealth-checkbox:disabled + .peakhealth-checkbox-label {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+

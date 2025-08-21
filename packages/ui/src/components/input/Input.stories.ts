@@ -1,6 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
-import * as React from 'react';
-
+import type { Meta, StoryObj } from '@storybook/react';
 import { Input } from './input';
 
 const meta: Meta<typeof Input> = {
@@ -11,172 +9,82 @@ const meta: Meta<typeof Input> = {
   },
   tags: ['autodocs'],
   argTypes: {
-    variant: {
-      control: { type: 'select' },
-      options: ['default', 'error'],
-    },
-    type: {
-      control: { type: 'select' },
-      options: ['text', 'email', 'password', 'number', 'tel', 'url'],
-    },
     disabled: {
-      control: { type: 'boolean' },
+      control: 'boolean',
+      description: 'Whether the input is disabled',
+    },
+    error: {
+      control: 'boolean',
+      description: 'Whether the input is in an error state',
     },
     placeholder: {
-      control: { type: 'text' },
+      control: 'text',
+      description: 'Placeholder text for the input',
+    },
+    type: {
+      control: 'select',
+      options: ['text', 'email', 'password', 'number', 'tel', 'url', 'date', 'time', 'file'],
+      description: 'The type of the input',
     },
   },
 };
 
 export default meta;
-type Story = StoryObj<typeof meta>;
+type Story = StoryObj<typeof Input>;
 
 export const Default: Story = {
   args: {
     placeholder: 'Enter text...',
+    type: 'text',
   },
 };
 
-export const WithValue: Story = {
+export const WithError: Story = {
   args: {
-    value: 'Sample text',
     placeholder: 'Enter text...',
-  },
-};
-
-export const Email: Story = {
-  args: {
-    type: 'email',
-    placeholder: 'Enter your email...',
-  },
-};
-
-export const Password: Story = {
-  args: {
-    type: 'password',
-    placeholder: 'Enter your password...',
-  },
-};
-
-export const Number: Story = {
-  args: {
-    type: 'number',
-    placeholder: 'Enter a number...',
-  },
-};
-
-export const Error: Story = {
-  args: {
-    variant: 'error',
-    placeholder: 'This field has an error',
+    type: 'text',
+    error: true,
   },
 };
 
 export const Disabled: Story = {
   args: {
+    placeholder: 'Enter text...',
+    type: 'text',
     disabled: true,
-    value: 'Disabled input',
   },
 };
 
-export const AllVariants: Story = {
-  render: () =>
-    React.createElement(
-      'div',
-      {
-        style: {
-          display: 'flex',
-          flexDirection: 'column',
-          gap: '1rem',
-          width: '300px',
-        },
-      },
-      React.createElement(Input, { placeholder: 'Default input' }),
-      React.createElement(Input, { type: 'email', placeholder: 'Email input' }),
-      React.createElement(Input, {
-        type: 'password',
-        placeholder: 'Password input',
-      }),
-      React.createElement(Input, {
-        variant: 'error',
-        placeholder: 'Error input',
-      }),
-      React.createElement(Input, {
-        disabled: true,
-        placeholder: 'Disabled input',
-      })
-    ),
+export const Email: Story = {
+  args: {
+    placeholder: 'Enter email...',
+    type: 'email',
+  },
 };
 
-export const WithLabels: Story = {
-  render: () =>
-    React.createElement(
-      'div',
-      {
-        style: {
-          display: 'flex',
-          flexDirection: 'column',
-          gap: '1rem',
-          width: '300px',
-        },
-      },
-      React.createElement(
-        'div',
-        null,
-        React.createElement(
-          'label',
-          {
-            style: {
-              display: 'block',
-              marginBottom: '0.5rem',
-              fontWeight: '500',
-            },
-          },
-          'Email Address'
-        ),
-        React.createElement(Input, {
-          type: 'email',
-          placeholder: 'Enter your email',
-        })
-      ),
-      React.createElement(
-        'div',
-        null,
-        React.createElement(
-          'label',
-          {
-            style: {
-              display: 'block',
-              marginBottom: '0.5rem',
-              fontWeight: '500',
-            },
-          },
-          'Password'
-        ),
-        React.createElement(Input, {
-          type: 'password',
-          placeholder: 'Enter your password',
-        })
-      ),
-      React.createElement(
-        'div',
-        null,
-        React.createElement(
-          'label',
-          {
-            style: {
-              display: 'block',
-              marginBottom: '0.5rem',
-              fontWeight: '500',
-            },
-          },
-          'Confirm Password'
-        ),
-        React.createElement(Input, {
-          type: 'password',
-          variant: 'error',
-          placeholder: "Passwords don't match",
-        })
-      )
-    ),
+export const Password: Story = {
+  args: {
+    placeholder: 'Enter password...',
+    type: 'password',
+  },
 };
+
+export const Number: Story = {
+  args: {
+    placeholder: 'Enter number...',
+    type: 'number',
+  },
+};
+
+export const Date: Story = {
+  args: {
+    type: 'date',
+  },
+};
+
+export const File: Story = {
+  args: {
+    type: 'file',
+  },
+};
+

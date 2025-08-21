@@ -1,0 +1,18 @@
+.peakhealth-label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: hsl(var(--foreground, 240 10% 3.9%));
+  display: block;
+  margin-bottom: 0.25rem;
+  user-select: none;
+}
+
+.peakhealth-label--error {
+  color: hsl(var(--destructive, 0 84.2% 60.2%));
+}
+
+.peakhealth-label__required {
+  color: hsl(var(--destructive, 0 84.2% 60.2%));
+  margin-left: 0.25rem;
+}
+
