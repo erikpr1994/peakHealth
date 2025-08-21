@@ -1,24 +1,14 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
 
-import EquipmentPage from '@/features/equipment/Equipment';
-import { FEATURE_FLAGS, useFeatureFlag } from '@/features/feature-flags';
-
-const Equipment = () => {
+export default function EquipmentPage(): React.JSX.Element {
   const router = useRouter();
-  const { flags, isLoading } = useFeatureFlag([
-    FEATURE_FLAGS.EQUIPMENT_FEATURE,
-  ]);
-  const isEnabled = flags[FEATURE_FLAGS.EQUIPMENT_FEATURE];
 
-  useEffect(() => {
-    if (!isLoading && !isEnabled) router.push('/profile');
-  }, [isLoading, isEnabled, router]);
-
-  if (isLoading || !isEnabled) return null;
-  return <EquipmentPage />;
-};
-
-export default Equipment;
+  return (
+    <div className="container mx-auto px-4 py-8">
+      <h1 className="text-3xl font-bold mb-6">Equipment</h1>
+      <p>Equipment tracking feature coming soon!</p>
+    </div>
+  );
+}

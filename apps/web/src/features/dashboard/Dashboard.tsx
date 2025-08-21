@@ -27,8 +27,6 @@ import {
 import { Button } from '@peakhealth/ui';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
-import { useFeatureFlag } from '@/features/feature-flags';
-import { FEATURE_FLAGS } from '@/features/feature-flags/lib/config';
 import ClubEventConflictModal from '@/features/social/ClubEventConflictModal';
 
 interface ClubEvent {
@@ -46,16 +44,6 @@ const Dashboard = (): React.JSX.Element => {
   const router = useRouter();
   const [showConflictModal, setShowConflictModal] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState<ClubEvent | null>(null);
-
-  // Get feature flags for conditional rendering
-  const { flags } = useFeatureFlag([
-    FEATURE_FLAGS.TRAINER_AND_CLUBS_FEATURE,
-    FEATURE_FLAGS.GYMS_FEATURE,
-  ]);
-
-  const isTrainerAndClubsEnabled =
-    flags[FEATURE_FLAGS.TRAINER_AND_CLUBS_FEATURE];
-  const isGymsEnabled = flags[FEATURE_FLAGS.GYMS_FEATURE];
 
   // Mock data for weekly progress
   const weeklyData = [
@@ -350,34 +338,33 @@ const Dashboard = (): React.JSX.Element => {
       </Card>
 
       {/* Find a Trainer Banner - Only show if user doesn't have trainer and feature is enabled */}
-      {isTrainerAndClubsEnabled && (
-        <Card className="bg-gradient-to-r from-blue-50 to-indigo-50 border-blue-200">
-          <CardContent className="p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <h3 className="font-semibold text-gray-900 mb-2">
-                  Ready for personalized guidance?
-                </h3>
-                <p className="text-gray-600 mb-3">
-                  Connect with certified trainers who can create custom workout
-                  plans and provide expert guidance tailored to your goals.
-                </p>
-                <div className="flex items-center gap-4 text-sm text-gray-600">
-                  <span>✓ Personalized workout plans</span>
-                  <span>✓ Expert guidance</span>
-                  <span>✓ Progress tracking</span>
-                </div>
+      {/* Removed feature flag usage */}
+      <Card className="bg-gradient-to-r from-blue-50 to-indigo-50 border-blue-200">
+        <CardContent className="p-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <h3 className="font-semibold text-gray-900 mb-2">
+                Ready for personalized guidance?
+              </h3>
+              <p className="text-gray-600 mb-3">
+                Connect with certified trainers who can create custom workout
+                plans and provide expert guidance tailored to your goals.
+              </p>
+              <div className="flex items-center gap-4 text-sm text-gray-600">
+                <span>✓ Personalized workout plans</span>
+                <span>✓ Expert guidance</span>
+                <span>✓ Progress tracking</span>
               </div>
-              <Button
-                onClick={() => router.push('/trainer-and-clubs')}
-                className="ml-6"
-              >
-                Find a Trainer
-              </Button>
             </div>
-          </CardContent>
-        </Card>
-      )}
+            <Button
+              onClick={() => router.push('/trainer-and-clubs')}
+              className="ml-6"
+            >
+              Find a Trainer
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Weekly Progress Chart */}
@@ -437,108 +424,103 @@ const Dashboard = (): React.JSX.Element => {
       </div>
 
       {/* Clubs Around You */}
-      {isGymsEnabled && (
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <MapPin className="w-5 h-5" />
-              Clubs Around You
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {nearbyClubs.map(club => (
-                <div
-                  key={club.id}
-                  className="p-4 border border-gray-200 rounded-lg hover:shadow-md transition-shadow"
-                >
-                  <div className="flex items-center justify-between mb-2">
-                    <div className="flex items-center gap-1">
-                      <Star className="w-4 h-4 text-yellow-500" />
-                      <span className="text-sm font-medium">{club.rating}</span>
-                    </div>
-                    <span className="text-sm text-gray-500">
-                      {club.distance}
-                    </span>
+      {/* Removed feature flag usage */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <MapPin className="w-5 h-5" />
+            Clubs Around You
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {nearbyClubs.map(club => (
+              <div
+                key={club.id}
+                className="p-4 border border-gray-200 rounded-lg hover:shadow-md transition-shadow"
+              >
+                <div className="flex items-center justify-between mb-2">
+                  <div className="flex items-center gap-1">
+                    <Star className="w-4 h-4 text-yellow-500" />
+                    <span className="text-sm font-medium">{club.rating}</span>
                   </div>
-                  <h4 className="font-semibold mb-1">{club.name}</h4>
-                  <p className="text-sm text-gray-600 mb-2">{club.specialty}</p>
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm text-gray-500">
-                      {club.members} members
-                    </span>
-                    <Button size="sm" variant="outline">
-                      View Club
-                    </Button>
-                  </div>
+                  <span className="text-sm text-gray-500">{club.distance}</span>
                 </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
-      )}
-
-      {/* Upcoming Club Events */}
-      {isGymsEnabled && (
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Calendar className="w-5 h-5" />
-              Upcoming Club Events
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {clubEvents.map(event => (
-                <div
-                  key={event.id}
-                  className="p-4 border border-gray-200 rounded-lg hover:shadow-md transition-shadow"
-                >
-                  <div className="flex items-center justify-between mb-2">
-                    <div className="flex items-center gap-1">
-                      <Users className="w-4 h-4 text-blue-500" />
-                      <span className="text-sm font-medium">
-                        {event.participants}
-                      </span>
-                    </div>
-                    <span className="text-sm text-gray-500">{event.time}</span>
-                  </div>
-                  <h4 className="font-semibold mb-1">{event.name}</h4>
-                  <p className="text-sm text-gray-600 mb-2">{event.club}</p>
-                  <div className="flex items-center justify-between mb-3">
-                    <span className="text-sm text-gray-500">
-                      {event.duration}
-                    </span>
-                    <span className="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded">
-                      {event.difficulty}
-                    </span>
-                  </div>
-                  <Button
-                    size="sm"
-                    onClick={() => handleJoinEvent(event)}
-                    className="w-full"
-                  >
-                    Join Event
+                <h4 className="font-semibold mb-1">{club.name}</h4>
+                <p className="text-sm text-gray-600 mb-2">{club.specialty}</p>
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-gray-500">
+                    {club.members} members
+                  </span>
+                  <Button size="sm" variant="outline">
+                    View Club
                   </Button>
                 </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
-      )}
+              </div>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Upcoming Club Events */}
+      {/* Removed feature flag usage */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Calendar className="w-5 h-5" />
+            Upcoming Club Events
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {clubEvents.map(event => (
+              <div
+                key={event.id}
+                className="p-4 border border-gray-200 rounded-lg hover:shadow-md transition-shadow"
+              >
+                <div className="flex items-center justify-between mb-2">
+                  <div className="flex items-center gap-1">
+                    <Users className="w-4 h-4 text-blue-500" />
+                    <span className="text-sm font-medium">
+                      {event.participants}
+                    </span>
+                  </div>
+                  <span className="text-sm text-gray-500">{event.time}</span>
+                </div>
+                <h4 className="font-semibold mb-1">{event.name}</h4>
+                <p className="text-sm text-gray-600 mb-2">{event.club}</p>
+                <div className="flex items-center justify-between mb-3">
+                  <span className="text-sm text-gray-500">
+                    {event.duration}
+                  </span>
+                  <span className="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded">
+                    {event.difficulty}
+                  </span>
+                </div>
+                <Button
+                  size="sm"
+                  onClick={() => handleJoinEvent(event)}
+                  className="w-full"
+                >
+                  Join Event
+                </Button>
+              </div>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
 
       {/* Club Event Conflict Modal */}
-      {isGymsEnabled && (
-        <ClubEventConflictModal
-          isOpen={showConflictModal}
-          onClose={() => setShowConflictModal(false)}
-          event={selectedEvent}
-          hasTrainer={false}
-          onConfirm={() => {
-            setShowConflictModal(false);
-          }}
-        />
-      )}
+      {/* Removed feature flag usage */}
+      <ClubEventConflictModal
+        isOpen={showConflictModal}
+        onClose={() => setShowConflictModal(false)}
+        event={selectedEvent}
+        hasTrainer={false}
+        onConfirm={() => {
+          setShowConflictModal(false);
+        }}
+      />
     </div>
   );
 };

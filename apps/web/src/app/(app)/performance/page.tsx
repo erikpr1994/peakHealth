@@ -1,24 +1,14 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
 
-import { FEATURE_FLAGS, useFeatureFlag } from '@/features/feature-flags';
-import Performance from '@/features/performance/Performance';
-
-const PerformancePage = () => {
+export default function PerformancePage(): React.JSX.Element {
   const router = useRouter();
-  const { flags, isLoading } = useFeatureFlag([
-    FEATURE_FLAGS.PERFORMANCE_FEATURE,
-  ]);
-  const isEnabled = flags[FEATURE_FLAGS.PERFORMANCE_FEATURE];
 
-  useEffect(() => {
-    if (!isLoading && !isEnabled) router.push('/profile');
-  }, [isLoading, isEnabled, router]);
-
-  if (isLoading || !isEnabled) return null;
-  return <Performance />;
-};
-
-export default PerformancePage;
+  return (
+    <div className="container mx-auto px-4 py-8">
+      <h1 className="text-3xl font-bold mb-6">Performance</h1>
+      <p>Performance tracking feature coming soon!</p>
+    </div>
+  );
+}

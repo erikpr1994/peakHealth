@@ -1,24 +1,14 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
 
-import { FEATURE_FLAGS, useFeatureFlag } from '@/features/feature-flags';
-import TrainerAndClubs from '@/features/social/TrainerAndClubs';
-
-const TrainerAndClubsPage = () => {
+export default function TrainerAndClubsPage(): React.JSX.Element {
   const router = useRouter();
-  const { flags, isLoading } = useFeatureFlag([
-    FEATURE_FLAGS.TRAINER_AND_CLUBS_FEATURE,
-  ]);
-  const isEnabled = flags[FEATURE_FLAGS.TRAINER_AND_CLUBS_FEATURE];
 
-  useEffect(() => {
-    if (!isLoading && !isEnabled) router.push('/profile');
-  }, [isLoading, isEnabled, router]);
-
-  if (isLoading || !isEnabled) return null;
-  return <TrainerAndClubs />;
-};
-
-export default TrainerAndClubsPage;
+  return (
+    <div className="container mx-auto px-4 py-8">
+      <h1 className="text-3xl font-bold mb-6">Trainer & Clubs</h1>
+      <p>Trainer and clubs feature coming soon!</p>
+    </div>
+  );
+}
