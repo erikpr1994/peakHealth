@@ -9,7 +9,6 @@ export default getRequestConfig(async ({ requestLocale }) => {
     ? requested
     : routing.defaultLocale;
 
-  // eslint-disable-next-line no-unsanitized/method
   const messages = (await import(`../../locales/${locale}/index.json`)).default;
 
   return {

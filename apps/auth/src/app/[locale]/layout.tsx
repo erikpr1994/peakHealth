@@ -1,3 +1,4 @@
+import React from 'react';
 import { NextIntlClientProvider, hasLocale } from 'next-intl';
 import { Inter } from 'next/font/google';
 import { notFound, redirect } from 'next/navigation';
@@ -23,14 +24,13 @@ export async function generateMetadata({
   params: Promise<{ locale: string }>;
 }): Promise<Metadata> {
   const { locale } = await params;
-  
+
   // Validate locale and redirect to default if invalid
   if (!hasLocale(routing.locales, locale)) {
     redirect(`/${routing.defaultLocale}`);
   }
-  
+
   try {
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
     const messages = require(`../../../locales/${locale}/index.json`);
 
     return {
@@ -54,7 +54,7 @@ const LocaleLayout = async ({
 }): Promise<React.JSX.Element> => {
   // Ensure that the incoming `locale` is valid
   const { locale } = await params;
-  
+
   // Validate locale and redirect to default if invalid
   if (!hasLocale(routing.locales, locale)) {
     redirect(`/${routing.defaultLocale}`);
@@ -65,7 +65,6 @@ const LocaleLayout = async ({
 
   let messages;
   try {
-    // eslint-disable-next-line no-unsanitized/method
     messages = (await import(`../../../locales/${locale}/index.json`)).default;
   } catch {
     notFound();

@@ -69,7 +69,7 @@ interface AnalyticsProps {
   scopeInfo?: Record<string, unknown>;
 }
 
-export const Analytics = ({ scopeInfo }: AnalyticsProps) => {
+export const Analytics = (_: AnalyticsProps) => {
   return (
     <div className="p-6 space-y-6">
       <div className="flex justify-between items-center">

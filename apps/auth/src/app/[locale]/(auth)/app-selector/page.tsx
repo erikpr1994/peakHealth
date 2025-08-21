@@ -1,3 +1,4 @@
+import React from 'react';
 import { AppSelector } from '@/features/auth/components/AppSelector';
 
 // Force static generation with no revalidation

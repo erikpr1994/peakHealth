@@ -1,5 +1,6 @@
 'use client';
 
+import React from 'react';
 import {
   validateEmail,
   validatePassword,
@@ -9,7 +10,6 @@ import { useTranslations } from 'next-intl';
 import { useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 
-// eslint-disable-next-line css-modules/no-unused-class
 import styles from './page.module.css';
 
 import { AuthCard, Input, Button, BackButton } from '@/features/shared';

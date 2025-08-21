@@ -1,5 +1,6 @@
 'use client';
 
+import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 import { Button } from './ui/button';
 import { Badge } from './ui/badge';
@@ -65,10 +66,7 @@ interface DashboardProps {
   userRole: string;
 }
 
-export const Dashboard = ({
-  scopeInfo,
-  userRole,
-}: DashboardProps): React.JSX.Element => {
+export const Dashboard = (_: DashboardProps): React.JSX.Element => {
   const getActivityIcon = (type: string): React.JSX.Element => {
     switch (type) {
       case 'trainer_joined':
@@ -91,7 +89,8 @@ export const Dashboard = ({
       <div className="flex items-center justify-between">
         <div>
           <p className="text-muted-foreground">
-            Welcome back! Here's what's happening with your platform today.
+            Welcome back! Here&apos;s what&apos;s happening with your platform
+            today.
           </p>
         </div>
         <div className="flex gap-2">

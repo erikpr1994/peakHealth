@@ -1,5 +1,6 @@
 'use client';
 
+import React from 'react';
 import {
   validateEmail,
   formatAuthError,
@@ -29,7 +30,6 @@ const LoginForm = (): React.JSX.Element => {
 
   const searchParams = useSearchParams();
   const message = searchParams.get('message');
-  const returnUrl = searchParams.get('returnUrl') ?? `/${locale}/app-selector`;
 
   const [formData, setFormData] = useState({
     email: '',

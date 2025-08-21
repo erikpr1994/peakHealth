@@ -1,5 +1,6 @@
 'use client';
 
+import React from 'react';
 import { Bell, Moon, Sun, Shield } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import { useState } from 'react';

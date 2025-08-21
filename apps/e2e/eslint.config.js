@@ -1,7 +1,7 @@
 import baseConfig from '../../eslint.config.js';
 import playwrightPlugin from 'eslint-plugin-playwright';
 
-export default [
+const config = [
   ...baseConfig,
   {
     files: ['**/*.ts', '**/*.tsx'],
@@ -31,3 +31,5 @@ export default [
     },
   },
 ];
+
+export default config;

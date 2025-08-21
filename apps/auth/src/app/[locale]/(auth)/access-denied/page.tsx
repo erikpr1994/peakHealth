@@ -1,3 +1,4 @@
+import React from 'react';
 import { AccessDeniedPage } from '@/features/auth/components/AccessDeniedPage';
 
 // Force static generation with no revalidation

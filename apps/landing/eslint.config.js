@@ -2,7 +2,7 @@ import baseConfig from '../../eslint.config.js';
 import reactRefreshPlugin from 'eslint-plugin-react-refresh';
 import typescriptPlugin from '@typescript-eslint/eslint-plugin';
 
-export default [
+const config = [
   ...baseConfig,
   {
     files: ['**/*.ts', '**/*.tsx'],
@@ -60,3 +60,5 @@ export default [
     },
   },
 ];
+
+export default config;

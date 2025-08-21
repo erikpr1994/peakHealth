@@ -24,7 +24,7 @@ export async function getClients(
     await supabase.auth.admin.listUsers();
 
   if (usersError) {
-    // eslint-disable-next-line no-console
+     
     console.error('Error fetching users:', usersError);
     throw new Error('Failed to fetch users');
   }
@@ -41,12 +41,12 @@ export async function getClients(
     .in('user_id', userIds);
 
   if (profilesResult.error) {
-    // eslint-disable-next-line no-console
+     
     console.error('Error fetching profiles:', profilesResult.error);
   }
 
   if (statsResult.error) {
-    // eslint-disable-next-line no-console
+     
     console.error('Error fetching user stats:', statsResult.error);
   }
 

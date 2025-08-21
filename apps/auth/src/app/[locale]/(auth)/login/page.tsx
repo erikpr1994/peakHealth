@@ -1,3 +1,4 @@
+import React from 'react';
 import { LoginForm } from '@/features/auth/components/LoginForm';
 
 // Force static generation with no revalidation

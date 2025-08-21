@@ -1,6 +1,7 @@
 import { describe, expect, it, vi } from 'vitest';
 import { render, screen } from '../../test/test-utils';
 import React from 'react';
+import Link from 'next/link';
 
 // Mock the BlogList component to avoid async issues
 vi.mock('./BlogList', () => ({
@@ -13,7 +14,7 @@ vi.mock('./BlogList', () => ({
         <span>5 min read</span>
         <span>test</span>
         <span>fitness</span>
-        <a href="/blog/test-post-1">Read More →</a>
+        <Link href="/blog/test-post-1">Read More →</Link>
       </div>
       <div data-testid="blog-post-2">
         <h2>Test Post 2</h2>
@@ -22,7 +23,7 @@ vi.mock('./BlogList', () => ({
         <span>3 min read</span>
         <span>test</span>
         <span>health</span>
-        <a href="/blog/test-post-2">Read More →</a>
+        <Link href="/blog/test-post-2">Read More →</Link>
       </div>
     </div>
   ),

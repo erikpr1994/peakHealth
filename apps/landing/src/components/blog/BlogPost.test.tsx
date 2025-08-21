@@ -1,6 +1,7 @@
 import { describe, expect, it, vi } from 'vitest';
 import { render, screen } from '../../test/test-utils';
 import React from 'react';
+import Link from 'next/link';
 
 // Mock the BlogPost component to avoid markdown processing issues
 vi.mock('./BlogPost', () => ({
@@ -21,7 +22,7 @@ vi.mock('./BlogPost', () => ({
       <span>Written by {post.author}</span>
       <span>Fitness enthusiast and health advocate</span>
       <span>{post.readTime} min read</span>
-      <a href="/blog">Back to Blog</a>
+      <Link href="/blog">Back to Blog</Link>
       {post.tags.map((tag: string) => (
         <span key={tag}>{tag}</span>
       ))}
@@ -44,7 +45,7 @@ vi.mock('./BlogPost', () => ({
           <a href="https://example.com">link</a>.
         </p>
         <pre>
-          <code>console.log('Hello World');</code>
+          <code>console.log(&apos;Hello World&apos;);</code>
         </pre>
         <blockquote>
           This is a blockquote with some important information.

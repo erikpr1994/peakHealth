@@ -450,7 +450,7 @@ export function ProgramBuilder() {
               <div className="text-center py-8 text-muted-foreground">
                 <BookOpen className="h-12 w-12 mx-auto mb-4 opacity-50" />
                 <p>No workouts added yet</p>
-                <p className="text-sm">Click "Add Workout" to get started</p>
+                <p className="text-sm">Click &quot;Add Workout&quot; to get started</p>
               </div>
             ) : (
               program.workouts.map((workout) => (

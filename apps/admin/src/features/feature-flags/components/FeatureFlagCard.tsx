@@ -86,7 +86,7 @@ export const FeatureFlagCard: React.FC<Props> = ({
                 <AlertDialogHeader>
                   <AlertDialogTitle>Delete Feature Flag</AlertDialogTitle>
                   <AlertDialogDescription>
-                    Are you sure you want to delete "{flag.display_name}"? This
+                    Are you sure you want to delete &quot;{flag.display_name}&quot;? This
                     action cannot be undone.
                   </AlertDialogDescription>
                 </AlertDialogHeader>
