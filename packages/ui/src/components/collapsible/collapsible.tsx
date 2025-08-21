@@ -119,17 +119,26 @@ const CollapsibleTrigger = forwardRef<
   ) {
     // Cast children to any to avoid TypeScript errors with unknown props
     const childElement = children as any;
+    
+    // Extract className from child props for merging
+    const { className: childClassName, ...childProps } = childElement.props;
+    
     return React.cloneElement(childElement, {
+      // Start with child props (lowest priority)
+      ...childProps,
+      
+      // Then add passed props (medium priority)
+      ...props,
+      
+      // Then add critical attributes (highest priority)
       ref,
       className: cn(
         'collapsible__trigger',
         className,
-        childElement.props.className
+        childClassName
       ),
       'data-slot': 'collapsible-trigger',
       role: 'button',
-      ...childElement.props,
-      ...props, // Put props last to ensure they override children.props
     });
   }
 
