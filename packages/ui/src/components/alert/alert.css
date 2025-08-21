@@ -1,0 +1,65 @@
+.peakhealth-alert {
+  position: relative;
+  width: 100%;
+  border-radius: 0.5rem;
+  border: 1px solid hsl(var(--border, 240 5.9% 90%));
+  padding: 0.75rem 1rem;
+  font-size: 0.875rem;
+  display: grid;
+  grid-template-columns: 0 1fr;
+  gap: 0.125rem 0;
+  align-items: start;
+}
+
+.peakhealth-alert:has(> svg) {
+  grid-template-columns: calc(var(--spacing, 1rem) * 4) 1fr;
+  gap: 0 0.75rem;
+}
+
+.peakhealth-alert > svg {
+  width: 1rem;
+  height: 1rem;
+  transform: translateY(0.125rem);
+  color: currentColor;
+}
+
+.peakhealth-alert--default {
+  background-color: hsl(var(--card, 0 0% 100%));
+  color: hsl(var(--card-foreground, 240 10% 3.9%));
+}
+
+.peakhealth-alert--destructive {
+  color: hsl(var(--destructive, 0 84.2% 60.2%));
+  background-color: hsl(var(--card, 0 0% 100%));
+}
+
+.peakhealth-alert--destructive > svg {
+  color: currentColor;
+}
+
+.peakhealth-alert--destructive .peakhealth-alert__description {
+  color: hsl(var(--destructive, 0 84.2% 60.2%) / 0.9);
+}
+
+.peakhealth-alert__title {
+  grid-column-start: 2;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-height: 1rem;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+}
+
+.peakhealth-alert__description {
+  grid-column-start: 2;
+  display: grid;
+  justify-items: start;
+  gap: 0.25rem;
+  font-size: 0.875rem;
+  color: hsl(var(--muted-foreground, 240 3.8% 46.1%));
+}
+
+.peakhealth-alert__description p {
+  line-height: 1.5;
+}
