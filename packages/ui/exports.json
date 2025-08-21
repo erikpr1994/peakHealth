@@ -24,6 +24,11 @@
     "import": "./dist/components/button/index.js",
     "require": "./dist/components/button/index.js"
   },
+  "./calendar": {
+    "types": "./dist/components/calendar/index.d.ts",
+    "import": "./dist/components/calendar/index.js",
+    "require": "./dist/components/calendar/index.js"
+  },
   "./card": {
     "types": "./dist/components/card/index.d.ts",
     "import": "./dist/components/card/index.js",

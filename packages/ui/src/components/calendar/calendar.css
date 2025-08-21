@@ -1,0 +1,203 @@
+.peakhealth-calendar {
+  padding: 0.75rem;
+  width: 100%;
+}
+
+.peakhealth-calendar__months {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+@media (min-width: 640px) {
+  .peakhealth-calendar__months {
+    flex-direction: row;
+  }
+}
+
+.peakhealth-calendar__month {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.peakhealth-calendar__caption {
+  display: flex;
+  justify-content: center;
+  padding-top: 0.25rem;
+  position: relative;
+  align-items: center;
+  width: 100%;
+}
+
+.peakhealth-calendar__caption-label {
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.peakhealth-calendar__nav {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.peakhealth-calendar__nav-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  white-space: nowrap;
+  border-radius: 0.375rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: all 0.2s;
+  border: 1px solid var(--border, #e2e8f0);
+  background-color: var(--background, #ffffff);
+  color: var(--foreground, #1e293b);
+  width: 1.75rem;
+  height: 1.75rem;
+  background-color: transparent;
+  padding: 0;
+  opacity: 0.5;
+}
+
+.peakhealth-calendar__nav-button:hover {
+  background-color: var(--accent, #f1f5f9);
+  color: var(--accent-foreground, #0f172a);
+  opacity: 1;
+}
+
+.peakhealth-calendar__nav-button--previous {
+  position: absolute;
+  left: 0.25rem;
+}
+
+.peakhealth-calendar__nav-button--next {
+  position: absolute;
+  right: 0.25rem;
+}
+
+.peakhealth-calendar__table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.peakhealth-calendar__head-row {
+  display: flex;
+}
+
+.peakhealth-calendar__head-cell {
+  color: var(--muted-foreground, #64748b);
+  border-radius: 0.375rem;
+  width: 2rem;
+  font-weight: 400;
+  font-size: 0.8rem;
+}
+
+.peakhealth-calendar__row {
+  display: flex;
+  width: 100%;
+  margin-top: 0.5rem;
+}
+
+.peakhealth-calendar__cell {
+  position: relative;
+  padding: 0;
+  text-align: center;
+  font-size: 0.875rem;
+}
+
+.peakhealth-calendar__cell:has([aria-selected]) {
+  background-color: var(--accent, #f1f5f9);
+}
+
+.peakhealth-calendar__cell--single:has([aria-selected]) {
+  border-radius: 0.375rem;
+}
+
+.peakhealth-calendar__cell--range:has(> .peakhealth-calendar__day--range-end) {
+  border-top-right-radius: 0.375rem;
+  border-bottom-right-radius: 0.375rem;
+}
+
+.peakhealth-calendar__cell--range:has(> .peakhealth-calendar__day--range-start) {
+  border-top-left-radius: 0.375rem;
+  border-bottom-left-radius: 0.375rem;
+}
+
+.peakhealth-calendar__cell--range:first-child:has([aria-selected]) {
+  border-top-left-radius: 0.375rem;
+  border-bottom-left-radius: 0.375rem;
+}
+
+.peakhealth-calendar__cell--range:last-child:has([aria-selected]) {
+  border-top-right-radius: 0.375rem;
+  border-bottom-right-radius: 0.375rem;
+}
+
+.peakhealth-calendar__day {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  white-space: nowrap;
+  border-radius: 0.375rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: all 0.2s;
+  width: 2rem;
+  height: 2rem;
+  padding: 0;
+  font-weight: 400;
+}
+
+.peakhealth-calendar__day:hover {
+  background-color: var(--accent, #f1f5f9);
+  color: var(--accent-foreground, #0f172a);
+}
+
+.peakhealth-calendar__day--range-start,
+.peakhealth-calendar__day--range-end {
+  background-color: var(--primary, #0f172a);
+  color: var(--primary-foreground, #ffffff);
+}
+
+.peakhealth-calendar__day--selected {
+  background-color: var(--primary, #0f172a);
+  color: var(--primary-foreground, #ffffff);
+}
+
+.peakhealth-calendar__day--selected:hover {
+  background-color: var(--primary, #0f172a);
+  color: var(--primary-foreground, #ffffff);
+}
+
+.peakhealth-calendar__day--today {
+  background-color: var(--accent, #f1f5f9);
+  color: var(--accent-foreground, #0f172a);
+}
+
+.peakhealth-calendar__day--outside {
+  color: var(--muted-foreground, #64748b);
+}
+
+.peakhealth-calendar__day--disabled {
+  color: var(--muted-foreground, #64748b);
+  opacity: 0.5;
+}
+
+.peakhealth-calendar__day--range-middle {
+  background-color: var(--accent, #f1f5f9);
+  color: var(--accent-foreground, #0f172a);
+}
+
+.peakhealth-calendar__day--hidden {
+  visibility: hidden;
+}
+
+.peakhealth-calendar__icon {
+  display: inline-flex;
+  width: 1rem;
+  height: 1rem;
+}
+
