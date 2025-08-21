@@ -10,7 +10,6 @@ import type {
   IntensityTarget,
   TrailRunningSection,
 } from './workout';
-import type { Exercise, ProgressionMethod } from './exercise';
 
 describe('Workout Types', () => {
   describe('WorkoutType', () => {
@@ -27,23 +26,6 @@ describe('Workout Types', () => {
       expect(types).toContain('strength');
       expect(types).toContain('running');
       expect(types).toContain('trail-running');
-    });
-  });
-
-  describe('ProgressionMethod', () => {
-    test('should accept valid progression methods', () => {
-      const methods: ProgressionMethod[] = [
-        'linear',
-        'dual',
-        'inverse-pyramid',
-        'myo-reps',
-        'widowmaker',
-        'amrap',
-      ];
-
-      expect(methods).toHaveLength(6);
-      expect(methods).toContain('linear');
-      expect(methods).toContain('amrap');
     });
   });
 
@@ -87,34 +69,6 @@ describe('Workout Types', () => {
 
         expect(section.type).toBe(type);
       });
-    });
-  });
-
-  describe('Exercise interface', () => {
-    test('should have correct structure', () => {
-      const exercise: Exercise = {
-        id: 'exercise-1',
-        name: 'Bench Press',
-        category: 'strength',
-        muscleGroups: ['chest', 'triceps'],
-        equipment: ['barbell', 'bench'],
-        exerciseId: 'ex-1',
-        variantId: 'var-1',
-        sets: [],
-        restTimer: '90s',
-        restAfter: '2 min',
-        notes: 'Test exercise',
-        progressionMethod: 'linear',
-        hasApproachSets: false,
-        emomReps: 10,
-      };
-
-      expect(exercise.id).toBe('exercise-1');
-      expect(exercise.name).toBe('Bench Press');
-      expect(exercise.category).toBe('strength');
-      expect(exercise.muscleGroups).toEqual(['chest', 'triceps']);
-      expect(exercise.equipment).toEqual(['barbell', 'bench']);
-      expect(exercise.progressionMethod).toBe('linear');
     });
   });
 

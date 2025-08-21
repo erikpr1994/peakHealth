@@ -75,18 +75,28 @@ Breaking down large components into smaller, focused pieces following project ru
 **Target:** < 200 lines ✅ (147 lines achieved)
 **Dependencies:** None
 
-### 🔄 PR #3: Extract Exercise Types
+### ✅ PR #3: Extract Exercise Types
 
-**Status:** PENDING
-**Files:** `features/routines/types/exercise.ts`
+**Status:** COMPLETED
+**Branch:** `refactor/extract-exercise-types`
+**Files:**
+
+- `features/routines/types/exercise.ts` (80 lines)
+- `features/routines/types/exercise.test.ts` (230 lines)
+- `features/routines/types/workout.ts` (reduced from 148 to 119 lines)
+- `features/routines/types/database.ts` (reduced from 118 to 93 lines)
+- `features/routines/types/index.ts` (updated - added exercise types re-exports)
+- `features/routines/features/routine-creation/types/modal.ts` (updated - removed duplicate types)
+
 **Changes:**
 
-- Extract exercise-related types from `types/index.ts`
-- Create focused type definitions for `Exercise`, `WorkoutSet`, `ProgressionMethod`
-- Add co-located tests
-- Update main types index
+- Extract exercise-related types from multiple files into dedicated `types/exercise.ts` file
+- Create focused type definitions for `Exercise`, `ProgressionMethod`, `WorkoutSet`, `DatabaseSet`, `DatabaseExercise`, `ExerciseSelectionData`, and `ExerciseVariantData`
+- Add comprehensive co-located tests (11 new tests)
+- Update imports across multiple files to use new exercise types file
+- Fix test organization - workout tests now only test workout types
 
-**Target:** < 100 lines
+**Target:** < 100 lines ✅ (80 lines achieved)
 **Dependencies:** None
 
 ### 🔄 PR #4: Extract Trail Running Types
@@ -353,10 +363,10 @@ Breaking down large components into smaller, focused pieces following project ru
 
 - [x] PR #1: Extract Routine Types
 - [x] PR #2: Extract Workout Types
+- [x] PR #3: Extract Exercise Types
 
 ### In Progress
 
-- [ ] PR #3: Extract Exercise Types
 - [ ] PR #4: Extract Trail Running Types
 
 ### Pending
