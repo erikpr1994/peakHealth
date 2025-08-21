@@ -10,7 +10,7 @@ describe('Button', () => {
     expect(button).toBeInTheDocument();
     expect(button).toHaveClass('peakhealth-button');
     expect(button).toHaveClass('peakhealth-button--default');
-    expect(button).toHaveClass('peakhealth-button--default');
+    expect(button).toHaveClass('peakhealth-button--size-default');
   });
 
   it('renders with different variants', () => {
@@ -32,13 +32,13 @@ describe('Button', () => {
 
   it('renders with different sizes', () => {
     const { rerender } = render(<Button size="sm">Small</Button>);
-    expect(screen.getByRole('button')).toHaveClass('peakhealth-button--sm');
+    expect(screen.getByRole('button')).toHaveClass('peakhealth-button--size-sm');
 
     rerender(<Button size="lg">Large</Button>);
-    expect(screen.getByRole('button')).toHaveClass('peakhealth-button--lg');
+    expect(screen.getByRole('button')).toHaveClass('peakhealth-button--size-lg');
 
     rerender(<Button size="icon">Icon</Button>);
-    expect(screen.getByRole('button')).toHaveClass('peakhealth-button--icon');
+    expect(screen.getByRole('button')).toHaveClass('peakhealth-button--size-icon');
   });
 
   it('renders in loading state', () => {
@@ -91,4 +91,3 @@ describe('Button', () => {
     expect(handleClick).not.toHaveBeenCalled();
   });
 });
-

@@ -11,8 +11,22 @@
   color: hsl(var(--destructive, 0 84.2% 60.2%));
 }
 
-.peakhealth-label__required {
+.peakhealth-label--required {
+  /* Style for the label itself when required */
+}
+
+.peakhealth-label--disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.peakhealth-label__required-indicator {
   color: hsl(var(--destructive, 0 84.2% 60.2%));
   margin-left: 0.25rem;
 }
 
+.peakhealth-label__optional-text {
+  color: hsl(var(--muted-foreground, 240 3.8% 46.1%));
+  margin-left: 0.25rem;
+  font-size: 0.75rem;
+}

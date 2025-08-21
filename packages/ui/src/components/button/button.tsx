@@ -37,7 +37,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     const buttonClasses = cn(
       'peakhealth-button',
       `peakhealth-button--${variant}`,
-      `peakhealth-button--${size}`,
+      `peakhealth-button--size-${size}`,
       loading && 'peakhealth-button--loading',
       className
     );
@@ -75,4 +75,3 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 Button.displayName = 'Button';
 
 export { Button };
-

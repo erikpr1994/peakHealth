@@ -79,24 +79,24 @@
   text-decoration: none;
 }
 
-.peakhealth-button--default {
+.peakhealth-button--size-default {
   height: 2.5rem;
   padding: 0 1rem;
 }
 
-.peakhealth-button--sm {
+.peakhealth-button--size-sm {
   height: 2rem;
   padding: 0 0.75rem;
   font-size: 0.75rem;
 }
 
-.peakhealth-button--lg {
+.peakhealth-button--size-lg {
   height: 2.75rem;
   padding: 0 1.5rem;
   font-size: 0.875rem;
 }
 
-.peakhealth-button--icon {
+.peakhealth-button--size-icon {
   height: 2.5rem;
   width: 2.5rem;
   padding: 0;
@@ -111,7 +111,7 @@
   animation: spin 1s linear infinite;
 }
 
-.peakhealth-button--icon .peakhealth-button__spinner {
+.peakhealth-button--size-icon .peakhealth-button__spinner {
   margin-right: 0;
 }
 
@@ -123,4 +123,3 @@
     transform: rotate(360deg);
   }
 }
-
