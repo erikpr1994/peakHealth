@@ -125,8 +125,8 @@ const CollapsibleTrigger = forwardRef<
       ),
       'data-slot': 'collapsible-trigger',
       role: 'button',
-      ...props,
       ...children.props,
+      ...props, // Put props last to ensure they override children.props
     });
   }
 
