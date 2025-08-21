@@ -14,7 +14,7 @@ export type ProgressionMethod =
   | 'amrap';
 
 // Import and re-export WorkoutSet from workout module to ensure consistency
-import type { WorkoutSet } from '@/features/workout/SetManagement';
+import type { WorkoutSet } from '../components/SetManagement';
 export type { WorkoutSet };
 
 export interface Exercise {

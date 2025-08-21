@@ -21,7 +21,7 @@ import {
   ProgressionMethod,
 } from '@/features/routines/types';
 import { getSectionColors, getSectionIcon } from '@/features/routines/utils';
-import { WorkoutSet } from '@/features/workout/SetManagement';
+import { WorkoutSet } from '@/features/routines/components/SetManagement';
 
 interface WorkoutSectionProps {
   section: WorkoutSectionType;
