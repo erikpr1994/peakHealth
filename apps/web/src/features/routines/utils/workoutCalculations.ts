@@ -1,7 +1,7 @@
 import { StrengthWorkout, RunningWorkout, ProgressionMethod } from '../types';
 
 // Import the WorkoutSet type from the workout module
-import { WorkoutSet, SetType } from '@/features/workout/SetManagement';
+import { WorkoutSet, SetType } from '../components/SetManagement';
 
 export const calculateWorkoutDuration = (
   workout: StrengthWorkout | RunningWorkout

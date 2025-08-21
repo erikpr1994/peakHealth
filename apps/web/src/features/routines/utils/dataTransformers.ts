@@ -17,7 +17,7 @@ import {
   Routine,
   ProgressionMethod,
 } from '../types';
-import { SetType, RepType } from '@/features/workout/SetManagement';
+import { SetType, RepType } from '../components/SetManagement';
 
 // Type guards for validation
 export function isValidWorkoutType(
