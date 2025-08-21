@@ -95,11 +95,6 @@ export class TrainerBasePage extends Page {
     await toastLocator.waitFor({ state: 'visible', timeout });
 
     if (text) {
-      await toastLocator.waitFor({
-        state: 'visible',
-        timeout,
-      });
-
       // Additional check for text content
       await this.waitForCondition(async () => {
         const content = await toastLocator.textContent();

@@ -53,11 +53,6 @@ export class Toast {
     await toast.waitFor({ state: 'visible', timeout });
 
     if (text) {
-      await toast.waitFor({
-        state: 'visible',
-        timeout,
-      });
-
       // Additional check for text content
       await this.waitForCondition(async () => {
         const content = await toast.textContent();
