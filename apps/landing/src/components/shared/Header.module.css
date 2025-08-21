@@ -152,7 +152,11 @@
   background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
   width: 100%;
   max-width: 320px;
-  height: 100vh;
+  /* Fallback for browsers that don't support dvh */
+  height: -webkit-fill-available;
+  height: 100vh; /*  Default height for all browsers */
+  /* Modern solution that accounts for mobile browser UI elements */
+  height: 100dvh;
   padding: 2rem 1.5rem;
   display: flex;
   flex-direction: column;
@@ -163,6 +167,7 @@
   transform: translateX(0);
   animation: slideIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow-y: auto; /* Ensure content doesn't overflow */
 }
 
 .mobileNav.closing {
@@ -283,6 +288,7 @@
     font-size: 1.25rem;
   }
 
+  /* These styles will be merged with the ones from the 768px media query */
   .mobileNav {
     max-width: 100%;
     padding: 2rem 1rem;
