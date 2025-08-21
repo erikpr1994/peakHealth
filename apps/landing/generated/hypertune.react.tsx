@@ -213,6 +213,7 @@ export function HypertuneClientLogger({
       flagFallbacks: hypertune.flagFallbacks,
       flagPaths,
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isReady]);
 
   return null;
