@@ -1,4 +1,5 @@
-import '@testing-library/jest-dom';
+import '@testing-library/jest-dom/vitest';
+import { vi } from 'vitest';
 import React from 'react';
 
 // Mock CSS Modules
@@ -59,3 +60,9 @@ vi.mock('@/i18n/navigation', () => ({
     return React.createElement('a', { href, className, ...props }, children);
   }),
 }));
+
+// Ensure Supabase env vars exist during tests (for shared utilities if referenced)
+process.env.NEXT_PUBLIC_SUPABASE_URL =
+  process.env.NEXT_PUBLIC_SUPABASE_URL || 'http://localhost:54321';
+process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY =
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'test-anon-key';
