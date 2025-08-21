@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { Calendar } from './calendar';
 import { addDays } from 'date-fns';
 import { useState } from 'react';
+import type { DateRange } from 'react-day-picker';
 
 const meta = {
   title: 'Components/Calendar',
@@ -20,10 +21,10 @@ const meta = {
     },
     mode: {
       control: 'select',
-      options: ['default', 'range', 'multiple'],
+      options: ['single', 'range', 'multiple'],
       description: 'Selection mode',
       table: {
-        defaultValue: { summary: 'default' },
+        defaultValue: { summary: 'single' },
       },
     },
   },
@@ -34,88 +35,72 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {
+    mode: 'single',
     showOutsideDays: true,
   },
 };
 
 export const WithoutOutsideDays: Story = {
   args: {
+    mode: 'single',
     showOutsideDays: false,
   },
 };
 
 export const WithSelectedDay: Story = {
-  render: (args) => {
+  render: () => {
     const [date, setDate] = useState<Date | undefined>(new Date());
-    return (
-      <Calendar
-        {...args}
-        mode="single"
-        selected={date}
-        onSelect={setDate}
-      />
-    );
+
+    return <Calendar mode="single" selected={date} onSelect={setDate} />;
   },
-  args: {},
+  args: {
+    mode: 'single',
+  },
 };
 
 export const WithRangeSelection: Story = {
-  render: (args) => {
-    const [range, setRange] = useState<{
-      from: Date;
-      to?: Date;
-    }>({
+  render: () => {
+    const [range, setRange] = useState<DateRange | undefined>({
       from: new Date(),
       to: addDays(new Date(), 7),
     });
-    return (
-      <Calendar
-        {...args}
-        mode="range"
-        selected={range}
-        onSelect={setRange}
-      />
-    );
+
+    return <Calendar mode="range" selected={range} onSelect={setRange} />;
   },
-  args: {},
+  args: {
+    mode: 'range',
+  },
 };
 
 export const WithMultipleSelection: Story = {
-  render: (args) => {
-    const [days, setDays] = useState<Date[]>([
+  render: () => {
+    const [days, setDays] = useState<Date[] | undefined>([
       new Date(),
       addDays(new Date(), 2),
       addDays(new Date(), 5),
     ]);
-    return (
-      <Calendar
-        {...args}
-        mode="multiple"
-        selected={days}
-        onSelect={setDays}
-      />
-    );
+
+    return <Calendar mode="multiple" selected={days} onSelect={setDays} />;
   },
-  args: {},
+  args: {
+    mode: 'multiple',
+  },
 };
 
 export const WithFooter: Story = {
-  render: (args) => {
+  render: () => {
     const [date, setDate] = useState<Date | undefined>(new Date());
+
     return (
       <div className="space-y-4">
-        <Calendar
-          {...args}
-          mode="single"
-          selected={date}
-          onSelect={setDate}
-        />
+        <Calendar mode="single" selected={date} onSelect={setDate} />
         <div className="text-center">
           <p>Selected date: {date?.toDateString()}</p>
         </div>
       </div>
     );
   },
-  args: {},
+  args: {
+    mode: 'single',
+  },
 };
-
