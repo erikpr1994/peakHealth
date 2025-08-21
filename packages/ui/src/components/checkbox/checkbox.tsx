@@ -30,17 +30,17 @@ const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
       className
     );
 
-    // Add onChange handler if checked is provided but onChange is not
-    const handleChange = onChange || (checked !== undefined ? () => {} : undefined);
-
+    // Don't create a no-op function for controlled components without onChange
+    // This allows React to properly warn about missing onChange handlers
+    
     return (
-      <div className="peakhealth-checkbox__container">
+      <div className="peakhealth-checkbox-container">
         <input
           type="checkbox"
           id={checkboxId}
           className={checkboxClasses}
           ref={ref}
-          onChange={handleChange}
+          onChange={onChange}
           checked={checked}
           {...props}
         />

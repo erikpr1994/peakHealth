@@ -30,17 +30,17 @@ const Radio = React.forwardRef<HTMLInputElement, RadioProps>(
       className
     );
 
-    // Add onChange handler if checked is provided but onChange is not
-    const handleChange = onChange || (checked !== undefined ? () => {} : undefined);
-
+    // Don't create a no-op function for controlled components without onChange
+    // This allows React to properly warn about missing onChange handlers
+    
     return (
-      <div className="peakhealth-radio__container">
+      <div className="peakhealth-radio-container">
         <input
           type="radio"
           id={radioId}
           className={radioClasses}
           ref={ref}
-          onChange={handleChange}
+          onChange={onChange}
           checked={checked}
           {...props}
         />
