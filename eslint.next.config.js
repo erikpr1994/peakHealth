@@ -34,6 +34,10 @@ export default [
         HeadersInit: 'readonly',
         URL: 'readonly',
         URLSearchParams: 'readonly',
+        // Node.js globals
+        process: 'readonly',
+        // Test globals
+        vi: 'readonly',
       },
       parserOptions: {
         ecmaFeatures: {
@@ -93,3 +97,4 @@ export default [
     },
   },
 ];
+
