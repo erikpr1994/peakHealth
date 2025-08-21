@@ -10,18 +10,18 @@ export class TestDataHelper {
    * @returns A random string with the prefix
    */
   static generateRandomString(prefix: string, length: number = 8): string {
-    // Use crypto.randomBytes for cryptographically secure random values
-    // Generate enough bytes to ensure we get the desired length
-    // Each base36 character represents ~5.17 bits, so we need more bytes
-    // Limit to 6 bytes max for readUIntBE compatibility
-    const maxBytes = Math.min(6, Math.ceil(length * 0.75));
-    const bytes = crypto.randomBytes(maxBytes);
+    // Generate enough bytes for the desired length
+    // Each byte can represent 0-255, which in base36 is 1-2 characters
+    const bytes = crypto.randomBytes(length);
 
-    // Convert bytes to a number, then to base36 string
-    const number = bytes.readUIntBE(0, bytes.length);
-    const randomPart = number.toString(36).toLowerCase().slice(0, length);
+    // Convert bytes to base36 string and ensure exact length
+    let randomPart = '';
+    for (let i = 0; i < bytes.length && randomPart.length < length; i++) {
+      randomPart += bytes[i].toString(36);
+    }
 
-    return `${prefix}-${randomPart}`;
+    // Ensure we get exactly the requested length
+    return `${prefix}-${randomPart.slice(0, length)}`;
   }
 
   /**
