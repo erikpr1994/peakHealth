@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { generateSetsForProgression } from './workoutCalculations';
+import { generateSetsForProgression } from '../domain/calculations';
 import type { WorkoutSet } from '@/features/routines/components/SetManagement';
 
 describe('workoutCalculations', () => {
