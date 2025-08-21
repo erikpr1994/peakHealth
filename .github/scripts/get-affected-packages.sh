@@ -17,8 +17,12 @@ if [ -n "$1" ]; then
   BASE_SHA="$1"
   log "Using provided BASE_SHA: ${BASE_SHA}"
 elif [[ "$GITHUB_EVENT_NAME" == "pull_request" ]]; then
-  BASE_SHA=$(git merge-base "$GITHUB_EVENT_PULL_REQUEST_BASE_SHA" "$GITHUB_SHA")
-  log "PR detected. Using merge-base: ${BASE_SHA}"
+  # GitHub Actions doesn't provide GITHUB_EVENT_PULL_REQUEST_BASE_SHA directly
+  # We need to use GITHUB_BASE_REF which is the name of the base branch
+  BASE_BRANCH="origin/$GITHUB_BASE_REF"
+  log "PR detected. Using base branch: ${BASE_BRANCH}"
+  BASE_SHA=$(git merge-base "$BASE_BRANCH" "$GITHUB_SHA")
+  log "Calculated merge-base SHA: ${BASE_SHA}"
 else
   # For push to main or other events, use the previous commit
   BASE_SHA=$(git rev-parse HEAD~1)
