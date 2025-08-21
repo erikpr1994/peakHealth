@@ -32,11 +32,16 @@ export default async function getHypertune(
   return hypertuneSource.root({
     args: {
       context: {
-        environment: process.env.NODE_ENV,
+        environment: process.env.NODE_ENV as
+          | 'development'
+          | 'production'
+          | 'test',
         user: {
-          id: '0',
-          anonymousId,
-          email: 'not logged in',
+          id: '', // Empty string for anonymous users
+          email: '', // Empty string for anonymous users
+        },
+        anonymousUser: {
+          id: anonymousId, // Use the anonymous ID for anonymous user tracking
         },
       },
     },

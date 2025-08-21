@@ -2,7 +2,7 @@
 
 import * as sdk from 'hypertune';
 
-export const queryCode = `query FullQuery{root{roadmap}}`;
+export const queryCode = `query FullQuery{root{running roadmap}}`;
 
 export const query: sdk.Query<sdk.ObjectValueWithVariables> = {
   variableDefinitions: {},
@@ -18,7 +18,10 @@ export const query: sdk.Query<sdk.ObjectValueWithVariables> = {
             Root: {
               type: 'InlineFragment',
               objectTypeName: 'Root',
-              selection: { roadmap: { fieldArguments: {}, fieldQuery: null } },
+              selection: {
+                running: { fieldArguments: {}, fieldQuery: null },
+                roadmap: { fieldArguments: {}, fieldQuery: null },
+              },
             },
           },
         },
@@ -28,8 +31,8 @@ export const query: sdk.Query<sdk.ObjectValueWithVariables> = {
 };
 
 export const initData = {
-  commitId: 34185,
-  hash: '7163488545891373',
+  commitId: 34320,
+  hash: '85707307664848',
   reducedExpression: {
     id: 'XIUJRXBLr6KJ9V8ZMNqXG',
     logs: {},
@@ -47,6 +50,122 @@ export const initData = {
           },
           type: 'ObjectExpression',
           fields: {
+            running: {
+              id: 'CxuUiQtJ81LC36A1eQRiy',
+              type: 'SwitchExpression',
+              cases: [
+                {
+                  id: '7CiueActjIEg9Jj2FiePh',
+                  when: {
+                    a: {
+                      id: 'tCrcedw8_c6XiKhgMTD50',
+                      type: 'SwitchExpression',
+                      cases: [
+                        {
+                          id: 'js8XozRFJ7etg8mm5VFxB',
+                          when: {
+                            a: {
+                              id: 'KgPm1uWP7hladUQeEcfis',
+                              type: 'GetFieldExpression',
+                              object: {
+                                id: '51Db27C2bjkqZ2_8Ole44',
+                                type: 'VariableExpression',
+                                valueType: {
+                                  type: 'ObjectValueType',
+                                  objectTypeName: 'Query_root_args',
+                                },
+                                variableId: 'NE9uKJWYhVJL9Zeiu13QI',
+                              },
+                              fieldPath: 'context > environment',
+                              valueType: {
+                                type: 'EnumValueType',
+                                enumTypeName: 'Environment',
+                              },
+                            },
+                            b: {
+                              id: '_9ncyZ9Vp6dvzO4hXe4th',
+                              type: 'ListExpression',
+                              items: [
+                                {
+                                  id: '-MTek0YMYi5LyL2ht4_gM',
+                                  type: 'EnumExpression',
+                                  value: 'development',
+                                  valueType: {
+                                    type: 'EnumValueType',
+                                    enumTypeName: 'Environment',
+                                  },
+                                },
+                              ],
+                              valueType: {
+                                type: 'ListValueType',
+                                itemValueType: {
+                                  type: 'EnumValueType',
+                                  enumTypeName: 'Environment',
+                                },
+                              },
+                            },
+                            id: 'DaQ5JB1v7qNWZvDRjeoKw',
+                            type: 'ComparisonExpression',
+                            operator: 'in',
+                            valueType: { type: 'BooleanValueType' },
+                          },
+                          then: {
+                            id: 'ZErY4DcUPPlzqo9hK9q5u',
+                            type: 'BooleanExpression',
+                            value: true,
+                            valueType: { type: 'BooleanValueType' },
+                          },
+                        },
+                      ],
+                      control: {
+                        id: 'A6NIWp3BElxMos19rlui0',
+                        type: 'BooleanExpression',
+                        value: true,
+                        valueType: { type: 'BooleanValueType' },
+                      },
+                      default: {
+                        id: 'DzDXf3N4Lr5uIXjCZHcJz',
+                        type: 'BooleanExpression',
+                        value: false,
+                        valueType: { type: 'BooleanValueType' },
+                      },
+                      valueType: { type: 'BooleanValueType' },
+                      logs: { evaluations: { KNHAWKfk7MMQ3BV8poGAQ: 1 } },
+                    },
+                    b: {
+                      id: 'kQInvaJnfHlWOG5sAXPsL',
+                      type: 'BooleanExpression',
+                      value: true,
+                      valueType: { type: 'BooleanValueType' },
+                    },
+                    id: '6xxxhWjd07PhRWNhv5q-S',
+                    type: 'ComparisonExpression',
+                    operator: '==',
+                    valueType: { type: 'BooleanValueType' },
+                  },
+                  then: {
+                    id: 'YQRJ620qj5eObL_emWEDa',
+                    type: 'BooleanExpression',
+                    value: true,
+                    valueType: { type: 'BooleanValueType' },
+                  },
+                },
+              ],
+              control: {
+                id: 'GVY56HWl7AwmCvjK4rDgU',
+                type: 'BooleanExpression',
+                value: true,
+                valueType: { type: 'BooleanValueType' },
+              },
+              default: {
+                id: '2Q6imizxOoqNXwbln2I5u',
+                type: 'BooleanExpression',
+                value: false,
+                valueType: { type: 'BooleanValueType' },
+              },
+              valueType: { type: 'BooleanValueType' },
+              logs: { evaluations: { kvJi3H91bANSim7oZX_Lr: 1 } },
+            },
             roadmap: {
               id: 'FLSF-mCdsVYQofN2gudQf',
               type: 'SwitchExpression',
@@ -143,7 +262,7 @@ export const initData = {
                   then: {
                     id: 'ufoi6k-AO1InQBw18pVtK',
                     type: 'BooleanExpression',
-                    value: false,
+                    value: true,
                     valueType: { type: 'BooleanValueType' },
                   },
                 },
@@ -191,6 +310,14 @@ export const initData = {
 };
 
 export const vercelFlagDefinitions = {
+  running: {
+    options: [
+      { label: 'Off', value: false },
+      { label: 'On', value: true },
+    ],
+    origin:
+      'https://app.hypertune.com/projects/6203/main/draft/logic?selected_field_path=root%3Erunning',
+  },
   roadmap: {
     options: [
       { label: 'Off', value: false },
@@ -202,16 +329,19 @@ export const vercelFlagDefinitions = {
 };
 
 export type RootFlagValues = {
+  running: boolean;
   roadmap: boolean;
 };
 
 export type FlagValues = {
+  running: boolean;
   roadmap: boolean;
 };
 
 export type FlagPaths = keyof FlagValues & string;
 
 export const flagFallbacks: FlagValues = {
+  running: false,
   roadmap: false,
 };
 
@@ -226,7 +356,6 @@ export type VariableValues = {};
 
 export type User = {
   id: string;
-  anonymousId: string;
   email: string;
 };
 
@@ -236,6 +365,10 @@ export const EnvironmentEnumValues = [
   'test',
 ] as const;
 export type Environment = (typeof EnvironmentEnumValues)[number];
+
+export type AnonymousUser = {
+  id: string;
+};
 
 /**
  * This `Context` input type is used for the `context` argument on your root field.
@@ -247,6 +380,7 @@ export type Environment = (typeof EnvironmentEnumValues)[number];
 export type Context = {
   user: User;
   environment: Environment;
+  anonymousUser: AnonymousUser;
 };
 
 export type RootArgs = {
@@ -256,10 +390,11 @@ export type RootArgs = {
 export type EmptyObject = {};
 
 export type Root = {
+  running: boolean;
   roadmap: boolean;
 };
 
-const rootFallback = { roadmap: false };
+const rootFallback = { running: false, roadmap: false };
 
 export class RootNode extends sdk.Node {
   override typeName = 'Root' as const;
@@ -281,6 +416,29 @@ export class RootNode extends sdk.Node {
       null
     );
     return this.getValue({ query: getQuery, fallback }) as Root;
+  }
+
+  /**
+   * [Open in Hypertune UI]({@link https://app.hypertune.com/projects/6203/main/draft/logic?selected_field_path=root%3Erunning})
+   */
+  running({
+    args = {},
+    fallback,
+  }: {
+    args?: EmptyObject;
+    fallback: boolean;
+  }): boolean {
+    const props0 = this.getFieldNodeProps('running', { fieldArguments: args });
+    const expression0 = props0.expression;
+
+    if (expression0 && expression0.type === 'BooleanExpression') {
+      const node = new sdk.BooleanNode(props0);
+      return node.get({ fallback });
+    }
+
+    const node = new sdk.BooleanNode(props0);
+    node._logUnexpectedTypeError();
+    return node.get({ fallback });
   }
 
   /**
@@ -328,7 +486,7 @@ export type Source = {
   root: Root;
 };
 
-const sourceFallback = { root: { roadmap: false } };
+const sourceFallback = { root: { running: false, roadmap: false } };
 
 export type GetQueryRootArgs = {
   args: RootArgs;

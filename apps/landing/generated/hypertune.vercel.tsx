@@ -11,7 +11,7 @@ import {
   Value,
 } from 'hypertune';
 import * as hypertuneTypes from './hypertune';
-import getHypertune from '../src/lib/hypertune/getHypertune';
+import getHypertune from '@/lib/hypertune/getHypertune';
 
 export async function getVercelOverride(): Promise<DeepPartial<hypertuneTypes.Source> | null> {
   const overridesCookieValue = (await cookies()).get(
@@ -63,6 +63,22 @@ function getVercelFlagValuesEntries(
     return getVercelFlagValuesEntries(`${keyPrefix}${flagKey}.`, flagValue);
   });
 }
+
+export const runningFlag = flag<boolean>({
+  key: 'running',
+  defaultValue: false,
+  origin:
+    'https://app.hypertune.com/projects/6203/main/draft/logic?selected_field_path=root%3Erunning',
+  options: [
+    { label: 'Off', value: false },
+    { label: 'On', value: true },
+  ],
+
+  async decide(params) {
+    const hypertune = await getHypertune(params);
+    return hypertune.running({ fallback: false });
+  },
+});
 
 export const roadmapFlag = flag<boolean>({
   key: 'roadmap',
