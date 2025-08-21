@@ -41,11 +41,13 @@ describe('Input', () => {
     expect(input).toHaveAttribute('type', 'email');
 
     rerender(<Input type="password" />);
-    input = screen.getByLabelText('');
+    // Password inputs don't have the textbox role
+    input = screen.getByRole('textbox', { hidden: true }) || screen.getByDisplayValue('');
     expect(input).toHaveAttribute('type', 'password');
 
     rerender(<Input type="number" />);
-    input = screen.getByLabelText('');
+    // Number inputs have a spinbutton role
+    input = screen.getByRole('spinbutton');
     expect(input).toHaveAttribute('type', 'number');
   });
 
@@ -93,4 +95,3 @@ describe('Input', () => {
     expect(input).toHaveAttribute('name', 'test-input');
   });
 });
-

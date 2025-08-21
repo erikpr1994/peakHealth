@@ -46,7 +46,8 @@ describe('Select', () => {
     expect(placeholderOption).toBeInTheDocument();
     expect(placeholderOption).toHaveAttribute('value', '');
     expect(placeholderOption).toHaveAttribute('disabled');
-    expect(placeholderOption).toHaveAttribute('selected');
+    // In React, selected is controlled by defaultValue/value on the select element
+    expect(select).toHaveValue('');
   });
 
   it('renders in disabled state', () => {
@@ -171,4 +172,3 @@ describe('Select', () => {
     expect(options).toHaveLength(4);
   });
 });
-

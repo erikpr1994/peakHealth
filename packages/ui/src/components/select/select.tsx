@@ -23,10 +23,17 @@ const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
       className
     );
 
+    // If placeholder is provided and no value/defaultValue is set, 
+    // use empty string as defaultValue to show the placeholder
+    const selectProps = {
+      ...props,
+      defaultValue: placeholder && !props.value && !props.defaultValue ? "" : props.defaultValue
+    };
+
     return (
-      <select className={selectClasses} ref={ref} {...props}>
+      <select className={selectClasses} ref={ref} {...selectProps}>
         {placeholder && (
-          <option value="" disabled selected hidden>
+          <option value="" disabled hidden>
             {placeholder}
           </option>
         )}
