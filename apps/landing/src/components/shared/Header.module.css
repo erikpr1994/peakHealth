@@ -152,7 +152,11 @@
   background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
   width: 100%;
   max-width: 320px;
-  height: 100vh; /* Default height for all browsers */
+  /* Fallback for browsers that don't support dvh */
+  height: -webkit-fill-available;
+  height: 100vh; /*  Default height for all browsers */
+  /* Modern solution that accounts for mobile browser UI elements */
+  height: 100dvh;
   padding: 2rem 1.5rem;
   display: flex;
   flex-direction: column;
@@ -272,14 +276,6 @@
 
   .mobileMenuButton {
     display: flex;
-  }
-
-  /* Mobile-specific height fixes */
-  .mobileNav {
-    /* Fallback for browsers that don't support dvh */
-    height: -webkit-fill-available;
-    /* Modern solution that accounts for mobile browser UI elements */
-    height: 100dvh;
   }
 }
 
