@@ -2,7 +2,7 @@ import { describe, test, expect } from 'vitest';
 import { renderHook } from '@testing-library/react';
 import { useRoutineValidation } from './useRoutineValidation';
 import { StrengthWorkout, RunningWorkout } from '@/features/routines/types';
-import { WorkoutSet } from '@/features/workout/SetManagement';
+import { WorkoutSet } from '@/features/routines/components/SetManagement';
 
 describe('useRoutineValidation', () => {
   const { result } = renderHook(() => useRoutineValidation());

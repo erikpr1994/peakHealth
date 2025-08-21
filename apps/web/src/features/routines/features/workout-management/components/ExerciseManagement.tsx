@@ -21,7 +21,9 @@ import {
   getProgressionMethodColor,
 } from '@/features/routines/utils';
 import { generateSetsForProgression } from '@/features/routines/utils/workoutCalculations';
-import SetManagement, { WorkoutSet } from '@/features/workout/SetManagement';
+import SetManagement, {
+  WorkoutSet,
+} from '@/features/routines/components/SetManagement';
 import TimeInput from '../../routine-creation/components/TimeInput';
 
 interface ExerciseManagementProps {

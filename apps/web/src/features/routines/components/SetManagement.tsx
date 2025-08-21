@@ -17,7 +17,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Tooltip } from '@peakhealth/ui';
-import { DynamicWeightInput } from './components/DynamicWeightInput';
+import { DynamicWeightInput } from '@/features/routines/components/DynamicWeightInput';
 
 export type SetType = 'warmup' | 'normal' | 'failure' | 'dropset';
 export type RepType = 'fixed' | 'range';
