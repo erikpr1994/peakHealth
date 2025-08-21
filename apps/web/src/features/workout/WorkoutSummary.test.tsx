@@ -94,12 +94,20 @@ describe('WorkoutSummary', () => {
     );
 
     expect(screen.getByText('Workout Complete!')).toBeInTheDocument();
-    // The component shows different celebration messages randomly, so we check for any celebration message
-    expect(
-      screen.getByText(
-        /You crushed it|Your dedication|Outstanding work|Another step closer/
-      )
-    ).toBeInTheDocument();
+    // The component shows a random motivational message
+    const motivationalMessages = [
+      'Outstanding work! 💪',
+      'You crushed it today! 🔥',
+      'Another step closer to your goals! 🎯',
+      'Consistency is key - well done! ⭐',
+      'Your dedication is inspiring! 🚀',
+    ];
+    const displayedMessage = screen.getAllByText((content, element) => {
+      return motivationalMessages.some(message =>
+        element?.textContent?.includes(message)
+      );
+    });
+    expect(displayedMessage.length).toBeGreaterThan(0);
   });
 
   it('should display workout statistics', () => {
