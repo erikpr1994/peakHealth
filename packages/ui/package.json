@@ -36,7 +36,9 @@
   "devDependencies": {
     "@storybook/addon-docs": "^9.1.2",
     "@storybook/addon-onboarding": "^9.1.2",
+    "@storybook/react": "^9.1.2",
     "@storybook/react-vite": "^9.1.2",
+    "@testing-library/jest-dom": "^6.7.0",
     "@testing-library/react": "^16.3.0",
     "@testing-library/user-event": "^14.6.1",
     "@types/react": "^19.1.10",
@@ -70,20 +72,55 @@
       "import": "./dist/index.js",
       "require": "./dist/index.js"
     },
+    "./badge": {
+      "types": "./dist/components/badge/index.d.ts",
+      "import": "./dist/components/badge/index.js",
+      "require": "./dist/components/badge/index.js"
+    },
     "./button": {
       "types": "./dist/components/button/index.d.ts",
       "import": "./dist/components/button/index.js",
       "require": "./dist/components/button/index.js"
+    },
+    "./card": {
+      "types": "./dist/components/card/index.d.ts",
+      "import": "./dist/components/card/index.js",
+      "require": "./dist/components/card/index.js"
+    },
+    "./checkbox": {
+      "types": "./dist/components/checkbox/index.d.ts",
+      "import": "./dist/components/checkbox/index.js",
+      "require": "./dist/components/checkbox/index.js"
     },
     "./input": {
       "types": "./dist/components/input/index.d.ts",
       "import": "./dist/components/input/index.js",
       "require": "./dist/components/input/index.js"
     },
+    "./label": {
+      "types": "./dist/components/label/index.d.ts",
+      "import": "./dist/components/label/index.js",
+      "require": "./dist/components/label/index.js"
+    },
     "./modal": {
       "types": "./dist/components/modal/index.d.ts",
       "import": "./dist/components/modal/index.js",
       "require": "./dist/components/modal/index.js"
+    },
+    "./radio": {
+      "types": "./dist/components/radio/index.d.ts",
+      "import": "./dist/components/radio/index.js",
+      "require": "./dist/components/radio/index.js"
+    },
+    "./select": {
+      "types": "./dist/components/select/index.d.ts",
+      "import": "./dist/components/select/index.js",
+      "require": "./dist/components/select/index.js"
+    },
+    "./textarea": {
+      "types": "./dist/components/textarea/index.d.ts",
+      "import": "./dist/components/textarea/index.js",
+      "require": "./dist/components/textarea/index.js"
     },
     "./toast": {
       "types": "./dist/components/toast/index.d.ts",
