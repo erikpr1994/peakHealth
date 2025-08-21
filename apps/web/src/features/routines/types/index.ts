@@ -4,11 +4,6 @@ export type {
   WorkoutSection,
   StrengthWorkout,
   RunningWorkout,
-  IntervalType,
-  TrailRunningInterval,
-  TrailRunningWorkoutData,
-  IntensityTarget,
-  TrailRunningSection,
 } from './workout';
 
 // Re-export exercise types from dedicated file
@@ -29,3 +24,12 @@ export type {
   WorkoutDay,
   ExerciseDetail,
 } from './routine';
+
+// Re-export trail running types from dedicated file
+export type {
+  IntervalType,
+  TrailRunningInterval,
+  TrailRunningWorkoutData,
+  IntensityTarget,
+  TrailRunningSection,
+} from './trailRunning';

@@ -4,11 +4,7 @@ import type {
   WorkoutSection,
   StrengthWorkout,
   RunningWorkout,
-  IntervalType,
-  TrailRunningInterval,
   TrailRunningWorkoutData,
-  IntensityTarget,
-  TrailRunningSection,
 } from './workout';
 
 describe('Workout Types', () => {
@@ -151,95 +147,6 @@ describe('Workout Types', () => {
 
       expect(trailWorkout.type).toBe('trail-running');
       expect(trailWorkout.trailRunningData).toBeDefined();
-    });
-  });
-
-  describe('Trail Running Types', () => {
-    test('IntervalType should accept valid interval types', () => {
-      const intervalTypes: IntervalType[] = [
-        'run',
-        'uphill',
-        'downhill',
-        'sprint',
-        'recovery',
-        'rest',
-        'walk',
-      ];
-
-      expect(intervalTypes).toHaveLength(7);
-      expect(intervalTypes).toContain('run');
-      expect(intervalTypes).toContain('uphill');
-    });
-
-    test('TrailRunningInterval should have correct structure', () => {
-      const interval: TrailRunningInterval = {
-        id: 'interval-1',
-        name: 'Sprint Interval',
-        type: 'sprint',
-        distance: 100,
-        duration: 30,
-        elevationChange: 10,
-      };
-
-      expect(interval.id).toBe('interval-1');
-      expect(interval.name).toBe('Sprint Interval');
-      expect(interval.type).toBe('sprint');
-      expect(interval.distance).toBe(100);
-      expect(interval.duration).toBe(30);
-    });
-
-    test('IntensityTarget should have correct structure', () => {
-      const target: IntensityTarget = {
-        type: 'heart-rate',
-        minValue: 140,
-        maxValue: 160,
-        unit: 'bpm',
-      };
-
-      expect(target.type).toBe('heart-rate');
-      expect(target.minValue).toBe(140);
-      expect(target.maxValue).toBe(160);
-      expect(target.unit).toBe('bpm');
-    });
-
-    test('TrailRunningSection should have correct structure', () => {
-      const section: TrailRunningSection = {
-        id: 'section-1',
-        name: 'Warm Up',
-        type: 'warm-up',
-        distance: 2,
-        duration: 15,
-        elevationChange: 50,
-        isRepeated: false,
-      };
-
-      expect(section.id).toBe('section-1');
-      expect(section.name).toBe('Warm Up');
-      expect(section.type).toBe('warm-up');
-      expect(section.distance).toBe(2);
-      expect(section.duration).toBe(15);
-    });
-
-    test('TrailRunningWorkoutData should have correct structure', () => {
-      const workoutData: TrailRunningWorkoutData = {
-        id: 'trail-1',
-        name: 'Mountain Trail Run',
-        description: 'Challenging mountain trail run',
-        type: 'trail-running',
-        difficulty: 'advanced',
-        estimatedDuration: 90,
-        targetDistance: 15,
-        elevationGain: 800,
-        sections: [],
-      };
-
-      expect(workoutData.id).toBe('trail-1');
-      expect(workoutData.name).toBe('Mountain Trail Run');
-      expect(workoutData.type).toBe('trail-running');
-      expect(workoutData.difficulty).toBe('advanced');
-      expect(workoutData.estimatedDuration).toBe(90);
-      expect(workoutData.targetDistance).toBe(15);
-      expect(workoutData.elevationGain).toBe(800);
     });
   });
 });
