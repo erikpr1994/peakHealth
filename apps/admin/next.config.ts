@@ -5,6 +5,7 @@ const isDevelopment = process.env.NODE_ENV === 'development';
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
+  typedRoutes: true,
   eslint: {
     ignoreDuringBuilds: true,
   },

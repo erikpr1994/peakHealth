@@ -7,6 +7,7 @@ const isDevelopment = process.env.NODE_ENV === 'development';
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
+  typedRoutes: true,
   eslint: {
     ignoreDuringBuilds: true,
   },
@@ -18,7 +19,7 @@ const nextConfig: NextConfig = {
     // Enable SWC minification for faster builds
     swcMinify: true,
     // Optimize chunk splitting for development
-    webpack: (config, { dev, isServer }) => {
+    webpack: (config, { dev, isServer }): typeof config => {
       if (dev && !isServer) {
         // Reduce chunk splitting overhead in development
         config.optimization = {

@@ -1,5 +1,6 @@
 'use client';
 
+import React from 'react';
 import { LogOut, Shield } from 'lucide-react';
 import { usePathname, useRouter } from 'next/navigation';
 
@@ -15,7 +16,7 @@ export const Sidebar = (): React.JSX.Element => {
   const { logout, user } = useAuth();
 
   const handleNavigation = (path: string): void => {
-    router.push(path);
+    router.push(path as any);
   };
 
   const handleLogout = async (): Promise<void> => {

@@ -6,6 +6,7 @@ const isDevelopment = process.env.NODE_ENV === 'development';
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
+  // typedRoutes: true, // Temporarily disabled due to dynamic route issues
   eslint: {
     ignoreDuringBuilds: true,
   },

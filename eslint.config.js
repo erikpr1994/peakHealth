@@ -22,9 +22,29 @@ import reactRefreshPlugin from 'eslint-plugin-react-refresh';
 import ruleAdoptionPlugin from 'eslint-plugin-rule-adoption';
 import unicornPlugin from 'eslint-plugin-unicorn';
 import ymlPlugin from 'eslint-plugin-yml';
+import { FlatCompat } from '@eslint/eslintrc';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
 import yamlParser from 'yaml-eslint-parser';
 
-export default [
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+const compat = new FlatCompat({
+  baseDirectory: __dirname,
+});
+
+const config = [
+  ...compat.extends('next/core-web-vitals'),
+  {
+    ignores: [
+      'node_modules/**',
+      '.next/**',
+      'out/**',
+      'build/**',
+      'next-env.d.ts',
+    ],
+  },
   js.configs.recommended,
   {
     files: [
@@ -265,8 +285,7 @@ export default [
       '@typescript-eslint/no-unused-vars': 'off',
       '@typescript-eslint/no-var-requires': 'off',
     },
-  },
-  // YAML configuration for GitHub Actions workflows
+  }, // YAML configuration for GitHub Actions workflows
   {
     files: ['.github/workflows/**/*.yml', '.github/workflows/**/*.yaml'],
     plugins: {
@@ -291,3 +310,5 @@ export default [
     },
   },
 ];
+
+export default config;
