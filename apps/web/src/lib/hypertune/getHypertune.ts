@@ -1,4 +1,5 @@
 import { cookies } from 'next/headers';
+import { type NextRequest } from 'next/server';
 import * as hypertune from '../../../generated/hypertune';
 import { createAdminClient } from '../supabase/admin';
 
@@ -11,10 +12,20 @@ function getEnvironment(): Environment {
   return 'development';
 }
 
-async function getUserFromCookies(): Promise<hypertune.User | null> {
+async function getUserFromCookies(
+  request?: NextRequest
+): Promise<hypertune.User | null> {
   try {
-    const cookieStore = await cookies();
-    const userCookie = cookieStore.get('user');
+    let userCookie: { name: string; value: string } | undefined;
+
+    if (request) {
+      // Edge runtime context (middleware)
+      userCookie = request.cookies.get('user');
+    } else {
+      // Server-side context
+      const cookieStore = await cookies();
+      userCookie = cookieStore.get('user');
+    }
 
     if (!userCookie?.value) {
       // No user cookie - this shouldn't happen in the web app
@@ -36,7 +47,8 @@ async function getUserFromCookies(): Promise<hypertune.User | null> {
 }
 
 export default async function getHypertune(
-  params?: Record<string, unknown>
+  params?: Record<string, unknown>,
+  request?: NextRequest
 ): Promise<ReturnType<typeof hypertuneSource.root>> {
   const hypertuneSource = hypertune.createSource({
     token: process.env.NEXT_PUBLIC_HYPERTUNE_TOKEN || '',
@@ -45,7 +57,7 @@ export default async function getHypertune(
     key: typeof window === 'undefined' ? 'server' : 'client',
   });
 
-  const user = await getUserFromCookies();
+  const user = await getUserFromCookies(request);
   const environment = getEnvironment();
 
   const context: hypertune.Context = {

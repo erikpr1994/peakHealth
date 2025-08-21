@@ -7,8 +7,8 @@ export async function middleware(request: NextRequest): Promise<NextResponse> {
     request: { headers: request.headers },
   });
 
-  // Initialize Hypertune
-  const hypertune = await getHypertune();
+  // Initialize Hypertune with request for Edge runtime compatibility
+  const hypertune = await getHypertune({}, request);
 
   // Check Hypertune flag (remove in production if not needed)
   hypertune.roadmap({ fallback: false });
