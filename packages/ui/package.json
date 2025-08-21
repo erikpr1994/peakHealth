@@ -31,6 +31,7 @@
     "react-dom": "^19.0.0"
   },
   "dependencies": {
+    "@radix-ui/react-collapsible": "^1.1.12",
     "clsx": "^2.1.1",
     "date-fns": "^4.1.0",
     "react-day-picker": "^9.9.0"
@@ -108,6 +109,11 @@
       "types": "./dist/components/checkbox/index.d.ts",
       "import": "./dist/components/checkbox/index.js",
       "require": "./dist/components/checkbox/index.js"
+    },
+    "./collapsible": {
+      "types": "./dist/components/collapsible/index.d.ts",
+      "import": "./dist/components/collapsible/index.js",
+      "require": "./dist/components/collapsible/index.js"
     },
     "./input": {
       "types": "./dist/components/input/index.d.ts",
