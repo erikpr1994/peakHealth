@@ -17,7 +17,7 @@ HAS_UNCOVERED_FILES=false
 # Check each changed file
 for file in $CHANGED_FILES; do
   # Skip if it's not a source file
-  if [[ ! "$file" =~ \.(ts|tsx|js|jsx)$ ]] || [[ "$file" =~ \.(test|spec)\.(ts|tsx|js|jsx)$ ]]; then
+  if [[ ! "$file" =~ \.(ts|tsx|js|jsx)$ ]] || [[ "$file" =~ \.(test|spec)\.(ts|tsx|js|jsx)$ ]] || [[ "$file" =~ \.d\.ts$ ]]; then
     continue
   fi
   
