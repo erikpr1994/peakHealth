@@ -346,10 +346,10 @@ Breaking down large components into smaller, focused pieces following project ru
 ### Completed
 
 - [x] PR #1: Extract Routine Types
+- [x] PR #2: Extract Workout Types
 
 ### In Progress
 
-- [ ] PR #2: Extract Workout Types
 - [ ] PR #3: Extract Exercise Types
 - [ ] PR #4: Extract Trail Running Types
 
