@@ -2,8 +2,6 @@ import { describe, test, expect } from 'vitest';
 import type {
   WorkoutType,
   WorkoutSection,
-  Exercise,
-  ProgressionMethod,
   StrengthWorkout,
   RunningWorkout,
   IntervalType,
@@ -12,6 +10,7 @@ import type {
   IntensityTarget,
   TrailRunningSection,
 } from './workout';
+import type { Exercise, ProgressionMethod } from './exercise';
 
 describe('Workout Types', () => {
   describe('WorkoutType', () => {

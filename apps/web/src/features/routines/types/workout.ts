@@ -8,9 +8,9 @@ export type WorkoutType =
   | 'swimming'
   | 'cycling';
 
-// Import and re-export WorkoutSet from workout module to ensure consistency
-import type { WorkoutSet } from '../components/SetManagement';
-export type { WorkoutSet };
+// Import exercise types from dedicated file
+import type { Exercise, WorkoutSet } from './exercise';
+export type { Exercise, WorkoutSet };
 
 export interface WorkoutSection {
   id: string;
@@ -22,34 +22,6 @@ export interface WorkoutSection {
   emomDuration?: number; // duration in minutes
   // TABATA specific properties (always 4 minutes, 8 rounds)
 }
-
-export interface Exercise {
-  id: string;
-  name: string;
-  category?: string;
-  muscleGroups?: string[];
-  equipment?: string[]; // Equipment required for this exercise
-  // Exercise and variant IDs for proper data tracking
-  exerciseId?: string; // ID of the base exercise
-  variantId?: string; // ID of the selected variant
-  sets: WorkoutSet[];
-  restTimer: string; // rest between sets
-  restAfter: string; // rest after this exercise
-  notes: string;
-  progressionMethod?: ProgressionMethod; // progression method for strength exercises
-  hasApproachSets?: boolean; // track if approach sets have been added
-  // EMOM specific properties
-  emomReps?: number; // target reps per minute
-  // TABATA specific properties (uses time intervals instead of sets)
-}
-
-export type ProgressionMethod =
-  | 'linear'
-  | 'dual'
-  | 'inverse-pyramid'
-  | 'myo-reps'
-  | 'widowmaker'
-  | 'amrap';
 
 export interface StrengthWorkout {
   id: string;
