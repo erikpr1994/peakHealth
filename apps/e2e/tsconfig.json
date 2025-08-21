@@ -1,9 +1,9 @@
 {
   "compilerOptions": {
     "target": "ES2022",
-    "module": "NodeNext",
+    "module": "ESNext",
     "lib": ["ES2022", "DOM"],
-    "moduleResolution": "NodeNext",
+    "moduleResolution": "bundler",
     "types": ["@playwright/test", "node"],
     "noEmit": true,
     "strict": true,
