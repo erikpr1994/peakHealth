@@ -7,9 +7,9 @@ set -e
 # Usage: ./get-affected-packages.sh [base_sha]
 # If base_sha is not provided, it will be calculated based on the event type
 
-# Function to log with timestamp
+# Function to log without timestamp to avoid CI parsing issues
 log() {
-  echo "$(date '+%Y-%m-%d %H:%M:%S') - $1"
+  echo "LOG: $1"
 }
 
 # Determine the base SHA to compare against
@@ -142,4 +142,3 @@ fi
 
 # Clean up
 rm -f "$TEMP_FILE"
-
