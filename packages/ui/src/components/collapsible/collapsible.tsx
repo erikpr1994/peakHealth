@@ -73,7 +73,8 @@ const Collapsible = forwardRef<HTMLDivElement, CollapsibleProps>(
               child as React.ReactElement<CollapsibleTriggerProps>,
               {
                 onClick: (e: React.MouseEvent) => {
-                  child.props.onClick?.(e);
+                  // Cast to any to avoid TypeScript errors with unknown props
+                  (child as any).props.onClick?.(e);
                   handleOpenChange(!isOpen);
                 },
                 'aria-expanded': isOpen,
@@ -116,16 +117,18 @@ const CollapsibleTrigger = forwardRef<
     React.Children.count(children) === 1 &&
     React.isValidElement(children)
   ) {
-    return React.cloneElement(children, {
+    // Cast children to any to avoid TypeScript errors with unknown props
+    const childElement = children as any;
+    return React.cloneElement(childElement, {
       ref,
       className: cn(
         'collapsible__trigger',
         className,
-        children.props.className
+        childElement.props.className
       ),
       'data-slot': 'collapsible-trigger',
       role: 'button',
-      ...children.props,
+      ...childElement.props,
       ...props, // Put props last to ensure they override children.props
     });
   }
@@ -206,4 +209,3 @@ const CollapsibleContent = forwardRef<HTMLDivElement, CollapsibleContentProps>(
 CollapsibleContent.displayName = 'CollapsibleContent';
 
 export { Collapsible, CollapsibleTrigger, CollapsibleContent };
-

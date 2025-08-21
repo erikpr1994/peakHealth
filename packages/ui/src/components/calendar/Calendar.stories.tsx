@@ -1,6 +1,11 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { Calendar } from './calendar';
-import { addDays } from 'date-fns';
+// Create a helper function to add days to a date
+const addDays = (date: Date, days: number): Date => {
+  const result = new Date(date);
+  result.setDate(result.getDate() + days);
+  return result;
+};
 import { useState } from 'react';
 import type { DateRange } from 'react-day-picker';
 
