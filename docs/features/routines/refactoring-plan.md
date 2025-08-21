@@ -180,18 +180,38 @@ Breaking down large components into smaller, focused pieces following project ru
 
 ## Phase 3: Hook Decomposition (Priority: High)
 
-### 🔄 PR #7: Extract Strength Workout Operations
+### ✅ PR #7: Extract Strength Workout Operations
 
-**Status:** PENDING
-**Files:** `features/routines/hooks/useStrengthWorkoutOperations.ts`
+**Status:** COMPLETED
+**Branch:** `refactor/extract-strength-workout-operations`
+**Files:**
+
+- `features/routines/hooks/useStrengthWorkoutOperations.ts` (77 lines)
+- `features/routines/hooks/useStrengthWorkoutState.ts` (123 lines)
+- `features/routines/hooks/useStrengthSectionOperations.ts` (129 lines)
+- `features/routines/hooks/useStrengthExerciseOperations.ts` (259 lines)
+- `features/routines/hooks/useStrengthWorkoutOperations.test.ts` (comprehensive tests)
+- `features/routines/hooks/useStrengthWorkoutState.test.ts` (focused tests)
+
 **Changes:**
 
-- Extract strength-specific operations from `useWorkoutOperations.ts` (1082 lines)
-- Create focused strength workout operations hook
-- Add co-located tests
-- Update imports
+- Extract strength-specific operations from `useWorkoutOperations.ts` (1082 lines) into focused hooks
+- Create composition pattern with smaller, focused hooks:
+  - `useStrengthWorkoutState`: State management and workout-level operations
+  - `useStrengthSectionOperations`: Section-level operations
+  - `useStrengthExerciseOperations`: Exercise-level operations
+  - `useStrengthWorkoutOperations`: Main orchestrator hook
+- Add comprehensive co-located tests for all hooks
+- Maintain backward compatibility with existing API
+- Achieve target of < 300 lines per file ✅ (all files under 260 lines)
 
-**Target:** < 300 lines
+**Functions extracted:**
+
+- **Workout operations**: `addStrengthWorkout`, `removeStrengthWorkout`, `moveStrengthWorkout`, `updateStrengthWorkoutName`, `updateStrengthWorkoutObjective`, `updateStrengthWorkoutSchedule`
+- **Section operations**: `addStrengthSection`, `removeStrengthSection`, `updateStrengthSectionName`, `updateStrengthSectionType`, `updateStrengthSectionRestAfter`, `updateStrengthSectionEmomDuration`
+- **Exercise operations**: `addStrengthExercise`, `removeStrengthExercise`, `updateStrengthExerciseName`, `updateStrengthExerciseSets`, `updateStrengthRestTimer`, `updateStrengthExerciseRestAfter`, `updateStrengthExerciseEmomReps`, `updateStrengthExerciseProgressionMethod`
+
+**Target:** < 300 lines ✅ (77 lines achieved for main hook)
 **Dependencies:** Types and utilities extraction
 
 ### 🔄 PR #8: Extract Running Workout Operations
@@ -397,6 +417,7 @@ Breaking down large components into smaller, focused pieces following project ru
 - [x] PR #3: Extract Exercise Types
 - [x] PR #5: Extract Workout Calculations
 - [x] PR #6: Extract Data Transformers
+- [x] PR #7: Extract Strength Workout Operations
 
 ### In Progress
 
@@ -404,7 +425,6 @@ Breaking down large components into smaller, focused pieces following project ru
 
 ### Pending
 
-- [ ] PR #7: Extract Strength Workout Operations
 - [ ] PR #8: Extract Running Workout Operations
 - [ ] PR #9: Extract Exercise Operations
 - [ ] PR #10: Extract RoutineCreation State
