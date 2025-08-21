@@ -13,10 +13,14 @@ export interface RadioProps
    * Optional error state for the radio button
    */
   error?: boolean;
+  /**
+   * Optional children for the radio label
+   */
+  children?: React.ReactNode;
 }
 
 const Radio = React.forwardRef<HTMLInputElement, RadioProps>(
-  ({ className, label, error, id, ...props }, ref) => {
+  ({ className, label, error, id, children, onChange, checked, ...props }, ref) => {
     const generatedId = React.useId();
     const radioId = id || generatedId;
     
@@ -26,21 +30,26 @@ const Radio = React.forwardRef<HTMLInputElement, RadioProps>(
       className
     );
 
+    // Add onChange handler if checked is provided but onChange is not
+    const handleChange = onChange || (checked !== undefined ? () => {} : undefined);
+
     return (
-      <div className="peakhealth-radio-container">
+      <div className="peakhealth-radio__container">
         <input
           type="radio"
           id={radioId}
           className={radioClasses}
           ref={ref}
+          onChange={handleChange}
+          checked={checked}
           {...props}
         />
-        {label && (
+        {(label || children) && (
           <label
             htmlFor={radioId}
             className="peakhealth-radio-label"
           >
-            {label}
+            {label || children}
           </label>
         )}
       </div>
@@ -60,9 +69,13 @@ export interface RadioGroupProps {
    */
   value?: string;
   /**
+   * Default value for uncontrolled component
+   */
+  defaultValue?: string;
+  /**
    * Callback when selection changes
    */
-  onChange?: (value: string) => void;
+  onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
   /**
    * Radio options
    */
@@ -79,19 +92,34 @@ export interface RadioGroupProps {
    * Optional additional className
    */
   className?: string;
+  /**
+   * Whether the entire group is disabled
+   */
+  disabled?: boolean;
 }
 
 const RadioGroup: React.FC<RadioGroupProps> = ({
   name,
   value,
+  defaultValue,
   onChange,
   options,
   error,
   className,
+  disabled,
 }) => {
+  const [internalValue, setInternalValue] = React.useState<string | undefined>(defaultValue);
+  
+  const isControlled = value !== undefined;
+  const currentValue = isControlled ? value : internalValue;
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!isControlled) {
+      setInternalValue(e.target.value);
+    }
+    
     if (onChange) {
-      onChange(e.target.value);
+      onChange(e);
     }
   };
 
@@ -104,10 +132,10 @@ const RadioGroup: React.FC<RadioGroupProps> = ({
           key={option.value}
           name={name}
           value={option.value}
-          checked={value === option.value}
+          checked={currentValue === option.value}
           onChange={handleChange}
           label={option.label}
-          disabled={option.disabled}
+          disabled={disabled || option.disabled}
           error={error}
         />
       ))}
@@ -118,4 +146,3 @@ const RadioGroup: React.FC<RadioGroupProps> = ({
 RadioGroup.displayName = 'RadioGroup';
 
 export { Radio, RadioGroup };
-

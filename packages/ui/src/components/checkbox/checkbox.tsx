@@ -13,10 +13,14 @@ export interface CheckboxProps
    * Optional error state for the checkbox
    */
   error?: boolean;
+  /**
+   * Optional children for the checkbox label
+   */
+  children?: React.ReactNode;
 }
 
 const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
-  ({ className, label, error, id, ...props }, ref) => {
+  ({ className, label, error, id, children, onChange, checked, ...props }, ref) => {
     const generatedId = React.useId();
     const checkboxId = id || generatedId;
     
@@ -26,21 +30,26 @@ const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
       className
     );
 
+    // Add onChange handler if checked is provided but onChange is not
+    const handleChange = onChange || (checked !== undefined ? () => {} : undefined);
+
     return (
-      <div className="peakhealth-checkbox-container">
+      <div className="peakhealth-checkbox__container">
         <input
           type="checkbox"
           id={checkboxId}
           className={checkboxClasses}
           ref={ref}
+          onChange={handleChange}
+          checked={checked}
           {...props}
         />
-        {label && (
+        {(label || children) && (
           <label
             htmlFor={checkboxId}
             className="peakhealth-checkbox-label"
           >
-            {label}
+            {label || children}
           </label>
         )}
       </div>
@@ -51,4 +60,3 @@ const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
 Checkbox.displayName = 'Checkbox';
 
 export { Checkbox };
-

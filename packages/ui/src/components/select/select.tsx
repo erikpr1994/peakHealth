@@ -9,10 +9,14 @@ export interface SelectProps
    * Optional error state for the select
    */
   error?: boolean;
+  /**
+   * Optional placeholder text
+   */
+  placeholder?: string;
 }
 
 const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
-  ({ className, children, error, ...props }, ref) => {
+  ({ className, children, error, placeholder, ...props }, ref) => {
     const selectClasses = cn(
       'peakhealth-select',
       error && 'peakhealth-select--error',
@@ -21,6 +25,11 @@ const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
 
     return (
       <select className={selectClasses} ref={ref} {...props}>
+        {placeholder && (
+          <option value="" disabled selected hidden>
+            {placeholder}
+          </option>
+        )}
         {children}
       </select>
     );
@@ -47,4 +56,3 @@ const SelectOption = React.forwardRef<HTMLOptionElement, SelectOptionProps>(
 SelectOption.displayName = 'SelectOption';
 
 export { Select, SelectOption };
-

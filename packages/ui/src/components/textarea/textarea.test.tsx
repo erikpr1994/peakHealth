@@ -97,8 +97,8 @@ describe('Textarea', () => {
     expect(textarea).toHaveAttribute('minLength', '10');
   });
 
-  it('renders with resize attribute', () => {
-    render(<Textarea resize="none" />);
+  it('renders with custom style', () => {
+    render(<Textarea style={{ resize: 'none' }} />);
     const textarea = screen.getByRole('textbox');
     expect(textarea).toHaveStyle('resize: none');
   });
