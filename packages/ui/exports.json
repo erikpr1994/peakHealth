@@ -39,6 +39,11 @@
     "import": "./dist/components/checkbox/index.js",
     "require": "./dist/components/checkbox/index.js"
   },
+  "./collapsible": {
+    "types": "./dist/components/collapsible/index.d.ts",
+    "import": "./dist/components/collapsible/index.js",
+    "require": "./dist/components/collapsible/index.js"
+  },
   "./input": {
     "types": "./dist/components/input/index.d.ts",
     "import": "./dist/components/input/index.js",

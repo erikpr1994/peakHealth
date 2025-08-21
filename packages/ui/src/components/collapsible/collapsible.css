@@ -1,0 +1,45 @@
+/* Base collapsible component */
+.collapsible {
+  width: 100%;
+}
+
+/* Trigger element */
+.collapsible__trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  cursor: pointer;
+}
+
+/* Content container */
+.collapsible__content {
+  overflow: hidden;
+}
+
+/* Animation for content */
+.collapsible__content[data-state='open'] {
+  animation: collapsibleSlideDown 300ms ease-out;
+}
+
+.collapsible__content[data-state='closed'] {
+  animation: collapsibleSlideUp 300ms ease-out;
+}
+
+@keyframes collapsibleSlideDown {
+  from {
+    height: 0;
+  }
+  to {
+    height: var(--radix-collapsible-content-height);
+  }
+}
+
+@keyframes collapsibleSlideUp {
+  from {
+    height: var(--radix-collapsible-content-height);
+  }
+  to {
+    height: 0;
+  }
+}
