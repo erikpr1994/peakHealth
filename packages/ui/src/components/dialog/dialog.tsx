@@ -66,25 +66,30 @@ export const Dialog = React.forwardRef<HTMLDialogElement, DialogProps>(
 
     // Reference to store the close animation timer
     const closeTimerRef = React.useRef<NodeJS.Timeout | null>(null);
-    
+
+    // Flag to prevent double invocation of onClose
+    const isClosingRef = React.useRef(false);
+
     // Handle the close animation
     const handleClose = React.useCallback(() => {
-      if (!dialogRef.current) return;
-      
+      if (!dialogRef.current || isClosingRef.current) return;
+
       // Clear any existing timer to prevent multiple calls
       if (closeTimerRef.current) {
         clearTimeout(closeTimerRef.current);
       }
 
+      isClosingRef.current = true;
       setIsClosing(true);
       closeTimerRef.current = setTimeout(() => {
         dialogRef.current?.close();
         setIsClosing(false);
         onClose?.();
         closeTimerRef.current = null;
+        isClosingRef.current = false;
       }, 200); // Match animation duration
     }, [onClose]);
-    
+
     // Handle opening and closing the dialog
     React.useEffect(() => {
       const dialog = dialogRef.current;
@@ -96,13 +101,14 @@ export const Dialog = React.forwardRef<HTMLDialogElement, DialogProps>(
         handleClose();
       }
     }, [open, handleClose]);
-    
+
     // Cleanup timeout when component unmounts
     React.useEffect(() => {
       return () => {
         if (closeTimerRef.current) {
           clearTimeout(closeTimerRef.current);
         }
+        isClosingRef.current = false;
       };
     }, []);
 
@@ -129,7 +135,12 @@ export const Dialog = React.forwardRef<HTMLDialogElement, DialogProps>(
           className
         )}
         onClick={handleBackdropClick}
-        onClose={() => onClose?.()}
+        onClose={() => {
+          // Only call onClose if we're not already in the process of closing
+          if (!isClosingRef.current) {
+            onClose?.();
+          }
+        }}
         {...props}
       >
         {title && (

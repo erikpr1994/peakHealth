@@ -55,7 +55,7 @@ describe('Dialog', () => {
     await waitFor(
       () => {
         expect(HTMLDialogElement.prototype.close).toHaveBeenCalled();
-        expect(onClose).toHaveBeenCalled();
+        expect(onClose).toHaveBeenCalledTimes(1); // Should only be called once
       },
       { timeout: 300 }
     );
@@ -183,6 +183,31 @@ describe('Dialog', () => {
     fireEvent.click(dialog, { clientX: 200, clientY: 200 });
 
     expect(onClose).not.toHaveBeenCalled();
+  });
+
+  it('prevents double invocation of onClose callback', async () => {
+    const onClose = vi.fn();
+    render(
+      <Dialog open title="Test Dialog" onClose={onClose}>
+        <p>Dialog content</p>
+      </Dialog>
+    );
+
+    const closeButton = screen.getByLabelText('Close dialog');
+
+    // Click the close button multiple times rapidly
+    fireEvent.click(closeButton);
+    fireEvent.click(closeButton);
+    fireEvent.click(closeButton);
+
+    // Wait for animation to complete
+    await waitFor(
+      () => {
+        expect(HTMLDialogElement.prototype.close).toHaveBeenCalledTimes(1);
+        expect(onClose).toHaveBeenCalledTimes(1); // Should only be called once despite multiple clicks
+      },
+      { timeout: 300 }
+    );
   });
 });
 
