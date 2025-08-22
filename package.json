@@ -67,7 +67,7 @@
   "packageManager": "pnpm@10.14.0",
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
-      "eslint --fix",
+      "ESLINT_FLAGS=v10_config_lookup_from_file eslint --fix",
       "prettier --write"
     ],
     "*.{json,css,md}": [
