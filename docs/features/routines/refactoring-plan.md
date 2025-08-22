@@ -289,18 +289,32 @@ Breaking down large components into smaller, focused pieces following project ru
 
 ## Phase 4: State Management Extraction (Priority: High)
 
-### 🔄 PR #10: Extract RoutineCreation State
+### ✅ PR #10: Extract RoutineCreation State
 
-**Status:** PENDING
-**Files:** `features/routines/hooks/useRoutineCreationState.ts`
+**Status:** COMPLETED
+**Branch:** `refactor/extract-routine-creation-state`
+**Files:**
+
+- `features/routines/hooks/useRoutineCreationState.ts` (150 lines)
+- `features/routines/hooks/useRoutineCreationState.test.ts` (350 lines)
+
 **Changes:**
 
-- Extract 20+ state variables from RoutineCreation.tsx (672 lines)
-- Create focused state management hook
-- Handle routine metadata, modal states, collapse states
-- Add comprehensive tests
+- Extract 20+ state variables from RoutineCreation.tsx (672 lines) into focused state management hook
+- Create comprehensive state management with routine metadata, running workout states, and collapse states
+- Add utility functions for state reset and loading for editing
+- Add comprehensive co-located tests (25 new tests) covering all state management scenarios
+- Achieve target of < 200 lines ✅ (150 lines achieved)
 
-**Target:** < 200 lines
+**State extracted:**
+
+- **Routine metadata**: `name`, `difficulty`, `goal`, `description`, `objectives`, `duration`
+- **Running workout states**: `creatingRunning`, `editingRunning`
+- **Collapse states**: `collapsedStrengthWorkouts`, `collapsedRunningWorkouts`
+- **Handlers**: `toggleStrengthWorkoutCollapse`, `toggleRunningWorkoutCollapse`, `handleAddRunningWorkout`, `handleRunningCancel`, `handleEditRunning`
+- **State management**: `resetState`, `loadStateForEditing`
+
+**Target:** < 200 lines ✅ (150 lines achieved)
 **Dependencies:** Types extraction
 
 ### 🔄 PR #11: Extract SetManagement State
@@ -463,11 +477,11 @@ Breaking down large components into smaller, focused pieces following project ru
 - [x] PR #6: Extract Data Transformers
 - [x] PR #7: Extract Strength Workout Operations
 - [x] PR #8: Extract Running Workout Operations
+- [x] PR #9: Extract Exercise Operations
+- [x] PR #10: Extract RoutineCreation State
 
 ### Pending
 
-- [ ] PR #9: Extract Exercise Operations
-- [ ] PR #10: Extract RoutineCreation State
 - [ ] PR #11: Extract SetManagement State
 - [ ] PR #12: Extract RoutineCreation Handlers
 - [ ] PR #13: Extract SetManagement Handlers
