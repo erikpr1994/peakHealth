@@ -11,12 +11,12 @@ Decompose hooks using service layer patterns and clear abstractions.
 
 ### Files
 
-- `features/routines/hooks/useStrengthWorkoutOperations.ts` (77 lines)
-- `features/routines/hooks/useStrengthWorkoutState.ts` (123 lines)
-- `features/routines/hooks/useStrengthSectionOperations.ts` (129 lines)
-- `features/routines/hooks/useStrengthExerciseOperations.ts` (259 lines)
-- `features/routines/hooks/useStrengthWorkoutOperations.test.ts` (comprehensive tests)
-- `features/routines/hooks/useStrengthWorkoutState.test.ts` (focused tests)
+- `features/routines/hooks/workout/strength/useStrengthWorkoutOperations.ts` (77 lines)
+- `features/routines/hooks/workout/strength/useStrengthWorkoutState.ts` (123 lines)
+- `features/routines/hooks/workout/strength/useStrengthSectionOperations.ts` (129 lines)
+- `features/routines/hooks/workout/strength/useStrengthExerciseOperations.ts` (259 lines)
+- `features/routines/hooks/workout/strength/useStrengthWorkoutOperations.test.ts` (comprehensive tests)
+- `features/routines/hooks/workout/strength/useStrengthWorkoutState.test.ts` (focused tests)
 
 ### Changes
 
@@ -39,12 +39,12 @@ Decompose hooks using service layer patterns and clear abstractions.
 
 ### Files
 
-- `features/routines/hooks/useRunningWorkoutOperations.ts` (77 lines)
-- `features/routines/hooks/useRunningWorkoutState.ts` (123 lines)
-- `features/routines/hooks/useRunningSectionOperations.ts` (129 lines)
-- `features/routines/hooks/useRunningExerciseOperations.ts` (259 lines)
-- `features/routines/hooks/useRunningWorkoutOperations.test.ts` (comprehensive tests)
-- `features/routines/hooks/useRunningWorkoutState.test.ts` (focused tests)
+- `features/routines/hooks/workout/running/useRunningWorkoutOperations.ts` (77 lines)
+- `features/routines/hooks/workout/running/useRunningWorkoutState.ts` (123 lines)
+- `features/routines/hooks/workout/running/useRunningSectionOperations.ts` (129 lines)
+- `features/routines/hooks/workout/running/useRunningIntervalOperations.ts` (259 lines)
+- `features/routines/hooks/workout/running/useRunningWorkoutOperations.test.ts` (comprehensive tests)
+- `features/routines/hooks/workout/running/useRunningWorkoutState.test.ts` (focused tests)
 
 ### Changes
 
@@ -61,17 +61,48 @@ Decompose hooks using service layer patterns and clear abstractions.
 
 **Target:** < 300 lines per file ✅ (all files under 260 lines)
 
-## 🔄 PR #9: Extract Exercise Operations
+## 🔄 PR #9: Extract Trail Running Workout Operations
+
+**Status:** COMPLETED  
+**Branch:** `refactor/extract-trail-running-workout-operations`
+
+### Files
+
+- `features/routines/hooks/workout/trail-running/useTrailRunningWorkoutOperations.ts` (77 lines)
+- `features/routines/hooks/workout/trail-running/useTrailRunningWorkoutState.ts` (123 lines)
+- `features/routines/hooks/workout/trail-running/useTrailRunningSectionOperations.ts` (129 lines)
+- `features/routines/hooks/workout/trail-running/useTrailRunningIntervalOperations.ts` (259 lines)
+- `features/routines/hooks/workout/trail-running/useTrailRunningWorkoutOperations.test.ts` (comprehensive tests)
+- `features/routines/hooks/workout/trail-running/useTrailRunningWorkoutState.test.ts` (focused tests)
+
+### Changes
+
+- Extract trail running-specific operations from `useWorkoutOperations.ts` into focused hooks
+- Create composition pattern with smaller, focused hooks:
+  - `useTrailRunningWorkoutState`: State management and workout-level operations
+  - `useTrailRunningSectionOperations`: Section-level operations
+  - `useTrailRunningIntervalOperations`: Interval-level operations
+  - `useTrailRunningWorkoutOperations`: Main orchestrator hook
+- Align with database schema where trail running is a separate workout type
+- Implement hooks that match the `trail_running_data` and `trail_running_intervals` tables
+- Add comprehensive co-located tests for all hooks
+- Maintain backward compatibility with existing API
+- Achieve target of < 300 lines per file ✅ (all files under 260 lines)
+
+**Target:** < 300 lines ✅ (77 lines achieved for main hook)
+
+## 🔄 PR #10: Extract Exercise Operations
 
 **Status:** COMPLETED  
 **Branch:** `refactor/extract-exercise-operations`
 
 ### Files
 
-- `features/routines/hooks/useExerciseOperations.ts` (295 lines)
-- `features/routines/hooks/useExerciseOperations.test.ts` (857 lines)
-- `features/routines/hooks/useStrengthExerciseOperations.ts` (updated to use generic hook)
-- `features/routines/hooks/useRunningExerciseOperations.ts` (updated to use generic hook)
+- `features/routines/hooks/workout/shared/useExerciseOperations.ts` (295 lines)
+- `features/routines/hooks/workout/shared/useExerciseOperations.test.ts` (857 lines)
+- `features/routines/hooks/workout/strength/useStrengthExerciseOperations.ts` (updated to use generic hook)
+- `features/routines/hooks/workout/running/useRunningIntervalOperations.ts` (updated to use generic hook)
+- `features/routines/hooks/workout/trail-running/useTrailRunningIntervalOperations.ts` (updated to use generic hook)
 - `features/routines/hooks/useWorkoutOperations.ts` (reduced from 1082 to 635 lines)
 
 ### Changes
@@ -86,15 +117,15 @@ Decompose hooks using service layer patterns and clear abstractions.
 
 **Target:** < 300 lines ✅ (295 lines achieved)
 
-## 🔄 PR #10: Extract RoutineCreation State
+## 🔄 PR #11: Extract RoutineCreation State
 
 **Status:** COMPLETED  
 **Branch:** `refactor/extract-routine-creation-state`
 
 ### Files
 
-- `features/routines/hooks/useRoutineCreationState.ts` (150 lines)
-- `features/routines/hooks/useRoutineCreationState.test.ts` (350 lines)
+- `features/routines/features/routine-creation/hooks/useRoutineCreationState.ts` (150 lines)
+- `features/routines/features/routine-creation/hooks/useRoutineCreationState.test.ts` (350 lines)
 
 ### Changes
 
@@ -106,15 +137,15 @@ Decompose hooks using service layer patterns and clear abstractions.
 
 **Target:** < 200 lines ✅ (150 lines achieved)
 
-## 🔄 PR #11: Extract SetManagement State
+## 🔄 PR #12: Extract SetManagement State
 
 **Status:** COMPLETED  
 **Branch:** `refactor/extract-set-management-state`
 
 ### Files
 
-- `features/routines/hooks/useSetManagementState.ts` (140 lines)
-- `features/routines/hooks/useSetManagementState.test.ts` (450 lines)
+- `features/routines/features/routine-creation/components/workout-forms/strength/SetManagement/hooks/useSetManagementState.ts` (140 lines)
+- `features/routines/features/routine-creation/components/workout-forms/strength/SetManagement/hooks/useSetManagementState.test.ts` (450 lines)
 
 ### Changes
 
@@ -129,7 +160,7 @@ Decompose hooks using service layer patterns and clear abstractions.
 ## 🔄 PR #17 (Enhanced): Simplify useWorkoutOperations
 
 **Status:** PENDING  
-**Files:** `features/routines/hooks/useWorkoutOperations.ts`
+**Files:** `features/routines/hooks/workout/shared/useWorkoutOperations.ts`
 
 ### The Problem
 
@@ -192,7 +223,7 @@ export const useStrengthWorkoutOperations = (workouts, setWorkouts) => {
 ## 🔄 PR #18: Simplify useRoutineOperations
 
 **Status:** PENDING  
-**Files:** `features/routines/hooks/useRoutineOperations.ts`
+**Files:** `features/routines/hooks/workout/shared/useRoutineOperations.ts`
 
 ### Changes
 
@@ -206,7 +237,7 @@ export const useStrengthWorkoutOperations = (workouts, setWorkouts) => {
 ## 🔄 PR #19: Extract RoutineCreation Handlers
 
 **Status:** PENDING  
-**Files:** `features/routines/hooks/useRoutineCreationHandlers.ts`
+**Files:** `features/routines/features/routine-creation/hooks/useRoutineCreationHandlers.ts`
 
 ### Changes
 
@@ -220,7 +251,7 @@ export const useStrengthWorkoutOperations = (workouts, setWorkouts) => {
 ## 🔄 PR #20: Extract SetManagement Handlers
 
 **Status:** PENDING  
-**Files:** `features/routines/hooks/useSetManagementHandlers.ts`
+**Files:** `features/routines/features/routine-creation/components/workout-forms/strength/SetManagement/hooks/useSetManagementHandlers.ts`
 
 ### Changes
 
@@ -297,13 +328,12 @@ export const useStrengthWorkoutOperations = (workouts, setWorkouts) => {
 
 ```
 hooks/
-├── state/
-│   ├── index.ts
-│   ├── useRoutineCreationState.ts
-│   ├── useSetManagementState.ts
-│   ├── useStrengthWorkoutState.ts
-│   └── useRunningWorkoutState.ts
-├── operations/
+├── workout/
+│   ├── shared/
+│   │   ├── index.ts
+│   │   ├── useWorkoutOperations.ts
+│   │   ├── useExerciseOperations.ts
+│   │   └── useRoutineOperations.ts
 │   ├── strength/
 │   │   ├── index.ts
 │   │   ├── useStrengthWorkoutOperations.ts
@@ -313,15 +343,20 @@ hooks/
 │   │   ├── index.ts
 │   │   ├── useRunningWorkoutOperations.ts
 │   │   ├── useRunningSectionOperations.ts
-│   │   └── useRunningExerciseOperations.ts
-│   └── shared/
+│   │   └── useRunningIntervalOperations.ts
+│   └── trail-running/
 │       ├── index.ts
-│       ├── useWorkoutOperations.ts
-│       ├── useExerciseOperations.ts
-│       └── useRoutineOperations.ts
-├── specialized/
-│   ├── index.ts
-│   └── useTrailRunningWorkout.ts
+│       ├── useTrailRunningWorkoutOperations.ts
+│       ├── useTrailRunningSectionOperations.ts
+│       └── useTrailRunningIntervalOperations.ts
+├── features/
+│   ├── routine-creation/
+│   │   ├── index.ts
+│   │   ├── useRoutineCreationState.ts
+│   │   └── useRoutineCreationHandlers.ts
+│   └── routine-detail/
+│       ├── index.ts
+│       └── useRoutineDetailState.ts
 └── index.ts
 ```
 

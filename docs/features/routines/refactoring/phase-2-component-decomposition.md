@@ -7,19 +7,18 @@ Break down large components into smaller, focused pieces with clear separation o
 ## 🔄 PR #13 (Enhanced): Break Down SetManagement.tsx
 
 **Status:** PENDING  
-**Files:** `features/routines/features/workout-management/components/SetManagement.tsx`
+**Files:** `features/routines/features/routine-creation/components/workout-forms/strength/SetManagement.tsx`
 
 ### New Proposed File Structure
 
 ```
-features/workout-management/
-├── components/
-│   └── SetManagement/
-│       ├── SetManagement.tsx       # The orchestrator component
-│       ├── SetActions.tsx          # "Add Approach Sets" button
-│       ├── SetHeader.tsx
-│       ├── SetRow.tsx
-│       └── SetTypeSelector.tsx
+features/routines/features/routine-creation/components/workout-forms/strength/
+├── SetManagement/
+│   ├── SetManagement.tsx       # The orchestrator component
+│   ├── SetActions.tsx          # "Add Approach Sets" button
+│   ├── SetHeader.tsx
+│   ├── SetRow.tsx
+│   └── SetTypeSelector.tsx
 ├── hooks/
 │   ├── useSetManagementState.ts
 │   └── useSetManagementHandlers.ts
