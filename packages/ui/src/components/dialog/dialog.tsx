@@ -76,19 +76,35 @@ export const Dialog = React.forwardRef<HTMLDialogElement, DialogProps>(
       }
     }, [open]);
 
+    // Reference to store the close animation timer
+    const closeTimerRef = React.useRef<ReturnType<typeof setTimeout>>();
+    
     // Handle the close animation
     const handleClose = () => {
       if (!dialogRef.current) return;
+      
+      // Clear any existing timer to prevent multiple calls
+      if (closeTimerRef.current) {
+        clearTimeout(closeTimerRef.current);
+      }
 
       setIsClosing(true);
-      const timer = setTimeout(() => {
+      closeTimerRef.current = setTimeout(() => {
         dialogRef.current?.close();
         setIsClosing(false);
         onClose?.();
+        closeTimerRef.current = undefined;
       }, 200); // Match animation duration
-
-      return () => clearTimeout(timer);
     };
+    
+    // Cleanup timeout when component unmounts
+    React.useEffect(() => {
+      return () => {
+        if (closeTimerRef.current) {
+          clearTimeout(closeTimerRef.current);
+        }
+      };
+    }, []);
 
     // Handle clicking outside the dialog
     const handleBackdropClick = (e: React.MouseEvent<HTMLDialogElement>) => {
