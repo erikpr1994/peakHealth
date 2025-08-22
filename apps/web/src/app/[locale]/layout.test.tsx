@@ -57,7 +57,7 @@ describe('LocaleLayout', () => {
     const { container } = render(
       await LocaleLayout({
         children: <div>Test content</div>,
-        params: { locale: 'en' },
+        params: Promise.resolve({ locale: 'en' }),
       })
     );
 
@@ -70,7 +70,7 @@ describe('LocaleLayout', () => {
     const { container } = render(
       await LocaleLayout({
         children: <div>Spanish content</div>,
-        params: { locale: 'es' },
+        params: Promise.resolve({ locale: 'es' }),
       })
     );
 
@@ -82,7 +82,7 @@ describe('LocaleLayout', () => {
   it('should call notFound for invalid locale', async (): Promise<void> => {
     await LocaleLayout({
       children: <div>Invalid content</div>,
-      params: { locale: 'fr' },
+      params: Promise.resolve({ locale: 'fr' }),
     });
 
     expect(notFound).toHaveBeenCalled();
@@ -92,7 +92,7 @@ describe('LocaleLayout', () => {
     const { container } = render(
       await LocaleLayout({
         children: <div>Test content</div>,
-        params: { locale: 'en' },
+        params: Promise.resolve({ locale: 'en' }),
       })
     );
 
@@ -104,20 +104,20 @@ describe('LocaleLayout', () => {
     // Test with valid locales
     await LocaleLayout({
       children: <div>Test</div>,
-      params: { locale: 'en' },
+      params: Promise.resolve({ locale: 'en' }),
     });
     expect(notFound).not.toHaveBeenCalled();
 
     await LocaleLayout({
       children: <div>Test</div>,
-      params: { locale: 'es' },
+      params: Promise.resolve({ locale: 'es' }),
     });
     expect(notFound).not.toHaveBeenCalled();
 
     // Test with invalid locale
     await LocaleLayout({
       children: <div>Test</div>,
-      params: { locale: 'invalid' },
+      params: Promise.resolve({ locale: 'invalid' }),
     });
     expect(notFound).toHaveBeenCalled();
   });
