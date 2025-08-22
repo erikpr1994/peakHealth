@@ -81,7 +81,8 @@ features/routines/
 ├── components/         # SHARED components across features
 │   ├── workout/        # Shared workout components
 │   │   ├── strength/   # Shared strength workout components
-│   │   └── running/    # Shared running workout components
+│   │   ├── running/    # Shared running workout components
+│   │   └── trail-running/ # Shared trail running workout components
 │   └── ...
 ├── domain/             # Pure business logic
 ├── features/           # Sub-features
@@ -89,10 +90,8 @@ features/routines/
 │   │   ├── components/
 │   │   │   ├── workout-forms/   # Forms for different workout types
 │   │   │   │   ├── strength/    # Strength workout specific components
-│   │   │   │   └── running/     # Running workout specific components
-│   │   │   │       ├── common/  # Shared running components
-│   │   │   │       ├── trail/   # Trail running specific components
-│   │   │   │       └── road/    # Road running specific components
+│   │   │   │   ├── running/     # Running workout specific components
+│   │   │   │   └── trail-running/ # Trail running specific components
 │   │   │   └── ...
 │   │   ├── hooks/
 │   │   └── ...
@@ -100,14 +99,16 @@ features/routines/
 │   │   ├── components/
 │   │   │   ├── workout-views/   # Views for different workout types
 │   │   │   │   ├── strength/    # Strength workout display
-│   │   │   │   └── running/     # Running workout display
+│   │   │   │   ├── running/     # Running workout display
+│   │   │   │   └── trail-running/ # Trail running display
 │   │   │   └── ...
 │   │   └── ...
 │   └── routine-list/            # Listing and managing routines
 ├── hooks/              # SHARED hooks across features
 │   ├── workout/        # Shared workout hooks
 │   │   ├── strength/   # Shared strength workout hooks
-│   │   └── running/    # Shared running workout hooks
+│   │   ├── running/    # Shared running workout hooks
+│   │   └── trail-running/ # Shared trail running workout hooks
 │   └── ...
 ├── patterns/           # Reusable design patterns
 ├── services/           # Application-level services
@@ -170,6 +171,11 @@ function WorkoutForm({ workout, onChange }) {
           value={workout.name} 
           onChange={(e) => onChange({ ...workout, name: e.target.value })} 
         />
+        <TextField 
+          label="Objective" 
+          value={workout.objective} 
+          onChange={(e) => onChange({ ...workout, objective: e.target.value })} 
+        />
         {/* Other common fields */}
       </div>
       
@@ -188,44 +194,82 @@ function WorkoutForm({ workout, onChange }) {
             onChange={onChange} 
           />
         )}
-      </div>
-    </div>
-  );
-}
-
-// Running-specific component with further composition
-function RunningWorkoutFields({ workout, onChange }) {
-  // Common running fields
-  
-  return (
-    <div className={styles.runningFields}>
-      {/* Common running fields */}
-      <div className={styles.commonRunningFields}>
-        <TextField 
-          label="Distance (km)" 
-          type="number"
-          value={workout.distance} 
-          onChange={(e) => onChange({ ...workout, distance: Number(e.target.value) })} 
-        />
-        {/* Other common running fields */}
-      </div>
-      
-      {/* Running type-specific fields */}
-      <div className={styles.runningTypeFields}>
+        
         {isTrailRunningWorkout(workout) && (
-          <TrailRunningFields 
+          <TrailRunningWorkoutFields 
             workout={workout} 
             onChange={onChange} 
           />
         )}
         
-        {isRoadRunningWorkout(workout) && (
-          <RoadRunningFields 
+        {isSwimmingWorkout(workout) && (
+          <SwimmingWorkoutFields 
+            workout={workout} 
+            onChange={onChange} 
+          />
+        )}
+        
+        {isCyclingWorkout(workout) && (
+          <CyclingWorkoutFields 
             workout={workout} 
             onChange={onChange} 
           />
         )}
       </div>
+    </div>
+  );
+}
+
+// Trail running specific component
+function TrailRunningWorkoutFields({ workout, onChange }) {
+  // Trail running specific fields
+  
+  return (
+    <div className={styles.trailRunningFields}>
+      <SelectField 
+        label="Difficulty" 
+        value={workout.difficulty} 
+        options={[
+          { value: 'beginner', label: 'Beginner' },
+          { value: 'intermediate', label: 'Intermediate' },
+          { value: 'advanced', label: 'Advanced' },
+          { value: 'expert', label: 'Expert' }
+        ]}
+        onChange={(e) => onChange({ ...workout, difficulty: e.target.value })} 
+      />
+      
+      <TextField 
+        label="Target Distance (km)" 
+        type="number"
+        value={workout.targetDistance} 
+        onChange={(e) => onChange({ ...workout, targetDistance: Number(e.target.value) })} 
+      />
+      
+      <TextField 
+        label="Elevation Gain (m)" 
+        type="number"
+        value={workout.elevationGain} 
+        onChange={(e) => onChange({ ...workout, elevationGain: Number(e.target.value) })} 
+      />
+      
+      <SelectField 
+        label="Intensity Target Type" 
+        value={workout.intensityTargetType} 
+        options={[
+          { value: 'Heart Rate', label: 'Heart Rate' },
+          { value: 'Speed', label: 'Speed' },
+          { value: 'Power', label: 'Power' },
+          { value: 'Cadence', label: 'Cadence' },
+          { value: 'RPE', label: 'RPE' }
+        ]}
+        onChange={(e) => onChange({ ...workout, intensityTargetType: e.target.value })} 
+      />
+      
+      {/* Trail running intervals management */}
+      <TrailRunningIntervalsList 
+        intervals={workout.intervals || []} 
+        onChange={(intervals) => onChange({ ...workout, intervals })} 
+      />
     </div>
   );
 }
@@ -247,49 +291,77 @@ function RunningWorkoutFields({ workout, onChange }) {
 
 ### 5. Workout Type System
 
-The workout type system should follow this pattern:
+The workout type system should align with the database schema's workout_type enum:
 
 ```typescript
+// Workout type enum (matches database)
+type WorkoutType = 'strength' | 'running' | 'trail-running' | 'swimming' | 'cycling';
+
 // Base workout interface
 interface Workout {
   id: string;
   name: string;
-  type: 'strength' | 'running';
+  type: WorkoutType;
   // Common properties
+  objective?: string;
+  schedule?: any;
+  orderIndex: number;
 }
 
 // Strength workout
 interface StrengthWorkout extends Workout {
   type: 'strength';
   // Strength-specific properties
-  exercises: Exercise[];
-  // ...
+  sections: WorkoutSection[];
 }
 
-// Base running workout
+// Running workout
 interface RunningWorkout extends Workout {
   type: 'running';
-  runningType: 'trail' | 'road';
-  // Common running properties
+  // Running-specific properties
   distance?: number;
   duration?: number;
   // ...
 }
 
-// Trail running specifics
-interface TrailRunningWorkout extends RunningWorkout {
-  runningType: 'trail';
-  // Trail-specific properties
-  elevation: number;
-  terrain: TerrainType;
+// Trail running workout (separate type, not a subtype of running)
+interface TrailRunningWorkout extends Workout {
+  type: 'trail-running';
+  // Trail running specific properties from trail_running_data
+  difficulty: 'beginner' | 'intermediate' | 'advanced' | 'expert';
+  estimatedDuration?: number;
+  targetDistance?: number;
+  elevationGain?: number;
+  intensityTargetType?: 'Heart Rate' | 'Speed' | 'Power' | 'Cadence' | 'RPE';
+  intensityTargetValue?: string;
+  // Trail running has its own intervals
+  intervals?: TrailRunningInterval[];
+}
+
+// Trail running interval
+interface TrailRunningInterval {
+  id: string;
+  sectionId: string;
+  intervalType: 'Run' | 'Uphill' | 'Downhill' | 'Sprint' | 'Recovery' | 'Rest' | 'Walk';
+  durationMinutes?: number;
+  distanceKm?: number;
+  elevationGain?: number;
+  intensityTarget?: string;
+  repeatCount: number;
+  orderIndex: number;
+}
+
+// Swimming workout
+interface SwimmingWorkout extends Workout {
+  type: 'swimming';
+  // Swimming-specific properties
   // ...
 }
 
-// Road running specifics
-interface RoadRunningWorkout extends RunningWorkout {
-  runningType: 'road';
-  // Road-specific properties
-  surface: SurfaceType;
+// Cycling workout
+interface CyclingWorkout extends Workout {
+  type: 'cycling';
+  // Cycling-specific properties
   // ...
 }
 
@@ -303,11 +375,15 @@ function isRunningWorkout(workout: Workout): workout is RunningWorkout {
 }
 
 function isTrailRunningWorkout(workout: Workout): workout is TrailRunningWorkout {
-  return workout.type === 'running' && (workout as RunningWorkout).runningType === 'trail';
+  return workout.type === 'trail-running';
 }
 
-function isRoadRunningWorkout(workout: Workout): workout is RoadRunningWorkout {
-  return workout.type === 'running' && (workout as RunningWorkout).runningType === 'road';
+function isSwimmingWorkout(workout: Workout): workout is SwimmingWorkout {
+  return workout.type === 'swimming';
+}
+
+function isCyclingWorkout(workout: Workout): workout is CyclingWorkout {
+  return workout.type === 'cycling';
 }
 ```
 
