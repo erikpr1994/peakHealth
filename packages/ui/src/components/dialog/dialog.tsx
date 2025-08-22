@@ -64,23 +64,11 @@ export const Dialog = React.forwardRef<HTMLDialogElement, DialogProps>(
     // Merge refs
     const mergedRef = useMergedRef(ref, dialogRef);
 
-    // Handle opening and closing the dialog
-    React.useEffect(() => {
-      const dialog = dialogRef.current;
-      if (!dialog) return;
-
-      if (open && !dialog.open) {
-        dialog.showModal();
-      } else if (!open && dialog.open) {
-        handleClose();
-      }
-    }, [open]);
-
     // Reference to store the close animation timer
-    const closeTimerRef = React.useRef<ReturnType<typeof setTimeout>>();
+    const closeTimerRef = React.useRef<NodeJS.Timeout | null>(null);
     
     // Handle the close animation
-    const handleClose = () => {
+    const handleClose = React.useCallback(() => {
       if (!dialogRef.current) return;
       
       // Clear any existing timer to prevent multiple calls
@@ -93,9 +81,21 @@ export const Dialog = React.forwardRef<HTMLDialogElement, DialogProps>(
         dialogRef.current?.close();
         setIsClosing(false);
         onClose?.();
-        closeTimerRef.current = undefined;
+        closeTimerRef.current = null;
       }, 200); // Match animation duration
-    };
+    }, [onClose]);
+    
+    // Handle opening and closing the dialog
+    React.useEffect(() => {
+      const dialog = dialogRef.current;
+      if (!dialog) return;
+
+      if (open && !dialog.open) {
+        dialog.showModal();
+      } else if (!open && dialog.open) {
+        handleClose();
+      }
+    }, [open, handleClose]);
     
     // Cleanup timeout when component unmounts
     React.useEffect(() => {
