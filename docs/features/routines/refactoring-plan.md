@@ -99,18 +99,24 @@ Breaking down large components into smaller, focused pieces following project ru
 **Target:** < 100 lines ✅ (80 lines achieved)
 **Dependencies:** None
 
-### 🔄 PR #4: Extract Trail Running Types
+### ✅ PR #4: Extract Trail Running Types
 
-**Status:** PENDING
-**Files:** `features/routines/types/trailRunning.ts`
+**Status:** COMPLETED
+**Branch:** `refactor/extract-trail-running-types`
+**Files:**
+
+- `features/routines/types/trailRunning.ts` (68 lines)
+- `features/routines/types/trailRunning.test.ts` (297 lines)
+- `features/routines/types/index.ts` (updated - added trail running types re-exports)
+
 **Changes:**
 
 - Extract trail running types from `types/index.ts`
-- Create focused type definitions for all trail running specific types
-- Add co-located tests
-- Update main types index
+- Create focused type definitions for `IntervalType`, `TrailRunningInterval`, `TrailRunningWorkoutData`, `IntensityTarget`, `TrailRunningSection`
+- Add comprehensive co-located tests
+- Update main types index to re-export trail running types
 
-**Target:** < 100 lines
+**Target:** < 100 lines ✅ (68 lines achieved)
 **Dependencies:** None
 
 ---
@@ -214,18 +220,39 @@ Breaking down large components into smaller, focused pieces following project ru
 **Target:** < 300 lines ✅ (77 lines achieved for main hook)
 **Dependencies:** Types and utilities extraction
 
-### 🔄 PR #8: Extract Running Workout Operations
+### ✅ PR #8: Extract Running Workout Operations
 
-**Status:** PENDING
-**Files:** `features/routines/hooks/useRunningWorkoutOperations.ts`
+**Status:** COMPLETED
+**Branch:** `refactor/extract-running-workout-operations`
+**Files:**
+
+- `features/routines/hooks/useRunningWorkoutOperations.ts` (77 lines)
+- `features/routines/hooks/useRunningWorkoutState.ts` (123 lines)
+- `features/routines/hooks/useRunningSectionOperations.ts` (129 lines)
+- `features/routines/hooks/useRunningExerciseOperations.ts` (259 lines)
+- `features/routines/hooks/useRunningWorkoutOperations.test.ts` (comprehensive tests)
+- `features/routines/hooks/useRunningWorkoutState.test.ts` (focused tests)
+
 **Changes:**
 
-- Extract running-specific operations from `useWorkoutOperations.ts`
-- Create focused running workout operations hook
-- Add co-located tests
-- Update imports
+- Extract running-specific operations from `useWorkoutOperations.ts` (1082 lines) into focused hooks
+- Create composition pattern with smaller, focused hooks:
+  - `useRunningWorkoutState`: State management and workout-level operations
+  - `useRunningSectionOperations`: Section-level operations
+  - `useRunningExerciseOperations`: Exercise-level operations
+  - `useRunningWorkoutOperations`: Main orchestrator hook
+- Add comprehensive co-located tests for all hooks
+- Maintain backward compatibility with existing API
+- Follow the same pattern as strength workout operations extraction
+- Fix existing strength workout tests to use proper integration testing pattern
 
-**Target:** < 300 lines
+**Functions extracted:**
+
+- **Workout operations**: `addRunningWorkout`, `removeRunningWorkout`, `moveRunningWorkout`, `updateRunningWorkoutName`, `updateRunningWorkoutObjective`, `updateRunningWorkoutSchedule`
+- **Section operations**: `addRunningSection`, `removeRunningSection`, `updateRunningSectionName`, `updateRunningSectionType`, `updateRunningSectionRestAfter`, `updateRunningSectionEmomDuration`
+- **Exercise operations**: `addRunningExercise`, `removeRunningExercise`, `updateRunningExerciseName`, `updateRunningExerciseSets`, `updateRunningRestTimer`, `updateRunningExerciseRestAfter`, `updateRunningExerciseEmomReps`
+
+**Target:** < 300 lines per file ✅ (all files under 260 lines)
 **Dependencies:** Types and utilities extraction
 
 ### 🔄 PR #9: Extract Exercise Operations
@@ -415,17 +442,14 @@ Breaking down large components into smaller, focused pieces following project ru
 - [x] PR #1: Extract Routine Types
 - [x] PR #2: Extract Workout Types
 - [x] PR #3: Extract Exercise Types
+- [x] PR #4: Extract Trail Running Types
 - [x] PR #5: Extract Workout Calculations
 - [x] PR #6: Extract Data Transformers
 - [x] PR #7: Extract Strength Workout Operations
-
-### In Progress
-
-- [ ] PR #4: Extract Trail Running Types
+- [x] PR #8: Extract Running Workout Operations
 
 ### Pending
 
-- [ ] PR #8: Extract Running Workout Operations
 - [ ] PR #9: Extract Exercise Operations
 - [ ] PR #10: Extract RoutineCreation State
 - [ ] PR #11: Extract SetManagement State
@@ -480,197 +504,3 @@ This plan focuses on **practical extraction** rather than theoretical perfection
 5. **Follow project conventions** strictly
 
 The key insight is that we need to extract **types**, **utilities**, **state management**, and **event handlers** first, then use those extracted pieces to simplify the large components and hooks.
-**Dependencies:** Types and utilities
-
-### 🔄 PR #6: Extract Event Handlers
-
-**Status:** PENDING
-**Files:**
-
-- `features/routines/hooks/useRoutineHandlers.ts`
-- `features/routines/hooks/useWorkoutHandlers.ts`
-
-**Changes:**
-
-- Extract event handler logic from large components
-- Create focused handler hooks
-- Add co-located tests
-- Update imports
-
-**Target:** < 200 lines each
-**Dependencies:** State hooks
-
----
-
-## Phase 3: Component Extraction
-
-### 🔄 PR #7: Extract Small UI Components
-
-**Status:** PENDING
-**Files:**
-
-- `features/routines/components/SetRow.tsx`
-- `features/routines/components/ExerciseRow.tsx`
-- `features/routines/components/WorkoutCard.tsx`
-
-**Changes:**
-
-- Extract small, reusable UI components
-- Create focused components with CSS Modules
-- Add co-located tests
-- Update imports
-
-**Target:** < 150 lines each
-**Dependencies:** Hooks refactoring
-
-### 🔄 PR #8: Extract Form Components
-
-**Status:** PENDING
-**Files:**
-
-- `features/routines/components/RoutineForm.tsx`
-- `features/routines/components/WorkoutForm.tsx`
-- `features/routines/components/ExerciseForm.tsx`
-
-**Changes:**
-
-- Extract form logic from large components
-- Create focused form components
-- Add co-located tests
-- Update imports
-
-**Target:** < 200 lines each
-**Dependencies:** Small UI components
-
----
-
-## Phase 4: Large Component Refactoring
-
-### 🔄 PR #9: Refactor RoutineCreation.tsx
-
-**Status:** PENDING
-**Files:** `features/routines/features/routine-creation/RoutineCreation.tsx`
-**Changes:**
-
-- Break down 672-line component into smaller pieces
-- Use extracted hooks and components
-- Maintain functionality while reducing complexity
-- Add comprehensive tests
-
-**Target:** < 300 lines
-**Dependencies:** All previous PRs
-
-### 🔄 PR #10: Refactor SetManagement.tsx
-
-**Status:** PENDING
-**Files:** `features/routines/components/SetManagement.tsx`
-**Changes:**
-
-- Break down 571-line component into smaller pieces
-- Use extracted hooks and components
-- Maintain functionality while reducing complexity
-- Add comprehensive tests
-
-**Target:** < 300 lines
-**Dependencies:** All previous PRs
-
-### 🔄 PR #11: Refactor useWorkoutOperations.ts
-
-**Status:** PENDING
-**Files:** `features/routines/hooks/useWorkoutOperations.ts`
-**Changes:**
-
-- Break down 1082-line hook into smaller pieces
-- Use extracted utilities and types
-- Maintain functionality while reducing complexity
-- Add comprehensive tests
-
-**Target:** < 300 lines
-**Dependencies:** All previous PRs
-
----
-
-## Phase 5: Final Cleanup
-
-### 🔄 PR #12: Update Imports and Exports
-
-**Status:** PENDING
-**Files:** All routine feature files
-**Changes:**
-
-- Update all imports to use new file structure
-- Ensure proper named exports
-- Clean up unused imports
-- Verify all tests pass
-
-**Dependencies:** All previous PRs
-
-### 🔄 PR #13: Documentation Update
-
-**Status:** PENDING
-**Files:** `docs/features/routines/README.md`
-**Changes:**
-
-- Update documentation to reflect new structure
-- Document new component organization
-- Add usage examples
-- Update architecture diagrams
-
-**Dependencies:** All previous PRs
-
----
-
-## Progress Tracking
-
-### Completed
-
-- [x] PR #1: Extract Routine Types
-- [x] PR #2: Extract Workout Types
-
-### In Progress
-
-- [ ] PR #3: Extract Exercise Types
-- [ ] PR #4: Extract Utility Functions
-
-### Pending
-
-- [ ] PR #5: Extract Small Hooks
-- [ ] PR #6: Extract Event Handlers
-- [ ] PR #7: Extract Small UI Components
-- [ ] PR #8: Extract Form Components
-- [ ] PR #9: Refactor RoutineCreation.tsx
-- [ ] PR #10: Refactor SetManagement.tsx
-- [ ] PR #11: Refactor useWorkoutOperations.ts
-- [ ] PR #12: Update Imports and Exports
-- [ ] PR #13: Documentation Update
-
----
-
-## Success Metrics
-
-### File Size Targets
-
-- All files under 300 lines ✅
-- Most files under 200 lines
-- Utility files under 150 lines
-- Type files under 100 lines
-
-### Test Coverage
-
-- All new files have co-located tests
-- Maintain existing test coverage
-- No test regressions
-
-### Code Quality
-
-- Follow project naming conventions
-- Use named exports
-- Proper TypeScript typing
-- CSS Modules only
-- No linting errors
-
-### Performance
-
-- No performance regressions
-- Maintain existing functionality
-- Clean import/export structure
