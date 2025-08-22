@@ -8,11 +8,13 @@ import './(app)/globals.css';
 
 export default async function LocaleLayout({
   children,
-  params: { locale },
+  params,
 }: {
   children: React.ReactNode;
-  params: { locale: string };
+  params: Promise<{ locale: string }>;
 }): Promise<React.JSX.Element> {
+  const { locale } = await params;
+
   // Validate that the incoming `locale` parameter is valid
   if (!routing.locales.includes(locale as 'en' | 'es')) notFound();
 
