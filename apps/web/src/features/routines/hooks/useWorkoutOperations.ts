@@ -618,29 +618,7 @@ export const useWorkoutOperations = ({
     updateRunningSectionEmomDuration,
 
     // Exercise Operations
-    addStrengthExercise: strengthExerciseOperations.addStrengthExercise,
-    addRunningExercise: runningExerciseOperations.addRunningExercise,
-    removeStrengthExercise: strengthExerciseOperations.removeStrengthExercise,
-    removeRunningExercise: runningExerciseOperations.removeRunningExercise,
-    updateStrengthExerciseName:
-      strengthExerciseOperations.updateStrengthExerciseName,
-    updateRunningExerciseName:
-      runningExerciseOperations.updateRunningExerciseName,
-    updateStrengthExerciseSets:
-      strengthExerciseOperations.updateStrengthExerciseSets,
-    updateRunningExerciseSets:
-      runningExerciseOperations.updateRunningExerciseSets,
-    updateStrengthRestTimer: strengthExerciseOperations.updateStrengthRestTimer,
-    updateRunningRestTimer: runningExerciseOperations.updateRunningRestTimer,
-    updateStrengthExerciseRestAfter:
-      strengthExerciseOperations.updateStrengthExerciseRestAfter,
-    updateRunningExerciseRestAfter:
-      runningExerciseOperations.updateRunningExerciseRestAfter,
-    updateStrengthExerciseEmomReps:
-      strengthExerciseOperations.updateStrengthExerciseEmomReps,
-    updateRunningExerciseEmomReps:
-      runningExerciseOperations.updateRunningExerciseEmomReps,
-    updateStrengthExerciseProgressionMethod:
-      strengthExerciseOperations.updateStrengthExerciseProgressionMethod,
+    ...strengthExerciseOperations,
+    ...runningExerciseOperations,
   };
 };
