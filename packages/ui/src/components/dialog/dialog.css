@@ -1,0 +1,150 @@
+/* Dialog component styles using BEM methodology */
+
+.dialog {
+  padding: 0;
+  border: none;
+  border-radius: 0.5rem;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  max-width: 90vw;
+  max-height: 90vh;
+  width: 32rem;
+  overflow: hidden;
+  background-color: #fff;
+  position: fixed;
+  margin: auto;
+}
+
+.dialog::backdrop {
+  background-color: rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(4px);
+}
+
+/* Animation for opening dialog */
+@keyframes dialog-fade-in {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Animation for closing dialog */
+@keyframes dialog-fade-out {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+}
+
+.dialog[open] {
+  animation: dialog-fade-in 0.2s ease-out;
+}
+
+.dialog--closing {
+  animation: dialog-fade-out 0.2s ease-out;
+  pointer-events: none;
+}
+
+/* Fullscreen variant */
+.dialog--fullscreen {
+  width: 100vw;
+  height: 100vh;
+  max-width: 100vw;
+  max-height: 100vh;
+  border-radius: 0;
+  margin: 0;
+}
+
+/* Header section */
+.dialog__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.dialog__title {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #111827;
+}
+
+/* Close button */
+.dialog__close {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #6b7280;
+  border-radius: 0.25rem;
+  transition:
+    background-color 0.2s,
+    color 0.2s;
+}
+
+.dialog__close:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+  color: #111827;
+}
+
+.dialog__close:focus-visible {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+/* Content section */
+.dialog__content {
+  padding: 1.5rem;
+  overflow-y: auto;
+  max-height: calc(90vh - 4rem);
+}
+
+.dialog--fullscreen .dialog__content {
+  max-height: calc(100vh - 4rem);
+}
+
+/* Footer section */
+.dialog__footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  padding: 1rem 1.5rem;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  background-color: #f9fafb;
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+  .dialog {
+    width: 100vw;
+    max-width: 100vw;
+    max-height: 100vh;
+    border-radius: 0;
+    margin: 0;
+  }
+
+  .dialog__header {
+    padding: 0.75rem 1rem;
+  }
+
+  .dialog__content {
+    padding: 1rem;
+  }
+
+  .dialog__footer {
+    padding: 0.75rem 1rem;
+  }
+}
