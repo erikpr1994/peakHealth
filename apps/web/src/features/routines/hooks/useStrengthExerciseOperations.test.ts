@@ -1,6 +1,7 @@
 import { renderHook, act } from '@testing-library/react';
 import { describe, test, expect } from 'vitest';
-import { useStrengthWorkoutOperations } from './useStrengthWorkoutOperations';
+import { useState } from 'react';
+import { useStrengthExerciseOperations } from './useStrengthExerciseOperations';
 import type { StrengthWorkout, Exercise, WorkoutSet } from '../types';
 
 describe('useStrengthExerciseOperations', () => {
@@ -29,9 +30,12 @@ describe('useStrengthExerciseOperations', () => {
       },
     ];
 
-    const { result } = renderHook(() =>
-      useStrengthWorkoutOperations({ initialStrengthWorkouts: initialWorkouts })
-    );
+    const { result } = renderHook(() => {
+      const [workouts, setWorkouts] =
+        useState<StrengthWorkout[]>(initialWorkouts);
+      const operations = useStrengthExerciseOperations(setWorkouts);
+      return { workouts, operations };
+    });
 
     const exerciseData = {
       name: 'Bench Press',
@@ -41,19 +45,15 @@ describe('useStrengthExerciseOperations', () => {
     };
 
     act(() => {
-      result.current.addStrengthExercise(
+      result.current.operations.addStrengthExercise(
         'workout-1',
         'section-1',
         exerciseData
       );
     });
 
-    expect(
-      result.current.strengthWorkouts[0].sections[0].exercises
-    ).toHaveLength(1);
-    expect(
-      result.current.strengthWorkouts[0].sections[0].exercises[0]
-    ).toMatchObject({
+    expect(result.current.workouts[0].sections[0].exercises).toHaveLength(1);
+    expect(result.current.workouts[0].sections[0].exercises[0]).toMatchObject({
       name: 'Bench Press',
       category: 'strength',
       muscleGroups: ['chest', 'triceps'],
@@ -64,9 +64,9 @@ describe('useStrengthExerciseOperations', () => {
       notes: '',
       hasApproachSets: false,
     });
-    expect(
-      result.current.strengthWorkouts[0].sections[0].exercises[0].id
-    ).toMatch(/^exercise-\d+$/);
+    expect(result.current.workouts[0].sections[0].exercises[0].id).toMatch(
+      /^exercise-\d+$/
+    );
   });
 
   test('should remove a strength exercise', () => {
@@ -106,21 +106,22 @@ describe('useStrengthExerciseOperations', () => {
       },
     ];
 
-    const { result } = renderHook(() =>
-      useStrengthWorkoutOperations({ initialStrengthWorkouts: initialWorkouts })
-    );
+    const { result } = renderHook(() => {
+      const [workouts, setWorkouts] =
+        useState<StrengthWorkout[]>(initialWorkouts);
+      const operations = useStrengthExerciseOperations(setWorkouts);
+      return { workouts, operations };
+    });
 
     act(() => {
-      result.current.removeStrengthExercise(
+      result.current.operations.removeStrengthExercise(
         'workout-1',
         'section-1',
         'exercise-1'
       );
     });
 
-    expect(
-      result.current.strengthWorkouts[0].sections[0].exercises
-    ).toHaveLength(0);
+    expect(result.current.workouts[0].sections[0].exercises).toHaveLength(0);
   });
 
   test('should update strength exercise name', () => {
@@ -160,12 +161,15 @@ describe('useStrengthExerciseOperations', () => {
       },
     ];
 
-    const { result } = renderHook(() =>
-      useStrengthWorkoutOperations({ initialStrengthWorkouts: initialWorkouts })
-    );
+    const { result } = renderHook(() => {
+      const [workouts, setWorkouts] =
+        useState<StrengthWorkout[]>(initialWorkouts);
+      const operations = useStrengthExerciseOperations(setWorkouts);
+      return { workouts, operations };
+    });
 
     act(() => {
-      result.current.updateStrengthExerciseName(
+      result.current.operations.updateStrengthExerciseName(
         'workout-1',
         'section-1',
         'exercise-1',
@@ -173,9 +177,9 @@ describe('useStrengthExerciseOperations', () => {
       );
     });
 
-    expect(
-      result.current.strengthWorkouts[0].sections[0].exercises[0].name
-    ).toBe('New Name');
+    expect(result.current.workouts[0].sections[0].exercises[0].name).toBe(
+      'New Name'
+    );
   });
 
   test('should update strength exercise sets', () => {
@@ -215,9 +219,12 @@ describe('useStrengthExerciseOperations', () => {
       },
     ];
 
-    const { result } = renderHook(() =>
-      useStrengthWorkoutOperations({ initialStrengthWorkouts: initialWorkouts })
-    );
+    const { result } = renderHook(() => {
+      const [workouts, setWorkouts] =
+        useState<StrengthWorkout[]>(initialWorkouts);
+      const operations = useStrengthExerciseOperations(setWorkouts);
+      return { workouts, operations };
+    });
 
     const newSets: WorkoutSet[] = [
       {
@@ -233,7 +240,7 @@ describe('useStrengthExerciseOperations', () => {
     ];
 
     act(() => {
-      result.current.updateStrengthExerciseSets(
+      result.current.operations.updateStrengthExerciseSets(
         'workout-1',
         'section-1',
         'exercise-1',
@@ -241,9 +248,9 @@ describe('useStrengthExerciseOperations', () => {
       );
     });
 
-    expect(
-      result.current.strengthWorkouts[0].sections[0].exercises[0].sets
-    ).toEqual(newSets);
+    expect(result.current.workouts[0].sections[0].exercises[0].sets).toEqual(
+      newSets
+    );
   });
 
   test('should update strength exercise rest timer', () => {
@@ -283,12 +290,15 @@ describe('useStrengthExerciseOperations', () => {
       },
     ];
 
-    const { result } = renderHook(() =>
-      useStrengthWorkoutOperations({ initialStrengthWorkouts: initialWorkouts })
-    );
+    const { result } = renderHook(() => {
+      const [workouts, setWorkouts] =
+        useState<StrengthWorkout[]>(initialWorkouts);
+      const operations = useStrengthExerciseOperations(setWorkouts);
+      return { workouts, operations };
+    });
 
     act(() => {
-      result.current.updateStrengthRestTimer(
+      result.current.operations.updateStrengthRestTimer(
         'workout-1',
         'section-1',
         'exercise-1',
@@ -296,9 +306,9 @@ describe('useStrengthExerciseOperations', () => {
       );
     });
 
-    expect(
-      result.current.strengthWorkouts[0].sections[0].exercises[0].restTimer
-    ).toBe('2 min');
+    expect(result.current.workouts[0].sections[0].exercises[0].restTimer).toBe(
+      '2 min'
+    );
   });
 
   test('should update strength exercise rest after', () => {
@@ -338,12 +348,15 @@ describe('useStrengthExerciseOperations', () => {
       },
     ];
 
-    const { result } = renderHook(() =>
-      useStrengthWorkoutOperations({ initialStrengthWorkouts: initialWorkouts })
-    );
+    const { result } = renderHook(() => {
+      const [workouts, setWorkouts] =
+        useState<StrengthWorkout[]>(initialWorkouts);
+      const operations = useStrengthExerciseOperations(setWorkouts);
+      return { workouts, operations };
+    });
 
     act(() => {
-      result.current.updateStrengthExerciseRestAfter(
+      result.current.operations.updateStrengthExerciseRestAfter(
         'workout-1',
         'section-1',
         'exercise-1',
@@ -351,9 +364,9 @@ describe('useStrengthExerciseOperations', () => {
       );
     });
 
-    expect(
-      result.current.strengthWorkouts[0].sections[0].exercises[0].restAfter
-    ).toBe('3 min');
+    expect(result.current.workouts[0].sections[0].exercises[0].restAfter).toBe(
+      '3 min'
+    );
   });
 
   test('should update strength exercise emom reps', () => {
@@ -393,12 +406,15 @@ describe('useStrengthExerciseOperations', () => {
       },
     ];
 
-    const { result } = renderHook(() =>
-      useStrengthWorkoutOperations({ initialStrengthWorkouts: initialWorkouts })
-    );
+    const { result } = renderHook(() => {
+      const [workouts, setWorkouts] =
+        useState<StrengthWorkout[]>(initialWorkouts);
+      const operations = useStrengthExerciseOperations(setWorkouts);
+      return { workouts, operations };
+    });
 
     act(() => {
-      result.current.updateStrengthExerciseEmomReps(
+      result.current.operations.updateStrengthExerciseEmomReps(
         'workout-1',
         'section-1',
         'exercise-1',
@@ -406,9 +422,9 @@ describe('useStrengthExerciseOperations', () => {
       );
     });
 
-    expect(
-      result.current.strengthWorkouts[0].sections[0].exercises[0].emomReps
-    ).toBe(8);
+    expect(result.current.workouts[0].sections[0].exercises[0].emomReps).toBe(
+      8
+    );
   });
 
   test('should update strength exercise progression method', () => {
@@ -449,12 +465,15 @@ describe('useStrengthExerciseOperations', () => {
       },
     ];
 
-    const { result } = renderHook(() =>
-      useStrengthWorkoutOperations({ initialStrengthWorkouts: initialWorkouts })
-    );
+    const { result } = renderHook(() => {
+      const [workouts, setWorkouts] =
+        useState<StrengthWorkout[]>(initialWorkouts);
+      const operations = useStrengthExerciseOperations(setWorkouts);
+      return { workouts, operations };
+    });
 
     act(() => {
-      result.current.updateStrengthExerciseProgressionMethod(
+      result.current.operations.updateStrengthExerciseProgressionMethod(
         'workout-1',
         'section-1',
         'exercise-1',
@@ -463,8 +482,7 @@ describe('useStrengthExerciseOperations', () => {
     });
 
     expect(
-      result.current.strengthWorkouts[0].sections[0].exercises[0]
-        .progressionMethod
+      result.current.workouts[0].sections[0].exercises[0].progressionMethod
     ).toBe('inverse-pyramid');
   });
 
@@ -505,14 +523,17 @@ describe('useStrengthExerciseOperations', () => {
       },
     ];
 
-    const { result } = renderHook(() =>
-      useStrengthWorkoutOperations({ initialStrengthWorkouts: initialWorkouts })
-    );
+    const { result } = renderHook(() => {
+      const [workouts, setWorkouts] =
+        useState<StrengthWorkout[]>(initialWorkouts);
+      const operations = useStrengthExerciseOperations(setWorkouts);
+      return { workouts, operations };
+    });
 
     // Should not throw when trying to update non-existent exercise
     expect(() => {
       act(() => {
-        result.current.updateStrengthExerciseName(
+        result.current.operations.updateStrengthExerciseName(
           'workout-1',
           'section-1',
           'non-existent',
@@ -522,8 +543,8 @@ describe('useStrengthExerciseOperations', () => {
     }).not.toThrow();
 
     // Original exercise should remain unchanged
-    expect(
-      result.current.strengthWorkouts[0].sections[0].exercises[0].name
-    ).toBe('Bench Press');
+    expect(result.current.workouts[0].sections[0].exercises[0].name).toBe(
+      'Bench Press'
+    );
   });
 });

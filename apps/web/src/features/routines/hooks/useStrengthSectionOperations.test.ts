@@ -1,6 +1,7 @@
 import { renderHook, act } from '@testing-library/react';
 import { describe, test, expect } from 'vitest';
-import { useStrengthWorkoutOperations } from './useStrengthWorkoutOperations';
+import { useState } from 'react';
+import { useStrengthSectionOperations } from './useStrengthSectionOperations';
 import type { StrengthWorkout, WorkoutSection } from '../types';
 
 describe('useStrengthSectionOperations', () => {
@@ -21,24 +22,25 @@ describe('useStrengthSectionOperations', () => {
       },
     ];
 
-    const { result } = renderHook(() =>
-      useStrengthWorkoutOperations({ initialStrengthWorkouts: initialWorkouts })
-    );
-
-    act(() => {
-      result.current.addStrengthSection('workout-1');
+    const { result } = renderHook(() => {
+      const [workouts, setWorkouts] =
+        useState<StrengthWorkout[]>(initialWorkouts);
+      const operations = useStrengthSectionOperations(setWorkouts);
+      return { workouts, operations };
     });
 
-    expect(result.current.strengthWorkouts[0].sections).toHaveLength(1);
-    expect(result.current.strengthWorkouts[0].sections[0]).toMatchObject({
+    act(() => {
+      result.current.operations.addStrengthSection('workout-1');
+    });
+
+    expect(result.current.workouts[0].sections).toHaveLength(1);
+    expect(result.current.workouts[0].sections[0]).toMatchObject({
       name: 'New Section',
       type: 'basic',
       exercises: [],
       restAfter: '',
     });
-    expect(result.current.strengthWorkouts[0].sections[0].id).toMatch(
-      /^section-\d+$/
-    );
+    expect(result.current.workouts[0].sections[0].id).toMatch(/^section-\d+$/);
   });
 
   test('should remove a strength section', () => {
@@ -66,15 +68,18 @@ describe('useStrengthSectionOperations', () => {
       },
     ];
 
-    const { result } = renderHook(() =>
-      useStrengthWorkoutOperations({ initialStrengthWorkouts: initialWorkouts })
-    );
-
-    act(() => {
-      result.current.removeStrengthSection('workout-1', 'section-1');
+    const { result } = renderHook(() => {
+      const [workouts, setWorkouts] =
+        useState<StrengthWorkout[]>(initialWorkouts);
+      const operations = useStrengthSectionOperations(setWorkouts);
+      return { workouts, operations };
     });
 
-    expect(result.current.strengthWorkouts[0].sections).toHaveLength(0);
+    act(() => {
+      result.current.operations.removeStrengthSection('workout-1', 'section-1');
+    });
+
+    expect(result.current.workouts[0].sections).toHaveLength(0);
   });
 
   test('should update strength section name', () => {
@@ -102,21 +107,22 @@ describe('useStrengthSectionOperations', () => {
       },
     ];
 
-    const { result } = renderHook(() =>
-      useStrengthWorkoutOperations({ initialStrengthWorkouts: initialWorkouts })
-    );
+    const { result } = renderHook(() => {
+      const [workouts, setWorkouts] =
+        useState<StrengthWorkout[]>(initialWorkouts);
+      const operations = useStrengthSectionOperations(setWorkouts);
+      return { workouts, operations };
+    });
 
     act(() => {
-      result.current.updateStrengthSectionName(
+      result.current.operations.updateStrengthSectionName(
         'workout-1',
         'section-1',
         'New Name'
       );
     });
 
-    expect(result.current.strengthWorkouts[0].sections[0].name).toBe(
-      'New Name'
-    );
+    expect(result.current.workouts[0].sections[0].name).toBe('New Name');
   });
 
   test('should update strength section type', () => {
@@ -144,19 +150,22 @@ describe('useStrengthSectionOperations', () => {
       },
     ];
 
-    const { result } = renderHook(() =>
-      useStrengthWorkoutOperations({ initialStrengthWorkouts: initialWorkouts })
-    );
+    const { result } = renderHook(() => {
+      const [workouts, setWorkouts] =
+        useState<StrengthWorkout[]>(initialWorkouts);
+      const operations = useStrengthSectionOperations(setWorkouts);
+      return { workouts, operations };
+    });
 
     act(() => {
-      result.current.updateStrengthSectionType(
+      result.current.operations.updateStrengthSectionType(
         'workout-1',
         'section-1',
         'warmup'
       );
     });
 
-    expect(result.current.strengthWorkouts[0].sections[0].type).toBe('warmup');
+    expect(result.current.workouts[0].sections[0].type).toBe('warmup');
   });
 
   test('should update strength section rest after', () => {
@@ -184,21 +193,22 @@ describe('useStrengthSectionOperations', () => {
       },
     ];
 
-    const { result } = renderHook(() =>
-      useStrengthWorkoutOperations({ initialStrengthWorkouts: initialWorkouts })
-    );
+    const { result } = renderHook(() => {
+      const [workouts, setWorkouts] =
+        useState<StrengthWorkout[]>(initialWorkouts);
+      const operations = useStrengthSectionOperations(setWorkouts);
+      return { workouts, operations };
+    });
 
     act(() => {
-      result.current.updateStrengthSectionRestAfter(
+      result.current.operations.updateStrengthSectionRestAfter(
         'workout-1',
         'section-1',
         '3 min'
       );
     });
 
-    expect(result.current.strengthWorkouts[0].sections[0].restAfter).toBe(
-      '3 min'
-    );
+    expect(result.current.workouts[0].sections[0].restAfter).toBe('3 min');
   });
 
   test('should update strength section emom duration', () => {
@@ -226,20 +236,21 @@ describe('useStrengthSectionOperations', () => {
       },
     ];
 
-    const { result } = renderHook(() =>
-      useStrengthWorkoutOperations({ initialStrengthWorkouts: initialWorkouts })
-    );
+    const { result } = renderHook(() => {
+      const [workouts, setWorkouts] =
+        useState<StrengthWorkout[]>(initialWorkouts);
+      const operations = useStrengthSectionOperations(setWorkouts);
+      return { workouts, operations };
+    });
 
     act(() => {
-      result.current.updateStrengthSectionEmomDuration(
+      result.current.operations.updateStrengthSectionEmomDuration(
         'workout-1',
         'section-1',
         10
       );
     });
 
-    expect(result.current.strengthWorkouts[0].sections[0].emomDuration).toBe(
-      10
-    );
+    expect(result.current.workouts[0].sections[0].emomDuration).toBe(10);
   });
 });
