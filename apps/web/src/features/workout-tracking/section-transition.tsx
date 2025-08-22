@@ -90,7 +90,7 @@ export const SectionTransition = ({
       onWorkoutTimerUpdate(workoutTimer + 1);
     }, 1000);
     return () => clearInterval(workoutInterval);
-  }, [workoutTimer, onWorkoutTimerUpdate]);
+  }, [onWorkoutTimerUpdate]);
 
   useEffect(() => {
     let interval: NodeJS.Timeout;
@@ -113,7 +113,7 @@ export const SectionTransition = ({
       setIsGetReady(false);
     }
     return () => clearInterval(interval);
-  }, [isTimerRunning, timeRemaining, isGetReady, onContinue]);
+  }, [isTimerRunning, isGetReady, onContinue]);
 
   const getSectionIcon = (type: SectionType) => {
     switch (type) {

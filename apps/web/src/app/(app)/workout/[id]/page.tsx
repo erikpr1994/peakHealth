@@ -1,15 +1,16 @@
 import { WorkoutExecution } from '@/features/workout-tracking/workout-execution';
 
 interface WorkoutPageProps {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 }
 
-export default function WorkoutPage({ params }: WorkoutPageProps) {
+export default async function WorkoutPage({ params }: WorkoutPageProps) {
+  const { id } = await params;
   return (
     <main className="min-h-screen bg-background">
-      <WorkoutExecution workoutId={params.id} />
+      <WorkoutExecution workoutId={id} />
     </main>
   );
 }

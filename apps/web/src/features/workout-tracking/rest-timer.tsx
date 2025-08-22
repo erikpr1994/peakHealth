@@ -76,7 +76,7 @@ export const RestTimer = ({
       onWorkoutTimerUpdate(workoutTimer + 1);
     }, 1000);
     return () => clearInterval(workoutInterval);
-  }, [workoutTimer, onWorkoutTimerUpdate]);
+  }, [onWorkoutTimerUpdate]);
 
   useEffect(() => {
     let interval: NodeJS.Timeout;
@@ -99,7 +99,7 @@ export const RestTimer = ({
       setIsGetReady(false);
     }
     return () => clearInterval(interval);
-  }, [isTimerRunning, timeRemaining, isGetReady, isSetCompleted, onSkip]);
+  }, [isTimerRunning, isGetReady, isSetCompleted, onSkip]);
 
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
