@@ -5,8 +5,8 @@ import { NextIntlClientProvider } from 'next-intl';
 import { UserMenu } from './UserMenu';
 
 // Mock the next-intl module with partial mocking
-vi.mock('next-intl', async importOriginal => {
-  const actual = await importOriginal();
+vi.mock('next-intl', async (importOriginal) => {
+  const actual = await importOriginal() as Record<string, unknown>;
   return {
     ...actual,
     useTranslations: vi.fn(() => ({
