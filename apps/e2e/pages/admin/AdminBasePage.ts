@@ -28,7 +28,11 @@ export class AdminBasePage extends Page {
     const baseUrl = isAdminApp
       ? 'http://localhost:3002'
       : 'http://localhost:3024';
-    super(page, path, baseUrl);
+
+    // Add locale prefix for web app paths
+    const finalPath = isAdminApp ? path : `/en${path}`;
+
+    super(page, finalPath, baseUrl);
   }
 
   /**

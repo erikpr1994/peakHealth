@@ -57,13 +57,15 @@ test.describe('Setup: Regular User Landing → Login → Web App', () => {
       await page.getByRole('button', { name: /sign in|log in/i }).click();
 
       // Regular users should be redirected directly to the web app dashboard
-      await page.waitForURL(/localhost:3024\/dashboard/, { timeout: 60_000 });
+      await page.waitForURL(/localhost:3024\/en\/dashboard/, {
+        timeout: 60_000,
+      });
     });
 
     // Verify final navigation to dashboard
     await test.step('Verify navigation to web app dashboard', async () => {
       // We should already be on the web app dashboard, just verify the final URL
-      await expect(page).toHaveURL(/localhost:3024\/dashboard/i);
+      await expect(page).toHaveURL(/localhost:3024\/en\/dashboard/i);
     });
 
     // Save storage state for regular web user

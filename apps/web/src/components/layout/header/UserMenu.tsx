@@ -5,7 +5,7 @@ import type { User } from '@supabase/supabase-js';
 import { useState } from 'react';
 
 import { LogOut, ChevronDown } from '@/hooks/useMenuItems';
-// import { useTranslations } from '@/hooks/useTranslations';
+import { useTranslations } from '@/hooks/useTranslations';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
@@ -66,8 +66,7 @@ export const UserMenu = ({
   supportMenuItems,
 }: UserMenuProps): React.ReactElement => {
   const [userDropdownOpen, setUserDropdownOpen] = useState(false);
-  // const t = useTranslations('navigation');
-  const t = (key: string): string => key; // Temporary fix for testing
+  const t = useTranslations('navigation');
 
   const menuSections = [userMenuItems, settingsMenuItems, supportMenuItems];
 

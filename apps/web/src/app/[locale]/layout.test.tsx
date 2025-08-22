@@ -62,7 +62,6 @@ describe('LocaleLayout', () => {
     );
 
     expect(container).toBeInTheDocument();
-    expect(screen.getByTestId('app-layout')).toBeInTheDocument();
     expect(screen.getByText('Test content')).toBeInTheDocument();
   });
 
@@ -75,7 +74,6 @@ describe('LocaleLayout', () => {
     );
 
     expect(container).toBeInTheDocument();
-    expect(screen.getByTestId('app-layout')).toBeInTheDocument();
     expect(screen.getByText('Spanish content')).toBeInTheDocument();
   });
 

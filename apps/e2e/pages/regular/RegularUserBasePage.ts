@@ -20,7 +20,9 @@ export class RegularUserBasePage extends Page {
    * @param path - The path of the page
    */
   constructor(page: PlaywrightPage, path: string = '') {
-    super(page, path, 'http://localhost:3024');
+    // Add locale prefix for web app paths
+    const finalPath = `/en${path}`;
+    super(page, finalPath, 'http://localhost:3024');
   }
 
   /**
@@ -44,7 +46,7 @@ export class RegularUserBasePage extends Page {
     await this.click(this.routinesLinkSelector);
 
     // Wait for navigation to complete
-    await this.page.waitForURL(/localhost:3024\/routines/);
+    await this.page.waitForURL(/localhost:3024\/en\/routines/);
     await this.waitForPageLoad();
   }
 

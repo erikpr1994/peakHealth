@@ -20,7 +20,7 @@ test.describe('Trainer User Direct Page Access Tests', () => {
       await dashboardPage.goto();
 
       // Verify URL
-      expect(dashboardPage.getUrl()).toMatch(/localhost:3024\/dashboard/);
+      expect(dashboardPage.getUrl()).toMatch(/localhost:3024\/en\/dashboard/);
 
       // Verify welcome message is visible
       expect(await dashboardPage.isWelcomeMessageVisible()).toBeTruthy();

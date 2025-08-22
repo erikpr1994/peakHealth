@@ -4,29 +4,10 @@ import { NextIntlClientProvider } from 'next-intl';
 
 import { UserMenu } from './UserMenu';
 
-// Mock the next-intl useTranslations hook
+// Mock the useTranslations hook
 const mockT = vi.fn((key: string) => key);
-vi.mock('next-intl', () => ({
-  useTranslations: vi.fn(() => ({
-    t: mockT,
-  })),
-  NextIntlClientProvider: ({
-    children,
-    messages,
-    locale,
-  }: {
-    children: React.ReactNode;
-    messages: Record<string, unknown>;
-    locale: string;
-  }): React.JSX.Element => (
-    <div
-      data-testid="next-intl-provider"
-      data-messages={JSON.stringify(messages)}
-      data-locale={locale}
-    >
-      {children}
-    </div>
-  ),
+vi.mock('@/hooks/useTranslations', () => ({
+  useTranslations: vi.fn(() => mockT),
 }));
 
 // Mock Next.js Link component

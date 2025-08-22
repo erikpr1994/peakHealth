@@ -82,7 +82,7 @@ describe('DesktopNavigation', () => {
   });
 
   it('applies active variant to current path', () => {
-    render(<DesktopNavigation items={mockItems} pathname="/dashboard" />);
+    render(<DesktopNavigation items={mockItems} pathname="/en/dashboard" />);
 
     const buttons = screen.getAllByTestId('button');
 
@@ -95,7 +95,9 @@ describe('DesktopNavigation', () => {
   });
 
   it('applies active variant to sub-routes', () => {
-    render(<DesktopNavigation items={mockItems} pathname="/routines/create" />);
+    render(
+      <DesktopNavigation items={mockItems} pathname="/en/routines/create" />
+    );
 
     const buttons = screen.getAllByTestId('button');
 
