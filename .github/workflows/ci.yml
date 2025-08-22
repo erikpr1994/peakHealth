@@ -86,9 +86,9 @@ jobs:
           fi
 
           # Write to GitHub output without any additional formatting
-          {
-            echo "affected=$AFFECTED_PACKAGES"
-          } >> $GITHUB_OUTPUT
+          # Ensure the output is properly sanitized
+          CLEAN_OUTPUT=$(echo "$AFFECTED_PACKAGES" | tr -d '\r\n' | xargs)
+          echo "affected=$CLEAN_OUTPUT" >> $GITHUB_OUTPUT
 
           echo "::endgroup::"
 
