@@ -78,15 +78,37 @@ This document provides guidelines for implementing the refactoring plan effectiv
 ```
 features/routines/
 ├── api/                # API client layer
-├── components/         # SHARED components only
+├── components/         # SHARED components across features
+│   ├── workout/        # Shared workout components
+│   │   ├── strength/   # Shared strength workout components
+│   │   └── running/    # Shared running workout components
+│   └── ...
 ├── domain/             # Pure business logic
 ├── features/           # Sub-features
-│   ├── routine-creation/
-│   ├── routine-detail/
-│   ├── routine-list/
-│   ├── workout-management/
-│   └── trail-running/
-├── hooks/              # SHARED hooks only
+│   ├── routine-creation/        # Creating and editing routines
+│   │   ├── components/
+│   │   │   ├── workout-forms/   # Forms for different workout types
+│   │   │   │   ├── strength/    # Strength workout specific components
+│   │   │   │   └── running/     # Running workout specific components
+│   │   │   │       ├── common/  # Shared running components
+│   │   │   │       ├── trail/   # Trail running specific components
+│   │   │   │       └── road/    # Road running specific components
+│   │   │   └── ...
+│   │   ├── hooks/
+│   │   └── ...
+│   ├── routine-detail/          # Viewing routine details
+│   │   ├── components/
+│   │   │   ├── workout-views/   # Views for different workout types
+│   │   │   │   ├── strength/    # Strength workout display
+│   │   │   │   └── running/     # Running workout display
+│   │   │   └── ...
+│   │   └── ...
+│   └── routine-list/            # Listing and managing routines
+├── hooks/              # SHARED hooks across features
+│   ├── workout/        # Shared workout hooks
+│   │   ├── strength/   # Shared strength workout hooks
+│   │   └── running/    # Shared running workout hooks
+│   └── ...
 ├── patterns/           # Reusable design patterns
 ├── services/           # Application-level services
 ├── types/              # SHARED types only
@@ -130,7 +152,86 @@ hooks/
 - **Composition over inheritance**: Use component composition patterns
 - **CSS Modules**: Use CSS modules for styling
 
-### 3. Hook Guidelines
+### 3. Workout Component Composition
+
+For workout components, use composition to handle different workout types:
+
+```tsx
+// Base workout form component
+function WorkoutForm({ workout, onChange }) {
+  // Common form fields and logic
+  
+  return (
+    <div className={styles.workoutForm}>
+      {/* Common fields like name, description, etc. */}
+      <div className={styles.commonFields}>
+        <TextField 
+          label="Name" 
+          value={workout.name} 
+          onChange={(e) => onChange({ ...workout, name: e.target.value })} 
+        />
+        {/* Other common fields */}
+      </div>
+      
+      {/* Type-specific fields */}
+      <div className={styles.typeSpecificFields}>
+        {isStrengthWorkout(workout) && (
+          <StrengthWorkoutFields 
+            workout={workout} 
+            onChange={onChange} 
+          />
+        )}
+        
+        {isRunningWorkout(workout) && (
+          <RunningWorkoutFields 
+            workout={workout} 
+            onChange={onChange} 
+          />
+        )}
+      </div>
+    </div>
+  );
+}
+
+// Running-specific component with further composition
+function RunningWorkoutFields({ workout, onChange }) {
+  // Common running fields
+  
+  return (
+    <div className={styles.runningFields}>
+      {/* Common running fields */}
+      <div className={styles.commonRunningFields}>
+        <TextField 
+          label="Distance (km)" 
+          type="number"
+          value={workout.distance} 
+          onChange={(e) => onChange({ ...workout, distance: Number(e.target.value) })} 
+        />
+        {/* Other common running fields */}
+      </div>
+      
+      {/* Running type-specific fields */}
+      <div className={styles.runningTypeFields}>
+        {isTrailRunningWorkout(workout) && (
+          <TrailRunningFields 
+            workout={workout} 
+            onChange={onChange} 
+          />
+        )}
+        
+        {isRoadRunningWorkout(workout) && (
+          <RoadRunningFields 
+            workout={workout} 
+            onChange={onChange} 
+          />
+        )}
+      </div>
+    </div>
+  );
+}
+```
+
+### 4. Hook Guidelines
 
 - **Single purpose**: Each hook should have a clear, single purpose
 - **Custom hooks**: Extract reusable logic into custom hooks
@@ -143,6 +244,72 @@ hooks/
 - **Co-located types**: Keep types close to their usage
 - **Shared types**: Move common types to shared location
 - **No circular dependencies**: Avoid circular imports
+
+### 5. Workout Type System
+
+The workout type system should follow this pattern:
+
+```typescript
+// Base workout interface
+interface Workout {
+  id: string;
+  name: string;
+  type: 'strength' | 'running';
+  // Common properties
+}
+
+// Strength workout
+interface StrengthWorkout extends Workout {
+  type: 'strength';
+  // Strength-specific properties
+  exercises: Exercise[];
+  // ...
+}
+
+// Base running workout
+interface RunningWorkout extends Workout {
+  type: 'running';
+  runningType: 'trail' | 'road';
+  // Common running properties
+  distance?: number;
+  duration?: number;
+  // ...
+}
+
+// Trail running specifics
+interface TrailRunningWorkout extends RunningWorkout {
+  runningType: 'trail';
+  // Trail-specific properties
+  elevation: number;
+  terrain: TerrainType;
+  // ...
+}
+
+// Road running specifics
+interface RoadRunningWorkout extends RunningWorkout {
+  runningType: 'road';
+  // Road-specific properties
+  surface: SurfaceType;
+  // ...
+}
+
+// Type guards
+function isStrengthWorkout(workout: Workout): workout is StrengthWorkout {
+  return workout.type === 'strength';
+}
+
+function isRunningWorkout(workout: Workout): workout is RunningWorkout {
+  return workout.type === 'running';
+}
+
+function isTrailRunningWorkout(workout: Workout): workout is TrailRunningWorkout {
+  return workout.type === 'running' && (workout as RunningWorkout).runningType === 'trail';
+}
+
+function isRoadRunningWorkout(workout: Workout): workout is RoadRunningWorkout {
+  return workout.type === 'running' && (workout as RunningWorkout).runningType === 'road';
+}
+```
 
 ## Migration Strategies
 
