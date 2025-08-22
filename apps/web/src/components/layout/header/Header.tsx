@@ -5,18 +5,18 @@ import { useState, Suspense } from 'react';
 
 import { DesktopNavigation } from './DesktopNavigation';
 import styles from './Header.module.css';
-import {
-  getNavigationItems,
-  getUserMenuItems,
-  getSettingsMenuItems,
-  getSupportMenuItems,
-} from './menuItems';
 import { SideNav } from './SideNav';
 import { UserMenu } from './UserMenu';
 import UserMenuSkeleton from './UserMenuSkeleton';
 
 import { useAuth } from '@/features/auth/context/AuthContext';
 import { useNotifications, NotificationsBell } from '@/features/notifications';
+import {
+  useNavigationItems,
+  useUserMenuItems,
+  useSettingsMenuItems,
+  useSupportMenuItems,
+} from '@/hooks/useMenuItems';
 
 const Header = (): React.ReactElement => {
   const pathname = usePathname();
@@ -25,25 +25,25 @@ const Header = (): React.ReactElement => {
   const [isSideNavOpen, setIsSideNavOpen] = useState(false);
 
   // Get all menu items without feature flag filtering
-  const navigationItems = getNavigationItems({
+  const navigationItems = useNavigationItems({
     isCalendarEnabled: true,
     isPerformanceEnabled: true,
     isHealthEnabled: true,
   });
 
-  const userMenuItems = getUserMenuItems({
+  const userMenuItems = useUserMenuItems({
     isTrainerAndClubsEnabled: true,
     isGymsEnabled: true,
     isEquipmentEnabled: true,
     isSuggestionsEnabled: true,
   });
 
-  const settingsMenuItems = getSettingsMenuItems({
+  const settingsMenuItems = useSettingsMenuItems({
     isAccountSettingsEnabled: true,
     isAppSettingsEnabled: true,
   });
 
-  const supportMenuItems = getSupportMenuItems({
+  const supportMenuItems = useSupportMenuItems({
     isHelpSupportEnabled: true,
   });
 

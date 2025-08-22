@@ -1,6 +1,5 @@
 import type { Metadata } from 'next';
 
-import './(app)/globals.css';
 import '@peakhealth/ui/design-system';
 import '@peakhealth/ui/components';
 import { Providers } from '@/components/providers/Providers';

@@ -1,8 +1,11 @@
 import { withSentryConfig } from '@sentry/nextjs';
 import type { NextConfig } from 'next';
 import { withMicrofrontends } from '@vercel/microfrontends/next/config';
+import createNextIntlPlugin from 'next-intl/plugin';
 
 const isDevelopment = process.env.NODE_ENV === 'development';
+
+const withNextIntl = createNextIntlPlugin('./src/i18n/request.ts');
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
@@ -51,7 +54,7 @@ const nextConfig: NextConfig = {
   }),
 };
 
-export default withSentryConfig(withMicrofrontends(nextConfig), {
+export default withSentryConfig(withNextIntl(withMicrofrontends(nextConfig)), {
   // For all available options, see:
   // https://www.npmjs.com/package/@sentry/webpack-plugin#options
 

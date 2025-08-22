@@ -1,8 +1,17 @@
 // Deep import to avoid bundling browser client in Edge runtime
 import { NextResponse, type NextRequest } from 'next/server';
+import createMiddleware from 'next-intl/middleware';
 import getHypertune from './lib/hypertune/getHypertune';
+import { routing } from './i18n/routing';
+
+// Create the internationalization middleware
+const intlMiddleware = createMiddleware(routing);
 
 export async function middleware(request: NextRequest): Promise<NextResponse> {
+  // Handle internationalization first
+  const intlResponse = intlMiddleware(request);
+  if (intlResponse) return intlResponse;
+
   const response = NextResponse.next({
     request: { headers: request.headers },
   });
@@ -34,8 +43,8 @@ export async function middleware(request: NextRequest): Promise<NextResponse> {
   // Handle root route logic
   if (request.nextUrl.pathname === '/') {
     if (isAuthenticated) {
-      // If authenticated, redirect to dashboard
-      return NextResponse.redirect(new URL('/dashboard', request.url));
+      // If authenticated, redirect to dashboard with default locale
+      return NextResponse.redirect(new URL(`/${routing.defaultLocale}/dashboard`, request.url));
     } else {
       // If not authenticated, redirect to landing app
       const landingUrl =
