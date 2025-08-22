@@ -19,17 +19,41 @@ Instead of a flat structure, we'll adopt a more domain-driven and feature-based 
 features/routines/
 ├── api/                # API client layer for routines
 ├── assets/             # Icons, images, etc.
-├── components/         # SHARED components within the routines feature
+├── components/         # SHARED components across features
+│   ├── workout/        # Shared workout components
+│   │   ├── strength/   # Shared strength workout components
+│   │   ├── running/    # Shared running workout components
+│   │   └── trail-running/ # Shared trail running workout components
+│   └── ...
 ├── constants/          # Constants, enums, and mock data
 ├── context/            # Feature-specific context providers
 ├── domain/             # Core business logic (no UI)
 ├── features/           # Sub-features (the bulk of the code)
-│   ├── routine-creation/
-│   ├── routine-detail/
-│   ├── routine-list/
-│   ├── workout-management/
-│   └── trail-running/
-├── hooks/              # SHARED hooks within the routines feature
+│   ├── routine-creation/        # Creating and editing routines
+│   │   ├── components/
+│   │   │   ├── workout-forms/   # Forms for different workout types
+│   │   │   │   ├── strength/    # Strength workout specific components
+│   │   │   │   ├── running/     # Running workout specific components
+│   │   │   │   └── trail-running/ # Trail running specific components
+│   │   │   └── ...
+│   │   ├── hooks/
+│   │   └── ...
+│   ├── routine-detail/          # Viewing routine details
+│   │   ├── components/
+│   │   │   ├── workout-views/   # Views for different workout types
+│   │   │   │   ├── strength/    # Strength workout display
+│   │   │   │   ├── running/     # Running workout display
+│   │   │   │   └── trail-running/ # Trail running display
+│   │   │   └── ...
+│   │   └── ...
+│   └── routine-list/            # Listing and managing routines
+├── hooks/              # SHARED hooks across features
+│   ├── workout/        # Shared workout hooks
+│   │   ├── strength/   # Shared strength workout hooks
+│   │   ├── running/    # Shared running workout hooks
+│   │   └── trail-running/ # Shared trail running workout hooks
+│   └── ...
+├── patterns/           # Reusable design patterns
 ├── services/           # Higher-level services that use the API layer
 ├── store/              # State management (e.g., Zustand or Jotai slices)
 ├── types/              # SHARED types
@@ -140,6 +164,8 @@ features/routines/
 
 - Extract trail running types from `types/index.ts`
 - Create focused type definitions for `IntervalType`, `TrailRunningInterval`, `TrailRunningWorkoutData`, `IntensityTarget`, `TrailRunningSection`
+- Align with database schema where trail running is a separate workout type (not a subtype of running)
+- Implement types that match the `trail_running_data` and `trail_running_intervals` tables
 - Add comprehensive co-located tests
 - Update main types index to re-export trail running types
 

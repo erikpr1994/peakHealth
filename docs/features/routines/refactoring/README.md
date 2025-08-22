@@ -68,6 +68,11 @@ Breaking down large components into smaller, focused pieces following project ru
 3. **Export structure issues:**
    - Main `index.ts` is doing too much exporting (violates minimal barrel rule)
 
+4. **Workout Type Organization:**
+   - Trail running is treated as a separate workout type in the database schema
+   - Need to align code organization with database structure
+   - Current implementation doesn't properly separate workout types
+
 ### Complexity Issues:
 
 - Too many state variables in single components
