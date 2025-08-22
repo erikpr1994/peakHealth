@@ -26,7 +26,7 @@ const getProgressionConfig = (
       allowRepsChange: true,
       allowRpeChange: true,
       lockMessage: 'Linear progression uses fixed reps and structure',
-      description: 'Fixed 3x5 structure',
+      description: 'Fixed reps',
     },
     dual: {
       allowRepTypeChange: true,

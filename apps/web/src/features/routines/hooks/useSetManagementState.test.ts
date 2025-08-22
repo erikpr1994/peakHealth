@@ -59,7 +59,7 @@ describe('useSetManagementState', () => {
         allowRepsChange: true,
         allowRpeChange: true,
         lockMessage: 'Linear progression uses fixed reps and structure',
-        description: 'Fixed 3x5 structure',
+        description: 'Fixed reps',
       });
     });
   });
@@ -382,7 +382,7 @@ describe('useSetManagementState', () => {
         allowRepsChange: true,
         allowRpeChange: true,
         lockMessage: 'Linear progression uses fixed reps and structure',
-        description: 'Fixed 3x5 structure',
+        description: 'Fixed reps',
       });
     });
 
