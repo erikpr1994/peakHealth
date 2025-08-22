@@ -99,18 +99,24 @@ Breaking down large components into smaller, focused pieces following project ru
 **Target:** < 100 lines ✅ (80 lines achieved)
 **Dependencies:** None
 
-### 🔄 PR #4: Extract Trail Running Types
+### ✅ PR #4: Extract Trail Running Types
 
-**Status:** PENDING
-**Files:** `features/routines/types/trailRunning.ts`
+**Status:** COMPLETED
+**Branch:** `refactor/extract-trail-running-types`
+**Files:**
+
+- `features/routines/types/trailRunning.ts` (68 lines)
+- `features/routines/types/trailRunning.test.ts` (297 lines)
+- `features/routines/types/index.ts` (updated - added trail running types re-exports)
+
 **Changes:**
 
 - Extract trail running types from `types/index.ts`
-- Create focused type definitions for all trail running specific types
-- Add co-located tests
-- Update main types index
+- Create focused type definitions for `IntervalType`, `TrailRunningInterval`, `TrailRunningWorkoutData`, `IntensityTarget`, `TrailRunningSection`
+- Add comprehensive co-located tests
+- Update main types index to re-export trail running types
 
-**Target:** < 100 lines
+**Target:** < 100 lines ✅ (68 lines achieved)
 **Dependencies:** None
 
 ---
@@ -216,16 +222,36 @@ Breaking down large components into smaller, focused pieces following project ru
 
 ### 🔄 PR #8: Extract Running Workout Operations
 
-**Status:** PENDING
-**Files:** `features/routines/hooks/useRunningWorkoutOperations.ts`
+**Status:** IN PROGRESS
+**Branch:** `refactor/extract-running-workout-operations`
+**Files:**
+
+- `features/routines/hooks/useRunningWorkoutOperations.ts`
+- `features/routines/hooks/useRunningWorkoutState.ts`
+- `features/routines/hooks/useRunningSectionOperations.ts`
+- `features/routines/hooks/useRunningExerciseOperations.ts`
+- `features/routines/hooks/useRunningWorkoutOperations.test.ts`
+- `features/routines/hooks/useRunningWorkoutState.test.ts`
+
 **Changes:**
 
-- Extract running-specific operations from `useWorkoutOperations.ts`
-- Create focused running workout operations hook
-- Add co-located tests
-- Update imports
+- Extract running-specific operations from `useWorkoutOperations.ts` (1082 lines) into focused hooks
+- Create composition pattern with smaller, focused hooks:
+  - `useRunningWorkoutState`: State management and workout-level operations
+  - `useRunningSectionOperations`: Section-level operations
+  - `useRunningExerciseOperations`: Exercise-level operations
+  - `useRunningWorkoutOperations`: Main orchestrator hook
+- Add comprehensive co-located tests for all hooks
+- Maintain backward compatibility with existing API
+- Follow the same pattern as strength workout operations extraction
 
-**Target:** < 300 lines
+**Functions to extract:**
+
+- **Workout operations**: `addRunningWorkout`, `removeRunningWorkout`, `moveRunningWorkout`, `updateRunningWorkoutName`, `updateRunningWorkoutObjective`, `updateRunningWorkoutSchedule`
+- **Section operations**: `addRunningSection`, `removeRunningSection`, `updateRunningSectionName`, `updateRunningSectionType`, `updateRunningSectionRestAfter`, `updateRunningSectionEmomDuration`
+- **Exercise operations**: `addRunningExercise`, `removeRunningExercise`, `updateRunningExerciseName`, `updateRunningExerciseSets`, `updateRunningExerciseRestAfter`, `updateRunningExerciseEmomReps`
+
+**Target:** < 300 lines per file
 **Dependencies:** Types and utilities extraction
 
 ### 🔄 PR #9: Extract Exercise Operations
@@ -415,17 +441,17 @@ Breaking down large components into smaller, focused pieces following project ru
 - [x] PR #1: Extract Routine Types
 - [x] PR #2: Extract Workout Types
 - [x] PR #3: Extract Exercise Types
+- [x] PR #4: Extract Trail Running Types
 - [x] PR #5: Extract Workout Calculations
 - [x] PR #6: Extract Data Transformers
 - [x] PR #7: Extract Strength Workout Operations
 
 ### In Progress
 
-- [ ] PR #4: Extract Trail Running Types
+- [ ] PR #8: Extract Running Workout Operations
 
 ### Pending
 
-- [ ] PR #8: Extract Running Workout Operations
 - [ ] PR #9: Extract Exercise Operations
 - [ ] PR #10: Extract RoutineCreation State
 - [ ] PR #11: Extract SetManagement State
