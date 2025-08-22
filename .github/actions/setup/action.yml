@@ -164,40 +164,31 @@ runs:
         restore-keys: |
           ${{ runner.os }}-test-
 
-    - name: Setup dependency cache
-      uses: actions/cache@v4
-      with:
-        path: |
-          node_modules
-          **/node_modules
-          .pnpm-store
-        key: ${{ runner.os }}-deps-${{ hashFiles('**/pnpm-lock.yaml') }}-${{ hashFiles('package.json') }}
-        restore-keys: |
-          ${{ runner.os }}-deps-${{ hashFiles('**/pnpm-lock.yaml') }}-
-          ${{ runner.os }}-deps-
+    # Enhanced pnpm store cache - we rely on this instead of caching node_modules directly
+    # This avoids tar extraction errors with complex directory structures
 
-    - name: Clean up corrupted cache (if needed)
+    - name: Clean workspace before installation
       if: ${{ inputs.install-dependencies == 'true' }}
       shell: bash
       run: |
-        # Remove potentially corrupted node_modules if they exist
-        if [ -d "node_modules" ]; then
-          echo "Cleaning up potentially corrupted node_modules..."
-          rm -rf node_modules
-        fi
-
-        # Clean up any corrupted pnpm store links
+        # Always clean node_modules to ensure a fresh install
+        echo "Cleaning node_modules directories..."
+        find . -name "node_modules" -type d -prune -exec rm -rf {} \; 2>/dev/null || true
+        # We don't remove the pnpm store as that's what we're caching
+        # But we do clean any corrupted links
         if [ -d ".pnpm-store" ]; then
-          echo "Cleaning up potentially corrupted .pnpm-store..."
-          rm -rf .pnpm-store
+          echo "Cleaning up potentially corrupted .pnpm-store links..."
+          find .pnpm-store -type l -exec test ! -e {} \; -delete 2>/dev/null || true
         fi
 
     - name: Install dependencies
       if: ${{ inputs.install-dependencies == 'true' }}
       shell: bash
       run: |
-        # Install with strict mode to avoid hard linking issues
-        pnpm install --frozen-lockfile --prefer-offline=false
+        # Clean install to avoid extraction issues
+        # We rely on pnpm store cache for speed instead of node_modules caching
+        echo "Installing dependencies from pnpm store..."
+        pnpm install --frozen-lockfile --prefer-offline=true
 
     - name: Cache warming
       if: ${{ inputs.setup-build-cache == 'true' }}
@@ -251,6 +242,9 @@ runs:
         else
           echo "❌ Test cache: Not enabled"
         fi
+        # Check node_modules status
+        NODE_MODULES_COUNT=$(find . -name "node_modules" -type d | wc -l)
+        echo "ℹ️ node_modules directories: $NODE_MODULES_COUNT (not cached, freshly installed)"
 
         # Display version information
         echo ""
