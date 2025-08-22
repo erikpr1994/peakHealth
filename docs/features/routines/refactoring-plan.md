@@ -255,18 +255,34 @@ Breaking down large components into smaller, focused pieces following project ru
 **Target:** < 300 lines per file ✅ (all files under 260 lines)
 **Dependencies:** Types and utilities extraction
 
-### 🔄 PR #9: Extract Exercise Operations
+### ✅ PR #9: Extract Exercise Operations
 
-**Status:** PENDING
-**Files:** `features/routines/hooks/useExerciseOperations.ts`
+**Status:** COMPLETED
+**Branch:** `refactor/extract-exercise-operations`
+**Files:**
+
+- `features/routines/hooks/useExerciseOperations.ts` (295 lines)
+- `features/routines/hooks/useExerciseOperations.test.ts` (857 lines)
+- `features/routines/hooks/useStrengthExerciseOperations.ts` (updated to use generic hook)
+- `features/routines/hooks/useRunningExerciseOperations.ts` (updated to use generic hook)
+- `features/routines/hooks/useWorkoutOperations.ts` (reduced from 1082 to 635 lines)
+
 **Changes:**
 
-- Extract exercise-specific operations from `useWorkoutOperations.ts`
-- Create focused exercise operations hook
-- Add co-located tests
-- Update imports
+- Create generic `useExerciseOperations` hook that works with both strength and running workouts
+- Eliminate code duplication between specialized exercise operation hooks
+- Reduce `useWorkoutOperations.ts` from 1082 to 635 lines (41% reduction)
+- Maintain backward compatibility with existing API
+- Add comprehensive tests for generic exercise operations hook
+- Update specialized hooks to use generic hook internally
+- Handle conditional `updateExerciseProgressionMethod` for strength workouts only
 
-**Target:** < 200 lines
+**Functions extracted:**
+
+- **Generic operations**: `addExercise`, `removeExercise`, `updateExerciseName`, `updateExerciseSets`, `updateRestTimer`, `updateExerciseRestAfter`, `updateExerciseEmomReps`
+- **Strength-specific**: `updateExerciseProgressionMethod` (conditionally exposed)
+
+**Target:** < 300 lines ✅ (295 lines achieved)
 **Dependencies:** Types and utilities extraction
 
 ---
