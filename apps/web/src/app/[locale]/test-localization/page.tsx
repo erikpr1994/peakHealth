@@ -9,7 +9,7 @@ export default function TestLocalizationPage(): React.JSX.Element {
   return (
     <div className="container mx-auto p-8">
       <h1 className="text-3xl font-bold mb-8">Localization Test Page</h1>
-      
+
       <div className="space-y-6">
         <section>
           <h2 className="text-xl font-semibold mb-4">Common Translations</h2>
@@ -36,7 +36,9 @@ export default function TestLocalizationPage(): React.JSX.Element {
         </section>
 
         <section>
-          <h2 className="text-xl font-semibold mb-4">Navigation Translations</h2>
+          <h2 className="text-xl font-semibold mb-4">
+            Navigation Translations
+          </h2>
           <div className="grid grid-cols-2 gap-4">
             <div>
               <strong>Dashboard:</strong> {tNav('dashboard')}
@@ -63,13 +65,16 @@ export default function TestLocalizationPage(): React.JSX.Element {
           <h2 className="text-xl font-semibold mb-4">Dashboard Translations</h2>
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <strong>Welcome:</strong> {useTranslations('dashboard')('welcome')}
+              <strong>Welcome:</strong>{' '}
+              {useTranslations('dashboard')('welcome')}
             </div>
             <div>
-              <strong>Today's Workout:</strong> {useTranslations('dashboard')('todayWorkout')}
+              <strong>Today's Workout:</strong>{' '}
+              {useTranslations('dashboard')('todayWorkout')}
             </div>
             <div>
-              <strong>Start Workout:</strong> {useTranslations('dashboard')('startWorkout')}
+              <strong>Start Workout:</strong>{' '}
+              {useTranslations('dashboard')('startWorkout')}
             </div>
           </div>
         </section>

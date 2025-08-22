@@ -15,6 +15,7 @@ import {
   LogOut,
   Bell,
   ChevronDown,
+  type LucideIcon,
 } from 'lucide-react';
 import { useTranslations } from './useTranslations';
 
@@ -25,7 +26,7 @@ export const useNavigationItems = (featureFlags: {
 }): Array<{
   id: string;
   label: string;
-  icon: React.ComponentType<{ className?: string }>;
+  icon: LucideIcon;
   path: string;
 }> => {
   const t = useTranslations('navigation');
@@ -33,9 +34,21 @@ export const useNavigationItems = (featureFlags: {
   return [
     { id: 'dashboard', label: t('dashboard'), icon: Home, path: '/dashboard' },
     { id: 'routines', label: t('routines'), icon: BookOpen, path: '/routines' },
-    { id: 'exercises', label: t('exercises'), icon: Dumbbell, path: '/exercises' },
+    {
+      id: 'exercises',
+      label: t('exercises'),
+      icon: Dumbbell,
+      path: '/exercises',
+    },
     ...(featureFlags.isCalendarEnabled
-      ? [{ id: 'calendar', label: t('calendar'), icon: Calendar, path: '/calendar' }]
+      ? [
+          {
+            id: 'calendar',
+            label: t('calendar'),
+            icon: Calendar,
+            path: '/calendar',
+          },
+        ]
       : []),
     ...(featureFlags.isPerformanceEnabled
       ? [
@@ -61,7 +74,7 @@ export const useUserMenuItems = (featureFlags: {
 }): Array<{
   id: string;
   label: string;
-  icon: React.ComponentType<{ className?: string }>;
+  icon: LucideIcon;
   path: string;
 }> => {
   const t = useTranslations('navigation');
@@ -110,7 +123,7 @@ export const useSettingsMenuItems = (featureFlags: {
 }): Array<{
   id: string;
   label: string;
-  icon: React.ComponentType<{ className?: string }>;
+  icon: LucideIcon;
   path: string;
 }> => {
   const t = useTranslations('navigation');
@@ -144,7 +157,7 @@ export const useSupportMenuItems = (featureFlags: {
 }): Array<{
   id: string;
   label: string;
-  icon: React.ComponentType<{ className?: string }>;
+  icon: LucideIcon;
   path: string;
 }> => {
   const t = useTranslations('navigation');

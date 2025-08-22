@@ -14,7 +14,7 @@ export default async function LocaleLayout({
   params: { locale: string };
 }): Promise<React.JSX.Element> {
   // Validate that the incoming `locale` parameter is valid
-  if (!routing.locales.includes(locale as string)) notFound();
+  if (!routing.locales.includes(locale as 'en' | 'es')) notFound();
 
   // Providing all messages to the client
   // side is the easiest way to get started
