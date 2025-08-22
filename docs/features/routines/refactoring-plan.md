@@ -303,18 +303,32 @@ Breaking down large components into smaller, focused pieces following project ru
 **Target:** < 200 lines
 **Dependencies:** Types extraction
 
-### 🔄 PR #11: Extract SetManagement State
+### ✅ PR #11: Extract SetManagement State
 
-**Status:** PENDING
-**Files:** `features/routines/hooks/useSetManagementState.ts`
+**Status:** COMPLETED
+**Branch:** `refactor/extract-set-management-state`
+**Files:**
+
+- `features/routines/hooks/useSetManagementState.ts` (140 lines)
+- `features/routines/hooks/useSetManagementState.test.ts` (450 lines)
+
 **Changes:**
 
-- Extract state management from SetManagement.tsx (571 lines)
-- Create focused state hook
-- Handle sets state, configuration state
-- Add comprehensive tests
+- Extract state management from SetManagement.tsx (571 lines) into focused state management hook
+- Create comprehensive state management with UI state, configuration state, and computed state
+- Add utility functions for set display, colors, and hover text
+- Add comprehensive co-located tests (29 new tests) covering all state management scenarios
+- Achieve target of < 150 lines (140 lines achieved)
 
-**Target:** < 150 lines
+**State extracted:**
+
+- **UI State**: `openPopoverId`, `initialized`
+- **Configuration State**: `config` (derived from progressionMethod)
+- **Computed State**: `hasApproachSets`, `isAddApproachSetsDisabled`
+- **Utility Functions**: `getAddApproachSetsHoverText`, `getSetDisplay`, `getSetTypeColor`
+- **Initialization**: `useEffect` for repType initialization
+
+**Target:** < 150 lines ✅ (140 lines achieved)
 **Dependencies:** Types extraction
 
 ---
@@ -463,12 +477,12 @@ Breaking down large components into smaller, focused pieces following project ru
 - [x] PR #6: Extract Data Transformers
 - [x] PR #7: Extract Strength Workout Operations
 - [x] PR #8: Extract Running Workout Operations
+- [x] PR #9: Extract Exercise Operations
+- [x] PR #10: Extract RoutineCreation State
+- [x] PR #11: Extract SetManagement State
 
 ### Pending
 
-- [ ] PR #9: Extract Exercise Operations
-- [ ] PR #10: Extract RoutineCreation State
-- [ ] PR #11: Extract SetManagement State
 - [ ] PR #12: Extract RoutineCreation Handlers
 - [ ] PR #13: Extract SetManagement Handlers
 - [ ] PR #14: Extract Set Configuration
