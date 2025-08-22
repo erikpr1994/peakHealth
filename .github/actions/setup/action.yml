@@ -174,7 +174,6 @@ runs:
         # Always clean node_modules to ensure a fresh install
         echo "Cleaning node_modules directories..."
         find . -name "node_modules" -type d -prune -exec rm -rf {} \; 2>/dev/null || true
-        
         # We don't remove the pnpm store as that's what we're caching
         # But we do clean any corrupted links
         if [ -d ".pnpm-store" ]; then
@@ -186,10 +185,10 @@ runs:
       if: ${{ inputs.install-dependencies == 'true' }}
       shell: bash
       run: |
-        # Clean install with no hard links to avoid extraction issues
+        # Clean install to avoid extraction issues
         # We rely on pnpm store cache for speed instead of node_modules caching
         echo "Installing dependencies from pnpm store..."
-        pnpm install --frozen-lockfile --prefer-offline=true --no-hardlinks
+        pnpm install --frozen-lockfile --prefer-offline=true
 
     - name: Cache warming
       if: ${{ inputs.setup-build-cache == 'true' }}
@@ -243,7 +242,6 @@ runs:
         else
           echo "❌ Test cache: Not enabled"
         fi
-        
         # Check node_modules status
         NODE_MODULES_COUNT=$(find . -name "node_modules" -type d | wc -l)
         echo "ℹ️ node_modules directories: $NODE_MODULES_COUNT (not cached, freshly installed)"
