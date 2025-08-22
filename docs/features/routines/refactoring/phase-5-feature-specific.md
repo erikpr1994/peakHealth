@@ -4,13 +4,13 @@
 
 Feature-specific refactoring tasks that focus on particular areas of the routines feature.
 
-## 🔄 PR #12: Move SetManagement to Feature Location
+## 🔄 PR #13: Move SetManagement to Feature Location
 
 **Status:** PENDING  
 **Files:**
 
-- Move `features/routines/components/SetManagement.tsx` to `features/routines/features/workout-management/components/SetManagement.tsx`
-- Move `features/routines/components/DynamicWeightInput.tsx` to `features/routines/features/workout-management/components/DynamicWeightInput.tsx`
+- Move `features/routines/components/SetManagement.tsx` to `features/routines/features/routine-creation/components/workout-forms/strength/SetManagement/SetManagement.tsx`
+- Move `features/routines/components/DynamicWeightInput.tsx` to `features/routines/features/routine-creation/components/workout-forms/strength/DynamicWeightInput.tsx`
 - Update all imports across the codebase
 
 ### Changes
@@ -18,11 +18,12 @@ Feature-specific refactoring tasks that focus on particular areas of the routine
 - Move components to their proper feature-specific location
 - Update all import statements to use new paths
 - Ensure components are properly co-located with their feature
-- Follow the rule about placing by feature
+- Follow the rule about placing by feature and workout type
+- Align with database schema where strength workouts have their own components
 
 **Target:** Proper feature organization
 
-## 🔄 PR #21: Simplify RoutineCreation Container
+## 🔄 PR #22: Simplify RoutineCreation Container
 
 **Status:** PENDING  
 **Files:** `features/routines/features/routine-creation/RoutineCreation.tsx`
@@ -36,7 +37,7 @@ Feature-specific refactoring tasks that focus on particular areas of the routine
 
 **Target:** < 300 lines (from 672 lines)
 
-## 🔄 PR #22: Split Large Test Files
+## 🔄 PR #23: Split Large Test Files
 
 **Status:** PENDING  
 **Files:** Various large test files

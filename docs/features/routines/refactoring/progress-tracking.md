@@ -27,41 +27,42 @@ _No PRs completed yet - we are starting from scratch with new code creation!_
 - [ ] PR #6: Extract Data Transformers
 - [ ] PR #7: Extract Strength Workout Operations
 - [ ] PR #8: Extract Running Workout Operations
-- [ ] PR #9: Extract Exercise Operations
-- [ ] PR #10: Extract RoutineCreation State
-- [ ] PR #11: Extract SetManagement State
-- [ ] PR #12: Move SetManagement to Feature Location
-- [ ] PR #13: Break Down SetManagement Component
-- [ ] PR #14: Break Down DynamicWeightInput Component
-- [ ] PR #15: Split Domain Transformers
-- [ ] PR #16: Split Domain Calculations
-- [ ] PR #17: Simplify useWorkoutOperations
-- [ ] PR #18: Simplify useRoutineOperations
-- [ ] PR #19: Extract RoutineCreation Handlers
-- [ ] PR #20: Extract SetManagement Handlers
-- [ ] PR #21: Simplify RoutineCreation Container
-- [ ] PR #22: Split Large Test Files
-- [ ] PR #23: Simplify Main Index Exports
-- [ ] PR #24: Split RoutineService
-- [ ] PR #25: Resolve Type Circular Dependencies
-- [ ] PR #26: Split Utils by Responsibility
-- [ ] PR #27: Organize Hooks with Sub-folders
-- [ ] PR #28: Break Down RoutineCreation Component
-- [ ] PR #29: Break Down Large Section Components
-- [ ] PR #30: Break Down RoutineDetail Component
-- [ ] PR #31: Improve Component Organization
-- [ ] PR #32: Break Down RoutineList Components
-- [ ] PR #33: Improve Component Organization
-- [ ] PR #34: Break Down WorkoutManagement Components
-- [ ] PR #35: Improve Component Organization
-- [ ] PR #36: Break Down TrailRunning Components
-- [ ] PR #37: Prepare for Running Type Expansion
+- [ ] PR #9: Extract Trail Running Workout Operations
+- [ ] PR #10: Extract Exercise Operations
+- [ ] PR #11: Extract RoutineCreation State
+- [ ] PR #12: Extract SetManagement State
+- [ ] PR #13: Move SetManagement to Feature Location
+- [ ] PR #14: Break Down SetManagement Component
+- [ ] PR #15: Break Down DynamicWeightInput Component
+- [ ] PR #16: Split Domain Transformers
+- [ ] PR #17: Split Domain Calculations
+- [ ] PR #18: Simplify useWorkoutOperations
+- [ ] PR #19: Simplify useRoutineOperations
+- [ ] PR #20: Extract RoutineCreation Handlers
+- [ ] PR #21: Extract SetManagement Handlers
+- [ ] PR #22: Simplify RoutineCreation Container
+- [ ] PR #23: Split Large Test Files
+- [ ] PR #24: Simplify Main Index Exports
+- [ ] PR #25: Split RoutineService
+- [ ] PR #26: Resolve Type Circular Dependencies
+- [ ] PR #27: Split Utils by Responsibility
+- [ ] PR #28: Organize Hooks with Sub-folders
+- [ ] PR #29: Break Down RoutineCreation Component
+- [ ] PR #30: Break Down Large Section Components
+- [ ] PR #31: Break Down RoutineDetail Component
+- [ ] PR #32: Improve Component Organization
+- [ ] PR #33: Break Down RoutineList Components
+- [ ] PR #34: Improve Component Organization
+- [ ] PR #35: Break Down WorkoutManagement Components
+- [ ] PR #36: Improve Component Organization
+- [ ] PR #37: Break Down TrailRunning Components
+- [ ] PR #38: Prepare for Running Type Expansion
 
 ## Summary
 
-- **Total PRs:** 37
+- **Total PRs:** 38
 - **Completed:** 0 (0%)
-- **Pending:** 37 (100%)
+- **Pending:** 38 (100%)
 
 ## Next Steps
 
@@ -127,7 +128,8 @@ _No PRs completed yet - we are starting from scratch with new code creation!_
 33. **PR #31: Improve Component Organization** - Component organization
 34. **PR #33: Improve Component Organization** - Component organization
 35. **PR #35: Improve Component Organization** - Component organization
-36. **PR #37: Prepare for Running Type Expansion** - Future preparation
+36. **PR #37: Break Down TrailRunning Components** - Large components
+37. **PR #38: Prepare for Running Type Expansion** - Future preparation
 
 ## Implementation Strategy
 

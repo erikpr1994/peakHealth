@@ -4,7 +4,7 @@
 
 Create clear distinction between pure business logic and application-level logic.
 
-## 🔄 PR #15: Split Domain Transformers
+## 🔄 PR #16: Split Domain Transformers
 
 **Status:** PENDING  
 **Files:** `features/routines/domain/transformers.ts`
@@ -42,7 +42,7 @@ Create clear distinction between pure business logic and application-level logic
 
 **Target:** < 200 lines per file
 
-## 🔄 PR #16: Split Domain Calculations
+## 🔄 PR #17: Split Domain Calculations
 
 **Status:** PENDING  
 **Files:** `features/routines/domain/calculations.ts`
