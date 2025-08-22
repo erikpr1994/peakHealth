@@ -123,7 +123,7 @@ if [ ${#AFFECTED_PACKAGES[@]} -gt 0 ]; then
     fi
   else
     log "No filter string created. Falling back to directly affected packages."
-    echo "${AFFECTED_PACKAGES[*]}" | tr ' ' ','
+    printf "%s" "$(echo "${AFFECTED_PACKAGES[*]}" | tr ' ' ',')"
   fi
 else
   log "No directly affected packages found."
