@@ -18,47 +18,12 @@ import {
   Star,
 } from 'lucide-react';
 import { WorkoutFeedback } from '@/features/workout-tracking/workout-feedback';
-
-interface Exercise {
-  id: string;
-  name: string;
-  sets: number;
-  reps: string;
-  weight: string;
-  rpe: number;
-  restTime: number;
-  isUnilateral?: boolean;
-  unilateralMode?: 'sequential' | 'alternating' | 'rest-between-sides';
-}
-
-interface WorkoutRoutine {
-  id: string;
-  name: string;
-  estimatedTime: number;
-  totalExercises: number;
-  exercises: Exercise[];
-}
-
-interface CompletedSet {
-  exerciseId: string;
-  setNumber: number;
-  actualReps: number;
-  actualWeight: string;
-  actualRpe: number;
-  notes?: string;
-  side?: 'left' | 'right' | 'both';
-  // For unilateral exercises, store separate data for each side
-  leftSide?: {
-    reps: number;
-    weight: string;
-    rpe: number;
-  };
-  rightSide?: {
-    reps: number;
-    weight: string;
-    rpe: number;
-  };
-}
+import type {
+  Exercise,
+  WorkoutRoutine,
+  CompletedSet,
+  SetType,
+} from '@/features/workout-tracking/workout';
 
 interface SetMedia {
   setId: string;
@@ -104,13 +69,17 @@ export const WorkoutReview = ({
   const calculateTotalVolume = () => {
     return completedSets.reduce((total, set) => {
       const weight =
-        Number.parseFloat(set.actualWeight.replace(/[^\d.]/g, '')) || 0;
-      return total + weight * set.actualReps;
+        Number.parseFloat((set.actualWeight || '0').replace(/[^\d.]/g, '')) ||
+        0;
+      return total + weight * (set.actualReps || 0);
     }, 0);
   };
 
   const calculateAverageRPE = () => {
-    const totalRPE = completedSets.reduce((sum, set) => sum + set.actualRpe, 0);
+    const totalRPE = completedSets.reduce(
+      (sum, set) => sum + (set.actualRpe || 0),
+      0
+    );
     return (totalRPE / completedSets.length).toFixed(1);
   };
 
@@ -157,7 +126,8 @@ export const WorkoutReview = ({
       [setId]: {
         ...prev[setId],
         [`${side}Side`]: {
-          ...prev[setId]?.[`${side}Side` as keyof CompletedSet],
+          ...((prev[setId]?.[`${side}Side` as keyof CompletedSet] as any) ||
+            {}),
           [field]: field === 'reps' || field === 'rpe' ? Number(value) : value,
         },
       },

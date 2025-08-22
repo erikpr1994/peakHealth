@@ -55,7 +55,7 @@ export interface Exercise {
   imageUrl?: string;
   videoUrl?: string;
   isUnilateral?: boolean;
-  unilateralMode?: 'sequential' | 'alternating' | 'rest-between';
+  unilateralMode?: 'sequential' | 'alternating' | 'rest-between-sides';
   lastWorkoutData?: {
     date: string;
     sets: SetData[];
@@ -85,14 +85,25 @@ export interface WorkoutRoutine {
   estimatedTime: number;
   totalExercises: number;
   sections: WorkoutSection[];
+  exercises: Exercise[];
 }
 
 export interface CompletedSet {
   exerciseId: string;
   setNumber: number;
-  actualReps: number;
-  actualWeight: string;
-  actualRpe: number;
+  actualReps?: number; // Optional for unilateral exercises
+  actualWeight?: string; // Optional for unilateral exercises
+  actualRpe?: number; // Optional for unilateral exercises
+  leftSide?: {
+    reps: number;
+    weight: string;
+    rpe: number;
+  };
+  rightSide?: {
+    reps: number;
+    weight: string;
+    rpe: number;
+  };
   notes: string;
   completedAt: Date;
   setType: SetType;

@@ -15,33 +15,11 @@ import {
   Zap,
   Clock,
 } from 'lucide-react';
-
-interface Exercise {
-  id: string;
-  name: string;
-  sets: number;
-  reps: string;
-  weight: string;
-  rpe: number;
-  restTime: number;
-}
-
-interface WorkoutRoutine {
-  id: string;
-  name: string;
-  estimatedTime: number;
-  totalExercises: number;
-  exercises: Exercise[];
-}
-
-interface CompletedSet {
-  exerciseId: string;
-  setNumber: number;
-  actualReps: number;
-  actualWeight: string;
-  actualRpe: number;
-  notes?: string;
-}
+import type {
+  Exercise,
+  WorkoutRoutine,
+  CompletedSet,
+} from '@/features/workout-tracking/workout';
 
 interface WorkoutFeedbackProps {
   routine: WorkoutRoutine;
@@ -160,8 +138,10 @@ export const WorkoutFeedback = ({
               <Zap className="w-4 h-4 text-primary mx-auto mb-1" />
               <p className="text-sm font-medium text-foreground">
                 {(
-                  completedSets.reduce((sum, set) => sum + set.actualRpe, 0) /
-                  completedSets.length
+                  completedSets.reduce(
+                    (sum, set) => sum + (set.actualRpe || 0),
+                    0
+                  ) / completedSets.length
                 ).toFixed(1)}
               </p>
               <p className="text-xs text-muted-foreground">Avg RPE</p>

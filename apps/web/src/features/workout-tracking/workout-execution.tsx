@@ -159,10 +159,27 @@ const mockRoutine: WorkoutRoutine = {
           instructions:
             'Start from a dead hang, pull your chest to the bar, and lower with control.',
           lastWorkoutData: {
-            weight: 'Bodyweight',
-            reps: '8, 7, 6',
-            rpe: 7,
             date: '2024-01-15',
+            sets: [
+              {
+                setNumber: 1,
+                weight: 'Bodyweight',
+                reps: 8,
+                rpe: 7,
+              },
+              {
+                setNumber: 2,
+                weight: 'Bodyweight',
+                reps: 7,
+                rpe: 7,
+              },
+              {
+                setNumber: 3,
+                weight: 'Bodyweight',
+                reps: 6,
+                rpe: 7,
+              },
+            ],
           },
           equipmentType: 'bodyweight',
         },
@@ -227,6 +244,129 @@ const mockRoutine: WorkoutRoutine = {
           equipmentType: 'bodyweight',
         },
       ],
+    },
+  ],
+  exercises: [
+    {
+      id: '1',
+      name: 'Arm Circles',
+      sets: 2,
+      reps: '10 each direction',
+      weight: 'Bodyweight',
+      rpe: 3,
+      restTime: 30,
+      progressionMethod: 'linear',
+      setTypes: ['warm-up'],
+      muscleGroups: ['Shoulders'],
+      instructions: 'Make large circles with your arms, forward and backward.',
+      isUnilateral: true,
+      unilateralMode: 'alternating',
+      equipmentType: 'bodyweight',
+    },
+    {
+      id: '2',
+      name: 'Band Pull-aparts',
+      sets: 2,
+      reps: '15',
+      weight: 'Light band',
+      rpe: 4,
+      restTime: 30,
+      progressionMethod: 'linear',
+      setTypes: ['warm-up'],
+      muscleGroups: ['Rear Delts', 'Rhomboids'],
+      instructions:
+        'Pull the band apart at chest level, squeezing your shoulder blades.',
+      equipmentType: 'band',
+      bandType: 'light',
+    },
+    {
+      id: '3',
+      name: 'Bench Press',
+      sets: 4,
+      reps: '8-10',
+      weight: '80kg',
+      rpe: 8,
+      restTime: 180,
+      progressionMethod: 'dual',
+      setTypes: ['working'],
+      muscleGroups: ['Chest', 'Triceps', 'Shoulders'],
+      instructions:
+        'Keep your feet flat on the floor, maintain a slight arch in your back, and lower the bar to your chest with control.',
+      lastWorkoutData: {
+        date: '2024-01-15',
+        sets: [
+          { setNumber: 1, weight: '77.5kg', reps: 10, rpe: 8 },
+          { setNumber: 2, weight: '77.5kg', reps: 9, rpe: 8 },
+          { setNumber: 3, weight: '77.5kg', reps: 8, rpe: 9 },
+          { setNumber: 4, weight: '77.5kg', reps: 8, rpe: 9 },
+        ],
+      },
+      equipmentType: 'barbell',
+    },
+    {
+      id: '4',
+      name: 'Pull-ups',
+      sets: 3,
+      reps: '8-12',
+      weight: 'Bodyweight',
+      rpe: 8,
+      restTime: 120,
+      progressionMethod: 'linear',
+      setTypes: ['working'],
+      muscleGroups: ['Lats', 'Biceps'],
+      instructions:
+        'Start from a dead hang, pull your chest to the bar, and lower with control.',
+      lastWorkoutData: {
+        date: '2024-01-15',
+        sets: [
+          { setNumber: 1, weight: 'Bodyweight', reps: 8, rpe: 7 },
+          { setNumber: 2, weight: 'Bodyweight', reps: 7, rpe: 7 },
+          { setNumber: 3, weight: 'Bodyweight', reps: 6, rpe: 7 },
+        ],
+      },
+      equipmentType: 'bodyweight',
+    },
+    {
+      id: '5',
+      name: 'Push-ups',
+      sets: 8,
+      reps: '10',
+      weight: 'Bodyweight',
+      rpe: 6,
+      restTime: 0,
+      progressionMethod: 'linear',
+      setTypes: ['working'],
+      muscleGroups: ['Chest', 'Triceps'],
+      instructions: 'Perform 10 push-ups at the start of each minute.',
+      equipmentType: 'bodyweight',
+    },
+    {
+      id: '6',
+      name: 'Burpees',
+      sets: 1,
+      reps: '5',
+      weight: 'Bodyweight',
+      rpe: 7,
+      restTime: 0,
+      progressionMethod: 'amrap',
+      setTypes: ['working'],
+      muscleGroups: ['Full Body'],
+      instructions: 'Complete 5 burpees, then move to mountain climbers.',
+      equipmentType: 'bodyweight',
+    },
+    {
+      id: '7',
+      name: 'Mountain Climbers',
+      sets: 1,
+      reps: '10',
+      weight: 'Bodyweight',
+      rpe: 6,
+      restTime: 0,
+      progressionMethod: 'amrap',
+      setTypes: ['working'],
+      muscleGroups: ['Core', 'Shoulders'],
+      instructions: '10 mountain climbers (5 each leg), then rest 20 seconds.',
+      equipmentType: 'bodyweight',
     },
   ],
 };
@@ -369,7 +509,7 @@ export const WorkoutExecution = ({ workoutId }: WorkoutExecutionProps) => {
         setCurrentSide('left');
         return;
       } else if (currentSide === 'left') {
-        if (currentExercise.unilateralMode === 'rest-between') {
+        if (currentExercise.unilateralMode === 'rest-between-sides') {
           setShowRestTimer(true);
           setIsTimerRunning(false);
           return;
@@ -442,7 +582,7 @@ export const WorkoutExecution = ({ workoutId }: WorkoutExecutionProps) => {
 
     if (
       currentExercise?.isUnilateral &&
-      currentExercise.unilateralMode === 'rest-between' &&
+      currentExercise.unilateralMode === 'rest-between-sides' &&
       currentSide === 'left'
     ) {
       setCurrentSide('right');
