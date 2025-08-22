@@ -76,7 +76,7 @@ export const RestTimer = ({
       onWorkoutTimerUpdate(workoutTimer + 1);
     }, 1000);
     return () => clearInterval(workoutInterval);
-  }, [onWorkoutTimerUpdate]);
+  }, [workoutTimer, onWorkoutTimerUpdate]);
 
   useEffect(() => {
     let interval: NodeJS.Timeout;
