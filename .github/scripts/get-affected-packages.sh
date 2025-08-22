@@ -49,12 +49,12 @@ if [ -z "$CHANGED_FILES" ]; then
     
     if [ -z "$CHANGED_FILES" ]; then
       log "Still no changed files detected after fetching more history."
-      echo "all"
+      printf "all"
       exit 0
     fi
   else
     log "Not a shallow repository, but still no changed files detected."
-    echo "all"
+    printf "all"
     exit 0
   fi
 fi
@@ -116,14 +116,14 @@ if [ ${#AFFECTED_PACKAGES[@]} -gt 0 ]; then
     
     if [ -n "$DEPENDENT_PACKAGES" ]; then
       log "All affected packages (including dependencies): $DEPENDENT_PACKAGES"
-      echo "$DEPENDENT_PACKAGES"
+      printf "%s" "$DEPENDENT_PACKAGES"
     else
       log "No dependent packages found or Turborepo error. Falling back to directly affected packages."
-      echo "${AFFECTED_PACKAGES[*]}" | tr ' ' ','
+      printf "%s" "$(echo "${AFFECTED_PACKAGES[*]}" | tr ' ' ',')"
     fi
   else
     log "No filter string created. Falling back to directly affected packages."
-    echo "${AFFECTED_PACKAGES[*]}" | tr ' ' ','
+    printf "%s" "$(echo "${AFFECTED_PACKAGES[*]}" | tr ' ' ',')"
   fi
 else
   log "No directly affected packages found."
@@ -133,11 +133,11 @@ else
   
   if [ -n "$ROOT_CONFIG_CHANGED" ]; then
     log "Root configuration files changed, affecting all packages:"
-    echo "$ROOT_CONFIG_CHANGED"
-    echo "all"
+    log "Changed root files: $ROOT_CONFIG_CHANGED"
+    printf "all"
   else
     log "No packages affected."
-    echo ""
+    printf ""
   fi
 fi
 
