@@ -1,18 +1,11 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 
-import {
-  TrailRunningWorkoutData,
-  StrengthWorkout,
-  RunningWorkout,
-} from '@/features/routines/types';
-import { routineService } from '../../services/routineService';
+import { StrengthWorkout, RunningWorkout } from '@/features/routines/types';
 import { DatabaseWorkout } from '../../types/database';
 import { transformDatabaseWorkout } from '../../utils/dataTransformers';
-import { useAuth } from '@/features/auth/context/AuthContext';
-import { useToast } from '@peakhealth/ui';
+import { routineService } from '../../services/routineService';
 
 // Import our new components and hooks
 import RoutineHeader from './components/RoutineHeader';
@@ -20,10 +13,9 @@ import RoutineDetailsForm from './components/RoutineDetailsForm';
 import StrengthWorkoutsSection from './components/StrengthWorkoutsSection';
 import RunningWorkoutsSection from './components/RunningWorkoutsSection';
 import { useWorkoutOperations } from '../../hooks/useWorkoutOperations';
-import { addApproachSets } from '../../utils/workoutCalculations';
-import { ProgressionMethod } from '../../types';
-import { useRoutineModals, useRoutineValidation } from './hooks';
-import { NotesContext } from './types/modal';
+import { useRoutineCreationState } from '../../hooks/useRoutineCreationState';
+import { useRoutineCreationHandlers } from '../../hooks/useRoutineCreationHandlers';
+import { useRoutineModals } from './hooks';
 import ExerciseSelectionModal from '@/features/exercises/ExerciseSelectionModal';
 import NotesModal from '@/components/shared/NotesModal';
 
@@ -36,36 +28,35 @@ const RoutineCreation = ({
   editRoutineId,
   mode = 'create',
 }: RoutineCreationProps): React.ReactElement => {
-  const router = useRouter();
-  const { isAuthenticated, user } = useAuth();
-  const { showToast } = useToast();
-
-  // Routine metadata state
-  const [name, setName] = useState('');
-  const [difficulty, setDifficulty] = useState('Beginner');
-  const [goal, setGoal] = useState('Strength');
-  const [description, setDescription] = useState('');
-  const [objectives, setObjectives] = useState<string[]>([]);
-  const [duration, setDuration] = useState(12); // Default 12 weeks (3 months)
-
   // Modal state management
-  const { isModalOpen, openModal, closeModal, getModalContext } =
-    useRoutineModals();
+  const { isModalOpen, closeModal, getModalContext } = useRoutineModals();
 
-  // Running workout creation/editing states
-  const [creatingRunning, setCreatingRunning] = useState(false);
-  const [editingRunning, setEditingRunning] = useState<{
-    workoutId: string;
-    data: TrailRunningWorkoutData;
-  } | null>(null);
-
-  // Collapse states
-  const [collapsedStrengthWorkouts, setCollapsedStrengthWorkouts] = useState<
-    Set<string>
-  >(new Set());
-  const [collapsedRunningWorkouts, setCollapsedRunningWorkouts] = useState<
-    Set<string>
-  >(new Set());
+  // Use our extracted state hook
+  const {
+    name,
+    difficulty,
+    goal,
+    description,
+    objectives,
+    duration,
+    creatingRunning,
+    editingRunning,
+    collapsedStrengthWorkouts,
+    collapsedRunningWorkouts,
+    setName,
+    setDifficulty,
+    setGoal,
+    setDescription,
+    setObjectives,
+    setDuration,
+    setCreatingRunning,
+    setEditingRunning,
+    toggleStrengthWorkoutCollapse,
+    toggleRunningWorkoutCollapse,
+    handleAddRunningWorkout,
+    handleRunningCancel,
+    handleEditRunning,
+  } = useRoutineCreationState();
 
   // Use our new workout operations hook
   const {
@@ -113,8 +104,35 @@ const RoutineCreation = ({
     updateStrengthExerciseProgressionMethod,
   } = useWorkoutOperations();
 
-  // Use our new validation hook
-  const { validateRoutineData } = useRoutineValidation();
+  // Use our extracted handlers hook
+  const {
+    handleSaveRoutine,
+    handleRunningSave,
+    handleAddExerciseClick,
+    handleExerciseSelect,
+    handleNotesClick,
+    handleNotesSave,
+    handleAddApproachSets,
+  } = useRoutineCreationHandlers(
+    name,
+    difficulty,
+    goal,
+    description,
+    objectives,
+    duration,
+    creatingRunning,
+    editingRunning,
+    setCreatingRunning,
+    setEditingRunning,
+    strengthWorkouts,
+    runningWorkouts,
+    setStrengthWorkouts,
+    setRunningWorkouts,
+    addStrengthExercise,
+    addRunningExercise,
+    updateStrengthExerciseSets,
+    updateRunningExerciseSets
+  );
 
   // Load routine data if editing
   useEffect(() => {
@@ -160,415 +178,18 @@ const RoutineCreation = ({
     };
 
     loadRoutineForEditing();
-  }, [editRoutineId, mode, setStrengthWorkouts, setRunningWorkouts]);
-
-  const toggleStrengthWorkoutCollapse = (workoutId: string): void => {
-    setCollapsedStrengthWorkouts(prev => {
-      const newSet = new Set(prev);
-      if (newSet.has(workoutId)) {
-        newSet.delete(workoutId);
-      } else {
-        newSet.add(workoutId);
-      }
-      return newSet;
-    });
-  };
-
-  const toggleRunningWorkoutCollapse = (workoutId: string): void => {
-    setCollapsedRunningWorkouts(prev => {
-      const newSet = new Set(prev);
-      if (newSet.has(workoutId)) {
-        newSet.delete(workoutId);
-      } else {
-        newSet.add(workoutId);
-      }
-      return newSet;
-    });
-  };
-
-  const handleAddRunningWorkout = (): void => {
-    setCreatingRunning(true);
-  };
-
-  const handleRunningSave = (runningData: TrailRunningWorkoutData): void => {
-    if (editingRunning) {
-      setRunningWorkouts(prev =>
-        prev.map(workout =>
-          workout.id === editingRunning.workoutId
-            ? { ...workout, trailRunningData: runningData }
-            : workout
-        )
-      );
-      setEditingRunning(null);
-    } else {
-      const newWorkout = {
-        id: `running-${Date.now()}`,
-        name: runningData.name || 'New Running Workout',
-        type: 'running' as 'running',
-        objective: runningData.description || '',
-        schedule: {
-          repeatPattern: '',
-          repeatValue: '',
-          selectedDays: [],
-          time: '',
-        },
-        sections: [],
-        trailRunningData: runningData,
-      };
-      setRunningWorkouts(prev => [...prev, newWorkout]);
-      setCreatingRunning(false);
-    }
-  };
-
-  const handleRunningCancel = (): void => {
-    setCreatingRunning(false);
-    setEditingRunning(null);
-  };
-
-  const handleEditRunning = (workoutId: string): void => {
-    const workout = runningWorkouts.find(w => w.id === workoutId);
-    if (workout?.trailRunningData) {
-      setEditingRunning({
-        workoutId,
-        data: workout.trailRunningData,
-      });
-    }
-  };
-
-  // Exercise selection handlers
-  const handleAddExerciseClick = (
-    workoutId: string,
-    sectionId: string
-  ): void => {
-    openModal('exercise', { workoutId, sectionId });
-  };
-
-  const handleExerciseSelect = (
-    selectedExercise: {
-      id: string;
-      name: string;
-      category?: string;
-      muscleGroups?: string[];
-    },
-    selectedVariant?: {
-      id: string;
-      name: string;
-      muscleGroups: string[];
-      difficulty: string;
-      equipment: string[];
-      instructions: string[];
-    }
-  ): void => {
-    const exerciseContext = getModalContext('exercise');
-    if (!exerciseContext) return;
-
-    const { workoutId, sectionId } = exerciseContext;
-    const isStrength = strengthWorkouts.some(w => w.id === workoutId);
-
-    // Use variant data if available, otherwise fall back to exercise data
-    const exerciseData = selectedVariant || selectedExercise;
-
-    const newExercise = {
-      id: `exercise-${Date.now()}`,
-      name: exerciseData.name,
-      category: selectedExercise.category,
-      muscleGroups: exerciseData.muscleGroups,
-      equipment: selectedVariant?.equipment || [],
-      exerciseId: selectedExercise.id,
-      variantId: selectedVariant?.id,
-      sets: [],
-      restTimer: '90s',
-      restAfter: '2 min',
-      notes: '',
-      progressionMethod: isStrength
-        ? ('linear' as ProgressionMethod)
-        : undefined,
-      hasApproachSets: false,
-    };
-
-    if (isStrength) {
-      addStrengthExercise(workoutId, sectionId, newExercise);
-    } else {
-      addRunningExercise(workoutId, sectionId, newExercise);
-    }
-
-    closeModal();
-  };
-
-  const handleNotesClick = (
-    type: 'exercise' | 'set',
-    workoutId: string,
-    sectionId: string,
-    exerciseId: string,
-    setId?: string
-  ): void => {
-    const isStrength = strengthWorkouts.some(w => w.id === workoutId);
-    const workouts = isStrength ? strengthWorkouts : runningWorkouts;
-    const workout = workouts.find(w => w.id === workoutId);
-    const section = workout?.sections.find(s => s.id === sectionId);
-    const exercise = section?.exercises.find(e => e.id === exerciseId);
-
-    if (!exercise) return;
-
-    let currentNotes = '';
-    if (type === 'exercise') {
-      currentNotes = exercise.notes;
-    } else if (type === 'set' && setId) {
-      const set = exercise.sets.find(s => s.id === setId);
-      currentNotes = set?.notes || '';
-    }
-
-    const notesContext: NotesContext = {
-      type,
-      workoutId,
-      sectionId,
-      exerciseId,
-      setId,
-      currentNotes,
-    };
-    openModal('notes', notesContext);
-  };
-
-  const handleNotesSave = (notes: string): void => {
-    const notesContext = getModalContext('notes');
-    if (!notesContext) return;
-
-    const { type, workoutId, sectionId, exerciseId, setId } = notesContext;
-    const isStrength = strengthWorkouts.some(w => w.id === workoutId);
-
-    if (type === 'exercise') {
-      if (isStrength) {
-        setStrengthWorkouts(prev =>
-          prev.map(workout =>
-            workout.id === workoutId
-              ? {
-                  ...workout,
-                  sections: workout.sections.map(section =>
-                    section.id === sectionId
-                      ? {
-                          ...section,
-                          exercises: section.exercises.map(exercise =>
-                            exercise.id === exerciseId
-                              ? { ...exercise, notes }
-                              : exercise
-                          ),
-                        }
-                      : section
-                  ),
-                }
-              : workout
-          )
-        );
-      } else {
-        setRunningWorkouts(prev =>
-          prev.map(workout =>
-            workout.id === workoutId
-              ? {
-                  ...workout,
-                  sections: workout.sections.map(section =>
-                    section.id === sectionId
-                      ? {
-                          ...section,
-                          exercises: section.exercises.map(exercise =>
-                            exercise.id === exerciseId
-                              ? { ...exercise, notes }
-                              : exercise
-                          ),
-                        }
-                      : section
-                  ),
-                }
-              : workout
-          )
-        );
-      }
-    } else if (type === 'set' && setId) {
-      if (isStrength) {
-        setStrengthWorkouts(prev =>
-          prev.map(workout =>
-            workout.id === workoutId
-              ? {
-                  ...workout,
-                  sections: workout.sections.map(section =>
-                    section.id === sectionId
-                      ? {
-                          ...section,
-                          exercises: section.exercises.map(exercise =>
-                            exercise.id === exerciseId
-                              ? {
-                                  ...exercise,
-                                  sets: exercise.sets.map(set =>
-                                    set.id === setId ? { ...set, notes } : set
-                                  ),
-                                }
-                              : exercise
-                          ),
-                        }
-                      : section
-                  ),
-                }
-              : workout
-          )
-        );
-      } else {
-        setRunningWorkouts(prev =>
-          prev.map(workout =>
-            workout.id === workoutId
-              ? {
-                  ...workout,
-                  sections: workout.sections.map(section =>
-                    section.id === sectionId
-                      ? {
-                          ...section,
-                          exercises: section.exercises.map(exercise =>
-                            exercise.id === exerciseId
-                              ? {
-                                  ...exercise,
-                                  sets: exercise.sets.map(set =>
-                                    set.id === setId ? { ...set, notes } : set
-                                  ),
-                                }
-                              : exercise
-                          ),
-                        }
-                      : section
-                  ),
-                }
-              : workout
-          )
-        );
-      }
-    }
-
-    closeModal();
-  };
-
-  const handleAddApproachSets = (
-    workoutId: string,
-    sectionId: string,
-    exerciseId: string
-  ): void => {
-    const isStrength = strengthWorkouts.some(w => w.id === workoutId);
-    const workouts = isStrength ? strengthWorkouts : runningWorkouts;
-    const workout = workouts.find(w => w.id === workoutId);
-    const section = workout?.sections.find(s => s.id === sectionId);
-    const exercise = section?.exercises.find(e => e.id === exerciseId);
-
-    if (!exercise) return;
-
-    const updatedSets = addApproachSets(exercise.sets);
-
-    if (isStrength) {
-      updateStrengthExerciseSets(workoutId, sectionId, exerciseId, updatedSets);
-      // Mark as having approach sets
-      setStrengthWorkouts(prev =>
-        prev.map(w =>
-          w.id === workoutId
-            ? {
-                ...w,
-                sections: w.sections.map(s =>
-                  s.id === sectionId
-                    ? {
-                        ...s,
-                        exercises: s.exercises.map(e =>
-                          e.id === exerciseId
-                            ? { ...e, hasApproachSets: true }
-                            : e
-                        ),
-                      }
-                    : s
-                ),
-              }
-            : w
-        )
-      );
-    } else {
-      updateRunningExerciseSets(workoutId, sectionId, exerciseId, updatedSets);
-      setRunningWorkouts(prev =>
-        prev.map(w =>
-          w.id === workoutId
-            ? {
-                ...w,
-                sections: w.sections.map(s =>
-                  s.id === sectionId
-                    ? {
-                        ...s,
-                        exercises: s.exercises.map(e =>
-                          e.id === exerciseId
-                            ? { ...e, hasApproachSets: true }
-                            : e
-                        ),
-                      }
-                    : s
-                ),
-              }
-            : w
-        )
-      );
-    }
-  };
-
-  // Save routine handler
-  const handleSaveRoutine = async (): Promise<void> => {
-    // Check authentication first
-    if (!isAuthenticated || !user) {
-      showToast({
-        message:
-          'You must be logged in to create a routine. Please log in first.',
-        variant: 'error',
-      });
-      return;
-    }
-
-    // Validate routine data using our extracted validation hook
-    const validationError = validateRoutineData({
-      name,
-      difficulty,
-      goal,
-      objectives,
-      strengthWorkouts,
-      runningWorkouts,
-    });
-
-    if (validationError) {
-      showToast({
-        message: validationError.message,
-        variant: 'error',
-      });
-      return;
-    }
-
-    // Prepare routine data
-    const routineData = {
-      userId: user.id,
-      name: name.trim(),
-      description: description.trim(),
-      difficulty: difficulty as 'Beginner' | 'Intermediate' | 'Advanced',
-      goal: goal as 'Strength' | 'Hypertrophy' | 'Endurance' | 'Weight Loss',
-      objectives,
-      duration,
-      // daysPerWeek is calculated dynamically from workout days
-      strengthWorkouts,
-      runningWorkouts,
-    };
-
-    try {
-      // setIsSaving(true); // This state variable is not defined in the original file
-      await routineService.createRoutine(routineData);
-      showToast({
-        message: 'Routine saved successfully!',
-        variant: 'success',
-      });
-      router.push('/routines');
-    } catch (error) {
-      showToast({
-        message: `Failed to save routine: ${error instanceof Error ? error.message : 'Unknown error'}`,
-        variant: 'error',
-      });
-    } finally {
-      // setIsSaving(false); // This state variable is not defined in the original file
-    }
-  };
+  }, [
+    editRoutineId,
+    mode,
+    setStrengthWorkouts,
+    setRunningWorkouts,
+    setName,
+    setDifficulty,
+    setGoal,
+    setDescription,
+    setObjectives,
+    setDuration,
+  ]);
 
   return (
     <div className="w-full px-4 sm:px-6 lg:px-8 py-6">
@@ -626,7 +247,9 @@ const RoutineCreation = ({
         onAddRunningWorkout={handleAddRunningWorkout}
         onRunningSave={handleRunningSave}
         onRunningCancel={handleRunningCancel}
-        onEditRunning={handleEditRunning}
+        onEditRunning={workoutId =>
+          handleEditRunning(workoutId, runningWorkouts)
+        }
         onToggleCollapse={toggleRunningWorkoutCollapse}
         onMoveUp={workoutId => moveRunningWorkout(workoutId, 'up')}
         onMoveDown={workoutId => moveRunningWorkout(workoutId, 'down')}
