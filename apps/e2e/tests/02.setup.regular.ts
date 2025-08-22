@@ -1,10 +1,10 @@
 import { test, expect } from '@playwright/test';
 
-test.describe('Setup: Admin User Landing → Login → Web App', () => {
-  test('admin user can navigate from landing to web app', async ({
+test.describe('Setup: Regular User Authentication', () => {
+  test('regular user can authenticate and access web app', async ({
     browser,
   }) => {
-    const email = 'erikpastorrios1994@gmail.com';
+    const email = 'user@example.com';
     const password = 'password123';
 
     const context = await browser.newContext();
@@ -22,8 +22,8 @@ test.describe('Setup: Admin User Landing → Login → Web App', () => {
       await expect(page).toHaveURL(/localhost:3000\/en\/login/);
     });
 
-    // Login and verify app selector appears
-    await test.step('Login and verify app selector appears', async () => {
+    // Login and verify direct navigation to web app
+    await test.step('Login and verify direct navigation to web app', async () => {
       // Wait for the login form to be ready
       await page.waitForSelector('input[placeholder="Enter your email"]', {
         state: 'visible',
@@ -31,35 +31,47 @@ test.describe('Setup: Admin User Landing → Login → Web App', () => {
 
       // Clear and fill email field with retry logic
       const emailInput = page.getByPlaceholder('Enter your email');
-      await emailInput.clear();
+
+      // Wait for the input to be ready
+      await emailInput.waitFor({ state: 'visible', timeout: 10000 });
+
+      // Fill the email
       await emailInput.fill(email);
 
-      // Wait a bit and verify the email was filled correctly
-
-      await page.waitForTimeout(100);
+      // Verify the email was filled correctly
       await expect(emailInput).toHaveValue(email, { timeout: 10000 });
 
       // Clear and fill password field
       const passwordInput = page.getByPlaceholder('Enter your password');
-      await passwordInput.clear();
+
+      // Wait for the input to be ready
+      await passwordInput.waitFor({ state: 'visible', timeout: 10000 });
+
+      // Fill the password
       await passwordInput.fill(password);
+
+      // Verify the password was filled correctly
+      await expect(passwordInput).toHaveValue(password, { timeout: 10000 });
 
       // Click sign in button
       await page.getByRole('button', { name: /sign in|log in/i }).click();
-      await page.waitForURL('**/app-selector', { timeout: 120_000 });
-      await expect(page.getByTestId('app-card-web')).toBeVisible();
+
+      // Regular users should be redirected directly to the web app dashboard
+      await page.waitForURL(/localhost:3024\/en\/dashboard/, {
+        timeout: 60_000,
+      });
     });
 
-    // Select web app and verify navigation
-    await test.step('Select web app and verify navigation', async () => {
-      await page.getByTestId('app-card-web').click();
+    // Verify final navigation to dashboard
+    await test.step('Verify navigation to web app dashboard', async () => {
+      // We should already be on the web app dashboard, just verify the final URL
       await expect(page).toHaveURL(/localhost:3024\/en\/dashboard/i);
     });
 
-    // Save storage state for admin web user
-    await test.step('Save storage state for admin web user', async () => {
+    // Save storage state for regular user
+    await test.step('Save storage state for regular user', async () => {
       await context.storageState({
-        path: 'storage-states/admin-web.json',
+        path: 'storage-states/regular.json',
       });
     });
 

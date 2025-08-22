@@ -1,10 +1,10 @@
 import { test, expect } from '@playwright/test';
 
-test.describe('Setup: Admin User Landing → Login → Admin App', () => {
-  test('admin user can navigate from landing to admin app', async ({
+test.describe('Setup: Trainer User Authentication', () => {
+  test('trainer user can authenticate and access app selector', async ({
     browser,
   }) => {
-    const email = 'erikpastorrios1994@gmail.com';
+    const email = 'trainer@example.com';
     const password = 'password123';
 
     const context = await browser.newContext();
@@ -46,19 +46,13 @@ test.describe('Setup: Admin User Landing → Login → Admin App', () => {
       // Click sign in button
       await page.getByRole('button', { name: /sign in|log in/i }).click();
       await page.waitForURL('**/app-selector', { timeout: 60_000 });
-      await expect(page.getByTestId('app-card-admin')).toBeVisible();
+      await expect(page.getByTestId('app-card-web')).toBeVisible();
     });
 
-    // Select admin app and verify navigation
-    await test.step('Select admin app and verify navigation', async () => {
-      await page.getByTestId('app-card-admin').click();
-      await expect(page).toHaveURL(/localhost:3002\/dashboard/i);
-    });
-
-    // Save storage state for admin admin user
-    await test.step('Save storage state for admin admin user', async () => {
+    // Save storage state for trainer user
+    await test.step('Save storage state for trainer user', async () => {
       await context.storageState({
-        path: 'storage-states/admin-admin.json',
+        path: 'storage-states/trainer.json',
       });
     });
 

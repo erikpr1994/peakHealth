@@ -49,74 +49,58 @@ export default defineConfig({
       testMatch: ['tests/landing.*.spec.ts'],
       use: { baseURL: 'http://localhost:3024' },
     },
-    // Persona-specific projects only
-    // Per-user setup projects
+    // User authentication setup projects
     {
-      name: 'setup-admin-web',
-      testMatch: ['tests/01.setup.admin.web.ts'],
+      name: 'setup-admin',
+      testMatch: ['tests/01.setup.admin.ts'],
       dependencies: ['setup'],
     },
     {
-      name: 'setup-admin-admin',
-      testMatch: ['tests/02.setup.admin.admin.ts'],
+      name: 'setup-regular',
+      testMatch: ['tests/02.setup.regular.ts'],
       dependencies: ['setup'],
     },
     {
-      name: 'setup-regular-web',
-      testMatch: ['tests/03.setup.regular.web.ts'],
+      name: 'setup-trainer',
+      testMatch: ['tests/03.setup.trainer.ts'],
       dependencies: ['setup'],
     },
-    {
-      name: 'setup-trainer-web',
-      testMatch: ['tests/04.setup.trainer.web.ts'],
-      dependencies: ['setup'],
-    },
-    // Projects that consume per-user storage states
+    // Projects that consume user storage states
     {
       name: 'admin-web',
-      dependencies: ['setup-admin-web'],
+      dependencies: ['setup-admin'],
       use: {
         baseURL: 'http://localhost:3024',
-        storageState: 'storage-states/admin-web.json',
+        storageState: 'storage-states/admin.json',
       },
-      testMatch: [
-        'tests/admin.flow.spec.ts',
-        'tests/trainer.flow.spec.ts',
-        'tests/landing.redirect.spec.ts',
-      ],
+      testMatch: ['tests/admin.flow.spec.ts', 'tests/trainer.flow.spec.ts'],
     },
     {
       name: 'admin-admin',
-      dependencies: ['setup-admin-admin'],
+      dependencies: ['setup-admin'],
       use: {
         baseURL: 'http://localhost:3002',
-        storageState: 'storage-states/admin-admin.json',
+        storageState: 'storage-states/admin.json',
       },
-      testMatch: ['tests/admin.flow.spec.ts', 'tests/landing.redirect.spec.ts'],
+      testMatch: ['tests/admin.flow.spec.ts'],
     },
     {
       name: 'regular-web',
-      dependencies: ['setup-regular-web'],
+      dependencies: ['setup-regular'],
       use: {
         baseURL: 'http://localhost:3024',
-        storageState: 'storage-states/regular-web.json',
+        storageState: 'storage-states/regular.json',
       },
-      testMatch: [
-        'tests/regular.flow.spec.ts',
-        'tests/landing.redirect.spec.ts',
-      ],
+      testMatch: ['tests/regular.flow.spec.ts'],
     },
     {
       name: 'trainer-web',
-      dependencies: ['setup-trainer-web'],
+      dependencies: ['setup-trainer'],
       use: {
         baseURL: 'http://localhost:3024',
-        storageState: 'storage-states/trainer-web.json',
+        storageState: 'storage-states/trainer.json',
       },
-      testMatch: [
-        'tests/trainer.flow.spec.ts',
-        'tests/landing.redirect.spec.ts',
-      ],
+      testMatch: ['tests/trainer.flow.spec.ts'],
     },
   ],
 });
