@@ -26,28 +26,44 @@ This document provides guidelines for implementing the refactoring plan effectiv
 
 ## General Principles
 
-### 1. Incremental Approach
+### 1. Dependency Management
+
+- **Understand PR dependencies**: Know which PRs depend on others
+- **Complete foundation PRs first**: Types, utilities, and domain logic before components
+- **Document dependencies**: Clearly document which PRs depend on others
+- **Avoid circular dependencies**: Ensure clean dependency graph between PRs
+
+### 2. Incremental Approach
 
 - **One PR at a time**: Don't try to do multiple refactoring tasks in a single PR
 - **Small, focused changes**: Each PR should have a clear, single purpose
 - **Test after each change**: Ensure functionality is maintained at each step
 - **Review thoroughly**: Get proper code review before merging
 
-### 2. Backward Compatibility
+### 3. Backward Compatibility
 
 - **Maintain existing APIs**: Don't break existing imports or function signatures
 - **Use re-exports**: When moving files, use re-exports to maintain compatibility
 - **Gradual migration**: Update imports incrementally across the codebase
 - **Document changes**: Clearly document any breaking changes
 
-### 3. Testing Strategy
+### 4. Validation Strategy
+
+- **Functional equivalence**: New components must behave identically to old ones
+- **Performance metrics**: No degradation in render performance or memory usage
+- **Accessibility**: Maintain or improve accessibility compliance
+- **Test coverage**: Equal or better test coverage than original
+- **Code quality**: Improved readability, maintainability, and separation of concerns
+- **Bundle size**: No significant increase in bundle size
+
+### 5. Testing Strategy
 
 - **Co-located tests**: Each new file should have its own test file
 - **Maintain coverage**: Don't reduce test coverage during refactoring
 - **Integration tests**: Ensure the overall feature still works
 - **Regression testing**: Run existing tests to catch any regressions
 
-### 4. Code Copying Strategy
+### 6. Code Copying Strategy
 
 - **Study first**: Thoroughly understand the existing implementation
 - **Extract patterns**: Identify reusable patterns and business logic
@@ -63,18 +79,19 @@ This document provides guidelines for implementing the refactoring plan effectiv
 features/routines/
 ├── api/                # API client layer
 ├── components/         # SHARED components only
-├── domain/            # Pure business logic
-├── features/          # Sub-features
+├── domain/             # Pure business logic
+├── features/           # Sub-features
 │   ├── routine-creation/
 │   ├── routine-detail/
 │   ├── routine-list/
 │   ├── workout-management/
 │   └── trail-running/
-├── hooks/             # SHARED hooks only
-├── services/          # Application-level services
-├── types/             # SHARED types only
-├── utils/             # SHARED utilities only
-└── index.ts           # Public API
+├── hooks/              # SHARED hooks only
+├── patterns/           # Reusable design patterns
+├── services/           # Application-level services
+├── types/              # SHARED types only
+├── utils/              # SHARED utilities only
+└── index.ts            # Public API
 ```
 
 ### 2. Component Organization
@@ -93,6 +110,7 @@ hooks/
 │   ├── strength/
 │   ├── running/
 │   └── shared/
+├── queries/           # Data fetching hooks
 ├── specialized/       # Feature-specific hooks
 └── index.ts          # Re-exports
 ```
@@ -157,41 +175,101 @@ hooks/
 
 ### 1. Test Organization
 
-- **Co-located tests**: Keep tests next to the code they test
-- **Focused tests**: Each test file should test one thing
-- **Integration tests**: Test complete user flows
-- **Unit tests**: Test individual functions and components
+- **Co-located Tests**: Keep tests next to the code they test
+- **Test Types**:
+  - `*.unit.test.tsx`: Pure unit tests with mocked dependencies
+  - `*.integration.test.tsx`: Tests that verify component integration
+  - `*.e2e.test.tsx`: End-to-end tests for complete features
+- **Focused Tests**: Each test file should test one thing
+- **Integration Tests**: Test complete user flows
+- **Unit Tests**: Test individual functions and components
 
 ### 2. Test Patterns
 
 ```typescript
 // Component test pattern
 describe('ComponentName', () => {
-  it('should render correctly', () => {
-    // Test rendering
+  describe('rendering', () => {
+    it('should render correctly with default props', () => {
+      // Test default rendering
+    });
+    
+    it('should render correctly with custom props', () => {
+      // Test custom props rendering
+    });
+    
+    it('should handle loading states', () => {
+      // Test loading states
+    });
+    
+    it('should handle error states', () => {
+      // Test error states
+    });
   });
 
-  it('should handle user interactions', () => {
-    // Test interactions
+  describe('interactions', () => {
+    it('should handle click events', () => {
+      // Test click interactions
+    });
+    
+    it('should handle form submissions', () => {
+      // Test form submissions
+    });
   });
 
-  it('should call callbacks correctly', () => {
-    // Test callbacks
+  describe('accessibility', () => {
+    it('should have proper ARIA attributes', () => {
+      // Test accessibility
+    });
+    
+    it('should be keyboard navigable', () => {
+      // Test keyboard navigation
+    });
+  });
+  
+  describe('performance', () => {
+    it('should not re-render unnecessarily', () => {
+      // Test render optimization
+    });
   });
 });
 
 // Hook test pattern
 describe('useHookName', () => {
-  it('should return expected initial state', () => {
-    // Test initial state
+  describe('initialization', () => {
+    it('should return expected initial state', () => {
+      // Test initial state
+    });
+    
+    it('should handle initialization with custom parameters', () => {
+      // Test custom initialization
+    });
   });
 
-  it('should update state correctly', () => {
-    // Test state updates
+  describe('state updates', () => {
+    it('should update state correctly when action is called', () => {
+      // Test state updates
+    });
+    
+    it('should batch related state updates', () => {
+      // Test batched updates
+    });
   });
 
-  it('should handle edge cases', () => {
-    // Test edge cases
+  describe('error handling', () => {
+    it('should handle API errors gracefully', () => {
+      // Test error handling
+    });
+    
+    it('should provide meaningful error messages', () => {
+      // Test error messages
+    });
+  });
+  
+  describe('performance', () => {
+    it('should not cause unnecessary re-renders', () => {
+      // Test render optimization
+    });
   });
 });
 ```
@@ -228,14 +306,51 @@ describe('useHookName', () => {
 
 ## Documentation Standards
 
-### 1. Code Comments
+### 1. Architectural Decision Records (ADRs)
+
+For significant architectural decisions during refactoring, create an ADR with:
+
+1. **Title**: Clear, descriptive title
+2. **Context**: Background and problem being solved
+3. **Decision**: The architectural decision made
+4. **Consequences**: Positive and negative implications
+5. **Alternatives Considered**: Other options and why they were rejected
+
+Example ADR template:
+```markdown
+# ADR-001: [Title of Decision]
+
+## Context
+[Describe the problem or situation that led to this decision]
+
+## Decision
+[Describe the decision that was made]
+
+## Consequences
+[Describe the positive and negative consequences of this decision]
+
+## Alternatives Considered
+[Describe other options that were considered and why they were rejected]
+```
+
+### 2. Code Comments
 
 - **JSDoc**: Use JSDoc for functions and components
 - **Complex logic**: Comment complex business logic
 - **API documentation**: Document public APIs clearly
 - **Examples**: Include usage examples for complex components
 
-### 2. README Files
+### 3. Component Documentation
+
+Each new component should include:
+
+1. **Purpose**: What the component does and when to use it
+2. **Props**: Detailed description of all props
+3. **Examples**: Usage examples for common scenarios
+4. **Internal Structure**: Brief explanation of how it works internally
+5. **Related Components**: Links to related components
+
+### 4. README Files
 
 - **Feature overview**: Explain what the feature does
 - **Usage examples**: Show how to use the feature
@@ -277,13 +392,37 @@ Before marking a PR as complete:
 - [ ] **New code matches original behavior**
 - [ ] **Existing functionality still works**
 
+## Integration with Development Workflow
+
+### 1. Handling Concurrent Development
+
+- **Feature freeze areas**: Communicate which components are actively being refactored
+- **Coordination meetings**: Regular sync meetings to discuss overlapping work
+- **Branch strategy**: Use feature branches that can be rebased on refactoring branches
+- **Incremental merging**: Merge refactoring PRs frequently to minimize conflicts
+- **Documentation**: Keep documentation updated about which components have been refactored
+
+### 2. Conflict Resolution
+
+- **Prioritize critical features**: Business-critical features take precedence over refactoring
+- **Adapt refactoring**: Adjust refactoring plans to accommodate new feature requirements
+- **Collaborative review**: Joint code reviews for areas with overlapping changes
+- **Temporary compromises**: Accept temporary deviations from refactoring goals when necessary
+
 ## Emergency Rollback
 
-If a refactoring causes issues:
+### 1. Component Rollback
 
-1. **Revert the PR** immediately
-2. **Document the issue** for future reference
-3. **Create a smaller PR** to address the specific problem
-4. **Add more tests** to prevent regression
-5. **Review the approach** and adjust if needed
-6. **Study existing code more thoroughly** before attempting again
+1. **Identify scope**: Determine if the issue affects a single component or multiple components
+2. **Isolate changes**: If possible, revert only the problematic component
+3. **Verify original**: Ensure the original component still works correctly
+4. **Document issue**: Record the specific problem for future reference
+5. **Adjust approach**: Modify the refactoring strategy based on the issue
+
+### 2. Hook Rollback
+
+1. **Revert to original**: Return to using the original hook implementation
+2. **Analyze root cause**: Determine what caused the issue
+3. **Create smaller PR**: Break the refactoring into smaller, more focused changes
+4. **Add tests**: Create tests that specifically target the issue
+5. **Retry with new approach**: Implement a revised refactoring strategy
