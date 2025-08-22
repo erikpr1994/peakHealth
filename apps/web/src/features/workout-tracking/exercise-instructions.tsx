@@ -12,8 +12,9 @@ interface ExerciseInstructionsProps {
 }
 
 export function ExerciseInstructions({
-  exercise,
-}: ExerciseInstructionsProps): JSX.Element {
+  instructions,
+  exerciseName,
+}: ExerciseInstructionsProps) {
   const [isExpanded, setIsExpanded] = useState(false);
 
   return (
@@ -47,7 +48,7 @@ export function ExerciseInstructions({
               Step-by-Step Instructions
             </h4>
             <div className="space-y-3">
-              {exercise.stepByStep.map((step, index) => (
+              {instructions.stepByStep.map((step, index) => (
                 <div key={index} className="flex gap-3">
                   <div className="flex-shrink-0 w-6 h-6 bg-primary/10 text-primary rounded-full flex items-center justify-center text-xs font-medium">
                     {index + 1}
@@ -76,7 +77,7 @@ export function ExerciseInstructions({
                 </span>
               </div>
               <div className="space-y-2">
-                {exercise.proTips.map((tip, index) => (
+                {instructions.proTips.map((tip, index) => (
                   <div key={index} className="flex items-start gap-2">
                     <CheckCircle className="w-3 h-3 text-green-600 mt-0.5 flex-shrink-0" />
                     <p className="text-xs text-green-700 leading-relaxed">
@@ -96,7 +97,7 @@ export function ExerciseInstructions({
                 </span>
               </div>
               <div className="space-y-2">
-                {exercise.commonMistakes.map((mistake, index) => (
+                {instructions.commonMistakes.map((mistake, index) => (
                   <div key={index} className="flex items-start gap-2">
                     <XCircle className="w-3 h-3 text-red-600 mt-0.5 flex-shrink-0" />
                     <p className="text-xs text-red-700 leading-relaxed">
