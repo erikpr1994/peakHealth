@@ -35,7 +35,7 @@ describe('Dialog', () => {
     );
 
     // Dialog element is in the DOM but not shown
-    const dialog = screen.getByRole('dialog');
+    const dialog = document.querySelector('dialog');
     expect(dialog).toBeInTheDocument();
     expect(HTMLDialogElement.prototype.showModal).not.toHaveBeenCalled();
   });
