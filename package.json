@@ -67,7 +67,7 @@
   "packageManager": "pnpm@10.14.0",
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
-      "node scripts/lint.mjs --fix",
+      "eslint --fix",
       "prettier --write"
     ],
     "*.{json,css,md}": [
