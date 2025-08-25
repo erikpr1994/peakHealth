@@ -4,7 +4,7 @@ import { ErrorHandler } from '../utils/ErrorHandler';
 import { ScreenshotHelper } from '../utils/ScreenshotHelper';
 
 test.describe('Trainer User Direct Page Access Tests', () => {
-  test.use({ storageState: 'storage-states/trainer-web.json' });
+  test.use({ storageState: 'storage-states/trainer.json' });
 
   test('can access web app dashboard directly with authenticated session', async ({
     page,

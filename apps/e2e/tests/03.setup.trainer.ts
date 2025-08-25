@@ -49,6 +49,12 @@ test.describe('Setup: Trainer User Authentication', () => {
       await expect(page.getByTestId('app-card-web')).toBeVisible();
     });
 
+    // Select web app and verify navigation
+    await test.step('Select web app and verify navigation', async () => {
+      await page.getByTestId('app-card-web').click();
+      await expect(page).toHaveURL(/localhost:3024\/en\/dashboard/i);
+    });
+
     // Save storage state for trainer user
     await test.step('Save storage state for trainer user', async () => {
       await context.storageState({

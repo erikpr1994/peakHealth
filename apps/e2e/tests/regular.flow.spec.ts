@@ -7,7 +7,7 @@ import { ScreenshotHelper } from '../utils/ScreenshotHelper';
 import { TestDataHelper } from '../utils/TestDataHelper';
 
 test.describe('Regular user flows', () => {
-  test.use({ storageState: 'storage-states/regular-web.json' });
+  test.use({ storageState: 'storage-states/regular.json' });
 
   test('regular user can create routines with proper validation', async ({
     page,
