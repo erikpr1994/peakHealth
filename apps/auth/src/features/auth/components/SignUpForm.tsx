@@ -146,81 +146,83 @@ const SignUpForm = (): React.JSX.Element => {
   };
 
   return (
-    <AuthCard title={t('title')} subtitle={t('subtitle')}>
-      <div className={styles.backButtonContainer}>
-        <BackButton variant="secondary" size="sm" />
-      </div>
-
-      <form onSubmit={handleSubmit} className={styles.form}>
-        <div className={styles.nameGrid}>
-          <div>
-            <Input
-              type="text"
-              name="firstName"
-              placeholder={t('firstName.placeholder')}
-              value={formData.firstName}
-              onChange={handleInputChange}
-              error={!!errors.firstName}
-              required
-            />
-          </div>
-          <div>
-            <Input
-              type="text"
-              name="lastName"
-              placeholder={t('lastName.placeholder')}
-              value={formData.lastName}
-              onChange={handleInputChange}
-              error={!!errors.lastName}
-              required
-            />
-          </div>
+    <div className={styles.container}>
+      <AuthCard title={t('title')} subtitle={t('subtitle')}>
+        <div className={styles.backButtonContainer}>
+          <BackButton variant="secondary" size="sm" />
         </div>
 
-        <Input
-          type="email"
-          name="email"
-          placeholder={t('email.placeholder')}
-          value={formData.email}
-          onChange={handleInputChange}
-          error={!!errors.email}
-          required
-        />
+        <form onSubmit={handleSubmit} className={styles.form}>
+          <div className={styles.nameGrid}>
+            <div>
+              <Input
+                type="text"
+                name="firstName"
+                placeholder={t('firstName.placeholder')}
+                value={formData.firstName}
+                onChange={handleInputChange}
+                error={!!errors.firstName}
+                required
+              />
+            </div>
+            <div>
+              <Input
+                type="text"
+                name="lastName"
+                placeholder={t('lastName.placeholder')}
+                value={formData.lastName}
+                onChange={handleInputChange}
+                error={!!errors.lastName}
+                required
+              />
+            </div>
+          </div>
 
-        <Input
-          type="password"
-          name="password"
-          placeholder={t('password.placeholder')}
-          value={formData.password}
-          onChange={handleInputChange}
-          error={!!errors.password}
-          required
-        />
+          <Input
+            type="email"
+            name="email"
+            placeholder={t('email.placeholder')}
+            value={formData.email}
+            onChange={handleInputChange}
+            error={!!errors.email}
+            required
+          />
 
-        <Input
-          type="password"
-          name="confirmPassword"
-          placeholder={t('confirmPassword.placeholder')}
-          value={formData.confirmPassword}
-          onChange={handleInputChange}
-          error={!!errors.confirmPassword}
-          required
-        />
+          <Input
+            type="password"
+            name="password"
+            placeholder={t('password.placeholder')}
+            value={formData.password}
+            onChange={handleInputChange}
+            error={!!errors.password}
+            required
+          />
 
-        {errors.submit && <div className={styles.error}>{errors.submit}</div>}
+          <Input
+            type="password"
+            name="confirmPassword"
+            placeholder={t('confirmPassword.placeholder')}
+            value={formData.confirmPassword}
+            onChange={handleInputChange}
+            error={!!errors.confirmPassword}
+            required
+          />
 
-        <Button type="submit" disabled={isLoading}>
-          {isLoading ? t('button.loading') : t('button.default')}
-        </Button>
+          {errors.submit && <div className={styles.error}>{errors.submit}</div>}
 
-        <div className={styles.loginLinkContainer}>
-          <span className={styles.loginText}>{t('footer.haveAccount')} </span>
-          <Link href={`/login?returnUrl=${encodeURIComponent(returnUrl)}`}>
-            {t('footer.signIn')}
-          </Link>
-        </div>
-      </form>
-    </AuthCard>
+          <Button type="submit" disabled={isLoading}>
+            {isLoading ? t('button.loading') : t('button.default')}
+          </Button>
+
+          <div className={styles.loginLinkContainer}>
+            <span className={styles.loginText}>{t('footer.haveAccount')} </span>
+            <Link href={`/login?returnUrl=${encodeURIComponent(returnUrl)}`}>
+              {t('footer.signIn')}
+            </Link>
+          </div>
+        </form>
+      </AuthCard>
+    </div>
   );
 };
 

@@ -1,7 +1,6 @@
 'use client';
 
 import React from 'react';
-
 import styles from '../styles/AuthCard.module.css';
 
 interface AuthCardProps {
@@ -18,14 +17,16 @@ export const AuthCard: React.FC<AuthCardProps> = ({
   variant = 'default',
 }): React.JSX.Element => {
   return (
-    <div
-      className={`${styles.authCard} ${variant === 'full-width' ? styles.fullWidth : ''}`}
-    >
-      <div className={styles.header}>
-        <h1 className={styles.title}>{title}</h1>
-        {subtitle && <p className={styles.subtitle}>{subtitle}</p>}
+    <div className={styles.authCardWrapper}>
+      <div
+        className={`${styles.authCard} ${variant === 'full-width' ? styles.fullWidth : ''}`}
+      >
+        <div className={styles.header}>
+          <h1 className={styles.title}>{title}</h1>
+          {subtitle && <p className={styles.subtitle}>{subtitle}</p>}
+        </div>
+        {children}
       </div>
-      {children}
     </div>
   );
 };
@@ -102,3 +103,4 @@ export const Link: React.FC<{
     </a>
   );
 };
+
