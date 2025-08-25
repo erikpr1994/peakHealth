@@ -15,6 +15,7 @@
     "supabase:start": "supabase start"
   },
   "dependencies": {
+    "@peakhealth/auth-utils": "workspace:*",
     "@peakhealth/ui": "workspace:*",
     "@radix-ui/react-alert-dialog": "^1.1.15",
     "@radix-ui/react-avatar": "^1.1.10",

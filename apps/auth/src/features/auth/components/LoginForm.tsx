@@ -29,7 +29,7 @@ const LoginForm = (): React.JSX.Element => {
 
   const searchParams = useSearchParams();
   const message = searchParams.get('message');
-  const returnUrl = searchParams.get('returnUrl') ?? `/${locale}/app-selector`;
+  const _returnUrl = searchParams.get('returnUrl') ?? `/${locale}/app-selector`;
 
   const [formData, setFormData] = useState({
     email: '',
@@ -86,8 +86,8 @@ const LoginForm = (): React.JSX.Element => {
       // Only one app available, redirect directly to it
       const appKey = availableApps[0].appKey;
 
-      // Don't pass returnUrl when redirecting directly to app
-      return buildAppRedirectUrl(appKey);
+      // Preserve locale when redirecting to app
+      return buildAppRedirectUrl(appKey, { locale });
     }
     // Multiple apps available, redirect to app selector
     return `/${locale}/app-selector`;

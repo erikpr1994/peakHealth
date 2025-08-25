@@ -12,6 +12,7 @@ import React, {
 import useSWR from 'swr';
 
 import { createClient } from '@/lib/supabase/client';
+import { extractLocaleFromPathnameWithFallback } from '@peakhealth/auth-utils';
 
 // Extended user type with our custom properties
 export type ExtendedUser = User;
@@ -74,15 +75,22 @@ const handleUserNotFoundCleanup = async (): Promise<void> => {
     // Clear any stored auth data
     localStorage.removeItem('supabase.auth.token');
     sessionStorage.removeItem('supabase.auth.token');
-  } catch (error) {
-    // Log error but continue with redirect
+  } catch {
     // Error clearing storage, continue with redirect
   }
 
-  // Redirect to external landing app
+  // Redirect to external landing app with locale preservation
   const landingUrl =
     process.env.NEXT_PUBLIC_WEB_APP_URL || 'http://localhost:3024';
-  window.location.href = landingUrl;
+
+  // Extract locale from current pathname
+  const currentPathname = window.location.pathname;
+  const currentLocale = extractLocaleFromPathnameWithFallback(currentPathname);
+
+  const redirectUrl =
+    currentLocale === 'en' ? landingUrl : `${landingUrl}/${currentLocale}`;
+
+  window.location.href = redirectUrl;
 };
 
 // Pure fetcher function - throws errors for proper SWR error handling
@@ -179,11 +187,22 @@ export const AuthProvider = ({
         await mutateUser(null);
         const landingUrl =
           process.env.NEXT_PUBLIC_WEB_APP_URL || 'http://localhost:3024';
+
+        // Extract locale from current pathname for redirect
+        const currentPathname = pathname;
+        const currentLocale =
+          extractLocaleFromPathnameWithFallback(currentPathname);
+
+        const redirectUrl =
+          currentLocale === 'en'
+            ? landingUrl
+            : `${landingUrl}/${currentLocale}`;
+
         // Use full redirect to landing app
         if (typeof window !== 'undefined') {
-          window.location.href = landingUrl;
+          window.location.href = redirectUrl;
         } else {
-          router.push(landingUrl);
+          router.push(redirectUrl);
         }
       }
     });
@@ -217,9 +236,6 @@ export const AuthProvider = ({
 
       // Revalidate user data after successful login
       await mutateUser();
-    } catch (error) {
-      // Login error occurred
-      throw error;
     } finally {
       setIsAuthOperationLoading(false);
     }
@@ -269,9 +285,6 @@ export const AuthProvider = ({
       // Get the new user data from the response and pass it to mutateUser
       const responseData = await response.json();
       await mutateUser(responseData.user);
-    } catch (error) {
-      // Signup error occurred
-      throw error;
     } finally {
       setIsAuthOperationLoading(false);
     }
@@ -321,9 +334,6 @@ export const AuthProvider = ({
       if (typeof window !== 'undefined') {
         window.location.href = landingUrl;
       }
-    } catch (error) {
-      // Logout error occurred
-      throw error;
     } finally {
       setIsAuthOperationLoading(false);
     }

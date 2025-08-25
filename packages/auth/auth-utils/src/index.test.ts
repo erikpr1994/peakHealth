@@ -6,6 +6,11 @@ import {
   hasGroup,
   validateReturnUrl,
   getReturnUrl,
+  buildAppRedirectUrl,
+  extractLocaleFromUrl,
+  extractLocaleFromPathname,
+  extractLocaleFromPathnameWithFallback,
+  parseAcceptLanguage,
 } from './index';
 import type { User } from '@supabase/supabase-js';
 
@@ -125,5 +130,108 @@ describe('Auth Utils', () => {
     it('should return false for null user', () => {
       expect(hasGroup(null, 'premium')).toBe(false);
     });
+  });
+});
+
+describe('Locale utilities', () => {
+  describe('extractLocaleFromUrl', () => {
+    it('should extract locale from URL with locale prefix', () => {
+      expect(extractLocaleFromUrl('https://example.com/es/dashboard')).toBe(
+        'es'
+      );
+      expect(extractLocaleFromUrl('https://example.com/en/profile')).toBe('en');
+    });
+
+    it('should return null for URL without locale prefix', () => {
+      expect(extractLocaleFromUrl('https://example.com/dashboard')).toBeNull();
+      expect(extractLocaleFromUrl('https://example.com/')).toBeNull();
+    });
+
+    it('should return null for invalid URL', () => {
+      expect(extractLocaleFromUrl('invalid-url')).toBeNull();
+    });
+  });
+
+  describe('extractLocaleFromPathname', () => {
+    it('should extract locale from pathname with locale prefix', () => {
+      expect(extractLocaleFromPathname('/es/dashboard')).toBe('es');
+      expect(extractLocaleFromPathname('/en/profile')).toBe('en');
+    });
+
+    it('should return null for pathname without locale prefix', () => {
+      expect(extractLocaleFromPathname('/dashboard')).toBeNull();
+      expect(extractLocaleFromPathname('/')).toBeNull();
+    });
+  });
+
+  describe('extractLocaleFromPathnameWithFallback', () => {
+    it('should extract locale from pathname with locale prefix', () => {
+      expect(extractLocaleFromPathnameWithFallback('/es/dashboard')).toBe('es');
+      expect(extractLocaleFromPathnameWithFallback('/en/profile')).toBe('en');
+    });
+
+    it('should return default locale for pathname without locale prefix', () => {
+      expect(extractLocaleFromPathnameWithFallback('/dashboard')).toBe('en');
+      expect(extractLocaleFromPathnameWithFallback('/')).toBe('en');
+    });
+  });
+
+  describe('parseAcceptLanguage', () => {
+    it('should parse Accept-Language header correctly', () => {
+      expect(parseAcceptLanguage('es-ES,es;q=0.9,en;q=0.8')).toBe('es');
+      expect(parseAcceptLanguage('en-US,en;q=0.9,es;q=0.8')).toBe('en');
+    });
+
+    it('should handle quality values correctly', () => {
+      expect(parseAcceptLanguage('en;q=0.8,es;q=0.9')).toBe('es');
+      expect(parseAcceptLanguage('fr;q=0.9,es;q=0.8,en;q=0.7')).toBe('es');
+    });
+
+    it('should return default locale for unsupported languages', () => {
+      expect(parseAcceptLanguage('fr-FR,fr;q=0.9')).toBe('en');
+      expect(parseAcceptLanguage('de-DE,de;q=0.9')).toBe('en');
+    });
+
+    it('should return default locale for empty header', () => {
+      expect(parseAcceptLanguage('')).toBe('en');
+    });
+  });
+});
+
+describe('buildAppRedirectUrl with locale support', () => {
+  it('should build URL without locale for default locale (en)', () => {
+    const url = buildAppRedirectUrl('web', { locale: 'en' });
+    expect(url).not.toContain('/en/');
+    expect(url).toContain('/dashboard');
+  });
+
+  it('should build URL with locale prefix for non-default locale', () => {
+    const url = buildAppRedirectUrl('web', { locale: 'es' });
+    expect(url).toContain('/es/dashboard');
+  });
+
+  it('should build URL without locale when locale is not provided', () => {
+    const url = buildAppRedirectUrl('web');
+    expect(url).not.toContain('/en/');
+    expect(url).toContain('/dashboard');
+  });
+
+  it('should preserve returnUrl when provided', () => {
+    const url = buildAppRedirectUrl('web', {
+      locale: 'es',
+      returnUrl: '/profile',
+    });
+    expect(url).toContain('/es/profile');
+  });
+
+  it('should work with different app keys', () => {
+    const webUrl = buildAppRedirectUrl('web', { locale: 'es' });
+    expect(webUrl).toContain('/es/dashboard');
+
+    const adminUrl = buildAppRedirectUrl('admin', { locale: 'es' });
+    expect(adminUrl).toContain('/es/dashboard');
+
+    const proUrl = buildAppRedirectUrl('pro', { locale: 'es' });
+    expect(proUrl).toContain('/es/dashboard');
   });
 });

@@ -3,6 +3,10 @@ import { NextResponse, type NextRequest } from 'next/server';
 import createMiddleware from 'next-intl/middleware';
 import getHypertune from './lib/hypertune/getHypertune';
 import { routing } from './i18n/routing';
+import {
+  parseAcceptLanguage,
+  extractLocaleFromPathname,
+} from '@peakhealth/auth-utils';
 
 // Create the internationalization middleware
 const intlMiddleware = createMiddleware(routing);
@@ -48,15 +52,28 @@ export async function middleware(request: NextRequest): Promise<NextResponse> {
   // Handle root route logic
   if (request.nextUrl.pathname === '/') {
     if (isAuthenticated) {
-      // If authenticated, redirect to dashboard with default locale
+      // If authenticated, redirect to dashboard with browser language detection
+      const acceptLanguage = request.headers.get('accept-language') || '';
+      const preferredLocale = parseAcceptLanguage(acceptLanguage);
+
       return NextResponse.redirect(
-        new URL(`/${routing.defaultLocale}/dashboard`, request.url)
+        new URL(`/${preferredLocale}/dashboard`, request.url)
       );
     } else {
-      // If not authenticated, redirect to landing app
+      // If not authenticated, redirect to landing app with locale preservation
       const landingUrl =
         process.env.NEXT_PUBLIC_WEB_APP_URL || 'http://localhost:3024';
-      return NextResponse.redirect(new URL(landingUrl));
+
+      // Extract locale from Accept-Language header
+      const acceptLanguage = request.headers.get('accept-language') || '';
+      const preferredLocale = parseAcceptLanguage(acceptLanguage);
+
+      const redirectUrl =
+        preferredLocale === 'en'
+          ? landingUrl
+          : `${landingUrl}/${preferredLocale}`;
+
+      return NextResponse.redirect(new URL(redirectUrl));
     }
   }
 
@@ -102,7 +119,16 @@ export async function middleware(request: NextRequest): Promise<NextResponse> {
   if (isProtectedRoute && !isAuthenticated) {
     const landing =
       process.env.NEXT_PUBLIC_WEB_APP_URL || 'http://localhost:3024';
-    return NextResponse.redirect(new URL(landing));
+
+    // Extract locale from current URL pathname
+    const currentLocale = extractLocaleFromPathname(request.nextUrl.pathname);
+
+    const redirectUrl =
+      currentLocale && currentLocale !== 'en'
+        ? `${landing}/${currentLocale}`
+        : landing;
+
+    return NextResponse.redirect(new URL(redirectUrl));
   }
 
   // (Kept for completeness) Redirect authenticated users away from any auth routes
