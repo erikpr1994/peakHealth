@@ -2,6 +2,7 @@
 
 import React from 'react';
 
+// eslint-disable-next-line css-modules/no-unused-class
 import styles from '../styles/AuthCard.module.css';
 
 interface AuthCardProps {
@@ -18,14 +19,47 @@ export const AuthCard: React.FC<AuthCardProps> = ({
   variant = 'default',
 }): React.JSX.Element => {
   return (
-    <div
-      className={`${styles.authCard} ${variant === 'full-width' ? styles.fullWidth : ''}`}
-    >
-      <div className={styles.header}>
-        <h1 className={styles.title}>{title}</h1>
-        {subtitle && <p className={styles.subtitle}>{subtitle}</p>}
+    <div className={styles.authContainer}>
+      <div className={styles.authInfo}>
+        <h2>Welcome to PeakHealth</h2>
+        <p>
+          Track your workouts, monitor your progress, and achieve your fitness
+          goals with our comprehensive fitness platform.
+        </p>
+        <div className={styles.featureList}>
+          <div className={styles.featureItem}>
+            <div className={styles.featureIcon}>✓</div>
+            <span>Create custom workout routines</span>
+          </div>
+          <div className={styles.featureItem}>
+            <div className={styles.featureIcon}>✓</div>
+            <span>Track your progress with detailed analytics</span>
+          </div>
+          <div className={styles.featureItem}>
+            <div className={styles.featureIcon}>✓</div>
+            <span>Connect with fitness community</span>
+          </div>
+        </div>
       </div>
-      {children}
+      <div
+        className={`${styles.authCard} ${variant === 'full-width' ? styles.fullWidth : ''}`}
+      >
+        <div className={styles.header}>
+          <h1 className={styles.title}>
+            {title.split(' ').map((word, index, array) =>
+              index === array.length - 1 ? (
+                <span key={index} className={styles.gradientText}>
+                  {word}
+                </span>
+              ) : (
+                <span key={index}>{word} </span>
+              )
+            )}
+          </h1>
+          {subtitle && <p className={styles.subtitle}>{subtitle}</p>}
+        </div>
+        {children}
+      </div>
     </div>
   );
 };
