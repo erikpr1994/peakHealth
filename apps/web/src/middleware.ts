@@ -52,9 +52,12 @@ export async function middleware(request: NextRequest): Promise<NextResponse> {
   // Handle root route logic
   if (request.nextUrl.pathname === '/') {
     if (isAuthenticated) {
-      // If authenticated, redirect to dashboard with default locale
+      // If authenticated, redirect to dashboard with browser language detection
+      const acceptLanguage = request.headers.get('accept-language') || '';
+      const preferredLocale = parseAcceptLanguage(acceptLanguage);
+
       return NextResponse.redirect(
-        new URL(`/${routing.defaultLocale}/dashboard`, request.url)
+        new URL(`/${preferredLocale}/dashboard`, request.url)
       );
     } else {
       // If not authenticated, redirect to landing app with locale preservation
