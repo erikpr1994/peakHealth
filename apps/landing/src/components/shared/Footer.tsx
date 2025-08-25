@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslations, useLocale } from 'next-intl';
 import { Link } from '@/i18n/navigation';
+import { Logo } from '@peakhealth/ui';
 
 import styles from './Footer.module.css';
 
@@ -27,7 +28,9 @@ export const Footer = (): React.JSX.Element => {
       <div className={styles.container}>
         <div className={styles.content}>
           <div className={styles.section}>
-            <div className={styles.title}>PeakHealth</div>
+            <div className={styles.title}>
+              <Logo width={160} height={35} />
+            </div>
             <p className={styles.description}>{t('description')}</p>
             <Link
               href={isMounted ? signupUrl : '#'}

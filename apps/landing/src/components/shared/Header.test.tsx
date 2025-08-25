@@ -29,7 +29,7 @@ describe('Header', () => {
     render(<Header />);
 
     // Check for logo
-    expect(screen.getByText('PeakHealth')).toBeInTheDocument();
+    expect(screen.getByTestId('logo')).toBeInTheDocument();
 
     // Check for navigation links
     expect(screen.getByText(/features/i)).toBeInTheDocument();

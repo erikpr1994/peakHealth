@@ -22,14 +22,14 @@
 }
 
 .logoLink {
-  font-size: 1.5rem;
-  font-weight: 800;
-  color: var(--foreground);
+  display: flex;
+  align-items: center;
   text-decoration: none;
-  background: linear-gradient(135deg, var(--primary) 0%, #8b5cf6 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  transition: opacity 0.2s ease;
+}
+
+.logoLink:hover {
+  opacity: 0.8;
 }
 
 .nav {

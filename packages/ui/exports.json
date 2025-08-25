@@ -59,6 +59,11 @@
     "import": "./dist/components/label/index.js",
     "require": "./dist/components/label/index.js"
   },
+  "./logo": {
+    "types": "./dist/components/logo/index.d.ts",
+    "import": "./dist/components/logo/index.js",
+    "require": "./dist/components/logo/index.js"
+  },
   "./modal": {
     "types": "./dist/components/modal/index.d.ts",
     "import": "./dist/components/modal/index.js",

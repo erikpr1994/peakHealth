@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { Logo } from '@peakhealth/ui';
 import {
   Clock,
   Target,
@@ -227,7 +228,13 @@ const mockRoutine: WorkoutRoutine = {
   ],
 };
 
-const getSectionTypeInfo = (type: SectionType) => {
+const getSectionTypeInfo = (
+  type: SectionType
+): {
+  icon: React.ComponentType<{ className?: string }>;
+  color: string;
+  label: string;
+} => {
   switch (type) {
     case 'warm-up':
       return { icon: TrendingUp, color: 'text-green-500', label: 'Warm-up' };
@@ -246,10 +253,10 @@ const getSectionTypeInfo = (type: SectionType) => {
   }
 };
 
-export const WorkoutOverview = () => {
+export const WorkoutOverview = (): React.JSX.Element => {
   const [routine] = useState<WorkoutRoutine>(mockRoutine);
 
-  const handleStartWorkout = () => {
+  const handleStartWorkout = (): void => {
     window.location.href = `/workout/${routine.id}`;
   };
 
@@ -258,7 +265,7 @@ export const WorkoutOverview = () => {
       {/* Header */}
       <div className="mb-6">
         <div className="flex items-center justify-between mb-2">
-          <h1 className="text-2xl font-bold text-foreground">PeakHealth</h1>
+          <Logo width={140} height={30} />
           <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center">
             <span className="text-primary-foreground text-sm font-semibold">
               P
@@ -347,7 +354,7 @@ export const WorkoutOverview = () => {
                   {section.type === 'amrap' && (
                     <p className="text-xs text-muted-foreground mb-2">
                       As many rounds as possible in{' '}
-                      {Math.floor(section.duration! / 60)} minutes
+                      {Math.floor((section.duration || 0) / 60)} minutes
                     </p>
                   )}
 
