@@ -6,12 +6,12 @@
   --secondary: #8b5cf6;
   --secondary-dark: #7c3aed;
   --secondary-light: #a78bfa;
-  
+
   --success: #10b981;
   --warning: #f59e0b;
   --error: #ef4444;
   --info: #0ea5e9;
-  
+
   --gray-50: #f8fafc;
   --gray-100: #f1f5f9;
   --gray-200: #e2e8f0;
@@ -23,54 +23,31 @@
   --gray-800: #1e293b;
   --gray-900: #0f172a;
   --gray-950: #020617;
-  
+
   /* Semantic colors */
   --text-primary: var(--gray-800);
   --text-secondary: var(--gray-500);
   --text-tertiary: var(--gray-400);
-  
+
   --background: var(--gray-50);
   --background-subtle: var(--gray-100);
   --background-muted: var(--gray-200);
-  
+
   --border-color: var(--gray-200);
   --border-color-hover: var(--gray-300);
-  
+
   --card-bg: white;
   --input-bg: white;
-  
+
   /* Shadows */
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-  
-  /* Spacing */
-  --spacing-1: 0.25rem;
-  --spacing-2: 0.5rem;
-  --spacing-3: 0.75rem;
-  --spacing-4: 1rem;
-  --spacing-6: 1.5rem;
-  --spacing-8: 2rem;
-  --spacing-12: 3rem;
-  --spacing-16: 4rem;
-  
-  /* Radius */
-  --radius-sm: 0.25rem;
-  --radius-md: 0.5rem;
-  --radius-lg: 0.75rem;
-  --radius-xl: 1rem;
-  --radius-2xl: 1.5rem;
-  
-  /* Typography */
-  --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
-  
-  /* Transitions */
-  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
-  --transition-normal: 300ms cubic-bezier(0.4, 0, 0.2, 1);
-  --transition-slow: 500ms cubic-bezier(0.4, 0, 0.2, 1);
-  
+  --shadow-md:
+    0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-lg:
+    0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --shadow-xl:
+    0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+
   /* Legacy variables for compatibility */
   --primary-color: var(--primary);
   --primary-hover: var(--primary-dark);
@@ -84,17 +61,17 @@
     --text-primary: var(--gray-100);
     --text-secondary: var(--gray-400);
     --text-tertiary: var(--gray-500);
-    
+
     --background: var(--gray-900);
     --background-subtle: var(--gray-800);
     --background-muted: var(--gray-700);
-    
+
     --border-color: var(--gray-700);
     --border-color-hover: var(--gray-600);
-    
+
     --card-bg: var(--gray-800);
     --input-bg: var(--gray-700);
-    
+
     /* Legacy variables for compatibility */
     --primary-color: var(--primary-light);
     --primary-hover: var(--primary);
@@ -105,17 +82,29 @@
 }
 
 /* Reset */
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
 
-html, body {
+html,
+body {
   height: 100%;
   width: 100%;
-  overflow-x: hidden;
-  font-family: var(--font-sans);
+  overflow: hidden;
+  font-family: var(
+    --font-sans,
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    Roboto,
+    'Helvetica Neue',
+    Arial,
+    sans-serif
+  );
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: var(--text-primary);
@@ -126,16 +115,29 @@ body {
   line-height: 1.5;
 }
 
-img, picture, video, canvas, svg {
+img,
+picture,
+video,
+canvas,
+svg {
   display: block;
   max-width: 100%;
 }
 
-input, button, textarea, select {
+input,
+button,
+textarea,
+select {
   font: inherit;
 }
 
-p, h1, h2, h3, h4, h5, h6 {
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   overflow-wrap: break-word;
 }
 
@@ -153,14 +155,16 @@ a {
 /* Auth Container */
 .auth-container {
   width: 100%;
-  min-height: 100vh;
+  height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
   background-color: var(--background);
-  background-image: 
-    radial-gradient(at 10% 10%, rgba(59, 130, 246, 0.05) 0px, transparent 50%),
-    radial-gradient(at 90% 90%, rgba(139, 92, 246, 0.05) 0px, transparent 50%);
+  background-image: linear-gradient(
+    to bottom right,
+    rgba(59, 130, 246, 0.05),
+    rgba(139, 92, 246, 0.05)
+  );
   position: relative;
   overflow: hidden;
 }
@@ -171,7 +175,7 @@ a {
   top: 0;
   left: 0;
   right: 0;
-  height: 4px;
+  height: 3px;
   background: linear-gradient(90deg, var(--primary), var(--secondary));
   z-index: 10;
 }
@@ -182,4 +186,3 @@ a {
     color-scheme: dark;
   }
 }
-
