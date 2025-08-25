@@ -90,9 +90,12 @@
 .title {
   font-size: 2.25rem;
   font-weight: 800;
-  color: var(--text-primary);
   margin-bottom: 0.75rem;
   line-height: 1.2;
+  background: linear-gradient(135deg, var(--primary) 0%, #8b5cf6 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .gradientText {
@@ -140,7 +143,7 @@
 
 .input:focus {
   outline: none;
-  border-color: var(--primary-color);
+  border-color: var(--primary);
   box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
   transform: translateY(-1px);
 }
@@ -179,6 +182,23 @@
   text-decoration: none;
   width: 100%;
   box-shadow: 0 4px 14px rgba(59, 130, 246, 0.25);
+  position: relative;
+  overflow: hidden;
+}
+
+.button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: all 0.6s ease;
+}
+
+.button:hover:not(:disabled)::before {
+  left: 100%;
 }
 
 .button:hover:not(:disabled) {
@@ -258,13 +278,31 @@
 }
 
 .link {
-  color: var(--primary-color);
+  color: var(--primary);
   text-decoration: none;
-  font-weight: 500;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  position: relative;
+  padding-bottom: 2px;
+}
+
+.link::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 2px;
+  bottom: 0;
+  left: 0;
+  background: linear-gradient(135deg, var(--primary) 0%, #8b5cf6 100%);
+  transition: width 0.3s ease;
 }
 
 .link:hover {
-  text-decoration: underline;
+  color: #2563eb;
+}
+
+.link:hover::after {
+  width: 100%;
 }
 
 .footer {
