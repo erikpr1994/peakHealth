@@ -267,11 +267,14 @@ export const buildAppRedirectUrl = (
       path = options.returnUrl;
     } else {
       // If returnUrl is invalid, fall back to default path
-
-      console.warn(
-        `Invalid returnUrl: ${options.returnUrl}, using default path`
-      );
+      // Invalid returnUrl, using default path
     }
+  }
+
+  // Handle locale preservation
+  if (options.locale && options.locale !== 'en') {
+    // For non-default locales, prepend the locale to the path
+    path = `/${options.locale}${path}`;
   }
 
   const finalUrl = `${baseUrl}${path}`;
@@ -281,6 +284,63 @@ export const buildAppRedirectUrl = (
 
 export const getReturnUrl = (searchParams: URLSearchParams): string | null => {
   return searchParams.get('returnUrl') ?? searchParams.get('redirect') ?? null;
+};
+
+// Locale utilities
+export const extractLocaleFromUrl = (url: string): string | null => {
+  try {
+    const urlObj = new URL(url);
+    const pathSegments = urlObj.pathname.split('/').filter(Boolean);
+
+    // Check if the first segment is a valid locale
+    if (pathSegments.length > 0 && ['en', 'es'].includes(pathSegments[0])) {
+      return pathSegments[0];
+    }
+
+    return null;
+  } catch {
+    return null;
+  }
+};
+
+export const extractLocaleFromPathname = (pathname: string): string | null => {
+  const pathSegments = pathname.split('/').filter(Boolean);
+
+  // Check if the first segment is a valid locale
+  if (pathSegments.length > 0 && ['en', 'es'].includes(pathSegments[0])) {
+    return pathSegments[0];
+  }
+
+  return null;
+};
+
+export const extractLocaleFromPathnameWithFallback = (
+  pathname: string
+): string => {
+  const locale = extractLocaleFromPathname(pathname);
+  return locale || 'en';
+};
+
+export const parseAcceptLanguage = (acceptLanguage: string): string => {
+  if (!acceptLanguage) return 'en';
+
+  // Split by comma and parse each language tag
+  const languages = acceptLanguage
+    .split(',')
+    .map(lang => {
+      const [language, quality = 'q=1.0'] = lang.trim().split(';');
+      const q = parseFloat(quality.replace('q=', ''));
+      return { language: language.toLowerCase().split('-')[0], q };
+    })
+    .sort((a, b) => b.q - a.q); // Sort by quality (highest first)
+
+  // Find the first supported language
+  for (const { language } of languages) {
+    if (language === 'es') return 'es';
+    if (language === 'en') return 'en';
+  }
+
+  return 'en'; // Default fallback
 };
 
 // URL validation utilities

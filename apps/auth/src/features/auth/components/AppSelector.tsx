@@ -4,7 +4,7 @@ import {
   getUserAccessibleApps,
   buildAppRedirectUrl,
 } from '@peakhealth/auth-utils';
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
 import { useEffect, useState } from 'react';
 
 import styles from './app-selector.module.css';
@@ -157,6 +157,7 @@ const AppIcons = {
 const AppSelector = (): React.JSX.Element => {
   const t = useTranslations('appSelector');
   const tErrors = useTranslations('errors');
+  const locale = useLocale();
 
   const router = useRouter();
   const [apps, setApps] = useState<AppOption[]>([]);
@@ -202,7 +203,7 @@ const AppSelector = (): React.JSX.Element => {
     }
 
     try {
-      const redirectUrl = buildAppRedirectUrl(appKey);
+      const redirectUrl = buildAppRedirectUrl(appKey, { locale });
       window.location.href = redirectUrl;
     } catch (err) {
       setError(err instanceof Error ? err.message : tErrors('redirectFailed'));

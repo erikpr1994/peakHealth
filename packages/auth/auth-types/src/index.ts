@@ -38,21 +38,20 @@ export interface AuthState {
 
 // Auth context types
 export interface AuthContextType extends AuthState {
-  // eslint-disable-next-line no-unused-vars
   login: (email: string, password: string) => Promise<void>;
-  // eslint-disable-next-line no-unused-vars
+
   signup: (email: string, password: string, name: string) => Promise<void>;
   logout: () => Promise<void>;
-  // eslint-disable-next-line no-unused-vars
+
   selectApp: (appKey: string) => Promise<void>;
   refreshSession: () => Promise<void>;
-  // eslint-disable-next-line no-unused-vars
+
   hasRole: (role: string) => boolean;
-  // eslint-disable-next-line no-unused-vars
+
   hasGroup: (group: string) => boolean;
-  // eslint-disable-next-line no-unused-vars
+
   hasAnyRole: (roles: readonly string[]) => boolean;
-  // eslint-disable-next-line no-unused-vars
+
   hasAnyGroup: (groups: readonly string[]) => boolean;
 }
 
@@ -91,4 +90,5 @@ export interface RedirectOptions {
   appKey: string;
   returnUrl?: string;
   preserveQuery?: boolean;
+  locale?: string;
 }
