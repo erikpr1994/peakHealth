@@ -76,7 +76,11 @@ export class RoutineService {
     );
   }
 
-  async setActiveRoutine(routineId: string): Promise<void> {
+  async setActiveRoutine(routineId: string): Promise<{
+    success: boolean;
+    message: string;
+    scheduledWorkoutsCount?: number;
+  }> {
     if (!this.supabase) {
       throw new Error('Database connection not available');
     }
@@ -90,27 +94,72 @@ export class RoutineService {
       throw new Error('Not authenticated');
     }
 
-    // First, deactivate all other routines
-    const { error: deactivateError } = await this.supabase
-      .from('routines')
-      .update({ is_active: false })
-      .eq('user_id', user.id);
+    try {
+      // First, deactivate all other routines and clear their scheduled workouts
+      const { data: activeRoutines, error: fetchError } = await this.supabase
+        .from('routines')
+        .select('id')
+        .eq('user_id', user.id)
+        .eq('is_active', true);
 
-    if (deactivateError) {
-      // Error handling without console.log
-      throw deactivateError;
-    }
+      if (fetchError) {
+        throw fetchError;
+      }
 
-    // Then activate the selected routine
-    const { error: updateError } = await this.supabase
-      .from('routines')
-      .update({ is_active: true })
-      .eq('id', routineId)
-      .eq('user_id', user.id);
+      // Clear scheduled workouts for all currently active routines
+      if (activeRoutines && activeRoutines.length > 0) {
+        for (const routine of activeRoutines) {
+          await this.supabase.rpc('clear_scheduled_workouts', {
+            routine_id_param: routine.id,
+          });
+        }
+      }
 
-    if (updateError) {
-      // Error handling without console.log
-      throw updateError;
+      // Deactivate all other routines
+      const { error: deactivateError } = await this.supabase
+        .from('routines')
+        .update({ is_active: false })
+        .eq('user_id', user.id);
+
+      if (deactivateError) {
+        throw deactivateError;
+      }
+
+      // Then activate the selected routine
+      const { error: updateError } = await this.supabase
+        .from('routines')
+        .update({ is_active: true })
+        .eq('id', routineId)
+        .eq('user_id', user.id);
+
+      if (updateError) {
+        throw updateError;
+      }
+
+      // Generate scheduled workouts for the new active routine
+      const { data: scheduledCount, error: generateError } =
+        await this.supabase.rpc('generate_scheduled_workouts', {
+          routine_id_param: routineId,
+          start_date_param: new Date().toISOString().split('T')[0],
+          weeks_ahead_param: 4,
+        });
+
+      if (generateError) {
+        // Don't fail the entire operation if scheduled workout generation fails
+        // Just continue silently
+      }
+
+      return {
+        success: true,
+        message: 'Routine activated successfully',
+        scheduledWorkoutsCount: scheduledCount || 0,
+      };
+    } catch (error) {
+      return {
+        success: false,
+        message:
+          error instanceof Error ? error.message : 'Failed to activate routine',
+      };
     }
   }
 
