@@ -382,11 +382,12 @@ jobs:
               IFS=',' read -ra PACKAGES <<< "$AFFECTED"
               for PKG in "${PACKAGES[@]}"; do
                 if [[ -n "$PKG" ]]; then
-                  # Only include packages that start with @peakhealth/ and are not apps
-                  if [[ "$PKG" == "@peakhealth/"* ]] && [[ "$PKG" != "@peakhealth/web" ]] && [[ "$PKG" != "@peakhealth/admin" ]] && [[ "$PKG" != "@peakhealth/landing" ]] && [[ "$PKG" != "@peakhealth/auth" ]]; then
+                  # Only include packages that are actually in the packages/ directory
+                  # Valid packages: @peakhealth/ui, @peakhealth/auth-types, @peakhealth/auth-utils
+                  if [[ "$PKG" == "@peakhealth/ui" ]] || [[ "$PKG" == "@peakhealth/auth-types" ]] || [[ "$PKG" == "@peakhealth/auth-utils" ]]; then
                     PACKAGES_TO_BUILD+=("$PKG")
                   else
-                    echo "Skipping app package: $PKG"
+                    echo "Skipping app/other package: $PKG"
                   fi
                 fi
               done
@@ -398,10 +399,9 @@ jobs:
 
               if [[ -n "$FILTER_STRING" ]]; then
                 echo "Running: pnpm turbo run build $FILTER_STRING"
-                # Use --no-deps to prevent building dependencies (apps)
-                pnpm turbo run build $FILTER_STRING --no-deps || {
+                pnpm turbo run build $FILTER_STRING || {
                   echo "Build failed, trying clean build..."
-                  pnpm turbo run build $FILTER_STRING --no-deps --force
+                  pnpm turbo run build $FILTER_STRING --force
                 }
               else
                 echo "No packages to build (only apps were affected)"
