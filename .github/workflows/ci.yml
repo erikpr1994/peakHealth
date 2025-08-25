@@ -391,16 +391,17 @@ jobs:
                 fi
               done
 
-              # Create filter string for packages to build
+              # Create filter string for packages to build (explicitly list each package)
               for PKG in "${PACKAGES_TO_BUILD[@]}"; do
                 FILTER_STRING="${FILTER_STRING} --filter=${PKG}"
               done
 
               if [[ -n "$FILTER_STRING" ]]; then
                 echo "Running: pnpm turbo run build $FILTER_STRING"
-                pnpm turbo run build $FILTER_STRING || {
+                # Use --no-deps to prevent building dependencies (apps)
+                pnpm turbo run build $FILTER_STRING --no-deps || {
                   echo "Build failed, trying clean build..."
-                  pnpm turbo run build $FILTER_STRING --force
+                  pnpm turbo run build $FILTER_STRING --no-deps --force
                 }
               else
                 echo "No packages to build (only apps were affected)"
