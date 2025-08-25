@@ -1,7 +1,6 @@
 .container {
   width: 100vw;
   height: 100vh;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   padding: 2rem;
   display: flex;
   justify-content: center;
@@ -40,10 +39,10 @@
   background: white;
   border-radius: 16px;
   padding: 2rem;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
   transition: all 0.3s ease;
   cursor: pointer;
-  border: 2px solid transparent;
+  border: 1px solid var(--border-color);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -51,12 +50,29 @@
   min-height: 240px;
   position: relative;
   backdrop-filter: blur(10px);
+  overflow: hidden;
+}
+
+.appCard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: linear-gradient(135deg, var(--primary) 0%, #8b5cf6 100%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
 }
 
 .appCard:hover:not(.disabled) {
   transform: translateY(-4px);
-  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.2);
-  border-color: #667eea;
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.12);
+  border-color: var(--border-color);
+}
+
+.appCard:hover:not(.disabled)::before {
+  opacity: 1;
 }
 
 .appCard.disabled {
@@ -72,10 +88,16 @@
   align-items: center;
   justify-content: center;
   border-radius: 16px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, var(--primary) 0%, #8b5cf6 100%);
   color: white;
   margin-bottom: 1.5rem;
-  box-shadow: 0 4px 16px rgba(102, 126, 234, 0.3);
+  box-shadow: 0 4px 16px rgba(59, 130, 246, 0.25);
+  transition: all 0.3s ease;
+}
+
+.appCard:hover:not(.disabled) .appIcon {
+  transform: scale(1.05);
+  box-shadow: 0 8px 24px rgba(59, 130, 246, 0.35);
 }
 
 .appIcon svg {
@@ -86,17 +108,25 @@
 .appName {
   font-size: 1.5rem;
   font-weight: 700;
-  color: #1a202c;
   margin-bottom: 0.75rem;
+  background: linear-gradient(135deg, var(--primary) 0%, #8b5cf6 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .appDescription {
-  color: #718096;
+  color: var(--text-secondary);
   font-size: 1rem;
   line-height: 1.6;
   margin-bottom: 1.5rem;
   flex-grow: 1;
   max-width: 280px;
+  transition: all 0.3s ease;
+}
+
+.appCard:hover:not(.disabled) .appDescription {
+  color: var(--text-primary);
 }
 
 .appStatus {
@@ -142,9 +172,31 @@
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.3s ease;
   min-width: 140px;
   box-shadow: 0 4px 16px rgba(229, 62, 62, 0.3);
+  position: relative;
+  overflow: hidden;
+}
+
+.signOutButton::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
+  transition: all 0.6s ease;
+}
+
+.signOutButton:hover::before {
+  left: 100%;
 }
 
 .signOutButton:hover {
@@ -181,8 +233,30 @@
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.3s ease;
   box-shadow: 0 4px 16px rgba(229, 62, 62, 0.3);
+  position: relative;
+  overflow: hidden;
+}
+
+.logoutButton::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
+  transition: all 0.6s ease;
+}
+
+.logoutButton:hover::before {
+  left: 100%;
 }
 
 .logoutButton:hover {
@@ -191,17 +265,18 @@
 }
 
 .error {
-  color: #e53e3e;
+  color: var(--error-color);
   margin-bottom: 1.5rem;
   padding: 1rem;
-  background: #fed7d7;
+  background: rgba(239, 68, 68, 0.1);
   border-radius: 12px;
   font-size: 0.875rem;
-  border: 1px solid #feb2b2;
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.1);
 }
 
 .retryButton {
-  background: linear-gradient(135deg, #667eea 0%, #5a67d8 100%);
+  background: linear-gradient(135deg, var(--primary) 0%, #2563eb 100%);
   color: white;
   border: none;
   padding: 1rem 2rem;
@@ -209,13 +284,35 @@
   font-size: 0.875rem;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s ease;
-  box-shadow: 0 4px 16px rgba(102, 126, 234, 0.3);
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 16px rgba(59, 130, 246, 0.25);
+  position: relative;
+  overflow: hidden;
+}
+
+.retryButton::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
+  transition: all 0.6s ease;
+}
+
+.retryButton:hover::before {
+  left: 100%;
 }
 
 .retryButton:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(102, 126, 234, 0.4);
+  box-shadow: 0 8px 24px rgba(59, 130, 246, 0.35);
 }
 
 /* Responsive design */
