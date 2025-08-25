@@ -4,7 +4,7 @@ import { createSource } from '../../../generated/hypertune';
 import { getVercelOverride } from '../../../generated/hypertune.vercel';
 import { getAnonymousId } from './anonymousId';
 
-let hypertuneToken = process.env.NEXT_PUBLIC_HYPERTUNE_TOKEN;
+let hypertuneToken = process.env.NEXT_PUBLIC_HYPERTUNE_TOKEN || '';
 if (!hypertuneToken) {
   if (process.env.NODE_ENV === 'test') {
     hypertuneToken = 'mock-token-for-tests';

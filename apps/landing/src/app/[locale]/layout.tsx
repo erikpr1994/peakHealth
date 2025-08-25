@@ -43,7 +43,7 @@ const LocaleLayout = async ({
   const serverDehydratedState = hypertune.dehydrate();
   const serverRootArgs = hypertune.getRootArgs();
 
-  const hypertuneToken = process.env.NEXT_PUBLIC_HYPERTUNE_TOKEN;
+  const hypertuneToken = process.env.NEXT_PUBLIC_HYPERTUNE_TOKEN || '';
   if (!hypertuneToken) {
     throw new Error('NEXT_PUBLIC_HYPERTUNE_TOKEN is not defined');
   }
