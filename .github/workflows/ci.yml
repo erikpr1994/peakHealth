@@ -350,9 +350,10 @@ jobs:
           else
             echo "Building affected packages: $AFFECTED"
 
-            # Create filter string for affected packages
+            # Create filter string for affected packages (only packages, not apps)
             FILTER_STRING=""
             AFFECTED_CORE=false
+            PACKAGES_TO_BUILD=()
 
             # Check if any core packages are affected
             for CORE_PKG in $CORE_PACKAGES; do
@@ -377,12 +378,22 @@ jobs:
                   --force
               }
             else
-              # Build only affected packages
+              # Filter affected packages to only include packages (not apps)
               IFS=',' read -ra PACKAGES <<< "$AFFECTED"
               for PKG in "${PACKAGES[@]}"; do
                 if [[ -n "$PKG" ]]; then
-                  FILTER_STRING="${FILTER_STRING} --filter=${PKG}"
+                  # Only include packages that start with @peakhealth/ and are not apps
+                  if [[ "$PKG" == "@peakhealth/"* ]] && [[ "$PKG" != "@peakhealth/web" ]] && [[ "$PKG" != "@peakhealth/admin" ]] && [[ "$PKG" != "@peakhealth/landing" ]] && [[ "$PKG" != "@peakhealth/auth" ]]; then
+                    PACKAGES_TO_BUILD+=("$PKG")
+                  else
+                    echo "Skipping app package: $PKG"
+                  fi
                 fi
+              done
+
+              # Create filter string for packages to build
+              for PKG in "${PACKAGES_TO_BUILD[@]}"; do
+                FILTER_STRING="${FILTER_STRING} --filter=${PKG}"
               done
 
               if [[ -n "$FILTER_STRING" ]]; then
@@ -392,7 +403,7 @@ jobs:
                   pnpm turbo run build $FILTER_STRING --force
                 }
               else
-                echo "No packages to build"
+                echo "No packages to build (only apps were affected)"
               fi
             fi
           fi
