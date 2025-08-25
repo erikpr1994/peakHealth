@@ -37,7 +37,7 @@ export class RoutinesPage extends RegularUserBasePage {
     await this.click(this.createRoutineButtonSelector);
 
     // Wait for navigation to complete
-    await this.page.waitForURL(/localhost:3024\/routines\/create/);
+    await this.page.waitForURL(/localhost:3024\/en\/routines\/create/);
     await this.waitForPageLoad();
   }
 

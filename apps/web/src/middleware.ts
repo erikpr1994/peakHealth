@@ -1,8 +1,22 @@
 // Deep import to avoid bundling browser client in Edge runtime
 import { NextResponse, type NextRequest } from 'next/server';
+import createMiddleware from 'next-intl/middleware';
 import getHypertune from './lib/hypertune/getHypertune';
+import { routing } from './i18n/routing';
+
+// Create the internationalization middleware
+const intlMiddleware = createMiddleware(routing);
 
 export async function middleware(request: NextRequest): Promise<NextResponse> {
+  // Skip internationalization for API routes
+  if (request.nextUrl.pathname.startsWith('/api/')) {
+    return NextResponse.next();
+  }
+
+  // Handle internationalization first
+  const intlResponse = intlMiddleware(request);
+  if (intlResponse) return intlResponse;
+
   const response = NextResponse.next({
     request: { headers: request.headers },
   });
@@ -34,8 +48,10 @@ export async function middleware(request: NextRequest): Promise<NextResponse> {
   // Handle root route logic
   if (request.nextUrl.pathname === '/') {
     if (isAuthenticated) {
-      // If authenticated, redirect to dashboard
-      return NextResponse.redirect(new URL('/dashboard', request.url));
+      // If authenticated, redirect to dashboard with default locale
+      return NextResponse.redirect(
+        new URL(`/${routing.defaultLocale}/dashboard`, request.url)
+      );
     } else {
       // If not authenticated, redirect to landing app
       const landingUrl =
@@ -66,9 +82,18 @@ export async function middleware(request: NextRequest): Promise<NextResponse> {
   // No local auth routes anymore
   const authRoutes: string[] = [];
 
-  const isProtectedRoute = protectedRoutes.some(route =>
-    request.nextUrl.pathname.startsWith(route)
-  );
+  // Check if the pathname matches any protected route, accounting for locale prefixes
+  const isProtectedRoute = protectedRoutes.some(route => {
+    // Check for exact match or locale-prefixed match
+    return (
+      request.nextUrl.pathname === route ||
+      request.nextUrl.pathname.startsWith(
+        `/${routing.defaultLocale}${route}`
+      ) ||
+      request.nextUrl.pathname.startsWith(`/es${route}`)
+    );
+  });
+
   const isAuthRoute = authRoutes.some(route =>
     request.nextUrl.pathname.startsWith(route)
   );
@@ -93,11 +118,12 @@ export const config = {
   matcher: [
     /*
      * Match all request paths except for the ones starting with:
+     * - api (API routes)
      * - _next/static (static files)
      * - _next/image (image optimization files)
      * - favicon.ico (favicon file)
      * Feel free to modify this pattern to include more paths.
      */
-    '/((?!_next/static|_next/image|favicon.ico).*)',
+    '/((?!api|_next/static|_next/image|favicon.ico).*)',
   ],
 };

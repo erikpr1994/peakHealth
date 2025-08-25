@@ -25,7 +25,7 @@ test.describe('Regular user flows', () => {
       await dashboardPage.goto();
 
       // Verify URL
-      expect(dashboardPage.getUrl()).toMatch(/localhost:3024\/dashboard/);
+      expect(dashboardPage.getUrl()).toMatch(/localhost:3024\/en\/dashboard/);
 
       // Verify welcome message is visible
       expect(await dashboardPage.isWelcomeMessageVisible()).toBeTruthy();
@@ -39,7 +39,7 @@ test.describe('Regular user flows', () => {
       await dashboardPage.navigateToRoutines();
 
       // Verify URL
-      expect(routinesPage.getUrl()).toMatch(/localhost:3024\/routines/);
+      expect(routinesPage.getUrl()).toMatch(/localhost:3024\/en\/routines/);
 
       // Verify routine list is visible
       expect(await routinesPage.isRoutineListVisible()).toBeTruthy();
@@ -54,7 +54,7 @@ test.describe('Regular user flows', () => {
 
       // Verify URL
       expect(routineCreatePage.getUrl()).toMatch(
-        /localhost:3024\/routines\/create/
+        /localhost:3024\/en\/routines\/create/
       );
 
       // Take screenshot
@@ -80,7 +80,7 @@ test.describe('Regular user flows', () => {
 
       // Verify we're still on the create page
       expect(routineCreatePage.getUrl()).toMatch(
-        /localhost:3024\/routines\/create/
+        /localhost:3024\/en\/routines\/create/
       );
     });
 
@@ -91,7 +91,7 @@ test.describe('Regular user flows', () => {
 
       // Verify URL
       expect(routineCreatePage.getUrl()).toMatch(
-        /localhost:3024\/routines\/create/
+        /localhost:3024\/en\/routines\/create/
       );
 
       // Take screenshot
@@ -107,8 +107,8 @@ test.describe('Regular user flows', () => {
       await routineCreatePage.waitForToast('Routine saved successfully!');
 
       // Verify redirect to routines page
-      await page.waitForURL(/localhost:3024\/routines/);
-      expect(routinesPage.getUrl()).toMatch(/localhost:3024\/routines/);
+      await page.waitForURL(/localhost:3024\/en\/routines/);
+      expect(routinesPage.getUrl()).toMatch(/localhost:3024\/en\/routines/);
 
       // Verify the new routine exists in the list
       expect(await routinesPage.routineExists(routineData.name)).toBeTruthy();

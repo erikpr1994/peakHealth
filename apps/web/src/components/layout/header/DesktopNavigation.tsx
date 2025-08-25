@@ -26,13 +26,16 @@ export const DesktopNavigation = ({
     itemPath: string,
     currentPathname: string
   ): boolean => {
+    // Extract locale from current pathname (e.g., /en/dashboard -> /dashboard)
+    const pathWithoutLocale = currentPathname.replace(/^\/[a-z]{2}/, '');
+
     // Check if the current pathname starts with the item path
     // This handles sub-routes like /routines/create, /routines/123, etc.
     if (itemPath === '/dashboard') {
       // Dashboard should only be active for exact match
-      return currentPathname === itemPath;
+      return pathWithoutLocale === itemPath;
     }
-    return currentPathname.startsWith(itemPath);
+    return pathWithoutLocale.startsWith(itemPath);
   };
 
   return (

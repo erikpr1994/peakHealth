@@ -1,7 +1,14 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, expect, it, vi, beforeEach } from 'vitest';
+import { NextIntlClientProvider } from 'next-intl';
 
 import { UserMenu } from './UserMenu';
+
+// Mock the useTranslations hook
+const mockT = vi.fn((key: string) => key);
+vi.mock('@/hooks/useTranslations', () => ({
+  useTranslations: vi.fn(() => mockT),
+}));
 
 // Mock Next.js Link component
 vi.mock('next/link', () => ({
@@ -207,31 +214,30 @@ describe('UserMenu', () => {
     vi.clearAllMocks();
   });
 
-  it('renders user menu trigger button', () => {
-    render(
-      <UserMenu
-        user={mockUser}
-        onLogout={mockOnLogout}
-        userMenuItems={mockUserMenuItems}
-        settingsMenuItems={mockSettingsMenuItems}
-        supportMenuItems={mockSupportMenuItems}
-      />
+  const renderUserMenu = (props = {}): ReturnType<typeof render> => {
+    return render(
+      <NextIntlClientProvider messages={{}} locale="en">
+        <UserMenu
+          user={mockUser}
+          onLogout={mockOnLogout}
+          userMenuItems={mockUserMenuItems}
+          settingsMenuItems={mockSettingsMenuItems}
+          supportMenuItems={mockSupportMenuItems}
+          {...props}
+        />
+      </NextIntlClientProvider>
     );
+  };
+
+  it('renders user menu trigger button', () => {
+    renderUserMenu();
 
     expect(screen.getByTestId('dropdown-trigger')).toBeInTheDocument();
     expect(screen.getByTestId('user-menu-button')).toBeInTheDocument();
   });
 
   it('renders user avatar and information', () => {
-    render(
-      <UserMenu
-        user={mockUser}
-        onLogout={mockOnLogout}
-        userMenuItems={mockUserMenuItems}
-        settingsMenuItems={mockSettingsMenuItems}
-        supportMenuItems={mockSupportMenuItems}
-      />
-    );
+    renderUserMenu();
 
     expect(screen.getByTestId('avatar')).toBeInTheDocument();
     expect(screen.getByTestId('avatar-image')).toHaveAttribute(
@@ -247,15 +253,7 @@ describe('UserMenu', () => {
   });
 
   it('renders dropdown content with navigation links', () => {
-    render(
-      <UserMenu
-        user={mockUser}
-        onLogout={mockOnLogout}
-        userMenuItems={mockUserMenuItems}
-        settingsMenuItems={mockSettingsMenuItems}
-        supportMenuItems={mockSupportMenuItems}
-      />
-    );
+    renderUserMenu();
 
     // Check that all navigation items are rendered
     expect(screen.getByTestId('link-profile')).toBeInTheDocument();
@@ -277,15 +275,7 @@ describe('UserMenu', () => {
   });
 
   it('renders icons and labels correctly', () => {
-    render(
-      <UserMenu
-        user={mockUser}
-        onLogout={mockOnLogout}
-        userMenuItems={mockUserMenuItems}
-        settingsMenuItems={mockSettingsMenuItems}
-        supportMenuItems={mockSupportMenuItems}
-      />
-    );
+    renderUserMenu();
 
     // Check that icons are rendered
     expect(screen.getByTestId('icon-profile')).toBeInTheDocument();
@@ -301,15 +291,7 @@ describe('UserMenu', () => {
   });
 
   it('closes dropdown when navigation link is clicked', () => {
-    render(
-      <UserMenu
-        user={mockUser}
-        onLogout={mockOnLogout}
-        userMenuItems={mockUserMenuItems}
-        settingsMenuItems={mockSettingsMenuItems}
-        supportMenuItems={mockSupportMenuItems}
-      />
-    );
+    renderUserMenu();
 
     const profileLink = screen.getByTestId('link-profile');
     fireEvent.click(profileLink);
@@ -319,15 +301,7 @@ describe('UserMenu', () => {
   });
 
   it('renders logout button with correct styling', () => {
-    render(
-      <UserMenu
-        user={mockUser}
-        onLogout={mockOnLogout}
-        userMenuItems={mockUserMenuItems}
-        settingsMenuItems={mockSettingsMenuItems}
-        supportMenuItems={mockSupportMenuItems}
-      />
-    );
+    renderUserMenu();
 
     const logoutButton = screen.getByTestId('logout-button');
     expect(logoutButton).toBeInTheDocument();
@@ -341,15 +315,7 @@ describe('UserMenu', () => {
   });
 
   it('calls onLogout when logout button is clicked', () => {
-    render(
-      <UserMenu
-        user={mockUser}
-        onLogout={mockOnLogout}
-        userMenuItems={mockUserMenuItems}
-        settingsMenuItems={mockSettingsMenuItems}
-        supportMenuItems={mockSupportMenuItems}
-      />
-    );
+    renderUserMenu();
 
     const logoutButton = screen.getByTestId('logout-button');
     fireEvent.click(logoutButton);
@@ -358,15 +324,7 @@ describe('UserMenu', () => {
   });
 
   it('renders separators between menu sections', () => {
-    render(
-      <UserMenu
-        user={mockUser}
-        onLogout={mockOnLogout}
-        userMenuItems={mockUserMenuItems}
-        settingsMenuItems={mockSettingsMenuItems}
-        supportMenuItems={mockSupportMenuItems}
-      />
-    );
+    renderUserMenu();
 
     const separators = screen.getAllByTestId('dropdown-separator');
     expect(separators.length).toBeGreaterThan(0);
@@ -379,15 +337,7 @@ describe('UserMenu', () => {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } as any;
 
-    render(
-      <UserMenu
-        user={userWithoutMetadata}
-        onLogout={mockOnLogout}
-        userMenuItems={mockUserMenuItems}
-        settingsMenuItems={mockSettingsMenuItems}
-        supportMenuItems={mockSupportMenuItems}
-      />
-    );
+    renderUserMenu({ user: userWithoutMetadata });
 
     // Should fall back to email for display name (appears twice - as name and email)
     const emailElements = screen.getAllByText('test@example.com');

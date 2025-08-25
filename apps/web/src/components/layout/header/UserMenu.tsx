@@ -4,7 +4,8 @@ import Link from 'next/link';
 import type { User } from '@supabase/supabase-js';
 import { useState } from 'react';
 
-import { LogOut, ChevronDown } from './menuItems';
+import { LogOut, ChevronDown } from '@/hooks/useMenuItems';
+import { useTranslations } from '@/hooks/useTranslations';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
@@ -65,6 +66,7 @@ export const UserMenu = ({
   supportMenuItems,
 }: UserMenuProps): React.ReactElement => {
   const [userDropdownOpen, setUserDropdownOpen] = useState(false);
+  const t = useTranslations('navigation');
 
   const menuSections = [userMenuItems, settingsMenuItems, supportMenuItems];
 
@@ -128,7 +130,7 @@ export const UserMenu = ({
           data-testid="logout-button"
         >
           <LogOut className="w-4 h-4" />
-          Log out
+          {t('signOut')}
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

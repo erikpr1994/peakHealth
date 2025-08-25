@@ -4,7 +4,7 @@ import { unstable_noStore as noStore } from 'next/cache';
 import { createSource, type Environment } from '../../../generated/hypertune';
 import { getVercelOverride } from '../../../generated/hypertune.vercel';
 
-let hypertuneToken = process.env.NEXT_PUBLIC_HYPERTUNE_TOKEN;
+let hypertuneToken = process.env.NEXT_PUBLIC_HYPERTUNE_TOKEN || '';
 if (!hypertuneToken) {
   // In test environment, provide a mock token to prevent errors
   if (process.env.NODE_ENV === 'test') {
