@@ -242,7 +242,27 @@ describe('routineService', () => {
     });
 
     it('should handle error when setting active routine', async () => {
-      // Mock the deactivate call
+      // Mock the select call for checking active routines
+      mockSupabase.from.mockReturnValueOnce({
+        select: vi.fn().mockReturnValue({
+          eq: vi.fn().mockReturnValue({
+            eq: vi.fn().mockReturnValue({
+              single: vi.fn().mockResolvedValue({
+                data: [],
+                error: null,
+              }),
+            }),
+          }),
+        }),
+      } as unknown as ReturnType<typeof mockSupabase.from>);
+
+      // Mock the rpc call for clearing scheduled workouts
+      mockSupabase.rpc = vi.fn().mockResolvedValue({
+        data: 0,
+        error: null,
+      });
+
+      // Mock the update call for deactivating all routines
       mockSupabase.from.mockReturnValueOnce({
         update: vi.fn().mockReturnValue({
           eq: vi.fn().mockResolvedValue({
@@ -252,7 +272,7 @@ describe('routineService', () => {
         }),
       } as unknown as ReturnType<typeof mockSupabase.from>);
 
-      // Mock the activate call with error
+      // Mock the update call for activating the specific routine with error
       mockSupabase.from.mockReturnValueOnce({
         update: vi.fn().mockReturnValue({
           eq: vi.fn().mockReturnValue({
@@ -264,9 +284,10 @@ describe('routineService', () => {
         }),
       } as unknown as ReturnType<typeof mockSupabase.from>);
 
-      await expect(
-        routineService.setActiveRoutine('routine-1')
-      ).rejects.toThrow('Activation failed');
+      const result = await routineService.setActiveRoutine('routine-1');
+
+      expect(result.success).toBe(false);
+      expect(result.message).toBeTruthy();
     });
   });
 });

@@ -16,8 +16,10 @@ import {
 import { useToast } from '@peakhealth/ui';
 import { Routine } from '@/features/routines/types';
 import { routineService } from '../../../services/routineService';
+import { ScheduledWorkoutService } from '../../../services/scheduledWorkoutService';
 import ActiveRoutineCard from './ActiveRoutineCard';
 import RoutineCard from './RoutineCard';
+import { ActiveRoutineWarningModal } from '../../../components/ActiveRoutineWarningModal';
 
 interface RoutinesListProps {
   routines: Routine[];
@@ -37,6 +39,19 @@ const RoutinesList = ({
   const [goalFilter, setGoalFilter] = useState('all');
   const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
+
+  // Warning modal state
+  const [warningModal, setWarningModal] = useState<{
+    isOpen: boolean;
+    currentActiveRoutineName: string;
+    newRoutineName: string;
+    newRoutineId: string;
+  }>({
+    isOpen: false,
+    currentActiveRoutineName: '',
+    newRoutineName: '',
+    newRoutineId: '',
+  });
 
   const activeRoutine = routines.find(routine => routine.isActive);
   const inactiveRoutines = routines.filter(routine => !routine.isActive);
@@ -60,6 +75,41 @@ const RoutinesList = ({
 
   const handleSetActiveRoutine = async (routineId: string): Promise<void> => {
     try {
+      const scheduledWorkoutService = new ScheduledWorkoutService();
+
+      // Check if user already has an active routine
+      const { hasActive, activeRoutineName } =
+        await scheduledWorkoutService.hasActiveRoutine();
+
+      if (hasActive && activeRoutineName) {
+        // Find the routine names
+        const currentActiveRoutine = routines.find(r => r.isActive);
+        const newRoutine = routines.find(r => r.id === routineId);
+
+        if (currentActiveRoutine && newRoutine) {
+          // Show warning modal
+          setWarningModal({
+            isOpen: true,
+            currentActiveRoutineName: currentActiveRoutine.name,
+            newRoutineName: newRoutine.name,
+            newRoutineId: routineId,
+          });
+          return;
+        }
+      }
+
+      // No active routine or no warning needed, proceed directly
+      await performSetActiveRoutine(routineId);
+    } catch {
+      showToast({
+        message: 'Failed to check active routine status. Please try again.',
+        variant: 'error',
+      });
+    }
+  };
+
+  const performSetActiveRoutine = async (routineId: string): Promise<void> => {
+    try {
       // Optimistically update the local state first
       const updatedRoutines = routines.map(routine => ({
         ...routine,
@@ -71,9 +121,21 @@ const RoutinesList = ({
       }
 
       // Then update the database and ensure it completes
-      await routineService.setActiveRoutine(routineId);
+      const result = await routineService.setActiveRoutine(routineId);
 
-      // If we get here, the database update was successful
+      if (result.success) {
+        // Show success message with scheduled workouts count if available
+        const message = result.scheduledWorkoutsCount
+          ? `Routine activated successfully! Generated ${result.scheduledWorkoutsCount} scheduled workouts.`
+          : 'Routine activated successfully!';
+
+        showToast({
+          message,
+          variant: 'success',
+        });
+      } else {
+        throw new Error(result.message);
+      }
     } catch {
       // Error occurred while setting active routine
 
@@ -93,6 +155,15 @@ const RoutinesList = ({
         variant: 'error',
       });
     }
+  };
+
+  const handleConfirmSetActiveRoutine = async (): Promise<void> => {
+    setWarningModal(prev => ({ ...prev, isOpen: false }));
+    await performSetActiveRoutine(warningModal.newRoutineId);
+  };
+
+  const handleCancelSetActiveRoutine = (): void => {
+    setWarningModal(prev => ({ ...prev, isOpen: false }));
   };
 
   const handleFavoriteToggle = async (routineId: string): Promise<void> => {
@@ -256,6 +327,15 @@ const RoutinesList = ({
           ))}
         </div>
       )}
+
+      {/* Warning Modal */}
+      <ActiveRoutineWarningModal
+        isOpen={warningModal.isOpen}
+        currentActiveRoutineName={warningModal.currentActiveRoutineName}
+        newRoutineName={warningModal.newRoutineName}
+        onConfirm={handleConfirmSetActiveRoutine}
+        onCancel={handleCancelSetActiveRoutine}
+      />
     </div>
   );
 };
