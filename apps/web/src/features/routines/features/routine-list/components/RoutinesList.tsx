@@ -53,6 +53,9 @@ const RoutinesList = ({
     newRoutineId: '',
   });
 
+  // Initialize ScheduledWorkoutService once at component level
+  const scheduledWorkoutService = new ScheduledWorkoutService();
+
   const activeRoutine = routines.find(routine => routine.isActive);
   const inactiveRoutines = routines.filter(routine => !routine.isActive);
 
@@ -75,22 +78,19 @@ const RoutinesList = ({
 
   const handleSetActiveRoutine = async (routineId: string): Promise<void> => {
     try {
-      const scheduledWorkoutService = new ScheduledWorkoutService();
-
       // Check if user already has an active routine
       const { hasActive, activeRoutineName } =
         await scheduledWorkoutService.hasActiveRoutine();
 
       if (hasActive && activeRoutineName) {
-        // Find the routine names
-        const currentActiveRoutine = routines.find(r => r.isActive);
+        // Find the new routine from local state
         const newRoutine = routines.find(r => r.id === routineId);
 
-        if (currentActiveRoutine && newRoutine) {
-          // Show warning modal
+        if (newRoutine) {
+          // Show warning modal using API data for current active routine
           setWarningModal({
             isOpen: true,
-            currentActiveRoutineName: currentActiveRoutine.name,
+            currentActiveRoutineName: activeRoutineName, // Use API data instead of local state
             newRoutineName: newRoutine.name,
             newRoutineId: routineId,
           });
