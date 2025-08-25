@@ -87,7 +87,7 @@ features/routines/
 
 ## 🔄 PR #1: Extract Routine Types
 
-**Status:** COMPLETED  
+**Status:** PENDING  
 **Branch:** `refactor/extract-routine-types`
 
 ### Files
@@ -107,7 +107,7 @@ features/routines/
 
 ## 🔄 PR #2: Extract Workout Types
 
-**Status:** COMPLETED  
+**Status:** PENDING  
 **Branch:** `refactor/extract-workout-types`
 
 ### Files
@@ -127,7 +127,7 @@ features/routines/
 
 ## 🔄 PR #3: Extract Exercise Types
 
-**Status:** COMPLETED  
+**Status:** PENDING  
 **Branch:** `refactor/extract-exercise-types`
 
 ### Files
@@ -151,7 +151,7 @@ features/routines/
 
 ## 🔄 PR #4: Extract Trail Running Types
 
-**Status:** COMPLETED  
+**Status:** PENDING  
 **Branch:** `refactor/extract-trail-running-types`
 
 ### Files
@@ -173,7 +173,7 @@ features/routines/
 
 ## 🔄 PR #5: Extract Workout Calculations
 
-**Status:** COMPLETED  
+**Status:** PENDING  
 **Branch:** `refactor/extract-workout-calculations`
 
 ### Files
@@ -202,7 +202,7 @@ features/routines/
 
 ## 🔄 PR #6: Extract Data Transformers
 
-**Status:** COMPLETED  
+**Status:** PENDING  
 **Branch:** `refactor/extract-data-transformers`
 
 ### Files
