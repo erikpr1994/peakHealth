@@ -6,6 +6,7 @@ import {
 } from '@peakhealth/auth-utils';
 import { useTranslations, useLocale } from 'next-intl';
 import { useEffect, useState } from 'react';
+import { ArrowRight, LogOut, RefreshCw } from 'lucide-react';
 
 import styles from './app-selector.module.css';
 
@@ -228,9 +229,10 @@ const AppSelector = (): React.JSX.Element => {
 
   if (isLoading) {
     return (
-      <div className={styles.container}>
-        <div className={styles.content}>
-          <div>{t('loading')}</div>
+      <div className={styles.loadingContainer}>
+        <div className={styles.loadingSpinner}>
+          <RefreshCw className={styles.spinIcon} />
+          <span>{t('loading')}</span>
         </div>
       </div>
     );
@@ -238,100 +240,109 @@ const AppSelector = (): React.JSX.Element => {
 
   if (error) {
     return (
-      <div className={styles.container}>
-        <AuthCard title={t('error.title')} subtitle={t('error.subtitle')}>
-          <div className={styles.error}>{error}</div>
-          <button
-            onClick={() => window.location.reload()}
-            className={styles.retryButton}
-          >
-            {t('error.tryAgain')}
-          </button>
-        </AuthCard>
-      </div>
+      <AuthCard title={t('error.title')} subtitle={t('error.subtitle')}>
+        <div className={styles.error}>
+          <p>{error}</p>
+        </div>
+        <button
+          onClick={() => window.location.reload()}
+          className={styles.retryButton}
+        >
+          <RefreshCw size={16} />
+          {t('error.tryAgain')}
+        </button>
+      </AuthCard>
     );
   }
 
   const accessibleApps = apps.filter(app => app.accessible);
 
   return (
-    <div className={styles.container}>
-      <AuthCard
-        title={t('title')}
-        subtitle={t('subtitle', {
-          name:
-            (user?.user_metadata?.firstName as string) ||
-            user?.email?.split('@')[0] ||
-            'User',
-        })}
-        variant="full-width"
-      >
-        <div className={styles.backButtonContainer}>
-          <BackButton variant="secondary" size="sm" />
-        </div>
+    <AuthCard
+      title={t('title')}
+      subtitle={t('subtitle', {
+        name:
+          (user?.user_metadata?.firstName as string) ||
+          user?.email?.split('@')[0] ||
+          'User',
+      })}
+      variant="full-width"
+    >
+      <div className={styles.backButtonContainer}>
+        <BackButton variant="secondary" size="sm" />
+      </div>
 
-        {accessibleApps.length === 0 ? (
-          <div className={styles.noAppsContainer}>
-            <p className={styles.noAppsText}>{t('noApps.message')}</p>
-            <button
-              onClick={() => void handleLogout()}
-              className={styles.logoutButton}
-            >
-              {t('noApps.logout')}
-            </button>
-          </div>
-        ) : (
-          <>
-            <div className={styles.appGrid}>
-              {apps.map(app => (
-                <div
-                  key={app.appKey}
-                  className={`${styles.appCard} ${!app.accessible ? styles.disabled : ''}`}
-                  role="button"
-                  tabIndex={0}
-                  data-testid={`app-card-${app.appKey}`}
-                  onClick={() => handleAppSelect(app.appKey)}
-                  onKeyDown={event => {
-                    if (event.key === 'Enter' || event.key === ' ') {
-                      event.preventDefault();
-                      handleAppSelect(app.appKey);
-                    }
-                  }}
-                >
-                  <div className={styles.appIcon}>
-                    {AppIcons[app.appKey as keyof typeof AppIcons]}
-                  </div>
-                  <div className={styles.appName}>{app.appConfig.name}</div>
-                  <div className={styles.appDescription}>
+      {accessibleApps.length === 0 ? (
+        <div className={styles.noAppsContainer}>
+          <p className={styles.noAppsText}>{t('noApps.message')}</p>
+          <button
+            onClick={() => void handleLogout()}
+            className={styles.logoutButton}
+          >
+            <LogOut size={16} />
+            {t('noApps.logout')}
+          </button>
+        </div>
+      ) : (
+        <>
+          <div className={styles.appGrid}>
+            {apps.map(app => (
+              <div
+                key={app.appKey}
+                className={`${styles.appCard} ${!app.accessible ? styles.disabled : ''}`}
+                role="button"
+                tabIndex={0}
+                data-testid={`app-card-${app.appKey}`}
+                onClick={() => handleAppSelect(app.appKey)}
+                onKeyDown={event => {
+                  if (event.key === 'Enter' || event.key === ' ') {
+                    event.preventDefault();
+                    handleAppSelect(app.appKey);
+                  }
+                }}
+              >
+                <div className={styles.appIcon}>
+                  {AppIcons[app.appKey as keyof typeof AppIcons]}
+                </div>
+                <div className={styles.appContent}>
+                  <h3 className={styles.appName}>{app.appConfig.name}</h3>
+                  <p className={styles.appDescription}>
                     {app.appConfig.description}
-                  </div>
+                  </p>
                   <div
                     className={`${styles.appStatus} ${app.accessible ? styles.accessible : styles.inaccessible}`}
                   >
-                    {app.accessible
-                      ? t('appStatus.accessible')
-                      : t('appStatus.noAccess')}
+                    {app.accessible ? (
+                      <>
+                        {t('appStatus.accessible')}
+                        <ArrowRight size={14} />
+                      </>
+                    ) : (
+                      t('appStatus.noAccess')
+                    )}
                   </div>
-                  {!app.accessible && app.reason && (
-                    <div className={styles.reasonText}>{app.reason}</div>
-                  )}
                 </div>
-              ))}
-            </div>
+                {!app.accessible && app.reason && (
+                  <div className={styles.reasonText}>{app.reason}</div>
+                )}
+              </div>
+            ))}
+          </div>
 
-            <div className={styles.logoutContainer}>
-              <button
-                onClick={() => void handleLogout()}
-                className={styles.signOutButton}
-              >
-                {t('signOut')}
-              </button>
-            </div>
-          </>
-        )}
-      </AuthCard>
-    </div>
+          <div className={styles.logoutContainer}>
+            <button
+              onClick={() => void handleLogout()}
+              className={styles.signOutButton}
+            >
+              <LogOut size={16} />
+              {t('signOut')}
+            </button>
+          </div>
+        </>
+      )}
+    </AuthCard>
   );
 };
 
 export { AppSelector };
+

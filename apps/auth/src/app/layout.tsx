@@ -2,8 +2,6 @@ import type { Metadata } from 'next';
 import React from 'react';
 
 import './globals.css';
-import '@peakhealth/ui/design-system';
-import '@peakhealth/ui/components';
 
 export const metadata: Metadata = {
   title: 'PeakHealth Auth',
@@ -15,7 +13,16 @@ const RootLayout = ({
 }: Readonly<{
   children: React.ReactNode;
 }>): React.JSX.Element => {
-  return <>{children}</>;
+  return (
+    <html lang="en">
+      <body>
+        <div className="auth-container">
+          {children}
+        </div>
+      </body>
+    </html>
+  );
 };
 
 export default RootLayout;
+
