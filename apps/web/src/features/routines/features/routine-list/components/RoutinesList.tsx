@@ -21,6 +21,9 @@ import ActiveRoutineCard from './ActiveRoutineCard';
 import RoutineCard from './RoutineCard';
 import { ActiveRoutineWarningModal } from '../../../components/ActiveRoutineWarningModal';
 
+// Initialize ScheduledWorkoutService once at module level
+const scheduledWorkoutService = new ScheduledWorkoutService();
+
 interface RoutinesListProps {
   routines: Routine[];
   onRoutineUpdate?: () => void;
@@ -52,9 +55,6 @@ const RoutinesList = ({
     newRoutineName: '',
     newRoutineId: '',
   });
-
-  // Initialize ScheduledWorkoutService once at component level
-  const scheduledWorkoutService = new ScheduledWorkoutService();
 
   const activeRoutine = routines.find(routine => routine.isActive);
   const inactiveRoutines = routines.filter(routine => !routine.isActive);
