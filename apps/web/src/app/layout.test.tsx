@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
-import RootLayout from '../layout';
+import RootLayout from './layout';
 
 // Mock the Providers component
 vi.mock('@/components/providers/Providers', () => ({
