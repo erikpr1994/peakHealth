@@ -1,7 +1,5 @@
 ---
-description: When I need to introduce or manage any piece of state while developing a React or Next.js application.
-globs:
-alwaysApply: false
+alwaysApply: true
 ---
 
 <!-- markdownlint-configure-file {"MD029": {"style": "ordered"}} -->
