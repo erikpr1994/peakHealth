@@ -182,14 +182,6 @@ const StrengthWorkoutsSection = ({
               <div className="p-4 space-y-3">
                 <div className="flex items-center justify-between">
                   <h4 className="font-medium text-gray-900">Sections</h4>
-                  <Button
-                    onClick={() => onAddSection(workout.id)}
-                    size="sm"
-                    className="bg-indigo-600 hover:bg-indigo-700"
-                  >
-                    <Plus className="h-4 w-4 mr-2" />
-                    Add Section
-                  </Button>
                 </div>
 
                 {workout.sections.length === 0 ? (
@@ -304,6 +296,16 @@ const StrengthWorkoutsSection = ({
                         }
                       />
                     ))}
+
+                    {/* Add Section button - only show when there are sections */}
+                    <Button
+                      onClick={() => onAddSection(workout.id)}
+                      size="sm"
+                      className="bg-indigo-600 hover:bg-indigo-700"
+                    >
+                      <Plus className="h-4 w-4 mr-2" />
+                      Add Section
+                    </Button>
                   </div>
                 )}
               </div>
