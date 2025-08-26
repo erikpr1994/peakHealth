@@ -1,143 +1,142 @@
-import React, {useState, useEffect, useRef} from 'react';
-import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
-import Button from '@/components/Button';
+import React, { useState, useEffect, useRef } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, Vibration, Platform } from 'react-native';
+import { Button } from '../../../components/Button/Button';
+import { platformSelect, isIOS } from '../../../utils/platform';
 
 interface RestTimerProps {
   duration: number; // in seconds
   onComplete: () => void;
-  onSkip?: () => void;
+  onSkip: () => void;
 }
 
-const formatTime = (seconds: number): string => {
-  const mins = Math.floor(seconds / 60);
-  const secs = seconds % 60;
-  return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
-};
-
-const RestTimer: React.FC<RestTimerProps> = ({
+export const RestTimer: React.FC<RestTimerProps> = ({
   duration,
   onComplete,
   onSkip,
 }) => {
   const [timeLeft, setTimeLeft] = useState(duration);
-  const [isPaused, setIsPaused] = useState(false);
-  const timerRef = useRef<NodeJS.Timeout | null>(null);
+  const [isActive, setIsActive] = useState(true);
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
-    if (!isPaused) {
-      timerRef.current = setInterval(() => {
-        setTimeLeft(prev => {
-          if (prev <= 1) {
-            if (timerRef.current) {
-              clearInterval(timerRef.current);
+    if (isActive) {
+      intervalRef.current = setInterval(() => {
+        setTimeLeft((prevTime) => {
+          if (prevTime <= 1) {
+            clearInterval(intervalRef.current!);
+            
+            // Platform-specific vibration pattern
+            if (isIOS) {
+              // iOS vibration
+              Vibration.vibrate();
+            } else {
+              // Android vibration pattern (ms)
+              Vibration.vibrate([0, 500, 200, 500]);
             }
+            
             onComplete();
             return 0;
           }
-          return prev - 1;
+          return prevTime - 1;
         });
       }, 1000);
-    } else if (timerRef.current) {
-      clearInterval(timerRef.current);
+    } else if (intervalRef.current) {
+      clearInterval(intervalRef.current);
     }
 
     return () => {
-      if (timerRef.current) {
-        clearInterval(timerRef.current);
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
       }
     };
-  }, [isPaused, onComplete]);
+  }, [isActive, onComplete]);
 
-  const togglePause = () => {
-    setIsPaused(prev => !prev);
+  const toggleTimer = () => {
+    setIsActive((prev) => !prev);
   };
 
-  const handleSkip = () => {
-    if (timerRef.current) {
-      clearInterval(timerRef.current);
-    }
-    if (onSkip) {
-      onSkip();
-    } else {
-      onComplete();
-    }
+  const formatTime = (seconds: number): string => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
   };
 
-  // Calculate progress percentage
-  const progress = ((duration - timeLeft) / duration) * 100;
+  // Platform-specific styles
+  const containerStyle = platformSelect<any>(
+    {
+      // iOS-specific styles
+      shadowColor: '#000',
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.1,
+      shadowRadius: 4,
+    },
+    {
+      // Android-specific styles
+      elevation: 4,
+    }
+  );
 
   return (
-    <View style={styles.container}>
-      <View style={styles.timerContainer}>
-        <Text style={styles.timerLabel}>Rest Timer</Text>
-        <Text style={styles.timer}>{formatTime(timeLeft)}</Text>
-        <View style={styles.progressBarContainer}>
-          <View
-            style={[styles.progressBar, {width: `${progress}%`}]}
-          />
-        </View>
-      </View>
-
+    <View style={[styles.container, containerStyle]}>
+      <Text style={styles.title}>Rest Timer</Text>
+      <Text style={styles.timer}>{formatTime(timeLeft)}</Text>
       <View style={styles.buttonContainer}>
         <Button
-          variant="outline"
-          onPress={togglePause}
-          style={styles.button}>
-          {isPaused ? 'Resume' : 'Pause'}
+          variant={isActive ? 'warning' : 'primary'}
+          onPress={toggleTimer}
+          style={styles.button}
+        >
+          {isActive ? 'Pause' : 'Resume'}
         </Button>
         <Button
-          variant="primary"
-          onPress={handleSkip}
-          style={styles.button}>
+          variant="secondary"
+          onPress={onSkip}
+          style={styles.button}
+        >
           Skip
         </Button>
       </View>
+      <Text style={styles.instruction}>
+        Rest between sets to maximize your performance
+      </Text>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#f5f5f5',
+    backgroundColor: '#FFFFFF',
     borderRadius: 12,
     padding: 16,
     marginVertical: 8,
-  },
-  timerContainer: {
     alignItems: 'center',
-    marginBottom: 16,
   },
-  timerLabel: {
-    fontSize: 16,
-    color: '#666',
+  title: {
+    fontSize: 18,
+    fontWeight: '600',
+    color: '#1F2937',
     marginBottom: 8,
   },
   timer: {
     fontSize: 48,
-    fontWeight: 'bold',
-    color: '#333',
-    marginBottom: 16,
-  },
-  progressBarContainer: {
-    width: '100%',
-    height: 8,
-    backgroundColor: '#e0e0e0',
-    borderRadius: 4,
-    overflow: 'hidden',
-  },
-  progressBar: {
-    height: '100%',
-    backgroundColor: '#0070f3',
+    fontWeight: '700',
+    color: '#3B82F6',
+    marginVertical: 16,
   },
   buttonContainer: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'center',
+    marginVertical: 8,
   },
   button: {
-    flex: 1,
-    marginHorizontal: 4,
+    marginHorizontal: 8,
+    minWidth: 100,
+  },
+  instruction: {
+    fontSize: 14,
+    color: '#6B7280',
+    textAlign: 'center',
+    marginTop: 8,
   },
 });
-
-export default RestTimer;
 
