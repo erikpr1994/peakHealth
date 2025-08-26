@@ -24,7 +24,7 @@ export class RoutineCreatePage extends RegularUserBasePage {
     'input[placeholder*="workout name" i], input:not([placeholder]):first-of-type';
   // Routine-level objectives (general training objectives)
   private readonly routineObjectivesSelector =
-    'input[placeholder*="main goals and focus areas" i], input[placeholder*="training objectives" i], input[placeholder*="obj" + "ectives" i]';
+    'input[placeholder*="main goals and focus areas" i], input[placeholder*="training objectives" i], input[placeholder*="goals" i]';
 
   // Workout-level objective (specific workout goal)
   private readonly workoutObjectiveSelector =
