@@ -1,7 +1,5 @@
 ---
-description: When I need to write, organize, or structure tests for React components, hooks, utilities, or any other code in the application.
-globs:
-alwaysApply: false
+alwaysApply: true
 ---
 
 # Testing
