@@ -23,12 +23,12 @@ export async function generateMetadata({
   params: Promise<{ locale: string }>;
 }): Promise<Metadata> {
   const { locale } = await params;
-  
+
   // Validate locale and redirect to default if invalid
   if (!hasLocale(routing.locales, locale)) {
     redirect(`/${routing.defaultLocale}`);
   }
-  
+
   try {
     // eslint-disable-next-line @typescript-eslint/no-var-requires
     const messages = require(`../../../locales/${locale}/index.json`);
@@ -54,7 +54,7 @@ const LocaleLayout = async ({
 }): Promise<React.JSX.Element> => {
   // Ensure that the incoming `locale` is valid
   const { locale } = await params;
-  
+
   // Validate locale and redirect to default if invalid
   if (!hasLocale(routing.locales, locale)) {
     redirect(`/${routing.defaultLocale}`);
@@ -74,11 +74,9 @@ const LocaleLayout = async ({
   return (
     <html lang={locale}>
       <body className={inter.className}>
-        <div className="auth-container">
-          <NextIntlClientProvider locale={locale} messages={messages}>
-            {children}
-          </NextIntlClientProvider>
-        </div>
+        <NextIntlClientProvider locale={locale} messages={messages}>
+          {children}
+        </NextIntlClientProvider>
       </body>
     </html>
   );

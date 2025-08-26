@@ -1,7 +1,9 @@
 'use client';
 
 import { useTranslations, useLocale } from 'next-intl';
+import { ArrowLeft } from 'lucide-react';
 import { Button } from './AuthCard';
+import styles from '../styles/BackButton.module.css';
 
 interface BackButtonProps {
   className?: string;
@@ -34,10 +36,12 @@ export const BackButton: React.FC<BackButtonProps> = ({
       type="button"
       variant={variant}
       size={size}
-      className={className}
+      className={`${styles.backButton} ${className ?? ''}`}
       onClick={handleGoBack}
     >
+      <ArrowLeft size={16} />
       {t('back')}
     </Button>
   );
 };
+
