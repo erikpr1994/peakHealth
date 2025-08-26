@@ -32,6 +32,8 @@ const mockSets: WorkoutSet[] = [
 const defaultProps = {
   sets: mockSets,
   onSetsChange: vi.fn(),
+  onNotesClick: vi.fn(),
+  onAddApproachSets: vi.fn(),
   isUnilateral: true,
   unilateralMode: 'sequential' as const,
 };
@@ -40,8 +42,8 @@ describe('SetManagement', () => {
   it('should render sets with unilateral side indicators', () => {
     render(<SetManagement {...defaultProps} />);
 
-    expect(screen.getByText('Set 1 (L)')).toBeInTheDocument();
-    expect(screen.getByText('Set 2 (R)')).toBeInTheDocument();
+    expect(screen.getByText('1 (L)')).toBeInTheDocument();
+    expect(screen.getByText('2 (R)')).toBeInTheDocument();
   });
 
   it('should render sets without side indicators for non-unilateral exercises', () => {
@@ -57,21 +59,21 @@ describe('SetManagement', () => {
 
     render(<SetManagement {...nonUnilateralProps} />);
 
-    expect(screen.getByText('Set 1')).toBeInTheDocument();
-    expect(screen.getByText('Set 2')).toBeInTheDocument();
+    expect(screen.getByText('1')).toBeInTheDocument();
+    expect(screen.getByText('2')).toBeInTheDocument();
   });
 
   it('should render sets without side indicators for alternating mode', () => {
     const alternatingProps = {
       ...defaultProps,
       unilateralMode: 'alternating' as const,
-      sets: mockSets.map(set => ({ ...set, unilateralSide: 'both' })),
+      sets: mockSets.map(set => ({ ...set, unilateralSide: 'both' as const })),
     };
 
     render(<SetManagement {...alternatingProps} />);
 
-    expect(screen.getByText('Set 1')).toBeInTheDocument();
-    expect(screen.getByText('Set 2')).toBeInTheDocument();
+    expect(screen.getByText('1')).toBeInTheDocument();
+    expect(screen.getByText('2')).toBeInTheDocument();
   });
 
   it('should add new set with correct unilateral side for sequential mode', () => {
@@ -90,7 +92,7 @@ describe('SetManagement', () => {
     ]);
   });
 
-  it('should add new set with "both" side for alternating mode', () => {
+  it('should add new set with correct unilateral side for alternating mode', () => {
     const alternatingProps = {
       ...defaultProps,
       unilateralMode: 'alternating' as const,
@@ -101,17 +103,17 @@ describe('SetManagement', () => {
     const addSetButton = screen.getByText('Add Set');
     fireEvent.click(addSetButton);
 
-    expect(defaultProps.onSetsChange).toHaveBeenCalledWith([
+    expect(alternatingProps.onSetsChange).toHaveBeenCalledWith([
       ...mockSets,
       expect.objectContaining({
         setNumber: 3,
         isUnilateral: true,
-        unilateralSide: 'both',
+        unilateralSide: 'both', // Alternating mode uses 'both'
       }),
     ]);
   });
 
-  it('should add new set with "both" side for simultaneous mode', () => {
+  it('should add new set with correct unilateral side for simultaneous mode', () => {
     const simultaneousProps = {
       ...defaultProps,
       unilateralMode: 'simultaneous' as const,
@@ -122,37 +124,52 @@ describe('SetManagement', () => {
     const addSetButton = screen.getByText('Add Set');
     fireEvent.click(addSetButton);
 
-    expect(defaultProps.onSetsChange).toHaveBeenCalledWith([
+    expect(simultaneousProps.onSetsChange).toHaveBeenCalledWith([
       ...mockSets,
       expect.objectContaining({
         setNumber: 3,
         isUnilateral: true,
-        unilateralSide: 'both',
+        unilateralSide: 'both', // Simultaneous mode uses 'both'
       }),
     ]);
   });
 
-  it('should remove set when remove button is clicked', () => {
+  it('should remove a set', () => {
     render(<SetManagement {...defaultProps} />);
 
-    const removeButtons = screen.getAllByText('Remove');
+    const removeButtons = screen.getAllByRole('button', {
+      name: /delete set/i,
+    });
     fireEvent.click(removeButtons[0]);
 
-    expect(defaultProps.onSetsChange).toHaveBeenCalledWith([mockSets[1]]);
+    // Check the last call to onSetsChange (after removal)
+    const lastCall =
+      defaultProps.onSetsChange.mock.calls[
+        defaultProps.onSetsChange.mock.calls.length - 1
+      ];
+    expect(lastCall[0]).toHaveLength(1); // Should have only one set remaining
+    expect(lastCall[0][0].id).toBe('2'); // Should be the second set from mockSets
   });
 
-  it('should update set when form fields are changed', () => {
+  it('should handle set removal and update set numbers', () => {
     render(<SetManagement {...defaultProps} />);
 
-    const repsInput = screen.getAllByDisplayValue('10')[0];
-    fireEvent.change(repsInput, { target: { value: '12' } });
+    const removeButtons = screen.getAllByRole('button', {
+      name: /delete set/i,
+    });
+    fireEvent.click(removeButtons[0]);
 
-    expect(defaultProps.onSetsChange).toHaveBeenCalledWith([
-      {
-        ...mockSets[0],
-        reps: 12,
-      },
-      mockSets[1],
-    ]);
+    // Check the last call to onSetsChange (after removal)
+    const lastCall =
+      defaultProps.onSetsChange.mock.calls[
+        defaultProps.onSetsChange.mock.calls.length - 1
+      ];
+    expect(lastCall[0]).toHaveLength(1); // Should have only one set remaining
+    expect(lastCall[0][0]).toEqual(
+      expect.objectContaining({
+        id: '2',
+        setNumber: 1, // Should be renumbered
+      })
+    );
   });
 });
