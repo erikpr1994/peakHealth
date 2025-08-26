@@ -19,7 +19,7 @@
     "@peakhealth/web": "workspace:*"
   },
   "devDependencies": {
-    "@playwright/test": "^1.54.2",
+    "@playwright/test": "^1.55.0",
     "@types/node": "^24.3.0",
     "@typescript-eslint/parser": "^8.40.0",
     "eslint-plugin-playwright": "^2.2.2",
