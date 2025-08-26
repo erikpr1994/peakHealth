@@ -40,6 +40,9 @@ export interface WorkoutSet {
   weight: number | null;
   rpe: number | null;
   notes: string;
+  // Unilateral exercise support
+  isUnilateral?: boolean;
+  unilateralSide?: 'left' | 'right' | 'both';
 }
 
 interface SetManagementProps {
@@ -50,6 +53,9 @@ interface SetManagementProps {
   progressionMethod?: ProgressionMethod;
   exerciseEquipment?: string[];
   exerciseName?: string;
+  // Unilateral exercise support
+  isUnilateral?: boolean;
+  unilateralMode?: 'alternating' | 'sequential' | 'simultaneous';
 }
 
 // Configuration for each progression method
@@ -134,6 +140,8 @@ const SetManagement = ({
   progressionMethod,
   exerciseEquipment = [],
   exerciseName,
+  isUnilateral = false,
+  unilateralMode,
 }: SetManagementProps): React.ReactElement => {
   const [openPopoverId, setOpenPopoverId] = useState<string | null>(null);
   const [initialized, setInitialized] = useState(false);
@@ -197,6 +205,15 @@ const SetManagement = ({
       weight: null,
       rpe: null,
       notes: '',
+      isUnilateral,
+      unilateralSide:
+        isUnilateral && unilateralMode === 'sequential'
+          ? sets.length % 2 === 0
+            ? 'left'
+            : 'right'
+          : isUnilateral
+            ? 'both'
+            : undefined,
     };
     onSetsChange([...sets, newSet]);
   };
@@ -239,27 +256,52 @@ const SetManagement = ({
     onSetsChange(updatedSets);
   };
 
+  // Get unilateral side display
+  const getUnilateralSideDisplay = (set: WorkoutSet): string => {
+    if (!set.isUnilateral || !set.unilateralSide) return '';
+
+    switch (set.unilateralSide) {
+      case 'left':
+        return ' (L)';
+      case 'right':
+        return ' (R)';
+      case 'both':
+        return ''; // Don't show anything for 'both' sides
+      default:
+        return '';
+    }
+  };
+
   // Calculate the display number/letter for each set
   const getSetDisplay = (set: WorkoutSet, index: number): string => {
+    let display = '';
     if (set.setType === 'normal') {
       // Count how many normal sets come before this one
       const normalSetsBefore = sets
         .slice(0, index)
         .filter(s => s.setType === 'normal').length;
-      return (normalSetsBefore + 1).toString();
+      display = (normalSetsBefore + 1).toString();
     } else {
       // Return letter for special sets
       switch (set.setType) {
         case 'warmup':
-          return 'W';
+          display = 'W';
+          break;
         case 'failure':
-          return 'F';
+          display = 'F';
+          break;
         case 'dropset':
-          return 'D';
+          display = 'D';
+          break;
         default:
-          return (index + 1).toString();
+          display = (index + 1).toString();
       }
     }
+
+    // Add unilateral side indicator
+    display += getUnilateralSideDisplay(set);
+
+    return display;
   };
 
   const getSetTypeColor = (type: SetType): string => {

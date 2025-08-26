@@ -16,6 +16,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Exercise, ProgressionMethod } from '@/features/routines/types';
+import { UnilateralMode } from '@/features/routines/types/exercise';
 import {
   getProgressionMethodLabel,
   getProgressionMethodColor,
@@ -66,22 +67,67 @@ const ExerciseManagement = ({
   onUpdateProgressionMethod,
   onNotesClick,
 }: ExerciseManagementProps): React.ReactElement => {
+  // Get unilateral mode display information
+  const getUnilateralModeInfo = (
+    mode: UnilateralMode
+  ): { label: string; description: string; color: string } => {
+    switch (mode) {
+      case 'alternating':
+        return {
+          label: 'Alternating',
+          description: 'Left → Right → Left → Right',
+          color: 'bg-blue-100 text-blue-700',
+        };
+      case 'sequential':
+        return {
+          label: 'Sequential',
+          description: 'All left sets → All right sets',
+          color: 'bg-green-100 text-green-700',
+        };
+      case 'simultaneous':
+        return {
+          label: 'Simultaneous',
+          description: 'Both sides together',
+          color: 'bg-purple-100 text-purple-700',
+        };
+      default:
+        return {
+          label: 'Unknown',
+          description: '',
+          color: 'bg-gray-100 text-gray-700',
+        };
+    }
+  };
   // Handle progression method change with automatic set generation
   const handleProgressionMethodChange = (method: ProgressionMethod): void => {
     onUpdateProgressionMethod(exercise.id, method);
 
     // Generate predefined sets for the selected progression method
-    const predefinedSets = generateSetsForProgression(method);
+    const predefinedSets = generateSetsForProgression(
+      method,
+      exercise.isUnilateral,
+      exercise.unilateralMode
+    );
     onUpdateSets(exercise.id, predefinedSets);
   };
 
   // Auto-generate default linear progression sets for new exercises
   useEffect(() => {
     if (exercise.sets.length === 0) {
-      const defaultSets = generateSetsForProgression('linear');
+      const defaultSets = generateSetsForProgression(
+        'linear',
+        exercise.isUnilateral,
+        exercise.unilateralMode
+      );
       onUpdateSets(exercise.id, defaultSets);
     }
-  }, [exercise.id, exercise.sets.length, onUpdateSets]);
+  }, [
+    exercise.id,
+    exercise.sets.length,
+    exercise.isUnilateral,
+    exercise.unilateralMode,
+    onUpdateSets,
+  ]);
 
   return (
     <Card className="border border-gray-200">
@@ -96,6 +142,21 @@ const ExerciseManagement = ({
               <h3 className="font-semibold text-gray-900 text-lg">
                 {exercise.name || 'Exercise'}
               </h3>
+              {exercise.isUnilateral && exercise.unilateralMode && (
+                <div className="mt-1">
+                  {/* eslint-disable-next-line @typescript-eslint/explicit-function-return-type */}
+                  {(() => {
+                    const modeInfo = getUnilateralModeInfo(
+                      exercise.unilateralMode
+                    );
+                    return (
+                      <Badge className={`text-xs ${modeInfo.color}`}>
+                        {modeInfo.label}: {modeInfo.description}
+                      </Badge>
+                    );
+                  })()}
+                </div>
+              )}
             </div>
             <Button
               variant="ghost"
@@ -230,6 +291,8 @@ const ExerciseManagement = ({
             onAddApproachSets={() => onAddApproachSets(exercise.id)}
             exerciseEquipment={exercise.equipment}
             exerciseName={exercise.name}
+            isUnilateral={exercise.isUnilateral}
+            unilateralMode={exercise.unilateralMode}
           />
         </div>
       </div>

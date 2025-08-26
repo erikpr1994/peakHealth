@@ -3,7 +3,7 @@ import type {
   RunningWorkout,
   ProgressionMethod,
 } from '../types';
-import type { WorkoutSet, SetType } from '../components/SetManagement';
+import type { WorkoutSet, SetType, RepType } from '../components/SetManagement';
 
 /**
  * Calculate the estimated duration of a workout based on its sections and exercises
@@ -82,298 +82,358 @@ export const parseRestTime = (timeString: string): number => {
 };
 
 /**
+ * Helper function to duplicate sets for unilateral exercises
+ */
+const duplicateSetsForUnilateral = (
+  baseSets: WorkoutSet[],
+  isUnilateral: boolean,
+  unilateralMode: 'alternating' | 'sequential' | 'simultaneous'
+): WorkoutSet[] => {
+  if (!isUnilateral) {
+    return baseSets;
+  }
+
+  switch (unilateralMode) {
+    case 'alternating':
+      // For alternating, each set is performed on both sides (left + right)
+      // The reps count represents the total reps for both sides combined
+      return baseSets.map((set, index) => ({
+        ...set,
+        id: `${set.id}-${index + 1}`,
+        setNumber: index + 1,
+        isUnilateral: true,
+        unilateralSide: 'both' as const,
+      }));
+
+    case 'sequential':
+      // For sequential, sets alternate between left and right sides
+      return baseSets.map((set, index) => ({
+        ...set,
+        id: `${set.id}-${index + 1}`,
+        setNumber: index + 1,
+        isUnilateral: true,
+        unilateralSide: index % 2 === 0 ? 'left' : 'right',
+      }));
+
+    case 'simultaneous':
+      // For simultaneous, all sets are performed on both sides
+      return baseSets.map((set, index) => ({
+        ...set,
+        id: `${set.id}-${index + 1}`,
+        setNumber: index + 1,
+        isUnilateral: true,
+        unilateralSide: 'both' as const,
+      }));
+
+    default:
+      return baseSets;
+  }
+};
+
+/**
  * Generate sets based on the specified progression method
  */
 export const generateSetsForProgression = (
-  progressionMethod: ProgressionMethod
+  progressionMethod: ProgressionMethod,
+  isUnilateral?: boolean,
+  unilateralMode?: 'alternating' | 'sequential' | 'simultaneous'
 ): WorkoutSet[] => {
-  switch (progressionMethod) {
-    case 'linear':
-      return [
-        {
-          id: '1',
-          setNumber: 1,
-          setType: 'normal',
-          repType: 'fixed',
-          reps: 12,
-          weight: 0,
-          rpe: null,
-          notes: '',
-        },
-        {
-          id: '2',
-          setNumber: 2,
-          setType: 'normal',
-          repType: 'fixed',
-          reps: 10,
-          weight: 0,
-          rpe: null,
-          notes: '',
-        },
-        {
-          id: '3',
-          setNumber: 3,
-          setType: 'normal',
-          repType: 'fixed',
-          reps: 8,
-          weight: 0,
-          rpe: null,
-          notes: '',
-        },
-        {
-          id: '4',
-          setNumber: 4,
-          setType: 'normal',
-          repType: 'fixed',
-          reps: 6,
-          weight: 0,
-          rpe: null,
-          notes: '',
-        },
-      ];
+  const baseSets = ((): WorkoutSet[] => {
+    switch (progressionMethod) {
+      case 'linear':
+        return [
+          {
+            id: '1',
+            setNumber: 1,
+            setType: 'normal' as SetType,
+            repType: 'fixed' as RepType,
+            reps: 12,
+            weight: 0,
+            rpe: null,
+            notes: '',
+          },
+          {
+            id: '2',
+            setNumber: 2,
+            setType: 'normal' as SetType,
+            repType: 'fixed' as RepType,
+            reps: 10,
+            weight: 0,
+            rpe: null,
+            notes: '',
+          },
+          {
+            id: '3',
+            setNumber: 3,
+            setType: 'normal' as SetType,
+            repType: 'fixed' as RepType,
+            reps: 8,
+            weight: 0,
+            rpe: null,
+            notes: '',
+          },
+          {
+            id: '4',
+            setNumber: 4,
+            setType: 'normal' as SetType,
+            repType: 'fixed' as RepType,
+            reps: 6,
+            weight: 0,
+            rpe: null,
+            notes: '',
+          },
+        ];
 
-    case 'dual':
-      return [
-        {
-          id: '1',
-          setNumber: 1,
-          setType: 'normal',
-          repType: 'range',
-          reps: null,
-          repsMin: 6,
-          repsMax: 8,
-          weight: 0,
-          rpe: null,
-          notes: '',
-        },
-        {
-          id: '2',
-          setNumber: 2,
-          setType: 'normal',
-          repType: 'range',
-          reps: null,
-          repsMin: 6,
-          repsMax: 8,
-          weight: 0,
-          rpe: null,
-          notes: '',
-        },
-        {
-          id: '3',
-          setNumber: 3,
-          setType: 'normal',
-          repType: 'range',
-          reps: null,
-          repsMin: 6,
-          repsMax: 8,
-          weight: 0,
-          rpe: null,
-          notes: '',
-        },
-        {
-          id: '4',
-          setNumber: 4,
-          setType: 'normal',
-          repType: 'range',
-          reps: null,
-          repsMin: 6,
-          repsMax: 8,
-          weight: 0,
-          rpe: null,
-          notes: '',
-        },
-      ];
+      case 'dual':
+        return [
+          {
+            id: '1',
+            setNumber: 1,
+            setType: 'normal' as SetType,
+            repType: 'range' as RepType,
+            reps: null,
+            repsMin: 6,
+            repsMax: 8,
+            weight: 0,
+            rpe: null,
+            notes: '',
+          },
+          {
+            id: '2',
+            setNumber: 2,
+            setType: 'normal' as SetType,
+            repType: 'range' as RepType,
+            reps: null,
+            repsMin: 6,
+            repsMax: 8,
+            weight: 0,
+            rpe: null,
+            notes: '',
+          },
+          {
+            id: '3',
+            setNumber: 3,
+            setType: 'normal' as SetType,
+            repType: 'range' as RepType,
+            reps: null,
+            repsMin: 6,
+            repsMax: 8,
+            weight: 0,
+            rpe: null,
+            notes: '',
+          },
+          {
+            id: '4',
+            setNumber: 4,
+            setType: 'normal' as SetType,
+            repType: 'range' as RepType,
+            reps: null,
+            repsMin: 6,
+            repsMax: 8,
+            weight: 0,
+            rpe: null,
+            notes: '',
+          },
+        ];
 
-    case 'inverse-pyramid':
-      return [
-        {
-          id: '1',
-          setNumber: 1,
-          setType: 'normal',
-          repType: 'fixed',
-          reps: 6,
-          weight: 0,
-          rpe: null,
-          notes: '',
-        },
-        {
-          id: '2',
-          setNumber: 2,
-          setType: 'normal',
-          repType: 'fixed',
-          reps: 8,
-          weight: 0,
-          rpe: null,
-          notes: '',
-        },
-        {
-          id: '3',
-          setNumber: 3,
-          setType: 'normal',
-          repType: 'fixed',
-          reps: 10,
-          weight: 0,
-          rpe: null,
-          notes: '',
-        },
-        {
-          id: '4',
-          setNumber: 4,
-          setType: 'normal',
-          repType: 'fixed',
-          reps: 12,
-          weight: 0,
-          rpe: null,
-          notes: '',
-        },
-      ];
+      case 'inverse-pyramid':
+        return [
+          {
+            id: '1',
+            setNumber: 1,
+            setType: 'normal' as SetType,
+            repType: 'fixed' as RepType,
+            reps: 6,
+            weight: 0,
+            rpe: null,
+            notes: '',
+          },
+          {
+            id: '2',
+            setNumber: 2,
+            setType: 'normal' as SetType,
+            repType: 'fixed' as RepType,
+            reps: 8,
+            weight: 0,
+            rpe: null,
+            notes: '',
+          },
+          {
+            id: '3',
+            setNumber: 3,
+            setType: 'normal' as SetType,
+            repType: 'fixed' as RepType,
+            reps: 10,
+            weight: 0,
+            rpe: null,
+            notes: '',
+          },
+          {
+            id: '4',
+            setNumber: 4,
+            setType: 'normal' as SetType,
+            repType: 'fixed' as RepType,
+            reps: 12,
+            weight: 0,
+            rpe: null,
+            notes: '',
+          },
+        ];
 
-    case 'myo-reps':
-      return [
-        {
-          id: '1',
-          setNumber: 1,
-          setType: 'normal',
-          repType: 'fixed',
-          reps: 15,
-          weight: 0,
-          rpe: null,
-          notes: 'Activation set',
-        },
-        {
-          id: '2',
-          setNumber: 2,
-          setType: 'normal',
-          repType: 'fixed',
-          reps: 5,
-          weight: 0,
-          rpe: null,
-          notes: 'Myo-rep 1',
-        },
-        {
-          id: '3',
-          setNumber: 3,
-          setType: 'normal',
-          repType: 'fixed',
-          reps: 5,
-          weight: 0,
-          rpe: null,
-          notes: 'Myo-rep 2',
-        },
-        {
-          id: '4',
-          setNumber: 4,
-          setType: 'normal',
-          repType: 'fixed',
-          reps: 5,
-          weight: 0,
-          rpe: null,
-          notes: 'Myo-rep 3',
-        },
-        {
-          id: '5',
-          setNumber: 5,
-          setType: 'normal',
-          repType: 'fixed',
-          reps: 5,
-          weight: 0,
-          rpe: null,
-          notes: 'Myo-rep 4',
-        },
-      ];
+      case 'myo-reps':
+        return [
+          {
+            id: '1',
+            setNumber: 1,
+            setType: 'normal',
+            repType: 'fixed',
+            reps: 15,
+            weight: 0,
+            rpe: null,
+            notes: 'Activation set',
+          },
+          {
+            id: '2',
+            setNumber: 2,
+            setType: 'normal',
+            repType: 'fixed',
+            reps: 5,
+            weight: 0,
+            rpe: null,
+            notes: 'Myo-rep 1',
+          },
+          {
+            id: '3',
+            setNumber: 3,
+            setType: 'normal',
+            repType: 'fixed',
+            reps: 5,
+            weight: 0,
+            rpe: null,
+            notes: 'Myo-rep 2',
+          },
+          {
+            id: '4',
+            setNumber: 4,
+            setType: 'normal',
+            repType: 'fixed',
+            reps: 5,
+            weight: 0,
+            rpe: null,
+            notes: 'Myo-rep 3',
+          },
+          {
+            id: '5',
+            setNumber: 5,
+            setType: 'normal',
+            repType: 'fixed',
+            reps: 5,
+            weight: 0,
+            rpe: null,
+            notes: 'Myo-rep 4',
+          },
+        ];
 
-    case 'widowmaker':
-      return [
-        {
-          id: '1',
-          setNumber: 1,
-          setType: 'warmup',
-          repType: 'fixed',
-          reps: 8,
-          weight: 0,
-          rpe: null,
-          notes: 'Warmup set - 60% of target weight',
-        },
-        {
-          id: '2',
-          setNumber: 2,
-          setType: 'failure',
-          repType: 'fixed',
-          reps: 20,
-          weight: 0,
-          rpe: null,
-          notes: 'Widowmaker set - 20 reps to failure',
-        },
-      ];
+      case 'widowmaker':
+        return [
+          {
+            id: '1',
+            setNumber: 1,
+            setType: 'warmup',
+            repType: 'fixed',
+            reps: 8,
+            weight: 0,
+            rpe: null,
+            notes: 'Warmup set - 60% of target weight',
+          },
+          {
+            id: '2',
+            setNumber: 2,
+            setType: 'failure',
+            repType: 'fixed',
+            reps: 20,
+            weight: 0,
+            rpe: null,
+            notes: 'Widowmaker set - 20 reps to failure',
+          },
+        ];
 
-    case 'amrap':
-      return [
-        {
-          id: '1',
-          setNumber: 1,
-          setType: 'normal',
-          repType: 'fixed',
-          reps: 8,
-          weight: 0,
-          rpe: null,
-          notes: 'Regular set 1',
-        },
-        {
-          id: '2',
-          setNumber: 2,
-          setType: 'normal',
-          repType: 'fixed',
-          reps: 8,
-          weight: 0,
-          rpe: null,
-          notes: 'Regular set 2',
-        },
-        {
-          id: '3',
-          setNumber: 3,
-          setType: 'failure',
-          repType: 'fixed',
-          reps: null,
-          weight: 0,
-          rpe: null,
-          notes: 'AMRAP - As many reps as possible',
-        },
-      ];
+      case 'amrap':
+        return [
+          {
+            id: '1',
+            setNumber: 1,
+            setType: 'normal',
+            repType: 'fixed',
+            reps: 8,
+            weight: 0,
+            rpe: null,
+            notes: 'Regular set 1',
+          },
+          {
+            id: '2',
+            setNumber: 2,
+            setType: 'normal',
+            repType: 'fixed',
+            reps: 8,
+            weight: 0,
+            rpe: null,
+            notes: 'Regular set 2',
+          },
+          {
+            id: '3',
+            setNumber: 3,
+            setType: 'failure',
+            repType: 'fixed',
+            reps: null,
+            weight: 0,
+            rpe: null,
+            notes: 'AMRAP - As many reps as possible',
+          },
+        ];
 
-    default:
-      return [
-        {
-          id: '1',
-          setNumber: 1,
-          setType: 'normal',
-          repType: 'fixed',
-          reps: 10,
-          weight: 0,
-          rpe: null,
-          notes: '',
-        },
-        {
-          id: '2',
-          setNumber: 2,
-          setType: 'normal',
-          repType: 'fixed',
-          reps: 10,
-          weight: 0,
-          rpe: null,
-          notes: '',
-        },
-        {
-          id: '3',
-          setNumber: 3,
-          setType: 'normal',
-          repType: 'fixed',
-          reps: 10,
-          weight: 0,
-          rpe: null,
-          notes: '',
-        },
-      ];
-  }
+      default:
+        return [
+          {
+            id: '1',
+            setNumber: 1,
+            setType: 'normal' as SetType,
+            repType: 'fixed' as RepType,
+            reps: 10,
+            weight: 0,
+            rpe: null,
+            notes: '',
+          },
+          {
+            id: '2',
+            setNumber: 2,
+            setType: 'normal' as SetType,
+            repType: 'fixed' as RepType,
+            reps: 10,
+            weight: 0,
+            rpe: null,
+            notes: '',
+          },
+          {
+            id: '3',
+            setNumber: 3,
+            setType: 'normal' as SetType,
+            repType: 'fixed' as RepType,
+            reps: 10,
+            weight: 0,
+            rpe: null,
+            notes: '',
+          },
+        ];
+    }
+  })();
+
+  // Apply unilateral set duplication if needed
+  return duplicateSetsForUnilateral(
+    baseSets,
+    isUnilateral || false,
+    unilateralMode || 'simultaneous'
+  );
 };
 
 /**

@@ -25,7 +25,54 @@ interface UseExerciseOperationsProps<T extends WorkoutType> {
 export const useExerciseOperations = <T extends WorkoutType>({
   setWorkouts,
   workoutType,
-}: UseExerciseOperationsProps<T>) => {
+}: UseExerciseOperationsProps<T>): {
+  addExercise: (
+    workoutId: string,
+    sectionId: string,
+    exerciseData: Partial<Exercise>
+  ) => void;
+  removeExercise: (
+    workoutId: string,
+    sectionId: string,
+    exerciseId: string
+  ) => void;
+  updateExerciseName: (
+    workoutId: string,
+    sectionId: string,
+    exerciseId: string,
+    name: string
+  ) => void;
+  updateExerciseSets: (
+    workoutId: string,
+    sectionId: string,
+    exerciseId: string,
+    sets: WorkoutSet[]
+  ) => void;
+  updateRestTimer: (
+    workoutId: string,
+    sectionId: string,
+    exerciseId: string,
+    timer: string
+  ) => void;
+  updateExerciseRestAfter: (
+    workoutId: string,
+    sectionId: string,
+    exerciseId: string,
+    rest: string
+  ) => void;
+  updateExerciseEmomReps: (
+    workoutId: string,
+    sectionId: string,
+    exerciseId: string,
+    reps: number
+  ) => void;
+  updateExerciseProgressionMethod?: (
+    workoutId: string,
+    sectionId: string,
+    exerciseId: string,
+    progressionMethod: ProgressionMethod
+  ) => void;
+} => {
   const addExercise = (
     workoutId: string,
     sectionId: string,
@@ -46,6 +93,8 @@ export const useExerciseOperations = <T extends WorkoutType>({
       progressionMethod: exerciseData.progressionMethod,
       hasApproachSets: exerciseData.hasApproachSets || false,
       emomReps: exerciseData.emomReps,
+      isUnilateral: exerciseData.isUnilateral || false,
+      unilateralMode: exerciseData.unilateralMode,
     };
 
     setWorkouts(
@@ -253,9 +302,6 @@ export const useExerciseOperations = <T extends WorkoutType>({
     progressionMethod: ProgressionMethod
   ): void => {
     if (workoutType !== 'strength') {
-      console.warn(
-        'Progression method is only available for strength workouts'
-      );
       return;
     }
 

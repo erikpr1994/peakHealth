@@ -8,6 +8,7 @@ import {
   StrengthWorkout,
   RunningWorkout,
 } from '@/features/routines/types';
+import { UnilateralMode } from '@/features/routines/types/exercise';
 import { routineService } from '../../services/routineService';
 import { DatabaseWorkout } from '../../types/database';
 import { transformDatabaseWorkout } from '../../utils/dataTransformers';
@@ -26,6 +27,7 @@ import { useRoutineModals, useRoutineValidation } from './hooks';
 import { NotesContext } from './types/modal';
 import ExerciseSelectionModal from '@/features/exercises/ExerciseSelectionModal';
 import NotesModal from '@/components/shared/NotesModal';
+import UnilateralExerciseModal from './components/UnilateralExerciseModal';
 
 interface RoutineCreationProps {
   editRoutineId?: string;
@@ -57,6 +59,28 @@ const RoutineCreation = ({
   const [editingRunning, setEditingRunning] = useState<{
     workoutId: string;
     data: TrailRunningWorkoutData;
+  } | null>(null);
+
+  // Unilateral exercise selection state
+  const [unilateralExerciseData, setUnilateralExerciseData] = useState<{
+    exercise: {
+      id: string;
+      name: string;
+      category?: string;
+      muscleGroups?: string[];
+    };
+    variant?: {
+      id: string;
+      name: string;
+      muscleGroups: string[];
+      difficulty: string;
+      equipment: string[];
+      instructions: string[];
+    };
+    context: {
+      workoutId: string;
+      sectionId: string;
+    };
   } | null>(null);
 
   // Collapse states
@@ -235,6 +259,46 @@ const RoutineCreation = ({
     }
   };
 
+  const handleUnilateralModeSelect = (mode: UnilateralMode): void => {
+    if (!unilateralExerciseData) return;
+
+    const { exercise, variant, context } = unilateralExerciseData;
+    const { workoutId, sectionId } = context;
+    const isStrength = strengthWorkouts.some(w => w.id === workoutId);
+
+    const newExercise = {
+      id: `exercise-${Date.now()}`,
+      name: variant?.name || exercise.name,
+      category: exercise.category,
+      muscleGroups: variant?.muscleGroups || exercise.muscleGroups,
+      equipment: variant?.equipment || [],
+      exerciseId: exercise.id,
+      variantId: variant?.id,
+      sets: [],
+      restTimer: '90s',
+      restAfter: '2 min',
+      notes: '',
+      progressionMethod: isStrength
+        ? ('linear' as ProgressionMethod)
+        : undefined,
+      hasApproachSets: false,
+      isUnilateral: true,
+      unilateralMode: mode,
+    };
+
+    if (isStrength) {
+      addStrengthExercise(workoutId, sectionId, newExercise);
+    } else {
+      addRunningExercise(workoutId, sectionId, newExercise);
+    }
+
+    setUnilateralExerciseData(null);
+  };
+
+  const handleUnilateralModalClose = (): void => {
+    setUnilateralExerciseData(null);
+  };
+
   // Exercise selection handlers
   const handleAddExerciseClick = (
     workoutId: string,
@@ -257,15 +321,28 @@ const RoutineCreation = ({
       difficulty: string;
       equipment: string[];
       instructions: string[];
+      isUnilateral?: boolean;
     }
   ): void => {
     const exerciseContext = getModalContext('exercise');
     if (!exerciseContext) return;
 
     const { workoutId, sectionId } = exerciseContext;
-    const isStrength = strengthWorkouts.some(w => w.id === workoutId);
 
-    // Use variant data if available, otherwise fall back to exercise data
+    // Check if this is a unilateral exercise
+    if (selectedVariant?.isUnilateral) {
+      // Store the exercise data and show unilateral modal
+      setUnilateralExerciseData({
+        exercise: selectedExercise,
+        variant: selectedVariant,
+        context: { workoutId, sectionId },
+      });
+      closeModal();
+      return;
+    }
+
+    // Handle non-unilateral exercise as before
+    const isStrength = strengthWorkouts.some(w => w.id === workoutId);
     const exerciseData = selectedVariant || selectedExercise;
 
     const newExercise = {
@@ -284,6 +361,7 @@ const RoutineCreation = ({
         ? ('linear' as ProgressionMethod)
         : undefined,
       hasApproachSets: false,
+      isUnilateral: false,
     };
 
     if (isStrength) {
@@ -663,6 +741,17 @@ const RoutineCreation = ({
         onClose={closeModal}
         onSave={handleNotesSave}
         initialNotes={getModalContext('notes')?.currentNotes || ''}
+      />
+
+      <UnilateralExerciseModal
+        isOpen={!!unilateralExerciseData}
+        onClose={handleUnilateralModalClose}
+        onConfirm={handleUnilateralModeSelect}
+        exerciseName={
+          unilateralExerciseData?.variant?.name ||
+          unilateralExerciseData?.exercise.name ||
+          ''
+        }
       />
     </div>
   );
