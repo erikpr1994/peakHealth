@@ -10,6 +10,7 @@ module.exports = {
       '<rootDir>/__mocks__/fileMock.js',
   },
   testPathIgnorePatterns: ['/node_modules/', '/android/', '/ios/'],
+  testMatch: ['**/?(*.)+(spec|test).[jt]s?(x)'],
   collectCoverageFrom: [
     'src/**/*.{js,jsx,ts,tsx}',
     '!src/**/*.d.ts',
