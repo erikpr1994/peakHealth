@@ -92,6 +92,9 @@ CREATE TABLE exercise_media (
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
+-- Add main_variant_id column to exercises table after both tables exist
+ALTER TABLE exercises ADD COLUMN main_variant_id UUID REFERENCES exercise_variants(id);
+
 -- User exercise favorites table
 CREATE TABLE user_exercise_favorites (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -530,4 +533,65 @@ BEGIN
   GROUP BY wr.id, wr.name, wr.description, wr.schedule, wr.is_active, wr.created_at
   ORDER BY wr.created_at DESC;
 END;
-$$ LANGUAGE plpgsql SECURITY DEFINER; 
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+-- Seed data for unilateral exercises
+INSERT INTO exercises (id, name, category, description, icon, icon_color, is_popular, is_new, tags) VALUES
+  ('550e8400-e29b-41d4-a716-446655440101', 'Dumbbell Curl', 'Strength', 'A classic bicep exercise using dumbbells', '💪', 'bg-blue-100 text-blue-600', true, false, ARRAY['biceps', 'arms', 'strength', 'unilateral']),
+  ('550e8400-e29b-41d4-a716-446655440102', 'Single-Arm Row', 'Strength', 'A back exercise that targets one side at a time', '🏋️', 'bg-green-100 text-green-600', true, false, ARRAY['back', 'lats', 'strength', 'unilateral']),
+  ('550e8400-e29b-41d4-a716-446655440103', 'Single-Leg Deadlift', 'Strength', 'A balance and strength exercise for the posterior chain', '🦵', 'bg-purple-100 text-purple-600', false, true, ARRAY['legs', 'hamstrings', 'balance', 'unilateral']);
+
+-- Seed data for unilateral exercise variants
+INSERT INTO exercise_variants (id, exercise_id, name, description, focus, difficulty, equipment, muscle_groups, secondary_muscles, is_unilateral, instructions) VALUES
+  -- Dumbbell Curl variants
+  ('660e8400-e29b-41d4-a716-446655440101', '550e8400-e29b-41d4-a716-446655440101', 'Alternating Dumbbell Curl', 'Perform curls alternating between left and right arms', 'Bicep isolation with alternating pattern', 'Beginner', ARRAY['Dumbbell'::exercise_equipment], ARRAY['Biceps'::muscle_group], ARRAY['Arms'::muscle_group], true, ARRAY[
+    'Stand with feet shoulder-width apart, holding a dumbbell in each hand',
+    'Keep your elbows close to your sides and palms facing forward',
+    'Curl the right dumbbell toward your shoulder while keeping the left arm down',
+    'Lower the right dumbbell and immediately curl the left dumbbell',
+    'Continue alternating between arms for the desired number of reps'
+  ]),
+  ('660e8400-e29b-41d4-a716-446655440102', '550e8400-e29b-41d4-a716-446655440101', 'Hammer Curl', 'Curl with palms facing each other, working both arms simultaneously', 'Bicep and forearm development', 'Beginner', ARRAY['Dumbbell'::exercise_equipment], ARRAY['Biceps'::muscle_group], ARRAY['Arms'::muscle_group], true, ARRAY[
+    'Stand with feet shoulder-width apart, holding a dumbbell in each hand',
+    'Keep your palms facing each other (neutral grip)',
+    'Curl both dumbbells simultaneously toward your shoulders',
+    'Lower both dumbbells back to the starting position',
+    'Maintain control throughout the movement'
+  ]),
+  
+  -- Single-Arm Row variants
+  ('660e8400-e29b-41d4-a716-446655440103', '550e8400-e29b-41d4-a716-446655440102', 'Single-Arm Dumbbell Row', 'Row exercise performed one arm at a time', 'Back strength and unilateral development', 'Intermediate', ARRAY['Dumbbell'::exercise_equipment, 'Bench'::exercise_equipment], ARRAY['Back'::muscle_group], ARRAY['Biceps'::muscle_group, 'Shoulders'::muscle_group], true, ARRAY[
+    'Place your left knee and left hand on a bench for support',
+    'Hold a dumbbell in your right hand with your arm extended',
+    'Pull the dumbbell up toward your hip, keeping your elbow close to your body',
+    'Lower the dumbbell back to the starting position',
+    'Complete all sets for the right side before switching to the left'
+  ]),
+  ('660e8400-e29b-41d4-a716-446655440104', '550e8400-e29b-41d4-a716-446655440102', 'Alternating Single-Arm Row', 'Row exercise alternating between arms', 'Back development with alternating pattern', 'Intermediate', ARRAY['Dumbbell'::exercise_equipment, 'Bench'::exercise_equipment], ARRAY['Back'::muscle_group], ARRAY['Biceps'::muscle_group, 'Shoulders'::muscle_group], true, ARRAY[
+    'Place your left knee and left hand on a bench for support',
+    'Hold a dumbbell in your right hand with your arm extended',
+    'Pull the right dumbbell up toward your hip',
+    'Lower the right dumbbell and immediately pull the left dumbbell',
+    'Continue alternating between arms for the desired number of reps'
+  ]),
+  
+  -- Single-Leg Deadlift variants
+  ('660e8400-e29b-41d4-a716-446655440105', '550e8400-e29b-41d4-a716-446655440103', 'Single-Leg Dumbbell Deadlift', 'Deadlift performed on one leg for balance and strength', 'Balance, stability, and posterior chain strength', 'Advanced', ARRAY['Dumbbell'::exercise_equipment], ARRAY['Legs'::muscle_group], ARRAY['Glutes'::muscle_group, 'Core'::muscle_group], true, ARRAY[
+    'Stand on your left leg, holding a dumbbell in your right hand',
+    'Hinge at your hips and lower the dumbbell toward the ground',
+    'Keep your left leg straight and your back neutral',
+    'Return to the starting position by driving through your left hip',
+    'Complete all sets for the left leg before switching to the right'
+  ]),
+  ('660e8400-e29b-41d4-a716-446655440106', '550e8400-e29b-41d4-a716-446655440103', 'Alternating Single-Leg Deadlift', 'Deadlift alternating between legs', 'Balance and posterior chain development', 'Advanced', ARRAY['Dumbbell'::exercise_equipment], ARRAY['Legs'::muscle_group], ARRAY['Glutes'::muscle_group, 'Core'::muscle_group], true, ARRAY[
+    'Stand on your left leg, holding a dumbbell in your right hand',
+    'Hinge at your hips and lower the dumbbell toward the ground',
+    'Return to the starting position by driving through your left hip',
+    'Switch to standing on your right leg with the dumbbell in your left hand',
+    'Continue alternating between legs for the desired number of reps'
+  ]);
+
+-- Set main variants for exercises
+UPDATE exercises SET main_variant_id = '660e8400-e29b-41d4-a716-446655440101' WHERE id = '550e8400-e29b-41d4-a716-446655440101';
+UPDATE exercises SET main_variant_id = '660e8400-e29b-41d4-a716-446655440103' WHERE id = '550e8400-e29b-41d4-a716-446655440102';
+UPDATE exercises SET main_variant_id = '660e8400-e29b-41d4-a716-446655440105' WHERE id = '550e8400-e29b-41d4-a716-446655440103'; 

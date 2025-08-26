@@ -23,6 +23,9 @@ export interface Exercise {
   // EMOM specific properties
   emomReps?: number; // target reps per minute
   // TABATA specific properties (uses time intervals instead of sets)
+  // Unilateral exercise properties
+  isUnilateral?: boolean; // whether this exercise is unilateral
+  unilateralMode?: 'alternating' | 'sequential' | 'simultaneous'; // how to perform unilateral exercise
 }
 
 export type ProgressionMethod =
@@ -32,6 +35,9 @@ export type ProgressionMethod =
   | 'myo-reps'
   | 'widowmaker'
   | 'amrap';
+
+// Unilateral exercise mode type
+export type UnilateralMode = 'alternating' | 'sequential' | 'simultaneous';
 
 // Database exercise types
 export interface DatabaseSet {
