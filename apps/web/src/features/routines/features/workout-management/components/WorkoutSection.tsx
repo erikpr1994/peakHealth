@@ -167,14 +167,6 @@ const WorkoutSection = ({
         <div className="space-y-3">
           <div className="flex items-center justify-between">
             <h4 className="font-medium text-gray-900">Exercises</h4>
-            <Button
-              onClick={onAddExercise}
-              size="sm"
-              className="bg-blue-600 hover:bg-blue-700"
-            >
-              <Plus className="h-4 w-4 mr-2" />
-              Add Exercise
-            </Button>
           </div>
 
           {section.exercises.length === 0 ? (
@@ -212,6 +204,16 @@ const WorkoutSection = ({
                   onNotesClick={onNotesClick}
                 />
               ))}
+
+              {/* Add Exercise button - only show when there are exercises */}
+              <Button
+                onClick={onAddExercise}
+                size="sm"
+                className="bg-blue-600 hover:bg-blue-700"
+              >
+                <Plus className="h-4 w-4 mr-2" />
+                Add Exercise
+              </Button>
             </div>
           )}
         </div>

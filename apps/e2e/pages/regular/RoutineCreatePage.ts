@@ -1,4 +1,4 @@
-import { Page as PlaywrightPage } from '@playwright/test';
+import type { Page as PlaywrightPage } from '@playwright/test';
 import { RegularUserBasePage } from './RegularUserBasePage';
 
 /**
@@ -24,16 +24,17 @@ export class RoutineCreatePage extends RegularUserBasePage {
     'input[placeholder*="workout name" i], input:not([placeholder]):first-of-type';
   // Routine-level objectives (general training objectives)
   private readonly routineObjectivesSelector =
-    'input[placeholder*="main goals and focus areas" i], input[placeholder*="training objectives" i], input[placeholder*="objectives" i]';
+    'input[placeholder*="main goals and focus areas" i], input[placeholder*="training objectives" i], input[placeholder*="goals" i]';
 
   // Workout-level objective (specific workout goal)
   private readonly workoutObjectiveSelector =
     'textarea[placeholder*="primary goal" i], textarea[placeholder*="objective" i], textarea[aria-label*="objective" i]';
-  private readonly addSectionButtonSelector = 'button:has-text("Add Section")';
+  private readonly addSectionButtonSelector =
+    'button:has-text("Add Your First Section")';
   private readonly sectionNameSelector =
     'input[id="section-name"], input[placeholder*="section name" i]';
   private readonly addExerciseButtonSelector =
-    'button:has-text("Add Exercise")';
+    'button:has-text("Add Your First Exercise")';
   private readonly exerciseDialogSelector = '[role="dialog"]';
   private readonly exerciseListSelector =
     '[role="dialog"] ul, [role="dialog"] div[role="list"]';
