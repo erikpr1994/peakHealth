@@ -312,118 +312,138 @@ const RoutineCreation = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [editRoutineId, mode]);
 
-  const toggleStrengthWorkoutCollapse = (workoutId: string): void => {
-    setCollapsedStrengthWorkouts(prev => {
-      const newSet = new Set(prev);
-      if (newSet.has(workoutId)) {
-        newSet.delete(workoutId);
-      } else {
-        newSet.add(workoutId);
-      }
-      return newSet;
-    });
-  };
+  const toggleStrengthWorkoutCollapse = useCallback(
+    (workoutId: string): void => {
+      setCollapsedStrengthWorkouts(prev => {
+        const newSet = new Set(prev);
+        if (newSet.has(workoutId)) {
+          newSet.delete(workoutId);
+        } else {
+          newSet.add(workoutId);
+        }
+        return newSet;
+      });
+    },
+    []
+  );
 
-  const toggleRunningWorkoutCollapse = (workoutId: string): void => {
-    setCollapsedRunningWorkouts(prev => {
-      const newSet = new Set(prev);
-      if (newSet.has(workoutId)) {
-        newSet.delete(workoutId);
-      } else {
-        newSet.add(workoutId);
-      }
-      return newSet;
-    });
-  };
+  const toggleRunningWorkoutCollapse = useCallback(
+    (workoutId: string): void => {
+      setCollapsedRunningWorkouts(prev => {
+        const newSet = new Set(prev);
+        if (newSet.has(workoutId)) {
+          newSet.delete(workoutId);
+        } else {
+          newSet.add(workoutId);
+        }
+        return newSet;
+      });
+    },
+    []
+  );
 
-  const handleAddRunningWorkout = (): void => {
+  const handleAddRunningWorkout = useCallback((): void => {
     setCreatingRunning(true);
-  };
+  }, []);
 
-  const handleRunningSave = (runningData: TrailRunningWorkoutData): void => {
-    if (editingRunning) {
-      setRunningWorkouts(prev =>
-        prev.map(workout =>
-          workout.id === editingRunning.workoutId
-            ? { ...workout, trailRunningData: runningData }
-            : workout
-        )
-      );
-      setEditingRunning(null);
-    } else {
-      const newWorkout = {
-        id: `running-${Date.now()}`,
-        name: runningData.name || 'New Running Workout',
-        type: 'running' as 'running',
-        objective: runningData.description || '',
-        schedule: {
-          repeatPattern: '',
-          repeatValue: '',
-          selectedDays: [],
-          time: '',
-        },
-        sections: [],
-        trailRunningData: runningData,
-      };
-      setRunningWorkouts(prev => [...prev, newWorkout]);
-      setCreatingRunning(false);
-    }
-  };
+  const handleRunningSave = useCallback(
+    (runningData: TrailRunningWorkoutData): void => {
+      if (editingRunning) {
+        setRunningWorkouts(prev =>
+          prev.map(workout =>
+            workout.id === editingRunning.workoutId
+              ? { ...workout, trailRunningData: runningData }
+              : workout
+          )
+        );
+        setEditingRunning(null);
+      } else {
+        const newWorkout = {
+          id: `running-${Date.now()}`,
+          name: runningData.name || 'New Running Workout',
+          type: 'running' as 'running',
+          objective: runningData.description || '',
+          schedule: {
+            repeatPattern: '',
+            repeatValue: '',
+            selectedDays: [],
+            time: '',
+          },
+          sections: [],
+          trailRunningData: runningData,
+        };
+        setRunningWorkouts(prev => [...prev, newWorkout]);
+        setCreatingRunning(false);
+      }
+    },
+    [editingRunning, setRunningWorkouts]
+  );
 
-  const handleRunningCancel = (): void => {
+  const handleRunningCancel = useCallback((): void => {
     setCreatingRunning(false);
     setEditingRunning(null);
-  };
+  }, []);
 
-  const handleEditRunning = (workoutId: string): void => {
-    const workout = runningWorkouts.find(w => w.id === workoutId);
-    if (workout?.trailRunningData) {
-      setEditingRunning({
-        workoutId,
-        data: workout.trailRunningData,
-      });
-    }
-  };
+  const handleEditRunning = useCallback(
+    (workoutId: string): void => {
+      const workout = runningWorkouts.find(w => w.id === workoutId);
+      if (workout?.trailRunningData) {
+        setEditingRunning({
+          workoutId,
+          data: workout.trailRunningData,
+        });
+      }
+    },
+    [runningWorkouts]
+  );
 
-  const handleUnilateralModeSelect = (mode: UnilateralMode): void => {
-    if (!unilateralExerciseData) return;
+  const handleUnilateralModeSelect = useCallback(
+    (mode: UnilateralMode): void => {
+      if (!unilateralExerciseData) return;
 
-    const { exercise, variant, context } = unilateralExerciseData;
-    const { workoutId, sectionId } = context;
-    const isStrength = strengthWorkouts.some(w => w.id === workoutId);
+      const { exercise, variant, context } = unilateralExerciseData;
+      const { workoutId, sectionId } = context;
+      const isStrength = strengthWorkouts.some(w => w.id === workoutId);
 
-    const newExercise = {
-      id: `exercise-${Date.now()}`,
-      name: variant?.name || exercise.name,
-      category: exercise.category,
-      muscleGroups: variant?.muscleGroups || exercise.muscleGroups,
-      equipment: variant?.equipment || [],
-      exerciseId: exercise.id,
-      variantId: variant?.id,
-      sets: [],
-      restTimer: '90s',
-      restAfter: '2 min',
-      notes: '',
-      progressionMethod: isStrength
-        ? ('linear' as ProgressionMethod)
-        : undefined,
-      hasApproachSets: false,
-      isUnilateral: true,
-      unilateralMode: mode,
-    };
+      const newExercise = {
+        id: `exercise-${Date.now()}`,
+        name: variant?.name || exercise.name,
+        category: exercise.category,
+        muscleGroups: variant?.muscleGroups || exercise.muscleGroups,
+        equipment: variant?.equipment || [],
+        exerciseId: exercise.id,
+        variantId: variant?.id,
+        sets: [],
+        restTimer: '90s',
+        restAfter: '2 min',
+        notes: '',
+        progressionMethod: isStrength
+          ? ('linear' as ProgressionMethod)
+          : undefined,
+        hasApproachSets: false,
+        isUnilateral: true,
+        unilateralMode: mode,
+      };
 
-    if (isStrength) {
-      addStrengthExercise(workoutId, sectionId, newExercise);
-    } else {
-      addRunningExercise(workoutId, sectionId, newExercise);
-    }
+      if (isStrength) {
+        addStrengthExercise(workoutId, sectionId, newExercise);
+      } else {
+        addRunningExercise(workoutId, sectionId, newExercise);
+      }
 
+      setUnilateralExerciseData(null);
+    },
+    [
+      unilateralExerciseData,
+      strengthWorkouts,
+      addStrengthExercise,
+      addRunningExercise,
+    ]
+  );
+
+  const handleUnilateralModalClose = useCallback((): void => {
     setUnilateralExerciseData(null);
-  };
-
-  const handleUnilateralModalClose = (): void => {
-    setUnilateralExerciseData(null);
-  };
+  }, []);
 
   // Exercise selection handlers
   const handleAddExerciseClick = useCallback(

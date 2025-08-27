@@ -1,5 +1,6 @@
 'use client';
 
+import React from 'react';
 import { Dumbbell, Plus } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
@@ -7,6 +8,7 @@ import { Card } from '@/components/ui/card';
 import WorkoutHeader from '@/features/routines/features/workout-management/components/WorkoutHeader';
 import WorkoutDetails from '@/features/routines/features/workout-management/components/WorkoutDetails';
 import WorkoutSectionComponent from '@/features/routines/features/workout-management/components/WorkoutSection';
+import EmomSectionWrapper from './EmomSectionWrapper';
 import { calculateWorkoutDuration } from '@/features/routines/utils/workoutCalculations';
 import {
   StrengthWorkout,
@@ -107,234 +109,284 @@ interface StrengthWorkoutsSectionProps {
   ) => void;
 }
 
-const StrengthWorkoutsSection = ({
-  strengthWorkouts,
-  collapsedStrengthWorkouts,
-  onAddStrengthWorkout,
-  onToggleCollapse,
-  onMoveUp,
-  onMoveDown,
-  onRemove,
-  onUpdateName,
-  onUpdateObjective,
-  onUpdateSchedule,
-  onAddSection,
-  onUpdateSectionName,
-  onUpdateSectionType,
-  onUpdateSectionRestAfter,
-  onUpdateSectionEmomDuration,
-  onRemoveSection,
-  onAddExercise,
-  onUpdateExerciseEmomReps,
-  onUpdateExerciseSets,
-  onUpdateExerciseName,
-  onUpdateRestTimer,
-  onUpdateExerciseRestAfter,
-  onRemoveExercise,
-  onAddApproachSets,
-  onUpdateProgressionMethod,
-  onNotesClick,
-}: StrengthWorkoutsSectionProps): React.ReactElement => {
-  return (
-    <div className="space-y-4">
-      <div className="flex items-center justify-between">
-        <h2 className="text-lg font-semibold text-gray-900">
-          Strength Workouts ({strengthWorkouts.length})
-        </h2>
-        <Button
-          onClick={onAddStrengthWorkout}
-          className="bg-indigo-600 hover:bg-indigo-700"
-        >
-          <Dumbbell className="h-4 w-4 mr-2" />
-          Add Strength Workout
-        </Button>
-      </div>
+const StrengthWorkoutsSection = React.memo(
+  ({
+    strengthWorkouts,
+    collapsedStrengthWorkouts,
+    onAddStrengthWorkout,
+    onToggleCollapse,
+    onMoveUp,
+    onMoveDown,
+    onRemove,
+    onUpdateName,
+    onUpdateObjective,
+    onUpdateSchedule,
+    onAddSection,
+    onUpdateSectionName,
+    onUpdateSectionType,
+    onUpdateSectionRestAfter,
+    onUpdateSectionEmomDuration,
+    onRemoveSection,
+    onAddExercise,
+    onUpdateExerciseEmomReps,
+    onUpdateExerciseSets,
+    onUpdateExerciseName,
+    onUpdateRestTimer,
+    onUpdateExerciseRestAfter,
+    onRemoveExercise,
+    onAddApproachSets,
+    onUpdateProgressionMethod,
+    onNotesClick,
+  }: StrengthWorkoutsSectionProps): React.ReactElement => {
+    return (
+      <div className="space-y-4">
+        <div className="flex items-center justify-between">
+          <h2 className="text-lg font-semibold text-gray-900">
+            Strength Workouts ({strengthWorkouts.length})
+          </h2>
+          <Button
+            onClick={onAddStrengthWorkout}
+            className="bg-indigo-600 hover:bg-indigo-700"
+          >
+            <Dumbbell className="h-4 w-4 mr-2" />
+            Add Strength Workout
+          </Button>
+        </div>
 
-      {strengthWorkouts.map((workout, index) => (
-        <Card key={workout.id} className="overflow-hidden">
-          <WorkoutHeader
-            workout={workout}
-            index={index}
-            totalCount={strengthWorkouts.length}
-            isCollapsed={collapsedStrengthWorkouts.has(workout.id)}
-            duration={calculateWorkoutDuration(workout)}
-            onToggleCollapse={() => onToggleCollapse(workout.id)}
-            onMoveUp={() => onMoveUp(workout.id)}
-            onMoveDown={() => onMoveDown(workout.id)}
-            onRemove={() => onRemove(workout.id)}
-            onUpdateName={name => onUpdateName(workout.id, name)}
-          />
+        {strengthWorkouts.map((workout, index) => (
+          <Card key={workout.id} className="overflow-hidden">
+            <WorkoutHeader
+              workout={workout}
+              index={index}
+              totalCount={strengthWorkouts.length}
+              isCollapsed={collapsedStrengthWorkouts.has(workout.id)}
+              duration={calculateWorkoutDuration(workout)}
+              onToggleCollapse={() => onToggleCollapse(workout.id)}
+              onMoveUp={() => onMoveUp(workout.id)}
+              onMoveDown={() => onMoveDown(workout.id)}
+              onRemove={() => onRemove(workout.id)}
+              onUpdateName={name => onUpdateName(workout.id, name)}
+            />
 
-          {!collapsedStrengthWorkouts.has(workout.id) && (
-            <>
-              <WorkoutDetails
-                objective={workout.objective}
-                schedule={workout.schedule}
-                onUpdateObjective={objective =>
-                  onUpdateObjective(workout.id, objective)
-                }
-                onUpdateSchedule={(field, value) =>
-                  onUpdateSchedule(workout.id, field, value)
-                }
-              />
+            {!collapsedStrengthWorkouts.has(workout.id) && (
+              <>
+                <WorkoutDetails
+                  objective={workout.objective}
+                  schedule={workout.schedule}
+                  onUpdateObjective={objective =>
+                    onUpdateObjective(workout.id, objective)
+                  }
+                  onUpdateSchedule={(field, value) =>
+                    onUpdateSchedule(workout.id, field, value)
+                  }
+                />
 
-              {/* Sections */}
-              <div className="p-4 space-y-3">
-                <div className="flex items-center justify-between">
-                  <h4 className="font-medium text-gray-900">Sections</h4>
+                {/* Sections */}
+                <div className="p-4 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <h4 className="font-medium text-gray-900">Sections</h4>
+                  </div>
+
+                  {workout.sections.length === 0 ? (
+                    <div className="text-center py-8 text-gray-500">
+                      <p>No sections added yet</p>
+                      <Button
+                        onClick={() => onAddSection(workout.id)}
+                        variant="outline"
+                        size="sm"
+                        className="mt-2"
+                      >
+                        <Plus className="h-4 w-4 mr-2" />
+                        Add Your First Section
+                      </Button>
+                    </div>
+                  ) : (
+                    <div className="space-y-3">
+                      {workout.sections.map((section, sectionIndex) => {
+                        // Use EmomSectionWrapper for EMOM sections
+                        if (section.type === 'emom') {
+                          return (
+                            <EmomSectionWrapper
+                              key={section.id}
+                              section={section}
+                              workoutId={workout.id}
+                              isLastSection={
+                                sectionIndex === workout.sections.length - 1
+                              }
+                              onUpdateSectionName={onUpdateSectionName}
+                              onUpdateSectionEmomDuration={
+                                onUpdateSectionEmomDuration
+                              }
+                              onUpdateSectionRestAfter={
+                                onUpdateSectionRestAfter
+                              }
+                              onRemoveSection={onRemoveSection}
+                              onAddExercise={onAddExercise}
+                              onUpdateExerciseEmomReps={
+                                onUpdateExerciseEmomReps
+                              }
+                              onUpdateExerciseName={onUpdateExerciseName}
+                              onUpdateExerciseRestAfter={
+                                onUpdateExerciseRestAfter
+                              }
+                              onRemoveExercise={onRemoveExercise}
+                              onNotesClick={onNotesClick}
+                            />
+                          );
+                        }
+
+                        // Use the original WorkoutSectionComponent for other section types
+                        return (
+                          <WorkoutSectionComponent
+                            key={section.id}
+                            section={section}
+                            workoutId={workout.id}
+                            isLastSection={
+                              sectionIndex === workout.sections.length - 1
+                            }
+                            onUpdateName={name =>
+                              onUpdateSectionName(workout.id, section.id, name)
+                            }
+                            onUpdateType={type =>
+                              onUpdateSectionType(workout.id, section.id, type)
+                            }
+                            onUpdateRestAfter={restAfter =>
+                              onUpdateSectionRestAfter(
+                                workout.id,
+                                section.id,
+                                restAfter
+                              )
+                            }
+                            onUpdateEmomDuration={duration =>
+                              onUpdateSectionEmomDuration(
+                                workout.id,
+                                section.id,
+                                duration
+                              )
+                            }
+                            onRemove={() =>
+                              onRemoveSection(workout.id, section.id)
+                            }
+                            onAddExercise={() =>
+                              onAddExercise(workout.id, section.id)
+                            }
+                            onUpdateExerciseEmomReps={(exerciseId, reps) =>
+                              onUpdateExerciseEmomReps(
+                                workout.id,
+                                section.id,
+                                exerciseId,
+                                reps
+                              )
+                            }
+                            onUpdateExerciseSets={(exerciseId, sets) =>
+                              onUpdateExerciseSets(
+                                workout.id,
+                                section.id,
+                                exerciseId,
+                                sets
+                              )
+                            }
+                            onUpdateExerciseName={(exerciseId, name) =>
+                              onUpdateExerciseName(
+                                workout.id,
+                                section.id,
+                                exerciseId,
+                                name
+                              )
+                            }
+                            onUpdateRestTimer={(exerciseId, restTimer) =>
+                              onUpdateRestTimer(
+                                workout.id,
+                                section.id,
+                                exerciseId,
+                                restTimer
+                              )
+                            }
+                            onUpdateExerciseRestAfter={(
+                              exerciseId,
+                              restAfter
+                            ) =>
+                              onUpdateExerciseRestAfter(
+                                workout.id,
+                                section.id,
+                                exerciseId,
+                                restAfter
+                              )
+                            }
+                            onRemoveExercise={exerciseId =>
+                              onRemoveExercise(
+                                workout.id,
+                                section.id,
+                                exerciseId
+                              )
+                            }
+                            onAddApproachSets={exerciseId =>
+                              onAddApproachSets(
+                                workout.id,
+                                section.id,
+                                exerciseId
+                              )
+                            }
+                            onUpdateProgressionMethod={(exerciseId, method) =>
+                              onUpdateProgressionMethod(
+                                workout.id,
+                                section.id,
+                                exerciseId,
+                                method
+                              )
+                            }
+                            onNotesClick={(type, exerciseId, setId) =>
+                              onNotesClick(
+                                type,
+                                workout.id,
+                                section.id,
+                                exerciseId,
+                                setId
+                              )
+                            }
+                          />
+                        );
+                      })}
+
+                      {/* Add Section button - only show when there are sections */}
+                      <Button
+                        onClick={() => onAddSection(workout.id)}
+                        size="sm"
+                        className="bg-indigo-600 hover:bg-indigo-700"
+                      >
+                        <Plus className="h-4 w-4 mr-2" />
+                        Add Section
+                      </Button>
+                    </div>
+                  )}
                 </div>
+              </>
+            )}
+          </Card>
+        ))}
 
-                {workout.sections.length === 0 ? (
-                  <div className="text-center py-8 text-gray-500">
-                    <p>No sections added yet</p>
-                    <Button
-                      onClick={() => onAddSection(workout.id)}
-                      variant="outline"
-                      size="sm"
-                      className="mt-2"
-                    >
-                      <Plus className="h-4 w-4 mr-2" />
-                      Add Your First Section
-                    </Button>
-                  </div>
-                ) : (
-                  <div className="space-y-3">
-                    {workout.sections.map((section, sectionIndex) => (
-                      <WorkoutSectionComponent
-                        key={section.id}
-                        section={section}
-                        workoutId={workout.id}
-                        isLastSection={
-                          sectionIndex === workout.sections.length - 1
-                        }
-                        onUpdateName={name =>
-                          onUpdateSectionName(workout.id, section.id, name)
-                        }
-                        onUpdateType={type =>
-                          onUpdateSectionType(workout.id, section.id, type)
-                        }
-                        onUpdateRestAfter={restAfter =>
-                          onUpdateSectionRestAfter(
-                            workout.id,
-                            section.id,
-                            restAfter
-                          )
-                        }
-                        onUpdateEmomDuration={duration =>
-                          onUpdateSectionEmomDuration(
-                            workout.id,
-                            section.id,
-                            duration
-                          )
-                        }
-                        onRemove={() => onRemoveSection(workout.id, section.id)}
-                        onAddExercise={() =>
-                          onAddExercise(workout.id, section.id)
-                        }
-                        onUpdateExerciseEmomReps={(exerciseId, reps) =>
-                          onUpdateExerciseEmomReps(
-                            workout.id,
-                            section.id,
-                            exerciseId,
-                            reps
-                          )
-                        }
-                        onUpdateExerciseSets={(exerciseId, sets) =>
-                          onUpdateExerciseSets(
-                            workout.id,
-                            section.id,
-                            exerciseId,
-                            sets
-                          )
-                        }
-                        onUpdateExerciseName={(exerciseId, name) =>
-                          onUpdateExerciseName(
-                            workout.id,
-                            section.id,
-                            exerciseId,
-                            name
-                          )
-                        }
-                        onUpdateRestTimer={(exerciseId, restTimer) =>
-                          onUpdateRestTimer(
-                            workout.id,
-                            section.id,
-                            exerciseId,
-                            restTimer
-                          )
-                        }
-                        onUpdateExerciseRestAfter={(exerciseId, restAfter) =>
-                          onUpdateExerciseRestAfter(
-                            workout.id,
-                            section.id,
-                            exerciseId,
-                            restAfter
-                          )
-                        }
-                        onRemoveExercise={exerciseId =>
-                          onRemoveExercise(workout.id, section.id, exerciseId)
-                        }
-                        onAddApproachSets={exerciseId =>
-                          onAddApproachSets(workout.id, section.id, exerciseId)
-                        }
-                        onUpdateProgressionMethod={(exerciseId, method) =>
-                          onUpdateProgressionMethod(
-                            workout.id,
-                            section.id,
-                            exerciseId,
-                            method
-                          )
-                        }
-                        onNotesClick={(type, exerciseId, setId) =>
-                          onNotesClick(
-                            type,
-                            workout.id,
-                            section.id,
-                            exerciseId,
-                            setId
-                          )
-                        }
-                      />
-                    ))}
-
-                    {/* Add Section button - only show when there are sections */}
-                    <Button
-                      onClick={() => onAddSection(workout.id)}
-                      size="sm"
-                      className="bg-indigo-600 hover:bg-indigo-700"
-                    >
-                      <Plus className="h-4 w-4 mr-2" />
-                      Add Section
-                    </Button>
-                  </div>
-                )}
+        {strengthWorkouts.length === 0 && (
+          <Card className="p-8 text-center">
+            <div className="flex flex-col items-center space-y-4">
+              <Dumbbell className="h-12 w-12 text-gray-400" />
+              <div>
+                <p className="text-gray-500 mb-4">
+                  No strength workouts added yet
+                </p>
+                <Button
+                  onClick={onAddStrengthWorkout}
+                  className="bg-indigo-600 hover:bg-indigo-700"
+                >
+                  <Dumbbell className="h-4 w-4 mr-2" />
+                  Add Your First Strength Workout
+                </Button>
               </div>
-            </>
-          )}
-        </Card>
-      ))}
-
-      {strengthWorkouts.length === 0 && (
-        <Card className="p-8 text-center">
-          <div className="flex flex-col items-center space-y-4">
-            <Dumbbell className="h-12 w-12 text-gray-400" />
-            <div>
-              <p className="text-gray-500 mb-4">
-                No strength workouts added yet
-              </p>
-              <Button
-                onClick={onAddStrengthWorkout}
-                className="bg-indigo-600 hover:bg-indigo-700"
-              >
-                <Dumbbell className="h-4 w-4 mr-2" />
-                Add Your First Strength Workout
-              </Button>
             </div>
-          </div>
-        </Card>
-      )}
-    </div>
-  );
-};
+          </Card>
+        )}
+      </div>
+    );
+  }
+);
 
 export default StrengthWorkoutsSection;
