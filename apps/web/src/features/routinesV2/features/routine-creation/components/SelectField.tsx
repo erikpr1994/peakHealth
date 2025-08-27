@@ -1,5 +1,5 @@
 import type { SelectFieldProps } from '../types';
-import styles from './FormField.module.css';
+import styles from './SelectField.module.css';
 
 export const SelectField = ({
   label,

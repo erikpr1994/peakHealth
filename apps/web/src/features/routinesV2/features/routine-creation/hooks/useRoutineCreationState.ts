@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react';
 import type { RoutineCreationData } from '../types';
-import { routineService } from '../../routines/services/routineService';
+import { routineService } from '../services/routineService';
 
 const initialRoutineData: RoutineCreationData = {
   name: '',
@@ -34,15 +34,16 @@ export const useRoutineCreationState = (): {
   const loadRoutineDataForEditing = useCallback(async (routineId: string) => {
     try {
       const data = await routineService.getRoutineById(routineId);
-
-      setRoutineData({
-        name: data.routine.name,
-        difficulty: data.routine.difficulty,
-        goal: data.routine.goal,
-        description: data.routine.description,
-        objectives: data.routine.objectives || [],
-        duration: data.routine.duration || 12,
-      });
+      if (data) {
+        setRoutineData({
+          name: data.name,
+          difficulty: data.difficulty as RoutineCreationData['difficulty'],
+          goal: data.goal as RoutineCreationData['goal'],
+          description: data.description,
+          objectives: data.objectives || [],
+          duration: data.duration || 12,
+        });
+      }
     } catch {
       // Silently handle error - could be logged to error service in production
     }

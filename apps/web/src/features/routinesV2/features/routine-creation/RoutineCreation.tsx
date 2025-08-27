@@ -10,7 +10,7 @@ import { RoutineDetails } from './components/RoutineDetails';
 import { RoutineHeader } from './components/RoutineHeader';
 import { useRoutineCreationState } from './hooks/useRoutineCreationState';
 import { useRoutineValidation } from './hooks/useRoutineValidation';
-import { routineService } from '../routines/services/routineService';
+import { routineService } from './services/routineService';
 
 import styles from './RoutineCreation.module.css';
 
@@ -24,6 +24,7 @@ export const RoutineCreation = ({
   mode = 'create',
 }: RoutineCreationProps): React.ReactElement => {
   const router = useRouter();
+  // TODO: This should be part of the auth context, so, if we are not logged in, we should redirect to the login page
   const { isAuthenticated, user } = useAuth();
   const { showToast } = useToast();
 
@@ -58,13 +59,16 @@ export const RoutineCreation = ({
 
     try {
       if (mode === 'edit' && editRoutineId) {
-        await routineService.updateRoutine(editRoutineId, {
+        await routineService.updateRoutine({
+          id: editRoutineId,
           name: routineData.name,
           description: routineData.description,
           difficulty: routineData.difficulty,
           goal: routineData.goal,
           duration: routineData.duration,
           objectives: routineData.objectives,
+          strengthWorkouts: [],
+          runningWorkouts: [],
         });
         showToast({
           message: 'Routine updated successfully',

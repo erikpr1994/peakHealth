@@ -1,6 +1,6 @@
 import { Input } from '@peakhealth/ui';
 import type { NumberInputProps } from '../types';
-import styles from './FormField.module.css';
+import styles from './NumberInput.module.css';
 
 export const NumberInput = ({
   label,

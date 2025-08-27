@@ -1,6 +1,6 @@
 import { Input } from '@peakhealth/ui';
 import type { InputFieldProps } from '../types';
-import styles from './FormField.module.css';
+import styles from './InputField.module.css';
 
 export const InputField = ({
   label,

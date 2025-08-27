@@ -1,1 +1,1 @@
-export { RoutineCreation } from './RoutineCreation';
+export { RoutineCreation } from './features/routine-creation/RoutineCreation';

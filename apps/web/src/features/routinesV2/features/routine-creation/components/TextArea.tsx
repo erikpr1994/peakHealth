@@ -1,6 +1,6 @@
 import { Textarea } from '@peakhealth/ui';
 import type { TextAreaProps } from '../types';
-import styles from './FormField.module.css';
+import styles from './TextArea.module.css';
 
 export const TextArea = ({
   label,
