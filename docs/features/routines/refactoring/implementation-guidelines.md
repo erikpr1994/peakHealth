@@ -76,7 +76,7 @@ This document provides guidelines for implementing the refactoring plan effectiv
 ### 1. Feature-Based Structure
 
 ```
-features/routines/
+features/routinesV2/
 ├── api/                # API client layer
 ├── components/         # SHARED components across features
 │   ├── workout/        # Shared workout components
@@ -161,59 +161,44 @@ For workout components, use composition to handle different workout types:
 // Base workout form component
 function WorkoutForm({ workout, onChange }) {
   // Common form fields and logic
-  
+
   return (
     <div className={styles.workoutForm}>
       {/* Common fields like name, description, etc. */}
       <div className={styles.commonFields}>
-        <TextField 
-          label="Name" 
-          value={workout.name} 
-          onChange={(e) => onChange({ ...workout, name: e.target.value })} 
+        <TextField
+          label="Name"
+          value={workout.name}
+          onChange={e => onChange({ ...workout, name: e.target.value })}
         />
-        <TextField 
-          label="Objective" 
-          value={workout.objective} 
-          onChange={(e) => onChange({ ...workout, objective: e.target.value })} 
+        <TextField
+          label="Objective"
+          value={workout.objective}
+          onChange={e => onChange({ ...workout, objective: e.target.value })}
         />
         {/* Other common fields */}
       </div>
-      
+
       {/* Type-specific fields */}
       <div className={styles.typeSpecificFields}>
         {isStrengthWorkout(workout) && (
-          <StrengthWorkoutFields 
-            workout={workout} 
-            onChange={onChange} 
-          />
+          <StrengthWorkoutFields workout={workout} onChange={onChange} />
         )}
-        
+
         {isRunningWorkout(workout) && (
-          <RunningWorkoutFields 
-            workout={workout} 
-            onChange={onChange} 
-          />
+          <RunningWorkoutFields workout={workout} onChange={onChange} />
         )}
-        
+
         {isTrailRunningWorkout(workout) && (
-          <TrailRunningWorkoutFields 
-            workout={workout} 
-            onChange={onChange} 
-          />
+          <TrailRunningWorkoutFields workout={workout} onChange={onChange} />
         )}
-        
+
         {isSwimmingWorkout(workout) && (
-          <SwimmingWorkoutFields 
-            workout={workout} 
-            onChange={onChange} 
-          />
+          <SwimmingWorkoutFields workout={workout} onChange={onChange} />
         )}
-        
+
         {isCyclingWorkout(workout) && (
-          <CyclingWorkoutFields 
-            workout={workout} 
-            onChange={onChange} 
-          />
+          <CyclingWorkoutFields workout={workout} onChange={onChange} />
         )}
       </div>
     </div>
@@ -223,52 +208,58 @@ function WorkoutForm({ workout, onChange }) {
 // Trail running specific component
 function TrailRunningWorkoutFields({ workout, onChange }) {
   // Trail running specific fields
-  
+
   return (
     <div className={styles.trailRunningFields}>
-      <SelectField 
-        label="Difficulty" 
-        value={workout.difficulty} 
+      <SelectField
+        label="Difficulty"
+        value={workout.difficulty}
         options={[
           { value: 'beginner', label: 'Beginner' },
           { value: 'intermediate', label: 'Intermediate' },
           { value: 'advanced', label: 'Advanced' },
-          { value: 'expert', label: 'Expert' }
+          { value: 'expert', label: 'Expert' },
         ]}
-        onChange={(e) => onChange({ ...workout, difficulty: e.target.value })} 
+        onChange={e => onChange({ ...workout, difficulty: e.target.value })}
       />
-      
-      <TextField 
-        label="Target Distance (km)" 
+
+      <TextField
+        label="Target Distance (km)"
         type="number"
-        value={workout.targetDistance} 
-        onChange={(e) => onChange({ ...workout, targetDistance: Number(e.target.value) })} 
+        value={workout.targetDistance}
+        onChange={e =>
+          onChange({ ...workout, targetDistance: Number(e.target.value) })
+        }
       />
-      
-      <TextField 
-        label="Elevation Gain (m)" 
+
+      <TextField
+        label="Elevation Gain (m)"
         type="number"
-        value={workout.elevationGain} 
-        onChange={(e) => onChange({ ...workout, elevationGain: Number(e.target.value) })} 
+        value={workout.elevationGain}
+        onChange={e =>
+          onChange({ ...workout, elevationGain: Number(e.target.value) })
+        }
       />
-      
-      <SelectField 
-        label="Intensity Target Type" 
-        value={workout.intensityTargetType} 
+
+      <SelectField
+        label="Intensity Target Type"
+        value={workout.intensityTargetType}
         options={[
           { value: 'Heart Rate', label: 'Heart Rate' },
           { value: 'Speed', label: 'Speed' },
           { value: 'Power', label: 'Power' },
           { value: 'Cadence', label: 'Cadence' },
-          { value: 'RPE', label: 'RPE' }
+          { value: 'RPE', label: 'RPE' },
         ]}
-        onChange={(e) => onChange({ ...workout, intensityTargetType: e.target.value })} 
+        onChange={e =>
+          onChange({ ...workout, intensityTargetType: e.target.value })
+        }
       />
-      
+
       {/* Trail running intervals management */}
-      <TrailRunningIntervalsList 
-        intervals={workout.intervals || []} 
-        onChange={(intervals) => onChange({ ...workout, intervals })} 
+      <TrailRunningIntervalsList
+        intervals={workout.intervals || []}
+        onChange={intervals => onChange({ ...workout, intervals })}
       />
     </div>
   );
@@ -295,7 +286,12 @@ The workout type system should align with the database schema's workout_type enu
 
 ```typescript
 // Workout type enum (matches database)
-type WorkoutType = 'strength' | 'running' | 'trail-running' | 'swimming' | 'cycling';
+type WorkoutType =
+  | 'strength'
+  | 'running'
+  | 'trail-running'
+  | 'swimming'
+  | 'cycling';
 
 // Base workout interface
 interface Workout {
@@ -342,7 +338,14 @@ interface TrailRunningWorkout extends Workout {
 interface TrailRunningInterval {
   id: string;
   sectionId: string;
-  intervalType: 'Run' | 'Uphill' | 'Downhill' | 'Sprint' | 'Recovery' | 'Rest' | 'Walk';
+  intervalType:
+    | 'Run'
+    | 'Uphill'
+    | 'Downhill'
+    | 'Sprint'
+    | 'Recovery'
+    | 'Rest'
+    | 'Walk';
   durationMinutes?: number;
   distanceKm?: number;
   elevationGain?: number;
@@ -374,7 +377,9 @@ function isRunningWorkout(workout: Workout): workout is RunningWorkout {
   return workout.type === 'running';
 }
 
-function isTrailRunningWorkout(workout: Workout): workout is TrailRunningWorkout {
+function isTrailRunningWorkout(
+  workout: Workout
+): workout is TrailRunningWorkout {
   return workout.type === 'trail-running';
 }
 
@@ -436,15 +441,15 @@ describe('ComponentName', () => {
     it('should render correctly with default props', () => {
       // Test default rendering
     });
-    
+
     it('should render correctly with custom props', () => {
       // Test custom props rendering
     });
-    
+
     it('should handle loading states', () => {
       // Test loading states
     });
-    
+
     it('should handle error states', () => {
       // Test error states
     });
@@ -454,7 +459,7 @@ describe('ComponentName', () => {
     it('should handle click events', () => {
       // Test click interactions
     });
-    
+
     it('should handle form submissions', () => {
       // Test form submissions
     });
@@ -464,12 +469,12 @@ describe('ComponentName', () => {
     it('should have proper ARIA attributes', () => {
       // Test accessibility
     });
-    
+
     it('should be keyboard navigable', () => {
       // Test keyboard navigation
     });
   });
-  
+
   describe('performance', () => {
     it('should not re-render unnecessarily', () => {
       // Test render optimization
@@ -483,7 +488,7 @@ describe('useHookName', () => {
     it('should return expected initial state', () => {
       // Test initial state
     });
-    
+
     it('should handle initialization with custom parameters', () => {
       // Test custom initialization
     });
@@ -493,7 +498,7 @@ describe('useHookName', () => {
     it('should update state correctly when action is called', () => {
       // Test state updates
     });
-    
+
     it('should batch related state updates', () => {
       // Test batched updates
     });
@@ -503,12 +508,12 @@ describe('useHookName', () => {
     it('should handle API errors gracefully', () => {
       // Test error handling
     });
-    
+
     it('should provide meaningful error messages', () => {
       // Test error messages
     });
   });
-  
+
   describe('performance', () => {
     it('should not cause unnecessary re-renders', () => {
       // Test render optimization
@@ -560,19 +565,24 @@ For significant architectural decisions during refactoring, create an ADR with:
 5. **Alternatives Considered**: Other options and why they were rejected
 
 Example ADR template:
+
 ```markdown
 # ADR-001: [Title of Decision]
 
 ## Context
+
 [Describe the problem or situation that led to this decision]
 
 ## Decision
+
 [Describe the decision that was made]
 
 ## Consequences
+
 [Describe the positive and negative consequences of this decision]
 
 ## Alternatives Considered
+
 [Describe other options that were considered and why they were rejected]
 ```
 
