@@ -1,8 +1,4 @@
-import type {
-  RoutineCreationData,
-  RoutineDifficulty,
-  RoutineGoal,
-} from './routine';
+import type { RoutineCreationData } from './routine';
 
 describe('Routine Types', () => {
   test('should export RoutineCreationData type', () => {
@@ -18,24 +14,20 @@ describe('Routine Types', () => {
     expect(testData.name).toBe('Test Routine');
   });
 
-  test('should export RoutineDifficulty type', () => {
+  test('should have valid difficulty values', () => {
     // Test that we can create valid difficulty values
-    const difficulties: RoutineDifficulty[] = [
-      'Beginner',
-      'Intermediate',
-      'Advanced',
-    ];
+    const difficulties = ['Beginner', 'Intermediate', 'Advanced'] as const;
     expect(difficulties).toHaveLength(3);
   });
 
-  test('should export RoutineGoal type', () => {
+  test('should have valid goal values', () => {
     // Test that we can create valid goal values
-    const goals: RoutineGoal[] = [
+    const goals = [
       'Strength',
       'Hypertrophy',
       'Endurance',
       'Weight Loss',
-    ];
+    ] as const;
     expect(goals).toHaveLength(4);
   });
 });

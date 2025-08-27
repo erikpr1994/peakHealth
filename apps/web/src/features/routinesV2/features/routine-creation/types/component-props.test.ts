@@ -17,7 +17,7 @@ describe('Component Props Types', () => {
   test('should export RoutineDetailsProps type', () => {
     // Test that we can create a valid object of this type
     const testProps: RoutineDetailsProps = {
-      routineData: {
+      data: {
         name: 'Test Routine',
         description: 'Test description',
         difficulty: 'Beginner',
@@ -27,6 +27,6 @@ describe('Component Props Types', () => {
       },
       onUpdate: vi.fn(),
     };
-    expect(testProps.routineData.name).toBe('Test Routine');
+    expect(testProps.data.name).toBe('Test Routine');
   });
 });
