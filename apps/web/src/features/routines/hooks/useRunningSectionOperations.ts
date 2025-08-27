@@ -1,6 +1,5 @@
 'use client';
 
-import { useCallback } from 'react';
 import { WorkoutSection, RunningWorkout } from '../types';
 
 export const useRunningSectionOperations = (
@@ -22,11 +21,6 @@ export const useRunningSectionOperations = (
     workoutId: string,
     sectionId: string,
     restAfter: string
-  ) => void;
-  updateRunningSectionEmomDuration: (
-    workoutId: string,
-    sectionId: string,
-    duration: number
   ) => void;
 } => {
   const addRunningSection = (workoutId: string): void => {
@@ -118,32 +112,11 @@ export const useRunningSectionOperations = (
     );
   };
 
-  const updateRunningSectionEmomDuration = useCallback(
-    (workoutId: string, sectionId: string, duration: number): void => {
-      setRunningWorkouts(prev =>
-        prev.map(workout =>
-          workout.id === workoutId
-            ? {
-                ...workout,
-                sections: workout.sections.map((section: WorkoutSection) =>
-                  section.id === sectionId
-                    ? { ...section, emomDuration: duration }
-                    : section
-                ),
-              }
-            : workout
-        )
-      );
-    },
-    [setRunningWorkouts]
-  );
-
   return {
     addRunningSection,
     removeRunningSection,
     updateRunningSectionName,
     updateRunningSectionType,
     updateRunningSectionRestAfter,
-    updateRunningSectionEmomDuration,
   };
 };

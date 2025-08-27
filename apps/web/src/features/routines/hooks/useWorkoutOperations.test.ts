@@ -1,7 +1,7 @@
 import { renderHook, act } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
 import { useWorkoutOperations } from './useWorkoutOperations';
-import { StrengthWorkout, RunningWorkout, WorkoutSection } from '../types';
+import { StrengthWorkout, RunningWorkout } from '../types';
 
 // Mock the specialized hooks
 vi.mock('./useStrengthExerciseOperations', () => ({
@@ -601,52 +601,12 @@ describe('useWorkoutOperations', () => {
         result.current.updateRunningSectionRestAfter(
           'running-1',
           'section-1',
-          '1 minute'
+          '2:30'
         );
       });
 
       expect(result.current.runningWorkouts[0].sections[0].restAfter).toBe(
-        '1 minute'
-      );
-    });
-
-    it('should update strength section EMOM duration', () => {
-      const { result } = renderHook(() =>
-        useWorkoutOperations({
-          initialStrengthWorkouts: [mockStrengthWorkout],
-        })
-      );
-
-      act(() => {
-        result.current.updateStrengthSectionEmomDuration(
-          'strength-1',
-          'section-1',
-          10
-        );
-      });
-
-      expect(result.current.strengthWorkouts[0].sections[0].emomDuration).toBe(
-        10
-      );
-    });
-
-    it('should update running section EMOM duration', () => {
-      const { result } = renderHook(() =>
-        useWorkoutOperations({
-          initialRunningWorkouts: [mockRunningWorkout],
-        })
-      );
-
-      act(() => {
-        result.current.updateRunningSectionEmomDuration(
-          'running-1',
-          'section-1',
-          15
-        );
-      });
-
-      expect(result.current.runningWorkouts[0].sections[0].emomDuration).toBe(
-        15
+        '2:30'
       );
     });
   });

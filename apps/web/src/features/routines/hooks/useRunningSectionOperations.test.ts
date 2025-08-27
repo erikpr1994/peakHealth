@@ -2,7 +2,7 @@ import { renderHook, act } from '@testing-library/react';
 import { describe, test, expect } from 'vitest';
 import { useState } from 'react';
 import { useRunningSectionOperations } from './useRunningSectionOperations';
-import type { RunningWorkout, WorkoutSection } from '../types';
+import { RunningWorkout } from '../types';
 
 describe('useRunningSectionOperations', () => {
   test('should add a new running section', () => {
@@ -204,53 +204,10 @@ describe('useRunningSectionOperations', () => {
       result.current.operations.updateRunningSectionRestAfter(
         'workout-1',
         'section-1',
-        '3 min'
+        '2:30'
       );
     });
 
-    expect(result.current.workouts[0].sections[0].restAfter).toBe('3 min');
-  });
-
-  test('should update running section emom duration', () => {
-    const initialWorkouts: RunningWorkout[] = [
-      {
-        id: 'workout-1',
-        name: 'Test Workout',
-        type: 'running',
-        objective: '',
-        schedule: {
-          repeatPattern: '',
-          repeatValue: '',
-          selectedDays: [],
-          time: '',
-        },
-        sections: [
-          {
-            id: 'section-1',
-            name: 'Test Section',
-            type: 'basic',
-            exercises: [],
-            restAfter: '',
-          },
-        ],
-      },
-    ];
-
-    const { result } = renderHook(() => {
-      const [workouts, setWorkouts] =
-        useState<RunningWorkout[]>(initialWorkouts);
-      const operations = useRunningSectionOperations(setWorkouts);
-      return { workouts, operations };
-    });
-
-    act(() => {
-      result.current.operations.updateRunningSectionEmomDuration(
-        'workout-1',
-        'section-1',
-        10
-      );
-    });
-
-    expect(result.current.workouts[0].sections[0].emomDuration).toBe(10);
+    expect(result.current.workouts[0].sections[0].restAfter).toBe('2:30');
   });
 });
