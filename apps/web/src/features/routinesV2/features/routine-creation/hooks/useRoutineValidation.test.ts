@@ -10,14 +10,14 @@ const messages = {
     validation: {
       routineNameRequired: 'Routine name is required',
       routineNameMinLength: 'Routine name must be at least 3 characters',
-      routineNameMaxLength: 'Routine name must be at most 50 characters',
+      routineNameMaxLength: 'Routine name must be at most 100 characters',
       descriptionRequired: 'Description is required',
       descriptionMinLength: 'Description must be at least 10 characters',
       descriptionMaxLength: 'Description must be at most 500 characters',
-      durationRequired: 'Duration is required',
       durationMin: 'Duration must be at least 1 week',
       durationMax: 'Duration must be at most 52 weeks',
-      objectivesNotEmpty: 'At least one objective is required',
+      objectivesRequired: 'At least one objective is required',
+      objectivesNotEmpty: 'All objectives must not be empty',
     },
   },
 };
@@ -66,9 +66,9 @@ describe('useRoutineValidation', () => {
 
   test('returns error for name too long', () => {
     const { result } = renderHookWithProvider();
-    const invalidData = { ...validData, name: 'a'.repeat(51) };
+    const invalidData = { ...validData, name: 'a'.repeat(101) };
     const validationError = result.current.validateRoutine(invalidData);
-    expect(validationError).toBe('Routine name must be at most 50 characters');
+    expect(validationError).toBe('Routine name must be at most 100 characters');
   });
 
   test('returns error for missing description', () => {

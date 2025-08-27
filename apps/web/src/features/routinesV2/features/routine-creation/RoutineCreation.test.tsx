@@ -29,10 +29,32 @@ vi.mock(
 
 vi.mock(
   '@peakhealth/ui',
-  (): { useToast: () => { showToast: ReturnType<typeof vi.fn> } } => ({
+  (): {
+    useToast: () => { showToast: ReturnType<typeof vi.fn> };
+    Button: React.ComponentType<any>;
+    Input: React.ComponentType<any>;
+    Select: React.ComponentType<any>;
+    NumberInput: React.ComponentType<any>;
+    TextArea: React.ComponentType<any>;
+    Textarea: React.ComponentType<any>;
+    Label: React.ComponentType<any>;
+  } => ({
     useToast: () => ({
       showToast: vi.fn(),
     }),
+    Button: ({ children, ...props }: any) => (
+      <button {...props}>{children}</button>
+    ),
+    Input: ({ ...props }: any) => <input {...props} />,
+    Select: ({ children, ...props }: any) => (
+      <select {...props}>{children}</select>
+    ),
+    NumberInput: ({ ...props }: any) => <input type="number" {...props} />,
+    TextArea: ({ ...props }: any) => <textarea {...props} />,
+    Textarea: ({ ...props }: any) => <textarea {...props} />,
+    Label: ({ children, ...props }: any) => (
+      <label {...props}>{children}</label>
+    ),
   })
 );
 
@@ -59,8 +81,34 @@ const messages = {
       subtitle: 'Build your perfect workout routine',
       editTitle: 'Edit Routine',
       editSubtitle: 'Update your workout routine',
-      saveButton: 'Save Routine',
-      updateButton: 'Update Routine',
+      saveRoutine: 'Save Routine',
+      updateRoutine: 'Update Routine',
+      routineDetails: 'Routine Details',
+      routineName: 'Routine Name',
+      routineNamePlaceholder: 'Enter routine name...',
+      difficulty: 'Difficulty',
+      selectDifficulty: 'Select difficulty',
+      goal: 'Goal',
+      selectGoal: 'Select goal',
+      duration: 'Duration (weeks)',
+      description: 'Description',
+      descriptionPlaceholder: 'Describe your routine...',
+      trainingObjectives: 'Training Objectives',
+      objectivesPlaceholder:
+        'What are the main goals and focus areas of this routine?',
+      objectivesHelpText:
+        'Press Enter to add each objective. Click the X to remove.',
+    },
+    difficulty: {
+      beginner: 'Beginner',
+      intermediate: 'Intermediate',
+      advanced: 'Advanced',
+    },
+    goals: {
+      strength: 'Strength',
+      hypertrophy: 'Hypertrophy',
+      endurance: 'Endurance',
+      weightLoss: 'Weight Loss',
     },
     messages: {
       routineCreated: 'Routine created successfully',

@@ -2,6 +2,13 @@ import { render, screen } from '@testing-library/react';
 import { NextIntlClientProvider } from 'next-intl';
 import { RoutineHeader } from './RoutineHeader';
 
+// Mock @peakhealth/ui
+vi.mock('@peakhealth/ui', (): { Button: React.ComponentType<any> } => ({
+  Button: ({ children, ...props }: any) => (
+    <button {...props}>{children}</button>
+  ),
+}));
+
 // Mock messages for testing (partial mock of routines.creation namespace)
 const messages = {
   routines: {
@@ -10,8 +17,8 @@ const messages = {
       subtitle: 'Build your perfect workout routine',
       editTitle: 'Edit Routine',
       editSubtitle: 'Update your workout routine',
-      saveButton: 'Save Routine',
-      updateButton: 'Update Routine',
+      saveRoutine: 'Save Routine',
+      updateRoutine: 'Update Routine',
     },
   },
 };
