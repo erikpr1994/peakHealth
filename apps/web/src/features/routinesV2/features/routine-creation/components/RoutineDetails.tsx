@@ -44,9 +44,13 @@ export const RoutineDetails = ({
         <SelectField
           label={t('creation.difficulty')}
           value={data.difficulty}
-          onChange={value =>
-            onUpdate({ difficulty: value as RoutineCreationData['difficulty'] })
-          }
+          onChange={value => {
+            if (value && value.trim() !== '') {
+              onUpdate({
+                difficulty: value as RoutineCreationData['difficulty'],
+              });
+            }
+          }}
           options={difficultyOptions}
           required
         />
@@ -55,9 +59,11 @@ export const RoutineDetails = ({
         <SelectField
           label={t('creation.goal')}
           value={data.goal}
-          onChange={value =>
-            onUpdate({ goal: value as RoutineCreationData['goal'] })
-          }
+          onChange={value => {
+            if (value && value.trim() !== '') {
+              onUpdate({ goal: value as RoutineCreationData['goal'] });
+            }
+          }}
           options={goalOptions}
           required
         />

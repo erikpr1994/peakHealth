@@ -49,6 +49,14 @@ export const useRoutineValidation = (): {
         return t('validation.objectivesNotEmpty');
       }
 
+      if (!data.difficulty || data.difficulty.trim() === '') {
+        return t('validation.difficultyRequired');
+      }
+
+      if (!data.goal || data.goal.trim() === '') {
+        return t('validation.goalRequired');
+      }
+
       return null;
     },
     [t]
