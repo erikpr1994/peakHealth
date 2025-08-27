@@ -20,8 +20,8 @@ interface BaseExercise {
   exerciseId: string; // Reference to Supabase exercise library
   exerciseVariantId: string; // Reference to specific exercise variant
   orderIndex: number;
-  restTimer: DurationString;
-  restAfter: DurationString;
+  restBetweenSets?: DurationString; // Default rest time between sets. Can be overridden by a set's specific rest time.
+  restAfter?: DurationString; // Rest time after completing all sets of this exercise. Not applicable for the last exercise in a section.
   notes?: string;
 }
 ```
@@ -96,7 +96,7 @@ interface BaseSet {
   setType: SetType;
   repType: RepType;
   notes?: string;
-  restTime?: DurationString;
+  restAfter?: DurationString; // Rest time after this set. Overrides the exercise's default rest time. Not applicable for the last set.
 }
 ```
 

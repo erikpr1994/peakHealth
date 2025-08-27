@@ -12,7 +12,7 @@ interface BaseSection {
   name: string;
   type: SectionType;
   orderIndex: number;
-  restAfter?: DurationString;
+  restAfter?: DurationString; // Rest time after this section. Not applicable if it's the last section in a workout.
   notes?: string;
   exercises: Exercise[];
 }
