@@ -65,6 +65,9 @@
     "next": "^15.5.0"
   },
   "packageManager": "pnpm@10.14.0",
+  "engines": {
+    "node": "^20.11.0 || >=22.0.0"
+  },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
       "eslint --fix",
