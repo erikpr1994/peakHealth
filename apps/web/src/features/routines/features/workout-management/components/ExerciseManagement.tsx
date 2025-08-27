@@ -134,6 +134,15 @@ const ExerciseManagement = ({
           weight: null,
           rpe: null,
           notes: `EMOM set ${i + 1} - ${i + 1} minute interval`,
+          isUnilateral: exercise.isUnilateral,
+          unilateralSide:
+            exercise.isUnilateral && exercise.unilateralMode === 'sequential'
+              ? i % 2 === 0
+                ? ('left' as const)
+                : ('right' as const)
+              : exercise.isUnilateral
+                ? ('both' as const)
+                : undefined,
         }));
       } else if (sectionType === 'tabata') {
         // For Tabata, create 8 sets per exercise (4 minutes total: 20s work, 10s rest, 8 rounds)
@@ -148,6 +157,15 @@ const ExerciseManagement = ({
           weight: null,
           rpe: null,
           notes: `Tabata round ${i + 1} - 20s work, 10s rest`,
+          isUnilateral: exercise.isUnilateral,
+          unilateralSide:
+            exercise.isUnilateral && exercise.unilateralMode === 'sequential'
+              ? i % 2 === 0
+                ? ('left' as const)
+                : ('right' as const)
+              : exercise.isUnilateral
+                ? ('both' as const)
+                : undefined,
         }));
       } else {
         // For other section types, use the existing logic
@@ -184,10 +202,27 @@ const ExerciseManagement = ({
         weight: null,
         rpe: null,
         notes: `EMOM set ${i + 1} - ${i + 1} minute interval`,
+        isUnilateral: exercise.isUnilateral,
+        unilateralSide:
+          exercise.isUnilateral && exercise.unilateralMode === 'sequential'
+            ? i % 2 === 0
+              ? ('left' as const)
+              : ('right' as const)
+            : exercise.isUnilateral
+              ? ('both' as const)
+              : undefined,
       }));
       onUpdateSets(exercise.id, newSets);
     }
-  }, [sectionType, emomDuration, exercise.emomReps, exercise.id, onUpdateSets]);
+  }, [
+    sectionType,
+    emomDuration,
+    exercise.emomReps,
+    exercise.id,
+    exercise.isUnilateral,
+    exercise.unilateralMode,
+    onUpdateSets,
+  ]);
 
   return (
     <Card className="border border-gray-200">
