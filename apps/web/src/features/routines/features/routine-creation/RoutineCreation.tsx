@@ -103,6 +103,7 @@ const RoutineCreation = ({
     updateStrengthWorkoutName,
     updateStrengthWorkoutObjective,
     updateStrengthWorkoutSchedule,
+
     removeRunningWorkout,
     moveRunningWorkout,
     updateRunningWorkoutName,
@@ -119,7 +120,6 @@ const RoutineCreation = ({
     updateStrengthSectionRestAfter,
     updateRunningSectionRestAfter,
     updateStrengthSectionEmomDuration,
-    updateRunningSectionEmomDuration,
     addStrengthExercise,
     addRunningExercise,
     removeStrengthExercise,
@@ -184,6 +184,7 @@ const RoutineCreation = ({
     };
 
     loadRoutineForEditing();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [editRoutineId, mode]);
 
   const toggleStrengthWorkoutCollapse = (workoutId: string): void => {
@@ -741,7 +742,6 @@ const RoutineCreation = ({
         onUpdateSectionName={updateRunningSectionName}
         onUpdateSectionType={updateRunningSectionType}
         onUpdateSectionRestAfter={updateRunningSectionRestAfter}
-        onUpdateSectionEmomDuration={updateRunningSectionEmomDuration}
         onRemoveSection={removeRunningSection}
         onAddExercise={handleAddExerciseClick}
         onUpdateExerciseEmomReps={updateRunningExerciseEmomReps}

@@ -30,7 +30,7 @@ interface WorkoutSectionProps {
   onUpdateName: (name: string) => void;
   onUpdateType: (type: WorkoutSectionType['type']) => void;
   onUpdateRestAfter: (restAfter: string) => void;
-  onUpdateEmomDuration: (duration: number) => void;
+  onUpdateEmomDuration?: (duration: number) => void;
   onRemove: () => void;
   onAddExercise: () => void;
   onUpdateExerciseEmomReps: (exerciseId: string, reps: number) => void;
@@ -155,7 +155,7 @@ const WorkoutSection = ({
               <Input
                 type="number"
                 value={section.emomDuration || ''}
-                onChange={e => onUpdateEmomDuration(Number(e.target.value))}
+                onChange={e => onUpdateEmomDuration?.(Number(e.target.value))}
                 placeholder="e.g., 10"
                 min="1"
               />

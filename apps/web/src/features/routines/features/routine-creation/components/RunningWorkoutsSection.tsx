@@ -51,11 +51,7 @@ interface RunningWorkoutsSectionProps {
     sectionId: string,
     restAfter: string
   ) => void;
-  onUpdateSectionEmomDuration: (
-    workoutId: string,
-    sectionId: string,
-    duration: number
-  ) => void;
+
   onRemoveSection: (workoutId: string, sectionId: string) => void;
   onAddExercise: (workoutId: string, sectionId: string) => void;
   onUpdateExerciseEmomReps: (
@@ -127,7 +123,7 @@ const RunningWorkoutsSection = ({
   onUpdateSectionName,
   onUpdateSectionType,
   onUpdateSectionRestAfter,
-  onUpdateSectionEmomDuration,
+
   onRemoveSection,
   onAddExercise,
   onUpdateExerciseEmomReps,
@@ -247,13 +243,6 @@ const RunningWorkoutsSection = ({
                             workout.id,
                             section.id,
                             restAfter
-                          )
-                        }
-                        onUpdateEmomDuration={duration =>
-                          onUpdateSectionEmomDuration(
-                            workout.id,
-                            section.id,
-                            duration
                           )
                         }
                         onRemove={() => onRemoveSection(workout.id, section.id)}
