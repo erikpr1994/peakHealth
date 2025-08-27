@@ -41,7 +41,61 @@
     "saveRoutine": "Save Routine",
     "cancel": "Cancel",
     "noRoutines": "No routines yet",
-    "createFirstRoutine": "Create your first routine to get started"
+    "createFirstRoutine": "Create your first routine to get started",
+    "creation": {
+      "title": "Create New Routine",
+      "editTitle": "Edit Routine",
+      "subtitle": "Build your perfect workout routine",
+      "editSubtitle": "Update your workout routine",
+      "routineDetails": "Routine Details",
+      "routineName": "Routine Name",
+      "routineNamePlaceholder": "Enter routine name...",
+      "difficulty": "Difficulty",
+      "selectDifficulty": "Select difficulty",
+      "goal": "Goal",
+      "selectGoal": "Select goal",
+      "duration": "Duration (weeks)",
+      "description": "Description",
+      "descriptionPlaceholder": "Describe your routine...",
+      "trainingObjectives": "Training Objectives",
+      "objectivesPlaceholder": "What are the main goals and focus areas of this routine?",
+      "objectivesHelpText": "Press Enter to add each objective. Click the X to remove.",
+      "saveRoutine": "Save Routine",
+      "updateRoutine": "Update Routine",
+      "cancel": "Cancel",
+      "back": "Back"
+    },
+    "difficulty": {
+      "beginner": "Beginner",
+      "intermediate": "Intermediate",
+      "advanced": "Advanced"
+    },
+    "goals": {
+      "strength": "Strength",
+      "hypertrophy": "Hypertrophy",
+      "endurance": "Endurance",
+      "weightLoss": "Weight Loss"
+    },
+    "validation": {
+      "routineNameRequired": "Routine name is required",
+      "routineNameMinLength": "Routine name must be at least 3 characters long",
+      "routineNameMaxLength": "Routine name must be less than 100 characters",
+      "descriptionRequired": "Routine description is required",
+      "descriptionMinLength": "Routine description must be at least 10 characters long",
+      "descriptionMaxLength": "Routine description must be less than 500 characters",
+      "durationMin": "Duration must be at least 1 week",
+      "durationMax": "Duration must be less than 52 weeks",
+      "objectivesRequired": "At least one training objective is required",
+      "objectivesNotEmpty": "All training objectives must not be empty",
+      "difficultyRequired": "Difficulty level is required",
+      "goalRequired": "Goal is required"
+    },
+    "messages": {
+      "pleaseLogin": "Please log in to create a routine",
+      "routineCreated": "Routine created successfully",
+      "routineUpdated": "Routine updated successfully",
+      "failedToSave": "Failed to save routine"
+    }
   },
   "workouts": {
     "title": "Workouts",

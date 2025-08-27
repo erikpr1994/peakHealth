@@ -1,6 +1,6 @@
 {
   "navigation": {
-    "dashboard": "Panel",
+    "dashboard": "Panel de Control",
     "routines": "Rutinas",
     "exercises": "Ejercicios",
     "calendar": "Calendario",
@@ -10,17 +10,17 @@
     "progress": "Progreso",
     "profile": "Perfil",
     "settings": "Configuración",
-    "trainerAndClubs": "Entrenadores y Clubes",
+    "trainerAndClubs": "Entrenador y Clubes",
     "gyms": "Gimnasios",
     "equipment": "Equipamiento",
     "suggestions": "Sugerencias",
     "accountSettings": "Configuración de Cuenta",
-    "appSettings": "Configuración de App",
+    "appSettings": "Configuración de la App",
     "helpSupport": "Ayuda y Soporte",
     "signOut": "Cerrar Sesión"
   },
   "dashboard": {
-    "title": "Panel",
+    "title": "Panel de Control",
     "welcome": "Bienvenido de vuelta",
     "todayWorkout": "Entrenamiento de Hoy",
     "recentWorkouts": "Entrenamientos Recientes",
@@ -41,7 +41,61 @@
     "saveRoutine": "Guardar Rutina",
     "cancel": "Cancelar",
     "noRoutines": "Aún no hay rutinas",
-    "createFirstRoutine": "Crea tu primera rutina para comenzar"
+    "createFirstRoutine": "Crea tu primera rutina para comenzar",
+    "creation": {
+      "title": "Crear Nueva Rutina",
+      "editTitle": "Editar Rutina",
+      "subtitle": "Construye tu rutina de entrenamiento perfecta",
+      "editSubtitle": "Actualiza tu rutina de entrenamiento",
+      "routineDetails": "Detalles de la Rutina",
+      "routineName": "Nombre de la Rutina",
+      "routineNamePlaceholder": "Ingresa el nombre de la rutina...",
+      "difficulty": "Dificultad",
+      "selectDifficulty": "Seleccionar dificultad",
+      "goal": "Objetivo",
+      "selectGoal": "Seleccionar objetivo",
+      "duration": "Duración (semanas)",
+      "description": "Descripción",
+      "descriptionPlaceholder": "Describe tu rutina...",
+      "trainingObjectives": "Objetivos de Entrenamiento",
+      "objectivesPlaceholder": "¿Cuáles son los principales objetivos y áreas de enfoque de esta rutina?",
+      "objectivesHelpText": "Presiona Enter para agregar cada objetivo. Haz clic en X para eliminar.",
+      "saveRoutine": "Guardar Rutina",
+      "updateRoutine": "Actualizar Rutina",
+      "cancel": "Cancelar",
+      "back": "Atrás"
+    },
+    "difficulty": {
+      "beginner": "Principiante",
+      "intermediate": "Intermedio",
+      "advanced": "Avanzado"
+    },
+    "goals": {
+      "strength": "Fuerza",
+      "hypertrophy": "Hipertrofia",
+      "endurance": "Resistencia",
+      "weightLoss": "Pérdida de Peso"
+    },
+    "validation": {
+      "routineNameRequired": "El nombre de la rutina es requerido",
+      "routineNameMinLength": "El nombre de la rutina debe tener al menos 3 caracteres",
+      "routineNameMaxLength": "El nombre de la rutina debe tener menos de 100 caracteres",
+      "descriptionRequired": "La descripción de la rutina es requerida",
+      "descriptionMinLength": "La descripción de la rutina debe tener al menos 10 caracteres",
+      "descriptionMaxLength": "La descripción de la rutina debe tener menos de 500 caracteres",
+      "durationMin": "La duración debe ser de al menos 1 semana",
+      "durationMax": "La duración debe ser de menos de 52 semanas",
+      "objectivesRequired": "Se requiere al menos un objetivo de entrenamiento",
+      "objectivesNotEmpty": "Todos los objetivos de entrenamiento no deben estar vacíos",
+      "difficultyRequired": "El nivel de dificultad es requerido",
+      "goalRequired": "El objetivo es requerido"
+    },
+    "messages": {
+      "pleaseLogin": "Por favor inicia sesión para crear una rutina",
+      "routineCreated": "Rutina creada exitosamente",
+      "routineUpdated": "Rutina actualizada exitosamente",
+      "failedToSave": "Error al guardar la rutina"
+    }
   },
   "workouts": {
     "title": "Entrenamientos",
@@ -72,7 +126,7 @@
     "volumeProgress": "Progreso de Volumen",
     "strengthProgress": "Progreso de Fuerza",
     "noData": "Aún no hay datos disponibles",
-    "startTracking": "Comienza a registrar tus entrenamientos para ver el progreso"
+    "startTracking": "Comienza a rastrear tus entrenamientos para ver el progreso"
   },
   "profile": {
     "title": "Perfil",
