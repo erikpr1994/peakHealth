@@ -16,5 +16,17 @@ export default [
         project: './tsconfig.json',
       },
     },
+    rules: {
+      '@typescript-eslint/no-unused-vars': [
+        'error',
+        {
+          argsIgnorePattern: '^_|^[a-z]|^[A-Za-z]',
+          ignoreRestSiblings: true,
+          varsIgnorePattern: '^_',
+          args: 'all',
+          ignoreFunctionParams: true,
+        },
+      ],
+    },
   },
 ];
