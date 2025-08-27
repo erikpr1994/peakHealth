@@ -4,6 +4,14 @@ import playwrightPlugin from 'eslint-plugin-playwright';
 export default [
   ...baseConfig,
   {
+    ignores: [
+      'playwright-report/**',
+      'test-results/**',
+      'storage-states/**',
+      'node_modules/**',
+    ],
+  },
+  {
     files: ['**/*.ts', '**/*.tsx'],
     languageOptions: {
       parser: (await import('@typescript-eslint/parser')).default,
