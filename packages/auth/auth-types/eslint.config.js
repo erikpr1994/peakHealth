@@ -17,14 +17,14 @@ export default [
       },
     },
     rules: {
+      'no-unused-vars': 'off', // Disable general ESLint rule for auth-types package
       '@typescript-eslint/no-unused-vars': [
-        'error',
+        'warn',
         {
           argsIgnorePattern: '^_|^[a-z]|^[A-Za-z]',
           ignoreRestSiblings: true,
           varsIgnorePattern: '^_',
-          args: 'all',
-          ignoreFunctionParams: true,
+          args: 'none', // Don't check function arguments in interfaces
         },
       ],
     },

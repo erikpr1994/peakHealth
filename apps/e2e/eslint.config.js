@@ -21,6 +21,7 @@ export default [
       },
       globals: {
         process: 'readonly',
+        console: 'readonly',
       },
     },
   },
@@ -36,6 +37,12 @@ export default [
       'playwright/no-wait-for-timeout': 'warn', // Changed from error to warn
       'playwright/prefer-web-first-assertions': 'error',
       'playwright/valid-expect': 'error',
+    },
+  },
+  {
+    files: ['global-teardown.ts'],
+    rules: {
+      'no-console': 'off', // Allow console statements in global teardown
     },
   },
 ];
