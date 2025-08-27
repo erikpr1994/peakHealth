@@ -189,23 +189,6 @@ const ExerciseManagement = ({
     }
   }, [sectionType, emomDuration, exercise.emomReps, exercise.id, onUpdateSets]);
 
-  // Update EMOM sets when reps change
-  useEffect(() => {
-    if (sectionType === 'emom' && exercise.sets.length > 0) {
-      const updatedSets = exercise.sets.map(set => ({
-        ...set,
-        reps: exercise.emomReps || 10,
-      }));
-      onUpdateSets(exercise.id, updatedSets);
-    }
-  }, [
-    sectionType,
-    exercise.emomReps,
-    exercise.sets,
-    exercise.id,
-    onUpdateSets,
-  ]);
-
   return (
     <Card className="border border-gray-200">
       <div className="p-4 space-y-4">
