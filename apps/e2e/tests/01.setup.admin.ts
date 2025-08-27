@@ -34,8 +34,7 @@ test.describe('Setup: Admin User Authentication', () => {
       await emailInput.clear();
       await emailInput.fill(email);
 
-      // Wait a bit and verify the email was filled correctly
-      await page.waitForTimeout(100);
+      // Verify the email was filled correctly
       await expect(emailInput).toHaveValue(email, { timeout: 10000 });
 
       // Clear and fill password field
