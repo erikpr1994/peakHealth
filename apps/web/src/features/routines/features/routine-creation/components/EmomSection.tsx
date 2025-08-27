@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Card } from '@/components/ui/card';
+import { Card } gfrom '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
