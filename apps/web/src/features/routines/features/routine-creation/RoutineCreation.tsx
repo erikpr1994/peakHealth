@@ -184,7 +184,7 @@ const RoutineCreation = ({
     };
 
     loadRoutineForEditing();
-  }, [editRoutineId, mode, setStrengthWorkouts, setRunningWorkouts]);
+  }, [editRoutineId, mode]);
 
   const toggleStrengthWorkoutCollapse = (workoutId: string): void => {
     setCollapsedStrengthWorkouts(prev => {
