@@ -1,4 +1,5 @@
 import { ArrowLeft } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import { Button } from '@peakhealth/ui';
 import type { RoutineHeaderProps } from '../types';
 import styles from './RoutineHeader.module.css';
@@ -8,6 +9,8 @@ export const RoutineHeader = ({
   onSave,
   onCancel,
 }: RoutineHeaderProps): React.ReactElement => {
+  const t = useTranslations('routines');
+
   return (
     <div className={styles.header}>
       {/* Left side - Back button and title */}
@@ -23,19 +26,21 @@ export const RoutineHeader = ({
 
         <div>
           <h1 className={styles.title}>
-            {mode === 'edit' ? 'Edit Routine' : 'Create New Routine'}
+            {mode === 'edit' ? t('creation.editTitle') : t('creation.title')}
           </h1>
           <p className={styles.subtitle}>
             {mode === 'edit'
-              ? 'Update your workout routine'
-              : 'Build your perfect workout routine'}
+              ? t('creation.editSubtitle')
+              : t('creation.subtitle')}
           </p>
         </div>
       </div>
 
       {/* Right side - Save button */}
       <Button onClick={onSave} className={styles.saveButton}>
-        {mode === 'edit' ? 'Update Routine' : 'Save Routine'}
+        {mode === 'edit'
+          ? t('creation.updateRoutine')
+          : t('creation.saveRoutine')}
       </Button>
     </div>
   );

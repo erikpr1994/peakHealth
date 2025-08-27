@@ -1,54 +1,57 @@
 import { useCallback } from 'react';
+import { useTranslations } from 'next-intl';
 import type { RoutineCreationData } from '../types';
 
 export const useRoutineValidation = (): {
   validateRoutine: (data: RoutineCreationData) => string | null;
 } => {
+  const t = useTranslations('routines');
+
   const validateRoutine = useCallback(
     (data: RoutineCreationData): string | null => {
       if (!data.name.trim()) {
-        return 'Routine name is required';
+        return t('validation.routineNameRequired');
       }
 
       if (data.name.length < 3) {
-        return 'Routine name must be at least 3 characters long';
+        return t('validation.routineNameMinLength');
       }
 
       if (data.name.length > 100) {
-        return 'Routine name must be less than 100 characters';
+        return t('validation.routineNameMaxLength');
       }
 
       if (!data.description.trim()) {
-        return 'Routine description is required';
+        return t('validation.descriptionRequired');
       }
 
       if (data.description.length < 10) {
-        return 'Routine description must be at least 10 characters long';
+        return t('validation.descriptionMinLength');
       }
 
       if (data.description.length > 500) {
-        return 'Routine description must be less than 500 characters';
+        return t('validation.descriptionMaxLength');
       }
 
       if (data.duration < 1) {
-        return 'Duration must be at least 1 week';
+        return t('validation.durationMin');
       }
 
       if (data.duration > 52) {
-        return 'Duration must be less than 52 weeks';
+        return t('validation.durationMax');
       }
 
       if (data.objectives.length === 0) {
-        return 'At least one training objective is required';
+        return t('validation.objectivesRequired');
       }
 
       if (data.objectives.some(obj => !obj.trim())) {
-        return 'All training objectives must not be empty';
+        return t('validation.objectivesNotEmpty');
       }
 
       return null;
     },
-    []
+    [t]
   );
 
   return {

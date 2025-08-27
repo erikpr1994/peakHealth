@@ -2,6 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
+import { useTranslations } from 'next-intl';
 
 import { useAuth } from '@/features/auth/context/AuthContext';
 import { useToast } from '@peakhealth/ui';
@@ -24,6 +25,7 @@ export const RoutineCreation = ({
   mode = 'create',
 }: RoutineCreationProps): React.ReactElement => {
   const router = useRouter();
+  const t = useTranslations('routines');
   // TODO: This should be part of the auth context, so, if we are not logged in, we should redirect to the login page
   const { isAuthenticated, user } = useAuth();
   const { showToast } = useToast();
@@ -45,7 +47,7 @@ export const RoutineCreation = ({
   const handleSaveRoutine = async (): Promise<void> => {
     if (!isAuthenticated || !user) {
       showToast({
-        message: 'Please log in to create a routine',
+        message: t('messages.pleaseLogin'),
         variant: 'error',
       });
       return;
@@ -71,7 +73,7 @@ export const RoutineCreation = ({
           runningWorkouts: [],
         });
         showToast({
-          message: 'Routine updated successfully',
+          message: t('messages.routineUpdated'),
           variant: 'success',
         });
       } else {
@@ -86,14 +88,14 @@ export const RoutineCreation = ({
           runningWorkouts: [],
         });
         showToast({
-          message: 'Routine created successfully',
+          message: t('messages.routineCreated'),
           variant: 'success',
         });
       }
 
       router.push('/routines');
     } catch {
-      showToast({ message: 'Failed to save routine', variant: 'error' });
+      showToast({ message: t('messages.failedToSave'), variant: 'error' });
     }
   };
 

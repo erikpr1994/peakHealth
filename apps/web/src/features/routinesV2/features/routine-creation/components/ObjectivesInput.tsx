@@ -1,4 +1,5 @@
 import { useState, KeyboardEvent } from 'react';
+import { useTranslations } from 'next-intl';
 import { X } from 'lucide-react';
 import { Input, Button } from '@peakhealth/ui';
 import styles from './ObjectivesInput.module.css';
@@ -13,10 +14,13 @@ interface ObjectivesInputProps {
 export const ObjectivesInput = ({
   objectives,
   onChange,
-  placeholder = 'What are the main goals and focus areas of this routine?',
+  placeholder,
   className = '',
 }: ObjectivesInputProps): React.ReactElement => {
+  const t = useTranslations('routines');
   const [inputValue, setInputValue] = useState('');
+
+  const defaultPlaceholder = t('creation.objectivesPlaceholder');
 
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>): void => {
     if (e.key === 'Enter' && inputValue.trim()) {
@@ -40,7 +44,7 @@ export const ObjectivesInput = ({
   return (
     <div className={`${styles.container} ${className}`}>
       <label className={styles.label}>
-        Training Objectives
+        {t('creation.trainingObjectives')}
         <span className={styles.required}>*</span>
       </label>
 
@@ -49,12 +53,10 @@ export const ObjectivesInput = ({
           value={inputValue}
           onChange={e => setInputValue(e.target.value)}
           onKeyDown={handleKeyDown}
-          placeholder={placeholder}
+          placeholder={placeholder || defaultPlaceholder}
           className={styles.input}
         />
-        <p className={styles.helpText}>
-          Press Enter to add each objective. Click the X to remove.
-        </p>
+        <p className={styles.helpText}>{t('creation.objectivesHelpText')}</p>
       </div>
 
       {objectives.length > 0 && (

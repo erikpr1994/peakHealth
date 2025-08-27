@@ -1,3 +1,4 @@
+import { useTranslations } from 'next-intl';
 import type { RoutineDetailsProps, RoutineCreationData } from '../types';
 import { InputField } from './InputField';
 import { SelectField } from './SelectField';
@@ -6,40 +7,42 @@ import { TextArea } from './TextArea';
 import { ObjectivesInput } from './ObjectivesInput';
 import styles from './RoutineDetails.module.css';
 
-const difficultyOptions = [
-  { value: 'Beginner', label: 'Beginner' },
-  { value: 'Intermediate', label: 'Intermediate' },
-  { value: 'Advanced', label: 'Advanced' },
-];
-
-const goalOptions = [
-  { value: 'Strength', label: 'Strength' },
-  { value: 'Hypertrophy', label: 'Hypertrophy' },
-  { value: 'Endurance', label: 'Endurance' },
-  { value: 'Weight Loss', label: 'Weight Loss' },
-];
-
 export const RoutineDetails = ({
   data,
   onUpdate,
 }: RoutineDetailsProps): React.ReactElement => {
+  const t = useTranslations('routines');
+
+  const difficultyOptions = [
+    { value: 'Beginner', label: t('difficulty.beginner') },
+    { value: 'Intermediate', label: t('difficulty.intermediate') },
+    { value: 'Advanced', label: t('difficulty.advanced') },
+  ];
+
+  const goalOptions = [
+    { value: 'Strength', label: t('goals.strength') },
+    { value: 'Hypertrophy', label: t('goals.hypertrophy') },
+    { value: 'Endurance', label: t('goals.endurance') },
+    { value: 'Weight Loss', label: t('goals.weightLoss') },
+  ];
+
   return (
     <div className={styles.container}>
-      <h2 className={styles.title}>Routine Details</h2>
+      <h2 className={styles.title}>{t('creation.routineDetails')}</h2>
 
       <div className={styles.formGrid}>
         {/* Routine Name */}
         <InputField
-          label="Routine Name"
+          label={t('creation.routineName')}
           value={data.name}
           onChange={value => onUpdate({ name: value })}
-          placeholder="Enter routine name..."
+          placeholder={t('creation.routineNamePlaceholder')}
           required
         />
 
         {/* Difficulty */}
         <SelectField
-          label="Difficulty"
+          label={t('creation.difficulty')}
           value={data.difficulty}
           onChange={value =>
             onUpdate({ difficulty: value as RoutineCreationData['difficulty'] })
@@ -50,7 +53,7 @@ export const RoutineDetails = ({
 
         {/* Goal */}
         <SelectField
-          label="Goal"
+          label={t('creation.goal')}
           value={data.goal}
           onChange={value =>
             onUpdate({ goal: value as RoutineCreationData['goal'] })
@@ -61,7 +64,7 @@ export const RoutineDetails = ({
 
         {/* Duration */}
         <NumberInput
-          label="Duration (weeks)"
+          label={t('creation.duration')}
           value={data.duration}
           onChange={value => onUpdate({ duration: value })}
           min={1}
@@ -73,10 +76,10 @@ export const RoutineDetails = ({
       {/* Description - Full width */}
       <div className={styles.fullWidth}>
         <TextArea
-          label="Description"
+          label={t('creation.description')}
           value={data.description}
           onChange={value => onUpdate({ description: value })}
-          placeholder="Describe your routine..."
+          placeholder={t('creation.descriptionPlaceholder')}
           required
           rows={4}
         />
