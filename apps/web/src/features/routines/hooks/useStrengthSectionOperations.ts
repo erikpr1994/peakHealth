@@ -1,10 +1,34 @@
 'use client';
 
+import { useCallback } from 'react';
 import { WorkoutSection, StrengthWorkout } from '../types';
 
 export const useStrengthSectionOperations = (
   setStrengthWorkouts: React.Dispatch<React.SetStateAction<StrengthWorkout[]>>
-) => {
+): {
+  addStrengthSection: (workoutId: string) => void;
+  removeStrengthSection: (workoutId: string, sectionId: string) => void;
+  updateStrengthSectionName: (
+    workoutId: string,
+    sectionId: string,
+    name: string
+  ) => void;
+  updateStrengthSectionType: (
+    workoutId: string,
+    sectionId: string,
+    type: WorkoutSection['type']
+  ) => void;
+  updateStrengthSectionRestAfter: (
+    workoutId: string,
+    sectionId: string,
+    restAfter: string
+  ) => void;
+  updateStrengthSectionEmomDuration: (
+    workoutId: string,
+    sectionId: string,
+    duration: number
+  ) => void;
+} => {
   const addStrengthSection = (workoutId: string): void => {
     const newSection: WorkoutSection = {
       id: `section-${Date.now()}`,
@@ -97,26 +121,25 @@ export const useStrengthSectionOperations = (
     );
   };
 
-  const updateStrengthSectionEmomDuration = (
-    workoutId: string,
-    sectionId: string,
-    duration: number
-  ): void => {
-    setStrengthWorkouts(prev =>
-      prev.map(workout =>
-        workout.id === workoutId
-          ? {
-              ...workout,
-              sections: workout.sections.map((section: WorkoutSection) =>
-                section.id === sectionId
-                  ? { ...section, emomDuration: duration }
-                  : section
-              ),
-            }
-          : workout
-      )
-    );
-  };
+  const updateStrengthSectionEmomDuration = useCallback(
+    (workoutId: string, sectionId: string, duration: number): void => {
+      setStrengthWorkouts(prev =>
+        prev.map(workout =>
+          workout.id === workoutId
+            ? {
+                ...workout,
+                sections: workout.sections.map((section: WorkoutSection) =>
+                  section.id === sectionId
+                    ? { ...section, emomDuration: duration }
+                    : section
+                ),
+              }
+            : workout
+        )
+      );
+    },
+    [setStrengthWorkouts]
+  );
 
   return {
     addStrengthSection,
