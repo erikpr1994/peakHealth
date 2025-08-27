@@ -11,6 +11,32 @@ export const NumberInput = ({
   required = false,
   className = '',
 }: NumberInputProps): React.ReactElement => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const inputValue = e.target.value;
+
+    // Parse as float to handle decimal values
+    const parsedValue = parseFloat(inputValue);
+
+    // Check if it's a valid number
+    if (isNaN(parsedValue)) {
+      // Only set to min if the input is completely empty
+      if (inputValue === '') {
+        onChange(min);
+      }
+      return; // Don't update if invalid
+    }
+
+    // Apply min/max constraints
+    let finalValue = parsedValue;
+    if (finalValue < min) {
+      finalValue = min;
+    } else if (finalValue > max) {
+      finalValue = max;
+    }
+
+    onChange(finalValue);
+  };
+
   return (
     <div className={`${styles.field} ${className}`}>
       <label className={styles.label}>
@@ -20,7 +46,7 @@ export const NumberInput = ({
       <Input
         type="number"
         value={value}
-        onChange={e => onChange(parseInt(e.target.value) || 0)}
+        onChange={handleChange}
         min={min}
         max={max}
         required={required}

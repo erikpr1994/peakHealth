@@ -1,4 +1,5 @@
 import { render, screen, fireEvent } from '@testing-library/react';
+import { Input } from '@peakhealth/ui';
 import { NumberInput } from './NumberInput';
 
 describe('NumberInput', () => {
@@ -6,6 +7,14 @@ describe('NumberInput', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
+  });
+
+  test('Input component works correctly', () => {
+    const inputOnChange = vi.fn();
+    render(<Input type="number" value={0} onChange={inputOnChange} />);
+    const input = screen.getByRole('spinbutton');
+    fireEvent.change(input, { target: { value: '10' } });
+    expect(inputOnChange).toHaveBeenCalled();
   });
 
   test('renders number input with label', () => {
@@ -35,6 +44,53 @@ describe('NumberInput', () => {
     const input = screen.getByRole('spinbutton');
     fireEvent.change(input, { target: { value: '10' } });
     expect(mockOnChange).toHaveBeenCalledWith(10);
+  });
+
+  test('handles decimal values', () => {
+    render(
+      <NumberInput label="Test Label" value={0} onChange={mockOnChange} />
+    );
+    const input = screen.getByRole('spinbutton');
+    fireEvent.change(input, { target: { value: '10.5' } });
+    expect(mockOnChange).toHaveBeenCalledWith(10.5);
+  });
+
+  test('handles empty input by setting to min value', () => {
+    render(
+      <NumberInput
+        label="Test Label"
+        value={5}
+        onChange={mockOnChange}
+        min={1}
+      />
+    );
+    const input = screen.getByRole('spinbutton');
+    fireEvent.change(input, { target: { value: '' } });
+    expect(mockOnChange).toHaveBeenCalledWith(1);
+  });
+
+  test('enforces max constraint', () => {
+    render(
+      <NumberInput
+        label="Test Label"
+        value={5}
+        onChange={mockOnChange}
+        max={10}
+      />
+    );
+    const input = screen.getByRole('spinbutton');
+    fireEvent.change(input, { target: { value: '15' } });
+    expect(mockOnChange).toHaveBeenCalledWith(10);
+  });
+
+  test('handles invalid input by setting to min value', () => {
+    render(
+      <NumberInput label="Test Label" value={5} onChange={mockOnChange} />
+    );
+    const input = screen.getByRole('spinbutton');
+    fireEvent.change(input, { target: { value: 'abc' } });
+    // HTML number inputs clear invalid values, so it becomes empty and sets to min
+    expect(mockOnChange).toHaveBeenCalledWith(1);
   });
 
   test('applies min and max attributes', () => {
