@@ -194,6 +194,8 @@ const WorkoutSection = ({
                   index={index}
                   isLastExercise={index === section.exercises.length - 1}
                   sectionType={section.type}
+                  emomDuration={section.emomDuration}
+                  totalExercisesInSection={section.exercises.length}
                   onUpdateEmomReps={onUpdateExerciseEmomReps}
                   onUpdateSets={onUpdateExerciseSets}
                   onUpdateName={onUpdateExerciseName}

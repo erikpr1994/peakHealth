@@ -5,7 +5,7 @@ import { Trash2, FileText } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
+
 import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
 import {
@@ -33,7 +33,9 @@ interface ExerciseManagementProps {
   sectionId: string;
   index: number;
   isLastExercise: boolean;
-  sectionType: 'warmup' | 'basic' | 'cooldown' | 'emom' | 'tabata' | 'amrap'; // Add section type prop
+  sectionType: 'warmup' | 'basic' | 'cooldown' | 'emom' | 'tabata' | 'amrap';
+  emomDuration?: number; // Add EMOM duration prop
+  totalExercisesInSection?: number; // Add total exercises prop for Tabata
   onUpdateEmomReps: (exerciseId: string, reps: number) => void;
   onUpdateSets: (exerciseId: string, sets: WorkoutSet[]) => void;
   onUpdateName: (exerciseId: string, name: string) => void;
@@ -59,6 +61,8 @@ const ExerciseManagement = ({
   index,
   isLastExercise,
   sectionType,
+  emomDuration,
+  totalExercisesInSection,
   onUpdateEmomReps,
   onUpdateSets,
   onUpdateName,
@@ -118,25 +122,24 @@ const ExerciseManagement = ({
     if (exercise.sets.length === 0) {
       let defaultSets;
 
-      if (sectionType === 'emom') {
+      if (sectionType === 'emom' && emomDuration) {
         // For EMOM, create sets based on the section duration
-        // Each set represents one minute, so we need to know the section duration
-        // For now, we'll create a placeholder set that will be updated when section duration is known
-        defaultSets = [
-          {
-            id: Date.now().toString(),
-            setNumber: 1,
-            setType: 'normal' as const,
-            repType: 'fixed' as const,
-            reps: exercise.emomReps || 10,
-            weight: null,
-            rpe: null,
-            notes: 'EMOM set - 1 minute interval',
-          },
-        ];
+        // Each set represents one minute
+        defaultSets = Array.from({ length: emomDuration }, (_, i) => ({
+          id: `${Date.now()}-${i}`,
+          setNumber: i + 1,
+          setType: 'normal' as const,
+          repType: 'fixed' as const,
+          reps: exercise.emomReps || 10,
+          weight: null,
+          rpe: null,
+          notes: `EMOM set ${i + 1} - ${i + 1} minute interval`,
+        }));
       } else if (sectionType === 'tabata') {
-        // For Tabata, create 8 sets (4 minutes total: 20s work, 10s rest, 8 rounds)
-        defaultSets = Array.from({ length: 8 }, (_, i) => ({
+        // For Tabata, create 8 sets per exercise (4 minutes total: 20s work, 10s rest, 8 rounds)
+        // Each exercise gets 8 sets regardless of how many exercises are in the section
+        const tabataRounds = 8;
+        defaultSets = Array.from({ length: tabataRounds }, (_, i) => ({
           id: `${Date.now()}-${i}`,
           setNumber: i + 1,
           setType: 'normal' as const,
@@ -164,6 +167,42 @@ const ExerciseManagement = ({
     exercise.unilateralMode,
     exercise.emomReps,
     sectionType,
+    emomDuration,
+    totalExercisesInSection,
+    onUpdateSets,
+  ]);
+
+  // Regenerate EMOM sets when duration changes
+  useEffect(() => {
+    if (sectionType === 'emom' && emomDuration && exercise.sets.length > 0) {
+      const newSets = Array.from({ length: emomDuration }, (_, i) => ({
+        id: `${Date.now()}-${i}`,
+        setNumber: i + 1,
+        setType: 'normal' as const,
+        repType: 'fixed' as const,
+        reps: exercise.emomReps || 10,
+        weight: null,
+        rpe: null,
+        notes: `EMOM set ${i + 1} - ${i + 1} minute interval`,
+      }));
+      onUpdateSets(exercise.id, newSets);
+    }
+  }, [sectionType, emomDuration, exercise.emomReps, exercise.id, onUpdateSets]);
+
+  // Update EMOM sets when reps change
+  useEffect(() => {
+    if (sectionType === 'emom' && exercise.sets.length > 0) {
+      const updatedSets = exercise.sets.map(set => ({
+        ...set,
+        reps: exercise.emomReps || 10,
+      }));
+      onUpdateSets(exercise.id, updatedSets);
+    }
+  }, [
+    sectionType,
+    exercise.emomReps,
+    exercise.sets,
+    exercise.id,
     onUpdateSets,
   ]);
 
@@ -260,22 +299,6 @@ const ExerciseManagement = ({
                 placeholder="e.g., 2:30 or 3:00"
               />
             )}
-
-          {/* Show EMOM reps input only for EMOM sections */}
-          {sectionType === 'emom' && (
-            <div>
-              <Label className="block mb-2">EMOM Reps</Label>
-              <Input
-                type="number"
-                value={exercise.emomReps || ''}
-                onChange={e =>
-                  onUpdateEmomReps(exercise.id, Number(e.target.value))
-                }
-                placeholder="e.g., 10"
-                min="1"
-              />
-            </div>
-          )}
 
           {/* Hide progression method for EMOM and Tabata */}
           {sectionType !== 'emom' && sectionType !== 'tabata' && (

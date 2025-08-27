@@ -368,24 +368,35 @@ const SetManagement = ({
               </Button>
             </Tooltip>
           )}
-          <Tooltip content="Add a new set to the workout">
-            <Button onClick={addSet} size="sm" variant="outline">
-              <Plus className="w-4 h-4 mr-1" />
-              Add Set
-            </Button>
-          </Tooltip>
+          {/* Hide Add Set button for EMOM and Tabata sections */}
+          {sectionType !== 'emom' && sectionType !== 'tabata' && (
+            <Tooltip content="Add a new set to the workout">
+              <Button onClick={addSet} size="sm" variant="outline">
+                <Plus className="w-4 h-4 mr-1" />
+                Add Set
+              </Button>
+            </Tooltip>
+          )}
         </div>
       </div>
 
       {/* Sets Header */}
-      <div className="grid grid-cols-8 gap-2 text-sm font-medium text-gray-600 border-b border-gray-200 pb-2">
+      <div
+        className={`grid gap-2 text-sm font-medium text-gray-600 border-b border-gray-200 pb-2 ${
+          sectionType === 'emom' || sectionType === 'tabata'
+            ? 'grid-cols-7'
+            : 'grid-cols-8'
+        }`}
+      >
         <div className="col-span-1">SET</div>
         <div className="col-span-1">REPS</div>
         <div className="col-span-2">REP VALUES</div>
         <div className="col-span-1">WEIGHT (KG)</div>
         <div className="col-span-1">RPE</div>
         <div className="col-span-1">NOTES</div>
-        <div className="col-span-1" />
+        {sectionType !== 'emom' && sectionType !== 'tabata' && (
+          <div className="col-span-1" />
+        )}
       </div>
 
       {/* Sets List */}
@@ -393,7 +404,11 @@ const SetManagement = ({
         {sets.map((set, index) => (
           <div
             key={set.id}
-            className="grid grid-cols-8 gap-2 items-center py-2"
+            className={`grid gap-2 items-center py-2 ${
+              sectionType === 'emom' || sectionType === 'tabata'
+                ? 'grid-cols-7'
+                : 'grid-cols-8'
+            }`}
           >
             {/* Set Number/Type Selector */}
             <div className="col-span-1">
@@ -593,18 +608,20 @@ const SetManagement = ({
               </Button>
             </div>
 
-            {/* Delete Action */}
-            <div className="col-span-1 flex justify-end">
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => removeSet(set.id)}
-                className="h-8 w-8 p-0 text-gray-400 hover:text-red-600"
-                title="Delete set"
-              >
-                <Failure className="w-4 h-4" />
-              </Button>
-            </div>
+            {/* Delete Action - Hide for EMOM and Tabata sections */}
+            {sectionType !== 'emom' && sectionType !== 'tabata' && (
+              <div className="col-span-1 flex justify-end">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => removeSet(set.id)}
+                  className="h-8 w-8 p-0 text-gray-400 hover:text-red-600"
+                  title="Delete set"
+                >
+                  <Failure className="w-4 h-4" />
+                </Button>
+              </div>
+            )}
           </div>
         ))}
       </div>
