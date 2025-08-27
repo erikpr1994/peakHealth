@@ -88,13 +88,13 @@ import { useMemo } from 'react';
 import { useRoutineBuilderContext } from './use-routine-builder';
 import { findExerciseById } from '../utils/routine-selectors'; // Example utility
 
-export function useExercise(sectionId, exerciseId) {
+export function useExercise(workoutId, sectionId, exerciseId) {
   const { state, dispatch } = useRoutineBuilderContext();
 
   // The complex find logic is encapsulated and memoized here.
   const exercise = useMemo(() => {
-    return findExerciseById(state, sectionId, exerciseId); // Assuming selector is updated
-  }, [state, sectionId, exerciseId]);
+    return findExerciseById(state, workoutId, sectionId, exerciseId);
+  }, [state, workoutId, sectionId, exerciseId]);
 
   // Pre-configured dispatchers provide a clean API to the component.
   const updateName = (name: string) => {
@@ -102,7 +102,7 @@ export function useExercise(sectionId, exerciseId) {
   };
 
   const deleteExercise = () => {
-    dispatch({ type: 'DELETE_EXERCISE', payload: { sectionId, exerciseId } });
+    dispatch({ type: 'DELETE_EXERCISE', payload: { workoutId, sectionId, exerciseId } });
   };
 
   return { exercise, updateName, deleteExercise };

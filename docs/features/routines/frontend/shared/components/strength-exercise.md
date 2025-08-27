@@ -12,6 +12,7 @@ This component is responsible for managing the sets, rest periods, and progressi
 
 ```typescript
 interface StrengthExerciseProps {
+  workoutId: string;
   sectionId: string;
   exerciseId: string;
   showApproachSetsToggle?: boolean; // Controlled by parent section
@@ -83,13 +84,13 @@ To avoid a large `if/else` or `switch` statement, the `StrengthExercise` compone
 2.  **Rendering**: The `StrengthExercise` component will use this map to dynamically render the correct child.
     ```jsx
     // Inside StrengthExercise.tsx
-    const { exercise } = useExercise(exerciseId);
+    const { exercise } = useExercise(workoutId, sectionId, exerciseId);
     const EditorComponent = progressionEditorMap[exercise.progressionMethod];
 
     return (
       <Accordion.Body>
         {/* ... other controls ... */}
-        <EditorComponent exerciseId={exerciseId} />
+        <EditorComponent workoutId={workoutId} sectionId={sectionId} exerciseId={exerciseId} />
       </Accordion.Body>
     );
     ```
@@ -115,4 +116,4 @@ This ensures that each progression method's UI is encapsulated in its own compon
 
 ## 4. State Management
 
--   To read its data and get pre-configured action dispatchers (like `updateName` and `deleteExercise`), it uses a dedicated selector hook: `useExercise(sectionId, exerciseId)`.
+-   To read its data and get pre-configured action dispatchers (like `updateName` and `deleteExercise`), it uses a dedicated selector hook: `useExercise(workoutId, sectionId, exerciseId)`.
