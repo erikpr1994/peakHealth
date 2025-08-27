@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import {
   StrengthWorkout,
   RunningWorkout,
@@ -193,7 +193,7 @@ export const useWorkoutOperations = ({
     useRunningExerciseOperations(setRunningWorkouts);
 
   // Strength Workout Operations
-  const addStrengthWorkout = (): void => {
+  const addStrengthWorkout = useCallback((): void => {
     const newWorkout: StrengthWorkout = {
       id: `strength-${Date.now()}`,
       name: 'New Strength Workout',
@@ -208,73 +208,79 @@ export const useWorkoutOperations = ({
       sections: [],
     };
     setStrengthWorkouts(prev => [...prev, newWorkout]);
-  };
+  }, []);
 
-  const removeStrengthWorkout = (workoutId: string): void => {
+  const removeStrengthWorkout = useCallback((workoutId: string): void => {
     setStrengthWorkouts(prev =>
       prev.filter(workout => workout.id !== workoutId)
     );
-  };
+  }, []);
 
-  const moveStrengthWorkout = (
-    workoutId: string,
-    direction: 'up' | 'down'
-  ): void => {
-    setStrengthWorkouts(prev => {
-      const index = prev.findIndex(workout => workout.id === workoutId);
-      if (index === -1) return prev;
+  const moveStrengthWorkout = useCallback(
+    (workoutId: string, direction: 'up' | 'down'): void => {
+      setStrengthWorkouts(prev => {
+        const index = prev.findIndex(workout => workout.id === workoutId);
+        if (index === -1) return prev;
 
-      const newWorkouts = [...prev];
-      if (direction === 'up' && index > 0) {
-        [newWorkouts[index], newWorkouts[index - 1]] = [
-          newWorkouts[index - 1],
-          newWorkouts[index],
-        ];
-      } else if (direction === 'down' && index < newWorkouts.length - 1) {
-        [newWorkouts[index], newWorkouts[index + 1]] = [
-          newWorkouts[index + 1],
-          newWorkouts[index],
-        ];
-      }
-      return newWorkouts;
-    });
-  };
+        const newWorkouts = [...prev];
+        if (direction === 'up' && index > 0) {
+          [newWorkouts[index], newWorkouts[index - 1]] = [
+            newWorkouts[index - 1],
+            newWorkouts[index],
+          ];
+        } else if (direction === 'down' && index < newWorkouts.length - 1) {
+          [newWorkouts[index], newWorkouts[index + 1]] = [
+            newWorkouts[index + 1],
+            newWorkouts[index],
+          ];
+        }
+        return newWorkouts;
+      });
+    },
+    []
+  );
 
-  const updateStrengthWorkoutName = (workoutId: string, name: string): void => {
-    setStrengthWorkouts(prev =>
-      prev.map(workout =>
-        workout.id === workoutId ? { ...workout, name } : workout
-      )
-    );
-  };
+  const updateStrengthWorkoutName = useCallback(
+    (workoutId: string, name: string): void => {
+      setStrengthWorkouts(prev =>
+        prev.map(workout =>
+          workout.id === workoutId ? { ...workout, name } : workout
+        )
+      );
+    },
+    []
+  );
 
-  const updateStrengthWorkoutObjective = (
-    workoutId: string,
-    objective: string
-  ): void => {
-    setStrengthWorkouts(prev =>
-      prev.map(workout =>
-        workout.id === workoutId ? { ...workout, objective } : workout
-      )
-    );
-  };
+  const updateStrengthWorkoutObjective = useCallback(
+    (workoutId: string, objective: string): void => {
+      setStrengthWorkouts(prev =>
+        prev.map(workout =>
+          workout.id === workoutId ? { ...workout, objective } : workout
+        )
+      );
+    },
+    []
+  );
 
-  const updateStrengthWorkoutSchedule = (
-    workoutId: string,
-    field: keyof StrengthWorkout['schedule'],
-    value: string | string[]
-  ): void => {
-    setStrengthWorkouts(prev =>
-      prev.map(workout =>
-        workout.id === workoutId
-          ? { ...workout, schedule: { ...workout.schedule, [field]: value } }
-          : workout
-      )
-    );
-  };
+  const updateStrengthWorkoutSchedule = useCallback(
+    (
+      workoutId: string,
+      field: keyof StrengthWorkout['schedule'],
+      value: string | string[]
+    ): void => {
+      setStrengthWorkouts(prev =>
+        prev.map(workout =>
+          workout.id === workoutId
+            ? { ...workout, schedule: { ...workout.schedule, [field]: value } }
+            : workout
+        )
+      );
+    },
+    []
+  );
 
   // Running Workout Operations
-  const addRunningWorkout = (): void => {
+  const addRunningWorkout = useCallback((): void => {
     const newWorkout: RunningWorkout = {
       id: `running-${Date.now()}`,
       name: 'New Running Workout',
@@ -289,73 +295,79 @@ export const useWorkoutOperations = ({
       sections: [],
     };
     setRunningWorkouts(prev => [...prev, newWorkout]);
-  };
+  }, []);
 
-  const removeRunningWorkout = (workoutId: string): void => {
+  const removeRunningWorkout = useCallback((workoutId: string): void => {
     setRunningWorkouts(prev =>
       prev.filter(workout => workout.id !== workoutId)
     );
-  };
+  }, []);
 
-  const moveRunningWorkout = (
-    workoutId: string,
-    direction: 'up' | 'down'
-  ): void => {
-    setRunningWorkouts(prev => {
-      const index = prev.findIndex(workout => workout.id === workoutId);
-      if (index === -1) return prev;
+  const moveRunningWorkout = useCallback(
+    (workoutId: string, direction: 'up' | 'down'): void => {
+      setRunningWorkouts(prev => {
+        const index = prev.findIndex(workout => workout.id === workoutId);
+        if (index === -1) return prev;
 
-      const newWorkouts = [...prev];
-      if (direction === 'up' && index > 0) {
-        [newWorkouts[index], newWorkouts[index - 1]] = [
-          newWorkouts[index - 1],
-          newWorkouts[index],
-        ];
-      } else if (direction === 'down' && index < newWorkouts.length - 1) {
-        [newWorkouts[index], newWorkouts[index + 1]] = [
-          newWorkouts[index + 1],
-          newWorkouts[index],
-        ];
-      }
-      return newWorkouts;
-    });
-  };
+        const newWorkouts = [...prev];
+        if (direction === 'up' && index > 0) {
+          [newWorkouts[index], newWorkouts[index - 1]] = [
+            newWorkouts[index - 1],
+            newWorkouts[index],
+          ];
+        } else if (direction === 'down' && index < newWorkouts.length - 1) {
+          [newWorkouts[index], newWorkouts[index + 1]] = [
+            newWorkouts[index + 1],
+            newWorkouts[index],
+          ];
+        }
+        return newWorkouts;
+      });
+    },
+    []
+  );
 
-  const updateRunningWorkoutName = (workoutId: string, name: string): void => {
-    setRunningWorkouts(prev =>
-      prev.map(workout =>
-        workout.id === workoutId ? { ...workout, name } : workout
-      )
-    );
-  };
+  const updateRunningWorkoutName = useCallback(
+    (workoutId: string, name: string): void => {
+      setRunningWorkouts(prev =>
+        prev.map(workout =>
+          workout.id === workoutId ? { ...workout, name } : workout
+        )
+      );
+    },
+    []
+  );
 
-  const updateRunningWorkoutObjective = (
-    workoutId: string,
-    objective: string
-  ): void => {
-    setRunningWorkouts(prev =>
-      prev.map(workout =>
-        workout.id === workoutId ? { ...workout, objective } : workout
-      )
-    );
-  };
+  const updateRunningWorkoutObjective = useCallback(
+    (workoutId: string, objective: string): void => {
+      setRunningWorkouts(prev =>
+        prev.map(workout =>
+          workout.id === workoutId ? { ...workout, objective } : workout
+        )
+      );
+    },
+    []
+  );
 
-  const updateRunningWorkoutSchedule = (
-    workoutId: string,
-    field: keyof RunningWorkout['schedule'],
-    value: string | string[]
-  ): void => {
-    setRunningWorkouts(prev =>
-      prev.map(workout =>
-        workout.id === workoutId
-          ? { ...workout, schedule: { ...workout.schedule, [field]: value } }
-          : workout
-      )
-    );
-  };
+  const updateRunningWorkoutSchedule = useCallback(
+    (
+      workoutId: string,
+      field: keyof RunningWorkout['schedule'],
+      value: string | string[]
+    ): void => {
+      setRunningWorkouts(prev =>
+        prev.map(workout =>
+          workout.id === workoutId
+            ? { ...workout, schedule: { ...workout.schedule, [field]: value } }
+            : workout
+        )
+      );
+    },
+    []
+  );
 
   // Section Operations
-  const addStrengthSection = (workoutId: string): void => {
+  const addStrengthSection = useCallback((workoutId: string): void => {
     const newSection: WorkoutSection = {
       id: `section-${Date.now()}`,
       name: 'New Section',
@@ -370,9 +382,9 @@ export const useWorkoutOperations = ({
           : workout
       )
     );
-  };
+  }, []);
 
-  const addRunningSection = (workoutId: string): void => {
+  const addRunningSection = useCallback((workoutId: string): void => {
     const newSection: WorkoutSection = {
       id: `section-${Date.now()}`,
       name: 'New Section',
@@ -387,196 +399,199 @@ export const useWorkoutOperations = ({
           : workout
       )
     );
-  };
+  }, []);
 
-  const removeStrengthSection = (
-    workoutId: string,
-    sectionId: string
-  ): void => {
-    setStrengthWorkouts(prev =>
-      prev.map(workout =>
-        workout.id === workoutId
-          ? {
-              ...workout,
-              sections: workout.sections.filter(
-                section => section.id !== sectionId
-              ),
-            }
-          : workout
-      )
-    );
-  };
+  const removeStrengthSection = useCallback(
+    (workoutId: string, sectionId: string): void => {
+      setStrengthWorkouts(prev =>
+        prev.map(workout =>
+          workout.id === workoutId
+            ? {
+                ...workout,
+                sections: workout.sections.filter(
+                  section => section.id !== sectionId
+                ),
+              }
+            : workout
+        )
+      );
+    },
+    []
+  );
 
-  const removeRunningSection = (workoutId: string, sectionId: string): void => {
-    setRunningWorkouts(prev =>
-      prev.map(workout =>
-        workout.id === workoutId
-          ? {
-              ...workout,
-              sections: workout.sections.filter(
-                section => section.id !== sectionId
-              ),
-            }
-          : workout
-      )
-    );
-  };
+  const removeRunningSection = useCallback(
+    (workoutId: string, sectionId: string): void => {
+      setRunningWorkouts(prev =>
+        prev.map(workout =>
+          workout.id === workoutId
+            ? {
+                ...workout,
+                sections: workout.sections.filter(
+                  section => section.id !== sectionId
+                ),
+              }
+            : workout
+        )
+      );
+    },
+    []
+  );
 
-  const updateStrengthSectionName = (
-    workoutId: string,
-    sectionId: string,
-    name: string
-  ): void => {
-    setStrengthWorkouts(prev =>
-      prev.map(workout =>
-        workout.id === workoutId
-          ? {
-              ...workout,
-              sections: workout.sections.map(section =>
-                section.id === sectionId ? { ...section, name } : section
-              ),
-            }
-          : workout
-      )
-    );
-  };
+  const updateStrengthSectionName = useCallback(
+    (workoutId: string, sectionId: string, name: string): void => {
+      setStrengthWorkouts(prev =>
+        prev.map(workout =>
+          workout.id === workoutId
+            ? {
+                ...workout,
+                sections: workout.sections.map(section =>
+                  section.id === sectionId ? { ...section, name } : section
+                ),
+              }
+            : workout
+        )
+      );
+    },
+    []
+  );
 
-  const updateRunningSectionName = (
-    workoutId: string,
-    sectionId: string,
-    name: string
-  ): void => {
-    setRunningWorkouts(prev =>
-      prev.map(workout =>
-        workout.id === workoutId
-          ? {
-              ...workout,
-              sections: workout.sections.map(section =>
-                section.id === sectionId ? { ...section, name } : section
-              ),
-            }
-          : workout
-      )
-    );
-  };
+  const updateRunningSectionName = useCallback(
+    (workoutId: string, sectionId: string, name: string): void => {
+      setRunningWorkouts(prev =>
+        prev.map(workout =>
+          workout.id === workoutId
+            ? {
+                ...workout,
+                sections: workout.sections.map(section =>
+                  section.id === sectionId ? { ...section, name } : section
+                ),
+              }
+            : workout
+        )
+      );
+    },
+    []
+  );
 
-  const updateStrengthSectionType = (
-    workoutId: string,
-    sectionId: string,
-    type: WorkoutSection['type']
-  ): void => {
-    setStrengthWorkouts(prev =>
-      prev.map(workout =>
-        workout.id === workoutId
-          ? {
-              ...workout,
-              sections: workout.sections.map(section =>
-                section.id === sectionId ? { ...section, type } : section
-              ),
-            }
-          : workout
-      )
-    );
-  };
+  const updateStrengthSectionType = useCallback(
+    (
+      workoutId: string,
+      sectionId: string,
+      type: WorkoutSection['type']
+    ): void => {
+      setStrengthWorkouts(prev =>
+        prev.map(workout =>
+          workout.id === workoutId
+            ? {
+                ...workout,
+                sections: workout.sections.map(section =>
+                  section.id === sectionId ? { ...section, type } : section
+                ),
+              }
+            : workout
+        )
+      );
+    },
+    []
+  );
 
-  const updateRunningSectionType = (
-    workoutId: string,
-    sectionId: string,
-    type: WorkoutSection['type']
-  ): void => {
-    setRunningWorkouts(prev =>
-      prev.map(workout =>
-        workout.id === workoutId
-          ? {
-              ...workout,
-              sections: workout.sections.map(section =>
-                section.id === sectionId ? { ...section, type } : section
-              ),
-            }
-          : workout
-      )
-    );
-  };
+  const updateRunningSectionType = useCallback(
+    (
+      workoutId: string,
+      sectionId: string,
+      type: WorkoutSection['type']
+    ): void => {
+      setRunningWorkouts(prev =>
+        prev.map(workout =>
+          workout.id === workoutId
+            ? {
+                ...workout,
+                sections: workout.sections.map(section =>
+                  section.id === sectionId ? { ...section, type } : section
+                ),
+              }
+            : workout
+        )
+      );
+    },
+    []
+  );
 
-  const updateStrengthSectionRestAfter = (
-    workoutId: string,
-    sectionId: string,
-    restAfter: string
-  ): void => {
-    setStrengthWorkouts(prev =>
-      prev.map(workout =>
-        workout.id === workoutId
-          ? {
-              ...workout,
-              sections: workout.sections.map(section =>
-                section.id === sectionId ? { ...section, restAfter } : section
-              ),
-            }
-          : workout
-      )
-    );
-  };
+  const updateStrengthSectionRestAfter = useCallback(
+    (workoutId: string, sectionId: string, restAfter: string): void => {
+      setStrengthWorkouts(prev =>
+        prev.map(workout =>
+          workout.id === workoutId
+            ? {
+                ...workout,
+                sections: workout.sections.map(section =>
+                  section.id === sectionId ? { ...section, restAfter } : section
+                ),
+              }
+            : workout
+        )
+      );
+    },
+    []
+  );
 
-  const updateRunningSectionRestAfter = (
-    workoutId: string,
-    sectionId: string,
-    restAfter: string
-  ): void => {
-    setRunningWorkouts(prev =>
-      prev.map(workout =>
-        workout.id === workoutId
-          ? {
-              ...workout,
-              sections: workout.sections.map(section =>
-                section.id === sectionId ? { ...section, restAfter } : section
-              ),
-            }
-          : workout
-      )
-    );
-  };
+  const updateRunningSectionRestAfter = useCallback(
+    (workoutId: string, sectionId: string, restAfter: string): void => {
+      setRunningWorkouts(prev =>
+        prev.map(workout =>
+          workout.id === workoutId
+            ? {
+                ...workout,
+                sections: workout.sections.map(section =>
+                  section.id === sectionId ? { ...section, restAfter } : section
+                ),
+              }
+            : workout
+        )
+      );
+    },
+    []
+  );
 
-  const updateStrengthSectionEmomDuration = (
-    workoutId: string,
-    sectionId: string,
-    duration: number
-  ): void => {
-    setStrengthWorkouts(prev =>
-      prev.map(workout =>
-        workout.id === workoutId
-          ? {
-              ...workout,
-              sections: workout.sections.map(section =>
-                section.id === sectionId
-                  ? { ...section, emomDuration: duration }
-                  : section
-              ),
-            }
-          : workout
-      )
-    );
-  };
+  const updateStrengthSectionEmomDuration = useCallback(
+    (workoutId: string, sectionId: string, duration: number): void => {
+      setStrengthWorkouts(prev =>
+        prev.map(workout =>
+          workout.id === workoutId
+            ? {
+                ...workout,
+                sections: workout.sections.map(section =>
+                  section.id === sectionId
+                    ? { ...section, emomDuration: duration }
+                    : section
+                ),
+              }
+            : workout
+        )
+      );
+    },
+    []
+  );
 
-  const updateRunningSectionEmomDuration = (
-    workoutId: string,
-    sectionId: string,
-    duration: number
-  ): void => {
-    setRunningWorkouts(prev =>
-      prev.map(workout =>
-        workout.id === workoutId
-          ? {
-              ...workout,
-              sections: workout.sections.map(section =>
-                section.id === sectionId
-                  ? { ...section, emomDuration: duration }
-                  : section
-              ),
-            }
-          : workout
-      )
-    );
-  };
+  const updateRunningSectionEmomDuration = useCallback(
+    (workoutId: string, sectionId: string, duration: number): void => {
+      setRunningWorkouts(prev =>
+        prev.map(workout =>
+          workout.id === workoutId
+            ? {
+                ...workout,
+                sections: workout.sections.map(section =>
+                  section.id === sectionId
+                    ? { ...section, emomDuration: duration }
+                    : section
+                ),
+              }
+            : workout
+        )
+      );
+    },
+    []
+  );
 
   // Exercise operations are now handled by specialized hooks
 
