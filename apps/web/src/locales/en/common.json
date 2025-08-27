@@ -86,7 +86,9 @@
       "durationMin": "Duration must be at least 1 week",
       "durationMax": "Duration must be less than 52 weeks",
       "objectivesRequired": "At least one training objective is required",
-      "objectivesNotEmpty": "All training objectives must not be empty"
+      "objectivesNotEmpty": "All training objectives must not be empty",
+      "difficultyRequired": "Difficulty level is required",
+      "goalRequired": "Goal is required"
     },
     "messages": {
       "pleaseLogin": "Please log in to create a routine",

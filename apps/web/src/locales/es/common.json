@@ -86,7 +86,9 @@
       "durationMin": "La duración debe ser de al menos 1 semana",
       "durationMax": "La duración debe ser de menos de 52 semanas",
       "objectivesRequired": "Se requiere al menos un objetivo de entrenamiento",
-      "objectivesNotEmpty": "Todos los objetivos de entrenamiento no deben estar vacíos"
+      "objectivesNotEmpty": "Todos los objetivos de entrenamiento no deben estar vacíos",
+      "difficultyRequired": "El nivel de dificultad es requerido",
+      "goalRequired": "El objetivo es requerido"
     },
     "messages": {
       "pleaseLogin": "Por favor inicia sesión para crear una rutina",
