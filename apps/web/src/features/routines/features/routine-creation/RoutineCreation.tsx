@@ -301,294 +301,385 @@ const RoutineCreation = ({
   };
 
   // Exercise selection handlers
-  const handleAddExerciseClick = (
-    workoutId: string,
-    sectionId: string
-  ): void => {
-    openModal('exercise', { workoutId, sectionId });
-  };
-
-  const handleExerciseSelect = (
-    selectedExercise: {
-      id: string;
-      name: string;
-      category?: string;
-      muscleGroups?: string[];
+  const handleAddExerciseClick = useCallback(
+    (workoutId: string, sectionId: string): void => {
+      openModal('exercise', { workoutId, sectionId });
     },
-    selectedVariant?: {
-      id: string;
-      name: string;
-      muscleGroups: string[];
-      difficulty: string;
-      equipment: string[];
-      instructions: string[];
-      isUnilateral?: boolean;
-    }
-  ): void => {
-    const exerciseContext = getModalContext('exercise');
-    if (!exerciseContext) return;
+    [openModal]
+  );
 
-    const { workoutId, sectionId } = exerciseContext;
+  const handleExerciseSelect = useCallback(
+    (
+      selectedExercise: {
+        id: string;
+        name: string;
+        category?: string;
+        muscleGroups?: string[];
+      },
+      selectedVariant?: {
+        id: string;
+        name: string;
+        muscleGroups: string[];
+        difficulty: string;
+        equipment: string[];
+        instructions: string[];
+        isUnilateral?: boolean;
+      }
+    ): void => {
+      const exerciseContext = getModalContext('exercise');
+      if (!exerciseContext) return;
 
-    // Check if this is a unilateral exercise
-    if (selectedVariant?.isUnilateral) {
-      // Store the exercise data and show unilateral modal
-      setUnilateralExerciseData({
-        exercise: selectedExercise,
-        variant: selectedVariant,
-        context: { workoutId, sectionId },
-      });
+      const { workoutId, sectionId } = exerciseContext;
+
+      // Check if this is a unilateral exercise
+      if (selectedVariant?.isUnilateral) {
+        // Store the exercise data and show unilateral modal
+        setUnilateralExerciseData({
+          exercise: selectedExercise,
+          variant: selectedVariant,
+          context: { workoutId, sectionId },
+        });
+        closeModal();
+        return;
+      }
+
+      // Handle non-unilateral exercise as before
+      const isStrength = strengthWorkouts.some(w => w.id === workoutId);
+      const exerciseData = selectedVariant || selectedExercise;
+
+      const newExercise = {
+        id: `exercise-${Date.now()}`,
+        name: exerciseData.name,
+        category: selectedExercise.category,
+        muscleGroups: exerciseData.muscleGroups,
+        equipment: selectedVariant?.equipment || [],
+        exerciseId: selectedExercise.id,
+        variantId: selectedVariant?.id,
+        sets: [],
+        restTimer: '90s',
+        restAfter: '2 min',
+        notes: '',
+        progressionMethod: isStrength
+          ? ('linear' as ProgressionMethod)
+          : undefined,
+        hasApproachSets: false,
+        isUnilateral: false,
+      };
+
+      if (isStrength) {
+        addStrengthExercise(workoutId, sectionId, newExercise);
+      } else {
+        addRunningExercise(workoutId, sectionId, newExercise);
+      }
+
       closeModal();
-      return;
-    }
+    },
+    [
+      getModalContext,
+      strengthWorkouts,
+      addStrengthExercise,
+      addRunningExercise,
+      closeModal,
+    ]
+  );
 
-    // Handle non-unilateral exercise as before
-    const isStrength = strengthWorkouts.some(w => w.id === workoutId);
-    const exerciseData = selectedVariant || selectedExercise;
+  const handleNotesClick = useCallback(
+    (
+      type: 'exercise' | 'set',
+      workoutId: string,
+      sectionId: string,
+      exerciseId: string,
+      setId?: string
+    ): void => {
+      const isStrength = strengthWorkouts.some(w => w.id === workoutId);
+      const workouts = isStrength ? strengthWorkouts : runningWorkouts;
+      const workout = workouts.find(w => w.id === workoutId);
+      const section = workout?.sections.find(s => s.id === sectionId);
+      const exercise = section?.exercises.find(e => e.id === exerciseId);
 
-    const newExercise = {
-      id: `exercise-${Date.now()}`,
-      name: exerciseData.name,
-      category: selectedExercise.category,
-      muscleGroups: exerciseData.muscleGroups,
-      equipment: selectedVariant?.equipment || [],
-      exerciseId: selectedExercise.id,
-      variantId: selectedVariant?.id,
-      sets: [],
-      restTimer: '90s',
-      restAfter: '2 min',
-      notes: '',
-      progressionMethod: isStrength
-        ? ('linear' as ProgressionMethod)
-        : undefined,
-      hasApproachSets: false,
-      isUnilateral: false,
-    };
+      if (!exercise) return;
 
-    if (isStrength) {
-      addStrengthExercise(workoutId, sectionId, newExercise);
-    } else {
-      addRunningExercise(workoutId, sectionId, newExercise);
-    }
+      let currentNotes = '';
+      if (type === 'exercise') {
+        currentNotes = exercise.notes;
+      } else if (type === 'set' && setId) {
+        const set = exercise.sets.find(s => s.id === setId);
+        currentNotes = set?.notes || '';
+      }
 
-    closeModal();
-  };
+      const notesContext: NotesContext = {
+        type,
+        workoutId,
+        sectionId,
+        exerciseId,
+        setId,
+        currentNotes,
+      };
+      openModal('notes', notesContext);
+    },
+    [strengthWorkouts, runningWorkouts, openModal]
+  );
 
-  const handleNotesClick = (
-    type: 'exercise' | 'set',
-    workoutId: string,
-    sectionId: string,
-    exerciseId: string,
-    setId?: string
-  ): void => {
-    const isStrength = strengthWorkouts.some(w => w.id === workoutId);
-    const workouts = isStrength ? strengthWorkouts : runningWorkouts;
-    const workout = workouts.find(w => w.id === workoutId);
-    const section = workout?.sections.find(s => s.id === sectionId);
-    const exercise = section?.exercises.find(e => e.id === exerciseId);
+  const handleNotesSave = useCallback(
+    (notes: string): void => {
+      const notesContext = getModalContext('notes');
+      if (!notesContext) return;
 
-    if (!exercise) return;
+      const { type, workoutId, sectionId, exerciseId, setId } = notesContext;
+      const isStrength = strengthWorkouts.some(w => w.id === workoutId);
 
-    let currentNotes = '';
-    if (type === 'exercise') {
-      currentNotes = exercise.notes;
-    } else if (type === 'set' && setId) {
-      const set = exercise.sets.find(s => s.id === setId);
-      currentNotes = set?.notes || '';
-    }
+      if (type === 'exercise') {
+        if (isStrength) {
+          setStrengthWorkouts(prev =>
+            prev.map(workout =>
+              workout.id === workoutId
+                ? {
+                    ...workout,
+                    sections: workout.sections.map(section =>
+                      section.id === sectionId
+                        ? {
+                            ...section,
+                            exercises: section.exercises.map(exercise =>
+                              exercise.id === exerciseId
+                                ? { ...exercise, notes }
+                                : exercise
+                            ),
+                          }
+                        : section
+                    ),
+                  }
+                : workout
+            )
+          );
+        } else {
+          setRunningWorkouts(prev =>
+            prev.map(workout =>
+              workout.id === workoutId
+                ? {
+                    ...workout,
+                    sections: workout.sections.map(section =>
+                      section.id === sectionId
+                        ? {
+                            ...section,
+                            exercises: section.exercises.map(exercise =>
+                              exercise.id === exerciseId
+                                ? { ...exercise, notes }
+                                : exercise
+                            ),
+                          }
+                        : section
+                    ),
+                  }
+                : workout
+            )
+          );
+        }
+      } else if (type === 'set' && setId) {
+        if (isStrength) {
+          setStrengthWorkouts(prev =>
+            prev.map(workout =>
+              workout.id === workoutId
+                ? {
+                    ...workout,
+                    sections: workout.sections.map(section =>
+                      section.id === sectionId
+                        ? {
+                            ...section,
+                            exercises: section.exercises.map(exercise =>
+                              exercise.id === exerciseId
+                                ? {
+                                    ...exercise,
+                                    sets: exercise.sets.map(set =>
+                                      set.id === setId ? { ...set, notes } : set
+                                    ),
+                                  }
+                                : exercise
+                            ),
+                          }
+                        : section
+                    ),
+                  }
+                : workout
+            )
+          );
+        } else {
+          setRunningWorkouts(prev =>
+            prev.map(workout =>
+              workout.id === workoutId
+                ? {
+                    ...workout,
+                    sections: workout.sections.map(section =>
+                      section.id === sectionId
+                        ? {
+                            ...section,
+                            exercises: section.exercises.map(exercise =>
+                              exercise.id === exerciseId
+                                ? {
+                                    ...exercise,
+                                    sets: exercise.sets.map(set =>
+                                      set.id === setId ? { ...set, notes } : set
+                                    ),
+                                  }
+                                : exercise
+                            ),
+                          }
+                        : section
+                    ),
+                  }
+                : workout
+            )
+          );
+        }
+      }
 
-    const notesContext: NotesContext = {
-      type,
-      workoutId,
-      sectionId,
-      exerciseId,
-      setId,
-      currentNotes,
-    };
-    openModal('notes', notesContext);
-  };
+      closeModal();
+    },
+    [
+      getModalContext,
+      strengthWorkouts,
+      setStrengthWorkouts,
+      setRunningWorkouts,
+      closeModal,
+    ]
+  );
 
-  const handleNotesSave = (notes: string): void => {
-    const notesContext = getModalContext('notes');
-    if (!notesContext) return;
+  const handleAddApproachSets = useCallback(
+    (workoutId: string, sectionId: string, exerciseId: string): void => {
+      const isStrength = strengthWorkouts.some(w => w.id === workoutId);
+      const workouts = isStrength ? strengthWorkouts : runningWorkouts;
+      const workout = workouts.find(w => w.id === workoutId);
+      const section = workout?.sections.find(s => s.id === sectionId);
+      const exercise = section?.exercises.find(e => e.id === exerciseId);
 
-    const { type, workoutId, sectionId, exerciseId, setId } = notesContext;
-    const isStrength = strengthWorkouts.some(w => w.id === workoutId);
+      if (!exercise) return;
 
-    if (type === 'exercise') {
+      const updatedSets = addApproachSets(exercise.sets);
+
       if (isStrength) {
+        updateStrengthExerciseSets(
+          workoutId,
+          sectionId,
+          exerciseId,
+          updatedSets
+        );
+        // Mark as having approach sets
         setStrengthWorkouts(prev =>
-          prev.map(workout =>
-            workout.id === workoutId
+          prev.map(w =>
+            w.id === workoutId
               ? {
-                  ...workout,
-                  sections: workout.sections.map(section =>
-                    section.id === sectionId
+                  ...w,
+                  sections: w.sections.map(s =>
+                    s.id === sectionId
                       ? {
-                          ...section,
-                          exercises: section.exercises.map(exercise =>
-                            exercise.id === exerciseId
-                              ? { ...exercise, notes }
-                              : exercise
+                          ...s,
+                          exercises: s.exercises.map(e =>
+                            e.id === exerciseId
+                              ? { ...e, hasApproachSets: true }
+                              : e
                           ),
                         }
-                      : section
+                      : s
                   ),
                 }
-              : workout
+              : w
           )
         );
       } else {
+        updateRunningExerciseSets(
+          workoutId,
+          sectionId,
+          exerciseId,
+          updatedSets
+        );
         setRunningWorkouts(prev =>
-          prev.map(workout =>
-            workout.id === workoutId
+          prev.map(w =>
+            w.id === workoutId
               ? {
-                  ...workout,
-                  sections: workout.sections.map(section =>
-                    section.id === sectionId
+                  ...w,
+                  sections: w.sections.map(s =>
+                    s.id === sectionId
                       ? {
-                          ...section,
-                          exercises: section.exercises.map(exercise =>
-                            exercise.id === exerciseId
-                              ? { ...exercise, notes }
-                              : exercise
+                          ...s,
+                          exercises: s.exercises.map(e =>
+                            e.id === exerciseId
+                              ? { ...e, hasApproachSets: true }
+                              : e
                           ),
                         }
-                      : section
+                      : s
                   ),
                 }
-              : workout
+              : w
           )
         );
       }
-    } else if (type === 'set' && setId) {
-      if (isStrength) {
-        setStrengthWorkouts(prev =>
-          prev.map(workout =>
-            workout.id === workoutId
-              ? {
-                  ...workout,
-                  sections: workout.sections.map(section =>
-                    section.id === sectionId
-                      ? {
-                          ...section,
-                          exercises: section.exercises.map(exercise =>
-                            exercise.id === exerciseId
-                              ? {
-                                  ...exercise,
-                                  sets: exercise.sets.map(set =>
-                                    set.id === setId ? { ...set, notes } : set
-                                  ),
-                                }
-                              : exercise
-                          ),
-                        }
-                      : section
-                  ),
-                }
-              : workout
-          )
-        );
-      } else {
-        setRunningWorkouts(prev =>
-          prev.map(workout =>
-            workout.id === workoutId
-              ? {
-                  ...workout,
-                  sections: workout.sections.map(section =>
-                    section.id === sectionId
-                      ? {
-                          ...section,
-                          exercises: section.exercises.map(exercise =>
-                            exercise.id === exerciseId
-                              ? {
-                                  ...exercise,
-                                  sets: exercise.sets.map(set =>
-                                    set.id === setId ? { ...set, notes } : set
-                                  ),
-                                }
-                              : exercise
-                          ),
-                        }
-                      : section
-                  ),
-                }
-              : workout
-          )
-        );
-      }
-    }
+    },
+    [
+      strengthWorkouts,
+      runningWorkouts,
+      updateStrengthExerciseSets,
+      updateRunningExerciseSets,
+      setStrengthWorkouts,
+      setRunningWorkouts,
+    ]
+  );
 
-    closeModal();
-  };
+  // Memoize callback functions to prevent infinite re-renders
+  const handleNameChange = useCallback((name: string) => {
+    setName(name);
+  }, []);
 
-  const handleAddApproachSets = (
-    workoutId: string,
-    sectionId: string,
-    exerciseId: string
-  ): void => {
-    const isStrength = strengthWorkouts.some(w => w.id === workoutId);
-    const workouts = isStrength ? strengthWorkouts : runningWorkouts;
-    const workout = workouts.find(w => w.id === workoutId);
-    const section = workout?.sections.find(s => s.id === sectionId);
-    const exercise = section?.exercises.find(e => e.id === exerciseId);
+  const handleDifficultyChange = useCallback((difficulty: string) => {
+    setDifficulty(difficulty);
+  }, []);
 
-    if (!exercise) return;
+  const handleGoalChange = useCallback((goal: string) => {
+    setGoal(goal);
+  }, []);
 
-    const updatedSets = addApproachSets(exercise.sets);
+  const handleDescriptionChange = useCallback((description: string) => {
+    setDescription(description);
+  }, []);
 
-    if (isStrength) {
-      updateStrengthExerciseSets(workoutId, sectionId, exerciseId, updatedSets);
-      // Mark as having approach sets
-      setStrengthWorkouts(prev =>
-        prev.map(w =>
-          w.id === workoutId
-            ? {
-                ...w,
-                sections: w.sections.map(s =>
-                  s.id === sectionId
-                    ? {
-                        ...s,
-                        exercises: s.exercises.map(e =>
-                          e.id === exerciseId
-                            ? { ...e, hasApproachSets: true }
-                            : e
-                        ),
-                      }
-                    : s
-                ),
-              }
-            : w
-        )
-      );
-    } else {
-      updateRunningExerciseSets(workoutId, sectionId, exerciseId, updatedSets);
-      setRunningWorkouts(prev =>
-        prev.map(w =>
-          w.id === workoutId
-            ? {
-                ...w,
-                sections: w.sections.map(s =>
-                  s.id === sectionId
-                    ? {
-                        ...s,
-                        exercises: s.exercises.map(e =>
-                          e.id === exerciseId
-                            ? { ...e, hasApproachSets: true }
-                            : e
-                        ),
-                      }
-                    : s
-                ),
-              }
-            : w
-        )
-      );
-    }
-  };
+  const handleObjectivesChange = useCallback((objectives: string[]) => {
+    setObjectives(objectives);
+  }, []);
 
-  // Save routine handler
-  const handleSaveRoutine = async (): Promise<void> => {
+  const handleDurationChange = useCallback((duration: number) => {
+    setDuration(duration);
+  }, []);
+
+  // Memoize move workout functions to prevent infinite re-renders
+  const handleMoveStrengthWorkoutUp = useCallback(
+    (workoutId: string) => {
+      moveStrengthWorkout(workoutId, 'up');
+    },
+    [moveStrengthWorkout]
+  );
+
+  const handleMoveStrengthWorkoutDown = useCallback(
+    (workoutId: string) => {
+      moveStrengthWorkout(workoutId, 'down');
+    },
+    [moveStrengthWorkout]
+  );
+
+  const handleMoveRunningWorkoutUp = useCallback(
+    (workoutId: string) => {
+      moveRunningWorkout(workoutId, 'up');
+    },
+    [moveRunningWorkout]
+  );
+
+  const handleMoveRunningWorkoutDown = useCallback(
+    (workoutId: string) => {
+      moveRunningWorkout(workoutId, 'down');
+    },
+    [moveRunningWorkout]
+  );
+
+  // Memoize save routine handler to prevent infinite re-renders
+  const handleSaveRoutine = useCallback(async (): Promise<void> => {
     // Check authentication first
     if (!isAuthenticated || !user) {
       showToast({
@@ -647,32 +738,22 @@ const RoutineCreation = ({
     } finally {
       // setIsSaving(false); // This state variable is not defined in the original file
     }
-  };
-
-  // Memoize callback functions to prevent infinite re-renders
-  const handleNameChange = useCallback((name: string) => {
-    setName(name);
-  }, []);
-
-  const handleDifficultyChange = useCallback((difficulty: string) => {
-    setDifficulty(difficulty);
-  }, []);
-
-  const handleGoalChange = useCallback((goal: string) => {
-    setGoal(goal);
-  }, []);
-
-  const handleDescriptionChange = useCallback((description: string) => {
-    setDescription(description);
-  }, []);
-
-  const handleObjectivesChange = useCallback((objectives: string[]) => {
-    setObjectives(objectives);
-  }, []);
-
-  const handleDurationChange = useCallback((duration: number) => {
-    setDuration(duration);
-  }, []);
+  }, [
+    isAuthenticated,
+    user,
+    validateRoutineData,
+    name,
+    difficulty,
+    goal,
+    objectives,
+    strengthWorkouts,
+    runningWorkouts,
+    description,
+    duration,
+    routineService,
+    showToast,
+    router,
+  ]);
 
   return (
     <div className="w-full px-4 sm:px-6 lg:px-8 py-6">
@@ -698,8 +779,8 @@ const RoutineCreation = ({
         collapsedStrengthWorkouts={collapsedStrengthWorkouts}
         onAddStrengthWorkout={addStrengthWorkout}
         onToggleCollapse={toggleStrengthWorkoutCollapse}
-        onMoveUp={workoutId => moveStrengthWorkout(workoutId, 'up')}
-        onMoveDown={workoutId => moveStrengthWorkout(workoutId, 'down')}
+        onMoveUp={handleMoveStrengthWorkoutUp}
+        onMoveDown={handleMoveStrengthWorkoutDown}
         onRemove={removeStrengthWorkout}
         onUpdateName={updateStrengthWorkoutName}
         onUpdateObjective={updateStrengthWorkoutObjective}
@@ -732,8 +813,8 @@ const RoutineCreation = ({
         onRunningCancel={handleRunningCancel}
         onEditRunning={handleEditRunning}
         onToggleCollapse={toggleRunningWorkoutCollapse}
-        onMoveUp={workoutId => moveRunningWorkout(workoutId, 'up')}
-        onMoveDown={workoutId => moveRunningWorkout(workoutId, 'down')}
+        onMoveUp={handleMoveRunningWorkoutUp}
+        onMoveDown={handleMoveRunningWorkoutDown}
         onRemove={removeRunningWorkout}
         onUpdateName={updateRunningWorkoutName}
         onUpdateObjective={updateRunningWorkoutObjective}
