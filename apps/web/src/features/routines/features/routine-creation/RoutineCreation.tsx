@@ -137,6 +137,131 @@ const RoutineCreation = ({
     updateStrengthExerciseProgressionMethod,
   } = useWorkoutOperations();
 
+  // Memoize all functions from useWorkoutOperations to prevent infinite re-renders
+  const memoizedAddStrengthWorkout = useCallback(addStrengthWorkout, [
+    addStrengthWorkout,
+  ]);
+  const memoizedRemoveStrengthWorkout = useCallback(removeStrengthWorkout, [
+    removeStrengthWorkout,
+  ]);
+  const memoizedUpdateStrengthWorkoutName = useCallback(
+    updateStrengthWorkoutName,
+    [updateStrengthWorkoutName]
+  );
+  const memoizedUpdateStrengthWorkoutObjective = useCallback(
+    updateStrengthWorkoutObjective,
+    [updateStrengthWorkoutObjective]
+  );
+  const memoizedUpdateStrengthWorkoutSchedule = useCallback(
+    updateStrengthWorkoutSchedule,
+    [updateStrengthWorkoutSchedule]
+  );
+
+  const memoizedRemoveRunningWorkout = useCallback(removeRunningWorkout, [
+    removeRunningWorkout,
+  ]);
+  const memoizedUpdateRunningWorkoutName = useCallback(
+    updateRunningWorkoutName,
+    [updateRunningWorkoutName]
+  );
+  const memoizedUpdateRunningWorkoutObjective = useCallback(
+    updateRunningWorkoutObjective,
+    [updateRunningWorkoutObjective]
+  );
+  const memoizedUpdateRunningWorkoutSchedule = useCallback(
+    updateRunningWorkoutSchedule,
+    [updateRunningWorkoutSchedule]
+  );
+
+  const memoizedAddStrengthSection = useCallback(addStrengthSection, [
+    addStrengthSection,
+  ]);
+  const memoizedAddRunningSection = useCallback(addRunningSection, [
+    addRunningSection,
+  ]);
+  const memoizedRemoveStrengthSection = useCallback(removeStrengthSection, [
+    removeStrengthSection,
+  ]);
+  const memoizedRemoveRunningSection = useCallback(removeRunningSection, [
+    removeRunningSection,
+  ]);
+  const memoizedUpdateStrengthSectionName = useCallback(
+    updateStrengthSectionName,
+    [updateStrengthSectionName]
+  );
+  const memoizedUpdateRunningSectionName = useCallback(
+    updateRunningSectionName,
+    [updateRunningSectionName]
+  );
+  const memoizedUpdateStrengthSectionType = useCallback(
+    updateStrengthSectionType,
+    [updateStrengthSectionType]
+  );
+  const memoizedUpdateRunningSectionType = useCallback(
+    updateRunningSectionType,
+    [updateRunningSectionType]
+  );
+  const memoizedUpdateStrengthSectionRestAfter = useCallback(
+    updateStrengthSectionRestAfter,
+    [updateStrengthSectionRestAfter]
+  );
+  const memoizedUpdateRunningSectionRestAfter = useCallback(
+    updateRunningSectionRestAfter,
+    [updateRunningSectionRestAfter]
+  );
+  const memoizedUpdateStrengthSectionEmomDuration = useCallback(
+    updateStrengthSectionEmomDuration,
+    [updateStrengthSectionEmomDuration]
+  );
+  const memoizedRemoveStrengthExercise = useCallback(removeStrengthExercise, [
+    removeStrengthExercise,
+  ]);
+  const memoizedRemoveRunningExercise = useCallback(removeRunningExercise, [
+    removeRunningExercise,
+  ]);
+  const memoizedUpdateStrengthExerciseName = useCallback(
+    updateStrengthExerciseName,
+    [updateStrengthExerciseName]
+  );
+  const memoizedUpdateRunningExerciseName = useCallback(
+    updateRunningExerciseName,
+    [updateRunningExerciseName]
+  );
+  const memoizedUpdateStrengthExerciseSets = useCallback(
+    updateStrengthExerciseSets,
+    [updateStrengthExerciseSets]
+  );
+  const memoizedUpdateRunningExerciseSets = useCallback(
+    updateRunningExerciseSets,
+    [updateRunningExerciseSets]
+  );
+  const memoizedUpdateStrengthRestTimer = useCallback(updateStrengthRestTimer, [
+    updateStrengthRestTimer,
+  ]);
+  const memoizedUpdateRunningRestTimer = useCallback(updateRunningRestTimer, [
+    updateRunningRestTimer,
+  ]);
+  const memoizedUpdateStrengthExerciseRestAfter = useCallback(
+    updateStrengthExerciseRestAfter,
+    [updateStrengthExerciseRestAfter]
+  );
+  const memoizedUpdateRunningExerciseRestAfter = useCallback(
+    updateRunningExerciseRestAfter,
+    [updateRunningExerciseRestAfter]
+  );
+  const memoizedUpdateStrengthExerciseEmomReps = useCallback(
+    updateStrengthExerciseEmomReps,
+    [updateStrengthExerciseEmomReps]
+  );
+  const memoizedUpdateRunningExerciseEmomReps = useCallback(
+    updateRunningExerciseEmomReps,
+    [updateRunningExerciseEmomReps]
+  );
+  const memoizedUpdateStrengthExerciseProgressionMethod = useCallback(
+    updateStrengthExerciseProgressionMethod,
+    [updateStrengthExerciseProgressionMethod]
+  );
+
   // Use our new validation hook
   const { validateRoutineData } = useRoutineValidation();
 
@@ -750,7 +875,6 @@ const RoutineCreation = ({
     runningWorkouts,
     description,
     duration,
-    routineService,
     showToast,
     router,
   ]);
@@ -777,29 +901,31 @@ const RoutineCreation = ({
       <StrengthWorkoutsSection
         strengthWorkouts={strengthWorkouts}
         collapsedStrengthWorkouts={collapsedStrengthWorkouts}
-        onAddStrengthWorkout={addStrengthWorkout}
+        onAddStrengthWorkout={memoizedAddStrengthWorkout}
         onToggleCollapse={toggleStrengthWorkoutCollapse}
         onMoveUp={handleMoveStrengthWorkoutUp}
         onMoveDown={handleMoveStrengthWorkoutDown}
-        onRemove={removeStrengthWorkout}
-        onUpdateName={updateStrengthWorkoutName}
-        onUpdateObjective={updateStrengthWorkoutObjective}
-        onUpdateSchedule={updateStrengthWorkoutSchedule}
-        onAddSection={addStrengthSection}
-        onUpdateSectionName={updateStrengthSectionName}
-        onUpdateSectionType={updateStrengthSectionType}
-        onUpdateSectionRestAfter={updateStrengthSectionRestAfter}
-        onUpdateSectionEmomDuration={updateStrengthSectionEmomDuration}
-        onRemoveSection={removeStrengthSection}
+        onRemove={memoizedRemoveStrengthWorkout}
+        onUpdateName={memoizedUpdateStrengthWorkoutName}
+        onUpdateObjective={memoizedUpdateStrengthWorkoutObjective}
+        onUpdateSchedule={memoizedUpdateStrengthWorkoutSchedule}
+        onAddSection={memoizedAddStrengthSection}
+        onUpdateSectionName={memoizedUpdateStrengthSectionName}
+        onUpdateSectionType={memoizedUpdateStrengthSectionType}
+        onUpdateSectionRestAfter={memoizedUpdateStrengthSectionRestAfter}
+        onUpdateSectionEmomDuration={memoizedUpdateStrengthSectionEmomDuration}
+        onRemoveSection={memoizedRemoveStrengthSection}
         onAddExercise={handleAddExerciseClick}
-        onUpdateExerciseEmomReps={updateStrengthExerciseEmomReps}
-        onUpdateExerciseSets={updateStrengthExerciseSets}
-        onUpdateExerciseName={updateStrengthExerciseName}
-        onUpdateRestTimer={updateStrengthRestTimer}
-        onUpdateExerciseRestAfter={updateStrengthExerciseRestAfter}
-        onRemoveExercise={removeStrengthExercise}
+        onUpdateExerciseEmomReps={memoizedUpdateStrengthExerciseEmomReps}
+        onUpdateExerciseSets={memoizedUpdateStrengthExerciseSets}
+        onUpdateExerciseName={memoizedUpdateStrengthExerciseName}
+        onUpdateRestTimer={memoizedUpdateStrengthRestTimer}
+        onUpdateExerciseRestAfter={memoizedUpdateStrengthExerciseRestAfter}
+        onRemoveExercise={memoizedRemoveStrengthExercise}
         onAddApproachSets={handleAddApproachSets}
-        onUpdateProgressionMethod={updateStrengthExerciseProgressionMethod}
+        onUpdateProgressionMethod={
+          memoizedUpdateStrengthExerciseProgressionMethod
+        }
         onNotesClick={handleNotesClick}
       />
 
@@ -815,22 +941,22 @@ const RoutineCreation = ({
         onToggleCollapse={toggleRunningWorkoutCollapse}
         onMoveUp={handleMoveRunningWorkoutUp}
         onMoveDown={handleMoveRunningWorkoutDown}
-        onRemove={removeRunningWorkout}
-        onUpdateName={updateRunningWorkoutName}
-        onUpdateObjective={updateRunningWorkoutObjective}
-        onUpdateSchedule={updateRunningWorkoutSchedule}
-        onAddSection={addRunningSection}
-        onUpdateSectionName={updateRunningSectionName}
-        onUpdateSectionType={updateRunningSectionType}
-        onUpdateSectionRestAfter={updateRunningSectionRestAfter}
-        onRemoveSection={removeRunningSection}
+        onRemove={memoizedRemoveRunningWorkout}
+        onUpdateName={memoizedUpdateRunningWorkoutName}
+        onUpdateObjective={memoizedUpdateRunningWorkoutObjective}
+        onUpdateSchedule={memoizedUpdateRunningWorkoutSchedule}
+        onAddSection={memoizedAddRunningSection}
+        onUpdateSectionName={memoizedUpdateRunningSectionName}
+        onUpdateSectionType={memoizedUpdateRunningSectionType}
+        onUpdateSectionRestAfter={memoizedUpdateRunningSectionRestAfter}
+        onRemoveSection={memoizedRemoveRunningSection}
         onAddExercise={handleAddExerciseClick}
-        onUpdateExerciseEmomReps={updateRunningExerciseEmomReps}
-        onUpdateExerciseSets={updateRunningExerciseSets}
-        onUpdateExerciseName={updateRunningExerciseName}
-        onUpdateRestTimer={updateRunningRestTimer}
-        onUpdateExerciseRestAfter={updateRunningExerciseRestAfter}
-        onRemoveExercise={removeRunningExercise}
+        onUpdateExerciseEmomReps={memoizedUpdateRunningExerciseEmomReps}
+        onUpdateExerciseSets={memoizedUpdateRunningExerciseSets}
+        onUpdateExerciseName={memoizedUpdateRunningExerciseName}
+        onUpdateRestTimer={memoizedUpdateRunningRestTimer}
+        onUpdateExerciseRestAfter={memoizedUpdateRunningExerciseRestAfter}
+        onRemoveExercise={memoizedRemoveRunningExercise}
         onAddApproachSets={handleAddApproachSets}
         onNotesClick={handleNotesClick}
       />
