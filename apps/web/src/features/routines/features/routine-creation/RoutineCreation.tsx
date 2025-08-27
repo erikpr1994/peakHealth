@@ -1,7 +1,7 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 
 import {
   TrailRunningWorkoutData,
@@ -648,6 +648,31 @@ const RoutineCreation = ({
     }
   };
 
+  // Memoize callback functions to prevent infinite re-renders
+  const handleNameChange = useCallback((name: string) => {
+    setName(name);
+  }, []);
+
+  const handleDifficultyChange = useCallback((difficulty: string) => {
+    setDifficulty(difficulty);
+  }, []);
+
+  const handleGoalChange = useCallback((goal: string) => {
+    setGoal(goal);
+  }, []);
+
+  const handleDescriptionChange = useCallback((description: string) => {
+    setDescription(description);
+  }, []);
+
+  const handleObjectivesChange = useCallback((objectives: string[]) => {
+    setObjectives(objectives);
+  }, []);
+
+  const handleDurationChange = useCallback((duration: number) => {
+    setDuration(duration);
+  }, []);
+
   return (
     <div className="w-full px-4 sm:px-6 lg:px-8 py-6">
       <RoutineHeader mode={mode} onSave={handleSaveRoutine} />
@@ -659,12 +684,12 @@ const RoutineCreation = ({
         description={description}
         objectives={objectives}
         duration={duration}
-        onNameChange={setName}
-        onDifficultyChange={setDifficulty}
-        onGoalChange={setGoal}
-        onDescriptionChange={setDescription}
-        onObjectivesChange={setObjectives}
-        onDurationChange={setDuration}
+        onNameChange={handleNameChange}
+        onDifficultyChange={handleDifficultyChange}
+        onGoalChange={handleGoalChange}
+        onDescriptionChange={handleDescriptionChange}
+        onObjectivesChange={handleObjectivesChange}
+        onDurationChange={handleDurationChange}
       />
 
       <StrengthWorkoutsSection
