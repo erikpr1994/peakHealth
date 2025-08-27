@@ -193,6 +193,7 @@ const WorkoutSection = ({
                   sectionId={section.id}
                   index={index}
                   isLastExercise={index === section.exercises.length - 1}
+                  sectionType={section.type}
                   onUpdateEmomReps={onUpdateExerciseEmomReps}
                   onUpdateSets={onUpdateExerciseSets}
                   onUpdateName={onUpdateExerciseName}

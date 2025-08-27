@@ -32,7 +32,8 @@ interface ExerciseManagementProps {
   workoutId: string;
   sectionId: string;
   index: number;
-  isLastExercise: boolean; // Add this prop to determine if it's the last exercise
+  isLastExercise: boolean;
+  sectionType: 'warmup' | 'basic' | 'cooldown' | 'emom' | 'tabata' | 'amrap'; // Add section type prop
   onUpdateEmomReps: (exerciseId: string, reps: number) => void;
   onUpdateSets: (exerciseId: string, sets: WorkoutSet[]) => void;
   onUpdateName: (exerciseId: string, name: string) => void;
@@ -57,6 +58,7 @@ const ExerciseManagement = ({
   sectionId,
   index,
   isLastExercise,
+  sectionType,
   onUpdateEmomReps,
   onUpdateSets,
   onUpdateName,
@@ -111,14 +113,48 @@ const ExerciseManagement = ({
     onUpdateSets(exercise.id, predefinedSets);
   };
 
-  // Auto-generate default linear progression sets for new exercises
+  // Auto-generate default sets for new exercises
   useEffect(() => {
     if (exercise.sets.length === 0) {
-      const defaultSets = generateSetsForProgression(
-        'linear',
-        exercise.isUnilateral,
-        exercise.unilateralMode
-      );
+      let defaultSets;
+
+      if (sectionType === 'emom') {
+        // For EMOM, create sets based on the section duration
+        // Each set represents one minute, so we need to know the section duration
+        // For now, we'll create a placeholder set that will be updated when section duration is known
+        defaultSets = [
+          {
+            id: Date.now().toString(),
+            setNumber: 1,
+            setType: 'normal' as const,
+            repType: 'fixed' as const,
+            reps: exercise.emomReps || 10,
+            weight: null,
+            rpe: null,
+            notes: 'EMOM set - 1 minute interval',
+          },
+        ];
+      } else if (sectionType === 'tabata') {
+        // For Tabata, create 8 sets (4 minutes total: 20s work, 10s rest, 8 rounds)
+        defaultSets = Array.from({ length: 8 }, (_, i) => ({
+          id: `${Date.now()}-${i}`,
+          setNumber: i + 1,
+          setType: 'normal' as const,
+          repType: 'fixed' as const,
+          reps: null, // Tabata doesn't use reps, it's time-based
+          weight: null,
+          rpe: null,
+          notes: `Tabata round ${i + 1} - 20s work, 10s rest`,
+        }));
+      } else {
+        // For other section types, use the existing logic
+        defaultSets = generateSetsForProgression(
+          'linear',
+          exercise.isUnilateral,
+          exercise.unilateralMode
+        );
+      }
+
       onUpdateSets(exercise.id, defaultSets);
     }
   }, [
@@ -126,6 +162,8 @@ const ExerciseManagement = ({
     exercise.sets.length,
     exercise.isUnilateral,
     exercise.unilateralMode,
+    exercise.emomReps,
+    sectionType,
     onUpdateSets,
   ]);
 
@@ -201,29 +239,35 @@ const ExerciseManagement = ({
 
         {/* Exercise Configuration */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <TimeInput
-            label="Rest Between Sets"
-            value={exercise.restTimer || null}
-            onChange={value => onUpdateRestTimer(exercise.id, value)}
-            placeholder="e.g., 90s or 2:30"
-          />
-
-          {/* Only show rest after exercise if NOT the last exercise */}
-          {!isLastExercise && (
+          {/* Hide rest timer for EMOM and Tabata */}
+          {sectionType !== 'emom' && sectionType !== 'tabata' && (
             <TimeInput
-              label="Rest After Exercise"
-              value={exercise.restAfter || null}
-              onChange={value => onUpdateRestAfter(exercise.id, value)}
-              placeholder="e.g., 2:30 or 3:00"
+              label="Rest Between Sets"
+              value={exercise.restTimer || null}
+              onChange={value => onUpdateRestTimer(exercise.id, value)}
+              placeholder="e.g., 90s or 2:30"
             />
           )}
 
-          {exercise.emomReps !== undefined && (
+          {/* Only show rest after exercise if NOT the last exercise and NOT EMOM/Tabata */}
+          {!isLastExercise &&
+            sectionType !== 'emom' &&
+            sectionType !== 'tabata' && (
+              <TimeInput
+                label="Rest After Exercise"
+                value={exercise.restAfter || null}
+                onChange={value => onUpdateRestAfter(exercise.id, value)}
+                placeholder="e.g., 2:30 or 3:00"
+              />
+            )}
+
+          {/* Show EMOM reps input only for EMOM sections */}
+          {sectionType === 'emom' && (
             <div>
               <Label className="block mb-2">EMOM Reps</Label>
               <Input
                 type="number"
-                value={exercise.emomReps}
+                value={exercise.emomReps || ''}
                 onChange={e =>
                   onUpdateEmomReps(exercise.id, Number(e.target.value))
                 }
@@ -233,49 +277,56 @@ const ExerciseManagement = ({
             </div>
           )}
 
-          <div>
-            <Label className="block mb-2">Progression Method</Label>
-            <Select
-              value={exercise.progressionMethod || 'linear'}
-              onValueChange={value =>
-                handleProgressionMethodChange(value as ProgressionMethod)
-              }
-            >
-              <SelectTrigger>
-                <SelectValue placeholder="Select method" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="linear">Linear</SelectItem>
-                <SelectItem value="dual">Dual</SelectItem>
-                <SelectItem value="inverse-pyramid">Inverse Pyramid</SelectItem>
-                <SelectItem value="myo-reps">Myo-Reps</SelectItem>
-                <SelectItem value="widowmaker">Widowmaker</SelectItem>
-                <SelectItem value="amrap">AMRAP</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
+          {/* Hide progression method for EMOM and Tabata */}
+          {sectionType !== 'emom' && sectionType !== 'tabata' && (
+            <div>
+              <Label className="block mb-2">Progression Method</Label>
+              <Select
+                value={exercise.progressionMethod || 'linear'}
+                onValueChange={value =>
+                  handleProgressionMethodChange(value as ProgressionMethod)
+                }
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Select method" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="linear">Linear</SelectItem>
+                  <SelectItem value="dual">Dual</SelectItem>
+                  <SelectItem value="inverse-pyramid">
+                    Inverse Pyramid
+                  </SelectItem>
+                  <SelectItem value="myo-reps">Myo-Reps</SelectItem>
+                  <SelectItem value="widowmaker">Widowmaker</SelectItem>
+                  <SelectItem value="amrap">AMRAP</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          )}
         </div>
 
-        {/* Progression Method Info */}
-        {exercise.progressionMethod && (
-          <div className="bg-gray-50 p-3 rounded-lg">
-            <div className="flex items-center justify-between">
-              <div>
-                <Badge
-                  className={getProgressionMethodColor(
-                    exercise.progressionMethod
-                  )}
-                >
-                  {getProgressionMethodLabel(exercise.progressionMethod)}
-                </Badge>
-                <p className="text-sm text-gray-600 mt-1">
-                  {getProgressionMethodLabel(exercise.progressionMethod)}{' '}
-                  progression method
-                </p>
+        {/* Progression Method Info - Hide for EMOM and Tabata */}
+        {exercise.progressionMethod &&
+          sectionType !== 'emom' &&
+          sectionType !== 'tabata' && (
+            <div className="bg-gray-50 p-3 rounded-lg">
+              <div className="flex items-center justify-between">
+                <div>
+                  <Badge
+                    className={getProgressionMethodColor(
+                      exercise.progressionMethod
+                    )}
+                  >
+                    {getProgressionMethodLabel(exercise.progressionMethod)}
+                  </Badge>
+                  <p className="text-sm text-gray-600 mt-1">
+                    {getProgressionMethodLabel(exercise.progressionMethod)}{' '}
+                    progression method
+                  </p>
+                </div>
               </div>
             </div>
-          </div>
-        )}
+          )}
 
         {/* Sets Management */}
         <div>
@@ -293,6 +344,10 @@ const ExerciseManagement = ({
             exerciseName={exercise.name}
             isUnilateral={exercise.isUnilateral}
             unilateralMode={exercise.unilateralMode}
+            hideApproachSets={
+              sectionType === 'emom' || sectionType === 'tabata'
+            }
+            sectionType={sectionType}
           />
         </div>
       </div>

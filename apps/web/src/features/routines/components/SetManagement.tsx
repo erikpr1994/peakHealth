@@ -56,6 +56,8 @@ interface SetManagementProps {
   // Unilateral exercise support
   isUnilateral?: boolean;
   unilateralMode?: 'alternating' | 'sequential' | 'simultaneous';
+  hideApproachSets?: boolean;
+  sectionType?: 'warmup' | 'basic' | 'cooldown' | 'emom' | 'tabata' | 'amrap';
 }
 
 // Configuration for each progression method
@@ -142,6 +144,8 @@ const SetManagement = ({
   exerciseName,
   isUnilateral = false,
   unilateralMode,
+  hideApproachSets,
+  sectionType,
 }: SetManagementProps): React.ReactElement => {
   const [openPopoverId, setOpenPopoverId] = useState<string | null>(null);
   const [initialized, setInitialized] = useState(false);
@@ -345,20 +349,25 @@ const SetManagement = ({
           )}
         </div>
         <div className="flex items-center gap-2">
-          <Tooltip content={getAddApproachSetsHoverText()}>
-            <Button
-              onClick={onAddApproachSets}
-              size="sm"
-              variant={hasApproachSets ? 'secondary' : 'outline'}
-              disabled={isAddApproachSetsDisabled}
-              className={
-                isAddApproachSetsDisabled ? 'opacity-50 cursor-not-allowed' : ''
-              }
-            >
-              <Target className="w-4 h-4 mr-1" />
-              {hasApproachSets ? 'Approach Sets Added' : 'Add Approach Sets'}
-            </Button>
-          </Tooltip>
+          {/* Hide approach sets button for EMOM and Tabata */}
+          {!hideApproachSets && (
+            <Tooltip content={getAddApproachSetsHoverText()}>
+              <Button
+                onClick={onAddApproachSets}
+                size="sm"
+                variant={hasApproachSets ? 'secondary' : 'outline'}
+                disabled={isAddApproachSetsDisabled}
+                className={
+                  isAddApproachSetsDisabled
+                    ? 'opacity-50 cursor-not-allowed'
+                    : ''
+                }
+              >
+                <Target className="w-4 h-4 mr-1" />
+                {hasApproachSets ? 'Approach Sets Added' : 'Add Approach Sets'}
+              </Button>
+            </Tooltip>
+          )}
           <Tooltip content="Add a new set to the workout">
             <Button onClick={addSet} size="sm" variant="outline">
               <Plus className="w-4 h-4 mr-1" />
@@ -442,11 +451,11 @@ const SetManagement = ({
                 onValueChange={(value: RepType) =>
                   updateSet(set.id, { repType: value })
                 }
-                disabled={set.setType === 'failure'}
+                disabled={set.setType === 'failure' || sectionType === 'tabata'}
               >
                 <SelectTrigger
                   className={`w-full h-8 ${
-                    set.setType === 'failure'
+                    set.setType === 'failure' || sectionType === 'tabata'
                       ? 'opacity-50 cursor-not-allowed'
                       : ''
                   }`}
@@ -465,6 +474,10 @@ const SetManagement = ({
               {set.setType === 'failure' ? (
                 <div className="flex items-center justify-center h-8 text-xs text-red-600 font-medium bg-red-50 border border-red-200 rounded">
                   To failure
+                </div>
+              ) : sectionType === 'tabata' ? (
+                <div className="flex items-center justify-center h-8 text-xs text-gray-600 font-medium bg-gray-50 border border-gray-200 rounded">
+                  Time-based
                 </div>
               ) : set.repType === 'range' ? (
                 <div className="flex items-center gap-1">

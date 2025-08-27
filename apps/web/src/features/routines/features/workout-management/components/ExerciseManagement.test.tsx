@@ -14,7 +14,7 @@ vi.mock('@/features/routines/components/SetManagement', () => ({
   }: {
     sets: WorkoutSet[];
     onSetsChange: (sets: WorkoutSet[]) => void;
-  }) => (
+  }): React.JSX.Element => (
     <div data-testid="set-management">
       <button
         onClick={() =>
@@ -41,16 +41,19 @@ vi.mock('@/features/routines/components/SetManagement', () => ({
 }));
 
 describe('ExerciseManagement', () => {
-  it('renders exercise management component', () => {
+  it('renders exercise management component', (): void => {
     const mockExercise: Exercise = {
       id: '1',
       name: 'Test Exercise',
       sets: [],
-      restTimer: '',
-      restAfter: '',
-      notes: '',
-      emomReps: 0,
+      emomReps: 10,
+      restTimer: '90s',
+      restAfter: '2:00',
       progressionMethod: 'linear',
+      equipment: ['barbell'],
+      isUnilateral: false,
+      unilateralMode: 'alternating',
+      notes: '',
     };
 
     const mockOnUpdateSets = vi.fn();
@@ -63,24 +66,29 @@ describe('ExerciseManagement', () => {
     const mockOnNotesClick = vi.fn();
     const mockOnUpdateEmomReps = vi.fn();
 
-    render(
-      <ExerciseManagement
-        exercise={mockExercise}
-        workoutId="workout-1"
-        sectionId="section-1"
-        index={0}
-        isLastExercise={true}
-        onUpdateSets={mockOnUpdateSets}
-        onUpdateName={mockOnUpdateName}
-        onUpdateRestTimer={mockOnUpdateRestTimer}
-        onUpdateRestAfter={mockOnUpdateRestAfter}
-        onRemove={mockOnRemove}
-        onAddApproachSets={mockOnAddApproachSets}
-        onUpdateProgressionMethod={mockOnUpdateProgressionMethod}
-        onNotesClick={mockOnNotesClick}
-        onUpdateEmomReps={mockOnUpdateEmomReps}
-      />
-    );
+    const renderComponent = (): ReturnType<typeof render> => {
+      return render(
+        <ExerciseManagement
+          exercise={mockExercise}
+          workoutId="workout-1"
+          sectionId="section-1"
+          index={0}
+          isLastExercise={true}
+          sectionType="basic"
+          onUpdateEmomReps={mockOnUpdateEmomReps}
+          onUpdateSets={mockOnUpdateSets}
+          onUpdateName={mockOnUpdateName}
+          onUpdateRestTimer={mockOnUpdateRestTimer}
+          onUpdateRestAfter={mockOnUpdateRestAfter}
+          onRemove={mockOnRemove}
+          onAddApproachSets={mockOnAddApproachSets}
+          onUpdateProgressionMethod={mockOnUpdateProgressionMethod}
+          onNotesClick={mockOnNotesClick}
+        />
+      );
+    };
+
+    renderComponent();
 
     expect(screen.getByText('Test Exercise')).toBeInTheDocument();
   });
