@@ -19,6 +19,7 @@
     "prepare": "husky",
     "supabase:start": "supabase start",
     "setup-dev-db": "node scripts/setup-dev-db.mjs",
+    "setup-routines-db": "cd scripts/db-setup && npm install && node setup-db.js",
     "cleanup": "node scripts/cleanup-dev-ports.mjs",
     "validate": "pnpm lint && pnpm type-check && pnpm test:unit",
     "turbo-ignore": "node -e \"const env = process.env.VERCEL_ENV; const branch = process.env.VERCEL_GIT_COMMIT_REF; const isProduction = env === 'production' || branch === 'main'; if (isProduction) { process.exit(0); } const { execSync } = require('child_process'); try { execSync('git diff --quiet HEAD~1', { stdio: 'ignore' }); process.exit(1); } catch { process.exit(0); }\""
@@ -64,6 +65,7 @@
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.56.0",
+    "mongodb": "^6.3.0",
     "next": "^15.5.2"
   },
   "packageManager": "pnpm@10.14.0",
@@ -80,3 +82,4 @@
     ]
   }
 }
+
