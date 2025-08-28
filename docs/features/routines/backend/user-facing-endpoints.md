@@ -20,7 +20,7 @@ Fetches all routines associated with the currently authenticated user. This incl
 
 Creates a new `UserCreatedRoutine`.
 
-- **Request Body**: A `Routine` object (without `id`).
+- **Request Body**: A `Routine` object (without `id`). The `exercises` within the sections can include a `supersetGroupId`.
 - **Response (201 Created)**: The newly created `Routine` document.
 
 ### `GET /api/routines/:id`
@@ -33,7 +33,7 @@ Fetches a single, fully populated routine document by its ID.
 
 Updates a `UserCreatedRoutine` that the user owns.
 
-- **Request Body**: A partial `Routine` object.
+- **Request Body**: A partial `Routine` object. The `exercises` within the sections can include a `supersetGroupId`.
 - **Response (200 OK)**: The updated `Routine` document.
 
 ### `DELETE /api/routines/:id`

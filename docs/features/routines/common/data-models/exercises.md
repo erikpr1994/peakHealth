@@ -7,7 +7,11 @@ These models represent exercises within workout sections, referencing the Supaba
 The `Exercise` uses a union type to support different exercise types:
 
 ```typescript
-type Exercise = StrengthExercise | BodyweightExercise | MobilityExercise | TabataExercise;
+type Exercise =
+  | StrengthExercise
+  | BodyweightExercise
+  | MobilityExercise
+  | TabataExercise;
 ```
 
 ## Base Exercise
@@ -28,8 +32,8 @@ interface BaseExercise {
 
 **Note on Exercise and Variant IDs:**
 
--   `exerciseId`: This links to the core exercise in the Supabase library (e.g., "Squat"), acting as a grouping mechanism.
--   `exerciseVariantId`: This is a **required** field that links to the specific variation of the exercise being performed (e.g., "Barbell High-Bar Squat"). A user always interacts with a variant.
+- `exerciseId`: This links to the core exercise in the Supabase library (e.g., "Squat"), acting as a grouping mechanism.
+- `exerciseVariantId`: This is a **required** field that links to the specific variation of the exercise being performed (e.g., "Barbell High-Bar Squat"). A user always interacts with a variant.
 
 ## Exercise Type Interfaces
 
@@ -39,9 +43,9 @@ interface BaseExercise {
 interface StrengthExercise extends BaseExercise {
   type: 'strength';
   progressionMethod?: ProgressionMethod;
-  hasApproachSets: boolean;
-  sets: StrengthSet[];
+  sets: StrengthSet[]; // This array holds ALL sets. The distinction between approach/working is made by the `type` property on the StrengthSet object itself.
   unilateralMode?: UnilateralMode; // Defines how a unilateral exercise is performed
+  supersetGroupId?: string; // An optional ID. Exercises within the same section that share the same `supersetGroupId` are performed as a superset.
 }
 ```
 
@@ -69,7 +73,8 @@ interface MobilityExercise extends BaseExercise {
 ### Tabata Exercise
 
 ```typescript
-interface TabataExercise extends Omit<BaseExercise, 'restTimer' | 'restAfter' | 'notes'> {
+interface TabataExercise
+  extends Omit<BaseExercise, 'restTimer' | 'restAfter' | 'notes'> {
   type: 'tabata';
   unilateralMode?: UnilateralMode; // Defines how a unilateral exercise is performed
   // Tabata exercises don't have sets, rest timers, or individual notes.
@@ -145,7 +150,19 @@ interface MobilitySet extends BaseSet {
 ```typescript
 type ObjectId = string;
 type DurationString = string;
-type ProgressionMethod = 'linear' | 'percentage' | 'rpe' | 'time-under-tension' | 'dual-linear' | 'widowmaker' | 'myo-reps' | 'amrap' | 'pyramid' | 'wave-loading' | 'cluster-sets' | 'rest-pause';
+type ProgressionMethod =
+  | 'linear'
+  | 'percentage'
+  | 'rpe'
+  | 'time-under-tension'
+  | 'dual-linear'
+  | 'widowmaker'
+  | 'myo-reps'
+  | 'amrap'
+  | 'pyramid'
+  | 'wave-loading'
+  | 'cluster-sets'
+  | 'rest-pause';
 type SetType = 'working' | 'warmup' | 'drop' | 'failure';
 type RepType = 'fixed' | 'range' | 'time' | 'max';
 type UnilateralMode = 'alternating' | 'sequential' | 'simultaneous';
