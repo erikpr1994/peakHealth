@@ -1,0 +1,24 @@
+---
+description: When creating and managing Linear
+alwaysApply: false
+---
+
+Before creating a Linear ticket or a set of tickets, you must first fetch all the latest data from Linear. This includes teams, cycles, issue statuses, issue labels, projects, project labels, and users.
+
+Once you have fetched all the data, you must update the `linear_documentation.md` file.
+
+Only after this documentation file is up-to-date should you proceed with creating the ticket or tickets.
+
+To create a new ticket, ask for the following information. All the necessary information for these fields can be found in the `linear_documentation.md` file:
+
+- **Title**: A clear and concise title for the issue.
+- **Team**: The team responsible for the issue (e.g., Frontend, Backend, Product).
+- **Description**: A detailed description of the issue, including steps to reproduce for bugs, or requirements for features.
+- **Assignee**: The person responsible for the ticket.
+- **Cycle**: The cycle to which the ticket should be assigned.
+- **Labels**: Any relevant labels (e.g., Bug, Feature, Improvement).
+- **Project**: The project this issue belongs to.
+
+For a **sub-ticket**, you must also provide the **Parent ID** of the parent issue.
+
+Once you have gathered all the necessary information, use the `create_issue` tool to create the ticket. Refer to `linear_documentation.md` for available IDs and names for teams, cycles, labels, projects, and users.
