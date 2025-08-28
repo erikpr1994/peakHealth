@@ -1,6 +1,6 @@
 'use client';
 
-import Routines from '@/features/routines/features/routine-list/Routines';
+import Routines from '@/features/routines-old/features/routine-list/Routines';
 
 const RoutinesPage = (): React.ReactElement => {
   return <Routines />;
