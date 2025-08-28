@@ -1,94 +1,35 @@
-# Routines Feature - Documentation
+# Routines Feature Documentation
 
-This folder contains documentation specifically for the Routines feature, which provides comprehensive workout management and routine creation capabilities.
+This folder contains all documentation for the Routines feature, which provides comprehensive workout management and routine creation capabilities for all PeakHealth platforms.
 
 ## Documentation Structure
 
-### 📋 [Feature Overview](./feature-overview.md)
+The documentation is organized into four main areas:
 
-Complete feature explanation, system architecture, and technical specifications for the Routines feature.
+### 1. 🧠 [Common Concepts](./common/)
 
-### 🎯 [MVP Scope](./mvp-scope.md)
+This is the best place to start. It explains the core business logic and data models that are shared between the frontend and backend.
 
-Minimum Viable Product definition, features, development phases, and success criteria.
+- **Concepts**: The building blocks of a workout plan (Routines, Workouts, Sections, etc.).
+- **Data Models**: The TypeScript interfaces that define our data structures.
 
-### 🚀 [Implementation Plan](./implementation-plan.md)
+### 2. 🖥️ [Frontend Documentation](./frontend/)
 
-Detailed 12-week implementation plan with specific tasks, timelines, and success criteria.
+Contains all documentation related to the frontend implementation of the feature.
 
-### ❓ [Questions & Feedback](./questions.md)
+- **[Technical Specification](./frontend/technical-spec.md)**: The architectural blueprint for the frontend.
+- **[Design Decisions](./frontend/design-decisions.md)**: The rationale behind key UX and architectural choices.
+- **[User App](./frontend/user-app/)**: Detailed documentation for the user-facing application, including page and component breakdowns.
 
-All questions that need answers to finalize the feature design. Questions are marked as pending, answered, or resolved.
+### 3. ⚙️ [Backend Documentation](./backend/)
 
-### ✅ [TODO & Tasks](../../todo.md)
+Contains all documentation related to the backend API and database.
 
-Project-wide actionable tasks organized by category. Tasks are general and can be built when dependencies are ready.
+- **[API Conventions](./backend/api-conventions.md)**: Standards for errors, pagination, and rate limiting.
+- **[Database Schema](./backend/database-schema/)**: The concrete MongoDB collection schemas.
+- **[Endpoints](./backend/endpoints.md)**: A complete reference for all API endpoints.
+- **[Design Decisions](./backend/design-decisions.md)**: The rationale behind key data architecture choices.
 
-### 🎯 [User Personas](./user-personas.md)
+### 4. ✅ [User Happy Path](./user-happy-path.md)
 
-How this feature serves each app-level persona. For comprehensive persona definitions, see [App-Level User Personas](../../app-overview/user-personas.md).
-
-### 🔧 [Technical Design](./technical-design.md)
-
-Technical architecture, data models, integration points, and implementation considerations for this feature.
-
-### 📊 [Business Strategy](./business-strategy.md)
-
-Feature-specific business strategy, competitive positioning, and success metrics.
-
-## Feature Overview
-
-The Routines feature enables users to create, manage, and track various types of workout routines. It supports both strength training and cardio/running workouts with advanced features like trail running planning.
-
-### Core Capabilities (Implemented)
-
-- **Routine Creation**: Create and edit workout routines with metadata
-- **Workout Management**: Add, remove, and reorder workouts and sections
-- **Exercise Management**: Manage exercises within sections with sets and progression
-- **Advanced Progression Methods**: Linear, dual, inverse pyramid, myo-reps, widowmaker, AMRAP
-- **Trail Running**: Specialized trail running workout creation with intervals
-- **Progress Tracking**: Visual indicators of routine progress and completion
-- **Basic Templates**: Curated routine templates for common goals (UI ready)
-
-### Future Enhancements (Recommended)
-
-Based on industry trends, the following capabilities are recommended for future development:
-
-- **Progressive Overload Tracking**: Track weight, reps, and sets progression over time
-- **AI Recommendations**: Personalized routine and exercise suggestions
-- **Wearable Integration**: Connect with fitness devices for real-time data
-- **Performance Analytics**: Insights and trends from workout history
-- **Adaptive Programming**: Smart adjustments based on performance and recovery
-
-### Target Users
-
-This feature primarily serves:
-
-- **Strength Training Enthusiasts**: From beginners to advanced lifters
-- **Cardio and Running Enthusiasts**: Various running and cardio workouts
-- **Trail Runners**: Advanced trail running with interval planning
-- **General Fitness Users**: Basic routine creation and management
-- **Health-Conscious Users**: Balanced workout routines
-
-## Workflow
-
-1. **Questions** are added to `questions.md` when clarification is needed
-2. **Answers** are recorded in `questions.md` and marked as resolved
-3. **Feature definition** is updated in `feature-overview.md` based on answers
-4. **Tasks** are added to `todo.md` as actionable items
-5. **Progress** is tracked by checking off completed tasks
-
-## Current Status
-
-- **Phase**: MVP Development Ready
-- **Status**: Core functionality implemented, needs data persistence and integration
-- **Next Step**: Begin MVP development (Phase 1: Core Foundation)
-- **Current Priority**: API integration, database schema, and exercise library integration
-- **Future Roadmap**: Progressive overload tracking, wearable integration, and AI recommendations (based on industry trends)
-
-## Quick Links
-
-- [View All Questions](./questions.md)
-- [View All Tasks](../../todo.md)
-- [Feature Overview](./feature-overview.md)
-- [App-Level User Personas](../../app-overview/user-personas.md)
+A step-by-step description of the primary user journey, from discovery to execution. This serves as a guide for E2E and manual testing.
