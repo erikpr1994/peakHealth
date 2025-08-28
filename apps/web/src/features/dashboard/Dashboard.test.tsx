@@ -42,7 +42,7 @@ vi.mock('next/navigation', () => ({
 }));
 
 // Mock the routines hook
-vi.mock('@/features/routines/hooks/useRoutines', () => ({
+vi.mock('@/features/routines-old/hooks/useRoutines', () => ({
   useRoutines: (): {
     routines: unknown[];
     isLoading: boolean;
