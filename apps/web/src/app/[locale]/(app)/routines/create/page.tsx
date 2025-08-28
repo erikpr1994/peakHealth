@@ -1,6 +1,6 @@
 'use client';
 
-import RoutineCreation from '@/features/routines/features/routine-creation/RoutineCreation';
+import RoutineCreation from '@/features/routines-old/features/routine-creation/RoutineCreation';
 
 const CreateRoutinePage = (): React.ReactElement => {
   return <RoutineCreation />;
