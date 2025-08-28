@@ -47,7 +47,7 @@ This service is responsible for:
 
 ### Environment Variables
 
-- `PORT`: Server port (default: 3002)
+- `PORT`: Server port (default: 4000)
 - `MONGODB_URI`: MongoDB connection string
 - `SUPABASE_JWT_SECRET`: JWT secret for token verification
 - `ALLOWED_ORIGINS`: Comma-separated list of allowed CORS origins

@@ -10,7 +10,7 @@ import { connectToDatabase } from './config/db.js';
 dotenv.config();
 
 const app: express.Application = express();
-const PORT = process.env.PORT || 3002; // Different port for routines service
+const PORT = process.env.PORT || 4000; // Backend service port
 
 // Security middleware
 app.use(helmet());
