@@ -17,6 +17,7 @@
   "dependencies": {
     "@peakhealth/auth-utils": "workspace:*",
     "@peakhealth/routines-types": "workspace:*",
+    "@peakhealth/routines-ui": "workspace:*",
     "@peakhealth/ui": "workspace:*",
     "@radix-ui/react-alert-dialog": "^1.1.15",
     "@radix-ui/react-avatar": "^1.1.10",
