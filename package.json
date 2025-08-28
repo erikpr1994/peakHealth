@@ -1,20 +1,85 @@
 {
-  "name": "peak-health-db-setup",
-  "version": "1.0.0",
-  "description": "Database setup for PeakHealth Routines feature",
-  "main": "setup-db.js",
+  "$schema": "https://json.schemastore.org/package.json",
+  "name": "peak-health",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
   "scripts": {
+    "dev": "node scripts/cleanup-dev-ports.mjs && turbo dev",
+    "build": "turbo build",
+    "lint": "ESLINT_FLAGS=v10_config_lookup_from_file turbo lint",
+    "lint:fix": "ESLINT_FLAGS=v10_config_lookup_from_file eslint . --fix",
+    "lint:yaml": "yamllint .github/workflows/ *.yml *.yaml",
+    "type-check": "turbo type-check",
+    "type-check:watch": "turbo type-check -- --watch",
+    "test:unit": "turbo test",
+    "test:coverage": "turbo test:coverage",
+    "test:e2e": "turbo run test:e2e --filter @peakhealth/e2e",
+    "test:e2e:update-snapshots": "turbo run test:update-snapshots --filter @peakhealth/e2e",
+    "prepare": "husky",
+    "supabase:start": "supabase start",
+    "setup-dev-db": "node scripts/setup-dev-db.mjs",
     "setup-routines-db": "cd scripts/db-setup && npm install && node setup-db.js",
-    "lint": "cd scripts/db-setup && npx eslint --config .eslintrc.js .",
-    "type-check": "echo 'No TypeScript files to check'",
-    "test": "echo 'No tests to run'"
-  },
-  "dependencies": {
-    "mongodb": "^6.3.0"
+    "cleanup": "node scripts/cleanup-dev-ports.mjs",
+    "validate": "pnpm lint && pnpm type-check && pnpm test:unit",
+    "turbo-ignore": "node -e \"const env = process.env.VERCEL_ENV; const branch = process.env.VERCEL_GIT_COMMIT_REF; const isProduction = env === 'production' || branch === 'main'; if (isProduction) { process.exit(0); } const { execSync } = require('child_process'); try { execSync('git diff --quiet HEAD~1', { stdio: 'ignore' }); process.exit(1); } catch { process.exit(0); }\""
   },
   "devDependencies": {
+    "@eslint/js": "^9.34.0",
+    "@next/eslint-plugin-next": "^15.5.2",
+    "@typescript-eslint/eslint-plugin": "^8.40.0",
+    "@typescript-eslint/parser": "^8.40.0",
+    "@vercel/microfrontends": "^2.0.0",
+    "dotenv": "^17.2.1",
+    "es-file-traverse": "^2.0.0",
     "eslint": "^9.34.0",
-    "turbo": "^2.5.6"
+    "eslint-config-next": "15.5.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-code-complete": "^1.1.0",
+    "eslint-plugin-compat": "^6.0.2",
+    "eslint-plugin-const-case": "^1.2.2",
+    "eslint-plugin-css-modules": "^2.12.0",
+    "eslint-plugin-depend": "^1.2.0",
+    "eslint-plugin-diff": "^2.0.3",
+    "eslint-plugin-github": "^6.0.0",
+    "eslint-plugin-import-x": "^4.16.1",
+    "eslint-plugin-jsx-a11y": "^6.10.2",
+    "eslint-plugin-no-secrets": "^2.2.1",
+    "eslint-plugin-no-unsanitized": "^4.1.2",
+    "eslint-plugin-perfectionist": "^4.15.0",
+    "eslint-plugin-pii": "^1.0.2",
+    "eslint-plugin-playwright": "^2.2.2",
+    "eslint-plugin-prettier": "^5.5.4",
+    "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "eslint-plugin-react-refresh": "^0.4.20",
+    "eslint-plugin-rule-adoption": "^1.1.1",
+    "eslint-plugin-unicorn": "^60.0.0",
+    "eslint-plugin-yml": "^1.18.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.1.5",
+    "prettier": "^3.6.2",
+    "turbo": "^2.5.6",
+    "typescript": "^5.9.2",
+    "yaml-eslint-parser": "^1.3.0"
   },
-  "packageManager": "pnpm@10.14.0+sha512.ad27a79641b49c3e481a16a805baa71817a04bbe06a38d17e60e2eaee83f6a146c6a688125f5792e48dd5ba30e7da52a5cda4c3992b9ccf333f9ce223af84748"
+  "dependencies": {
+    "@supabase/supabase-js": "^2.56.0",
+    "mongodb": "^6.3.0",
+    "next": "^15.5.2"
+  },
+  "packageManager": "pnpm@10.14.0",
+  "engines": {
+    "node": "^20.11.0 || >=22.0.0"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{json,css,md}": [
+      "prettier --write"
+    ]
+  }
 }
+
