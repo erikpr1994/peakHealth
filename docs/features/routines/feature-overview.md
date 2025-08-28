@@ -2,502 +2,135 @@
 
 ## Overview
 
-The Routines feature is a comprehensive workout management system that allows users to create, manage, and track various types of workout routines. It supports both strength training and cardio/running workouts with advanced features like trail running planning. This document outlines both the current implementation and recommended future enhancements based on industry trends.
+The Routines feature is a comprehensive workout management system that allows users to create, manage, and track various types of workout routines. It supports both strength training and cardio/running workouts with advanced features like trail running planning. This document outlines the designed features for the Minimum Viable Product (MVP).
 
-## 🏗️ Architecture ✅ **RESOLVED**
+## 🏗️ Architecture ✅ **DESIGNED**
 
-**Decision**: **Maintain current progressive disclosure design with tiered feature access**
+**Decision**: **The architecture is based on a decoupled frontend and backend, with a clearly defined data model and API contract.** The backend uses MongoDB on Railway, with Supabase for authentication. The frontend is built with Next.js and follows a domain-driven structure with a dedicated services layer.
 
-### Feature Structure
+### Feature Structure (Frontend)
+
+The frontend follows a domain-driven structure for clear separation of concerns, as defined in the technical specification.
 
 ```
 features/routines/
-├── features/                    # Sub-features
-│   ├── routine-creation/       # Routine creation and editing (tiered by subscription)
-│   ├── routine-detail/         # Routine viewing and management
-│   ├── routine-list/           # Routine listing and browsing
-│   ├── trail-running/          # Specialized trail running workouts
-│   └── workout-management/     # Workout section and exercise management
-├── hooks/                      # Custom React hooks
-├── types/                      # TypeScript type definitions
-├── utils/                      # Utility functions
-└── index.ts                    # Main exports
+├── api/                # API client layer for routines (e.g., SWR hooks)
+├── components/         # SHARED components used across the routines feature
+├── contexts/           # Feature-scoped context providers (e.g., RoutineBuilder)
+├── domain/             # Core, pure business logic (no UI, no API calls)
+├── pages/              # Page-level components that orchestrate features
+├── services/           # Higher-level services that orchestrate domain logic and API calls
+├── types/              # SHARED type definitions for the feature
+└── index.ts            # Public API of the routines feature
 ```
 
-### Core Components
-
-#### 1. **Routine Creation** (`routine-creation/`) ✅ **IMPLEMENTED**
-
-- **RoutineCreation**: Main component for creating/editing routines
-- **RoutineHeader**: Header with save/cancel actions
-- **RoutineDetailsForm**: Basic routine metadata form
-- **StrengthWorkoutsSection**: Strength workout management
-- **RunningWorkoutsSection**: Running workout management
-- **RoutineModals**: Exercise selection and notes modals
-
-#### 2. **Routine Detail** (`routine-detail/`) ✅ **IMPLEMENTED**
-
-- **RoutineDetail**: Main routine viewing component
-- **RoutineDetailHeader**: Header with actions (favorite, share, etc.)
-- **RoutineOverviewCards**: Key metrics display
-- **RoutineProgress**: Progress tracking visualization
-- **WeeklySchedule**: Weekly schedule display
-- **WorkoutDaysList**: List of workout days
-- **ExerciseList**: Exercise details display
+### Core Pages (User App)
 
-#### 3. **Routine List** (`routine-list/`) ✅ **IMPLEMENTED**
+- **Routines Dashboard** (`/routines`): The main landing page, showing the user's active routine, their other routines, and recommended templates.
+- **Routine Detail** (`/routines/:id`): A detailed, tabbed view of a single routine, including an overview, weekly schedule, and full workout breakdown.
+- **Explore Templates** (`/routines/explore`): A gallery for browsing and filtering all available public routine templates.
+- **Create/Edit Routine** (`/routines/new`, `/routines/:id/edit`): The main routine builder interface for creating and modifying user-owned routines.
+- **Workout Player** (`/workout/:sessionId`): The in-workout experience for performing and logging a scheduled workout session.
 
-- **Routines**: Main routines listing page
-- **RoutinesList**: List management with search/filter
-- **RoutineCard**: Individual routine card display
-- **ActiveRoutineCard**: Special display for active routine
-- **WorkoutCard**: Workout management within routines
+## 📊 Data Models ✅ **DESIGNED**
 
-#### 4. **Trail Running** (`trail-running/`) ✅ **IMPLEMENTED**
+The data model is built on MongoDB and separates **The Plan** (the structure of routines) from **The Action** (the execution of workouts).
 
-- **TrailRunningWorkout**: Specialized trail running workout creator
-- **IntensityTargetConfiguration**: Intensity target setup
-- **RepeatIntervalsForm**: Interval repetition management
-- **SectionForm**: Trail running section configuration
-- **SectionsList**: Trail running sections display
+### Core Concepts
 
-#### 5. **Workout Management** (`workout-management/`) ✅ **IMPLEMENTED**
+- **Template vs. User-Created**: Routines are either versioned, read-only `TemplateRoutine`s (from trainers/company) or mutable `UserCreatedRoutine`s.
+- **Versioning & Immutability**: Templates are versioned to allow updates without affecting assigned users. A user is always assigned to a specific, immutable version.
+- **Snapshots for History**: When a workout is scheduled, an immutable `workoutSnapshot` is created in the `WorkoutSession`. This guarantees the user's historical record is never altered by future changes to a template.
 
-- **WorkoutHeader**: Workout header with actions
-- **WorkoutDetails**: Workout metadata management
-- **WorkoutSection**: Section management component
-- **ExerciseManagement**: Exercise-level management
+### MongoDB Collections
 
-### Recommended Future Components
+- **`sections`**: Reusable, version-controlled section templates.
+- **`workouts`**: Reusable, version-controlled workout templates.
+- **`routines`**: Stores all `TemplateRoutine` and `UserCreatedRoutine` documents.
+- **`routine_assignments`**: Links a user to a specific version of a `TemplateRoutine`.
+- **`workout_sessions`**: Contains every scheduled workout, including the immutable `workoutSnapshot` and the user's `performanceLog`.
 
-The following components are recommended for future development based on industry trends:
+_Note: The master Exercise Library and User data are managed in Supabase._
 
-#### 6. **Progressive Overload Tracking** 🔄 **RECOMMENDED**
+## 🔧 Hooks & State Management ✅ **DESIGNED**
 
-- **ProgressiveOverloadTracker**: Visual tracking of strength progression over time
-- **PerformanceInsights**: Analysis of routine effectiveness and suggestions
-- **ProgressiveOverloadControls**: Tools for managing weight, reps, and sets progression
-- **RestTimerIntegration**: Smart rest timer with adaptive recommendations
+The frontend employs a sophisticated state management strategy to handle the complexity of the feature while keeping components clean.
 
-#### 7. **AI & Personalization** 🔄 **RECOMMENDED**
+### **Page-Level Hooks**
 
-- **AIRecommendationPanel**: AI-powered routine suggestions based on user goals and history
-- **TemplateGallery**: Curated and AI-recommended templates for quick routine creation
-- **SmartFilters**: AI-powered filtering based on user preferences and history
-- **RecommendedRoutines**: Personalized routine recommendations section
-- **AICoach**: Virtual coaching with real-time feedback during workouts
-- **AdaptiveProgression**: Smart adjustment of workout difficulty based on performance
-- **PersonalizedGoals**: Goal setting with AI-assisted target recommendations
-
-#### 8. **Wearable Integration** 🔄 **RECOMMENDED**
-
-- **DeviceConnector**: Interface for connecting various wearable devices
-- **MetricsDisplay**: Real-time display of heart rate, calories, and other metrics
-- **WorkoutSync**: Synchronization of completed workouts with wearable data
-- **BiometricFeedback**: Integration of biometric data for workout optimization
-- **RecoveryAnalysis**: Recovery tracking based on sleep and HRV data
-- **TerrainAnalysis**: Elevation and terrain difficulty visualization for trail running
-- **WearableIntegration**: Heart rate zone and GPS tracking integration
-- **IntervalOptimizer**: AI-powered interval suggestions based on fitness level
-
-## 📊 Data Models
-
-### Core Types ✅ **IMPLEMENTED**
-
-#### **Routine**
-
-```typescript
-interface Routine {
-  id: string;
-  name: string;
-  description: string;
-  daysPerWeek: number;
-  difficulty: 'Beginner' | 'Intermediate' | 'Advanced';
-  goal: 'Strength' | 'Hypertrophy' | 'Endurance' | 'Weight Loss';
-  isActive: boolean;
-  isFavorite: boolean;
-  schedule: boolean[]; // [Mon, Tue, Wed, Thu, Fri, Sat, Sun]
-  progress: { current: number; total: number };
-  lastUsed?: string;
-  objectives?: string[];
-  totalWorkouts?: number;
-  completedWorkouts?: number;
-  estimatedDuration?: string;
-}
-```
-
-#### **Workout Types**
-
-- **StrengthWorkout**: Traditional strength training workouts
-- **RunningWorkout**: Cardio/running workouts
-- **TrailRunningWorkoutData**: Specialized trail running data
-
-#### **Exercise & Section Structure**
-
-- **Exercise**: Individual exercises with sets, reps, weights
-- **WorkoutSection**: Sections (warmup, basic, cooldown, emom, tabata)
-- **WorkoutSet**: Individual sets with reps, weight, duration, rest
-
-### Advanced Features ✅ **IMPLEMENTED**
-
-#### **Progression Methods**
-
-- Linear, Dual, Inverse Pyramid, Myo-Reps, Widowmaker, AMRAP
-
-#### **Trail Running Features**
-
-- **Interval Types**: Run, Uphill, Downhill, Sprint, Recovery, Rest, Walk
-- **Intensity Targets**: Heart rate, Speed, Power, Cadence, RPE
-- **Section Types**: Warm-up, Cool-down, Run, Walk, Uphill-repeat, etc.
-
-### Recommended Data Model Extensions 🔄 **RECOMMENDED**
-
-The following data model extensions are recommended for future development:
-
-#### **Enhanced Routine Model**
-
-```typescript
-interface EnhancedRoutine {
-  // Current fields plus:
-  createdBy: 'user' | 'ai' | 'template';
-  tags?: string[];
-  aiRecommended?: boolean;
-  adaptiveProgression?: boolean;
-  recoveryTracking?: boolean;
-}
-```
-
-#### **Additional Workout Types**
-
-- **IntervalWorkout**: High-intensity interval training workouts
-- **CircuitWorkout**: Circuit-based training with minimal rest
-- **SupersetWorkout**: Workouts with supersets and compound movements
-
-#### **Progressive Overload Tracking**
-
-```typescript
-interface ProgressiveOverloadData {
-  exerciseId: string;
-  history: {
-    date: string;
-    weight: number;
-    reps: number;
-    sets: number;
-    volume: number; // calculated as weight * reps * sets
-    oneRepMax: number; // estimated 1RM
-    notes?: string;
-  }[];
-  trends: {
-    weeklyGrowth: number;
-    monthlyGrowth: number;
-    plateauDetected: boolean;
-    recommendedIncrease?: number;
-  };
-}
-```
-
-#### **Terrain Analysis**
-
-```typescript
-interface TerrainData {
-  elevationGain: number;
-  elevationLoss: number;
-  maxGradient: number;
-  terrainType: 'road' | 'trail' | 'track' | 'mixed';
-  difficulty: 'easy' | 'moderate' | 'challenging' | 'difficult';
-  surfaceTypes: ('paved' | 'gravel' | 'dirt' | 'rocky' | 'rooty' | 'sandy')[];
-  recommendedFootwear?: string;
-  weatherImpact?: 'low' | 'medium' | 'high';
-}
-```
-
-#### **AI & Personalization Features**
-
-```typescript
-interface AIRecommendation {
-  type: 'routine' | 'exercise' | 'progression' | 'recovery';
-  confidence: number; // 0-100
-  recommendation: string;
-  reasoning: string;
-  dataPoints: string[]; // what data was used to make this recommendation
-  userFeedback?: 'accepted' | 'rejected' | 'modified';
-}
-
-interface PersonalizationProfile {
-  fitnessLevel: 'beginner' | 'intermediate' | 'advanced' | 'elite';
-  preferences: {
-    workoutDuration: number; // preferred minutes
-    exerciseTypes: string[];
-    avoidedExercises: string[];
-    preferredDays: boolean[]; // [Mon, Tue, Wed, Thu, Fri, Sat, Sun]
-    preferredTimeOfDay: 'morning' | 'afternoon' | 'evening';
-  };
-  limitations: {
-    injuries: string[];
-    equipmentAccess: string[];
-    timeConstraints: number; // max minutes available
-  };
-  goals: {
-    primary: string;
-    secondary: string[];
-    targetDate?: string;
-  };
-}
-```
-
-#### **Wearable Integration**
-
-```typescript
-interface WearableData {
-  deviceType: 'smartwatch' | 'fitness_tracker' | 'heart_rate_monitor' | 'smart_clothing';
-  deviceModel?: string;
-  metrics: {
-    heartRate?: {
-      current: number;
-      average: number;
-      max: number;
-      zones: {
-        zone1: number; // time spent in zone 1 (seconds)
-        zone2: number;
-        zone3: number;
-        zone4: number;
-        zone5: number;
-      };
-    };
-    steps?: number;
-    calories?: number;
-    distance?: number;
-    pace?: number;
-    cadence?: number;
-    power?: number;
-    elevation?: {
-      gain: number;
-      loss: number;
-      current: number;
-    };
-    recovery?: {
-      hrv: number;
-      sleepQuality: number;
-      readiness: number;
-    };
-  };
-  lastSynced: string;
-}
-```
-
-## 🔧 Hooks & State Management
-
-### Current Hooks ✅ **IMPLEMENTED**
-
-#### **useWorkoutOperations**
-
-Comprehensive hook for managing workout state:
-
-- Strength and running workout CRUD operations
-- Section and exercise management
-- Workout reordering and scheduling
-- Exercise progression and rest management
-
-#### **useTrailRunningWorkout**
-
-Specialized hook for trail running workouts:
-
-- Section management with intervals
-- Intensity target configuration
-- Repeat interval handling
-- Validation and save state
-
-#### **useRoutineOperations**
-
-Utility hook for routine-level operations:
-
-- Set generation for progression methods
-- Workout duration calculations
-- Approach sets management
-
-### Recommended Future Hooks 🔄 **RECOMMENDED**
-
-#### **useProgressiveOverload**
-
-Advanced hook for tracking strength progression:
-
-- Weight and rep progression tracking
-- Performance trend analysis
-- Plateau detection and recommendations
-- One-rep max estimation and tracking
-- Volume calculation and visualization
-
-#### **useWearableIntegration**
-
-Hook for integrating with wearable devices:
-
-- Device connection and data synchronization
-- Real-time metrics monitoring
-- Workout data recording and analysis
-- Recovery metrics integration
-
-#### **useAIRecommendations**
-
-Hook for AI-powered recommendations:
-
-- Personalized routine suggestions
-- Exercise selection optimization
-- Progressive overload recommendations
-- Recovery and deload suggestions
-- Performance analysis and insights
-
-## 🎯 Current Functionality
-
-### ✅ **Implemented Features**
-
-#### **Routine Creation**
-
-- ✅ Create new routines with metadata
-- ✅ Add strength workouts with sections and exercises
-- ✅ Add running workouts with sections and exercises
-- ✅ Advanced trail running workout creation with intervals
-- ✅ Exercise selection from library
-- ✅ Notes and progression method management
-- ✅ Workout scheduling and objectives
-- ✅ Complete form validation and state management
-
-#### **Routine Management**
-
-- ✅ View routine details and progress
-- ✅ Edit existing routines
-- ✅ Favorite/unfavorite routines
-- ✅ Share routines (UI ready)
-- ✅ Duplicate routines (UI ready)
-- ✅ Delete routines (UI ready)
-
-#### **Workout Management**
-
-- ✅ Add/remove workouts and sections
-- ✅ Reorder workouts and sections
-- ✅ Manage exercises within sections
-- ✅ Configure rest times and progression
-- ✅ EMOM and Tabata workout types
-- ✅ Approach sets for strength training
-
-#### **Trail Running**
-
-- ✅ Specialized trail running workout creation
-- ✅ Complex interval-based workout planning
-- ✅ Advanced intensity target configuration (HR, speed, power, cadence, RPE)
-- ✅ Elevation and distance tracking with calculations
-- ✅ Repeat interval management with smart defaults
-- ✅ Multiple section types (warm-up, cool-down, run, walk, uphill-repeat, etc.)
-- ✅ Complete trail running data model and UI
-
-#### **User Interface**
-
-- ✅ Responsive design for mobile and desktop
-- ✅ Search and filtering capabilities
-- ✅ Grid and list view modes
-- ✅ Collapsible workout sections
-- ✅ Progress tracking visualization
-- ✅ Weekly schedule display
-- ✅ Complete form validation and error handling
-- ✅ Modal dialogs for exercise selection and notes
-- ✅ Drag-and-drop reordering (UI ready)
-
-### 🔄 **Current State**
-
-#### **Data Management**
-
-- ✅ **Frontend State**: Complete state management with React hooks
-- 🔄 **Mock Data**: Currently using hardcoded mock data for display
-- 🔄 **No Persistence**: Changes are not saved to database (TODO: API integration)
-- 🔄 **No API Integration**: Backend API calls not yet implemented
-
-#### **Navigation**
-
-- ✅ **Routing**: Proper Next.js routing implemented
-- ✅ **Page Structure**: All pages properly structured
-- 🔄 **Deep Linking**: Some deep linking not fully implemented
-
-#### **Integration**
-
-- 🔄 **Workout Tracker**: Referenced but not integrated
-- 🔄 **Exercise Library**: Referenced but not implemented
-- 🔄 **User Authentication**: Not integrated with user system
+For standard pages (Dashboard, Detail, Explore), a single page-level hook (e.g., `useRoutinesDashboard`) acts as the source of truth, fetching data via SWR and managing UI state.
+
+### **Routine Builder Context**
+
+For the deeply nested Routine Builder UI, a dedicated, feature-scoped React Context (`RoutineBuilderContext`) is used to avoid prop drilling.
+
+- **`useRoutineBuilder`**: A `useReducer`-based hook that manages the entire state of the routine being built. It is called once at the page level.
+- **`RoutineBuilderProvider`**: Wraps the builder UI, making the state and dispatch function available to all children.
+- **Selector Hooks** (e.g., `useSection`, `useExercise`): Small, memoized hooks that consume the context and select a specific slice of state for a component. This keeps components simple and performant.
+
+## 🎯 MVP Scope
+
+This section outlines the scope of the features that have been designed for the MVP. The design phase is complete, and this represents the blueprint for implementation.
+
+#### **Backend & Database**
+
+- **Database Schema**: A complete MongoDB schema has been designed for all 5 core collections (`sections`, `workouts`, `routines`, `routine_assignments`, `workout_sessions`).
+- **API Endpoints**: A full API contract has been defined for all CRUD operations, including library versioning and user-facing endpoints.
+- **Authentication**: The authentication strategy will use Supabase JWTs with the Railway backend.
+- **Data Models**: Comprehensive TypeScript data models have been defined for all core concepts.
+
+#### **Frontend**
+
+- **Architecture**: A robust frontend architecture has been specified, including a domain-driven folder structure, a services layer, and advanced hook patterns.
+- **Page Structure**: All primary user-facing pages and their component breakdowns have been fully defined.
+- **State Management**: A clear strategy has been defined for both simple pages (using page-level hooks) and complex UIs (using a feature-scoped context).
+- **Component Design**: A library of shared, granular components has been designed to build the UI.
+- **UI Logic**: Core frontend logic for features like Trail Running, progression methods, and workout calculations has been documented.
 
 ## 🚧 **Remaining Work**
 
-### **High Priority**
+The design phase is complete. The primary remaining work is the implementation of the frontend and backend based on these designs.
 
-#### **1. Data Persistence & API Integration**
+### **High Priority (MVP Implementation)**
 
-- [ ] **Database Schema**: Design and implement database tables
-- [ ] **API Endpoints**: Create CRUD API endpoints for routines
-- [ ] **Data Integration**: Replace mock data with real API calls
-- [ ] **User Association**: Link routines to authenticated users
-- [ ] **Save Functionality**: Implement actual save/update operations
+#### **1. Backend Implementation**
 
-#### **2. Exercise Library Integration**
+- [ ] **Build API**: Implement all API endpoints as defined in the documentation.
+- [ ] **Database Setup**: Set up the MongoDB collections on Railway.
+- [ ] **Implement Auth**: Integrate the Supabase JWT verification middleware.
 
-- [ ] **Exercise Database**: Create exercise library system
-- [ ] **Exercise Search**: Implement exercise search and filtering
-- [ ] **Exercise Categories**: Organize exercises by muscle groups
-- [ ] **Exercise Details**: Add exercise descriptions and instructions
-- [ ] **Exercise Selection**: Connect to real exercise library data
+#### **2. Frontend Implementation & API Integration**
 
-#### **3. Workout Tracker Integration**
+- [ ] **Build UI Components**: Implement the shared and page-specific components as designed.
+- [ ] **Implement Services**: Write the frontend services layer to handle API communication.
+- [ ] **Integrate API Calls**: Replace mock data with live data from the backend by integrating the SWR hooks with the services layer.
+- [ ] **Connect to Auth**: Link the frontend to the Supabase authentication system to get user context and JWTs for API calls.
+- [ ] **Workout Player Persistence**: Implement local storage (IndexedDB) for the offline-first workout player.
 
-- [ ] **Workout Execution**: Connect routines to workout tracker
-- [ ] **Progress Tracking**: Track actual workout completion
-- [ ] **Performance Metrics**: Record and display performance data
-- [ ] **Workout History**: Maintain workout history
+#### **3. Exercise Library Integration**
+
+- [ ] **Connect to Library**: The frontend `ExerciseLibraryModal` needs to be connected to the real exercise data source (Supabase).
+- [ ] **Implement Search**: Implement the frontend logic for searching and filtering the exercise library.
+
+#### **4. Workout Tracker Integration**
+
+- [ ] **Connect Player to API**: The Workout Player needs to be connected to the `workout-sessions` endpoints to fetch session data and save performance logs.
+- [ ] **Track Progress**: Implement the logic to track and display workout completion progress.
 
 ### **Medium Priority**
 
 #### **4. Enhanced Features**
 
-- [ ] **Routine Templates**: Pre-built routine templates (UI ready, needs data)
-- [ ] **Routine Sharing**: Implement routine sharing functionality
-- [ ] **Routine Import/Export**: Import/export routine data
-- [ ] **Advanced Scheduling**: More flexible scheduling options
+- [ ] **Routine Templates**: Implement UI for browsing and copying pre-built routine templates.
+- [ ] **Routine Sharing**: Implement routine sharing functionality.
+- [ ] **Advanced Scheduling**: More flexible scheduling options.
 
 #### **5. User Experience**
 
-- [ ] **Onboarding**: Routine creation onboarding flow
-- [ ] **Validation**: Enhanced form validation and error handling
-- [ ] **Loading States**: Proper loading and error states
-- [ ] **Offline Support**: Basic offline functionality
-
-### **Future Enhancements (Industry Trends)** 🔄 **RECOMMENDED**
-
-#### **6. Progressive Overload Tracking**
-
-- [ ] **Weight Progression**: Track weight increases over time
-- [ ] **Volume Tracking**: Calculate and visualize workout volume
-- [ ] **Performance Trends**: Analyze strength progression trends
-- [ ] **Plateau Detection**: Identify and suggest solutions for plateaus
-- [ ] **1RM Estimation**: Calculate and track estimated one-rep maxes
-
-#### **7. Wearable Integration**
-
-- [ ] **Device Connection**: Connect to various wearable devices
-- [ ] **Metrics Display**: Show real-time metrics during workouts
-- [ ] **Data Synchronization**: Sync workout data with wearables
-- [ ] **Recovery Tracking**: Use sleep and HRV data for recovery analysis
-- [ ] **Performance Insights**: Generate insights from wearable data
-
-#### **8. AI & Personalization**
-
-- [ ] **AI Recommendations**: Smart routine recommendations
-- [ ] **Adaptive Progression**: Dynamic workout adjustments based on performance
-- [ ] **Personalized Goals**: AI-assisted goal setting and tracking
-- [ ] **Virtual Coaching**: Real-time feedback during workouts
-- [ ] **Smart Scheduling**: Recovery-based workout scheduling
-
-#### **9. Advanced Features**
-
-- [ ] **Social Features**: Community routine sharing
-- [ ] **Analytics**: Advanced routine analytics
-- [ ] **Integration**: Third-party platform integration
-- [ ] **Form Analysis**: Camera-based exercise form analysis
-- [ ] **Voice Control**: Voice commands for hands-free workout control
+- [ ] **Onboarding**: Routine creation onboarding flow.
+- [ ] **Validation**: Enhanced form validation and error handling.
+- [ ] **Loading States**: Proper loading and error states for all data-fetching operations.
+- [ ] **Offline Support**: Background sync for the Workout Player.
 
 ## 🔗 **Dependencies**
 
@@ -510,45 +143,34 @@ Hook for AI-powered recommendations:
 
 ### **External Dependencies**
 
-- **Supabase**: Database and authentication
+- **MongoDB**: Database
+- **Railway**: Backend Deployment
+- **Supabase**: Authentication (JWTs)
 - **Next.js**: Routing and page structure
 - **React**: Component framework
 - **TypeScript**: Type safety
 
-### **Future External Dependencies** 🔄 **RECOMMENDED**
-
-- **Wearable APIs**: For device integration (Garmin, Fitbit, Apple Health, etc.)
-- **AI/ML Services**: For recommendation engines and form analysis
-
 ## 🎯 **MVP Goals**
 
-### **Phase 1: Core Functionality**
+### **Phase 1: Core Functionality (Implementation)**
 
-- [ ] Complete database schema and API implementation
-- [ ] Integrate with user authentication system
-- [ ] Implement exercise library integration
-- [ ] Connect with workout tracker for execution
-- [ ] Replace mock data with real API calls
+- [ ] Complete frontend implementation based on the existing designs and architecture.
+- [ ] Integrate frontend with the designed backend API, replacing all mock data.
+- [ ] Integrate with the user authentication system.
+- [ ] Implement the connection to the Exercise Library.
+- [ ] Connect the Workout Player to the backend for workout execution and logging.
 
 ### **Phase 2: Enhanced UX**
 
-- [ ] Add routine templates and guided creation
-- [ ] Implement proper validation and error handling
-- [ ] Add routine sharing and collaboration features
-- [ ] Optimize performance and loading states
-
-### **Phase 3: Advanced Features** 🔄 **RECOMMENDED**
-
-- [ ] Implement progressive overload tracking
-- [ ] Add basic wearable integration
-- [ ] Implement personalized recommendations
-- [ ] Add performance analytics and insights
+- [ ] Add routine templates and guided creation.
+- [ ] Implement proper validation and error handling throughout the UI.
+- [ ] Add routine sharing and collaboration features.
+- [ ] Optimize performance and loading states.
 
 ## 📚 **Related Documentation**
 
-- [User App MVP Scope](../../app-overview/user-app/mvp-scope.md)
-- [Premium Routine Management](../premium-routine-management/README.md)
-- [Workout Feature](../workout/README.md)
-- [Exercise Feature](../exercises/README.md)
-- [Project TODO](../../todo.md)
-
+- [Routines Feature Hub](./README.md): Main entry point for all feature documentation.
+- [Backend Documentation](./backend/README.md): API endpoints, database schema, and architecture.
+- [Frontend Documentation](./frontend/README.md): Component breakdowns, state management, and technical specs.
+- [Common Data Models](./common/data-models/README.md): Shared TypeScript interfaces for core concepts.
+- [Future Enhancements](./future-enhancements.md): A list of post-MVP features and ideas.
