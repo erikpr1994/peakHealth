@@ -60,6 +60,7 @@ export default [
         __dirname: 'readonly',
         __filename: 'readonly',
         Buffer: 'readonly',
+        console: 'readonly',
         process: 'readonly',
         require: 'readonly',
         module: 'readonly',
