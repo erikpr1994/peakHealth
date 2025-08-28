@@ -52,6 +52,7 @@ app.get(
 // Temporary protected test route for authentication testing
 app.get(
   '/api/v1/protected-test',
+  profileLimiter, // Add rate limiting to protect against brute force attacks
   verifySupabaseJWT,
   (req: Request, res: Response) => {
     res.status(200).json({

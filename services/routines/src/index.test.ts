@@ -2,6 +2,14 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import express, { Request, Response } from 'express';
 import request from 'supertest';
 
+// Mock express-rate-limit
+vi.mock('express-rate-limit', () => ({
+  default: vi.fn(() => (req: Request, res: Response, next: Function) => {
+    // Mock implementation that always passes through
+    next();
+  }),
+}));
+
 // Mock the auth middleware
 vi.mock('./middleware/auth', () => ({
   verifySupabaseJWT: vi.fn((req: Request, res: Response, next: Function) => {
@@ -33,6 +41,7 @@ vi.mock('./middleware/auth', () => ({
 
 // Import after mocking
 import { verifySupabaseJWT } from './middleware/auth';
+import rateLimit from 'express-rate-limit';
 
 describe('Protected Routes', () => {
   let app: express.Application;
@@ -45,6 +54,10 @@ describe('Protected Routes', () => {
     // Setup the protected test route
     app.get(
       '/api/v1/protected-test',
+      rateLimit({ // Add rate limiting to protect against brute force attacks
+        windowMs: 15 * 60 * 1000, // 15 minutes
+        max: 100, // Limit each IP to 100 requests per windowMs
+      }),
       verifySupabaseJWT,
       (req: Request, res: Response) => {
         res.status(200).json({

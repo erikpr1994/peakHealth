@@ -14,18 +14,22 @@ The service uses Supabase JWT authentication. The `verifySupabaseJWT` middleware
 
 ### Protected Routes
 
-All protected routes use the `verifySupabaseJWT` middleware to authenticate requests. The middleware:
+All protected routes use the `verifySupabaseJWT` middleware to authenticate requests and rate limiting for security. The authentication middleware:
 
 1. Extracts the JWT from the Authorization header
 2. Verifies it using the SUPABASE_JWT_SECRET
 3. Attaches the user information to the request object
+
+Rate limiting is applied to all protected routes to prevent brute force attacks:
+- 100 requests per 15 minutes per IP address
 
 Example of a protected route:
 
 ```typescript
 app.get(
   '/api/v1/protected-test',
-  verifySupabaseJWT,
+  profileLimiter, // Rate limiting
+  verifySupabaseJWT, // Authentication
   (req: Request, res: Response) => {
     res.status(200).json({
       userId: req.user?.id,
