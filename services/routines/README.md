@@ -1,72 +1,59 @@
 # Routines Service
 
-This is the backend service for the PeakHealth Routines feature. It provides API endpoints for managing workout routines and user progress.
-
-## Setup
-
-### Prerequisites
-
-- Node.js v24 or higher
-- pnpm v10.14.0 or higher
-- MongoDB (local or remote instance)
-- Supabase account (for authentication)
-
-### Environment Variables
-
-Copy the `.env.example` file to create a `.env` file:
-
-```bash
-cp .env.example .env
-```
-
-Then update the values in the `.env` file:
-
-```
-# Server Configuration
-PORT=3001
-
-# MongoDB Connection
-MONGO_URI=mongodb://mongo:27017/routines
-
-# Supabase Authentication
-SUPABASE_JWT_SECRET=your_supabase_jwt_secret
-```
-
-### Getting the Supabase JWT Secret
-
-To get your Supabase JWT secret:
-
-1. Go to your Supabase project dashboard
-2. Navigate to **Settings** → **API**
-3. In the **JWT Settings** section, find the **JWT Secret** value
-4. Copy this value and add it to your `.env` file as `SUPABASE_JWT_SECRET`
-
-![Supabase JWT Secret Location](https://supabase.com/docs/img/guides/api/api-keys-jwt-secret.png)
-
-> **Important**: Keep your JWT secret secure and never commit it to version control.
-
-### Installation
-
-Install dependencies:
-
-```bash
-pnpm install
-```
-
-### Running the Service
-
-Start the service in development mode:
-
-```bash
-pnpm start
-```
+This service handles routines-related functionality for the Peak Health application.
 
 ## Authentication
 
-This service uses Supabase JWT tokens for authentication. The tokens are verified using the `verifySupabaseJWT` middleware, which extracts the user ID from the token and attaches it to the request object.
+The service uses Supabase JWT authentication. The `verifySupabaseJWT` middleware verifies tokens from the `Authorization: Bearer` header and attaches the authenticated user's information to the request object.
 
-For more details on the authentication implementation, see the [Authentication Investigation](../../docs/features/routines/backend/authentication-investigation.md) document.
+### Environment Variables
 
-## API Documentation
+- `SUPABASE_JWT_SECRET`: JWT secret from Supabase for token verification (required)
+- `PORT`: The port to run the server on (default: 3001)
+- `MONGO_URI`: MongoDB connection string (default: mongodb://mongo:27017/routines)
 
-For detailed API documentation, refer to the [API Endpoints](../../docs/features/routines/backend/endpoints.md) document.
+### Protected Routes
+
+All protected routes use the `verifySupabaseJWT` middleware to authenticate requests. The middleware:
+
+1. Extracts the JWT from the Authorization header
+2. Verifies it using the SUPABASE_JWT_SECRET
+3. Attaches the user information to the request object
+
+Example of a protected route:
+
+```typescript
+app.get(
+  '/api/v1/protected-test',
+  verifySupabaseJWT,
+  (req: Request, res: Response) => {
+    res.status(200).json({
+      userId: req.user?.id,
+      email: req.user?.email,
+      role: req.user?.role,
+      message: 'Authentication successful',
+    });
+  }
+);
+```
+
+### Testing
+
+The authentication middleware has comprehensive unit tests covering:
+
+- Requests with a valid token
+- Requests with an invalid/expired token
+- Requests with a malformed `Authorization` header
+- Requests with no token at all
+
+Run tests with:
+
+```bash
+pnpm test
+```
+
+Run tests with coverage:
+
+```bash
+pnpm test:coverage
+```
