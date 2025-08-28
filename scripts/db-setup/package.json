@@ -5,7 +5,7 @@
   "main": "setup-db.js",
   "scripts": {
     "setup": "node setup-db.js",
-    "lint": "eslint . --ext .js",
+    "lint": "eslint .",
     "test": "echo \"No tests to run\" && exit 0"
   },
   "dependencies": {
