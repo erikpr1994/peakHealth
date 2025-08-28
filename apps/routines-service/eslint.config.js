@@ -1,13 +1,15 @@
-import js from '@eslint/js';
-import tseslint from '@typescript-eslint/eslint-plugin';
-import tsparser from '@typescript-eslint/parser';
-import prettier from 'eslint-plugin-prettier';
+import baseConfig from '../../eslint.config.js';
 
 export default [
-  js.configs.recommended,
+  ...baseConfig,
   {
-    files: ['**/*.{ts,tsx}'],
+    files: ['src/**/*.{js,jsx,ts,tsx}'],
     languageOptions: {
+      parser: (await import('@typescript-eslint/parser')).default,
+      parserOptions: {
+        ecmaVersion: 2020,
+        sourceType: 'module',
+      },
       globals: {
         // Node.js globals
         __dirname: 'readonly',
@@ -19,37 +21,21 @@ export default [
         exports: 'readonly',
         global: 'readonly',
         console: 'readonly',
+        // Test globals
+        describe: 'readonly',
+        it: 'readonly',
+        test: 'readonly',
+        expect: 'readonly',
+        beforeEach: 'readonly',
+        afterEach: 'readonly',
+        beforeAll: 'readonly',
+        afterAll: 'readonly',
+        vi: 'readonly',
       },
-      parser: tsparser,
-      parserOptions: {
-        ecmaVersion: 'latest',
-        sourceType: 'module',
-        project: './tsconfig.json',
-      },
-    },
-    plugins: {
-      '@typescript-eslint': tseslint,
-      prettier,
     },
     rules: {
-      ...tseslint.configs.recommended.rules,
-      'prettier/prettier': 'error',
-      '@typescript-eslint/no-unused-vars': 'warn',
-      '@typescript-eslint/explicit-function-return-type': 'warn',
-      '@typescript-eslint/no-non-null-assertion': 'warn',
+      // Routines service specific overrides
       'no-console': 'warn',
-      'no-undef': 'error',
-    },
-  },
-  {
-    files: ['**/*.js'],
-    languageOptions: {
-      ecmaVersion: 'latest',
-      sourceType: 'module',
-    },
-    rules: {
-      'no-console': 'warn',
-      'no-undef': 'error',
     },
   },
 ];
