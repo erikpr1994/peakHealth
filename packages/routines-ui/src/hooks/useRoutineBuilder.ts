@@ -4,11 +4,12 @@ import { useReducer } from 'react';
 import {
   routineBuilderReducer,
   RoutineBuilderState,
-} from '../../context/routineBuilder';
+} from '../../context/routineBuilder/routineBuilderReducer';
+import { RoutineBuilderAction } from '../../context/routineBuilder/types';
 
 type UseRoutineBuilderReturn = {
   state: RoutineBuilderState;
-  dispatch: React.Dispatch<any>; // Using any for now as actions will grow
+  dispatch: React.Dispatch<RoutineBuilderAction>;
 };
 
 export const useRoutineBuilder = (

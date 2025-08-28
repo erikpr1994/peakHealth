@@ -1,4 +1,4 @@
-import { RoutineBuilderAction, RoutineBuilderState } from '../types';
+import { RoutineBuilderAction, RoutineBuilderState } from './types';
 import { updateRoutineName } from './reducers/routineReducer';
 
 export const routineBuilderReducer = (

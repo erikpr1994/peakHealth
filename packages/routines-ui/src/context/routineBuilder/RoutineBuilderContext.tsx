@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, Dispatch, ReactNode, useContext } from 'react';
+import { createContext, Dispatch, ReactNode } from 'react';
 import { RoutineBuilderAction, RoutineBuilderState } from './types';
 
 export type RoutineBuilderContextType = {
