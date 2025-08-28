@@ -5,7 +5,7 @@
   "main": "setup-db.js",
   "scripts": {
     "setup-routines-db": "cd scripts/db-setup && npm install && node setup-db.js",
-    "lint": "cd scripts/db-setup && npx eslint .",
+    "lint": "cd scripts/db-setup && npx eslint --config .eslintrc.js .",
     "type-check": "echo 'No TypeScript files to check'",
     "test": "echo 'No tests to run'"
   },
