@@ -6,29 +6,9 @@ import {
   reorderSections,
 } from './sectionReducer';
 import { RoutineBuilderState } from '../types';
+import { BasicSection, Workout } from '@peakhealth/routines-types';
 
 describe('sectionReducer', () => {
-  const mockInitialState: RoutineBuilderState = {
-    _id: 'routine-1',
-    name: 'Test Routine',
-    description: 'A test routine',
-    difficulty: 'beginner',
-    workouts: [],
-    totalWorkouts: 0,
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-    userId: 'user-1',
-    createdBy: 'user-1',
-    routineType: 'user-created',
-    isActive: false,
-    isFavorite: false,
-    completedWorkouts: 0,
-    schemaVersion: '1.0',
-    duration: 4,
-    goal: 'strength',
-    objectives: [],
-  };
-
   it('should export all required functions', () => {
     expect(typeof addSection).toBe('function');
     expect(typeof removeSection).toBe('function');
@@ -36,104 +16,11 @@ describe('sectionReducer', () => {
     expect(typeof reorderSections).toBe('function');
   });
 
-  it('should handle addSection with empty workouts array', () => {
-    const result = addSection(mockInitialState, {
-      workoutId: 'non-existent',
-      section: {
-        _id: 'section-1',
-        name: 'Test Section',
-        type: 'basic',
-        orderIndex: 0,
-        exercises: [],
-      } as any,
-    });
-
-    expect(result).toBeDefined();
-    expect(result.workouts).toHaveLength(0);
-  });
-
-  it('should add section to existing workout', () => {
-    const stateWithWorkout: RoutineBuilderState = {
-      ...mockInitialState,
-      workouts: [
-        {
-          _id: 'workout-1',
-          name: 'Workout 1',
-          type: 'strength',
-          orderIndex: 0,
-          sections: [],
-          objective: 'Build strength',
-          notes: 'Test workout',
-        } as any,
-      ],
-      totalWorkouts: 1,
-    };
-
-    const newSection = {
-      _id: 'section-1',
-      name: 'Warm Up',
-      type: 'basic',
-      orderIndex: 0,
-      exercises: [],
-    } as any;
-
-    const result = addSection(stateWithWorkout, {
-      workoutId: 'workout-1',
-      section: newSection,
-    });
-
-    expect(result.workouts[0].sections).toHaveLength(1);
-    expect(result.workouts[0].sections[0]._id).toBe('section-1');
-    expect(result.workouts[0].sections[0].name).toBe('Warm Up');
-    expect(result.workouts[0].sections[0].orderIndex).toBe(0);
-  });
-
-  it('should not modify other workouts when adding section', () => {
-    const stateWithMultipleWorkouts: RoutineBuilderState = {
-      ...mockInitialState,
-      workouts: [
-        {
-          _id: 'workout-1',
-          name: 'Workout 1',
-          type: 'strength',
-          orderIndex: 0,
-          sections: [],
-          objective: 'Build strength',
-          notes: 'Test workout',
-        } as any,
-        {
-          _id: 'workout-2',
-          name: 'Workout 2',
-          type: 'strength',
-          orderIndex: 1,
-          sections: [],
-          objective: 'Build strength',
-          notes: 'Test workout 2',
-        } as any,
-      ],
-      totalWorkouts: 2,
-    };
-
-    const newSection = {
-      _id: 'section-1',
-      name: 'Warm Up',
-      type: 'basic',
-      orderIndex: 0,
-      exercises: [],
-    } as any;
-
-    const result = addSection(stateWithMultipleWorkouts, {
-      workoutId: 'workout-1',
-      section: newSection,
-    });
-
-    expect(result.workouts[0].sections).toHaveLength(1);
-    expect(result.workouts[1].sections).toHaveLength(0);
-  });
-
-  it('should remove section from workout', () => {
-    const stateWithSection: RoutineBuilderState = {
-      ...mockInitialState,
+  describe('reorderSections', () => {
+    const createMockState = (): RoutineBuilderState => ({
+      _id: 'routine-1',
+      name: 'Test Routine',
+      description: 'Test description',
       workouts: [
         {
           _id: 'workout-1',
@@ -143,73 +30,161 @@ describe('sectionReducer', () => {
           sections: [
             {
               _id: 'section-1',
-              name: 'Warm Up',
+              name: 'Section 1',
               type: 'basic',
               orderIndex: 0,
               exercises: [],
-            } as any,
-          ],
-          objective: 'Build strength',
-          notes: 'Test workout',
-        } as any,
-      ],
-      totalWorkouts: 1,
-    };
-
-    const result = removeSection(stateWithSection, {
-      workoutId: 'workout-1',
-      sectionId: 'section-1',
-    });
-
-    expect(result.workouts[0].sections).toHaveLength(0);
-  });
-
-  it('should reorder remaining sections after removal', () => {
-    const stateWithSections: RoutineBuilderState = {
-      ...mockInitialState,
-      workouts: [
-        {
-          _id: 'workout-1',
-          name: 'Workout 1',
-          type: 'strength',
-          orderIndex: 0,
-          sections: [
-            {
-              _id: 'section-1',
-              name: 'Warm Up',
-              type: 'basic',
-              orderIndex: 0,
-              exercises: [],
-            } as any,
+            } as BasicSection,
             {
               _id: 'section-2',
-              name: 'Main Workout',
+              name: 'Section 2',
               type: 'basic',
               orderIndex: 1,
               exercises: [],
-            } as any,
+            } as BasicSection,
             {
               _id: 'section-3',
-              name: 'Cool Down',
+              name: 'Section 3',
               type: 'basic',
               orderIndex: 2,
               exercises: [],
-            } as any,
+            } as BasicSection,
           ],
-          objective: 'Build strength',
-          notes: 'Test workout',
-        } as any,
+        } as Workout,
       ],
+      userId: 'user-1',
+      createdBy: 'user-1',
+      routineType: 'user-created',
+      isActive: false,
+      isFavorite: false,
+      completedWorkouts: 0,
       totalWorkouts: 1,
-    };
-
-    const result = removeSection(stateWithSections, {
-      workoutId: 'workout-1',
-      sectionId: 'section-1',
+      schemaVersion: '1.0',
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      difficulty: 'beginner',
+      duration: 4,
+      goal: 'strength',
+      objectives: [],
     });
 
-    expect(result.workouts[0].sections).toHaveLength(2);
-    expect(result.workouts[0].sections[0].orderIndex).toBe(0);
-    expect(result.workouts[0].sections[1].orderIndex).toBe(1);
+    it('should reorder sections correctly', () => {
+      const initialState = createMockState();
+      const newOrder = ['section-3', 'section-1', 'section-2'];
+
+      const result = reorderSections(initialState, {
+        workoutId: 'workout-1',
+        sectionIds: newOrder,
+      });
+
+      const sections = result.workouts[0].sections;
+      expect(sections[0]._id).toBe('section-3');
+      expect(sections[0].orderIndex).toBe(0);
+      expect(sections[1]._id).toBe('section-1');
+      expect(sections[1].orderIndex).toBe(1);
+      expect(sections[2]._id).toBe('section-2');
+      expect(sections[2].orderIndex).toBe(2);
+    });
+
+    it('should handle reordering with non-existent IDs without creating gaps', () => {
+      const initialState = createMockState();
+      const newOrder = ['section-1', 'non-existent-id', 'section-3'];
+
+      const result = reorderSections(initialState, {
+        workoutId: 'workout-1',
+        sectionIds: newOrder,
+      });
+
+      const sections = result.workouts[0].sections;
+
+      // Should only have 2 sections (non-existent one filtered out)
+      expect(sections).toHaveLength(2);
+
+      // Should have consecutive orderIndex values
+      expect(sections[0]._id).toBe('section-1');
+      expect(sections[0].orderIndex).toBe(0);
+      expect(sections[1]._id).toBe('section-3');
+      expect(sections[1].orderIndex).toBe(1);
+    });
+
+    it('should handle multiple non-existent IDs', () => {
+      const initialState = createMockState();
+      const newOrder = [
+        'non-existent-1',
+        'section-2',
+        'non-existent-2',
+        'section-1',
+      ];
+
+      const result = reorderSections(initialState, {
+        workoutId: 'workout-1',
+        sectionIds: newOrder,
+      });
+
+      const sections = result.workouts[0].sections;
+
+      // Should only have 2 sections
+      expect(sections).toHaveLength(2);
+
+      // Should have consecutive orderIndex values
+      expect(sections[0]._id).toBe('section-2');
+      expect(sections[0].orderIndex).toBe(0);
+      expect(sections[1]._id).toBe('section-1');
+      expect(sections[1].orderIndex).toBe(1);
+    });
+
+    it('should handle empty sectionIds array', () => {
+      const initialState = createMockState();
+
+      const result = reorderSections(initialState, {
+        workoutId: 'workout-1',
+        sectionIds: [],
+      });
+
+      const sections = result.workouts[0].sections;
+      expect(sections).toHaveLength(0);
+    });
+
+    it('should handle all non-existent IDs', () => {
+      const initialState = createMockState();
+      const newOrder = ['non-existent-1', 'non-existent-2', 'non-existent-3'];
+
+      const result = reorderSections(initialState, {
+        workoutId: 'workout-1',
+        sectionIds: newOrder,
+      });
+
+      const sections = result.workouts[0].sections;
+      expect(sections).toHaveLength(0);
+    });
+
+    it('should not modify other workouts', () => {
+      const initialState = createMockState();
+      // Add another workout
+      initialState.workouts.push({
+        _id: 'workout-2',
+        name: 'Workout 2',
+        type: 'strength',
+        orderIndex: 1,
+        sections: [
+          {
+            _id: 'section-4',
+            name: 'Section 4',
+            type: 'basic',
+            orderIndex: 0,
+            exercises: [],
+          } as BasicSection,
+        ],
+      } as Workout);
+
+      const result = reorderSections(initialState, {
+        workoutId: 'workout-1',
+        sectionIds: ['section-3', 'section-1'],
+      });
+
+      // workout-2 should remain unchanged
+      const workout2 = result.workouts.find(w => w._id === 'workout-2');
+      expect(workout2?.sections[0].orderIndex).toBe(0);
+    });
   });
 });

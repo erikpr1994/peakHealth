@@ -217,7 +217,9 @@ export const reorderSets = (
         }
 
         // Create a map of set ID to set for quick lookup
-        const setMap = new Map(exercise.sets.map(set => [set._id, set] as const));
+        const setMap = new Map(
+          exercise.sets.map(set => [set._id, set] as const)
+        );
 
         // Filter out non-existent sets first, then assign consecutive indices
         const reorderedSets = setIds
