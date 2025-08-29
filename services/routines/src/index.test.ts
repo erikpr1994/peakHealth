@@ -13,6 +13,15 @@ vi.mock('express-rate-limit', () => ({
 // Mock the auth middleware
 vi.mock('./middleware/auth', () => ({
   verifySupabaseJWT: vi.fn((req: Request, res: Response, next: Function) => {
+    // Check if authorization header exists
+    if (!req.headers.authorization) {
+      return res.status(401).json({
+        error: 'Unauthorized',
+        message: 'No valid token provided',
+        code: 'auth/missing-token',
+      });
+    }
+    
     // Mock implementation to simulate successful authentication
     if (req.headers.authorization === 'Bearer valid-token') {
       req.user = {
@@ -22,20 +31,13 @@ vi.mock('./middleware/auth', () => ({
       };
       return next();
     }
-
-    // Simulate unauthorized
-    if (
-      !req.headers.authorization ||
-      req.headers.authorization !== 'Bearer valid-token'
-    ) {
-      return res.status(401).json({
-        error: 'Unauthorized',
-        message: 'No valid token provided',
-        code: 'auth/missing-token',
-      });
-    }
-
-    next();
+    
+    // If we get here, the token exists but is invalid
+    return res.status(401).json({
+      error: 'Unauthorized',
+      message: 'Invalid or expired token',
+      code: 'auth/invalid-token',
+    });
   }),
 }));
 
@@ -109,8 +111,8 @@ describe('Protected Routes', () => {
     expect(response.status).toBe(401);
     expect(response.body).toEqual({
       error: 'Unauthorized',
-      message: 'No valid token provided',
-      code: 'auth/missing-token',
+      message: 'Invalid or expired token',
+      code: 'auth/invalid-token',
     });
   });
 });
