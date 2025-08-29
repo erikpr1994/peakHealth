@@ -1,8 +1,10 @@
-import express, { Request, Response } from 'express';
+import express, { Request, Response, NextFunction } from 'express';
 import dotenv from 'dotenv';
 import mongoose from 'mongoose';
 import { verifySupabaseJWT } from './middleware/auth';
 import rateLimit from 'express-rate-limit';
+import userRoutinesRoutes from './routes/v1/userRoutines';
+import { errorHandler, notFoundHandler } from './utils/error-handler';
 
 // Load environment variables from .env file
 // Required variables:
@@ -35,6 +37,9 @@ app.get('/health', (req: Request, res: Response) => {
   res.status(200).send('OK');
 });
 
+// Register API routes
+app.use('/api/routines', userRoutinesRoutes);
+
 // Example of a protected endpoint using the JWT verification middleware
 app.get(
   '/api/user/profile',
@@ -63,6 +68,14 @@ app.get(
     });
   }
 );
+
+// 404 handler for undefined routes
+app.use(notFoundHandler);
+
+// Global error handler
+app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
+  errorHandler(err, req, res);
+});
 
 app.listen(port, () => {
   console.log(`Routines service is running on port ${port}`);
