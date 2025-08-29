@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "display": "Configuration for Next.js Apps",
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    // Next.js specific
+    "plugins": [{ "name": "next" }],
+    "noEmit": true,
+    "incremental": true,
+
+    // Path aliases (to be overridden per app if needed)
+    "paths": {
+      "@/*": ["./src/*"]
+    }
+  }
+}
