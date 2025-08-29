@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { routineService } from '../services/routine.service';
+import { routineService } from '../services/routineService';
 import { ApiError } from '../utils/error-handler';
 
 /**
@@ -52,7 +52,7 @@ export class RoutineController {
       const type = req.query.type as 'active' | 'user' | 'assigned' | undefined;
 
       // Get routines using the service
-      const routines = await routineService.getRoutines(userId, type);
+      const routines = await routineService.getRoutinesByUser(userId, type);
 
       // Return success response with the routines
       return res.status(200).json({ routines });
