@@ -1,6 +1,7 @@
 import baseConfig from '../../eslint.config.js';
 import typescriptPlugin from '@typescript-eslint/eslint-plugin';
 import typescriptParser from '@typescript-eslint/parser';
+import importXPlugin from 'eslint-plugin-import-x';
 import globals from 'globals';
 
 export default [
@@ -10,6 +11,7 @@ export default [
     ignores: ['**/*.test.ts', '**/*.test.tsx'],
     plugins: {
       '@typescript-eslint': typescriptPlugin,
+      'import-x': importXPlugin,
     },
     languageOptions: {
       parser: typescriptParser,
@@ -29,6 +31,9 @@ export default [
           project: './tsconfig.json',
           alwaysTryTypes: true,
         },
+        node: {
+          extensions: ['.js', '.jsx', '.ts', '.tsx'],
+        },
       },
     },
     rules: {
@@ -39,6 +44,7 @@ export default [
     files: ['**/*.test.ts', '**/*.test.tsx'],
     plugins: {
       '@typescript-eslint': typescriptPlugin,
+      'import-x': importXPlugin,
     },
     languageOptions: {
       parser: typescriptParser,
@@ -58,6 +64,9 @@ export default [
         typescript: {
           project: './tsconfig.json',
           alwaysTryTypes: true,
+        },
+        node: {
+          extensions: ['.js', '.jsx', '.ts', '.tsx'],
         },
       },
     },
