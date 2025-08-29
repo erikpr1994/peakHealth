@@ -196,7 +196,7 @@ describe('exerciseReducer', () => {
             sets: [],
           } as Exercise,
         ],
-      } as StrengthWorkoutSection);
+      } as any);
 
       const result = reorderExercises(initialState, {
         workoutId: 'workout-1',
