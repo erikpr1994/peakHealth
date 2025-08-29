@@ -1,6 +1,7 @@
 import baseConfig from '../../eslint.config.js';
 import typescriptPlugin from '@typescript-eslint/eslint-plugin';
 import typescriptParser from '@typescript-eslint/parser';
+import globals from 'globals';
 
 export default [
   ...baseConfig,
@@ -16,12 +17,20 @@ export default [
         sourceType: 'module',
         project: './tsconfig.json',
         tsconfigRootDir: import.meta.dirname,
+        ecmaFeatures: {
+          jsx: true,
+        },
+      },
+      globals: {
+        ...globals.browser,
+        ...globals.node,
       },
     },
     settings: {
       'import/resolver': {
         typescript: {
           project: './tsconfig.json',
+          alwaysTryTypes: true,
         },
       },
     },

@@ -23,8 +23,8 @@
     "react-dom": "^19.0.0"
   },
   "dependencies": {
-    "@peakhealth/ui": "workspace:*",
     "@peakhealth/routines-types": "workspace:*",
+    "@peakhealth/ui": "workspace:*",
     "clsx": "^2.1.1"
   },
   "devDependencies": {
@@ -39,6 +39,7 @@
     "@vitest/coverage-v8": "3.2.4",
     "@vitest/ui": "^3.2.4",
     "eslint": "^9.33.0",
+    "globals": "^16.3.0",
     "jsdom": "^26.1.0",
     "typescript": "^5.9.2",
     "vite": "^7.1.3",
