@@ -1,21 +1,34 @@
 'use client';
 import type { ComponentProps, FC, PropsWithChildren } from 'react';
+import { clsx } from 'clsx';
 import './accordion.css';
 
 interface AccordionProps extends ComponentProps<'details'> {}
 
 const AccordionContent: FC<PropsWithChildren<ComponentProps<'div'>>> = ({
   children,
+  className,
+  ...props
 }) => {
-  return <div className="content">{children}</div>;
+  return (
+    <div className={clsx('content', className)} {...props}>
+      {children}
+    </div>
+  );
 };
 
 AccordionContent.displayName = 'Accordion.Content';
 
 const AccordionHeader: FC<PropsWithChildren<ComponentProps<'summary'>>> = ({
   children,
+  className,
+  ...props
 }) => {
-  return <summary className="header">{children}</summary>;
+  return (
+    <summary className={clsx('header', className)} {...props}>
+      {children}
+    </summary>
+  );
 };
 
 AccordionHeader.displayName = 'Accordion.Header';
