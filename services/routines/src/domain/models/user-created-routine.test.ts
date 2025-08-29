@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeAll, afterAll } from 'vitest';
 import mongoose from 'mongoose';
-import { UserCreatedRoutineModel } from './routine';
+import { UserCreatedRoutineModel } from './user-created-routine';
 
 describe('UserCreatedRoutine Model', () => {
   // Connect to a test database before running tests
@@ -17,11 +17,15 @@ describe('UserCreatedRoutine Model', () => {
   it('should create a valid user created routine', async () => {
     const routineData = {
       _id: new mongoose.Types.ObjectId().toString(),
+      userId: new mongoose.Types.ObjectId().toString(),
       name: 'My First Routine',
+      description: 'A beginner-friendly routine',
+      category: 'strength',
       difficulty: 'intermediate',
-      goal: 'strength',
-      duration: 4,
-      objectives: ['Build strength', 'Improve form'],
+      duration: 30,
+      frequency: 3,
+      tags: ['strength', 'beginner'],
+      isPublic: false,
       workouts: [
         {
           _id: new mongoose.Types.ObjectId().toString(),
@@ -46,9 +50,8 @@ describe('UserCreatedRoutine Model', () => {
                   type: 'bodyweight',
                   sets: [
                     {
-                      setNumber: 1,
-                      setType: 'warmup',
-                      repType: 'fixed',
+                      _id: new mongoose.Types.ObjectId().toString(),
+                      orderIndex: 0,
                       reps: 10
                     }
                   ]
@@ -70,17 +73,15 @@ describe('UserCreatedRoutine Model', () => {
                   progressionMethod: 'linear',
                   sets: [
                     {
-                      setNumber: 1,
-                      setType: 'working',
-                      repType: 'fixed',
+                      _id: new mongoose.Types.ObjectId().toString(),
+                      orderIndex: 0,
                       reps: 8,
                       weight: 100,
                       rpe: 7
                     },
                     {
-                      setNumber: 2,
-                      setType: 'working',
-                      repType: 'fixed',
+                      _id: new mongoose.Types.ObjectId().toString(),
+                      orderIndex: 1,
                       reps: 8,
                       weight: 100,
                       rpe: 8
@@ -91,17 +92,7 @@ describe('UserCreatedRoutine Model', () => {
             }
           ]
         }
-      ],
-      schemaVersion: '1.0',
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-      userId: new mongoose.Types.ObjectId().toString(),
-      createdBy: new mongoose.Types.ObjectId().toString(),
-      routineType: 'user-created',
-      isActive: true,
-      isFavorite: false,
-      completedWorkouts: 0,
-      totalWorkouts: 1
+      ]
     };
 
     const routine = new UserCreatedRoutineModel(routineData);
@@ -110,12 +101,11 @@ describe('UserCreatedRoutine Model', () => {
     expect(savedRoutine._id).toBeDefined();
     expect(savedRoutine.name).toBe(routineData.name);
     expect(savedRoutine.difficulty).toBe(routineData.difficulty);
-    expect(savedRoutine.goal).toBe(routineData.goal);
+    expect(savedRoutine.category).toBe(routineData.category);
     expect(savedRoutine.workouts.length).toBe(1);
     expect(savedRoutine.workouts[0].sections.length).toBe(2);
     expect(savedRoutine.workouts[0].sections[0].type).toBe('warmup');
     expect(savedRoutine.workouts[0].sections[1].type).toBe('basic');
-    expect(savedRoutine.routineType).toBe('user-created');
   });
 
   it('should validate required fields', async () => {
@@ -129,22 +119,12 @@ describe('UserCreatedRoutine Model', () => {
   it('should validate enum fields', async () => {
     const routineWithInvalidEnum = new UserCreatedRoutineModel({
       _id: new mongoose.Types.ObjectId().toString(),
-      name: 'Invalid Routine',
-      difficulty: 'super-hard', // Invalid enum value
-      goal: 'strength',
-      duration: 4,
-      objectives: [],
-      workouts: [],
-      schemaVersion: '1.0',
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
       userId: new mongoose.Types.ObjectId().toString(),
-      createdBy: new mongoose.Types.ObjectId().toString(),
-      routineType: 'user-created',
-      isActive: true,
-      isFavorite: false,
-      completedWorkouts: 0,
-      totalWorkouts: 0
+      name: 'Invalid Routine',
+      category: 'invalid-category', // Invalid enum value
+      difficulty: 'super-hard', // Invalid enum value
+      duration: 30,
+      frequency: 3
     });
 
     await expect(routineWithInvalidEnum.save()).rejects.toThrow();
@@ -153,11 +133,15 @@ describe('UserCreatedRoutine Model', () => {
   it('should create a routine with a circuit section', async () => {
     const routineData = {
       _id: new mongoose.Types.ObjectId().toString(),
+      userId: new mongoose.Types.ObjectId().toString(),
       name: 'Circuit Training Routine',
+      description: 'A circuit-based routine',
+      category: 'strength',
       difficulty: 'intermediate',
-      goal: 'endurance',
-      duration: 4,
-      objectives: ['Improve endurance', 'Burn calories'],
+      duration: 45,
+      frequency: 3,
+      tags: ['circuit', 'hiit'],
+      isPublic: false,
       workouts: [
         {
           _id: new mongoose.Types.ObjectId().toString(),
@@ -182,9 +166,8 @@ describe('UserCreatedRoutine Model', () => {
                   type: 'bodyweight',
                   sets: [
                     {
-                      setNumber: 1,
-                      setType: 'working',
-                      repType: 'fixed',
+                      _id: new mongoose.Types.ObjectId().toString(),
+                      orderIndex: 0,
                       reps: 15
                     }
                   ]
@@ -197,9 +180,8 @@ describe('UserCreatedRoutine Model', () => {
                   type: 'bodyweight',
                   sets: [
                     {
-                      setNumber: 1,
-                      setType: 'working',
-                      repType: 'fixed',
+                      _id: new mongoose.Types.ObjectId().toString(),
+                      orderIndex: 0,
                       reps: 12
                     }
                   ]
@@ -208,17 +190,7 @@ describe('UserCreatedRoutine Model', () => {
             }
           ]
         }
-      ],
-      schemaVersion: '1.0',
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-      userId: new mongoose.Types.ObjectId().toString(),
-      createdBy: new mongoose.Types.ObjectId().toString(),
-      routineType: 'user-created',
-      isActive: true,
-      isFavorite: false,
-      completedWorkouts: 0,
-      totalWorkouts: 1
+      ]
     };
 
     const routine = new UserCreatedRoutineModel(routineData);
@@ -234,11 +206,15 @@ describe('UserCreatedRoutine Model', () => {
   it('should create a routine with a running workout', async () => {
     const routineData = {
       _id: new mongoose.Types.ObjectId().toString(),
+      userId: new mongoose.Types.ObjectId().toString(),
       name: 'Running Program',
+      description: 'A running-focused routine',
+      category: 'running',
       difficulty: 'intermediate',
-      goal: 'endurance',
-      duration: 8,
-      objectives: ['Improve cardiovascular fitness', 'Prepare for 10K'],
+      duration: 60,
+      frequency: 3,
+      tags: ['running', 'cardio'],
+      isPublic: false,
       workouts: [
         {
           _id: new mongoose.Types.ObjectId().toString(),
@@ -278,17 +254,7 @@ describe('UserCreatedRoutine Model', () => {
             }
           ]
         }
-      ],
-      schemaVersion: '1.0',
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-      userId: new mongoose.Types.ObjectId().toString(),
-      createdBy: new mongoose.Types.ObjectId().toString(),
-      routineType: 'user-created',
-      isActive: true,
-      isFavorite: false,
-      completedWorkouts: 0,
-      totalWorkouts: 1
+      ]
     };
 
     const routine = new UserCreatedRoutineModel(routineData);
