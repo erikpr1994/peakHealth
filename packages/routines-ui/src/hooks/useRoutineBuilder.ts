@@ -1,11 +1,11 @@
 'use client';
 
-import { useReducer } from 'react';
+import React, { useReducer } from 'react';
+import { routineBuilderReducer } from '../context/routineBuilder/routineBuilderReducer';
 import {
-  routineBuilderReducer,
+  RoutineBuilderAction,
   RoutineBuilderState,
-} from '../../context/routineBuilder/routineBuilderReducer';
-import { RoutineBuilderAction } from '../../context/routineBuilder/types';
+} from '../context/routineBuilder/types';
 
 type UseRoutineBuilderReturn = {
   state: RoutineBuilderState;

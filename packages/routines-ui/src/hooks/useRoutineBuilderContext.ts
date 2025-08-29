@@ -4,7 +4,7 @@ import { useContext } from 'react';
 import {
   RoutineBuilderContext,
   RoutineBuilderContextType,
-} from '../context/routineBuilder';
+} from '../context/routineBuilder/RoutineBuilderContext';
 
 export const useRoutineBuilderContext = (): RoutineBuilderContextType => {
   const context = useContext(RoutineBuilderContext);
