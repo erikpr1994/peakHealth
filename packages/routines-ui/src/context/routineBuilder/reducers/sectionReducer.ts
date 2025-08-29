@@ -134,25 +134,20 @@ export const reorderSections = (
 
     // Create a map of section ID to section for quick lookup
     const sectionMap = new Map(
-      workout.sections.map(section => [section._id, section])
+      workout.sections.map(section => [section._id, section] as const)
     );
 
-    // Reorder sections based on the provided order
+    // Filter out non-existent sections first, then assign consecutive indices
     const reorderedSections = sectionIds
-      .map((sectionId, index) => {
-        const section = sectionMap.get(sectionId);
-        if (!section) {
-          return null;
-        }
-        return {
-          ...section,
-          orderIndex: index,
-        };
-      })
+      .map(sectionId => sectionMap.get(sectionId))
       .filter(
         (section): section is StrengthWorkoutSection | RunningWorkoutSection =>
-          section !== null
-      );
+          section !== undefined
+      )
+      .map((section, index) => ({
+        ...section,
+        orderIndex: index,
+      }));
 
     return {
       ...workout,

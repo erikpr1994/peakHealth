@@ -171,19 +171,14 @@ export const reorderExercises = (
         section.exercises.map(exercise => [exercise._id, exercise])
       );
 
-      // Reorder exercises based on the provided order
+      // Filter out non-existent exercises first, then assign consecutive indices
       const reorderedExercises = exerciseIds
-        .map((exerciseId, index) => {
-          const exercise = exerciseMap.get(exerciseId);
-          if (!exercise) {
-            return null;
-          }
-          return {
-            ...exercise,
-            orderIndex: index,
-          };
-        })
-        .filter((exercise): exercise is Exercise => exercise !== null);
+        .map(exerciseId => exerciseMap.get(exerciseId))
+        .filter((exercise): exercise is Exercise => exercise !== undefined)
+        .map((exercise, index) => ({
+          ...exercise,
+          orderIndex: index,
+        }));
 
       return {
         ...section,

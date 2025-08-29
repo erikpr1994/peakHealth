@@ -217,21 +217,16 @@ export const reorderSets = (
         }
 
         // Create a map of set ID to set for quick lookup
-        const setMap = new Map(exercise.sets.map(set => [set._id, set]));
+        const setMap = new Map(exercise.sets.map(set => [set._id, set] as const));
 
-        // Reorder sets based on the provided order
+        // Filter out non-existent sets first, then assign consecutive indices
         const reorderedSets = setIds
-          .map((setId, index) => {
-            const set = setMap.get(setId);
-            if (!set) {
-              return null;
-            }
-            return {
-              ...set,
-              setNumber: index + 1,
-            };
-          })
-          .filter((set): set is WorkoutSet => set !== null);
+          .map(setId => setMap.get(setId))
+          .filter((set): set is WorkoutSet => set !== undefined)
+          .map((set, index) => ({
+            ...set,
+            setNumber: index + 1,
+          }));
 
         return {
           ...exercise,
