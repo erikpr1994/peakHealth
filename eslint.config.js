@@ -1,8 +1,8 @@
 /**
  * Simplified ESLint configuration for Peak Health
  *
- * This configuration focuses on essential rules for code quality, security, and best practices
- * while removing redundant or overly strict rules to improve performance and developer experience.
+ * Focuses on essential rules for code quality and TypeScript/React best practices
+ * Reduced from 20+ plugins to core essentials for better performance
  */
 import js from '@eslint/js';
 import nextPlugin from '@next/eslint-plugin-next';
@@ -14,9 +14,6 @@ import jsxA11yPlugin from 'eslint-plugin-jsx-a11y';
 import prettierPlugin from 'eslint-plugin-prettier';
 import reactPlugin from 'eslint-plugin-react';
 import reactHooksPlugin from 'eslint-plugin-react-hooks';
-import reactRefreshPlugin from 'eslint-plugin-react-refresh';
-import ymlPlugin from 'eslint-plugin-yml';
-import yamlParser from 'yaml-eslint-parser';
 
 export default [
   js.configs.recommended,
@@ -111,31 +108,26 @@ export default [
       prettier: prettierPlugin,
       react: reactPlugin,
       'react-hooks': reactHooksPlugin,
-      'react-refresh': reactRefreshPlugin,
     },
     rules: {
       // Next.js rules
       '@next/next/no-html-link-for-pages': 'off',
       '@next/next/no-img-element': 'error',
 
-      // TypeScript rules - relaxed for better developer experience
-      '@typescript-eslint/explicit-function-return-type': 'warn', // Downgraded from error
-      '@typescript-eslint/explicit-module-boundary-types': 'warn', // Downgraded from error
-      '@typescript-eslint/no-empty-function': 'warn', // Downgraded from error
-      '@typescript-eslint/no-explicit-any': 'warn', // Downgraded from error
-      '@typescript-eslint/no-non-null-assertion': 'warn', // Downgraded from error
+      // TypeScript rules - focused on catching real issues
+      '@typescript-eslint/no-explicit-any': 'warn',
+      '@typescript-eslint/no-non-null-assertion': 'warn',
       '@typescript-eslint/no-unused-vars': [
-        'warn', // Downgraded from error
+        'warn',
         {
-          argsIgnorePattern: '^_|^[a-z]',
+          argsIgnorePattern: '^_',
           ignoreRestSiblings: true,
           varsIgnorePattern: '^_',
         },
       ],
-      '@typescript-eslint/no-var-requires': 'warn', // Downgraded from error
 
       // CSS Modules rules
-      'css-modules/no-unused-class': 'warn', // Downgraded from error
+      'css-modules/no-unused-class': 'warn',
 
       // Import rules
       'import-x/default': 'error',
@@ -155,17 +147,17 @@ export default [
       'jsx-a11y/role-supports-aria-props': 'error',
 
       // General JavaScript rules
-      'no-console': 'warn', // Downgraded from error
+      'no-console': 'warn',
       'no-debugger': 'error',
       'no-duplicate-imports': 'error',
-      'no-unused-expressions': 'warn', // Downgraded from error
+      'no-unused-expressions': 'warn',
       'no-unused-labels': 'error',
       'no-unused-vars': 'off', // Handled by TypeScript
-      'no-useless-escape': 'warn', // Downgraded from error
-      'no-useless-return': 'warn', // Downgraded from error
+      'no-useless-escape': 'warn',
+      'no-useless-return': 'warn',
       'no-var': 'error',
       'prefer-const': 'error',
-      'prefer-template': 'warn', // Downgraded from error
+      'prefer-template': 'warn',
 
       // Prettier integration
       'prettier/prettier': 'error',
@@ -173,10 +165,7 @@ export default [
       // React rules
       'react-hooks/exhaustive-deps': 'warn',
       'react-hooks/rules-of-hooks': 'error',
-      'react-refresh/only-export-components': [
-        'warn',
-        { allowConstantExport: true },
-      ],
+
       'react/function-component-definition': [
         'warn',
         {
@@ -231,30 +220,6 @@ export default [
       '@typescript-eslint/no-non-null-assertion': 'off',
       '@typescript-eslint/no-unused-vars': 'off',
       '@typescript-eslint/no-var-requires': 'off',
-    },
-  },
-  // YAML configuration for GitHub Actions workflows
-  {
-    files: ['.github/workflows/**/*.yml', '.github/workflows/**/*.yaml'],
-    plugins: {
-      yml: ymlPlugin,
-    },
-    languageOptions: {
-      parser: yamlParser,
-    },
-    rules: {
-      ...ymlPlugin.configs.recommended.rules,
-      'yml/indent': ['error', 2],
-      'yml/quotes': ['error', { prefer: 'single' }],
-      'yml/no-empty-document': 'error',
-      'yml/no-empty-key': 'error',
-      'yml/no-empty-mapping-value': 'error',
-      'yml/no-empty-sequence-entry': 'error',
-      'yml/no-tab-indent': 'error',
-      'yml/require-string-key': 'error',
-      'yml/key-spacing': ['error', { beforeColon: false, afterColon: true }],
-      'yml/no-irregular-whitespace': 'error',
-      'yml/spaced-comment': ['error', 'always'],
     },
   },
 ];
