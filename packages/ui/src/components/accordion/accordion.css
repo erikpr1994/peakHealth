@@ -1,0 +1,19 @@
+details.accordion {
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-bottom: 1rem;
+}
+
+summary.header {
+  background-color: #f1f1f1;
+  padding: 1rem;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.content {
+  padding: 1rem;
+  border-top: 1px solid #ccc;
+}
