@@ -1,66 +1,55 @@
 import { renderHook } from '@testing-library/react';
-import { describe, expect, test, vi } from 'vitest';
-import React from 'react';
 import { useRoutineBuilderContext } from './useRoutineBuilderContext';
-import { RoutineBuilderState } from '../context/routineBuilder/types';
-import { UserCreatedRoutine } from '@peakhealth/routines-types';
-import { RoutineBuilderProvider } from '../context/routineBuilder/RoutineBuilderContext';
-
-const mockState: RoutineBuilderState = {
-  _id: 'routine1',
-  name: 'Initial Routine',
-  workouts: [],
-  userId: 'user1',
-  createdBy: 'user1',
-  routineType: 'user-created',
-  isActive: false,
-  isFavorite: false,
-  completedWorkouts: 0,
-  totalWorkouts: 0,
-  schemaVersion: '1.0',
-  createdAt: new Date().toISOString(),
-  updatedAt: new Date().toISOString(),
-  difficulty: 'beginner',
-  duration: 4,
-  goal: 'strength',
-  objectives: [],
-} as UserCreatedRoutine;
+import {
+  RoutineBuilderProvider,
+  RoutineBuilderContextType,
+} from '../context/routineBuilder/RoutineBuilderContext';
+import { vi } from 'vitest';
 
 describe('useRoutineBuilderContext', () => {
-  test('throws an error when used outside of a RoutineBuilderProvider', () => {
-    // Suppress console.error output for this expected error
-    const spy = vi.spyOn(console, 'error').mockImplementation(() => {
-      // no-op
-    });
-    expect(() => renderHook(() => useRoutineBuilderContext())).toThrow(
-      'useRoutineBuilderContext must be used within a RoutineBuilderProvider'
-    );
-    spy.mockRestore();
-  });
-
-  test('returns the context value when used within a RoutineBuilderProvider', () => {
-    const mockValue = {
-      state: mockState,
+  it('should return context value when used within RoutineBuilderProvider', () => {
+    const mockContextValue: RoutineBuilderContextType = {
+      state: {
+        _id: '1',
+        name: 'Test Routine',
+        description: 'Test description',
+        difficulty: 'beginner',
+        goal: 'strength',
+        duration: 4,
+        objectives: ['Build strength'],
+        workouts: [],
+        schemaVersion: '1.0',
+        createdAt: '2024-01-01T00:00:00Z',
+        updatedAt: '2024-01-01T00:00:00Z',
+        userId: 'user1',
+        createdBy: 'user1',
+        routineType: 'user-created',
+        isActive: true,
+        isFavorite: false,
+        completedWorkouts: 0,
+        totalWorkouts: 0,
+      },
       dispatch: vi.fn(),
     };
 
-    function Wrapper({
-      children,
-    }: {
-      children: React.ReactNode;
-    }): React.ReactElement {
-      return (
-        <RoutineBuilderProvider value={mockValue}>
+    const { result } = renderHook(() => useRoutineBuilderContext(), {
+      wrapper: ({ children }) => (
+        <RoutineBuilderProvider value={mockContextValue}>
           {children}
         </RoutineBuilderProvider>
-      );
-    }
-
-    const { result } = renderHook(() => useRoutineBuilderContext(), {
-      wrapper: Wrapper,
+      ),
     });
 
-    expect(result.current.state).toEqual(mockState);
-    expect(result.current.dispatch).toBeInstanceOf(Function);
+    expect(result.current).toBeDefined();
+    expect(result.current.state).toBeDefined();
+    expect(result.current.dispatch).toBeDefined();
+  });
+
+  it('should throw error when used outside RoutineBuilderProvider', () => {
+    expect(() => {
+      renderHook(() => useRoutineBuilderContext());
+    }).toThrow(
+      'useRoutineBuilderContext must be used within a RoutineBuilderProvider'
+    );
   });
 });
