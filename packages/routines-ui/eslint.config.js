@@ -24,7 +24,7 @@ export default [
       },
     },
     settings: {
-      'import/resolver': {
+      'import-x/resolver': {
         typescript: {
           project: './tsconfig.json',
           alwaysTryTypes: true,
@@ -54,7 +54,7 @@ export default [
       },
     },
     settings: {
-      'import/resolver': {
+      'import-x/resolver': {
         typescript: {
           project: './tsconfig.json',
           alwaysTryTypes: true,

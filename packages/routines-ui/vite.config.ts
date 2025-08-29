@@ -1,7 +1,7 @@
 import { defineConfig } from 'vite';
 import { resolve } from 'path';
 import react from '@vitejs/plugin-react';
-// @ts-ignore - vite-plugin-dts has ESLint issues with its exports
+// eslint-disable-next-line import-x/default
 import dts from 'vite-plugin-dts';
 
 export default defineConfig({
@@ -9,7 +9,11 @@ export default defineConfig({
     react(),
     dts({
       include: ['src/**/*'],
-      exclude: ['src/**/*.test.ts', 'src/**/*.test.tsx', 'src/**/*.stories.tsx'],
+      exclude: [
+        'src/**/*.test.ts',
+        'src/**/*.test.tsx',
+        'src/**/*.stories.tsx',
+      ],
     }),
   ],
   build: {
