@@ -331,7 +331,7 @@ jobs:
           AFFECTED="${{ needs.determine-affected.outputs.affected }}"
 
           # Core packages that should always be built first if they're affected
-          CORE_PACKAGES="@peakhealth/ui @peakhealth/auth-types @peakhealth/auth-utils"
+          CORE_PACKAGES="@peakhealth/ui @peakhealth/auth-types @peakhealth/auth-utils @peakhealth/routines-types @peakhealth/routines-ui"
 
           if [[ "$AFFECTED" == "all" ]]; then
             echo "Building all core packages"
@@ -339,12 +339,16 @@ jobs:
             pnpm turbo run build \
               --filter="@peakhealth/ui" \
               --filter="@peakhealth/auth-types" \
-              --filter="@peakhealth/auth-utils" || {
+              --filter="@peakhealth/auth-utils" \
+              --filter="@peakhealth/routines-types" \
+              --filter="@peakhealth/routines-ui" || {
               echo "Build failed, trying clean build..."
               pnpm turbo run build \
                 --filter="@peakhealth/ui" \
                 --filter="@peakhealth/auth-types" \
                 --filter="@peakhealth/auth-utils" \
+                --filter="@peakhealth/routines-types" \
+                --filter="@peakhealth/routines-ui" \
                 --force
             }
           else
@@ -369,12 +373,16 @@ jobs:
               pnpm turbo run build \
                 --filter="@peakhealth/ui" \
                 --filter="@peakhealth/auth-types" \
-                --filter="@peakhealth/auth-utils" || {
+                --filter="@peakhealth/auth-utils" \
+                --filter="@peakhealth/routines-types" \
+                --filter="@peakhealth/routines-ui" || {
                 echo "Build failed, trying clean build..."
                 pnpm turbo run build \
                   --filter="@peakhealth/ui" \
                   --filter="@peakhealth/auth-types" \
                   --filter="@peakhealth/auth-utils" \
+                  --filter="@peakhealth/routines-types" \
+                  --filter="@peakhealth/routines-ui" \
                   --force
               }
             else
@@ -384,7 +392,7 @@ jobs:
                 if [[ -n "$PKG" ]]; then
                   # Only include packages that are actually in the packages/ directory
                   # Valid packages: @peakhealth/ui, @peakhealth/auth-types, @peakhealth/auth-utils
-                  if [[ "$PKG" == "@peakhealth/ui" ]] || [[ "$PKG" == "@peakhealth/auth-types" ]] || [[ "$PKG" == "@peakhealth/auth-utils" ]]; then
+                  if [[ "$PKG" == "@peakhealth/ui" ]] || [[ "$PKG" == "@peakhealth/auth-types" ]] || [[ "$PKG" == "@peakhealth/auth-utils" ]] || [[ "$PKG" == "@peakhealth/routines-types" ]] || [[ "$PKG" == "@peakhealth/routines-ui" ]]; then
                     PACKAGES_TO_BUILD+=("$PKG")
                   else
                     echo "Skipping app/other package: $PKG"
