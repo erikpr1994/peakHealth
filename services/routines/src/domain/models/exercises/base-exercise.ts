@@ -1,4 +1,5 @@
 import mongoose, { Schema } from 'mongoose';
+import { baseSetSchema } from '../sets/base-set';
 
 // Define schema for base exercise
 export const baseExerciseSchema = new Schema(
@@ -15,7 +16,7 @@ export const baseExerciseSchema = new Schema(
     restAfter: { type: String }, // DurationString
     notes: { type: String },
     // Type-specific fields that can be used when embedded
-    sets: [Schema.Types.Mixed], // Will contain type-specific set data
+    sets: [baseSetSchema], // Use proper set schema for type safety
     progressionMethod: { type: String },
     unilateralMode: { type: String },
     rounds: { type: Number },
