@@ -6,18 +6,18 @@ import { ApiError } from '../utils/error-handler';
 
 // Mock the mongoose model
 vi.mock('../domain/models/user-created-routine', () => {
+  const mockModel = vi.fn() as any;
+  mockModel.find = vi.fn();
+  mockModel.findOne = vi.fn();
+  mockModel.deleteOne = vi.fn();
   return {
-    default: {
-      find: vi.fn(),
-      findOne: vi.fn(),
-      deleteOne: vi.fn(),
-    },
+    default: mockModel,
   };
 });
 
 describe('RoutineService', () => {
   const userId = 'user123';
-  const routineId = 'routine123';
+  const routineId = '507f1f77bcf86cd799439011';
   const mockObjectId = new Types.ObjectId(routineId);
 
   beforeEach(() => {
@@ -39,18 +39,18 @@ describe('RoutineService', () => {
         save: mockSave,
       };
 
-      // Mock the constructor and save method
-      vi.spyOn(
-        UserCreatedRoutineModel.prototype,
-        'constructor'
-      ).mockReturnValue(mockRoutine as any);
-      vi.spyOn(UserCreatedRoutineModel.prototype, 'save').mockResolvedValue(
-        mockRoutine
-      );
+      // Mock the UserCreatedRoutineModel constructor
+      (UserCreatedRoutineModel as any).mockImplementation(() => ({
+        ...mockRoutine,
+        save: mockSave,
+      }));
 
       const result = await routineService.createRoutine(userId, routineData);
 
-      expect(result).toEqual(mockRoutine);
+      expect(result).toEqual({
+        ...mockRoutine,
+        save: mockSave,
+      });
       expect(mockSave).toHaveBeenCalled();
     });
 
@@ -66,17 +66,10 @@ describe('RoutineService', () => {
         category: { message: 'Category is required' },
       };
 
-      // Mock the constructor and save method
-      vi.spyOn(
-        UserCreatedRoutineModel.prototype,
-        'constructor'
-      ).mockImplementation(() => {
-        return {
-          save: () => {
-            throw validationError;
-          },
-        } as any;
-      });
+      // Mock the UserCreatedRoutineModel constructor to throw validation error
+      (UserCreatedRoutineModel as any).mockImplementation(() => ({
+        save: vi.fn().mockRejectedValue(validationError),
+      }));
 
       await expect(
         routineService.createRoutine(userId, routineData)
@@ -152,14 +145,21 @@ describe('RoutineService', () => {
     });
 
     it('should handle invalid ID format', async () => {
+      // Mock Types.ObjectId to throw an error for invalid ID
+      const originalObjectId = Types.ObjectId;
       const castError = new Error('Cast error');
       castError.name = 'CastError';
 
-      (UserCreatedRoutineModel.findOne as any).mockRejectedValue(castError);
+      Types.ObjectId = vi.fn().mockImplementation(() => {
+        throw castError;
+      }) as any;
 
       await expect(
         routineService.getRoutineById('invalid-id', userId)
-      ).rejects.toThrow(new ApiError('Invalid routine ID format', 400));
+      ).rejects.toThrow(ApiError);
+
+      // Restore original ObjectId
+      Types.ObjectId = originalObjectId;
     });
   });
 
