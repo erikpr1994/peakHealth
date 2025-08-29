@@ -341,19 +341,16 @@ jobs:
             IFS=',' read -ra PACKAGES <<< "$AFFECTED"
             for PKG in "${PACKAGES[@]}"; do
               if [[ -n "$PKG" ]]; then
-                # Only include packages, exclude services and apps
-                if [[ -d "packages/$(echo $PKG | sed 's/@peakhealth\///')" ]]; then
-                  FILTER_STRING="${FILTER_STRING} --filter=${PKG}"
-                elif [[ "$PKG" == "@peakhealth/routines-api" ]]; then
+                # Explicitly exclude routines-api and other services
+                if [[ "$PKG" == "@peakhealth/routines-api" ]]; then
                   echo "Skipping routines-api service: $PKG"
+                elif [[ "$PKG" == "@peakhealth/web" ]] || [[ "$PKG" == "@peakhealth/admin" ]] || [[ "$PKG" == "@peakhealth/landing" ]] || [[ "$PKG" == "@peakhealth/auth" ]]; then
+                  echo "Skipping app: $PKG"
+                elif [[ -d "packages/$(echo $PKG | sed 's/@peakhealth\///')" ]]; then
+                  echo "Including package: $PKG"
+                  FILTER_STRING="${FILTER_STRING} --filter=${PKG}"
                 else
-                  # Check if it's a service (exclude) or app (exclude)
-                  is_package=$(pnpm find . --json | jq -r ".[] | select(.name == \"$PKG\") | .path" | grep -E "^packages")
-                  if [[ -n "$is_package" ]]; then
-                     FILTER_STRING="${FILTER_STRING} --filter=${PKG}"
-                  else
-                    echo "Skipping service/app: $PKG"
-                  fi
+                  echo "Skipping unknown package/service: $PKG"
                 fi
               fi
             done
