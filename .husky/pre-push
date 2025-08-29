@@ -47,17 +47,23 @@ for file in $CHANGED_FILES; do
   TEST_FILES_FOUND=false
   
   # Check for test files in the same directory
-  if [ -f "$DIR/${NAME_WITHOUT_EXT}.test.${FILENAME##*.}" ] || \
-     [ -f "$DIR/${NAME_WITHOUT_EXT}.spec.${FILENAME##*.}" ] || \
-     [ -f "$DIR/__tests__/${NAME_WITHOUT_EXT}.test.${FILENAME##*.}" ] || \
-     [ -f "$DIR/__tests__/${NAME_WITHOUT_EXT}.spec.${FILENAME##*.}" ]; then
+  if [ -f "$DIR/${NAME_WITHOUT_EXT}.test.ts" ] || \
+     [ -f "$DIR/${NAME_WITHOUT_EXT}.test.tsx" ] || \
+     [ -f "$DIR/${NAME_WITHOUT_EXT}.spec.ts" ] || \
+     [ -f "$DIR/${NAME_WITHOUT_EXT}.spec.tsx" ] || \
+     [ -f "$DIR/__tests__/${NAME_WITHOUT_EXT}.test.ts" ] || \
+     [ -f "$DIR/__tests__/${NAME_WITHOUT_EXT}.test.tsx" ] || \
+     [ -f "$DIR/__tests__/${NAME_WITHOUT_EXT}.spec.ts" ] || \
+     [ -f "$DIR/__tests__/${NAME_WITHOUT_EXT}.spec.tsx" ]; then
     TEST_FILES_FOUND=true
   fi
   
   # Check for test files in parent __tests__ directory
   PARENT_DIR=$(dirname "$DIR")
-  if [ -f "$PARENT_DIR/__tests__/${NAME_WITHOUT_EXT}.test.${FILENAME##*.}" ] || \
-     [ -f "$PARENT_DIR/__tests__/${NAME_WITHOUT_EXT}.spec.${FILENAME##*.}" ]; then
+  if [ -f "$PARENT_DIR/__tests__/${NAME_WITHOUT_EXT}.test.ts" ] || \
+     [ -f "$PARENT_DIR/__tests__/${NAME_WITHOUT_EXT}.test.tsx" ] || \
+     [ -f "$PARENT_DIR/__tests__/${NAME_WITHOUT_EXT}.spec.ts" ] || \
+     [ -f "$PARENT_DIR/__tests__/${NAME_WITHOUT_EXT}.spec.tsx" ]; then
     TEST_FILES_FOUND=true
   fi
   

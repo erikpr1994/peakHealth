@@ -3,9 +3,8 @@ import { describe, expect, test, vi } from 'vitest';
 import React from 'react';
 import { useRoutineBuilderContext } from './useRoutineBuilderContext';
 import { RoutineBuilderState } from '../context/routineBuilder/types';
-// eslint-disable-next-line import/named
 import { UserCreatedRoutine } from '@peakhealth/routines-types';
-import { RoutineBuilderProvider } from '../context/routineBuilder';
+import { RoutineBuilderProvider } from '../context/routineBuilder/RoutineBuilderContext';
 
 const mockState: RoutineBuilderState = {
   _id: 'routine1',
@@ -30,7 +29,9 @@ const mockState: RoutineBuilderState = {
 describe('useRoutineBuilderContext', () => {
   test('throws an error when used outside of a RoutineBuilderProvider', () => {
     // Suppress console.error output for this expected error
-    const spy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    const spy = vi.spyOn(console, 'error').mockImplementation(() => {
+      // no-op
+    });
     expect(() => renderHook(() => useRoutineBuilderContext())).toThrow(
       'useRoutineBuilderContext must be used within a RoutineBuilderProvider'
     );

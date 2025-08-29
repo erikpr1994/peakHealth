@@ -6,7 +6,8 @@ import globals from 'globals';
 export default [
   ...baseConfig,
   {
-    files: ['**/*.ts', '**/*.tsx'],
+    files: ['src/**/*.ts', 'src/**/*.tsx'],
+    ignores: ['**/*.test.ts', '**/*.test.tsx'],
     plugins: {
       '@typescript-eslint': typescriptPlugin,
     },
@@ -21,10 +22,6 @@ export default [
           jsx: true,
         },
       },
-      globals: {
-        ...globals.browser,
-        ...globals.node,
-      },
     },
     settings: {
       'import/resolver': {
@@ -36,6 +33,36 @@ export default [
     },
     rules: {
       // Add any package-specific rules here
+    },
+  },
+  {
+    files: ['**/*.test.ts', '**/*.test.tsx'],
+    plugins: {
+      '@typescript-eslint': typescriptPlugin,
+    },
+    languageOptions: {
+      parser: typescriptParser,
+      parserOptions: {
+        project: './tsconfig.json',
+        tsconfigRootDir: import.meta.dirname,
+      },
+      globals: {
+        ...globals.browser,
+        ...globals.node,
+        ...globals.jest,
+        ...globals.vitest,
+      },
+    },
+    settings: {
+      'import/resolver': {
+        typescript: {
+          project: './tsconfig.json',
+          alwaysTryTypes: true,
+        },
+      },
+    },
+    rules: {
+      'no-undef': 'off', // Vitest globals are not always picked up
     },
   },
 ];
