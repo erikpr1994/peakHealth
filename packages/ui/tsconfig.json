@@ -1,20 +1,10 @@
 {
+  "extends": "../../tsconfig.packages.json",
   "compilerOptions": {
-    "target": "ES2020",
-    "lib": ["ES2020", "DOM", "DOM.Iterable"],
-    "module": "ESNext",
-    "moduleResolution": "node",
-    "declaration": true,
-    "outDir": "./dist",
-    "rootDir": "./src",
-    "strict": true,
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true,
     "jsx": "react-jsx",
-    "types": ["vitest/globals"]
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "rootDir": "./src"
   },
-  "include": ["src/**/*", "eslint.config.js"],
+  "include": ["src/**/*"],
   "exclude": ["node_modules", "dist"]
 }

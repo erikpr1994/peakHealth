@@ -1,21 +1,17 @@
 {
   "$schema": "https://json.schemastore.org/tsconfig",
-  "display": "Base Configuration",
+  "display": "Peak Health Base TypeScript Configuration",
   "compilerOptions": {
     // Target and module settings
     "target": "ES2020",
-    "lib": ["dom", "dom.iterable", "esnext"],
-    "module": "esnext",
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
     "moduleResolution": "bundler",
     "jsx": "preserve",
 
     // JavaScript support
     "allowJs": true,
     "resolveJsonModule": true,
-
-    // Emit settings
-    "noEmit": true,
-    "incremental": true,
 
     // Type checking
     "strict": true,
@@ -25,8 +21,9 @@
     // Module interop
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
+    "allowSyntheticDefaultImports": true,
 
-    // Types
+    // Common types
     "types": ["vitest/globals"]
   }
 }
