@@ -1,23 +1,23 @@
+import { describe, it, expect, afterEach, vi } from 'vitest';
 import { routineService } from './routine.service';
 import UserCreatedRoutineModel from '../domain/models/user-created-routine';
 import { ApiError } from '../utils/error-handler';
 
 // Mock the UserCreatedRoutineModel
-jest.mock('../domain/models/user-created-routine', () => {
+vi.mock('../domain/models/user-created-routine', () => {
   return {
-    __esModule: true,
     default: {
-      find: jest.fn(),
-      findOne: jest.fn(),
-      countDocuments: jest.fn(),
-      deleteOne: jest.fn(),
+      find: vi.fn(),
+      findOne: vi.fn(),
+      countDocuments: vi.fn(),
+      deleteOne: vi.fn(),
     },
   };
 });
 
 describe('RoutineService', () => {
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   describe('getRoutinesByUser', () => {
@@ -31,13 +31,13 @@ describe('RoutineService', () => {
       const mockTotalItems = 10;
 
       // Setup mocks
-      (UserCreatedRoutineModel.countDocuments as jest.Mock).mockResolvedValue(
+      (UserCreatedRoutineModel.countDocuments as ReturnType<typeof vi.fn>).mockResolvedValue(
         mockTotalItems
       );
-      (UserCreatedRoutineModel.find as jest.Mock).mockReturnValue({
-        skip: jest.fn().mockReturnThis(),
-        limit: jest.fn().mockReturnThis(),
-        sort: jest.fn().mockResolvedValue(mockRoutines),
+      (UserCreatedRoutineModel.find as ReturnType<typeof vi.fn>).mockReturnValue({
+        skip: vi.fn().mockReturnThis(),
+        limit: vi.fn().mockReturnThis(),
+        sort: vi.fn().mockResolvedValue(mockRoutines),
       });
 
       // Call the service method
@@ -68,13 +68,13 @@ describe('RoutineService', () => {
       const mockTotalItems = 15;
 
       // Setup mocks
-      (UserCreatedRoutineModel.countDocuments as jest.Mock).mockResolvedValue(
+      (UserCreatedRoutineModel.countDocuments as ReturnType<typeof vi.fn>).mockResolvedValue(
         mockTotalItems
       );
-      (UserCreatedRoutineModel.find as jest.Mock).mockReturnValue({
-        skip: jest.fn().mockReturnThis(),
-        limit: jest.fn().mockReturnThis(),
-        sort: jest.fn().mockResolvedValue(mockRoutines),
+      (UserCreatedRoutineModel.find as ReturnType<typeof vi.fn>).mockReturnValue({
+        skip: vi.fn().mockReturnThis(),
+        limit: vi.fn().mockReturnThis(),
+        sort: vi.fn().mockResolvedValue(mockRoutines),
       });
 
       // Call the service method
@@ -103,13 +103,13 @@ describe('RoutineService', () => {
       const mockTotalItems = 1;
 
       // Setup mocks
-      (UserCreatedRoutineModel.countDocuments as jest.Mock).mockResolvedValue(
+      (UserCreatedRoutineModel.countDocuments as ReturnType<typeof vi.fn>).mockResolvedValue(
         mockTotalItems
       );
-      (UserCreatedRoutineModel.find as jest.Mock).mockReturnValue({
-        skip: jest.fn().mockReturnThis(),
-        limit: jest.fn().mockReturnThis(),
-        sort: jest.fn().mockResolvedValue(mockRoutines),
+      (UserCreatedRoutineModel.find as ReturnType<typeof vi.fn>).mockReturnValue({
+        skip: vi.fn().mockReturnThis(),
+        limit: vi.fn().mockReturnThis(),
+        sort: vi.fn().mockResolvedValue(mockRoutines),
       });
 
       // Call the service method
@@ -128,7 +128,7 @@ describe('RoutineService', () => {
     it('should handle errors', async () => {
       // Setup mock to throw error
       const error = new Error('Database error');
-      (UserCreatedRoutineModel.countDocuments as jest.Mock).mockRejectedValue(
+      (UserCreatedRoutineModel.countDocuments as ReturnType<typeof vi.fn>).mockRejectedValue(
         error
       );
 
@@ -139,3 +139,4 @@ describe('RoutineService', () => {
     });
   });
 });
+

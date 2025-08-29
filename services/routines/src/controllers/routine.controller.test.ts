@@ -1,19 +1,20 @@
 import { Request, Response, NextFunction } from 'express';
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { routineController } from './routine.controller';
 import { routineService } from '../services/routine.service';
 import { ApiError } from '../utils/error-handler';
 
 // Mock the routine service
-jest.mock('../services/routine.service', () => ({
+vi.mock('../services/routine.service', () => ({
   routineService: {
-    getRoutinesByUser: jest.fn(),
+    getRoutinesByUser: vi.fn(),
   },
 }));
 
 describe('RoutineController', () => {
   let mockRequest: Partial<Request>;
   let mockResponse: Partial<Response>;
-  let mockNext: jest.MockedFunction<NextFunction>;
+  let mockNext: ReturnType<typeof vi.fn>;
 
   beforeEach(() => {
     mockRequest = {
@@ -21,14 +22,14 @@ describe('RoutineController', () => {
       query: {},
     };
     mockResponse = {
-      status: jest.fn().mockReturnThis(),
-      json: jest.fn(),
+      status: vi.fn().mockReturnThis(),
+      json: vi.fn(),
     };
-    mockNext = jest.fn();
+    mockNext = vi.fn();
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   describe('getRoutines', () => {
@@ -41,7 +42,7 @@ describe('RoutineController', () => {
       const mockTotalItems = 10;
 
       // Setup mock return value
-      (routineService.getRoutinesByUser as jest.Mock).mockResolvedValue({
+      (routineService.getRoutinesByUser as ReturnType<typeof vi.fn>).mockResolvedValue({
         routines: mockRoutines,
         totalItems: mockTotalItems,
         page: 1,
@@ -88,7 +89,7 @@ describe('RoutineController', () => {
       const mockTotalItems = 25;
 
       // Setup mock return value
-      (routineService.getRoutinesByUser as jest.Mock).mockResolvedValue({
+      (routineService.getRoutinesByUser as ReturnType<typeof vi.fn>).mockResolvedValue({
         routines: mockRoutines,
         totalItems: mockTotalItems,
         page: 2,
@@ -132,7 +133,7 @@ describe('RoutineController', () => {
       const mockTotalItems = 1;
 
       // Setup mock return value
-      (routineService.getRoutinesByUser as jest.Mock).mockResolvedValue({
+      (routineService.getRoutinesByUser as ReturnType<typeof vi.fn>).mockResolvedValue({
         routines: mockRoutines,
         totalItems: mockTotalItems,
         page: 1,
@@ -230,7 +231,7 @@ describe('RoutineController', () => {
     it('should handle service errors', async () => {
       // Setup service to throw error
       const error = new Error('Service error');
-      (routineService.getRoutinesByUser as jest.Mock).mockRejectedValue(error);
+      (routineService.getRoutinesByUser as ReturnType<typeof vi.fn>).mockRejectedValue(error);
 
       // Call the controller method
       await routineController.getRoutines(
@@ -244,3 +245,4 @@ describe('RoutineController', () => {
     });
   });
 });
+

@@ -1,3 +1,4 @@
+import { describe, it, expect } from 'vitest';
 import { parsePaginationParams, createPaginationMetadata } from './pagination';
 
 describe('Pagination Utils', () => {
@@ -100,3 +101,4 @@ describe('Pagination Utils', () => {
     });
   });
 });
+
