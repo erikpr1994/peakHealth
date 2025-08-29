@@ -65,8 +65,8 @@ echo "$CHANGED_FILES" >&2  # Send to stderr
 # Step 2: Map changed files to workspace packages
 log "Mapping changed files to workspace packages..."
 
-# Get all workspace packages
-WORKSPACE_PACKAGES=$(find apps packages -maxdepth 2 -type f -name "package.json" | grep -v "node_modules" | xargs dirname)
+# Get all workspace packages from apps, packages, and services directories
+WORKSPACE_PACKAGES=$(find apps packages services -maxdepth 2 -type f -name "package.json" | grep -v "node_modules" | xargs dirname)
 
 # Initialize affected packages array
 AFFECTED_PACKAGES=()

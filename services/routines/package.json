@@ -1,11 +1,11 @@
 {
-  "name": "routines",
+  "name": "@peakhealth/routines-api",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
     "start": "tsc && node dist/index.js",
-    "test": "vitest",
+    "test": "vitest run",
     "test:coverage": "vitest run --coverage"
   },
   "keywords": [],
