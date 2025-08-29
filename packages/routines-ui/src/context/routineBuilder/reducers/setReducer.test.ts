@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { addSet, removeSet, updateSet, reorderSets } from './setReducer';
 import { RoutineBuilderState } from '../types';
+// eslint-disable-next-line import-x/named
 import {
   WorkoutSet,
   StrengthExercise,
@@ -428,3 +429,4 @@ describe('setReducer', () => {
     });
   });
 });
+// Test comment
