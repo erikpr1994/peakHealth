@@ -36,12 +36,19 @@ export class RoutineService {
   }
 
   /**
-   * Get all routines for a user
+   * Get all routines for a user with pagination
    * @param userId The ID of the user
    * @param type Optional filter for routine type
-   * @returns Array of routines
+   * @param page Page number (1-based)
+   * @param limit Number of items per page
+   * @returns Object containing routines array and pagination metadata
    */
-  async getRoutinesByUser(userId: string, type?: 'active' | 'user' | 'assigned') {
+  async getRoutinesByUser(
+    userId: string,
+    type?: 'active' | 'user' | 'assigned',
+    page: number = 1,
+    limit: number = 20
+  ) {
     try {
       let query: any = { userId };
 
@@ -57,8 +64,24 @@ export class RoutineService {
         // This is a placeholder for future implementation
       }
 
-      const routines = await UserCreatedRoutineModel.find(query);
-      return routines;
+      // Calculate skip value for pagination
+      const skip = (page - 1) * limit;
+
+      // Get total count for pagination metadata
+      const totalItems = await UserCreatedRoutineModel.countDocuments(query);
+
+      // Get paginated routines
+      const routines = await UserCreatedRoutineModel.find(query)
+        .skip(skip)
+        .limit(limit)
+        .sort({ updatedAt: -1 }); // Sort by most recently updated
+
+      return {
+        routines,
+        totalItems,
+        page,
+        limit,
+      };
     } catch (error) {
       throw error;
     }
@@ -179,4 +202,3 @@ export class RoutineService {
 
 // Export a singleton instance
 export const routineService = new RoutineService();
-

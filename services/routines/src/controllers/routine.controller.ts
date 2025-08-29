@@ -37,7 +37,7 @@ export class RoutineController {
   }
 
   /**
-   * Get all routines for the authenticated user
+   * Get all routines for the authenticated user with pagination
    * GET /api/routines
    */
   async getRoutines(req: Request, res: Response, next: NextFunction) {
@@ -51,11 +51,44 @@ export class RoutineController {
       // Get type filter from query params if provided
       const type = req.query.type as 'active' | 'user' | 'assigned' | undefined;
 
-      // Get routines using the service
-      const routines = await routineService.getRoutinesByUser(userId, type);
+      // Parse pagination parameters
+      const page = req.query.page ? parseInt(req.query.page as string, 10) : 1;
+      const limit = req.query.limit
+        ? parseInt(req.query.limit as string, 10)
+        : 20;
 
-      // Return success response with the routines
-      return res.status(200).json({ routines });
+      // Validate pagination parameters
+      if (isNaN(page) || page < 1) {
+        throw new ApiError('Invalid page parameter', 400);
+      }
+
+      if (isNaN(limit) || limit < 1 || limit > 100) {
+        throw new ApiError('Invalid limit parameter', 400);
+      }
+
+      // Get routines using the service with pagination
+      const { routines, totalItems } = await routineService.getRoutinesByUser(
+        userId,
+        type,
+        page,
+        limit
+      );
+
+      // Calculate pagination metadata
+      const totalPages = Math.ceil(totalItems / limit);
+
+      // Return success response with the routines and pagination metadata
+      return res.status(200).json({
+        data: routines,
+        pagination: {
+          currentPage: page,
+          pageSize: limit,
+          totalItems,
+          totalPages,
+          hasNextPage: page < totalPages,
+          hasPrevPage: page > 1,
+        },
+      });
     } catch (error) {
       next(error);
     }
@@ -152,4 +185,3 @@ export class RoutineController {
 
 // Export a singleton instance
 export const routineController = new RoutineController();
-
