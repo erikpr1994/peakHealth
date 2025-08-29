@@ -20,6 +20,11 @@ for file in $CHANGED_FILES; do
   if [[ ! "$file" =~ \.(ts|tsx|js|jsx)$ ]] || [[ "$file" =~ \.(test|spec)\.(ts|tsx|js|jsx)$ ]]; then
     continue
   fi
+
+  # Skip barrel files (index.ts, index.tsx, etc.)
+  if [[ "$(basename "$file")" =~ ^index\.(ts|tsx|js|jsx)$ ]]; then
+    continue
+  fi
   
   # Skip if it's in node_modules, dist, build, or .next
   if [[ "$file" =~ node_modules/ ]] || [[ "$file" =~ dist/ ]] || [[ "$file" =~ build/ ]] || [[ "$file" =~ \.next/ ]]; then
