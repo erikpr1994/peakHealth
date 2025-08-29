@@ -1,9 +1,7 @@
 import { renderHook } from '@testing-library/react';
 import { describe, expect, test } from 'vitest';
-import {
-  RoutineBuilderProvider,
-  useRoutineBuilderContext,
-} from '../context/routineBuilder';
+import { RoutineBuilderProvider } from '../context/routineBuilder';
+import { useRoutineBuilderContext } from './useRoutineBuilderContext';
 import { RoutineBuilderState } from '../context/routineBuilder/types';
 import { UserCreatedRoutine } from '@peakhealth/routines-types';
 
@@ -44,9 +42,11 @@ describe('useRoutineBuilderContext', () => {
       dispatch: () => {},
     };
 
-    const wrapper = ({ children }: { children: React.ReactNode }) => (
-      <RoutineBuilderProvider value={mockValue}>{children}</RoutineBuilderProvider>
-    );
+    function wrapper({ children }: { children: React.ReactNode }) {
+      return (
+        <RoutineBuilderProvider value={mockValue}>{children}</RoutineBuilderProvider>
+      );
+    }
 
     const { result } = renderHook(() => useRoutineBuilderContext(), { wrapper });
 
