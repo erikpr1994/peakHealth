@@ -6,7 +6,9 @@ import { useRoutineBuilder } from '../hooks/useRoutineBuilder';
 import { UserCreatedRoutine } from '@peakhealth/routines-types';
 
 // Mock wrapper component to provide context
-const MockProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+const MockProvider: React.FC<{ children: React.ReactNode }> = ({
+  children,
+}) => {
   const initialState: UserCreatedRoutine = {
     _id: 'test-routine',
     name: 'Test Routine',
@@ -46,7 +48,7 @@ describe('RoutineBuilderExample', () => {
     );
 
     expect(screen.getByText('Routine: Test Routine')).toBeInTheDocument();
-    
+
     const nameInput = screen.getByDisplayValue('Test Routine');
     expect(nameInput).toBeInTheDocument();
   });
@@ -69,7 +71,9 @@ describe('RoutineBuilderExample', () => {
       </MockProvider>
     );
 
-    expect(screen.getByText('No workouts yet. Click "Add Workout" to get started!')).toBeInTheDocument();
+    expect(
+      screen.getByText('No workouts yet. Click "Add Workout" to get started!')
+    ).toBeInTheDocument();
   });
 
   test('should add workout when button is clicked', () => {
@@ -99,9 +103,13 @@ describe('RoutineBuilderExample', () => {
 
     // Find and edit the workout name
     const workoutNameInput = screen.getByDisplayValue('Workout 1');
-    fireEvent.change(workoutNameInput, { target: { value: 'Updated Workout Name' } });
+    fireEvent.change(workoutNameInput, {
+      target: { value: 'Updated Workout Name' },
+    });
 
-    expect(screen.getByDisplayValue('Updated Workout Name')).toBeInTheDocument();
+    expect(
+      screen.getByDisplayValue('Updated Workout Name')
+    ).toBeInTheDocument();
   });
 
   test('should show workout type', () => {

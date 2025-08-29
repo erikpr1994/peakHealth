@@ -32,8 +32,8 @@ export type UpdateWorkoutAction = {
 };
 
 // Action types will be added here as we build the mutation utilities
-export type RoutineBuilderAction = 
-  | UpdateRoutineNameAction 
-  | AddWorkoutAction 
-  | RemoveWorkoutAction 
+export type RoutineBuilderAction =
+  | UpdateRoutineNameAction
+  | AddWorkoutAction
+  | RemoveWorkoutAction
   | UpdateWorkoutAction;

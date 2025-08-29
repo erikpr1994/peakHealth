@@ -29,12 +29,15 @@ export const RoutineBuilderExample: React.FC = () => {
     });
   };
 
-  const handleUpdateWorkoutName = (workoutId: string, newName: string): void => {
+  const handleUpdateWorkoutName = (
+    workoutId: string,
+    newName: string
+  ): void => {
     dispatch({
       type: 'UPDATE_WORKOUT',
-      payload: { 
-        workoutId, 
-        updates: { name: newName } 
+      payload: {
+        workoutId,
+        updates: { name: newName },
       },
     });
   };
@@ -49,28 +52,28 @@ export const RoutineBuilderExample: React.FC = () => {
   return (
     <div style={{ padding: '20px', fontFamily: 'Arial, sans-serif' }}>
       <h2>Routine Builder Example</h2>
-      
+
       <div style={{ marginBottom: '20px' }}>
         <h3>Routine: {state.name}</h3>
         <input
           type="text"
           value={state.name}
-          onChange={(e) => handleUpdateRoutineName(e.target.value)}
+          onChange={e => handleUpdateRoutineName(e.target.value)}
           placeholder="Routine name"
           style={{ padding: '8px', marginRight: '10px' }}
         />
       </div>
 
       <div style={{ marginBottom: '20px' }}>
-        <button 
+        <button
           onClick={handleAddWorkout}
-          style={{ 
-            padding: '10px 20px', 
-            backgroundColor: '#007bff', 
-            color: 'white', 
-            border: 'none', 
+          style={{
+            padding: '10px 20px',
+            backgroundColor: '#007bff',
+            color: 'white',
+            border: 'none',
             borderRadius: '4px',
-            cursor: 'pointer'
+            cursor: 'pointer',
           }}
         >
           Add Workout
@@ -86,17 +89,17 @@ export const RoutineBuilderExample: React.FC = () => {
           <p>No workouts yet. Click "Add Workout" to get started!</p>
         ) : (
           <ul style={{ listStyle: 'none', padding: 0 }}>
-            {state.workouts.map((workout) => (
-              <li 
-                key={workout._id} 
-                style={{ 
-                  border: '1px solid #ddd', 
-                  margin: '10px 0', 
-                  padding: '15px', 
+            {state.workouts.map(workout => (
+              <li
+                key={workout._id}
+                style={{
+                  border: '1px solid #ddd',
+                  margin: '10px 0',
+                  padding: '15px',
                   borderRadius: '4px',
                   display: 'flex',
                   alignItems: 'center',
-                  gap: '10px'
+                  gap: '10px',
                 }}
               >
                 <span style={{ fontWeight: 'bold', minWidth: '60px' }}>
@@ -105,12 +108,12 @@ export const RoutineBuilderExample: React.FC = () => {
                 <input
                   type="text"
                   value={workout.name}
-                  onChange={(e) => handleUpdateWorkoutName(workout._id, e.target.value)}
+                  onChange={e =>
+                    handleUpdateWorkoutName(workout._id, e.target.value)
+                  }
                   style={{ flex: 1, padding: '5px' }}
                 />
-                <span style={{ color: '#666' }}>
-                  Type: {workout.type}
-                </span>
+                <span style={{ color: '#666' }}>Type: {workout.type}</span>
                 <button
                   onClick={() => handleRemoveWorkout(workout._id)}
                   style={{
@@ -119,7 +122,7 @@ export const RoutineBuilderExample: React.FC = () => {
                     color: 'white',
                     border: 'none',
                     borderRadius: '4px',
-                    cursor: 'pointer'
+                    cursor: 'pointer',
                   }}
                 >
                   Remove
@@ -130,7 +133,14 @@ export const RoutineBuilderExample: React.FC = () => {
         )}
       </div>
 
-      <div style={{ marginTop: '20px', padding: '15px', backgroundColor: '#f8f9fa', borderRadius: '4px' }}>
+      <div
+        style={{
+          marginTop: '20px',
+          padding: '15px',
+          backgroundColor: '#f8f9fa',
+          borderRadius: '4px',
+        }}
+      >
         <h4>State Summary:</h4>
         <pre style={{ fontSize: '12px', overflow: 'auto' }}>
           {JSON.stringify(state, null, 2)}

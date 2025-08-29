@@ -1,11 +1,11 @@
 import { describe, expect, test } from 'vitest';
 import { routineBuilderReducer } from './routineBuilderReducer';
-import { 
-  RoutineBuilderState, 
-  UpdateRoutineNameAction, 
-  AddWorkoutAction, 
-  RemoveWorkoutAction, 
-  UpdateWorkoutAction 
+import {
+  RoutineBuilderState,
+  UpdateRoutineNameAction,
+  AddWorkoutAction,
+  RemoveWorkoutAction,
+  UpdateWorkoutAction,
 } from './types';
 import { UserCreatedRoutine, Workout } from '@peakhealth/routines-types';
 
@@ -68,7 +68,7 @@ describe('routineBuilderReducer', () => {
       workouts: [mockWorkout],
       totalWorkouts: 1,
     };
-    
+
     const action: RemoveWorkoutAction = {
       type: 'REMOVE_WORKOUT',
       payload: { workoutId: 'workout1' },
@@ -84,12 +84,12 @@ describe('routineBuilderReducer', () => {
       workouts: [mockWorkout],
       totalWorkouts: 1,
     };
-    
+
     const action: UpdateWorkoutAction = {
       type: 'UPDATE_WORKOUT',
-      payload: { 
-        workoutId: 'workout1', 
-        updates: { name: 'Updated Workout Name' } 
+      payload: {
+        workoutId: 'workout1',
+        updates: { name: 'Updated Workout Name' },
       },
     };
     const newState = routineBuilderReducer(stateWithWorkout, action);

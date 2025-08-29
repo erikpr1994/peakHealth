@@ -35,7 +35,7 @@ const mockWorkout: Workout = {
 describe('workoutReducer', () => {
   test('addWorkout should add a workout to the routine', () => {
     const updatedState = addWorkout(mockState, { workout: mockWorkout });
-    
+
     expect(updatedState.workouts).toHaveLength(1);
     expect(updatedState.workouts[0]).toEqual({
       ...mockWorkout,
@@ -48,10 +48,10 @@ describe('workoutReducer', () => {
   test('addWorkout should increment orderIndex for subsequent workouts', () => {
     const firstWorkout = { ...mockWorkout, _id: 'workout1' };
     const secondWorkout = { ...mockWorkout, _id: 'workout2' };
-    
+
     let state = addWorkout(mockState, { workout: firstWorkout });
     state = addWorkout(state, { workout: secondWorkout });
-    
+
     expect(state.workouts).toHaveLength(2);
     expect(state.workouts[0].orderIndex).toBe(0);
     expect(state.workouts[1].orderIndex).toBe(1);
@@ -65,10 +65,10 @@ describe('workoutReducer', () => {
       workouts: [existingWorkout],
       totalWorkouts: 1,
     };
-    
+
     const newWorkout = { ...mockWorkout, _id: 'new1' };
     const updatedState = addWorkout(stateWithExisting, { workout: newWorkout });
-    
+
     expect(updatedState.workouts).toHaveLength(2);
     expect(updatedState.workouts[0]).toEqual(existingWorkout);
     expect(updatedState.workouts[1]).toEqual({
@@ -82,15 +82,17 @@ describe('workoutReducer', () => {
     const workout1 = { ...mockWorkout, _id: 'workout1', orderIndex: 0 };
     const workout2 = { ...mockWorkout, _id: 'workout2', orderIndex: 1 };
     const workout3 = { ...mockWorkout, _id: 'workout3', orderIndex: 2 };
-    
+
     const stateWithWorkouts = {
       ...mockState,
       workouts: [workout1, workout2, workout3],
       totalWorkouts: 3,
     };
-    
-    const updatedState = removeWorkout(stateWithWorkouts, { workoutId: 'workout2' });
-    
+
+    const updatedState = removeWorkout(stateWithWorkouts, {
+      workoutId: 'workout2',
+    });
+
     expect(updatedState.workouts).toHaveLength(2);
     expect(updatedState.workouts[0]._id).toBe('workout1');
     expect(updatedState.workouts[0].orderIndex).toBe(0);
@@ -106,9 +108,11 @@ describe('workoutReducer', () => {
       workouts: [workout1],
       totalWorkouts: 1,
     };
-    
-    const updatedState = removeWorkout(stateWithWorkout, { workoutId: 'non-existent' });
-    
+
+    const updatedState = removeWorkout(stateWithWorkout, {
+      workoutId: 'non-existent',
+    });
+
     expect(updatedState.workouts).toHaveLength(1);
     expect(updatedState.workouts[0]).toEqual(workout1);
     expect(updatedState.totalWorkouts).toBe(1);
@@ -121,12 +125,12 @@ describe('workoutReducer', () => {
       workouts: [workout1],
       totalWorkouts: 1,
     };
-    
+
     const updatedState = updateWorkout(stateWithWorkout, {
       workoutId: 'workout1',
       updates: { name: 'Updated Name', notes: 'New notes' },
     });
-    
+
     expect(updatedState.workouts).toHaveLength(1);
     expect(updatedState.workouts[0].name).toBe('Updated Name');
     expect(updatedState.workouts[0].notes).toBe('New notes');
@@ -141,12 +145,12 @@ describe('workoutReducer', () => {
       workouts: [workout1],
       totalWorkouts: 1,
     };
-    
+
     const updatedState = updateWorkout(stateWithWorkout, {
       workoutId: 'non-existent',
       updates: { name: 'Updated Name' },
     });
-    
+
     expect(updatedState.workouts).toHaveLength(1);
     expect(updatedState.workouts[0]).toEqual(workout1); // Should remain unchanged
   });
