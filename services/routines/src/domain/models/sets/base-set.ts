@@ -3,7 +3,6 @@ import mongoose, { Schema } from 'mongoose';
 // Define schema for base set
 export const baseSetSchema = new Schema(
   {
-    _id: { type: String, required: true },
     orderIndex: { type: Number, required: true },
     notes: { type: String },
   },

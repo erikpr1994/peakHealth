@@ -4,7 +4,6 @@ import { baseWorkoutSchema } from './workouts/base-workout';
 // Define schema for user created routine
 const userCreatedRoutineSchema = new Schema(
   {
-    _id: { type: String, required: true },
     userId: { type: String, required: true },
     name: { type: String, required: true },
     description: { type: String },

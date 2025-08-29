@@ -4,7 +4,6 @@ import { baseExerciseSchema } from '../exercises/base-exercise';
 // Define schema for the base workout section
 export const baseSectionSchema = new Schema(
   {
-    _id: { type: String, required: true },
     name: { type: String, required: true },
     type: {
       type: String,
