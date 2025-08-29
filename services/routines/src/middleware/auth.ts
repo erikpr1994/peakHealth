@@ -41,7 +41,9 @@ export const verifySupabaseJWT = (
 
     // Verify the JWT using Supabase secret
     if (!process.env.SUPABASE_JWT_SECRET) {
-      console.error('SUPABASE_JWT_SECRET environment variable is not set');
+      if (process.env.NODE_ENV !== 'test') {
+        console.error('SUPABASE_JWT_SECRET environment variable is not set');
+      }
       return res.status(500).json({
         error: 'Internal Server Error',
         message: 'Authentication configuration error',
@@ -68,7 +70,9 @@ export const verifySupabaseJWT = (
       });
     }
 
-    console.error('JWT verification error:', error);
+    if (process.env.NODE_ENV !== 'test') {
+      console.error('JWT verification error:', error);
+    }
     return res.status(500).json({
       error: 'Internal Server Error',
       message: 'Authentication processing error',

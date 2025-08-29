@@ -27,7 +27,7 @@ describe('verifySupabaseJWT middleware', () => {
   // Mock request, response, and next function
   let req: Partial<Request>;
   let res: Partial<Response>;
-  let next: vi.Mock;
+  let next: ReturnType<typeof vi.fn>;
 
   // Setup environment variable
   const originalEnv = process.env;
@@ -66,7 +66,7 @@ describe('verifySupabaseJWT middleware', () => {
       role: 'user',
     };
     req.headers = { authorization: 'Bearer valid-token' };
-    (jwt.verify as vi.Mock).mockReturnValue(mockUser);
+    (jwt.verify as ReturnType<typeof vi.fn>).mockReturnValue(mockUser);
 
     // Act
     verifySupabaseJWT(req as Request, res as Response, next);
@@ -142,7 +142,7 @@ describe('verifySupabaseJWT middleware', () => {
     // Arrange
     req.headers = { authorization: 'Bearer invalid-token' };
     const jwtError = new jwt.JsonWebTokenError('invalid token');
-    (jwt.verify as vi.Mock).mockImplementation(() => {
+    (jwt.verify as ReturnType<typeof vi.fn>).mockImplementation(() => {
       throw jwtError;
     });
 
@@ -164,7 +164,7 @@ describe('verifySupabaseJWT middleware', () => {
     // Arrange
     req.headers = { authorization: 'Bearer valid-token' };
     const genericError = new Error('Some unexpected error');
-    (jwt.verify as vi.Mock).mockImplementation(() => {
+    (jwt.verify as ReturnType<typeof vi.fn>).mockImplementation(() => {
       throw genericError;
     });
 

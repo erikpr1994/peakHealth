@@ -38,6 +38,11 @@ for file in $CHANGED_FILES; do
     continue
   fi
   
+  # Skip model schema files (they are tested through integration tests)
+  if [[ "$file" =~ /models/ ]] && [[ "$file" =~ \.(ts|tsx)$ ]] && [[ ! "$file" =~ \.test\.(ts|tsx)$ ]] && [[ ! "$file" =~ \.spec\.(ts|tsx)$ ]]; then
+    continue
+  fi
+  
   # Get the directory of the source file
   DIR=$(dirname "$file")
   FILENAME=$(basename "$file")
