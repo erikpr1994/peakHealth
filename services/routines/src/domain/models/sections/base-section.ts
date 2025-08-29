@@ -25,8 +25,20 @@ export const baseSectionSchema = new Schema(
     restAfter: { type: String }, // DurationString
     notes: { type: String },
     exercises: [baseExerciseSchema],
+    // Type-specific fields that can be used when embedded
+    rounds: { type: Number },
+    workDistance: { type: Number },
+    workDuration: { type: String },
+    restDuration: { type: String },
+    intensity: { type: String },
+    emomDuration: { type: Number },
+    restBetweenExercises: { type: String },
+    targetPace: { type: String },
+    targetHeartRate: { type: String },
+    hillGrade: { type: Number },
+    hillDuration: { type: String },
   },
-  { discriminatorKey: 'type', _id: false }
+  { _id: false }
 );
 
 // Create and export the model

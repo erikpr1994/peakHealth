@@ -10,7 +10,7 @@ export const baseWorkoutSchema = new Schema(
     notes: { type: String },
     sections: [baseSectionSchema],
   },
-  { discriminatorKey: 'type', _id: false }
+  { _id: false }
 );
 
 // Create and export the model
