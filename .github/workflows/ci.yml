@@ -331,27 +331,28 @@ jobs:
           AFFECTED="${{ needs.determine-affected.outputs.affected }}"
 
           if [[ "$AFFECTED" == "all" ]]; then
-            echo "Building all packages and services"
-            pnpm turbo run build --filter="./packages/*" --filter="./services/*" --concurrency=3 --cache-dir=.turbo
+            echo "Building all packages and services (excluding routines-api)"
+            pnpm turbo run build --filter="./packages/*" --concurrency=3 --cache-dir=.turbo
           else
             echo "Building affected packages: $AFFECTED"
 
-            # Filter affected packages to only include packages and services (not apps)
+            # Filter affected packages to only include packages (not services or apps)
             FILTER_STRING=""
             IFS=',' read -ra PACKAGES <<< "$AFFECTED"
             for PKG in "${PACKAGES[@]}"; do
               if [[ -n "$PKG" ]]; then
-                # Check if the package is in packages/ or services/ directory
-                if [[ -d "packages/$(echo $PKG | sed 's/@peakhealth\///')" ]] || [[ -d "services/$(echo $PKG | sed 's/@peakhealth\///')" ]]; then
+                # Only include packages, exclude services and apps
+                if [[ -d "packages/$(echo $PKG | sed 's/@peakhealth\///')" ]]; then
                   FILTER_STRING="${FILTER_STRING} --filter=${PKG}"
+                elif [[ "$PKG" == "@peakhealth/routines-api" ]]; then
+                  echo "Skipping routines-api service: $PKG"
                 else
-                  # A better approach could be to check the package.json location
-                  # This is a simplified check
-                  is_package_or_service=$(pnpm find . --json | jq -r ".[] | select(.name == \"$PKG\") | .path" | grep -E "^(packages|services)")
-                  if [[ -n "$is_package_or_service" ]]; then
+                  # Check if it's a service (exclude) or app (exclude)
+                  is_package=$(pnpm find . --json | jq -r ".[] | select(.name == \"$PKG\") | .path" | grep -E "^packages")
+                  if [[ -n "$is_package" ]]; then
                      FILTER_STRING="${FILTER_STRING} --filter=${PKG}"
                   else
-                    echo "Skipping app: $PKG"
+                    echo "Skipping service/app: $PKG"
                   fi
                 fi
               fi
