@@ -248,6 +248,12 @@ describe('RoutineController', () => {
 
     it('should handle empty request body', async () => {
       mockRequest.body = {};
+      const mockRoutine = {
+        _id: 'routine123',
+        name: 'Test Routine',
+        userId: 'user123',
+      };
+      (routineService.updateRoutine as any).mockResolvedValue(mockRoutine);
 
       await routineController.updateRoutine(
         mockRequest,
@@ -255,8 +261,13 @@ describe('RoutineController', () => {
         mockNext
       );
 
-      expect(mockNext).toHaveBeenCalledWith(expect.any(ApiError));
-      expect(routineService.updateRoutine).not.toHaveBeenCalled();
+      expect(routineService.updateRoutine).toHaveBeenCalledWith(
+        'routine123',
+        'user123',
+        {}
+      );
+      expect(mockResponse.status).toHaveBeenCalledWith(200);
+      expect(mockResponse.json).toHaveBeenCalledWith(mockRoutine);
     });
 
     it('should handle missing user ID', async () => {

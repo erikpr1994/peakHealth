@@ -95,14 +95,6 @@ export class RoutineController {
    */
   async updateRoutine(req: Request, res: Response, next: NextFunction) {
     try {
-      // Validate input
-      if (!req.body || Object.keys(req.body).length === 0) {
-        throw new ApiError(
-          'Request body is empty or missing required fields',
-          400
-        );
-      }
-
       // Get user ID from the authenticated request
       const userId = req.user?.id;
       if (!userId) {
