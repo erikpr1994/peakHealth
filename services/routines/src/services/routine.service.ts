@@ -41,7 +41,7 @@ export class RoutineService {
    * @param type Optional filter for routine type
    * @returns Array of routines
    */
-  async getRoutines(userId: string, type?: 'active' | 'user' | 'assigned') {
+  async getRoutinesByUser(userId: string, type?: 'active' | 'user' | 'assigned') {
     try {
       let query: any = { userId };
 
@@ -179,3 +179,4 @@ export class RoutineService {
 
 // Export a singleton instance
 export const routineService = new RoutineService();
+

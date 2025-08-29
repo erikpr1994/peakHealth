@@ -52,7 +52,7 @@ export class RoutineController {
       const type = req.query.type as 'active' | 'user' | 'assigned' | undefined;
 
       // Get routines using the service
-      const routines = await routineService.getRoutines(userId, type);
+      const routines = await routineService.getRoutinesByUser(userId, type);
 
       // Return success response with the routines
       return res.status(200).json({ routines });
@@ -152,3 +152,4 @@ export class RoutineController {
 
 // Export a singleton instance
 export const routineController = new RoutineController();
+

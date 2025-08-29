@@ -7,7 +7,7 @@ import { ApiError } from '../utils/error-handler';
 vi.mock('../services/routine.service', () => ({
   routineService: {
     createRoutine: vi.fn(),
-    getRoutines: vi.fn(),
+    getRoutinesByUser: vi.fn(),
     getRoutineById: vi.fn(),
     updateRoutine: vi.fn(),
     deleteRoutine: vi.fn(),
@@ -15,317 +15,308 @@ vi.mock('../services/routine.service', () => ({
 }));
 
 describe('RoutineController', () => {
-  let mockRequest: any;
-  let mockResponse: any;
-  let mockNext: any;
+  const userId = 'user123';
+  const routineId = '507f1f77bcf86cd799439011';
+
+  // Mock request, response, and next function
+  let req: any;
+  let res: any;
+  let next: any;
 
   beforeEach(() => {
     // Reset mocks
     vi.clearAllMocks();
 
-    // Mock request object
-    mockRequest = {
-      user: { id: 'user123' },
-      body: {
-        name: 'Test Routine',
-        category: 'strength',
-        difficulty: 'intermediate',
-      },
-      params: { id: 'routine123' },
+    // Setup request mock
+    req = {
+      user: { id: userId },
+      body: {},
+      params: {},
       query: {},
-      originalUrl: '/api/routines',
     };
 
-    // Mock response object
-    mockResponse = {
+    // Setup response mock
+    res = {
       status: vi.fn().mockReturnThis(),
       json: vi.fn(),
       send: vi.fn(),
     };
 
-    // Mock next function
-    mockNext = vi.fn();
+    // Setup next function mock
+    next = vi.fn();
   });
 
   describe('createRoutine', () => {
     it('should create a routine successfully', async () => {
-      const mockRoutine = {
-        _id: 'routine123',
-        ...mockRequest.body,
-        userId: 'user123',
+      // Setup
+      const routineData = {
+        name: 'Test Routine',
+        category: 'strength',
+        difficulty: 'intermediate',
       };
-      (routineService.createRoutine as any).mockResolvedValue(mockRoutine);
+      const createdRoutine = { ...routineData, _id: 'new-id', userId };
 
-      await routineController.createRoutine(
-        mockRequest,
-        mockResponse,
-        mockNext
-      );
+      req.body = routineData;
+      (routineService.createRoutine as any).mockResolvedValue(createdRoutine);
 
+      // Execute
+      await routineController.createRoutine(req, res, next);
+
+      // Assert
       expect(routineService.createRoutine).toHaveBeenCalledWith(
-        'user123',
-        mockRequest.body
+        userId,
+        routineData
       );
-      expect(mockResponse.status).toHaveBeenCalledWith(201);
-      expect(mockResponse.json).toHaveBeenCalledWith(mockRoutine);
-    });
-
-    it('should handle missing user ID', async () => {
-      mockRequest.user = null;
-
-      await routineController.createRoutine(
-        mockRequest,
-        mockResponse,
-        mockNext
-      );
-
-      expect(mockNext).toHaveBeenCalledWith(expect.any(ApiError));
-      expect(routineService.createRoutine).not.toHaveBeenCalled();
+      expect(res.status).toHaveBeenCalledWith(201);
+      expect(res.json).toHaveBeenCalledWith(createdRoutine);
+      expect(next).not.toHaveBeenCalled();
     });
 
     it('should handle empty request body', async () => {
-      mockRequest.body = {};
+      // Setup
+      req.body = {};
 
-      await routineController.createRoutine(
-        mockRequest,
-        mockResponse,
-        mockNext
-      );
+      // Execute
+      await routineController.createRoutine(req, res, next);
 
-      expect(mockNext).toHaveBeenCalledWith(expect.any(ApiError));
+      // Assert
       expect(routineService.createRoutine).not.toHaveBeenCalled();
+      expect(next).toHaveBeenCalledWith(expect.any(ApiError));
+    });
+
+    it('should handle missing user ID', async () => {
+      // Setup
+      req.user = {};
+      req.body = { name: 'Test' };
+
+      // Execute
+      await routineController.createRoutine(req, res, next);
+
+      // Assert
+      expect(routineService.createRoutine).not.toHaveBeenCalled();
+      expect(next).toHaveBeenCalledWith(expect.any(ApiError));
     });
 
     it('should handle service errors', async () => {
+      // Setup
       const error = new Error('Service error');
+      req.body = { name: 'Test' };
       (routineService.createRoutine as any).mockRejectedValue(error);
 
-      await routineController.createRoutine(
-        mockRequest,
-        mockResponse,
-        mockNext
-      );
+      // Execute
+      await routineController.createRoutine(req, res, next);
 
-      expect(mockNext).toHaveBeenCalledWith(error);
+      // Assert
+      expect(routineService.createRoutine).toHaveBeenCalled();
+      expect(next).toHaveBeenCalledWith(error);
     });
   });
 
   describe('getRoutines', () => {
-    it('should get all routines successfully', async () => {
+    it('should get all routines for a user', async () => {
+      // Setup
       const mockRoutines = [
-        { _id: 'routine1', name: 'Routine 1', userId: 'user123' },
-        { _id: 'routine2', name: 'Routine 2', userId: 'user123' },
+        { _id: 'routine1', name: 'Routine 1', userId },
+        { _id: 'routine2', name: 'Routine 2', userId },
       ];
-      (routineService.getRoutines as any).mockResolvedValue(mockRoutines);
+      (routineService.getRoutinesByUser as any).mockResolvedValue(mockRoutines);
 
-      await routineController.getRoutines(mockRequest, mockResponse, mockNext);
+      // Execute
+      await routineController.getRoutines(req, res, next);
 
-      expect(routineService.getRoutines).toHaveBeenCalledWith(
-        'user123',
+      // Assert
+      expect(routineService.getRoutinesByUser).toHaveBeenCalledWith(
+        userId,
         undefined
       );
-      expect(mockResponse.status).toHaveBeenCalledWith(200);
-      expect(mockResponse.json).toHaveBeenCalledWith({
-        routines: mockRoutines,
-      });
+      expect(res.status).toHaveBeenCalledWith(200);
+      expect(res.json).toHaveBeenCalledWith({ routines: mockRoutines });
+      expect(next).not.toHaveBeenCalled();
     });
 
-    it('should handle type filter', async () => {
-      mockRequest.query.type = 'user';
-      const mockRoutines = [
-        { _id: 'routine1', name: 'Routine 1', userId: 'user123' },
-      ];
-      (routineService.getRoutines as any).mockResolvedValue(mockRoutines);
+    it('should filter routines by type', async () => {
+      // Setup
+      const mockRoutines = [{ _id: 'routine1', name: 'Routine 1', userId }];
+      req.query.type = 'user';
+      (routineService.getRoutinesByUser as any).mockResolvedValue(mockRoutines);
 
-      await routineController.getRoutines(mockRequest, mockResponse, mockNext);
+      // Execute
+      await routineController.getRoutines(req, res, next);
 
-      expect(routineService.getRoutines).toHaveBeenCalledWith(
-        'user123',
+      // Assert
+      expect(routineService.getRoutinesByUser).toHaveBeenCalledWith(
+        userId,
         'user'
       );
-      expect(mockResponse.status).toHaveBeenCalledWith(200);
-      expect(mockResponse.json).toHaveBeenCalledWith({
-        routines: mockRoutines,
-      });
+      expect(res.status).toHaveBeenCalledWith(200);
+      expect(res.json).toHaveBeenCalledWith({ routines: mockRoutines });
+      expect(next).not.toHaveBeenCalled();
     });
 
     it('should handle missing user ID', async () => {
-      mockRequest.user = null;
+      // Setup
+      req.user = {};
 
-      await routineController.getRoutines(mockRequest, mockResponse, mockNext);
+      // Execute
+      await routineController.getRoutines(req, res, next);
 
-      expect(mockNext).toHaveBeenCalledWith(expect.any(ApiError));
-      expect(routineService.getRoutines).not.toHaveBeenCalled();
+      // Assert
+      expect(routineService.getRoutinesByUser).not.toHaveBeenCalled();
+      expect(next).toHaveBeenCalledWith(expect.any(ApiError));
     });
   });
 
   describe('getRoutineById', () => {
-    it('should get a routine by ID successfully', async () => {
+    it('should get a routine by ID', async () => {
+      // Setup
       const mockRoutine = {
-        _id: 'routine123',
+        _id: routineId,
         name: 'Test Routine',
-        userId: 'user123',
+        userId,
       };
+      req.params.id = routineId;
       (routineService.getRoutineById as any).mockResolvedValue(mockRoutine);
 
-      await routineController.getRoutineById(
-        mockRequest,
-        mockResponse,
-        mockNext
-      );
+      // Execute
+      await routineController.getRoutineById(req, res, next);
 
+      // Assert
       expect(routineService.getRoutineById).toHaveBeenCalledWith(
-        'routine123',
-        'user123'
+        routineId,
+        userId
       );
-      expect(mockResponse.status).toHaveBeenCalledWith(200);
-      expect(mockResponse.json).toHaveBeenCalledWith(mockRoutine);
+      expect(res.status).toHaveBeenCalledWith(200);
+      expect(res.json).toHaveBeenCalledWith(mockRoutine);
+      expect(next).not.toHaveBeenCalled();
     });
 
     it('should handle missing routine ID', async () => {
-      mockRequest.params = {};
+      // Setup
+      req.params = {};
 
-      await routineController.getRoutineById(
-        mockRequest,
-        mockResponse,
-        mockNext
-      );
+      // Execute
+      await routineController.getRoutineById(req, res, next);
 
-      expect(mockNext).toHaveBeenCalledWith(expect.any(ApiError));
+      // Assert
       expect(routineService.getRoutineById).not.toHaveBeenCalled();
+      expect(next).toHaveBeenCalledWith(expect.any(ApiError));
     });
 
     it('should handle missing user ID', async () => {
-      mockRequest.user = null;
+      // Setup
+      req.user = {};
+      req.params.id = routineId;
 
-      await routineController.getRoutineById(
-        mockRequest,
-        mockResponse,
-        mockNext
-      );
+      // Execute
+      await routineController.getRoutineById(req, res, next);
 
-      expect(mockNext).toHaveBeenCalledWith(expect.any(ApiError));
+      // Assert
       expect(routineService.getRoutineById).not.toHaveBeenCalled();
+      expect(next).toHaveBeenCalledWith(expect.any(ApiError));
     });
   });
 
   describe('updateRoutine', () => {
     it('should update a routine successfully', async () => {
-      const mockRoutine = {
-        _id: 'routine123',
+      // Setup
+      const updateData = {
         name: 'Updated Routine',
-        userId: 'user123',
+        difficulty: 'advanced',
       };
-      (routineService.updateRoutine as any).mockResolvedValue(mockRoutine);
+      const updatedRoutine = {
+        _id: routineId,
+        ...updateData,
+        userId,
+      };
+      req.params.id = routineId;
+      req.body = updateData;
+      (routineService.updateRoutine as any).mockResolvedValue(updatedRoutine);
 
-      await routineController.updateRoutine(
-        mockRequest,
-        mockResponse,
-        mockNext
-      );
+      // Execute
+      await routineController.updateRoutine(req, res, next);
 
+      // Assert
       expect(routineService.updateRoutine).toHaveBeenCalledWith(
-        'routine123',
-        'user123',
-        mockRequest.body
+        routineId,
+        userId,
+        updateData
       );
-      expect(mockResponse.status).toHaveBeenCalledWith(200);
-      expect(mockResponse.json).toHaveBeenCalledWith(mockRoutine);
+      expect(res.status).toHaveBeenCalledWith(200);
+      expect(res.json).toHaveBeenCalledWith(updatedRoutine);
+      expect(next).not.toHaveBeenCalled();
     });
 
     it('should handle missing routine ID', async () => {
-      mockRequest.params = {};
+      // Setup
+      req.params = {};
+      req.body = { name: 'Updated' };
 
-      await routineController.updateRoutine(
-        mockRequest,
-        mockResponse,
-        mockNext
-      );
+      // Execute
+      await routineController.updateRoutine(req, res, next);
 
-      expect(mockNext).toHaveBeenCalledWith(expect.any(ApiError));
+      // Assert
       expect(routineService.updateRoutine).not.toHaveBeenCalled();
-    });
-
-    it('should handle empty request body', async () => {
-      mockRequest.body = {};
-      const mockRoutine = {
-        _id: 'routine123',
-        name: 'Test Routine',
-        userId: 'user123',
-      };
-      (routineService.updateRoutine as any).mockResolvedValue(mockRoutine);
-
-      await routineController.updateRoutine(
-        mockRequest,
-        mockResponse,
-        mockNext
-      );
-
-      expect(routineService.updateRoutine).toHaveBeenCalledWith(
-        'routine123',
-        'user123',
-        {}
-      );
-      expect(mockResponse.status).toHaveBeenCalledWith(200);
-      expect(mockResponse.json).toHaveBeenCalledWith(mockRoutine);
+      expect(next).toHaveBeenCalledWith(expect.any(ApiError));
     });
 
     it('should handle missing user ID', async () => {
-      mockRequest.user = null;
+      // Setup
+      req.user = {};
+      req.params.id = routineId;
+      req.body = { name: 'Updated' };
 
-      await routineController.updateRoutine(
-        mockRequest,
-        mockResponse,
-        mockNext
-      );
+      // Execute
+      await routineController.updateRoutine(req, res, next);
 
-      expect(mockNext).toHaveBeenCalledWith(expect.any(ApiError));
+      // Assert
       expect(routineService.updateRoutine).not.toHaveBeenCalled();
+      expect(next).toHaveBeenCalledWith(expect.any(ApiError));
     });
   });
 
   describe('deleteRoutine', () => {
     it('should delete a routine successfully', async () => {
+      // Setup
+      req.params.id = routineId;
       (routineService.deleteRoutine as any).mockResolvedValue(true);
 
-      await routineController.deleteRoutine(
-        mockRequest,
-        mockResponse,
-        mockNext
-      );
+      // Execute
+      await routineController.deleteRoutine(req, res, next);
 
+      // Assert
       expect(routineService.deleteRoutine).toHaveBeenCalledWith(
-        'routine123',
-        'user123'
+        routineId,
+        userId
       );
-      expect(mockResponse.status).toHaveBeenCalledWith(204);
-      expect(mockResponse.send).toHaveBeenCalled();
+      expect(res.status).toHaveBeenCalledWith(204);
+      expect(res.send).toHaveBeenCalled();
+      expect(next).not.toHaveBeenCalled();
     });
 
     it('should handle missing routine ID', async () => {
-      mockRequest.params = {};
+      // Setup
+      req.params = {};
 
-      await routineController.deleteRoutine(
-        mockRequest,
-        mockResponse,
-        mockNext
-      );
+      // Execute
+      await routineController.deleteRoutine(req, res, next);
 
-      expect(mockNext).toHaveBeenCalledWith(expect.any(ApiError));
+      // Assert
       expect(routineService.deleteRoutine).not.toHaveBeenCalled();
+      expect(next).toHaveBeenCalledWith(expect.any(ApiError));
     });
 
     it('should handle missing user ID', async () => {
-      mockRequest.user = null;
+      // Setup
+      req.user = {};
+      req.params.id = routineId;
 
-      await routineController.deleteRoutine(
-        mockRequest,
-        mockResponse,
-        mockNext
-      );
+      // Execute
+      await routineController.deleteRoutine(req, res, next);
 
-      expect(mockNext).toHaveBeenCalledWith(expect.any(ApiError));
+      // Assert
       expect(routineService.deleteRoutine).not.toHaveBeenCalled();
+      expect(next).toHaveBeenCalledWith(expect.any(ApiError));
     });
   });
 });
+
