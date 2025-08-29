@@ -1,79 +1,33 @@
 'use client';
-
-import {
-  type ComponentProps,
-  type FC,
-  type PropsWithChildren,
-  type ReactNode,
-  createContext,
-  useCallback,
-  useContext,
-  useMemo,
-  useState,
-} from 'react';
+import type { ComponentProps, FC, PropsWithChildren } from 'react';
 import './accordion.css';
 
-interface AccordionContextProps {
-  isOpen: boolean;
-  toggle: () => void;
-}
+interface AccordionProps extends ComponentProps<'details'> {}
 
-const AccordionContext = createContext<AccordionContextProps | undefined>(
-  undefined
-);
-
-const useAccordionContext = (): AccordionContextProps => {
-  const context = useContext(AccordionContext);
-  if (!context) {
-    throw new Error(
-      'useAccordionContext must be used within an Accordion component'
-    );
-  }
-  return context;
-};
-
-interface AccordionProps extends ComponentProps<'div'> {
-  // Add any additional props here
-}
-
-const AccordionContent: FC<PropsWithChildren<AccordionProps>> = ({
+const AccordionContent: FC<PropsWithChildren<ComponentProps<'div'>>> = ({
   children,
-}): ReactNode => {
-  const { isOpen } = useAccordionContext();
-  return isOpen ? <div className="content">{children}</div> : null;
+}) => {
+  return <div className="content">{children}</div>;
 };
 
 AccordionContent.displayName = 'Accordion.Content';
 
-const AccordionHeader: FC<PropsWithChildren<AccordionProps>> = ({
+const AccordionHeader: FC<PropsWithChildren<ComponentProps<'summary'>>> = ({
   children,
-}): ReactNode => {
-  const { toggle } = useAccordionContext();
-  return (
-    <div className="header" onClick={toggle}>
-      {children}
-    </div>
-  );
+}) => {
+  return <summary className="header">{children}</summary>;
 };
 
 AccordionHeader.displayName = 'Accordion.Header';
 
 const Accordion: FC<PropsWithChildren<AccordionProps>> & {
-  Header: FC<PropsWithChildren<AccordionProps>>;
-  Content: FC<PropsWithChildren<AccordionProps>>;
-} = ({ children }): ReactNode => {
-  const [isOpen, setIsOpen] = useState(false);
-
-  const toggle = useCallback(() => {
-    setIsOpen(prevOpen => !prevOpen);
-  }, []);
-
-  const value = useMemo(() => ({ isOpen, toggle }), [isOpen, toggle]);
-
+  Header: FC<PropsWithChildren<ComponentProps<'summary'>>>;
+  Content: FC<PropsWithChildren<ComponentProps<'div'>>>;
+} = ({ children, ...props }) => {
   return (
-    <AccordionContext.Provider value={value}>
-      <div className="accordion">{children}</div>
-    </AccordionContext.Provider>
+    <details className="accordion" {...props}>
+      {children}
+    </details>
   );
 };
 
