@@ -1,10 +1,10 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { routineController } from './routine.controller';
-import { routineService } from '../services/routineService';
+import { routineService } from '../services/routine.service';
 import { ApiError } from '../utils/error-handler';
 
 // Mock the routine service
-vi.mock('../services/routineService', () => ({
+vi.mock('../services/routine.service', () => ({
   routineService: {
     createRoutine: vi.fn(),
     getRoutinesByUser: vi.fn(),
@@ -319,3 +319,4 @@ describe('RoutineController', () => {
     });
   });
 });
+

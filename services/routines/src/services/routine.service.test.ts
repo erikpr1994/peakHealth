@@ -77,7 +77,7 @@ describe('RoutineService', () => {
     });
   });
 
-  describe('getRoutines', () => {
+  describe('getRoutinesByUser', () => {
     it('should get all routines for a user', async () => {
       const mockRoutines = [
         { _id: 'routine1', name: 'Routine 1', userId },
@@ -86,7 +86,7 @@ describe('RoutineService', () => {
 
       (UserCreatedRoutineModel.find as any).mockResolvedValue(mockRoutines);
 
-      const result = await routineService.getRoutines(userId);
+      const result = await routineService.getRoutinesByUser(userId);
 
       expect(result).toEqual(mockRoutines);
       expect(UserCreatedRoutineModel.find).toHaveBeenCalledWith({ userId });
@@ -97,10 +97,30 @@ describe('RoutineService', () => {
 
       (UserCreatedRoutineModel.find as any).mockResolvedValue(mockRoutines);
 
-      const result = await routineService.getRoutines(userId, 'user');
+      const result = await routineService.getRoutinesByUser(userId, 'user');
 
       expect(result).toEqual(mockRoutines);
       expect(UserCreatedRoutineModel.find).toHaveBeenCalledWith({ userId });
+    });
+  });
+
+  describe('getRoutines', () => {
+    it('should call getRoutinesByUser with the same parameters', async () => {
+      // Create a spy on getRoutinesByUser
+      const spy = vi.spyOn(routineService, 'getRoutinesByUser');
+      
+      // Mock the return value
+      const mockRoutines = [
+        { _id: 'routine1', name: 'Routine 1', userId },
+      ];
+      spy.mockResolvedValue(mockRoutines);
+
+      // Call getRoutines
+      const result = await routineService.getRoutines(userId, 'user');
+
+      // Verify getRoutinesByUser was called with the same parameters
+      expect(spy).toHaveBeenCalledWith(userId, 'user');
+      expect(result).toEqual(mockRoutines);
     });
   });
 
@@ -264,3 +284,4 @@ describe('RoutineService', () => {
     });
   });
 });
+

@@ -41,7 +41,7 @@ export class RoutineService {
    * @param type Optional filter for routine type
    * @returns Array of routines
    */
-  async getRoutines(userId: string, type?: 'active' | 'user' | 'assigned') {
+  async getRoutinesByUser(userId: string, type?: 'active' | 'user' | 'assigned') {
     try {
       let query: any = { userId };
 
@@ -62,6 +62,17 @@ export class RoutineService {
     } catch (error) {
       throw error;
     }
+  }
+
+  /**
+   * Get all routines for a user (alias for getRoutinesByUser for backward compatibility)
+   * @deprecated Use getRoutinesByUser instead
+   * @param userId The ID of the user
+   * @param type Optional filter for routine type
+   * @returns Array of routines
+   */
+  async getRoutines(userId: string, type?: 'active' | 'user' | 'assigned') {
+    return this.getRoutinesByUser(userId, type);
   }
 
   /**
@@ -179,3 +190,4 @@ export class RoutineService {
 
 // Export a singleton instance
 export const routineService = new RoutineService();
+

@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { routineService } from '../services/routineService';
+import { routineService } from '../services/routine.service';
 import { ApiError } from '../utils/error-handler';
 
 /**
@@ -152,3 +152,4 @@ export class RoutineController {
 
 // Export a singleton instance
 export const routineController = new RoutineController();
+
