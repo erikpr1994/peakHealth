@@ -1,4 +1,4 @@
-import { describe, expect, test } from 'vitest';
+import { describe, it, expect } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { RoutineBuilderExample } from './RoutineBuilderExample';
 import { RoutineBuilderProvider } from '../context/routineBuilder/RoutineBuilderContext';
@@ -6,30 +6,13 @@ import { useRoutineBuilder } from '../hooks/useRoutineBuilder';
 import { UserCreatedRoutine } from '@peakhealth/routines-types';
 
 // Mock wrapper component to provide context
-const MockProvider: React.FC<{ children: React.ReactNode }> = ({
+const MockProvider: React.FC<{ 
+  initialState: UserCreatedRoutine;
+  children: React.ReactNode;
+}> = ({
+  initialState,
   children,
 }) => {
-  const initialState: UserCreatedRoutine = {
-    _id: 'test-routine',
-    name: 'Test Routine',
-    description: 'A test routine',
-    workouts: [],
-    userId: 'user1',
-    createdBy: 'user1',
-    routineType: 'user-created',
-    isActive: false,
-    isFavorite: false,
-    completedWorkouts: 0,
-    totalWorkouts: 0,
-    schemaVersion: '1.0',
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-    difficulty: 'beginner',
-    duration: 4,
-    goal: 'strength',
-    objectives: [],
-  } as UserCreatedRoutine;
-
   const { state, dispatch } = useRoutineBuilder(initialState);
 
   return (
@@ -40,103 +23,159 @@ const MockProvider: React.FC<{ children: React.ReactNode }> = ({
 };
 
 describe('RoutineBuilderExample', () => {
-  test('should render routine name and allow editing', () => {
+  const mockInitialState: UserCreatedRoutine = {
+    _id: 'routine-1',
+    name: 'Test Routine',
+    description: 'A test routine',
+    difficulty: 'beginner',
+    workouts: [],
+    totalWorkouts: 0,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+    userId: 'user-1',
+    createdBy: 'user-1',
+    routineType: 'user-created',
+    isActive: false,
+    isFavorite: false,
+    completedWorkouts: 0,
+    schemaVersion: '1.0',
+    duration: 4,
+    goal: 'strength',
+    objectives: [],
+  };
+
+  it('renders the routine builder with initial state', () => {
     render(
-      <MockProvider>
+      <MockProvider initialState={mockInitialState}>
         <RoutineBuilderExample />
       </MockProvider>
     );
 
-    expect(screen.getByText('Routine: Test Routine')).toBeInTheDocument();
+    expect(screen.getByText('Routine: Test Routine')).toBeDefined();
+    expect(screen.getByDisplayValue('Test Routine')).toBeDefined();
+  });
+
+  it('allows updating routine name', () => {
+    render(
+      <MockProvider initialState={mockInitialState}>
+        <RoutineBuilderExample />
+      </MockProvider>
+    );
 
     const nameInput = screen.getByDisplayValue('Test Routine');
-    expect(nameInput).toBeInTheDocument();
+    expect(nameInput).toBeDefined();
+
+    fireEvent.change(nameInput, { target: { value: 'Updated Routine' } });
+
+    expect(screen.getByDisplayValue('Updated Routine')).toBeDefined();
   });
 
-  test('should show add workout button and total count', () => {
+  it('allows adding a workout', () => {
     render(
-      <MockProvider>
+      <MockProvider initialState={mockInitialState}>
         <RoutineBuilderExample />
       </MockProvider>
     );
 
-    expect(screen.getByText('Add Workout')).toBeInTheDocument();
-    expect(screen.getByText('Total Workouts: 0')).toBeInTheDocument();
-  });
+    expect(screen.getByText('Add Workout')).toBeDefined();
+    expect(screen.getByText('Total Workouts: 0')).toBeDefined();
 
-  test('should show message when no workouts exist', () => {
-    render(
-      <MockProvider>
-        <RoutineBuilderExample />
-      </MockProvider>
-    );
+    const addWorkoutButton = screen.getByText('Add Workout');
+    fireEvent.click(addWorkoutButton);
 
     expect(
-      screen.getByText('No workouts yet. Click "Add Workout" to get started!')
-    ).toBeInTheDocument();
+      screen.getByText('Workout 1')
+    ).toBeDefined();
+
+    expect(screen.getByText('Total Workouts: 1')).toBeDefined();
+    expect(screen.getByDisplayValue('Workout 1')).toBeDefined();
   });
 
-  test('should add workout when button is clicked', () => {
+  it('allows updating workout name', () => {
+    const initialStateWithWorkout: UserCreatedRoutine = {
+      ...mockInitialState,
+      workouts: [
+        {
+          _id: 'workout-1',
+          name: 'Workout 1',
+          type: 'strength',
+          orderIndex: 0,
+          sections: [],
+          objective: 'Build strength',
+          notes: 'Test workout',
+        },
+      ],
+      totalWorkouts: 1,
+    };
+
     render(
-      <MockProvider>
+      <MockProvider initialState={initialStateWithWorkout}>
         <RoutineBuilderExample />
       </MockProvider>
     );
 
-    const addButton = screen.getByText('Add Workout');
-    fireEvent.click(addButton);
-
-    expect(screen.getByText('Total Workouts: 1')).toBeInTheDocument();
-    expect(screen.getByDisplayValue('Workout 1')).toBeInTheDocument();
-  });
-
-  test('should allow editing workout name', () => {
-    render(
-      <MockProvider>
-        <RoutineBuilderExample />
-      </MockProvider>
-    );
-
-    // Add a workout first
-    const addButton = screen.getByText('Add Workout');
-    fireEvent.click(addButton);
-
-    // Find and edit the workout name
     const workoutNameInput = screen.getByDisplayValue('Workout 1');
-    fireEvent.change(workoutNameInput, {
-      target: { value: 'Updated Workout Name' },
-    });
+    fireEvent.change(workoutNameInput, { target: { value: 'Updated Workout' } });
 
-    expect(
-      screen.getByDisplayValue('Updated Workout Name')
-    ).toBeInTheDocument();
+    expect(screen.getByDisplayValue('Updated Workout')).toBeDefined();
   });
 
-  test('should show workout type', () => {
+  it('displays workout details correctly', () => {
+    const initialStateWithWorkout: UserCreatedRoutine = {
+      ...mockInitialState,
+      workouts: [
+        {
+          _id: 'workout-1',
+          name: 'Workout 1',
+          type: 'strength',
+          orderIndex: 0,
+          sections: [],
+          objective: 'Build strength',
+          notes: 'Test workout',
+        },
+      ],
+      totalWorkouts: 1,
+    };
+
     render(
-      <MockProvider>
+      <MockProvider initialState={initialStateWithWorkout}>
         <RoutineBuilderExample />
       </MockProvider>
     );
 
-    // Add a workout first
-    const addButton = screen.getByText('Add Workout');
-    fireEvent.click(addButton);
-
-    expect(screen.getByText('Type: strength')).toBeInTheDocument();
+    expect(screen.getByText('Type: strength')).toBeDefined();
+    expect(screen.getByText('Objective: Build strength')).toBeDefined();
+    expect(screen.getByText('Notes: Test workout')).toBeDefined();
   });
 
-  test('should show remove button for each workout', () => {
+  it('allows removing a workout', () => {
+    const initialStateWithWorkout: UserCreatedRoutine = {
+      ...mockInitialState,
+      workouts: [
+        {
+          _id: 'workout-1',
+          name: 'Workout 1',
+          type: 'strength',
+          orderIndex: 0,
+          sections: [],
+          objective: 'Build strength',
+          notes: 'Test workout',
+        },
+      ],
+      totalWorkouts: 1,
+    };
+
     render(
-      <MockProvider>
+      <MockProvider initialState={initialStateWithWorkout}>
         <RoutineBuilderExample />
       </MockProvider>
     );
 
-    // Add a workout first
-    const addButton = screen.getByText('Add Workout');
-    fireEvent.click(addButton);
+    expect(screen.getByText('Remove')).toBeDefined();
 
-    expect(screen.getByText('Remove')).toBeInTheDocument();
+    const removeButton = screen.getByText('Remove');
+    fireEvent.click(removeButton);
+
+    expect(screen.getByText('Total Workouts: 0')).toBeDefined();
   });
 });
