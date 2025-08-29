@@ -22,7 +22,6 @@ const profileLimiter = rateLimit({
   legacyHeaders: false, // Disable the `X-RateLimit-*` headers
 });
 
-
 const port = process.env.PORT || 3001;
 const mongoUri = process.env.MONGO_URI || 'mongodb://mongo:27017/routines';
 
@@ -46,6 +45,21 @@ app.get(
     res.status(200).json({
       userId: req.user?.id,
       message: 'Protected endpoint accessed successfully',
+    });
+  }
+);
+
+// Temporary protected test route for authentication testing
+app.get(
+  '/api/v1/protected-test',
+  profileLimiter, // Add rate limiting to protect against brute force attacks
+  verifySupabaseJWT,
+  (req: Request, res: Response) => {
+    res.status(200).json({
+      userId: req.user?.id,
+      email: req.user?.email,
+      role: req.user?.role,
+      message: 'Authentication successful',
     });
   }
 );
