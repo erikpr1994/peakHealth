@@ -5,16 +5,16 @@ export const baseSetSchema = new Schema(
   {
     type: {
       type: String,
-      enum: ['strength', 'bodyweight', 'mobility', 'tabata'],
+      enum: ['strengthSet', 'bodyweightSet', 'mobilitySet'],
       required: true,
     },
     orderIndex: { type: Number, required: true },
     notes: { type: String },
     // Type-specific fields that can be used when embedded
-    reps: { type: String },
-    weight: { type: String },
-    duration: { type: String },
-    restTime: { type: String },
+    reps: { type: Number },
+    weight: { type: Number },
+    duration: { type: Number },
+    restTime: { type: String }, // Keep as String since it's a DurationString
   },
   { _id: false }
 );
