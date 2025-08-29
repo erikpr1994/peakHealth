@@ -1,107 +1,175 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { verifySupabaseJWT } from './auth';
 import jwt from 'jsonwebtoken';
+import { Request, Response } from 'express';
 
-// Mock jsonwebtoken
+// Mock jsonwebtoken module
 vi.mock('jsonwebtoken', () => ({
   verify: vi.fn(),
+  JsonWebTokenError: class JsonWebTokenError extends Error {
+    constructor(message: string) {
+      super(message);
+      this.name = 'JsonWebTokenError';
+    }
+  },
 }));
 
 describe('verifySupabaseJWT middleware', () => {
-  const mockRequest = () => {
-    return {
-      headers: {
-        authorization: 'Bearer test-token',
-      },
-    };
-  };
+  // Mock request, response, and next function
+  let req: Partial<Request>;
+  let res: Partial<Response>;
+  let next: vi.Mock;
 
-  const mockResponse = () => {
-    const res: any = {};
-    res.status = vi.fn().mockReturnValue(res);
-    res.json = vi.fn().mockReturnValue(res);
-    return res;
-  };
-
-  const mockNext = vi.fn();
+  // Setup environment variable
+  const originalEnv = process.env;
 
   beforeEach(() => {
+    // Reset mocks before each test
     vi.resetAllMocks();
-    process.env.SUPABASE_JWT_SECRET = 'test-secret';
+
+    // Setup environment variables
+    process.env = { ...originalEnv, SUPABASE_JWT_SECRET: 'test-secret' };
+
+    // Setup request, response, and next function mocks
+    req = {
+      headers: {},
+      user: undefined,
+    };
+
+    res = {
+      status: vi.fn().mockReturnThis(),
+      json: vi.fn(),
+    };
+
+    next = vi.fn();
   });
 
-  it('should call next() when token is valid', () => {
-    const req = mockRequest();
-    const res = mockResponse();
+  afterEach(() => {
+    // Restore environment variables
+    process.env = originalEnv;
+  });
 
-    // Mock successful token verification
-    (jwt.verify as any).mockReturnValue({
-      sub: 'test-user-id',
+  it('should pass with valid token and set user in request', () => {
+    // Arrange
+    const mockUser = {
+      sub: 'user-123',
       email: 'test@example.com',
-    });
+      role: 'user',
+    };
+    req.headers = { authorization: 'Bearer valid-token' };
+    (jwt.verify as vi.Mock).mockReturnValue(mockUser);
 
-    verifySupabaseJWT(req as any, res as any, mockNext);
+    // Act
+    verifySupabaseJWT(req as Request, res as Response, next);
 
-    expect(jwt.verify).toHaveBeenCalledWith('test-token', 'test-secret');
-    expect(req).toHaveProperty('user');
+    // Assert
+    expect(jwt.verify).toHaveBeenCalledWith('valid-token', 'test-secret');
     expect(req.user).toEqual({
-      id: 'test-user-id',
+      id: 'user-123',
       email: 'test@example.com',
       role: 'user',
     });
-    expect(mockNext).toHaveBeenCalled();
+    expect(next).toHaveBeenCalled();
+    expect(res.status).not.toHaveBeenCalled();
+    expect(res.json).not.toHaveBeenCalled();
   });
 
-  it('should return 401 when no token is provided', () => {
-    const req = { headers: {} };
-    const res = mockResponse();
+  it('should return 401 when no authorization header is provided', () => {
+    // Arrange
+    req.headers = {};
 
-    verifySupabaseJWT(req as any, res as any, mockNext);
+    // Act
+    verifySupabaseJWT(req as Request, res as Response, next);
 
+    // Assert
+    expect(jwt.verify).not.toHaveBeenCalled();
+    expect(next).not.toHaveBeenCalled();
     expect(res.status).toHaveBeenCalledWith(401);
     expect(res.json).toHaveBeenCalledWith({
       error: 'Unauthorized',
       message: 'No valid token provided',
       code: 'auth/missing-token',
     });
-    expect(mockNext).not.toHaveBeenCalled();
   });
 
-  it('should return 401 when token is invalid', () => {
-    const req = mockRequest();
-    const res = mockResponse();
+  it('should return 401 when authorization header does not start with Bearer', () => {
+    // Arrange
+    req.headers = { authorization: 'Basic invalid-format' };
 
-    // Mock token verification failure
-    (jwt.verify as any).mockImplementation(() => {
-      throw new jwt.JsonWebTokenError('Invalid token');
-    });
+    // Act
+    verifySupabaseJWT(req as Request, res as Response, next);
 
-    verifySupabaseJWT(req as any, res as any, mockNext);
-
+    // Assert
+    expect(jwt.verify).not.toHaveBeenCalled();
+    expect(next).not.toHaveBeenCalled();
     expect(res.status).toHaveBeenCalledWith(401);
     expect(res.json).toHaveBeenCalledWith({
       error: 'Unauthorized',
-      message: 'Invalid or expired token',
-      code: 'auth/invalid-token',
+      message: 'No valid token provided',
+      code: 'auth/missing-token',
     });
-    expect(mockNext).not.toHaveBeenCalled();
   });
 
   it('should return 500 when SUPABASE_JWT_SECRET is not set', () => {
-    const req = mockRequest();
-    const res = mockResponse();
-
-    // Remove environment variable
+    // Arrange
+    req.headers = { authorization: 'Bearer valid-token' };
     delete process.env.SUPABASE_JWT_SECRET;
 
-    verifySupabaseJWT(req as any, res as any, mockNext);
+    // Act
+    verifySupabaseJWT(req as Request, res as Response, next);
 
+    // Assert
+    expect(jwt.verify).not.toHaveBeenCalled();
+    expect(next).not.toHaveBeenCalled();
     expect(res.status).toHaveBeenCalledWith(500);
     expect(res.json).toHaveBeenCalledWith({
       error: 'Internal Server Error',
       message: 'Authentication configuration error',
       code: 'auth/config-error',
     });
-    expect(mockNext).not.toHaveBeenCalled();
+  });
+
+  it('should return 401 when token is invalid', () => {
+    // Arrange
+    req.headers = { authorization: 'Bearer invalid-token' };
+    const jwtError = new jwt.JsonWebTokenError('invalid token');
+    (jwt.verify as vi.Mock).mockImplementation(() => {
+      throw jwtError;
+    });
+
+    // Act
+    verifySupabaseJWT(req as Request, res as Response, next);
+
+    // Assert
+    expect(jwt.verify).toHaveBeenCalledWith('invalid-token', 'test-secret');
+    expect(next).not.toHaveBeenCalled();
+    expect(res.status).toHaveBeenCalledWith(401);
+    expect(res.json).toHaveBeenCalledWith({
+      error: 'Unauthorized',
+      message: 'Invalid or expired token',
+      code: 'auth/invalid-token',
+    });
+  });
+
+  it('should return 500 when a non-JWT error occurs', () => {
+    // Arrange
+    req.headers = { authorization: 'Bearer valid-token' };
+    const genericError = new Error('Some unexpected error');
+    (jwt.verify as vi.Mock).mockImplementation(() => {
+      throw genericError;
+    });
+
+    // Act
+    verifySupabaseJWT(req as Request, res as Response, next);
+
+    // Assert
+    expect(jwt.verify).toHaveBeenCalledWith('valid-token', 'test-secret');
+    expect(next).not.toHaveBeenCalled();
+    expect(res.status).toHaveBeenCalledWith(500);
+    expect(res.json).toHaveBeenCalledWith({
+      error: 'Internal Server Error',
+      message: 'Authentication processing error',
+      code: 'auth/processing-error',
+    });
   });
 });
