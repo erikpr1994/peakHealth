@@ -1,18 +1,27 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { verifySupabaseJWT } from './auth';
 import jwt from 'jsonwebtoken';
 import { Request, Response } from 'express';
 
 // Mock jsonwebtoken module
-vi.mock('jsonwebtoken', () => ({
-  verify: vi.fn(),
-  JsonWebTokenError: class JsonWebTokenError extends Error {
+vi.mock('jsonwebtoken', () => {
+  const mockVerify = vi.fn();
+  const mockJsonWebTokenError = class JsonWebTokenError extends Error {
     constructor(message: string) {
       super(message);
       this.name = 'JsonWebTokenError';
     }
-  },
-}));
+  };
+
+  return {
+    default: {
+      verify: mockVerify,
+      JsonWebTokenError: mockJsonWebTokenError,
+    },
+    verify: mockVerify,
+    JsonWebTokenError: mockJsonWebTokenError,
+  };
+});
 
 describe('verifySupabaseJWT middleware', () => {
   // Mock request, response, and next function
