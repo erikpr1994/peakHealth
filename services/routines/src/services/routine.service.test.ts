@@ -129,7 +129,7 @@ describe('RoutineService', () => {
       (UserCreatedRoutineModel.findOne as any).mockResolvedValue(null);
 
       // Mock exists to return null (routine doesn't exist at all)
-      (UserCreatedRoutineModel.exists as any) = vi.fn().mockResolvedValue(null);
+      (UserCreatedRoutineModel.exists as any).mockResolvedValue(null);
 
       await expect(
         routineService.getRoutineById(routineId, userId)
@@ -149,7 +149,7 @@ describe('RoutineService', () => {
       (UserCreatedRoutineModel.findOne as any).mockResolvedValue(null);
 
       // Mock exists to return true (routine exists but belongs to another user)
-      (UserCreatedRoutineModel.exists as any) = vi.fn().mockResolvedValue(true);
+      (UserCreatedRoutineModel.exists as any).mockResolvedValue(true);
 
       await expect(
         routineService.getRoutineById(routineId, userId)
