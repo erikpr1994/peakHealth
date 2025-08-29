@@ -46,24 +46,21 @@ for file in $CHANGED_FILES; do
   # Look for corresponding test files
   TEST_FILES_FOUND=false
   
+  # Determine the file extension to look for corresponding test files
+  FILE_EXT="${file##*.}"
+  
   # Check for test files in the same directory
-  if [ -f "$DIR/${NAME_WITHOUT_EXT}.test.ts" ] || \
-     [ -f "$DIR/${NAME_WITHOUT_EXT}.test.tsx" ] || \
-     [ -f "$DIR/${NAME_WITHOUT_EXT}.spec.ts" ] || \
-     [ -f "$DIR/${NAME_WITHOUT_EXT}.spec.tsx" ] || \
-     [ -f "$DIR/__tests__/${NAME_WITHOUT_EXT}.test.ts" ] || \
-     [ -f "$DIR/__tests__/${NAME_WITHOUT_EXT}.test.tsx" ] || \
-     [ -f "$DIR/__tests__/${NAME_WITHOUT_EXT}.spec.ts" ] || \
-     [ -f "$DIR/__tests__/${NAME_WITHOUT_EXT}.spec.tsx" ]; then
+  if [ -f "$DIR/${NAME_WITHOUT_EXT}.test.$FILE_EXT" ] || \
+     [ -f "$DIR/${NAME_WITHOUT_EXT}.spec.$FILE_EXT" ] || \
+     [ -f "$DIR/__tests__/${NAME_WITHOUT_EXT}.test.$FILE_EXT" ] || \
+     [ -f "$DIR/__tests__/${NAME_WITHOUT_EXT}.spec.$FILE_EXT" ]; then
     TEST_FILES_FOUND=true
   fi
   
   # Check for test files in parent __tests__ directory
   PARENT_DIR=$(dirname "$DIR")
-  if [ -f "$PARENT_DIR/__tests__/${NAME_WITHOUT_EXT}.test.ts" ] || \
-     [ -f "$PARENT_DIR/__tests__/${NAME_WITHOUT_EXT}.test.tsx" ] || \
-     [ -f "$PARENT_DIR/__tests__/${NAME_WITHOUT_EXT}.spec.ts" ] || \
-     [ -f "$PARENT_DIR/__tests__/${NAME_WITHOUT_EXT}.spec.tsx" ]; then
+  if [ -f "$PARENT_DIR/__tests__/${NAME_WITHOUT_EXT}.test.$FILE_EXT" ] || \
+     [ -f "$PARENT_DIR/__tests__/${NAME_WITHOUT_EXT}.spec.$FILE_EXT" ]; then
     TEST_FILES_FOUND=true
   fi
   
@@ -80,12 +77,12 @@ if [ "$HAS_UNCOVERED_FILES" = true ]; then
   echo -e "$UNCOVERED_SOURCE_FILES"
   echo ""
   echo "💡 Please add tests for these files before pushing:"
-  echo "   - Create .test.ts/.test.tsx or .spec.ts/.spec.tsx files"
+  echo "   - Create .test.[ext] or .spec.[ext] files (where [ext] matches your source file)"
   echo "   - Place them in the same directory or in a __tests__ subdirectory"
   echo ""
   echo "📝 Example test file structure:"
-  echo "   src/features/dashboard/Dashboard.tsx"
-  echo "   src/features/dashboard/Dashboard.test.tsx"
+  echo "   src/features/dashboard/Dashboard.tsx → src/features/dashboard/Dashboard.test.tsx"
+  echo "   src/features/dashboard/Dashboard.js → src/features/dashboard/Dashboard.test.js"
   echo "   OR"
   echo "   src/features/dashboard/__tests__/Dashboard.test.tsx"
   exit 1
