@@ -1,10 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import {
-  addSet,
-  removeSet,
-  updateSet,
-  reorderSets,
-} from './setReducer';
+import { addSet, removeSet, updateSet, reorderSets } from './setReducer';
 import { RoutineBuilderState } from '../types';
 import {
   WorkoutSet,
@@ -117,7 +112,8 @@ describe('setReducer', () => {
         setIds: newOrder,
       });
 
-      const exercise = result.workouts[0].sections[0].exercises[0] as StrengthExercise;
+      const exercise = result.workouts[0].sections[0]
+        .exercises[0] as StrengthExercise;
       const sets = exercise.sets;
 
       // Should only have 1 set (non-existent one filtered out)
@@ -138,7 +134,8 @@ describe('setReducer', () => {
         setIds: [],
       });
 
-      const exercise = result.workouts[0].sections[0].exercises[0] as StrengthExercise;
+      const exercise = result.workouts[0].sections[0]
+        .exercises[0] as StrengthExercise;
       const sets = exercise.sets;
       expect(sets).toHaveLength(0);
     });
@@ -154,7 +151,8 @@ describe('setReducer', () => {
         setIds: newOrder,
       });
 
-      const exercise = result.workouts[0].sections[0].exercises[0] as StrengthExercise;
+      const exercise = result.workouts[0].sections[0]
+        .exercises[0] as StrengthExercise;
       const sets = exercise.sets;
       expect(sets).toHaveLength(0);
     });
@@ -234,7 +232,8 @@ describe('setReducer', () => {
         set: newSet,
       });
 
-      const exercise = result.workouts[0].sections[0].exercises[0] as StrengthExercise;
+      const exercise = result.workouts[0].sections[0]
+        .exercises[0] as StrengthExercise;
       const sets = exercise.sets;
 
       expect(sets).toHaveLength(2);
@@ -327,7 +326,8 @@ describe('setReducer', () => {
         setId: 'set-2',
       });
 
-      const exercise = result.workouts[0].sections[0].exercises[0] as StrengthExercise;
+      const exercise = result.workouts[0].sections[0]
+        .exercises[0] as StrengthExercise;
       const sets = exercise.sets;
 
       expect(sets).toHaveLength(2);
@@ -415,7 +415,8 @@ describe('setReducer', () => {
         },
       });
 
-      const exercise = result.workouts[0].sections[0].exercises[0] as StrengthExercise;
+      const exercise = result.workouts[0].sections[0]
+        .exercises[0] as StrengthExercise;
       const sets = exercise.sets;
 
       expect(sets[0]._id).toBe('set-1');
