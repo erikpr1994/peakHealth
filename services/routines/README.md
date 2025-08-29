@@ -1,63 +1,103 @@
 # Routines Service
 
-This service handles routines-related functionality for the Peak Health application.
+A Node.js/Express service for managing workout routines with authentication and rate limiting.
 
-## Authentication
+## Rate Limiting
 
-The service uses Supabase JWT authentication. The `verifySupabaseJWT` middleware verifies tokens from the `Authorization: Bearer` header and attaches the authenticated user's information to the request object.
+This service implements comprehensive rate limiting to prevent denial-of-service attacks. The rate limiting is configured at multiple levels:
 
-### Environment Variables
+### Global Rate Limiting
 
-- `SUPABASE_JWT_SECRET`: JWT secret from Supabase for token verification (required)
-- `PORT`: The port to run the server on (default: 3001)
-- `MONGO_URI`: MongoDB connection string (default: mongodb://mongo:27017/routines)
+- Applied to all requests by default
+- 1000 requests per 15 minutes per IP
+- Health check endpoints are excluded from rate limiting
 
-### Protected Routes
+### Specific Rate Limiters
 
-All protected routes use the `verifySupabaseJWT` middleware to authenticate requests and rate limiting for security. The authentication middleware:
+#### `globalLimiter`
 
-1. Extracts the JWT from the Authorization header
-2. Verifies it using the SUPABASE_JWT_SECRET
-3. Attaches the user information to the request object
+- **Limit**: 1000 requests per 15 minutes per IP
+- **Usage**: Applied globally to all requests
+- **Exclusions**: Health check endpoints (`/health`)
 
-Rate limiting is applied to all protected routes to prevent brute force attacks:
-- 100 requests per 15 minutes per IP address
+#### `authLimiter`
 
-Example of a protected route:
+- **Limit**: 100 requests per 15 minutes per IP
+- **Usage**: For authentication and sensitive endpoints
+- **Example**: Login, profile, protected test routes
+
+#### `apiLimiter`
+
+- **Limit**: 300 requests per 15 minutes per IP
+- **Usage**: For general API endpoints
+- **Example**: Data retrieval endpoints
+
+#### `resourceLimiter`
+
+- **Limit**: 100 requests per 15 minutes per IP
+- **Usage**: For resource-specific endpoints
+- **Example**: Routines CRUD operations
+
+### Implementation
+
+The rate limiting middleware is implemented in `src/middleware/rateLimit.ts` and provides:
+
+- Standard rate limit headers (`RateLimit-*`)
+- Custom error messages for different endpoint types
+- Configurable limits and time windows
+- IP-based tracking
+
+### Usage Examples
 
 ```typescript
-app.get(
-  '/api/v1/protected-test',
-  profileLimiter, // Rate limiting
-  verifySupabaseJWT, // Authentication
-  (req: Request, res: Response) => {
-    res.status(200).json({
-      userId: req.user?.id,
-      email: req.user?.email,
-      role: req.user?.role,
-      message: 'Authentication successful',
-    });
-  }
-);
+import {
+  globalLimiter,
+  authLimiter,
+  resourceLimiter,
+} from './middleware/rateLimit';
+
+// Apply global rate limiting to all requests
+app.use(globalLimiter);
+
+// Apply stricter rate limiting to authentication endpoints
+app.get('/api/auth/login', authLimiter, authController.login);
+
+// Apply resource-specific rate limiting
+app.use('/api/routines', resourceLimiter, routineRoutes);
 ```
 
-### Testing
+### Rate Limit Headers
 
-The authentication middleware has comprehensive unit tests covering:
+The middleware includes standard rate limit headers in responses:
 
-- Requests with a valid token
-- Requests with an invalid/expired token
-- Requests with a malformed `Authorization` header
-- Requests with no token at all
+- `RateLimit-Limit`: Maximum requests allowed
+- `RateLimit-Remaining`: Remaining requests in current window
+- `RateLimit-Reset`: Time when the rate limit resets
 
-Run tests with:
+### Error Responses
+
+When rate limits are exceeded, the service returns:
+
+- HTTP 429 (Too Many Requests)
+- JSON error message
+- Rate limit headers with reset information
+
+## Development
+
+### Running Tests
 
 ```bash
 pnpm test
 ```
 
-Run tests with coverage:
+### Running the Service
 
 ```bash
-pnpm test:coverage
+pnpm start
 ```
+
+## Environment Variables
+
+- `PORT`: Server port (default: 3001)
+- `MONGO_URI`: MongoDB connection string
+- `SUPABASE_JWT_SECRET`: JWT secret for token verification
