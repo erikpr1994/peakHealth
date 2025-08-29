@@ -16,6 +16,7 @@ export * from './components/select';
 export * from './components/textarea';
 export * from './components/toast';
 export * from './components/tooltip';
+export * from './components/accordion';
 
 // Utilities
 export * from './utils';
