@@ -104,26 +104,6 @@ describe('RoutineService', () => {
     });
   });
 
-  describe('getRoutines', () => {
-    it('should call getRoutinesByUser with the same parameters', async () => {
-      // Create a spy on getRoutinesByUser
-      const spy = vi.spyOn(routineService, 'getRoutinesByUser');
-      
-      // Mock the return value
-      const mockRoutines = [
-        { _id: 'routine1', name: 'Routine 1', userId },
-      ];
-      spy.mockResolvedValue(mockRoutines);
-
-      // Call getRoutines
-      const result = await routineService.getRoutines(userId, 'user');
-
-      // Verify getRoutinesByUser was called with the same parameters
-      expect(spy).toHaveBeenCalledWith(userId, 'user');
-      expect(result).toEqual(mockRoutines);
-    });
-  });
-
   describe('getRoutineById', () => {
     it('should get a routine by ID', async () => {
       const mockRoutine = {

@@ -65,17 +65,6 @@ export class RoutineService {
   }
 
   /**
-   * Get all routines for a user (alias for getRoutinesByUser for backward compatibility)
-   * @deprecated Use getRoutinesByUser instead
-   * @param userId The ID of the user
-   * @param type Optional filter for routine type
-   * @returns Array of routines
-   */
-  async getRoutines(userId: string, type?: 'active' | 'user' | 'assigned') {
-    return this.getRoutinesByUser(userId, type);
-  }
-
-  /**
    * Get a single routine by ID
    * @param routineId The ID of the routine to retrieve
    * @param userId The ID of the user (for authorization)
