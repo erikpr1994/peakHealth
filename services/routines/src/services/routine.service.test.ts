@@ -10,6 +10,7 @@ vi.mock('../domain/models/user-created-routine', () => {
   mockModel.find = vi.fn();
   mockModel.findOne = vi.fn();
   mockModel.deleteOne = vi.fn();
+  mockModel.exists = vi.fn();
   return {
     default: mockModel,
   };
@@ -119,29 +120,48 @@ describe('RoutineService', () => {
       expect(result).toEqual(mockRoutine);
       expect(UserCreatedRoutineModel.findOne).toHaveBeenCalledWith({
         _id: expect.any(Types.ObjectId),
+        userId,
       });
     });
 
     it('should throw an error if routine not found', async () => {
+      // Mock findOne to return null (not found)
       (UserCreatedRoutineModel.findOne as any).mockResolvedValue(null);
+
+      // Mock exists to return null (routine doesn't exist at all)
+      (UserCreatedRoutineModel.exists as any) = vi.fn().mockResolvedValue(null);
 
       await expect(
         routineService.getRoutineById(routineId, userId)
       ).rejects.toThrow(new ApiError('Routine not found', 404));
+
+      expect(UserCreatedRoutineModel.findOne).toHaveBeenCalledWith({
+        _id: expect.any(Types.ObjectId),
+        userId,
+      });
+      expect(UserCreatedRoutineModel.exists).toHaveBeenCalledWith({
+        _id: expect.any(Types.ObjectId),
+      });
     });
 
     it('should throw an error if user is not authorized', async () => {
-      const mockRoutine = {
-        _id: mockObjectId,
-        name: 'Test Routine',
-        userId: 'different-user',
-      };
+      // Mock findOne to return null (not found with this userId)
+      (UserCreatedRoutineModel.findOne as any).mockResolvedValue(null);
 
-      (UserCreatedRoutineModel.findOne as any).mockResolvedValue(mockRoutine);
+      // Mock exists to return true (routine exists but belongs to another user)
+      (UserCreatedRoutineModel.exists as any) = vi.fn().mockResolvedValue(true);
 
       await expect(
         routineService.getRoutineById(routineId, userId)
       ).rejects.toThrow(new ApiError('Unauthorized access to routine', 403));
+
+      expect(UserCreatedRoutineModel.findOne).toHaveBeenCalledWith({
+        _id: expect.any(Types.ObjectId),
+        userId,
+      });
+      expect(UserCreatedRoutineModel.exists).toHaveBeenCalledWith({
+        _id: expect.any(Types.ObjectId),
+      });
     });
 
     it('should handle invalid ID format', async () => {
@@ -264,4 +284,3 @@ describe('RoutineService', () => {
     });
   });
 });
-
