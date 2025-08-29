@@ -330,90 +330,38 @@ jobs:
           echo "::group::Building Affected Packages"
           AFFECTED="${{ needs.determine-affected.outputs.affected }}"
 
-          # Core packages that should always be built first if they're affected
-          CORE_PACKAGES="@peakhealth/ui @peakhealth/auth-types @peakhealth/auth-utils @peakhealth/routines-types @peakhealth/routines-ui"
-
           if [[ "$AFFECTED" == "all" ]]; then
-            echo "Building all core packages"
-            # Try to build with cache first, fallback to clean build if needed
-            pnpm turbo run build \
-              --filter="@peakhealth/ui" \
-              --filter="@peakhealth/auth-types" \
-              --filter="@peakhealth/auth-utils" \
-              --filter="@peakhealth/routines-types" \
-              --filter="@peakhealth/routines-ui" || {
-              echo "Build failed, trying clean build..."
-              pnpm turbo run build \
-                --filter="@peakhealth/ui" \
-                --filter="@peakhealth/auth-types" \
-                --filter="@peakhealth/auth-utils" \
-                --filter="@peakhealth/routines-types" \
-                --filter="@peakhealth/routines-ui" \
-                --force
-            }
+            echo "Building all packages and services"
+            pnpm turbo run build --filter="./packages/*" --filter="./services/*" --concurrency=3 --cache-dir=.turbo
           else
             echo "Building affected packages: $AFFECTED"
 
-            # Create filter string for affected packages (only packages, not apps)
+            # Filter affected packages to only include packages and services (not apps)
             FILTER_STRING=""
-            AFFECTED_CORE=false
-            PACKAGES_TO_BUILD=()
-
-            # Check if any core packages are affected
-            for CORE_PKG in $CORE_PACKAGES; do
-              if [[ "$AFFECTED" == *"$CORE_PKG"* ]]; then
-                AFFECTED_CORE=true
-                break
+            IFS=',' read -ra PACKAGES <<< "$AFFECTED"
+            for PKG in "${PACKAGES[@]}"; do
+              if [[ -n "$PKG" ]]; then
+                # Check if the package is in packages/ or services/ directory
+                if [[ -d "packages/$(echo $PKG | sed 's/@peakhealth\///')" ]] || [[ -d "services/$(echo $PKG | sed 's/@peakhealth\///')" ]]; then
+                  FILTER_STRING="${FILTER_STRING} --filter=${PKG}"
+                else
+                  # A better approach could be to check the package.json location
+                  # This is a simplified check
+                  is_package_or_service=$(pnpm find . --json | jq -r ".[] | select(.name == \"$PKG\") | .path" | grep -E "^(packages|services)")
+                  if [[ -n "$is_package_or_service" ]]; then
+                     FILTER_STRING="${FILTER_STRING} --filter=${PKG}"
+                  else
+                    echo "Skipping app: $PKG"
+                  fi
+                fi
               fi
             done
 
-            if [[ "$AFFECTED_CORE" == "true" ]]; then
-              echo "Core packages affected, building all core packages"
-              # Try to build with cache first, fallback to clean build if needed
-              pnpm turbo run build \
-                --filter="@peakhealth/ui" \
-                --filter="@peakhealth/auth-types" \
-                --filter="@peakhealth/auth-utils" \
-                --filter="@peakhealth/routines-types" \
-                --filter="@peakhealth/routines-ui" || {
-                echo "Build failed, trying clean build..."
-                pnpm turbo run build \
-                  --filter="@peakhealth/ui" \
-                  --filter="@peakhealth/auth-types" \
-                  --filter="@peakhealth/auth-utils" \
-                  --filter="@peakhealth/routines-types" \
-                  --filter="@peakhealth/routines-ui" \
-                  --force
-              }
+            if [[ -n "$FILTER_STRING" ]]; then
+              echo "Running: pnpm turbo run build $FILTER_STRING --concurrency=3 --cache-dir=.turbo"
+              pnpm turbo run build $FILTER_STRING --concurrency=3 --cache-dir=.turbo
             else
-              # Filter affected packages to only include packages (not apps)
-              IFS=',' read -ra PACKAGES <<< "$AFFECTED"
-              for PKG in "${PACKAGES[@]}"; do
-                if [[ -n "$PKG" ]]; then
-                  # Only include packages that are actually in the packages/ directory
-                  # Valid packages: @peakhealth/ui, @peakhealth/auth-types, @peakhealth/auth-utils
-                  if [[ "$PKG" == "@peakhealth/ui" ]] || [[ "$PKG" == "@peakhealth/auth-types" ]] || [[ "$PKG" == "@peakhealth/auth-utils" ]] || [[ "$PKG" == "@peakhealth/routines-types" ]] || [[ "$PKG" == "@peakhealth/routines-ui" ]]; then
-                    PACKAGES_TO_BUILD+=("$PKG")
-                  else
-                    echo "Skipping app/other package: $PKG"
-                  fi
-                fi
-              done
-
-              # Create filter string for packages to build (explicitly list each package)
-              for PKG in "${PACKAGES_TO_BUILD[@]}"; do
-                FILTER_STRING="${FILTER_STRING} --filter=${PKG}"
-              done
-
-              if [[ -n "$FILTER_STRING" ]]; then
-                echo "Running: pnpm turbo run build $FILTER_STRING"
-                pnpm turbo run build $FILTER_STRING || {
-                  echo "Build failed, trying clean build..."
-                  pnpm turbo run build $FILTER_STRING --force
-                }
-              else
-                echo "No packages to build (only apps were affected)"
-              fi
+              echo "No packages or services to build (only apps were affected)"
             fi
           fi
           echo "::endgroup::"
