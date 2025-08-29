@@ -41,7 +41,10 @@ export class RoutineService {
    * @param type Optional filter for routine type
    * @returns Array of routines
    */
-  async getRoutinesByUser(userId: string, type?: 'active' | 'user' | 'assigned') {
+  async getRoutinesByUser(
+    userId: string,
+    type?: 'active' | 'user' | 'assigned'
+  ) {
     try {
       let query: any = { userId };
 
@@ -72,17 +75,25 @@ export class RoutineService {
    */
   async getRoutineById(routineId: string, userId: string) {
     try {
+      // First, try to find the routine by ID and userId to ensure ownership
       const routine = await UserCreatedRoutineModel.findOne({
         _id: new Types.ObjectId(routineId),
+        userId: userId, // Ensure the userId matches the authenticated user
       });
 
+      // If no routine is found, check if it's because it doesn't exist or because of unauthorized access
       if (!routine) {
-        throw new ApiError('Routine not found', 404);
-      }
+        // Check if the routine exists at all (regardless of owner)
+        const routineExists = await UserCreatedRoutineModel.exists({
+          _id: new Types.ObjectId(routineId),
+        });
 
-      // Check if the user is authorized to access this routine
-      if (routine.userId !== userId) {
-        throw new ApiError('Unauthorized access to routine', 403);
+        if (!routineExists) {
+          throw new ApiError('Routine not found', 404);
+        } else {
+          // Routine exists but doesn't belong to the user
+          throw new ApiError('Unauthorized access to routine', 403);
+        }
       }
 
       return routine;
@@ -179,4 +190,3 @@ export class RoutineService {
 
 // Export a singleton instance
 export const routineService = new RoutineService();
-
