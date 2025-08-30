@@ -14,13 +14,24 @@ export class RoutineAssignmentService {
    */
   async assignRoutine(userId: string, routineId: string) {
     try {
-      // First, check if the routine exists and is accessible to the user
-      const routine = await UserCreatedRoutineModel.findOne({
+      // First, check if the routine exists in UserCreatedRoutineModel
+      let routine = await UserCreatedRoutineModel.findOne({
         _id: new Types.ObjectId(routineId),
       });
 
+      // If routine is not found in UserCreatedRoutineModel, it might be a TemplateRoutine
+      // For now, we'll throw a "not found" error, but in the future, this should check
+      // a TemplateRoutineModel as well
       if (!routine) {
-        throw new ApiError('Routine not found', 404);
+        // TODO: Once TemplateRoutineModel is implemented, check there as well:
+        // routine = await TemplateRoutineModel.findOne({
+        //   _id: new Types.ObjectId(routineId),
+        // });
+
+        // If still not found, throw error
+        if (!routine) {
+          throw new ApiError('Routine not found', 404);
+        }
       }
 
       // Check if the user already has an active routine assignment
@@ -179,3 +190,4 @@ export class RoutineAssignmentService {
 
 // Export a singleton instance
 export const routineAssignmentService = new RoutineAssignmentService();
+
