@@ -38,6 +38,18 @@ export default [
     },
     rules: {
       // Add any package-specific rules here
+      // Fix for TypeScript interface function parameters being marked as unused
+      'no-unused-vars': 'off',
+      '@typescript-eslint/no-unused-vars': [
+        'warn',
+        {
+          args: 'none', // Don't check function arguments at all
+          argsIgnorePattern: '^_',
+          ignoreRestSiblings: true,
+          varsIgnorePattern: '^_',
+          caughtErrors: 'none',
+        },
+      ],
     },
   },
   {
