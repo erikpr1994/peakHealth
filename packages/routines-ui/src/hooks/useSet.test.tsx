@@ -3,6 +3,7 @@ import { renderHook } from '@testing-library/react';
 import { useSet } from './useSet';
 import { RoutineBuilderProvider } from '../context/routineBuilder/RoutineBuilderContext';
 import { RoutineBuilderState } from '../context/routineBuilder/types';
+import type { StrengthSet } from '@peakhealth/routines-types';
 
 // Mock data for testing
 const mockState: RoutineBuilderState = {
@@ -96,7 +97,9 @@ describe('useSet', () => {
     expect(result.current.set?._id).toBe('set-1');
     expect(result.current.set?.setNumber).toBe(1);
     expect(result.current.set?.reps).toBe(8);
-    expect(result.current.set?.weight).toBe(135);
+    // Type guard to check if it's a StrengthSet before accessing weight
+    expect(result.current.set && 'weight' in result.current.set).toBe(true);
+    expect((result.current.set as StrengthSet).weight).toBe(135);
   });
 
   it('should provide set management functions', () => {
