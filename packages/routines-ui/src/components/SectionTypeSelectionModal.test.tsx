@@ -68,38 +68,43 @@ describe('SectionTypeSelectionModal', () => {
   it('displays all section type categories', () => {
     render(<SectionTypeSelectionModal {...defaultProps} />);
 
+    expect(screen.getByText('🔄 Common Sections')).toBeDefined();
     expect(screen.getByText('💪 Strength Training')).toBeDefined();
-    expect(screen.getByText('🏃 Cardio & Running')).toBeDefined();
-    expect(screen.getByText('🧘 Warm-up & Recovery')).toBeDefined();
   });
 
   it('displays section type options with labels and descriptions', () => {
     render(<SectionTypeSelectionModal {...defaultProps} />);
 
-    expect(screen.getByText('Basic Strength')).toBeDefined();
+    expect(screen.getByText('Basic')).toBeDefined();
     expect(
-      screen.getByText('Standard strength training with sets and reps')
+      screen.getByText(
+        'A standard section for strength training, consisting of a list of exercises performed for a specified number of sets and reps'
+      )
     ).toBeDefined();
 
     expect(screen.getByText('EMOM')).toBeDefined();
     expect(
-      screen.getByText('Every Minute On the Minute training')
+      screen.getByText(
+        'Every Minute on the Minute - perform a specific exercise at the start of every minute for a set amount of time'
+      )
     ).toBeDefined();
 
-    expect(screen.getByText('Warm-up')).toBeDefined();
-    expect(screen.getByText('Prepare your body for the workout')).toBeDefined();
+    expect(screen.getByText('Warmup')).toBeDefined();
+    expect(
+      screen.getByText(
+        'Prepares the body for exercise by gradually increasing heart rate and blood flow to the muscles'
+      )
+    ).toBeDefined();
   });
 
   it('calls onSectionTypeSelect when a section type is clicked', () => {
     render(<SectionTypeSelectionModal {...defaultProps} />);
 
-    const basicStrengthButton = screen
-      .getByText('Basic Strength')
-      .closest('button');
-    expect(basicStrengthButton).toBeDefined();
+    const basicButton = screen.getByText('Basic').closest('button');
+    expect(basicButton).toBeDefined();
 
-    if (basicStrengthButton) {
-      fireEvent.click(basicStrengthButton);
+    if (basicButton) {
+      fireEvent.click(basicButton);
     }
 
     expect(defaultProps.onSectionTypeSelect).toHaveBeenCalledWith(
@@ -111,12 +116,10 @@ describe('SectionTypeSelectionModal', () => {
   it('closes modal after selecting a section type', () => {
     render(<SectionTypeSelectionModal {...defaultProps} />);
 
-    const basicStrengthButton = screen
-      .getByText('Basic Strength')
-      .closest('button');
+    const basicButton = screen.getByText('Basic').closest('button');
 
-    if (basicStrengthButton) {
-      fireEvent.click(basicStrengthButton);
+    if (basicButton) {
+      fireEvent.click(basicButton);
     }
 
     expect(defaultProps.onClose).toHaveBeenCalled();
@@ -135,22 +138,16 @@ describe('SectionTypeSelectionModal', () => {
     render(<SectionTypeSelectionModal {...defaultProps} />);
 
     // Check that all section types are rendered
-    expect(screen.getByText('Basic Strength')).toBeDefined();
+    expect(screen.getByText('Basic')).toBeDefined();
     expect(screen.getByText('EMOM')).toBeDefined();
     expect(screen.getByText('Tabata')).toBeDefined();
     expect(screen.getByText('Circuit')).toBeDefined();
 
-    expect(screen.getByText('Intervals')).toBeDefined();
-    expect(screen.getByText('Tempo')).toBeDefined();
-    expect(screen.getByText('Fartlek')).toBeDefined();
-    expect(screen.getByText('Hill Repeats')).toBeDefined();
-
-    expect(screen.getByText('Warm-up')).toBeDefined();
+    expect(screen.getByText('Warmup')).toBeDefined();
     expect(screen.getByText('Cooldown')).toBeDefined();
 
     // Check that category headers are rendered
+    expect(screen.getByText('🔄 Common Sections')).toBeDefined();
     expect(screen.getByText('💪 Strength Training')).toBeDefined();
-    expect(screen.getByText('🏃 Cardio & Running')).toBeDefined();
-    expect(screen.getByText('🧘 Warm-up & Recovery')).toBeDefined();
   });
 });

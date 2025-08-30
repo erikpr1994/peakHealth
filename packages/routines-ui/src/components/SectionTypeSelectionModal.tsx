@@ -25,10 +25,8 @@ export const SectionTypeSelectionModal: React.FC<
     switch (category) {
       case 'strength':
         return '💪';
-      case 'cardio':
-        return '🏃';
-      case 'recovery':
-        return '🧘';
+      case 'common':
+        return '🔄';
       default:
         return '⚡';
     }
@@ -46,9 +44,8 @@ export const SectionTypeSelectionModal: React.FC<
   );
 
   const categoryLabels: Record<string, string> = {
+    common: 'Common Sections',
     strength: 'Strength Training',
-    cardio: 'Cardio & Running',
-    recovery: 'Warm-up & Recovery',
   };
 
   return (
