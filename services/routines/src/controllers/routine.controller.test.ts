@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { routineController } from './routine.controller';
 import { routineService } from '../services/routine.service';
+import { routineAssignmentService } from '../services/routine-assignment.service';
 import { ApiError } from '../utils/error-handler';
 
 // Mock the routine service
@@ -12,6 +13,13 @@ vi.mock('../services/routine.service', () => ({
     getRoutineById: vi.fn(),
     updateRoutine: vi.fn(),
     deleteRoutine: vi.fn(),
+  },
+}));
+
+// Mock the routine assignment service
+vi.mock('../services/routine-assignment.service', () => ({
+  routineAssignmentService: {
+    assignRoutine: vi.fn(),
   },
 }));
 
@@ -483,6 +491,105 @@ describe('RoutineController', () => {
       // Assert
       expect(routineService.deleteRoutine).not.toHaveBeenCalled();
       expect(mockNext).toHaveBeenCalledWith(expect.any(ApiError));
+    });
+  });
+
+  describe('assignRoutine', () => {
+    const assignRoutineId = 'routine123';
+    const mockAssignment = {
+      _id: 'assignment123',
+      routineVersionId: assignRoutineId,
+      userId: 'user123',
+      status: 'active',
+    };
+
+    it('should assign a routine to the authenticated user', async () => {
+      // Set up the request
+      mockRequest.params = { id: assignRoutineId };
+      
+      // Mock the service method
+      vi.mocked(routineAssignmentService.assignRoutine).mockResolvedValue(mockAssignment);
+
+      // Call the controller method
+      await routineController.assignRoutine(
+        mockRequest as Request,
+        mockResponse as Response,
+        mockNext
+      );
+
+      // Verify the service was called with the correct parameters
+      expect(routineAssignmentService.assignRoutine).toHaveBeenCalledWith(
+        'user123',
+        assignRoutineId
+      );
+
+      // Verify the response
+      expect(mockResponse.status).toHaveBeenCalledWith(201);
+      expect(mockResponse.json).toHaveBeenCalledWith({
+        success: true,
+        assignment: mockAssignment,
+        message: 'Routine assigned successfully',
+      });
+    });
+
+    it('should return 401 if user is not authenticated', async () => {
+      // Set up the request without a user
+      mockRequest.user = undefined;
+      mockRequest.params = { id: assignRoutineId };
+
+      // Call the controller method
+      await routineController.assignRoutine(
+        mockRequest as Request,
+        mockResponse as Response,
+        mockNext
+      );
+
+      // Verify the next function was called with an error
+      expect(mockNext).toHaveBeenCalledWith(
+        expect.objectContaining({
+          message: 'Authentication required',
+          statusCode: 401,
+        })
+      );
+    });
+
+    it('should return 400 if routine ID is missing', async () => {
+      // Set up the request without a routine ID
+      mockRequest.params = {};
+
+      // Call the controller method
+      await routineController.assignRoutine(
+        mockRequest as Request,
+        mockResponse as Response,
+        mockNext
+      );
+
+      // Verify the next function was called with an error
+      expect(mockNext).toHaveBeenCalledWith(
+        expect.objectContaining({
+          message: 'Routine ID is required',
+          statusCode: 400,
+        })
+      );
+    });
+
+    it('should handle service errors', async () => {
+      // Set up the request
+      mockRequest.params = { id: assignRoutineId };
+      
+      // Mock the service method to throw an error
+      const error = new ApiError('Routine not found', 404);
+      vi.mocked(routineAssignmentService.assignRoutine).mockRejectedValue(error);
+
+      // Call the controller method
+      await routineController.assignRoutine(
+        mockRequest as Request,
+        mockResponse as Response,
+        mockNext
+      );
+
+      // Verify the next function was called with the error
+      expect(mockNext).toHaveBeenCalledWith(error);
     });
   });
 });
