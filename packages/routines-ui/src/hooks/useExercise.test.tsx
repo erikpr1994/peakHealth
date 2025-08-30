@@ -87,7 +87,10 @@ describe('useExercise', () => {
   });
 
   it('should return exercise data and set IDs', () => {
-    const { result } = renderHook(() => useExercise('workout-1', 'section-1', 'exercise-1'), { wrapper });
+    const { result } = renderHook(
+      () => useExercise('workout-1', 'section-1', 'exercise-1'),
+      { wrapper }
+    );
 
     expect(result.current.exercise).toBeDefined();
     expect(result.current.exercise?._id).toBe('exercise-1');
@@ -96,7 +99,10 @@ describe('useExercise', () => {
   });
 
   it('should provide exercise and set management functions', () => {
-    const { result } = renderHook(() => useExercise('workout-1', 'section-1', 'exercise-1'), { wrapper });
+    const { result } = renderHook(
+      () => useExercise('workout-1', 'section-1', 'exercise-1'),
+      { wrapper }
+    );
 
     expect(typeof result.current.updateExercise).toBe('function');
     expect(typeof result.current.removeExercise).toBe('function');

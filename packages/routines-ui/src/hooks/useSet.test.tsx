@@ -87,7 +87,10 @@ describe('useSet', () => {
   });
 
   it('should return set data', () => {
-    const { result } = renderHook(() => useSet('workout-1', 'section-1', 'exercise-1', 'set-1'), { wrapper });
+    const { result } = renderHook(
+      () => useSet('workout-1', 'section-1', 'exercise-1', 'set-1'),
+      { wrapper }
+    );
 
     expect(result.current.set).toBeDefined();
     expect(result.current.set?._id).toBe('set-1');
@@ -97,7 +100,10 @@ describe('useSet', () => {
   });
 
   it('should provide set management functions', () => {
-    const { result } = renderHook(() => useSet('workout-1', 'section-1', 'exercise-1', 'set-1'), { wrapper });
+    const { result } = renderHook(
+      () => useSet('workout-1', 'section-1', 'exercise-1', 'set-1'),
+      { wrapper }
+    );
 
     expect(typeof result.current.updateSet).toBe('function');
     expect(typeof result.current.removeSet).toBe('function');
