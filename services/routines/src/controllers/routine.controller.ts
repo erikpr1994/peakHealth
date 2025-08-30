@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import { routineService } from '../services/routine.service';
 import { ApiError } from '../utils/error-handler';
+import { parsePaginationParams, createPaginationMetadata } from '../utils/pagination';
 
 /**
  * Controller for handling routine-related API endpoints
@@ -37,7 +38,7 @@ export class RoutineController {
   }
 
   /**
-   * Get all routines for the authenticated user
+   * Get all routines for the authenticated user with pagination
    * GET /api/routines
    */
   async getRoutines(req: Request, res: Response, next: NextFunction) {
@@ -51,11 +52,25 @@ export class RoutineController {
       // Get type filter from query params if provided
       const type = req.query.type as 'active' | 'user' | 'assigned' | undefined;
 
-      // Get routines using the service
-      const routines = await routineService.getRoutinesByUser(userId, type);
+      // Parse pagination parameters
+      const { page, limit } = parsePaginationParams(req.query);
 
-      // Return success response with the routines
-      return res.status(200).json({ routines });
+      // Get routines using the service with pagination
+      const { routines, totalItems } = await routineService.getRoutinesByUser(
+        userId,
+        type,
+        page,
+        limit
+      );
+
+      // Create pagination metadata
+      const paginationMetadata = createPaginationMetadata(page, limit, totalItems);
+
+      // Return success response with the routines and pagination metadata
+      return res.status(200).json({
+        data: routines,
+        pagination: paginationMetadata,
+      });
     } catch (error) {
       next(error);
     }
