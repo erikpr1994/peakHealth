@@ -21,5 +21,6 @@ router.get('/', routineController.getRoutines);
 router.get('/:id', routineController.getRoutineById);
 router.put('/:id', validateRoutineUpdate, routineController.updateRoutine);
 router.delete('/:id', routineController.deleteRoutine);
+router.post('/:id/assign', routineController.assignRoutine);
 
 export default router;
