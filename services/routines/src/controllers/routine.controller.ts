@@ -1,7 +1,11 @@
 import { Request, Response, NextFunction } from 'express';
 import { routineService } from '../services/routine.service';
+import { routineAssignmentService } from '../services/routine-assignment.service';
 import { ApiError } from '../utils/error-handler';
-import { parsePaginationParams, createPaginationMetadata } from '../utils/pagination';
+import {
+  parsePaginationParams,
+  createPaginationMetadata,
+} from '../utils/pagination';
 
 /**
  * Controller for handling routine-related API endpoints
@@ -64,7 +68,11 @@ export class RoutineController {
       );
 
       // Create pagination metadata
-      const paginationMetadata = createPaginationMetadata(page, limit, totalItems);
+      const paginationMetadata = createPaginationMetadata(
+        page,
+        limit,
+        totalItems
+      );
 
       // Return success response with the routines and pagination metadata
       return res.status(200).json({
@@ -163,8 +171,42 @@ export class RoutineController {
       next(error);
     }
   }
+
+  /**
+   * Assign a routine to the authenticated user
+   * POST /api/routines/:id/assign
+   */
+  async assignRoutine(req: Request, res: Response, next: NextFunction) {
+    try {
+      // Get user ID from the authenticated request
+      const userId = req.user?.id;
+      if (!userId) {
+        throw new ApiError('Authentication required', 401);
+      }
+
+      // Get routine ID from request parameters
+      const routineId = req.params.id;
+      if (!routineId) {
+        throw new ApiError('Routine ID is required', 400);
+      }
+
+      // Assign the routine using the service
+      const assignment = await routineAssignmentService.assignRoutine(
+        userId,
+        routineId
+      );
+
+      // Return success response with the created assignment
+      return res.status(201).json({
+        success: true,
+        assignment,
+        message: 'Routine assigned successfully',
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
 }
 
 // Export a singleton instance
 export const routineController = new RoutineController();
-
