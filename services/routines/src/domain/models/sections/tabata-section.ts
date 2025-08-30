@@ -9,10 +9,9 @@ export const tabataSectionSchema = new Schema({
   // Note: exercises field is already in the base schema
 });
 
-// Register the discriminator
-export const TabataSectionModel = SectionModel.discriminator(
-  'tabata',
-  tabataSectionSchema
-);
+// Register the discriminator only if it doesn't already exist
+// This prevents "Cannot overwrite model" errors in tests
+export const TabataSectionModel = SectionModel.discriminators?.['tabata'] || 
+  SectionModel.discriminator('tabata', tabataSectionSchema);
 
 export default TabataSectionModel;

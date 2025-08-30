@@ -1,17 +1,33 @@
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { Request, Response, NextFunction } from 'express';
-import { routineController } from './routine.controller';
-import { routineService } from '../services/routine.service';
-import { routineAssignmentService } from '../services/routine-assignment.service';
 import { ApiError } from '../utils/error-handler';
 
 // Mock the services
-jest.mock('../services/routine.service');
-jest.mock('../services/routine-assignment.service');
+vi.mock('../services/routine.service', () => ({
+  routineService: {
+    createRoutine: vi.fn(),
+    getRoutines: vi.fn(),
+    getRoutineById: vi.fn(),
+    updateRoutine: vi.fn(),
+    deleteRoutine: vi.fn(),
+  }
+}));
+
+vi.mock('../services/routine-assignment.service', () => ({
+  routineAssignmentService: {
+    assignRoutine: vi.fn(),
+  }
+}));
+
+// Import after mocking
+import { routineController } from './routine.controller';
+import { routineService } from '../services/routine.service';
+import { routineAssignmentService } from '../services/routine-assignment.service';
 
 describe('RoutineController', () => {
   let mockRequest: Partial<Request>;
   let mockResponse: Partial<Response>;
-  let mockNext: jest.MockedFunction<NextFunction>;
+  let mockNext: ReturnType<typeof vi.fn>;
 
   beforeEach(() => {
     mockRequest = {
@@ -21,12 +37,12 @@ describe('RoutineController', () => {
       body: {},
     };
     mockResponse = {
-      status: jest.fn().mockReturnThis(),
-      json: jest.fn(),
-      send: jest.fn(),
+      status: vi.fn().mockReturnThis(),
+      json: vi.fn(),
+      send: vi.fn(),
     };
-    mockNext = jest.fn();
-    jest.clearAllMocks();
+    mockNext = vi.fn();
+    vi.clearAllMocks();
   });
 
   describe('assignRoutine', () => {
@@ -41,11 +57,9 @@ describe('RoutineController', () => {
     it('should assign a routine to the authenticated user', async () => {
       // Set up the request
       mockRequest.params = { id: routineId };
-
+      
       // Mock the service method
-      (routineAssignmentService.assignRoutine as jest.Mock).mockResolvedValue(
-        mockAssignment
-      );
+      vi.mocked(routineAssignmentService.assignRoutine).mockResolvedValue(mockAssignment);
 
       // Call the controller method
       await routineController.assignRoutine(
@@ -113,12 +127,10 @@ describe('RoutineController', () => {
     it('should handle service errors', async () => {
       // Set up the request
       mockRequest.params = { id: routineId };
-
+      
       // Mock the service method to throw an error
       const error = new ApiError('Routine not found', 404);
-      (routineAssignmentService.assignRoutine as jest.Mock).mockRejectedValue(
-        error
-      );
+      vi.mocked(routineAssignmentService.assignRoutine).mockRejectedValue(error);
 
       // Call the controller method
       await routineController.assignRoutine(
@@ -132,3 +144,4 @@ describe('RoutineController', () => {
     });
   });
 });
+

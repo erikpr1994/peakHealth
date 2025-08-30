@@ -23,6 +23,9 @@ vi.mock('../../controllers/routine.controller', () => ({
       res.status(200).json({ message: 'Routine updated' })
     ),
     deleteRoutine: vi.fn((req, res) => res.status(204).send()),
+    assignRoutine: vi.fn((req, res) => 
+      res.status(201).json({ message: 'Routine assigned successfully' })
+    ),
   },
 }));
 
@@ -105,6 +108,16 @@ describe('User Routines Routes', () => {
       expect(response.status).toBe(204);
       expect(verifySupabaseJWT).toHaveBeenCalled();
       expect(routineController.deleteRoutine).toHaveBeenCalled();
+    });
+  });
+
+  describe('POST /:id/assign', () => {
+    it('should call assignRoutine controller', async () => {
+      const response = await request(app).post('/api/routines/routine123/assign');
+
+      expect(response.status).toBe(201);
+      expect(verifySupabaseJWT).toHaveBeenCalled();
+      expect(routineController.assignRoutine).toHaveBeenCalled();
     });
   });
 });

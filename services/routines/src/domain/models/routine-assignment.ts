@@ -68,9 +68,8 @@ routineAssignmentSchema.index({ routineVersionId: 1, userId: 1 });
 // Export the model and return your type interface
 export type RoutineAssignmentDocument = Document & IRoutineAssignment;
 
-const RoutineAssignmentModel = mongoose.model<RoutineAssignmentDocument>(
-  'RoutineAssignment',
-  routineAssignmentSchema
-);
+// Use mongoose.models to check if the model already exists to prevent "Cannot overwrite model" errors
+const RoutineAssignmentModel = mongoose.models.RoutineAssignment || 
+  mongoose.model<RoutineAssignmentDocument>('RoutineAssignment', routineAssignmentSchema);
 
 export default RoutineAssignmentModel;
