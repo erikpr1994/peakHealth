@@ -52,7 +52,8 @@
       "dependsOn": [
         "@peakhealth/ui#build",
         "@peakhealth/auth-types#build",
-        "@peakhealth/auth-utils#build"
+        "@peakhealth/auth-utils#build",
+        "@peakhealth/routines-types#build"
       ],
       "outputs": [],
       "inputs": [
