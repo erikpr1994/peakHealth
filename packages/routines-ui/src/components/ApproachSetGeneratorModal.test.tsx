@@ -23,7 +23,7 @@ interface MockInputProps {
   type?: string;
   placeholder?: string;
   value: string;
-  onChange: (e: { target: { value: string } }) => void;
+  onChange: () => void;
   min?: string;
   max?: string;
   step?: string;
