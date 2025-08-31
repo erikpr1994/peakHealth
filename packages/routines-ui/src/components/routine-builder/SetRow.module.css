@@ -1,0 +1,84 @@
+.setRow {
+  display: flex;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.setNumber {
+  width: 80px;
+  font-weight: 500;
+}
+
+.sideLabel {
+  font-size: 0.8em;
+  color: #666;
+}
+
+.setTypeContainer {
+  width: 120px;
+  margin-right: 16px;
+}
+
+.setTypeSelect {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.repsContainer {
+  display: flex;
+  align-items: center;
+  margin-right: 16px;
+}
+
+.repInput {
+  width: 60px;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.dualRepInput {
+  display: flex;
+  flex-direction: column;
+  margin-right: 8px;
+}
+
+.dualRepInput label {
+  font-size: 0.8em;
+  margin-bottom: 4px;
+}
+
+.timeContainer {
+  display: flex;
+  flex-direction: column;
+  margin-right: 16px;
+}
+
+.timeInput {
+  width: 80px;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.weightContainer, .rpeContainer {
+  display: flex;
+  flex-direction: column;
+  margin-right: 16px;
+}
+
+.weightInput, .rpeInput {
+  width: 80px;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.error {
+  color: #e53e3e;
+  padding: 8px;
+}
+

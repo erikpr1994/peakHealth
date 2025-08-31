@@ -7,15 +7,25 @@ export default defineConfig({
   test: {
     globals: true,
     environment: 'jsdom',
+    setupFiles: ['./src/test/setup.ts'],
     coverage: {
       provider: 'v8',
       reporter: ['text', 'json', 'html'],
       exclude: ['**/*.test.ts', '**/*.test.tsx', '**/*.stories.tsx'],
     },
+    deps: {
+      optimizer: {
+        web: {
+          include: [/@peakhealth\/ui/]
+        }
+      }
+    },
   },
   resolve: {
     alias: {
       '@': resolve(__dirname, './src'),
+      '@peakhealth/ui': resolve(__dirname, './src/test/mocks/ui.ts'),
     },
   },
 });
+
