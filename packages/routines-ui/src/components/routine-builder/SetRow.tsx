@@ -1,6 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { useSet } from '../../hooks/useSet';
-import { Exercise, SetType, WorkoutSet } from '@peakhealth/routines-types';
+import { 
+  Exercise, 
+  SetType, 
+  WorkoutSet, 
+  StrengthSet, 
+  BodyweightSet,
+  StrengthExercise,
+  BodyweightExercise,
+  MobilityExercise,
+  MobilitySet
+} from '@peakhealth/routines-types';
 import styles from './SetRow.module.css';
 
 interface SetRowProps {
@@ -11,6 +21,28 @@ interface SetRowProps {
   exercise: Exercise;
   side?: 'left' | 'right'; // Only used when unilateralMode is 'sequential'
 }
+
+// Type guard to check if set has weight property
+const hasWeight = (set: WorkoutSet): set is StrengthSet | BodyweightSet => {
+  return set.setType === 'working' || set.setType === 'warmup';
+};
+
+// Type guard to check if set has RPE property
+const hasRPE = (set: WorkoutSet): set is StrengthSet | BodyweightSet => {
+  return set.setType === 'working' || set.setType === 'warmup';
+};
+
+// Type guard for exercise types
+const isStrengthOrBodyweightExercise = (
+  exercise: Exercise
+): exercise is StrengthExercise | BodyweightExercise => {
+  return exercise.type === 'strength' || exercise.type === 'bodyweight';
+};
+
+// Type guard for StrengthSet
+const isStrengthSet = (set: Partial<WorkoutSet>): set is Partial<StrengthSet> => {
+  return 'repsMin' in set || 'repsMax' in set;
+};
 
 /**
  * SetRow Component
@@ -45,15 +77,15 @@ export function SetRow({
     return <div className={styles.error}>Set not found</div>;
   }
 
-  // Handle input changes
-  const handleInputChange = (field: keyof WorkoutSet, value: unknown) => {
+  // Handle input changes with type safety
+  const handleInputChange = (field: string, value: unknown) => {
     setLocalSet(prev => ({ ...prev, [field]: value }));
   };
 
-  // Update context on blur
-  const handleBlur = (field: keyof WorkoutSet) => {
-    if (localSet[field] !== set[field]) {
-      updateSet({ [field]: localSet[field] });
+  // Update context on blur with type safety
+  const handleBlur = (field: string) => {
+    if (localSet[field as keyof typeof localSet] !== set[field as keyof typeof set]) {
+      updateSet({ [field]: localSet[field as keyof typeof localSet] });
     }
   };
 
@@ -67,12 +99,17 @@ export function SetRow({
       // Standard sets can have reps
     } else if (newSetType === 'failure') {
       // To failure sets don't need reps
-      updateSet({ reps: undefined, repsMin: undefined, repsMax: undefined });
+      updateSet({ 
+        reps: undefined, 
+        repsMin: undefined, 
+        repsMax: undefined 
+      });
     }
   };
 
   // Determine if we should show dual progression inputs (min/max reps)
-  const isDualProgression = exercise.progressionMethod === 'dual-linear';
+  const isDualProgression = isStrengthOrBodyweightExercise(exercise) && 
+    exercise.progressionMethod === 'dual-linear';
   
   // Determine if this is a timed set
   const isTimedSet = set.repType === 'time';
@@ -135,7 +172,7 @@ export function SetRow({
                   id={`min-reps-${setId}`}
                   type="number"
                   min="0"
-                  value={localSet.repsMin || ''}
+                  value={isStrengthSet(localSet) ? localSet.repsMin || '' : ''}
                   onChange={(e) => handleInputChange('repsMin', parseInt(e.target.value) || 0)}
                   onBlur={() => handleBlur('repsMin')}
                   className={styles.repInput}
@@ -147,7 +184,7 @@ export function SetRow({
                   id={`max-reps-${setId}`}
                   type="number"
                   min="0"
-                  value={localSet.repsMax || ''}
+                  value={isStrengthSet(localSet) ? localSet.repsMax || '' : ''}
                   onChange={(e) => handleInputChange('repsMax', parseInt(e.target.value) || 0)}
                   onBlur={() => handleBlur('repsMax')}
                   className={styles.repInput}
@@ -188,36 +225,40 @@ export function SetRow({
         </div>
       )}
       
-      {/* Weight Input - For all set types */}
-      <div className={styles.weightContainer}>
-        <label htmlFor={`weight-${setId}`}>Weight</label>
-        <input
-          id={`weight-${setId}`}
-          type="number"
-          min="0"
-          step="0.5"
-          value={localSet.weight || ''}
-          onChange={(e) => handleInputChange('weight', parseFloat(e.target.value) || 0)}
-          onBlur={() => handleBlur('weight')}
-          className={styles.weightInput}
-        />
-      </div>
+      {/* Weight Input - For strength and bodyweight sets */}
+      {hasWeight(set) && (
+        <div className={styles.weightContainer}>
+          <label htmlFor={`weight-${setId}`}>Weight</label>
+          <input
+            id={`weight-${setId}`}
+            type="number"
+            min="0"
+            step="0.5"
+            value={hasWeight(localSet as WorkoutSet) ? (localSet as StrengthSet).weight || '' : ''}
+            onChange={(e) => handleInputChange('weight', parseFloat(e.target.value) || 0)}
+            onBlur={() => handleBlur('weight')}
+            className={styles.weightInput}
+          />
+        </div>
+      )}
       
-      {/* RPE Input - For all set types */}
-      <div className={styles.rpeContainer}>
-        <label htmlFor={`rpe-${setId}`}>RPE</label>
-        <input
-          id={`rpe-${setId}`}
-          type="number"
-          min="1"
-          max="10"
-          step="0.5"
-          value={localSet.rpe || ''}
-          onChange={(e) => handleInputChange('rpe', parseFloat(e.target.value) || 0)}
-          onBlur={() => handleBlur('rpe')}
-          className={styles.rpeInput}
-        />
-      </div>
+      {/* RPE Input - For strength and bodyweight sets */}
+      {hasRPE(set) && (
+        <div className={styles.rpeContainer}>
+          <label htmlFor={`rpe-${setId}`}>RPE</label>
+          <input
+            id={`rpe-${setId}`}
+            type="number"
+            min="1"
+            max="10"
+            step="0.5"
+            value={hasRPE(localSet as WorkoutSet) ? (localSet as StrengthSet).rpe || '' : ''}
+            onChange={(e) => handleInputChange('rpe', parseFloat(e.target.value) || 0)}
+            onBlur={() => handleBlur('rpe')}
+            className={styles.rpeInput}
+          />
+        </div>
+      )}
     </div>
   );
 }
