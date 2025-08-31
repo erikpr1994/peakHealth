@@ -7,7 +7,9 @@ expect.extend(matchers);
 // Add TypeScript declarations
 declare global {
   // eslint-disable-next-line no-unused-vars
-  interface HTMLElement {}
+  interface Window {
+    HTMLElement: typeof HTMLElement;
+  }
 }
 
 declare module 'vitest' {
