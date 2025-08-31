@@ -8,9 +8,10 @@
     },
     "lint": {
       "dependsOn": [
-        "@peakhealth/ui#build",
         "@peakhealth/auth-types#build",
-        "@peakhealth/auth-utils#build"
+        "@peakhealth/auth-utils#build",
+        "@peakhealth/routines-types#build",
+        "@peakhealth/ui#build"
       ],
       "inputs": [
         "src/**/*.{ts,tsx,js,jsx}",
@@ -21,9 +22,10 @@
     },
     "type-check": {
       "dependsOn": [
-        "@peakhealth/ui#build",
         "@peakhealth/auth-types#build",
-        "@peakhealth/auth-utils#build"
+        "@peakhealth/auth-utils#build",
+        "@peakhealth/routines-types#build",
+        "@peakhealth/ui#build"
       ],
       "inputs": [
         "src/**/*.{ts,tsx}",
@@ -50,10 +52,10 @@
     },
     "test": {
       "dependsOn": [
-        "@peakhealth/ui#build",
         "@peakhealth/auth-types#build",
         "@peakhealth/auth-utils#build",
-        "@peakhealth/routines-types#build"
+        "@peakhealth/routines-types#build",
+        "@peakhealth/ui#build"
       ],
       "outputs": [],
       "inputs": [
