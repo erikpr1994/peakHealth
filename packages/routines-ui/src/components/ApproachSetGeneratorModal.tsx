@@ -100,17 +100,28 @@ export const ApproachSetGeneratorModal: React.FC<
       newSets[index] = { ...newSets[index], [field]: Number(value) };
     } else if (field === 'percentage') {
       const percentage = Number(value);
+      const weight =
+        workingWeight && !isNaN(parseFloat(workingWeight))
+          ? Math.round((parseFloat(workingWeight) * percentage) / 100)
+          : 0;
       newSets[index] = {
         ...newSets[index],
         percentage,
-        weight: Math.round((parseFloat(workingWeight) * percentage) / 100),
+        weight,
       };
     }
     setCustomSets(newSets);
   };
 
   const addCustomSet = () => {
-    setCustomSets([...customSets, { weight: 0, reps: 8, percentage: 50 }]);
+    const defaultWeight =
+      workingWeight && !isNaN(parseFloat(workingWeight))
+        ? Math.round((parseFloat(workingWeight) * 50) / 100)
+        : 0;
+    setCustomSets([
+      ...customSets,
+      { weight: defaultWeight, reps: 8, percentage: 50 },
+    ]);
   };
 
   const removeCustomSet = (index: number) => {
