@@ -1,8 +1,8 @@
 declare module '@peakhealth/ui' {
-  import { ReactNode } from 'react';
+  import * as React from 'react';
 
   export interface ButtonProps {
-    children: ReactNode;
+    children: React.ReactNode;
     onClick?: () => void;
     variant?: 'primary' | 'secondary' | 'tertiary' | 'outline';
     size?: 'small' | 'medium' | 'large' | 'lg';
@@ -16,7 +16,7 @@ declare module '@peakhealth/ui' {
   export const Button: React.FC<ButtonProps>;
 
   export interface CardProps {
-    children: ReactNode;
+    children: React.ReactNode;
     title?: string;
     variant?: 'default' | 'outlined' | 'elevated';
     className?: string;
@@ -28,7 +28,7 @@ declare module '@peakhealth/ui' {
     isOpen: boolean;
     onClose: () => void;
     title?: string;
-    children: ReactNode;
+    children: React.ReactNode;
     size?: 'small' | 'medium' | 'large';
     showCloseButton?: boolean;
   }
@@ -43,7 +43,7 @@ declare module '@peakhealth/ui' {
   export const Spinner: React.FC<SpinnerProps>;
 
   export interface TypographyProps {
-    children: ReactNode;
+    children: React.ReactNode;
     variant?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'body1' | 'body2' | 'caption';
     color?: string;
     align?: 'left' | 'center' | 'right';
