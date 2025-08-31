@@ -1,14 +1,14 @@
-// Export all components
+// Export components
 export * from './components';
 
-// Export all types
+// Export types
 export * from './types';
 
-// Export all hooks
+// Export hooks
 export * from './hooks';
 
-// Export all context
+// Export context
 export * from './context';
 
-// Export all utils
+// Export utils
 export * from './utils';
