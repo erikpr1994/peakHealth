@@ -2,8 +2,8 @@
   "extends": "../../tsconfig.packages.json",
   "compilerOptions": {
     "jsx": "react-jsx",
-    "lib": ["ES2020", "DOM"],
-    "types": ["node", "vitest/globals"],
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "types": ["node", "vitest/globals", "react", "react-dom"],
     "outDir": "dist",
     "rootDir": "..",
     "baseUrl": ".",
@@ -15,3 +15,4 @@
   "include": ["src", "src/**/*.test.ts", "src/**/*.test.tsx"],
   "exclude": ["node_modules", "dist"]
 }
+

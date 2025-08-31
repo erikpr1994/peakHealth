@@ -1,0 +1,130 @@
+.setRow {
+  display: flex;
+  align-items: center;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--color-border, #e0e0e0);
+  gap: 16px;
+}
+
+.setRow:last-child {
+  border-bottom: none;
+}
+
+.error {
+  color: var(--color-error, #e53935);
+  padding: 12px;
+  font-size: 14px;
+}
+
+.setNumber {
+  min-width: 60px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+}
+
+.sideLabel {
+  font-weight: normal;
+  font-size: 0.9em;
+  margin-left: 4px;
+  color: var(--color-text-secondary, #757575);
+}
+
+.setTypeContainer {
+  min-width: 120px;
+}
+
+.setTypeSelect {
+  width: 100%;
+  padding: 8px;
+  border-radius: 4px;
+  border: 1px solid var(--color-border, #e0e0e0);
+  background-color: var(--color-background, #ffffff);
+}
+
+.repsContainer {
+  display: flex;
+  gap: 8px;
+  min-width: 140px;
+}
+
+.dualRepInput {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.repInput {
+  width: 100%;
+  padding: 8px;
+  border-radius: 4px;
+  border: 1px solid var(--color-border, #e0e0e0);
+}
+
+.timeContainer {
+  display: flex;
+  flex-direction: column;
+  min-width: 140px;
+}
+
+.timeInput {
+  width: 100%;
+  padding: 8px;
+  border-radius: 4px;
+  border: 1px solid var(--color-border, #e0e0e0);
+}
+
+.weightContainer {
+  display: flex;
+  flex-direction: column;
+  min-width: 100px;
+}
+
+.weightInput {
+  width: 100%;
+  padding: 8px;
+  border-radius: 4px;
+  border: 1px solid var(--color-border, #e0e0e0);
+}
+
+.rpeContainer {
+  display: flex;
+  flex-direction: column;
+  min-width: 80px;
+}
+
+.rpeInput {
+  width: 100%;
+  padding: 8px;
+  border-radius: 4px;
+  border: 1px solid var(--color-border, #e0e0e0);
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .setRow {
+    flex-wrap: wrap;
+    padding: 12px 8px;
+  }
+  
+  .setNumber {
+    min-width: 50px;
+  }
+  
+  .setTypeContainer,
+  .repsContainer,
+  .timeContainer,
+  .weightContainer,
+  .rpeContainer {
+    min-width: 0;
+    flex: 1 1 calc(50% - 16px);
+    margin-top: 8px;
+  }
+  
+  .setNumber,
+  .setTypeContainer {
+    flex: 1 1 100%;
+    margin-bottom: 8px;
+  }
+}
+
