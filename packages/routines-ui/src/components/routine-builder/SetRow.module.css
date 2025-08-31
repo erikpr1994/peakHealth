@@ -1,0 +1,150 @@
+.setRow {
+  display: flex;
+  align-items: center;
+  padding: 12px 16px;
+  border-bottom: 1px solid #e5e7eb;
+  background-color: #ffffff;
+  gap: 16px;
+}
+
+.setRow:last-child {
+  border-bottom: none;
+}
+
+.setNumber {
+  font-weight: 600;
+  min-width: 60px;
+  color: #374151;
+}
+
+.sideLabel {
+  font-weight: normal;
+  font-size: 0.85em;
+  color: #6b7280;
+}
+
+.setTypeContainer {
+  min-width: 100px;
+}
+
+.setTypeSelect {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  background-color: #f9fafb;
+  font-size: 14px;
+}
+
+.repsContainer {
+  display: flex;
+  gap: 8px;
+  min-width: 120px;
+}
+
+.dualRepInput {
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+}
+
+.repInput {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.timeContainer {
+  display: flex;
+  flex-direction: column;
+  min-width: 120px;
+}
+
+.timeInput {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.weightContainer {
+  display: flex;
+  flex-direction: column;
+  min-width: 100px;
+}
+
+.weightInput {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.rpeContainer {
+  display: flex;
+  flex-direction: column;
+  min-width: 80px;
+}
+
+.rpeInput {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.error {
+  color: #ef4444;
+  padding: 12px;
+  text-align: center;
+  width: 100%;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .setRow {
+    flex-wrap: wrap;
+    padding: 12px 8px;
+  }
+  
+  .setNumber {
+    min-width: 50px;
+  }
+  
+  .setTypeContainer,
+  .repsContainer,
+  .timeContainer,
+  .weightContainer,
+  .rpeContainer {
+    min-width: 0;
+    flex: 1 1 calc(50% - 16px);
+    margin-bottom: 8px;
+  }
+}
+
+@media (max-width: 480px) {
+  .setRow {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  
+  .setNumber {
+    width: 100%;
+    margin-bottom: 4px;
+  }
+  
+  .setTypeContainer,
+  .repsContainer,
+  .timeContainer,
+  .weightContainer,
+  .rpeContainer {
+    width: 100%;
+  }
+}
+
