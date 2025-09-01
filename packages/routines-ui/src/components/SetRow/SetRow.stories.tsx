@@ -1,6 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import React, { useEffect, useState } from 'react';
 import { SetRow } from './SetRow';
 import { RoutineBuilderProvider } from '../../context/routineBuilder/RoutineBuilderContext';
+import { useRoutineBuilder } from '../../hooks/useRoutineBuilder';
 
 // Mock data for the context
 const mockRoutineData = {
@@ -78,6 +80,19 @@ const mockRoutineData = {
   },
 };
 
+// Wrapper component to provide the RoutineBuilderContext
+const RoutineBuilderWrapper = ({ children }: { children: React.ReactNode }) => {
+  const { state, dispatch } = useRoutineBuilder(mockRoutineData);
+  
+  return (
+    <RoutineBuilderProvider value={{ state, dispatch }}>
+      <div style={{ width: '500px', padding: '20px', border: '1px solid #ccc' }}>
+        {children}
+      </div>
+    </RoutineBuilderProvider>
+  );
+};
+
 const meta: Meta<typeof SetRow> = {
   title: 'Routines/SetRow',
   component: SetRow,
@@ -87,11 +102,9 @@ const meta: Meta<typeof SetRow> = {
   tags: ['autodocs'],
   decorators: [
     (Story) => (
-      <RoutineBuilderProvider initialState={mockRoutineData}>
-        <div style={{ width: '500px', padding: '20px', border: '1px solid #ccc' }}>
-          {Story()}
-        </div>
-      </RoutineBuilderProvider>
+      <RoutineBuilderWrapper>
+        {Story()}
+      </RoutineBuilderWrapper>
     ),
   ],
 };
