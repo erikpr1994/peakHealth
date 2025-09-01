@@ -1,0 +1,35 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.header {
+  display: flex;
+  gap: 8px;
+}
+
+.addButton {
+  border: 1px solid var(--color-primary, #3b82f6);
+  background: transparent;
+  color: var(--color-primary, #3b82f6);
+  padding: 6px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.addButton:hover {
+  background: rgba(59, 130, 246, 0.08);
+}
+
+.table {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+@media (max-width: 768px) {
+  .header {
+    flex-direction: column;
+  }
+}
