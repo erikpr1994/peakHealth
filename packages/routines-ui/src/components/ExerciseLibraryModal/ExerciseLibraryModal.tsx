@@ -2,31 +2,11 @@
 
 import React, { useState, useMemo } from 'react';
 import { Modal, Button, Input } from '@peakhealth/ui';
+import {
+  ExerciseLibraryExercise,
+  ExerciseLibraryModalProps,
+} from './ExerciseLibraryModal.types';
 import './ExerciseLibraryModal.css';
-
-// Exercise types for the modal
-export interface ExerciseLibraryExercise {
-  id: string;
-  name: string;
-  description: string;
-  category: 'Strength' | 'Cardio' | 'Flexibility' | 'Balance';
-  muscleGroups: string[];
-  equipment: string[];
-  difficulty: 'Beginner' | 'Intermediate' | 'Advanced';
-  icon: string;
-  iconColor: string;
-}
-
-export interface ExerciseLibraryModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  onSelect: (selectedExercises: ExerciseLibraryExercise[]) => void;
-  initialFilter?: {
-    category?: ExerciseLibraryExercise['category'];
-    muscleGroup?: string;
-    difficulty?: ExerciseLibraryExercise['difficulty'];
-  };
-}
 
 export const ExerciseLibraryModal: React.FC<ExerciseLibraryModalProps> = ({
   isOpen,
