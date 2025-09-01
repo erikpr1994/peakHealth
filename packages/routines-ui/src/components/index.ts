@@ -8,6 +8,7 @@ export { StrengthExercise } from './StrengthExercise';
 export { ExerciseLibraryModal } from './ExerciseLibraryModal';
 export { WarmupSection } from './WarmupSection';
 export { MainStrengthSection } from './MainStrengthSection';
+export { WorkoutAccordion } from './WorkoutAccordion';
 
 // Temporary export to make TypeScript happy
 export const ComponentsPlaceholder = 'ComponentsPlaceholder';

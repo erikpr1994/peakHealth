@@ -1,0 +1,135 @@
+.workout-accordion {
+  margin-bottom: 1rem;
+}
+
+.workout-accordion-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.workout-accordion-header:hover {
+  background-color: var(--color-surface-hover);
+}
+
+.workout-accordion-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.workout-icon {
+  font-size: 1.25rem;
+}
+
+.workout-accordion-title h3 {
+  margin: 0;
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.workout-accordion-controls {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.add-section-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.btn-icon {
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.workout-accordion-body {
+  padding: 1rem;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-top: none;
+  border-radius: 0 0 8px 8px;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 2rem 1rem;
+}
+
+.empty-state-content {
+  max-width: 300px;
+  margin: 0 auto;
+}
+
+.empty-state-icon {
+  font-size: 2rem;
+  display: block;
+  margin-bottom: 1rem;
+}
+
+.empty-state h4 {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.empty-state p {
+  margin: 0 0 1.5rem 0;
+  color: var(--color-text-muted);
+  line-height: 1.5;
+}
+
+.empty-state-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  margin: 0 auto;
+}
+
+.sections-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.workout-section {
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  padding: 1rem;
+  background-color: var(--color-surface-secondary);
+}
+
+.section-placeholder {
+  padding: 1rem;
+  text-align: center;
+  color: var(--color-text-muted);
+  font-style: italic;
+  background-color: var(--color-surface);
+  border-radius: 4px;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .workout-accordion-header {
+    flex-direction: column;
+    gap: 1rem;
+    align-items: stretch;
+  }
+
+  .workout-accordion-controls {
+    justify-content: center;
+  }
+
+  .workout-accordion-title {
+    justify-content: center;
+  }
+}
