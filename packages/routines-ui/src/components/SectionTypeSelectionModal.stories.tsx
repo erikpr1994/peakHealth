@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import { SectionTypeSelectionModal } from './SectionTypeSelectionModal';
 
 const meta: Meta<typeof SectionTypeSelectionModal> = {
@@ -10,7 +10,7 @@ const meta: Meta<typeof SectionTypeSelectionModal> = {
   tags: ['autodocs'],
   argTypes: {
     onClose: { action: 'closed' },
-    onSelect: { action: 'selected' },
+    onSectionTypeSelect: { action: 'selected' },
   },
 };
 
@@ -20,10 +20,11 @@ type Story = StoryObj<typeof SectionTypeSelectionModal>;
 export const Default: Story = {
   args: {
     isOpen: true,
+    workoutId: 'workout-123',
     onClose: () => {
       // Handle close
     },
-    onSelect: type => {
+    onSectionTypeSelect: (workoutId: string, sectionType: string) => {
       // Handle selection
     },
   },
@@ -32,10 +33,11 @@ export const Default: Story = {
 export const Closed: Story = {
   args: {
     isOpen: false,
+    workoutId: 'workout-123',
     onClose: () => {
       // Handle close
     },
-    onSelect: type => {
+    onSectionTypeSelect: (workoutId: string, sectionType: string) => {
       // Handle selection
     },
   },

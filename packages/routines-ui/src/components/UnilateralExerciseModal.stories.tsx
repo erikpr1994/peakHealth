@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import { UnilateralExerciseModal } from './UnilateralExerciseModal';
 
 const meta: Meta<typeof UnilateralExerciseModal> = {
@@ -10,7 +10,7 @@ const meta: Meta<typeof UnilateralExerciseModal> = {
   tags: ['autodocs'],
   argTypes: {
     onClose: { action: 'closed' },
-    onConfirm: { action: 'confirmed' },
+    onModeSelect: { action: 'modeSelected' },
   },
 };
 
@@ -20,25 +20,27 @@ type Story = StoryObj<typeof UnilateralExerciseModal>;
 export const Default: Story = {
   args: {
     isOpen: true,
+    exerciseId: 'exercise-123',
     onClose: () => {
       // Handle close
     },
-    onConfirm: isUnilateral => {
-      // Handle confirmation
+    onModeSelect: (exerciseId: string, mode: string) => {
+      // Handle mode selection
     },
-    exerciseName: 'Dumbbell Curl',
+    currentMode: 'simultaneous',
   },
 };
 
 export const Closed: Story = {
   args: {
     isOpen: false,
+    exerciseId: 'exercise-123',
     onClose: () => {
       // Handle close
     },
-    onConfirm: isUnilateral => {
-      // Handle confirmation
+    onModeSelect: (exerciseId: string, mode: string) => {
+      // Handle mode selection
     },
-    exerciseName: 'Dumbbell Curl',
+    currentMode: 'alternating',
   },
 };

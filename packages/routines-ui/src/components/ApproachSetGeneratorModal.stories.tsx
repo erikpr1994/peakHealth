@@ -1,5 +1,5 @@
-import type { Meta, StoryObj } from '@storybook/react';
-import { ApproachSetGeneratorModal } from './ApproachSetGeneratorModal';
+import type { Meta, StoryObj } from '@storybook/react-vite';
+import { ApproachSetGeneratorModal, WarmupSet } from './ApproachSetGeneratorModal';
 
 const meta: Meta<typeof ApproachSetGeneratorModal> = {
   title: 'Routines/ApproachSetGeneratorModal',
@@ -10,7 +10,7 @@ const meta: Meta<typeof ApproachSetGeneratorModal> = {
   tags: ['autodocs'],
   argTypes: {
     onClose: { action: 'closed' },
-    onGenerate: { action: 'generated' },
+    onGenerateSets: { action: 'generated' },
   },
 };
 
@@ -20,10 +20,11 @@ type Story = StoryObj<typeof ApproachSetGeneratorModal>;
 export const Default: Story = {
   args: {
     isOpen: true,
+    exerciseId: 'exercise-123',
     onClose: () => {
       // Handle close
     },
-    onGenerate: sets => {
+    onGenerateSets: (exerciseId: string, sets: WarmupSet[]) => {
       // Handle generated sets
     },
   },
@@ -32,10 +33,11 @@ export const Default: Story = {
 export const Closed: Story = {
   args: {
     isOpen: false,
+    exerciseId: 'exercise-123',
     onClose: () => {
       // Handle close
     },
-    onGenerate: sets => {
+    onGenerateSets: (exerciseId: string, sets: WarmupSet[]) => {
       // Handle generated sets
     },
   },
