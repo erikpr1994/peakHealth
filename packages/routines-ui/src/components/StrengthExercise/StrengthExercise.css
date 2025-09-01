@@ -1,0 +1,138 @@
+.strength-exercise-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.strength-exercise-name {
+  font-weight: 600;
+  font-size: 1.1rem;
+  color: var(--color-text, #333);
+}
+
+.strength-exercise-delete-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 1.2rem;
+  transition: background-color 0.2s ease;
+}
+
+.strength-exercise-delete-button:hover {
+  background-color: rgba(239, 68, 68, 0.1);
+}
+
+.strength-exercise-body {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.strength-exercise-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.control-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.control-label {
+  font-weight: 500;
+  font-size: 0.9rem;
+  color: var(--color-text, #333);
+}
+
+.control-input,
+.control-select {
+  padding: 8px 12px;
+  border: 1px solid var(--color-border, #d1d5db);
+  border-radius: 4px;
+  font-size: 0.9rem;
+  background-color: white;
+  transition: border-color 0.2s ease;
+}
+
+.control-input:focus,
+.control-select:focus {
+  outline: none;
+  border-color: var(--color-primary, #3b82f6);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.unilateral-config-section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px;
+  background-color: var(--color-background-secondary, #f9fafb);
+  border-radius: 8px;
+  border: 1px solid var(--color-border, #e5e7eb);
+}
+
+.unilateral-config-button {
+  background-color: var(--color-primary, #3b82f6);
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.2s ease;
+}
+
+.unilateral-config-button:hover {
+  background-color: var(--color-primary-dark, #2563eb);
+}
+
+.unilateral-config-info {
+  font-size: 0.9rem;
+  color: var(--color-text-secondary, #6b7280);
+  font-style: italic;
+}
+
+.approach-sets-section {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.approach-sets-button {
+  background-color: transparent;
+  color: var(--color-primary, #3b82f6);
+  border: 1px solid var(--color-primary, #3b82f6);
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.approach-sets-button:hover {
+  background-color: rgba(59, 130, 246, 0.1);
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .strength-exercise-controls {
+    gap: 12px;
+  }
+
+  .control-group {
+    gap: 6px;
+  }
+
+  .unilateral-config-section {
+    padding: 12px;
+  }
+
+  .approach-sets-button {
+    width: 100%;
+    text-align: center;
+  }
+}

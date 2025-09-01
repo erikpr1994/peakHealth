@@ -4,6 +4,7 @@ export { UnilateralExerciseModal } from './UnilateralExerciseModal';
 export { ApproachSetGeneratorModal } from './ApproachSetGeneratorModal';
 export { SetRow } from './SetRow';
 export { SetsTable } from './SetsTable';
+export { StrengthExercise } from './StrengthExercise';
 
 // Temporary export to make TypeScript happy
 export const ComponentsPlaceholder = 'ComponentsPlaceholder';
