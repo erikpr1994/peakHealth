@@ -2,10 +2,8 @@
 
 import React, { useState, useMemo } from 'react';
 import { Modal, Button, Input } from '@peakhealth/ui';
-import {
-  ExerciseLibraryExercise,
-  ExerciseLibraryModalProps,
-} from './ExerciseLibraryModal.types';
+import { ExerciseLibraryModalProps } from './ExerciseLibraryModal.types';
+import { useExercises } from '../../hooks/useExercises';
 import './ExerciseLibraryModal.css';
 
 export const ExerciseLibraryModal: React.FC<ExerciseLibraryModalProps> = ({
@@ -16,79 +14,26 @@ export const ExerciseLibraryModal: React.FC<ExerciseLibraryModalProps> = ({
 }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<
-    ExerciseLibraryExercise['category'] | 'All'
+    'Strength' | 'Cardio' | 'Flexibility' | 'Balance' | 'All'
   >(initialFilter?.category || 'All');
   const [selectedMuscleGroup, setSelectedMuscleGroup] = useState<string>(
     initialFilter?.muscleGroup || 'All'
   );
   const [selectedDifficulty, setSelectedDifficulty] = useState<
-    ExerciseLibraryExercise['difficulty'] | 'All'
+    'Beginner' | 'Intermediate' | 'Advanced' | 'All'
   >(initialFilter?.difficulty || 'All');
   const [selectedExercises, setSelectedExercises] = useState<Set<string>>(
     new Set()
   );
 
-  // Mock exercise data - in a real app, this would come from an API
-  const exercises: ExerciseLibraryExercise[] = useMemo(
-    () => [
-      {
-        id: '1',
-        name: 'Push-ups',
-        description: 'A classic bodyweight exercise for upper body strength',
-        category: 'Strength',
-        muscleGroups: ['Chest', 'Triceps', 'Shoulders'],
-        equipment: ['Bodyweight'],
-        difficulty: 'Beginner',
-        icon: '🏋️',
-        iconColor: 'bg-blue-100 text-blue-600',
-      },
-      {
-        id: '2',
-        name: 'Squats',
-        description: 'Fundamental lower body exercise',
-        category: 'Strength',
-        muscleGroups: ['Legs', 'Glutes', 'Core'],
-        equipment: ['Bodyweight'],
-        difficulty: 'Beginner',
-        icon: '🏋️',
-        iconColor: 'bg-green-100 text-green-600',
-      },
-      {
-        id: '3',
-        name: 'Plank',
-        description: 'Core stability exercise',
-        category: 'Strength',
-        muscleGroups: ['Core', 'Shoulders'],
-        equipment: ['Bodyweight'],
-        difficulty: 'Beginner',
-        icon: '🧘',
-        iconColor: 'bg-yellow-100 text-yellow-600',
-      },
-      {
-        id: '4',
-        name: 'Jumping Jacks',
-        description: 'Cardiovascular exercise',
-        category: 'Cardio',
-        muscleGroups: ['Full Body'],
-        equipment: ['Bodyweight'],
-        difficulty: 'Beginner',
-        icon: '🏃',
-        iconColor: 'bg-red-100 text-red-600',
-      },
-      {
-        id: '5',
-        name: 'Stretching',
-        description: 'Flexibility and mobility work',
-        category: 'Flexibility',
-        muscleGroups: ['Full Body'],
-        equipment: ['Bodyweight'],
-        difficulty: 'Beginner',
-        icon: '🧘',
-        iconColor: 'bg-purple-100 text-purple-600',
-      },
-    ],
-    []
-  );
+  // Use the real data fetching hook
+  const { exercises, isLoading, error } = useExercises({
+    searchTerm: searchTerm || undefined,
+    category: selectedCategory !== 'All' ? selectedCategory : undefined,
+    muscleGroup:
+      selectedMuscleGroup !== 'All' ? selectedMuscleGroup : undefined,
+    difficulty: selectedDifficulty !== 'All' ? selectedDifficulty : undefined,
+  });
 
   // Filter exercises based on search and filters
   const filteredExercises = useMemo(() => {
@@ -190,7 +135,10 @@ export const ExerciseLibraryModal: React.FC<ExerciseLibraryModalProps> = ({
                 onChange={e =>
                   setSelectedCategory(
                     e.target.value as
-                      | ExerciseLibraryExercise['category']
+                      | 'Strength'
+                      | 'Cardio'
+                      | 'Flexibility'
+                      | 'Balance'
                       | 'All'
                   )
                 }
@@ -226,7 +174,9 @@ export const ExerciseLibraryModal: React.FC<ExerciseLibraryModalProps> = ({
                 onChange={e =>
                   setSelectedDifficulty(
                     e.target.value as
-                      | ExerciseLibraryExercise['difficulty']
+                      | 'Beginner'
+                      | 'Intermediate'
+                      | 'Advanced'
                       | 'All'
                   )
                 }
@@ -253,7 +203,18 @@ export const ExerciseLibraryModal: React.FC<ExerciseLibraryModalProps> = ({
 
         {/* Exercise List */}
         <div className="exercise-list">
-          {filteredExercises.length === 0 ? (
+          {isLoading ? (
+            <div className="loading-state">
+              <p>Loading exercises...</p>
+            </div>
+          ) : error ? (
+            <div className="error-state">
+              <p>Error: {error.message}</p>
+              <Button variant="outline" onClick={handleClearFilters}>
+                Clear Filters
+              </Button>
+            </div>
+          ) : filteredExercises.length === 0 ? (
             <div className="no-results">
               <p>No exercises found matching your criteria.</p>
               <Button variant="outline" onClick={handleClearFilters}>

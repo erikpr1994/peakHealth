@@ -28,7 +28,8 @@
   "dependencies": {
     "@peakhealth/routines-types": "workspace:*",
     "@peakhealth/ui": "workspace:*",
-    "clsx": "^2.1.1"
+    "clsx": "^2.1.1",
+    "swr": "^2.3.6"
   },
   "devDependencies": {
     "@storybook/addon-docs": "^9.1.3",

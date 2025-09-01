@@ -3,6 +3,12 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { ExerciseLibraryModal } from './ExerciseLibraryModal';
 import type { ExerciseLibraryExercise } from './ExerciseLibraryModal.types';
+import { useExercises } from '../../hooks/useExercises';
+
+// Mock the useExercises hook
+vi.mock('../../hooks/useExercises', () => ({
+  useExercises: vi.fn(),
+}));
 
 // Mock the UI components
 vi.mock('@peakhealth/ui', () => ({
@@ -72,6 +78,14 @@ describe('ExerciseLibraryModal', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
+
+    // Set up default mock for useExercises
+    vi.mocked(useExercises).mockReturnValue({
+      exercises: mockExercises,
+      isLoading: false,
+      error: null,
+      mutate: vi.fn(),
+    });
   });
 
   it('renders when open', () => {
