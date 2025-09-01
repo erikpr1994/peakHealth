@@ -256,7 +256,7 @@ export const SetRow = ({
               className="input"
             />
           )}
-          {hasDuration(set) && (
+          {hasDuration(set) && set.repType !== 'time' && (
             <input
               type="number"
               value={set.duration || ''}
