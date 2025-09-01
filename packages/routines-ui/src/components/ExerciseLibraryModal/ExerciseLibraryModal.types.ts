@@ -1,3 +1,9 @@
+import type {
+  ExerciseCategory,
+  ExerciseDifficulty,
+  ExerciseMuscleGroup,
+} from './ExerciseLibraryModal.utils';
+
 // Exercise types for the modal
 export interface ExerciseLibraryExercise {
   id: string;
@@ -16,8 +22,8 @@ export interface ExerciseLibraryModalProps {
   onClose: () => void;
   onSelect: (selectedExercises: ExerciseLibraryExercise[]) => void;
   initialFilter?: {
-    category?: ExerciseLibraryExercise['category'];
-    muscleGroup?: string;
-    difficulty?: ExerciseLibraryExercise['difficulty'];
+    category?: ExerciseCategory;
+    muscleGroup?: ExerciseMuscleGroup;
+    difficulty?: ExerciseDifficulty;
   };
 }

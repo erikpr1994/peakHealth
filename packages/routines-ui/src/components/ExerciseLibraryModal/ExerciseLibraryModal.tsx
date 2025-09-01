@@ -1,9 +1,20 @@
 'use client';
 
-import React, { useState, useMemo } from 'react';
+import React, { useState } from 'react';
 import { Modal, Button, Input } from '@peakhealth/ui';
 import { ExerciseLibraryModalProps } from './ExerciseLibraryModal.types';
 import { useExercises } from '../../hooks/useExercises';
+import {
+  EXERCISE_CATEGORIES,
+  EXERCISE_MUSCLE_GROUPS,
+  EXERCISE_DIFFICULTIES,
+  toApiCategoryFilter,
+  toApiDifficultyFilter,
+  toApiMuscleGroupFilter,
+  ExerciseCategory,
+  ExerciseDifficulty,
+  ExerciseMuscleGroup,
+} from './ExerciseLibraryModal.utils';
 import './ExerciseLibraryModal.css';
 
 export const ExerciseLibraryModal: React.FC<ExerciseLibraryModalProps> = ({
@@ -13,60 +24,24 @@ export const ExerciseLibraryModal: React.FC<ExerciseLibraryModalProps> = ({
   initialFilter,
 }) => {
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState<
-    'Strength' | 'Cardio' | 'Flexibility' | 'Balance' | 'All'
-  >(initialFilter?.category || 'All');
-  const [selectedMuscleGroup, setSelectedMuscleGroup] = useState<string>(
-    initialFilter?.muscleGroup || 'All'
+  const [selectedCategory, setSelectedCategory] = useState<ExerciseCategory>(
+    initialFilter?.category || 'All'
   );
-  const [selectedDifficulty, setSelectedDifficulty] = useState<
-    'Beginner' | 'Intermediate' | 'Advanced' | 'All'
-  >(initialFilter?.difficulty || 'All');
+  const [selectedMuscleGroup, setSelectedMuscleGroup] =
+    useState<ExerciseMuscleGroup>(initialFilter?.muscleGroup || 'All');
+  const [selectedDifficulty, setSelectedDifficulty] =
+    useState<ExerciseDifficulty>(initialFilter?.difficulty || 'All');
   const [selectedExercises, setSelectedExercises] = useState<Set<string>>(
     new Set()
   );
 
-  // Use the real data fetching hook
+  // Use the real data fetching hook - server handles all filtering
   const { exercises, isLoading, error } = useExercises({
     searchTerm: searchTerm || undefined,
-    category: selectedCategory !== 'All' ? selectedCategory : undefined,
-    muscleGroup:
-      selectedMuscleGroup !== 'All' ? selectedMuscleGroup : undefined,
-    difficulty: selectedDifficulty !== 'All' ? selectedDifficulty : undefined,
+    category: toApiCategoryFilter(selectedCategory),
+    muscleGroup: toApiMuscleGroupFilter(selectedMuscleGroup),
+    difficulty: toApiDifficultyFilter(selectedDifficulty),
   });
-
-  // Filter exercises based on search and filters
-  const filteredExercises = useMemo(() => {
-    return exercises.filter(exercise => {
-      const matchesSearch =
-        exercise.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        exercise.description.toLowerCase().includes(searchTerm.toLowerCase());
-
-      const matchesCategory =
-        selectedCategory === 'All' || exercise.category === selectedCategory;
-
-      const matchesMuscleGroup =
-        selectedMuscleGroup === 'All' ||
-        exercise.muscleGroups.includes(selectedMuscleGroup);
-
-      const matchesDifficulty =
-        selectedDifficulty === 'All' ||
-        exercise.difficulty === selectedDifficulty;
-
-      return (
-        matchesSearch &&
-        matchesCategory &&
-        matchesMuscleGroup &&
-        matchesDifficulty
-      );
-    });
-  }, [
-    exercises,
-    searchTerm,
-    selectedCategory,
-    selectedMuscleGroup,
-    selectedDifficulty,
-  ]);
 
   const handleExerciseToggle = (exerciseId: string) => {
     const newSelected = new Set(selectedExercises);
@@ -92,20 +67,6 @@ export const ExerciseLibraryModal: React.FC<ExerciseLibraryModalProps> = ({
     setSelectedDifficulty('All');
     setSearchTerm('');
   };
-
-  const categories = ['All', 'Strength', 'Cardio', 'Flexibility', 'Balance'];
-  const muscleGroups = [
-    'All',
-    'Chest',
-    'Back',
-    'Legs',
-    'Arms',
-    'Shoulders',
-    'Core',
-    'Glutes',
-    'Full Body',
-  ];
-  const difficulties = ['All', 'Beginner', 'Intermediate', 'Advanced'];
 
   return (
     <Modal
@@ -133,18 +94,11 @@ export const ExerciseLibraryModal: React.FC<ExerciseLibraryModalProps> = ({
               <select
                 value={selectedCategory}
                 onChange={e =>
-                  setSelectedCategory(
-                    e.target.value as
-                      | 'Strength'
-                      | 'Cardio'
-                      | 'Flexibility'
-                      | 'Balance'
-                      | 'All'
-                  )
+                  setSelectedCategory(e.target.value as ExerciseCategory)
                 }
                 className="filter-select"
               >
-                {categories.map(category => (
+                {EXERCISE_CATEGORIES.map(category => (
                   <option key={category} value={category}>
                     {category}
                   </option>
@@ -156,10 +110,12 @@ export const ExerciseLibraryModal: React.FC<ExerciseLibraryModalProps> = ({
               <label>Muscle Group:</label>
               <select
                 value={selectedMuscleGroup}
-                onChange={e => setSelectedMuscleGroup(e.target.value)}
+                onChange={e =>
+                  setSelectedMuscleGroup(e.target.value as ExerciseMuscleGroup)
+                }
                 className="filter-select"
               >
-                {muscleGroups.map(group => (
+                {EXERCISE_MUSCLE_GROUPS.map(group => (
                   <option key={group} value={group}>
                     {group}
                   </option>
@@ -172,17 +128,11 @@ export const ExerciseLibraryModal: React.FC<ExerciseLibraryModalProps> = ({
               <select
                 value={selectedDifficulty}
                 onChange={e =>
-                  setSelectedDifficulty(
-                    e.target.value as
-                      | 'Beginner'
-                      | 'Intermediate'
-                      | 'Advanced'
-                      | 'All'
-                  )
+                  setSelectedDifficulty(e.target.value as ExerciseDifficulty)
                 }
                 className="filter-select"
               >
-                {difficulties.map(difficulty => (
+                {EXERCISE_DIFFICULTIES.map(difficulty => (
                   <option key={difficulty} value={difficulty}>
                     {difficulty}
                   </option>
@@ -214,7 +164,7 @@ export const ExerciseLibraryModal: React.FC<ExerciseLibraryModalProps> = ({
                 Clear Filters
               </Button>
             </div>
-          ) : filteredExercises.length === 0 ? (
+          ) : exercises.length === 0 ? (
             <div className="no-results">
               <p>No exercises found matching your criteria.</p>
               <Button variant="outline" onClick={handleClearFilters}>
@@ -223,7 +173,7 @@ export const ExerciseLibraryModal: React.FC<ExerciseLibraryModalProps> = ({
             </div>
           ) : (
             <div className="exercise-grid">
-              {filteredExercises.map(exercise => (
+              {exercises.map(exercise => (
                 <div
                   key={exercise.id}
                   className={`exercise-card ${selectedExercises.has(exercise.id) ? 'selected' : ''}`}

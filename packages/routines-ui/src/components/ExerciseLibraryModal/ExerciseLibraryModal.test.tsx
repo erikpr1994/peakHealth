@@ -48,33 +48,34 @@ vi.mock('@peakhealth/ui', () => ({
   ),
 }));
 
+const mockExercises: ExerciseLibraryExercise[] = [
+  {
+    id: '1',
+    name: 'Push-ups',
+    description: 'A classic bodyweight exercise for upper body strength',
+    category: 'Strength',
+    muscleGroups: ['Chest', 'Triceps', 'Shoulders'],
+    equipment: ['Bodyweight'],
+    difficulty: 'Beginner',
+    icon: '🏋️',
+    iconColor: 'bg-blue-100 text-blue-600',
+  },
+  {
+    id: '2',
+    name: 'Squats',
+    description: 'Fundamental lower body exercise',
+    category: 'Strength',
+    muscleGroups: ['Legs', 'Glutes', 'Core'],
+    equipment: ['Bodyweight'],
+    difficulty: 'Beginner',
+    icon: '🏋️',
+    iconColor: 'bg-green-100 text-green-600',
+  },
+];
+
 describe('ExerciseLibraryModal', () => {
   const mockOnClose = vi.fn();
   const mockOnSelect = vi.fn();
-  const mockExercises: ExerciseLibraryExercise[] = [
-    {
-      id: '1',
-      name: 'Push-ups',
-      description: 'A classic bodyweight exercise for upper body strength',
-      category: 'Strength',
-      muscleGroups: ['Chest', 'Triceps', 'Shoulders'],
-      equipment: ['Bodyweight'],
-      difficulty: 'Beginner',
-      icon: '🏋️',
-      iconColor: 'bg-blue-100 text-blue-600',
-    },
-    {
-      id: '2',
-      name: 'Squats',
-      description: 'Fundamental lower body exercise',
-      category: 'Strength',
-      muscleGroups: ['Legs', 'Glutes', 'Core'],
-      equipment: ['Bodyweight'],
-      difficulty: 'Beginner',
-      icon: '🏋️',
-      iconColor: 'bg-green-100 text-green-600',
-    },
-  ];
 
   beforeEach(() => {
     vi.clearAllMocks();
@@ -131,6 +132,25 @@ describe('ExerciseLibraryModal', () => {
   });
 
   it('filters exercises by search term', async () => {
+    // Mock useExercises to return filtered results when search term changes
+    const mockUseExercises = vi.mocked(useExercises);
+    mockUseExercises.mockImplementation(filters => {
+      if (filters?.searchTerm === 'push') {
+        return {
+          exercises: [mockExercises[0]], // Only Push-ups
+          isLoading: false,
+          error: null,
+          mutate: vi.fn(),
+        };
+      }
+      return {
+        exercises: mockExercises,
+        isLoading: false,
+        error: null,
+        mutate: vi.fn(),
+      };
+    });
+
     render(
       <ExerciseLibraryModal
         isOpen={true}
@@ -290,6 +310,14 @@ describe('ExerciseLibraryModal', () => {
   });
 
   it('shows no results message when filters return empty', async () => {
+    // Mock useExercises to return empty results
+    vi.mocked(useExercises).mockReturnValue({
+      exercises: [],
+      isLoading: false,
+      error: null,
+      mutate: vi.fn(),
+    });
+
     render(
       <ExerciseLibraryModal
         isOpen={true}
@@ -297,9 +325,6 @@ describe('ExerciseLibraryModal', () => {
         onSelect={mockOnSelect}
       />
     );
-
-    const searchInput = screen.getByTestId('search-input');
-    fireEvent.change(searchInput, { target: { value: 'nonexistent' } });
 
     await waitFor(() => {
       expect(
