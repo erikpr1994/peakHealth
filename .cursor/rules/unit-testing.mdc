@@ -1,0 +1,243 @@
+---
+description: Guidelines for writing unit tests for individual functions, components, and utilities
+globs:
+  - '**/*.test.ts'
+  - '**/*.test.tsx'
+  - '**/*.spec.ts'
+  - '**/*.spec.tsx'
+  - '!apps/e2e/**'
+  - '!**/*.integration.test.*'
+  - '!**/*.e2e.test.*'
+alwaysApply: false
+---
+
+# Unit Testing
+
+## Purpose
+
+Unit tests validate individual functions, components, or utilities in isolation from external dependencies.
+
+## Test Structure
+
+1. **Co-locate test files** - Place `*.test.ts(x)` files next to the source file being tested
+2. **One test file per source file** - Maintain 1:1 relationship between source and test files
+3. **Group related tests** - Use `describe` blocks to organize tests logically
+4. **Test one thing at a time** - Each test should validate a single behavior
+
+## Unit Test Patterns
+
+### Testing Pure Functions
+
+```typescript
+// math.utils.test.ts
+import { describe, it, expect } from 'vitest';
+import { calculateTotal, applyDiscount } from './math.utils';
+
+describe('calculateTotal', () => {
+  it('should sum all numbers in array', () => {
+    expect(calculateTotal([1, 2, 3])).toBe(6);
+  });
+
+  it('should return 0 for empty array', () => {
+    expect(calculateTotal([])).toBe(0);
+  });
+
+  it('should handle negative numbers', () => {
+    expect(calculateTotal([-1, 2, -3])).toBe(-2);
+  });
+});
+```
+
+### Testing React Components
+
+```typescript
+// Button.test.tsx
+import { describe, it, expect, vi } from 'vitest';
+import { render, screen, fireEvent } from '@testing-library/react';
+import { Button } from './Button';
+
+describe('Button', () => {
+  it('should render children text', () => {
+    render(<Button>Click me</Button>);
+    expect(screen.getByRole('button')).toHaveTextContent('Click me');
+  });
+
+  it('should call onClick when clicked', () => {
+    const handleClick = vi.fn();
+    render(<Button onClick={handleClick}>Click</Button>);
+
+    fireEvent.click(screen.getByRole('button'));
+    expect(handleClick).toHaveBeenCalledTimes(1);
+  });
+
+  it('should be disabled when disabled prop is true', () => {
+    render(<Button disabled>Click</Button>);
+    expect(screen.getByRole('button')).toBeDisabled();
+  });
+
+  it('should apply correct variant styles', () => {
+    render(<Button variant="primary">Click</Button>);
+    const button = screen.getByRole('button');
+    expect(button.className).toContain('primary');
+  });
+});
+```
+
+### Testing Hooks
+
+```typescript
+// useCounter.test.ts
+import { describe, it, expect } from 'vitest';
+import { renderHook, act } from '@testing-library/react';
+import { useCounter } from './useCounter';
+
+describe('useCounter', () => {
+  it('should initialize with default value', () => {
+    const { result } = renderHook(() => useCounter());
+    expect(result.current.count).toBe(0);
+  });
+
+  it('should initialize with custom value', () => {
+    const { result } = renderHook(() => useCounter(10));
+    expect(result.current.count).toBe(10);
+  });
+
+  it('should increment count', () => {
+    const { result } = renderHook(() => useCounter());
+
+    act(() => {
+      result.current.increment();
+    });
+
+    expect(result.current.count).toBe(1);
+  });
+
+  it('should decrement count', () => {
+    const { result } = renderHook(() => useCounter(5));
+
+    act(() => {
+      result.current.decrement();
+    });
+
+    expect(result.current.count).toBe(4);
+  });
+});
+```
+
+## Mocking Strategies
+
+### Mock External Dependencies
+
+```typescript
+// api.service.test.ts
+import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { fetchUser } from './api.service';
+
+// Mock the fetch function
+global.fetch = vi.fn();
+
+describe('fetchUser', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it('should return user data on success', async () => {
+    const mockUser = { id: 1, name: 'John Doe' };
+    (global.fetch as any).mockResolvedValueOnce({
+      ok: true,
+      json: async () => mockUser,
+    });
+
+    const user = await fetchUser(1);
+
+    expect(user).toEqual(mockUser);
+    expect(global.fetch).toHaveBeenCalledWith('/api/users/1');
+  });
+
+  it('should throw error on failure', async () => {
+    (global.fetch as any).mockResolvedValueOnce({
+      ok: false,
+      status: 404,
+    });
+
+    await expect(fetchUser(1)).rejects.toThrow('User not found');
+  });
+});
+```
+
+### Mock Modules
+
+```typescript
+// Import mocks
+vi.mock('@/lib/database', () => ({
+  db: {
+    query: vi.fn(),
+    insert: vi.fn(),
+    update: vi.fn(),
+    delete: vi.fn(),
+  },
+}));
+```
+
+## Best Practices
+
+### Do's
+
+- ✅ Test behavior, not implementation details
+- ✅ Use descriptive test names that explain what is being tested
+- ✅ Keep tests simple and focused
+- ✅ Use AAA pattern: Arrange, Act, Assert
+- ✅ Mock external dependencies
+- ✅ Test edge cases and error scenarios
+- ✅ Maintain test data close to tests
+- ✅ Use data-testid for reliable element selection
+
+### Don'ts
+
+- ❌ Test private methods directly
+- ❌ Test implementation details
+- ❌ Write overly complex test setups
+- ❌ Share state between tests
+- ❌ Rely on test execution order
+- ❌ Use random or time-dependent data without mocking
+- ❌ Test third-party libraries
+
+## Testing Utilities
+
+### Custom Render for Providers
+
+```typescript
+// test-utils.tsx
+import { render } from '@testing-library/react';
+import { ThemeProvider } from '@/contexts/theme';
+
+export function renderWithProviders(ui: React.ReactElement) {
+  return render(
+    <ThemeProvider>
+      {ui}
+    </ThemeProvider>
+  );
+}
+```
+
+### Test Data Factories
+
+```typescript
+// factories/user.factory.ts
+export function createMockUser(overrides = {}) {
+  return {
+    id: '1',
+    name: 'Test User',
+    email: 'test@example.com',
+    role: 'user',
+    ...overrides,
+  };
+}
+```
+
+## Coverage Guidelines
+
+- Aim for **80%+ code coverage** for critical business logic
+- Focus on **branch coverage** over line coverage
+- Don't chase 100% coverage at the expense of test quality
+- Exclude generated files and types from coverage reports

@@ -1,0 +1,308 @@
+---
+description: Guidelines for writing integration tests that validate interactions between multiple components or modules
+globs:
+  - "**/*.integration.test.ts"
+  - "**/*.integration.test.tsx"
+  - "**/*.integration.spec.ts"
+  - "**/*.integration.spec.tsx"
+  - "**/integration/**/*.test.ts"
+  - "**/integration/**/*.test.tsx"
+alwaysApply: false
+---
+
+# Integration Testing
+
+## Purpose
+Integration tests validate the interaction between multiple components, modules, or services working together.
+
+## Test Structure
+
+1. **Use descriptive file names** - Append `.integration.test.ts` to clearly identify integration tests
+2. **Group by feature or flow** - Organize tests around user journeys or business processes
+3. **Test real interactions** - Minimize mocking to test actual component integration
+4. **Use test.step for clarity** - Break down complex flows into clear steps
+
+## Integration Test Patterns
+
+### Testing Component Interactions
+
+```typescript
+// UserProfile.integration.test.tsx
+import { describe, it, expect, beforeEach, test } from 'vitest';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { UserProfile } from '@/features/user/UserProfile';
+import { UserProvider } from '@/contexts/UserContext';
+import { setupServer } from 'msw/node';
+import { rest } from 'msw';
+
+const server = setupServer(
+  rest.get('/api/user/:id', (req, res, ctx) => {
+    return res(ctx.json({
+      id: req.params.id,
+      name: 'John Doe',
+      email: 'john@example.com',
+    }));
+  }),
+  rest.put('/api/user/:id', (req, res, ctx) => {
+    return res(ctx.json({ success: true }));
+  })
+);
+
+beforeAll(() => server.listen());
+afterEach(() => server.resetHandlers());
+afterAll(() => server.close());
+
+describe('UserProfile Integration', () => {
+  test('user can view and edit profile', async () => {
+    await test.step('render profile with user data', async () => {
+      render(
+        <UserProvider>
+          <UserProfile userId="123" />
+        </UserProvider>
+      );
+
+      await waitFor(() => {
+        expect(screen.getByText('John Doe')).toBeInTheDocument();
+      });
+    });
+
+    await test.step('enable edit mode', async () => {
+      const editButton = screen.getByRole('button', { name: /edit/i });
+      fireEvent.click(editButton);
+
+      expect(screen.getByRole('textbox', { name: /name/i })).toBeInTheDocument();
+    });
+
+    await test.step('update user name', async () => {
+      const nameInput = screen.getByRole('textbox', { name: /name/i });
+      fireEvent.change(nameInput, { target: { value: 'Jane Doe' } });
+      
+      const saveButton = screen.getByRole('button', { name: /save/i });
+      fireEvent.click(saveButton);
+
+      await waitFor(() => {
+        expect(screen.getByText('Profile updated successfully')).toBeInTheDocument();
+      });
+    });
+  });
+});
+```
+
+### Testing API Integration
+
+```typescript
+// api.integration.test.ts
+import { describe, it, expect, beforeAll, afterAll, test } from 'vitest';
+import { createTestClient } from '@/test/utils/testClient';
+import { setupTestDatabase } from '@/test/utils/testDatabase';
+
+describe('Routine API Integration', () => {
+  let client: TestClient;
+  let db: TestDatabase;
+
+  beforeAll(async () => {
+    db = await setupTestDatabase();
+    client = createTestClient();
+  });
+
+  afterAll(async () => {
+    await db.cleanup();
+  });
+
+  test('complete routine creation flow', async () => {
+    let routineId: string;
+
+    await test.step('create a new routine', async () => {
+      const response = await client.post('/api/routines', {
+        name: 'Morning Workout',
+        description: 'Daily morning exercise routine',
+        difficulty: 'intermediate',
+      });
+
+      expect(response.status).toBe(201);
+      routineId = response.data.id;
+      expect(routineId).toBeDefined();
+    });
+
+    await test.step('add exercises to routine', async () => {
+      const exercises = [
+        { exerciseId: 'ex1', sets: 3, reps: 10 },
+        { exerciseId: 'ex2', sets: 4, reps: 12 },
+      ];
+
+      for (const exercise of exercises) {
+        const response = await client.post(`/api/routines/${routineId}/exercises`, exercise);
+        expect(response.status).toBe(201);
+      }
+    });
+
+    await test.step('verify complete routine', async () => {
+      const response = await client.get(`/api/routines/${routineId}`);
+      
+      expect(response.status).toBe(200);
+      expect(response.data).toMatchObject({
+        name: 'Morning Workout',
+        exercises: expect.arrayContaining([
+          expect.objectContaining({ exerciseId: 'ex1' }),
+          expect.objectContaining({ exerciseId: 'ex2' }),
+        ]),
+      });
+    });
+  });
+});
+```
+
+### Testing Form Workflows
+
+```typescript
+// RoutineForm.integration.test.tsx
+import { describe, it, expect, vi, test } from 'vitest';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { RoutineForm } from '@/features/routines/RoutineForm';
+import { RoutineProvider } from '@/features/routines/context';
+import { useRouter } from 'next/navigation';
+
+vi.mock('next/navigation', () => ({
+  useRouter: vi.fn(),
+}));
+
+describe('Routine Form Integration', () => {
+  test('complete form submission flow', async () => {
+    const mockPush = vi.fn();
+    (useRouter as any).mockReturnValue({ push: mockPush });
+
+    await test.step('render form with all fields', async () => {
+      render(
+        <RoutineProvider>
+          <RoutineForm />
+        </RoutineProvider>
+      );
+
+      expect(screen.getByLabelText(/routine name/i)).toBeInTheDocument();
+      expect(screen.getByLabelText(/description/i)).toBeInTheDocument();
+      expect(screen.getByLabelText(/difficulty/i)).toBeInTheDocument();
+    });
+
+    await test.step('fill out form fields', async () => {
+      fireEvent.change(screen.getByLabelText(/routine name/i), {
+        target: { value: 'Test Routine' },
+      });
+
+      fireEvent.change(screen.getByLabelText(/description/i), {
+        target: { value: 'This is a test routine' },
+      });
+
+      fireEvent.change(screen.getByLabelText(/difficulty/i), {
+        target: { value: 'beginner' },
+      });
+    });
+
+    await test.step('submit form and navigate', async () => {
+      const submitButton = screen.getByRole('button', { name: /create routine/i });
+      fireEvent.click(submitButton);
+
+      await waitFor(() => {
+        expect(mockPush).toHaveBeenCalledWith('/routines');
+      });
+    });
+  });
+});
+```
+
+## Testing Strategies
+
+### Database Integration
+
+```typescript
+// Use test database for integration tests
+beforeEach(async () => {
+  await testDb.migrate.latest();
+  await testDb.seed.run();
+});
+
+afterEach(async () => {
+  await testDb.migrate.rollback();
+});
+```
+
+### Mock Service Worker (MSW) for API Testing
+
+```typescript
+import { setupServer } from 'msw/node';
+import { rest } from 'msw';
+
+const handlers = [
+  rest.get('/api/users', (req, res, ctx) => {
+    return res(ctx.json({ users: [] }));
+  }),
+];
+
+const server = setupServer(...handlers);
+```
+
+## Best Practices
+
+### Do's
+- ✅ Test complete user workflows
+- ✅ Use real implementations when possible
+- ✅ Test error handling across components
+- ✅ Verify data flow between components
+- ✅ Test state management integration
+- ✅ Use MSW for API mocking
+- ✅ Clean up test data after each test
+- ✅ Test loading and error states
+
+### Don'ts
+- ❌ Mock everything - defeats the purpose of integration testing
+- ❌ Test implementation details
+- ❌ Rely on specific timing without proper waits
+- ❌ Share test data between unrelated tests
+- ❌ Test external services directly (use mocks)
+
+## Test Environment Setup
+
+### Test Utilities
+
+```typescript
+// test/utils/integrationHelpers.ts
+export async function waitForDataLoad() {
+  await waitFor(() => {
+    expect(screen.queryByText(/loading/i)).not.toBeInTheDocument();
+  });
+}
+
+export async function fillForm(fields: Record<string, string>) {
+  for (const [label, value] of Object.entries(fields)) {
+    const input = screen.getByLabelText(new RegExp(label, 'i'));
+    fireEvent.change(input, { target: { value } });
+  }
+}
+```
+
+### Custom Test Wrappers
+
+```typescript
+// test/utils/renderWithProviders.tsx
+export function renderWithProviders(
+  ui: React.ReactElement,
+  options = {}
+) {
+  return render(
+    <QueryClientProvider client={queryClient}>
+      <ThemeProvider>
+        <RouterContext.Provider value={mockRouter}>
+          {ui}
+        </RouterContext.Provider>
+      </ThemeProvider>
+    </QueryClientProvider>,
+    options
+  );
+}
+```
+
+## Performance Considerations
+
+- Run integration tests in parallel when possible
+- Use test database transactions for faster cleanup
+- Cache test fixtures that are expensive to create
+- Consider running integration tests separately from unit tests in CI

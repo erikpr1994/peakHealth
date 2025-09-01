@@ -1,0 +1,113 @@
+---
+description: Core development methodology for incremental, test-driven development
+alwaysApply: true
+---
+
+# Ways of Working
+
+## Development Philosophy
+
+We follow an incremental, test-driven development approach to ensure high-quality, maintainable code.
+
+## Core Principles
+
+### 1. Work in Small, Incremental Steps
+
+- **Break down complex tasks** into small, manageable pieces
+- **Complete one piece at a time** before moving to the next
+- **Each step should be testable** and add clear value
+- **Commit frequently** with meaningful, atomic changes
+- **Avoid large, monolithic changes** that are hard to review and debug
+
+### 2. Test-First Development (TDD)
+
+- **Write tests before implementation** whenever possible
+- **Start with failing tests** that define the expected behavior
+- **Implement the minimum code** needed to make tests pass
+- **Refactor with confidence** once tests are green
+- **Tests are documentation** - they show how the code should work
+
+### 3. Incremental Problem Solving Process
+
+1. **Understand the requirement**
+   - Break it down into small, testable units
+   - Identify edge cases and error scenarios
+   - Create a mental model of the solution
+
+2. **Write the test first**
+   - Define the expected behavior
+   - Cover happy path and edge cases
+   - Ensure tests fail initially (red phase)
+
+3. **Implement the solution**
+   - Write minimal code to pass the test (green phase)
+   - Focus on making it work, not perfect
+   - Avoid over-engineering
+
+4. **Refactor and optimize**
+   - Clean up the code while tests stay green
+   - Extract reusable components
+   - Improve performance if needed
+   - Update documentation
+
+5. **Commit and move to the next piece**
+   - Make atomic commits with clear messages
+   - Ensure CI/CD passes
+   - Move to the next incremental step
+
+### 4. Practical Guidelines
+
+- **One feature, one test file**: Start by creating the test file for new features
+- **Red-Green-Refactor cycle**: Follow TDD rhythm consistently
+- **Small PRs**: Keep pull requests focused and easy to review (< 400 lines when possible)
+- **Continuous validation**: Run tests frequently during development
+- **Progressive enhancement**: Build features incrementally, not all at once
+
+### 5. Benefits of This Approach
+
+- **Reduced bugs**: Tests catch issues early
+- **Better design**: TDD leads to more modular, testable code
+- **Easier debugging**: Small changes make issues easier to locate
+- **Faster feedback**: Quick test runs provide immediate validation
+- **Living documentation**: Tests document expected behavior
+- **Confident refactoring**: Tests ensure changes don't break existing functionality
+
+## Example Workflow
+
+```bash
+# 1. Create test file first
+touch src/features/user-profile/userProfile.test.ts
+
+# 2. Write failing test
+# 3. Run test to see it fail
+pnpm test userProfile.test.ts
+
+# 4. Implement minimal code
+# 5. Run test to see it pass
+pnpm test userProfile.test.ts
+
+# 6. Refactor if needed
+# 7. Commit the working increment
+git add .
+git commit -m "feat: add user profile name validation"
+
+# 8. Move to next test/feature
+```
+
+## Red Flags to Avoid
+
+- ❌ Writing all the code before any tests
+- ❌ Creating huge PRs with multiple features
+- ❌ Skipping tests to "save time"
+- ❌ Implementing features beyond current requirements
+- ❌ Committing broken code
+- ❌ Refactoring without test coverage
+
+## Green Flags to Follow
+
+- ✅ Test file exists before implementation file
+- ✅ Each commit represents a working increment
+- ✅ Tests run and pass before committing
+- ✅ PRs are small and focused
+- ✅ Code coverage increases with each feature
+- ✅ Tests are readable and maintainable
