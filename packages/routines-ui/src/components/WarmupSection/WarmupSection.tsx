@@ -1,13 +1,12 @@
 'use client';
 
-import React, { useState } from 'react';
+import React from 'react';
 import { Accordion, Button } from '@peakhealth/ui';
+import { useExerciseManagement } from '../../hooks/useExerciseManagement';
 import { useSection } from '../../hooks/useSection';
+import { EXERCISE_DEFAULTS } from '../../utils/exerciseCreation';
 import { StrengthExercise } from '../StrengthExercise';
-import {
-  ExerciseLibraryModal,
-  type ExerciseLibraryExercise,
-} from '../ExerciseLibraryModal';
+import { ExerciseLibraryModal } from '../ExerciseLibraryModal';
 import './WarmupSection.css';
 
 export interface WarmupSectionProps {
@@ -19,36 +18,16 @@ export const WarmupSection: React.FC<WarmupSectionProps> = ({
   workoutId,
   sectionId,
 }) => {
-  const [isExerciseModalOpen, setIsExerciseModalOpen] = useState(false);
-  const { exerciseIds, addExercise } = useSection(workoutId, sectionId);
+  const { exerciseIds } = useSection(workoutId, sectionId);
+  const {
+    isExerciseModalOpen,
+    handleAddExercise,
+    handleExerciseSelect,
+    handleCloseExerciseModal,
+  } = useExerciseManagement(workoutId, sectionId);
 
-  const handleAddExercise = () => {
-    setIsExerciseModalOpen(true);
-  };
-
-  const handleExerciseSelect = (
-    selectedExercises: ExerciseLibraryExercise[]
-  ) => {
-    // Add each selected exercise to the section
-    selectedExercises.forEach(exercise => {
-      // Create a new exercise with default configuration
-      const newExercise = {
-        _id: globalThis.crypto.randomUUID(),
-        exerciseId: exercise.id,
-        exerciseVariantId: exercise.id, // Using the same ID for now
-        orderIndex: exerciseIds.length,
-        type: 'strength' as const,
-        sets: [],
-        restBetweenSets: '60s',
-        notes: '',
-      };
-
-      addExercise(newExercise);
-    });
-  };
-
-  const handleCloseExerciseModal = () => {
-    setIsExerciseModalOpen(false);
+  const onExerciseSelect = (selectedExercises: any[]) => {
+    handleExerciseSelect(selectedExercises, EXERCISE_DEFAULTS.warmup);
   };
 
   return (
@@ -110,7 +89,7 @@ export const WarmupSection: React.FC<WarmupSectionProps> = ({
       <ExerciseLibraryModal
         isOpen={isExerciseModalOpen}
         onClose={handleCloseExerciseModal}
-        onSelect={handleExerciseSelect}
+        onSelect={onExerciseSelect}
         initialFilter={{
           category: 'Flexibility',
           difficulty: 'Beginner',
