@@ -1,8 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-import { canAccessOwnWorkouts, DATA_ACCESS_LEVELS } from '@/lib/data-access';
+import { DATA_ACCESS_LEVELS } from '@/lib/data-access';
 import { createClient } from '@/lib/supabase/server';
+import { validateWorkoutAccess } from '@/lib/validation/workout-sessions';
 
+/**
+ * GET /api/workouts/sessions
+ * Gets all workout sessions for the authenticated user
+ */
 export async function GET() {
   try {
     const supabase = await createClient();
@@ -14,6 +19,7 @@ export async function GET() {
       );
     }
 
+    // Authenticate user
     const {
       data: { user },
       error: authError,
@@ -25,14 +31,13 @@ export async function GET() {
 
     // Check data access permissions for workout data
     const userDataAccessRules = user.app_metadata?.data_access_rules || {};
+    const accessError = validateWorkoutAccess(
+      userDataAccessRules,
+      DATA_ACCESS_LEVELS.READ_ONLY
+    );
 
-    if (
-      !canAccessOwnWorkouts(DATA_ACCESS_LEVELS.READ_ONLY, userDataAccessRules)
-    ) {
-      return NextResponse.json(
-        { error: 'Insufficient permissions to access workout data' },
-        { status: 403 }
-      );
+    if (accessError) {
+      return NextResponse.json({ error: accessError }, { status: 403 });
     }
 
     // Get user's workout sessions
@@ -52,7 +57,7 @@ export async function GET() {
       .order('started_at', { ascending: false });
 
     if (sessionsError) {
-      // eslint-disable-next-line no-console
+      // Log error to server console
       console.error('Error fetching workout sessions:', sessionsError);
       return NextResponse.json(
         { error: 'Failed to fetch workout sessions' },
@@ -62,7 +67,7 @@ export async function GET() {
 
     return NextResponse.json({ sessions: sessions || [] });
   } catch (error) {
-    // eslint-disable-next-line no-console
+    // Log error to server console
     console.error('Workout sessions API error:', error);
     return NextResponse.json(
       { error: 'Internal server error' },
@@ -71,6 +76,10 @@ export async function GET() {
   }
 }
 
+/**
+ * POST /api/workouts/sessions
+ * This endpoint is deprecated. Use /api/sessions/start instead.
+ */
 export async function POST(request: NextRequest) {
   try {
     const supabase = await createClient();
@@ -82,6 +91,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Authenticate user
     const {
       data: { user },
       error: authError,
@@ -93,14 +103,17 @@ export async function POST(request: NextRequest) {
 
     // Check data access permissions for workout data (need write access)
     const userDataAccessRules = user.app_metadata?.data_access_rules || {};
+    const accessError = validateWorkoutAccess(
+      userDataAccessRules,
+      DATA_ACCESS_LEVELS.FULL
+    );
 
-    if (!canAccessOwnWorkouts(DATA_ACCESS_LEVELS.FULL, userDataAccessRules)) {
-      return NextResponse.json(
-        { error: 'Insufficient permissions to create workout sessions' },
-        { status: 403 }
-      );
+    if (accessError) {
+      return NextResponse.json({ error: accessError }, { status: 403 });
     }
 
+    // This endpoint is deprecated, but we'll keep it for backward compatibility
+    // with a warning message
     const { routineId, notes } = await request.json();
 
     if (!routineId) {
@@ -133,12 +146,13 @@ export async function POST(request: NextRequest) {
         routine_id: routineId,
         started_at: new Date().toISOString(),
         notes,
+        status: 'in-progress',
       })
       .select()
       .single();
 
     if (sessionError) {
-      // eslint-disable-next-line no-console
+      // Log error to server console
       console.error('Error creating workout session:', sessionError);
       return NextResponse.json(
         { error: 'Failed to create workout session' },
@@ -150,9 +164,10 @@ export async function POST(request: NextRequest) {
       success: true,
       session,
       message: 'Workout session started successfully',
+      warning: 'This endpoint is deprecated. Use /api/sessions/start instead.',
     });
   } catch (error) {
-    // eslint-disable-next-line no-console
+    // Log error to server console
     console.error('Create workout session API error:', error);
     return NextResponse.json(
       { error: 'Internal server error' },

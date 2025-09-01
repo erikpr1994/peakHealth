@@ -1,8 +1,20 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-import { canAccessOwnWorkouts, DATA_ACCESS_LEVELS } from '@/lib/data-access';
+import { DATA_ACCESS_LEVELS } from '@/lib/data-access';
 import { createClient } from '@/lib/supabase/server';
+import {
+  ExercisePerformance,
+  UpdateSessionPayload,
+  validateSessionOwnership,
+  validateSessionState,
+  validateUpdateSessionPayload,
+  validateWorkoutAccess,
+} from '@/lib/validation/workout-sessions';
 
+/**
+ * PUT /api/workouts/sessions/:id
+ * Updates a workout session with performance data
+ */
 export async function PUT(
   request: NextRequest,
   { params }: { params: Promise<{ sessionId: string }> }
@@ -17,6 +29,7 @@ export async function PUT(
       );
     }
 
+    // Authenticate user
     const {
       data: { user },
       error: authError,
@@ -28,62 +41,96 @@ export async function PUT(
 
     // Check data access permissions for workout data (need write access)
     const userDataAccessRules = user.app_metadata?.data_access_rules || {};
+    const accessError = validateWorkoutAccess(
+      userDataAccessRules,
+      DATA_ACCESS_LEVELS.FULL
+    );
 
-    if (!canAccessOwnWorkouts(DATA_ACCESS_LEVELS.FULL, userDataAccessRules)) {
-      return NextResponse.json(
-        { error: 'Insufficient permissions to update workout sessions' },
-        { status: 403 }
-      );
+    if (accessError) {
+      return NextResponse.json({ error: accessError }, { status: 403 });
     }
 
     const { sessionId } = await params;
-    const { completedAt, durationMinutes, notes, exercises } =
-      await request.json();
 
-    // Verify the session belongs to the user
-    const { data: session, error: sessionError } = await supabase
-      .from('workout_sessions')
-      .select('id, user_id')
-      .eq('id', sessionId)
-      .eq('user_id', user.id)
-      .single();
+    // Validate session ownership
+    const { session, error: ownershipError } = await validateSessionOwnership(
+      supabase,
+      sessionId,
+      user.id
+    );
 
-    if (sessionError || !session) {
-      return NextResponse.json(
-        { error: 'Workout session not found or access denied' },
-        { status: 404 }
-      );
+    if (ownershipError) {
+      return NextResponse.json({ error: ownershipError }, { status: 404 });
     }
 
-    // Update the workout session
-    const { data: updatedSession, error: updateError } = await supabase
-      .from('workout_sessions')
-      .update({
-        completed_at: completedAt || new Date().toISOString(),
-        duration_minutes: durationMinutes,
-        notes: notes,
-      })
-      .eq('id', sessionId)
-      .select()
-      .single();
+    // Validate session state
+    const stateError = validateSessionState(session, 'update');
+    if (stateError) {
+      return NextResponse.json({ error: stateError }, { status: 400 });
+    }
 
-    if (updateError) {
-      // eslint-disable-next-line no-console
-      console.error('Error updating workout session:', updateError);
-      return NextResponse.json(
-        { error: 'Failed to update workout session' },
-        { status: 500 }
-      );
+    // Validate request payload
+    const payload = await request.json() as UpdateSessionPayload;
+    const validationError = validateUpdateSessionPayload(payload);
+
+    if (validationError) {
+      return NextResponse.json({ error: validationError }, { status: 400 });
+    }
+
+    const { notes, exercises } = payload;
+
+    // Update the workout session
+    const updateData: Record<string, unknown> = {};
+    
+    if (notes !== undefined) {
+      updateData.notes = notes;
+    }
+    
+    // Only update if there are fields to update
+    let updatedSession = session;
+    if (Object.keys(updateData).length > 0) {
+      const { data: updated, error: updateError } = await supabase
+        .from('workout_sessions')
+        .update(updateData)
+        .eq('id', sessionId)
+        .select()
+        .single();
+
+      if (updateError) {
+        // Log error to server console
+        console.error('Error updating workout session:', updateError);
+        return NextResponse.json(
+          { error: 'Failed to update workout session' },
+          { status: 500 }
+        );
+      }
+      
+      updatedSession = updated;
     }
 
     // If exercises data is provided, save the exercise performance
     if (exercises && Array.isArray(exercises)) {
-      const exerciseData = exercises.map((exercise: any) => ({
+      // First, check if there are existing exercises for this session
+      const { data: existingExercises } = await supabase
+        .from('workout_session_exercises')
+        .select('id, exercise_variant_id')
+        .eq('workout_session_id', sessionId);
+      
+      // If there are existing exercises, delete them before inserting new ones
+      if (existingExercises && existingExercises.length > 0) {
+        await supabase
+          .from('workout_session_exercises')
+          .delete()
+          .eq('workout_session_id', sessionId);
+      }
+      
+      // Insert new exercise data
+      const exerciseData = exercises.map((exercise: ExercisePerformance) => ({
         workout_session_id: sessionId,
         exercise_variant_id: exercise.exerciseVariantId,
         exercise_order: exercise.exerciseOrder,
-        sets_completed: exercise.setsCompleted,
-        reps_completed: exercise.repsCompleted,
+        sets_completed: exercise.setsCompleted || 0,
+        reps_completed: exercise.repsCompleted || 0,
         weight_kg: exercise.weightKg,
         rest_time_seconds: exercise.restTimeSeconds,
         notes: exercise.notes,
@@ -94,20 +141,23 @@ export async function PUT(
         .insert(exerciseData);
 
       if (exercisesError) {
-        // eslint-disable-next-line no-console
+        // Log error to server console
         console.error('Error saving exercise data:', exercisesError);
-        // Don't fail the entire request, just log the error
+        return NextResponse.json(
+          { error: 'Failed to save exercise performance data' },
+          { status: 500 }
+        );
       }
     }
 
     return NextResponse.json({
       success: true,
       session: updatedSession,
-      message: 'Workout session completed successfully',
+      message: 'Workout session updated successfully',
     });
   } catch (error) {
-    // eslint-disable-next-line no-console
-    console.error('Complete workout session API error:', error);
+    // Log error to server console
+    console.error('Update workout session API error:', error);
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }
