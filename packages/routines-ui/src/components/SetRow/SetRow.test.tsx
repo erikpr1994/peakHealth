@@ -240,7 +240,7 @@ describe('SetRow', () => {
     expect(screen.getByPlaceholderText('Time')).toBeDefined();
   });
 
-  it('shows alternating unilateral inputs for alternating unilateral exercise', () => {
+  it('uses a single input group for alternating unilateral exercise (no L/R labels)', () => {
     // Mock exercise with alternating unilateral mode
     mockUseExercise.mockReturnValue({
       exercise: { ...mockExercise, unilateralMode: 'alternating' },
@@ -255,8 +255,11 @@ describe('SetRow', () => {
 
     renderWithProvider();
 
-    expect(screen.getByText('Left')).toBeDefined();
-    expect(screen.getByText('Right')).toBeDefined();
+    // No explicit Left/Right labels
+    expect(screen.queryByText('Left')).toBeNull();
+    expect(screen.queryByText('Right')).toBeNull();
+    // Should show a single set of inputs (reps for fixed repType by default)
+    expect(screen.getByPlaceholderText('Reps')).toBeDefined();
   });
 
   it('shows time input instead of reps for time-based sets', () => {

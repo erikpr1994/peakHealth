@@ -76,120 +76,12 @@ export const SetRow = ({
           {(hasReps(set) || hasDuration(set)) && (
             <>
               {exercise.unilateralMode === 'alternating' ? (
-                <>
-                  <div className="unilateral-input-group">
-                    <label className="unilateral-label">Left</label>
-                    {set.repType === 'time' ? (
-                      <input
-                        type="number"
-                        value={set.duration || ''}
-                        onChange={e =>
-                          handleDurationChange(Number(e.target.value))
-                        }
-                        placeholder="Time"
-                        className="input"
-                      />
-                    ) : (
-                      <>
-                        {dualProgression ? (
-                          <>
-                            <input
-                              type="number"
-                              value={
-                                ('repsMin' in set ? set.repsMin : '') || ''
-                              }
-                              onChange={e =>
-                                handleRepsMinChange(Number(e.target.value))
-                              }
-                              placeholder="Min Reps"
-                              className="input"
-                            />
-                            <input
-                              type="number"
-                              value={
-                                ('repsMax' in set ? set.repsMax : '') || ''
-                              }
-                              onChange={e =>
-                                handleRepsMaxChange(Number(e.target.value))
-                              }
-                              placeholder="Max Reps"
-                              className="input"
-                            />
-                          </>
-                        ) : (
-                          <input
-                            type="number"
-                            value={set.reps || ''}
-                            onChange={e =>
-                              handleRepsChange(Number(e.target.value))
-                            }
-                            placeholder="Reps"
-                            className="input"
-                          />
-                        )}
-                      </>
-                    )}
-                  </div>
-                  <div className="unilateral-input-group">
-                    <label className="unilateral-label">Right</label>
-                    {set.repType === 'time' ? (
-                      <input
-                        type="number"
-                        value={set.duration || ''}
-                        onChange={e =>
-                          handleDurationChange(Number(e.target.value))
-                        }
-                        placeholder="Time"
-                        className="input"
-                      />
-                    ) : (
-                      <>
-                        {dualProgression ? (
-                          <>
-                            <input
-                              type="number"
-                              value={
-                                ('repsMin' in set ? set.repsMin : '') || ''
-                              }
-                              onChange={e =>
-                                handleRepsMinChange(Number(e.target.value))
-                              }
-                              placeholder="Min Reps"
-                              className="input"
-                            />
-                            <input
-                              type="number"
-                              value={
-                                ('repsMax' in set ? set.repsMax : '') || ''
-                              }
-                              onChange={e =>
-                                handleRepsMaxChange(Number(e.target.value))
-                              }
-                              placeholder="Max Reps"
-                              className="input"
-                            />
-                          </>
-                        ) : (
-                          <input
-                            type="number"
-                            value={set.reps || ''}
-                            onChange={e =>
-                              handleRepsChange(Number(e.target.value))
-                            }
-                            placeholder="Reps"
-                            className="input"
-                          />
-                        )}
-                      </>
-                    )}
-                  </div>
-                </>
-              ) : (
+                // For alternating mode, a single input set controls the set values. No duplicated Left/Right inputs.
                 <>
                   {set.repType === 'time' ? (
                     <input
                       type="number"
-                      value={set.duration || ''}
+                      value={set.duration ?? ''}
                       onChange={e =>
                         handleDurationChange(Number(e.target.value))
                       }
@@ -202,7 +94,9 @@ export const SetRow = ({
                         <>
                           <input
                             type="number"
-                            value={('repsMin' in set ? set.repsMin : '') || ''}
+                            value={
+                              ('repsMin' in set ? set.repsMin : undefined) ?? ''
+                            }
                             onChange={e =>
                               handleRepsMinChange(Number(e.target.value))
                             }
@@ -211,7 +105,9 @@ export const SetRow = ({
                           />
                           <input
                             type="number"
-                            value={('repsMax' in set ? set.repsMax : '') || ''}
+                            value={
+                              ('repsMax' in set ? set.repsMax : undefined) ?? ''
+                            }
                             onChange={e =>
                               handleRepsMaxChange(Number(e.target.value))
                             }
@@ -222,7 +118,60 @@ export const SetRow = ({
                       ) : (
                         <input
                           type="number"
-                          value={set.reps || ''}
+                          value={set.reps ?? ''}
+                          onChange={e =>
+                            handleRepsChange(Number(e.target.value))
+                          }
+                          placeholder="Reps"
+                          className="input"
+                        />
+                      )}
+                    </>
+                  )}
+                </>
+              ) : (
+                <>
+                  {set.repType === 'time' ? (
+                    <input
+                      type="number"
+                      value={set.duration ?? ''}
+                      onChange={e =>
+                        handleDurationChange(Number(e.target.value))
+                      }
+                      placeholder="Time"
+                      className="input"
+                    />
+                  ) : (
+                    <>
+                      {dualProgression ? (
+                        <>
+                          <input
+                            type="number"
+                            value={
+                              ('repsMin' in set ? set.repsMin : undefined) ?? ''
+                            }
+                            onChange={e =>
+                              handleRepsMinChange(Number(e.target.value))
+                            }
+                            placeholder="Min Reps"
+                            className="input"
+                          />
+                          <input
+                            type="number"
+                            value={
+                              ('repsMax' in set ? set.repsMax : undefined) ?? ''
+                            }
+                            onChange={e =>
+                              handleRepsMaxChange(Number(e.target.value))
+                            }
+                            placeholder="Max Reps"
+                            className="input"
+                          />
+                        </>
+                      ) : (
+                        <input
+                          type="number"
+                          value={set.reps ?? ''}
                           onChange={e =>
                             handleRepsChange(Number(e.target.value))
                           }
@@ -239,7 +188,7 @@ export const SetRow = ({
           {hasWeight(set) && (
             <input
               type="number"
-              value={set.weight || ''}
+              value={set.weight ?? ''}
               onChange={e => handleWeightChange(Number(e.target.value))}
               placeholder="Weight"
               className="input"
@@ -248,7 +197,7 @@ export const SetRow = ({
           {hasRpe(set) && (
             <input
               type="number"
-              value={set.rpe || ''}
+              value={set.rpe ?? ''}
               onChange={e => handleRpeChange(Number(e.target.value))}
               placeholder="RPE"
               min="1"
@@ -259,7 +208,7 @@ export const SetRow = ({
           {hasDuration(set) && set.repType !== 'time' && (
             <input
               type="number"
-              value={set.duration || ''}
+              value={set.duration ?? ''}
               onChange={e => handleDurationChange(Number(e.target.value))}
               placeholder="Duration"
               className="input"
@@ -273,7 +222,7 @@ export const SetRow = ({
           {hasReps(set) && (
             <input
               type="number"
-              value={set.reps || ''}
+              value={set.reps ?? ''}
               onChange={e => handleRepsChange(Number(e.target.value))}
               placeholder="Reps"
               className="input"
@@ -282,7 +231,7 @@ export const SetRow = ({
           {hasWeight(set) && (
             <input
               type="number"
-              value={set.weight || ''}
+              value={set.weight ?? ''}
               onChange={e => handleWeightChange(Number(e.target.value))}
               placeholder="Weight"
               className="input"
@@ -296,7 +245,7 @@ export const SetRow = ({
           {hasReps(set) && (
             <input
               type="number"
-              value={set.reps || ''}
+              value={set.reps ?? ''}
               onChange={e => handleRepsChange(Number(e.target.value))}
               placeholder="Reps"
               className="input"
@@ -305,7 +254,7 @@ export const SetRow = ({
           {hasWeight(set) && (
             <input
               type="number"
-              value={set.weight || ''}
+              value={set.weight ?? ''}
               onChange={e => handleWeightChange(Number(e.target.value))}
               placeholder="Weight"
               className="input"
@@ -319,7 +268,7 @@ export const SetRow = ({
           {hasWeight(set) && (
             <input
               type="number"
-              value={set.weight || ''}
+              value={set.weight ?? ''}
               onChange={e => handleWeightChange(Number(e.target.value))}
               placeholder="Weight"
               className="input"
@@ -328,7 +277,7 @@ export const SetRow = ({
           {hasRpe(set) && (
             <input
               type="number"
-              value={set.rpe || ''}
+              value={set.rpe ?? ''}
               onChange={e => handleRpeChange(Number(e.target.value))}
               placeholder="RPE"
               min="1"
