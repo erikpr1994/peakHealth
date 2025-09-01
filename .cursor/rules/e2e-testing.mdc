@@ -1,0 +1,374 @@
+---
+description: Guidelines for writing end-to-end tests using Playwright to test complete user workflows
+globs:
+  - 'apps/e2e/**/*.ts'
+  - 'apps/e2e/**/*.spec.ts'
+  - '**/*.e2e.test.ts'
+  - '**/*.e2e.spec.ts'
+alwaysApply: false
+---
+
+# End-to-End Testing
+
+## Purpose
+
+E2E tests validate complete user workflows through the entire application stack, from the UI to the database.
+
+## Test Structure
+
+1. **Use Playwright for E2E testing** - Run with `pnpm test:e2e`
+2. **Organize by user journeys** - Each test file should represent a complete user workflow
+3. **Use test.step for clarity** - Break down complex flows into clear, descriptive steps
+4. **Configure device types in Playwright config** - Not in individual test files
+
+## E2E Test Patterns
+
+### Page Object Model
+
+```typescript
+// pages/LoginPage.ts
+import { Page, Locator } from '@playwright/test';
+
+export class LoginPage {
+  readonly page: Page;
+  readonly emailInput: Locator;
+  readonly passwordInput: Locator;
+  readonly loginButton: Locator;
+  readonly errorMessage: Locator;
+
+  constructor(page: Page) {
+    this.page = page;
+    this.emailInput = page.getByLabel('Email');
+    this.passwordInput = page.getByLabel('Password');
+    this.loginButton = page.getByRole('button', { name: /sign in/i });
+    this.errorMessage = page.getByRole('alert');
+  }
+
+  async goto() {
+    await this.page.goto('/login');
+  }
+
+  async login(email: string, password: string) {
+    await this.emailInput.fill(email);
+    await this.passwordInput.fill(password);
+    await this.loginButton.click();
+  }
+
+  async expectError(message: string) {
+    await expect(this.errorMessage).toContainText(message);
+  }
+}
+```
+
+### Complete User Journey Test
+
+```typescript
+// tests/user-onboarding.spec.ts
+import { test, expect } from '@playwright/test';
+import { LoginPage } from '../pages/LoginPage';
+import { OnboardingPage } from '../pages/OnboardingPage';
+import { DashboardPage } from '../pages/DashboardPage';
+
+test.describe('User Onboarding Journey', () => {
+  test('new user completes onboarding flow', async ({ page }) => {
+    const loginPage = new LoginPage(page);
+    const onboardingPage = new OnboardingPage(page);
+    const dashboardPage = new DashboardPage(page);
+
+    await test.step('navigate to signup page', async () => {
+      await page.goto('/signup');
+      await expect(page).toHaveTitle(/Sign Up/);
+    });
+
+    await test.step('create new account', async () => {
+      await page.getByLabel('Email').fill('newuser@example.com');
+      await page.getByLabel('Password').fill('SecurePass123!');
+      await page.getByLabel('Confirm Password').fill('SecurePass123!');
+      await page.getByRole('button', { name: /create account/i }).click();
+
+      await page.waitForURL('/onboarding/welcome');
+    });
+
+    await test.step('complete profile setup', async () => {
+      await onboardingPage.fillProfile({
+        firstName: 'John',
+        lastName: 'Doe',
+        dateOfBirth: '1990-01-01',
+        fitnessLevel: 'intermediate',
+      });
+      await onboardingPage.clickNext();
+    });
+
+    await test.step('set fitness goals', async () => {
+      await onboardingPage.selectGoals(['weight-loss', 'muscle-gain']);
+      await onboardingPage.setWeeklyTarget(3);
+      await onboardingPage.clickNext();
+    });
+
+    await test.step('skip optional preferences', async () => {
+      await onboardingPage.clickSkip();
+    });
+
+    await test.step('verify dashboard access', async () => {
+      await expect(page).toHaveURL('/dashboard');
+      await expect(dashboardPage.welcomeMessage).toContainText(
+        'Welcome, John!'
+      );
+      await expect(dashboardPage.onboardingComplete).toBeVisible();
+    });
+  });
+});
+```
+
+### Testing Complex Interactions
+
+```typescript
+// tests/workout-tracking.spec.ts
+import { test, expect } from '@playwright/test';
+
+test.describe('Workout Tracking', () => {
+  test.beforeEach(async ({ page }) => {
+    // Login with test user
+    await page.goto('/login');
+    await page.getByLabel('Email').fill('test@example.com');
+    await page.getByLabel('Password').fill('password');
+    await page.getByRole('button', { name: /sign in/i }).click();
+    await page.waitForURL('/dashboard');
+  });
+
+  test('complete workout session', async ({ page }) => {
+    await test.step('start workout from routine', async () => {
+      await page.goto('/routines');
+      await page.getByRole('button', { name: /morning workout/i }).click();
+      await page.getByRole('button', { name: /start workout/i }).click();
+
+      await expect(page.locator('[data-testid="workout-timer"]')).toBeVisible();
+    });
+
+    await test.step('complete first exercise', async () => {
+      // First set
+      await page.getByTestId('weight-input-0').fill('50');
+      await page.getByTestId('reps-input-0').fill('10');
+      await page.getByRole('button', { name: /complete set/i }).click();
+
+      // Wait for rest timer
+      await page.waitForTimeout(2000);
+
+      // Second set
+      await page.getByTestId('weight-input-1').fill('50');
+      await page.getByTestId('reps-input-1').fill('8');
+      await page.getByRole('button', { name: /complete set/i }).click();
+    });
+
+    await test.step('skip to next exercise', async () => {
+      await page.getByRole('button', { name: /next exercise/i }).click();
+      await expect(page.locator('h2')).toContainText('Squats');
+    });
+
+    await test.step('finish workout', async () => {
+      await page.getByRole('button', { name: /finish workout/i }).click();
+
+      // Confirm dialog
+      await page.getByRole('button', { name: /yes, finish/i }).click();
+
+      await expect(page).toHaveURL('/workouts/summary');
+      await expect(
+        page.locator('[data-testid="workout-duration"]')
+      ).toBeVisible();
+      await expect(
+        page.locator('[data-testid="exercises-completed"]')
+      ).toContainText('2');
+    });
+  });
+});
+```
+
+### Testing API and UI Integration
+
+```typescript
+// tests/api-ui-integration.spec.ts
+import { test, expect } from '@playwright/test';
+
+test.describe('API and UI Integration', () => {
+  test('data persistence across sessions', async ({ browser }) => {
+    const context1 = await browser.newContext();
+    const page1 = await context1.newPage();
+
+    await test.step('create routine in first session', async () => {
+      await page1.goto('/login');
+      await page1.getByLabel('Email').fill('user1@example.com');
+      await page1.getByLabel('Password').fill('password');
+      await page1.getByRole('button', { name: /sign in/i }).click();
+
+      await page1.goto('/routines/new');
+      await page1.getByLabel('Routine Name').fill('Test Routine');
+      await page1.getByRole('button', { name: /save routine/i }).click();
+
+      await expect(
+        page1.locator('[data-testid="success-toast"]')
+      ).toBeVisible();
+    });
+
+    await context1.close();
+
+    const context2 = await browser.newContext();
+    const page2 = await context2.newPage();
+
+    await test.step('verify routine in second session', async () => {
+      await page2.goto('/login');
+      await page2.getByLabel('Email').fill('user1@example.com');
+      await page2.getByLabel('Password').fill('password');
+      await page2.getByRole('button', { name: /sign in/i }).click();
+
+      await page2.goto('/routines');
+      await expect(page2.getByText('Test Routine')).toBeVisible();
+    });
+
+    await context2.close();
+  });
+});
+```
+
+## Test Configuration
+
+### Playwright Config Setup
+
+```typescript
+// playwright.config.ts
+import { defineConfig, devices } from '@playwright/test';
+
+export default defineConfig({
+  testDir: './tests',
+  fullyParallel: true,
+  forbidOnly: !!process.env.CI,
+  retries: process.env.CI ? 2 : 0,
+  workers: process.env.CI ? 1 : undefined,
+  reporter: 'html',
+
+  use: {
+    baseURL: 'http://localhost:3000',
+    trace: 'on-first-retry',
+    screenshot: 'only-on-failure',
+    video: 'retain-on-failure',
+  },
+
+  projects: [
+    {
+      name: 'chromium',
+      use: { ...devices['Desktop Chrome'] },
+    },
+    {
+      name: 'Mobile Chrome',
+      use: { ...devices['Pixel 5'] },
+    },
+    {
+      name: 'Mobile Safari',
+      use: { ...devices['iPhone 12'] },
+    },
+  ],
+
+  webServer: {
+    command: 'pnpm build && pnpm start',
+    url: 'http://localhost:3000',
+    reuseExistingServer: !process.env.CI,
+  },
+});
+```
+
+## Best Practices
+
+### Do's
+
+- ✅ Build and start the app before tests (`pnpm build && pnpm start`)
+- ✅ Use data-testid for reliable element selection
+- ✅ Test real user workflows end-to-end
+- ✅ Use Page Object Model for maintainability
+- ✅ Take screenshots on failure for debugging
+- ✅ Clean up test data after each test
+- ✅ Test on multiple viewport sizes
+- ✅ Use explicit waits over hard-coded timeouts
+- ✅ Test both happy and error paths
+
+### Don'ts
+
+- ❌ Build during test runtime - build beforehand
+- ❌ Use CSS selectors that may change
+- ❌ Test implementation details
+- ❌ Rely on specific timing without proper waits
+- ❌ Share authentication state between unrelated tests
+- ❌ Run E2E tests for unit test scenarios
+- ❌ Ignore flaky tests - fix them
+
+## Test Data Management
+
+### Using Test Fixtures
+
+```typescript
+// fixtures/users.ts
+export const testUsers = {
+  admin: {
+    email: 'admin@test.com',
+    password: 'AdminPass123!',
+  },
+  user: {
+    email: 'user@test.com',
+    password: 'UserPass123!',
+  },
+};
+```
+
+### Database Seeding
+
+```typescript
+// global-setup.ts
+import { chromium } from '@playwright/test';
+
+async function globalSetup() {
+  // Seed database with test data
+  await seedTestDatabase();
+
+  // Create authenticated state
+  const browser = await chromium.launch();
+  const page = await browser.newPage();
+
+  await page.goto('/login');
+  await page.fill('[name="email"]', 'test@example.com');
+  await page.fill('[name="password"]', 'password');
+  await page.click('button[type="submit"]');
+
+  await page.context().storageState({ path: 'storage-states/auth.json' });
+  await browser.close();
+}
+
+export default globalSetup;
+```
+
+## Debugging E2E Tests
+
+### Interactive Mode
+
+```bash
+# Run tests in headed mode to see the browser
+pnpm playwright test --headed
+
+# Debug a specific test
+pnpm playwright test --debug tests/user-onboarding.spec.ts
+
+# Use Playwright Inspector
+pnpm playwright test --ui
+```
+
+### Trace Viewer
+
+```bash
+# View trace after test failure
+pnpm playwright show-trace trace.zip
+```
+
+## Performance Tips
+
+- Run E2E tests in parallel where possible
+- Reuse authentication state across tests
+- Use API calls for test data setup when UI is not being tested
+- Configure appropriate timeouts for different operations
+- Run smoke tests on every PR, full suite on main branch
