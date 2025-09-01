@@ -1,0 +1,151 @@
+.workout-builder {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+.workout-builder-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 32px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--color-border, #e5e7eb);
+}
+
+.workout-builder-title {
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--color-text-primary, #111827);
+  margin: 0;
+}
+
+.add-workout-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 500;
+}
+
+.workout-builder-content {
+  min-height: 200px;
+}
+
+.workout-builder-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 64px 24px;
+  background-color: var(--color-background-secondary, #f9fafb);
+  border: 2px dashed var(--color-border, #d1d5db);
+  border-radius: 12px;
+  margin: 24px 0;
+}
+
+.empty-state-icon {
+  font-size: 48px;
+  margin-bottom: 16px;
+}
+
+.empty-state-title {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--color-text-primary, #111827);
+  margin: 0 0 8px 0;
+}
+
+.empty-state-description {
+  font-size: 16px;
+  color: var(--color-text-secondary, #6b7280);
+  margin: 0 0 24px 0;
+  max-width: 400px;
+  line-height: 1.5;
+}
+
+.empty-state-btn {
+  font-weight: 500;
+}
+
+.workouts-list {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .workout-builder {
+    padding: 16px;
+  }
+
+  .workout-builder-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+
+  .workout-builder-title {
+    font-size: 20px;
+  }
+
+  .add-workout-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .workout-builder-empty-state {
+    padding: 48px 16px;
+    margin: 16px 0;
+  }
+
+  .empty-state-icon {
+    font-size: 40px;
+  }
+
+  .empty-state-title {
+    font-size: 18px;
+  }
+
+  .empty-state-description {
+    font-size: 14px;
+    margin-bottom: 20px;
+  }
+
+  .workouts-list {
+    gap: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .workout-builder {
+    padding: 12px;
+  }
+
+  .workout-builder-header {
+    margin-bottom: 20px;
+  }
+
+  .workout-builder-title {
+    font-size: 18px;
+  }
+
+  .workout-builder-empty-state {
+    padding: 32px 12px;
+  }
+
+  .empty-state-icon {
+    font-size: 32px;
+  }
+
+  .empty-state-title {
+    font-size: 16px;
+  }
+
+  .empty-state-description {
+    font-size: 13px;
+  }
+}
