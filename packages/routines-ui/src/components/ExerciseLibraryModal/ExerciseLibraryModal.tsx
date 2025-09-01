@@ -269,10 +269,7 @@ export const ExerciseLibraryModal: React.FC<ExerciseLibraryModalProps> = ({
                   onClick={() => handleExerciseToggle(exercise.id)}
                 >
                   <div className="exercise-header">
-                    <span
-                      className="exercise-icon"
-                      style={{ backgroundColor: exercise.iconColor }}
-                    >
+                    <span className={`exercise-icon ${exercise.iconColor}`}>
                       {exercise.icon}
                     </span>
                     <div className="exercise-info">
