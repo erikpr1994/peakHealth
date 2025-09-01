@@ -1,16 +1,17 @@
 ---
 description: Guidelines for writing end-to-end tests using Playwright to test complete user workflows
 globs:
-  - "apps/e2e/**/*.ts"
-  - "apps/e2e/**/*.spec.ts"
-  - "**/*.e2e.test.ts"
-  - "**/*.e2e.spec.ts"
+  - 'apps/e2e/**/*.ts'
+  - 'apps/e2e/**/*.spec.ts'
+  - '**/*.e2e.test.ts'
+  - '**/*.e2e.spec.ts'
 alwaysApply: false
 ---
 
 # End-to-End Testing
 
 ## Purpose
+
 E2E tests validate complete user workflows through the entire application stack, from the UI to the database.
 
 ## Test Structure
@@ -84,7 +85,7 @@ test.describe('User Onboarding Journey', () => {
       await page.getByLabel('Password').fill('SecurePass123!');
       await page.getByLabel('Confirm Password').fill('SecurePass123!');
       await page.getByRole('button', { name: /create account/i }).click();
-      
+
       await page.waitForURL('/onboarding/welcome');
     });
 
@@ -110,7 +111,9 @@ test.describe('User Onboarding Journey', () => {
 
     await test.step('verify dashboard access', async () => {
       await expect(page).toHaveURL('/dashboard');
-      await expect(dashboardPage.welcomeMessage).toContainText('Welcome, John!');
+      await expect(dashboardPage.welcomeMessage).toContainText(
+        'Welcome, John!'
+      );
       await expect(dashboardPage.onboardingComplete).toBeVisible();
     });
   });
@@ -138,7 +141,7 @@ test.describe('Workout Tracking', () => {
       await page.goto('/routines');
       await page.getByRole('button', { name: /morning workout/i }).click();
       await page.getByRole('button', { name: /start workout/i }).click();
-      
+
       await expect(page.locator('[data-testid="workout-timer"]')).toBeVisible();
     });
 
@@ -147,10 +150,10 @@ test.describe('Workout Tracking', () => {
       await page.getByTestId('weight-input-0').fill('50');
       await page.getByTestId('reps-input-0').fill('10');
       await page.getByRole('button', { name: /complete set/i }).click();
-      
+
       // Wait for rest timer
       await page.waitForTimeout(2000);
-      
+
       // Second set
       await page.getByTestId('weight-input-1').fill('50');
       await page.getByTestId('reps-input-1').fill('8');
@@ -164,13 +167,17 @@ test.describe('Workout Tracking', () => {
 
     await test.step('finish workout', async () => {
       await page.getByRole('button', { name: /finish workout/i }).click();
-      
+
       // Confirm dialog
       await page.getByRole('button', { name: /yes, finish/i }).click();
-      
+
       await expect(page).toHaveURL('/workouts/summary');
-      await expect(page.locator('[data-testid="workout-duration"]')).toBeVisible();
-      await expect(page.locator('[data-testid="exercises-completed"]')).toContainText('2');
+      await expect(
+        page.locator('[data-testid="workout-duration"]')
+      ).toBeVisible();
+      await expect(
+        page.locator('[data-testid="exercises-completed"]')
+      ).toContainText('2');
     });
   });
 });
@@ -192,12 +199,14 @@ test.describe('API and UI Integration', () => {
       await page1.getByLabel('Email').fill('user1@example.com');
       await page1.getByLabel('Password').fill('password');
       await page1.getByRole('button', { name: /sign in/i }).click();
-      
+
       await page1.goto('/routines/new');
       await page1.getByLabel('Routine Name').fill('Test Routine');
       await page1.getByRole('button', { name: /save routine/i }).click();
-      
-      await expect(page1.locator('[data-testid="success-toast"]')).toBeVisible();
+
+      await expect(
+        page1.locator('[data-testid="success-toast"]')
+      ).toBeVisible();
     });
 
     await context1.close();
@@ -210,7 +219,7 @@ test.describe('API and UI Integration', () => {
       await page2.getByLabel('Email').fill('user1@example.com');
       await page2.getByLabel('Password').fill('password');
       await page2.getByRole('button', { name: /sign in/i }).click();
-      
+
       await page2.goto('/routines');
       await expect(page2.getByText('Test Routine')).toBeVisible();
     });
@@ -235,7 +244,7 @@ export default defineConfig({
   retries: process.env.CI ? 2 : 0,
   workers: process.env.CI ? 1 : undefined,
   reporter: 'html',
-  
+
   use: {
     baseURL: 'http://localhost:3000',
     trace: 'on-first-retry',
@@ -269,6 +278,7 @@ export default defineConfig({
 ## Best Practices
 
 ### Do's
+
 - ✅ Build and start the app before tests (`pnpm build && pnpm start`)
 - ✅ Use data-testid for reliable element selection
 - ✅ Test real user workflows end-to-end
@@ -280,6 +290,7 @@ export default defineConfig({
 - ✅ Test both happy and error paths
 
 ### Don'ts
+
 - ❌ Build during test runtime - build beforehand
 - ❌ Use CSS selectors that may change
 - ❌ Test implementation details
@@ -315,16 +326,16 @@ import { chromium } from '@playwright/test';
 async function globalSetup() {
   // Seed database with test data
   await seedTestDatabase();
-  
+
   // Create authenticated state
   const browser = await chromium.launch();
   const page = await browser.newPage();
-  
+
   await page.goto('/login');
   await page.fill('[name="email"]', 'test@example.com');
   await page.fill('[name="password"]', 'password');
   await page.click('button[type="submit"]');
-  
+
   await page.context().storageState({ path: 'storage-states/auth.json' });
   await browser.close();
 }
