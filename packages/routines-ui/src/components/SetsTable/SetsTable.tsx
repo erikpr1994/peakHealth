@@ -1,7 +1,7 @@
 import { useExercise } from '../../hooks/useExercise';
 import { SetRow } from '../SetRow';
 import type { SetsTableProps } from './SetsTable.types';
-import styles from './SetsTable.module.css';
+import './SetsTable.css';
 
 export const SetsTable = ({
   workoutId,
@@ -33,25 +33,25 @@ export const SetsTable = ({
   };
 
   return (
-    <div className={styles.container}>
-      <div className={styles.header}>
+    <div className="sets-table-container">
+      <div className="sets-table-header">
         <button
           type="button"
-          className={styles.addButton}
+          className="sets-table-add-button"
           onClick={() => handleAddSet('warmup')}
         >
           + Add Warmup Set
         </button>
         <button
           type="button"
-          className={styles.addButton}
+          className="sets-table-add-button"
           onClick={() => handleAddSet('working')}
         >
           + Add Working Set
         </button>
       </div>
 
-      <div className={styles.table}>
+      <div className="sets-table">
         {setIds?.map(setId => (
           <SetRow
             key={setId}
