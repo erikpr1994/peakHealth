@@ -6,6 +6,7 @@ import { useExercise } from '../../hooks/useExercise';
 import { SetsTable } from '../SetsTable';
 import { UnilateralExerciseModal } from '../UnilateralExerciseModal';
 import { ApproachSetGeneratorModal } from '../ApproachSetGeneratorModal';
+import { InversePyramidEditor } from '../routine-builder/editors';
 import type { StrengthExerciseProps } from './StrengthExercise.types';
 import type {
   ProgressionMethod,
@@ -177,12 +178,21 @@ export const StrengthExercise: React.FC<StrengthExerciseProps> = ({
               </div>
             )}
 
-            {/* Sets Table */}
-            <SetsTable
-              workoutId={workoutId}
-              sectionId={sectionId}
-              exerciseId={exerciseId}
-            />
+            {/* Sets Table or Progression Editor */}
+            {(exercise as StrengthExerciseType | BodyweightExercise)
+              .progressionMethod === 'inverse-pyramid' ? (
+              <InversePyramidEditor
+                exerciseId={exerciseId}
+                workoutId={workoutId}
+                sectionId={sectionId}
+              />
+            ) : (
+              <SetsTable
+                workoutId={workoutId}
+                sectionId={sectionId}
+                exerciseId={exerciseId}
+              />
+            )}
           </div>
         </Accordion.Content>
       </Accordion>
