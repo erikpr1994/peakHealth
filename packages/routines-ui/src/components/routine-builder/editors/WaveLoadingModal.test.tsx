@@ -29,7 +29,7 @@ describe('WaveLoadingModal', () => {
   it('does not render when closed', () => {
     render(<WaveLoadingModal {...defaultProps} isOpen={false} />);
 
-    expect(screen.queryByText('Configure Wave Loading Sets')).toBeNull();
+    expect(screen.queryByText('Configure Wave Loading')).toBeNull();
   });
 
   it('displays default form values', () => {
