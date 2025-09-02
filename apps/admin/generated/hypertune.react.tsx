@@ -173,11 +173,9 @@ export function useHypertune(): hypertune.RootNode {
 
 export function HypertuneHydrator({
   dehydratedState,
-  rootArgs,
   children,
 }: {
   dehydratedState?: hypertune.DehydratedState | null;
-  rootArgs?: hypertune.RootArgs;
   children: React.ReactElement | null;
 }): React.ReactElement | null {
   const hypertuneSource = useHypertuneSource();
@@ -186,21 +184,13 @@ export function HypertuneHydrator({
     hypertuneSource.hydrate(dehydratedState);
   }
 
-  if (rootArgs) {
-    return (
-      <HypertuneRootProvider rootArgs={rootArgs}>
-        {children}
-      </HypertuneRootProvider>
-    );
-  }
-
   return children;
 }
 
 export function HypertuneClientLogger({
   flagPaths,
 }: {
-  flagPaths: hypertune.FlagPaths[];
+  flagPaths: hypertune.FlagPath[];
 }): null {
   const hypertuneRoot = useHypertune();
   const isReady = hypertuneRoot.isReady();

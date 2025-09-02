@@ -59,7 +59,7 @@ export function HypertuneSourceProvider({
     key: typeof window === 'undefined' ? 'ssr' : 'client',
     initDataProvider: typeof window === 'undefined' ? null : undefined,
     remoteLogging: { mode: typeof window === 'undefined' ? 'off' : undefined },
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
+
     localLogger: typeof window === 'undefined' ? () => {} : undefined,
     ...createSourceOptions,
   });
@@ -173,11 +173,9 @@ export function useHypertune(): hypertune.RootNode {
 
 export function HypertuneHydrator({
   dehydratedState,
-  rootArgs,
   children,
 }: {
   dehydratedState?: hypertune.DehydratedState | null;
-  rootArgs?: hypertune.RootArgs;
   children: React.ReactElement | null;
 }): React.ReactElement | null {
   const hypertuneSource = useHypertuneSource();
@@ -186,21 +184,13 @@ export function HypertuneHydrator({
     hypertuneSource.hydrate(dehydratedState);
   }
 
-  if (rootArgs) {
-    return (
-      <HypertuneRootProvider rootArgs={rootArgs}>
-        {children}
-      </HypertuneRootProvider>
-    );
-  }
-
   return children;
 }
 
 export function HypertuneClientLogger({
   flagPaths,
 }: {
-  flagPaths: hypertune.FlagPaths[];
+  flagPaths: hypertune.FlagPath[];
 }): null {
   const hypertuneRoot = useHypertune();
   const isReady = hypertuneRoot.isReady();
@@ -213,7 +203,6 @@ export function HypertuneClientLogger({
       flagFallbacks: hypertune.flagFallbacks,
       flagPaths,
     });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isReady]);
 
   return null;
