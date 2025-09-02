@@ -35,7 +35,7 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "flags": "^4.0.1",
-    "hypertune": "^2.7.3",
+    "hypertune": "^2.8.1",
     "lucide-react": "^0.542.0",
     "nanoid": "^5.1.5",
     "next": "^15.5.2",
