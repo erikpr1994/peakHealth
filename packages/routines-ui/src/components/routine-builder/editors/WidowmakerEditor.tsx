@@ -22,6 +22,7 @@ export const WidowmakerEditor: React.FC<WidowmakerEditorProps> = ({
   );
 
   const [targetReps, setTargetReps] = useState(20);
+  const [inputValue, setInputValue] = useState('20');
 
   // Initialize target reps from existing sets if they exist
   useEffect(() => {
@@ -34,21 +35,31 @@ export const WidowmakerEditor: React.FC<WidowmakerEditorProps> = ({
       );
       if (existingSet && existingSet.reps) {
         setTargetReps(existingSet.reps);
+        setInputValue(existingSet.reps.toString());
       }
     }
   }, [exercise, setIds]);
 
-  // Handle target reps change
+  // Handle target reps change - allow any input temporarily
   const handleTargetRepsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newTargetReps = parseInt(e.target.value, 10);
-    if (!isNaN(newTargetReps) && newTargetReps > 0) {
-      setTargetReps(newTargetReps);
-    }
+    setInputValue(e.target.value);
   };
 
   // Handle blur event to update the set
   const handleTargetRepsBlur = () => {
-    // Clear existing working sets first
+    const newTargetReps = parseInt(inputValue, 10);
+
+    // Validate the input
+    if (isNaN(newTargetReps) || newTargetReps <= 0) {
+      // Reset to last valid value if input is invalid
+      setInputValue(targetReps.toString());
+      return;
+    }
+
+    // Update the target reps state
+    setTargetReps(newTargetReps);
+
+    // Clear existing sets first
     if (setIds && setIds.length > 0) {
       setIds.forEach(setId => {
         removeSet(setId);
@@ -61,7 +72,7 @@ export const WidowmakerEditor: React.FC<WidowmakerEditorProps> = ({
       setNumber: 1,
       setType: 'working' as const,
       repType: 'fixed' as const,
-      reps: targetReps,
+      reps: newTargetReps,
       notes: 'Widowmaker set',
       restAfter: '0s',
     };
@@ -79,7 +90,7 @@ export const WidowmakerEditor: React.FC<WidowmakerEditorProps> = ({
           id="target-reps"
           type="number"
           min="1"
-          value={targetReps}
+          value={inputValue}
           onChange={handleTargetRepsChange}
           onBlur={handleTargetRepsBlur}
           className="widowmaker-input"

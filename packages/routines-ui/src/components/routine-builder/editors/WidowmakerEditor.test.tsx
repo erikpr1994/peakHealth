@@ -138,7 +138,7 @@ describe('WidowmakerEditor', () => {
     expect(screen.getByDisplayValue('25')).toBeDefined();
   });
 
-  it('updates target reps when input changes', () => {
+  it('allows temporary invalid input without immediate validation', () => {
     render(
       <RoutineBuilderProvider value={mockContextValue}>
         <WidowmakerEditor {...defaultProps} />
@@ -146,12 +146,40 @@ describe('WidowmakerEditor', () => {
     );
 
     const input = screen.getByDisplayValue('20') as HTMLInputElement;
-    fireEvent.change(input, { target: { value: '30' } });
 
-    expect(input.value).toBe('30');
+    // Allow invalid input temporarily
+    fireEvent.change(input, { target: { value: '0' } });
+    expect(input.value).toBe('0');
+
+    fireEvent.change(input, { target: { value: '-5' } });
+    expect(input.value).toBe('-5');
+
+    // HTML number inputs don't allow non-numeric characters, so test with empty string
+    fireEvent.change(input, { target: { value: '' } });
+    expect(input.value).toBe('');
+
+    // Test with another invalid number
+    fireEvent.change(input, { target: { value: '0' } });
+    expect(input.value).toBe('0');
   });
 
-  it('calls addSet and removeSet on blur event', () => {
+  it('updates input value when typing valid numbers', () => {
+    render(
+      <RoutineBuilderProvider value={mockContextValue}>
+        <WidowmakerEditor {...defaultProps} />
+      </RoutineBuilderProvider>
+    );
+
+    const input = screen.getByDisplayValue('20') as HTMLInputElement;
+
+    fireEvent.change(input, { target: { value: '30' } });
+    expect(input.value).toBe('30');
+
+    fireEvent.change(input, { target: { value: '15' } });
+    expect(input.value).toBe('15');
+  });
+
+  it('validates input on blur and creates set with valid values', () => {
     const mockAddSet = vi.fn();
     const mockRemoveSet = vi.fn();
 
@@ -169,6 +197,9 @@ describe('WidowmakerEditor', () => {
     );
 
     const input = screen.getByDisplayValue('20');
+
+    // Change to valid value and blur
+    fireEvent.change(input, { target: { value: '30' } });
     fireEvent.blur(input);
 
     expect(mockRemoveSet).toHaveBeenCalledWith('set-1');
@@ -177,11 +208,57 @@ describe('WidowmakerEditor', () => {
         setNumber: 1,
         setType: 'working',
         repType: 'fixed',
-        reps: 20,
+        reps: 30,
         notes: 'Widowmaker set',
         restAfter: '0s',
       })
     );
+  });
+
+  it('resets invalid input to last valid value on blur', () => {
+    render(
+      <RoutineBuilderProvider value={mockContextValue}>
+        <WidowmakerEditor {...defaultProps} />
+      </RoutineBuilderProvider>
+    );
+
+    const input = screen.getByDisplayValue('20') as HTMLInputElement;
+
+    // Set invalid input
+    fireEvent.change(input, { target: { value: '0' } });
+    expect(input.value).toBe('0');
+
+    // Blur should reset to last valid value
+    fireEvent.blur(input);
+    expect(input.value).toBe('20');
+  });
+
+  it('does not create set when input is invalid on blur', () => {
+    const mockAddSet = vi.fn();
+    const mockRemoveSet = vi.fn();
+
+    mockUseExercise.mockReturnValue({
+      exercise: mockState.workouts[0].sections[0].exercises[0],
+      setIds: ['set-1'],
+      addSet: mockAddSet,
+      removeSet: mockRemoveSet,
+    });
+
+    render(
+      <RoutineBuilderProvider value={mockContextValue}>
+        <WidowmakerEditor {...defaultProps} />
+      </RoutineBuilderProvider>
+    );
+
+    const input = screen.getByDisplayValue('20');
+
+    // Set invalid input and blur
+    fireEvent.change(input, { target: { value: '-5' } });
+    fireEvent.blur(input);
+
+    // Should not call addSet or removeSet with invalid input
+    expect(mockRemoveSet).not.toHaveBeenCalled();
+    expect(mockAddSet).not.toHaveBeenCalled();
   });
 
   it('handles empty setIds gracefully', () => {
@@ -199,15 +276,18 @@ describe('WidowmakerEditor', () => {
     );
 
     const input = screen.getByDisplayValue('20');
+
+    // Change to valid value and blur
+    fireEvent.change(input, { target: { value: '25' } });
     fireEvent.blur(input);
 
     // Should not call removeSet when there are no sets
     expect(
-      screen.getByText('Widowmaker: Single high-rep set targeting 20 reps')
+      screen.getByText('Widowmaker: Single high-rep set targeting 25 reps')
     ).toBeDefined();
   });
 
-  it('validates input to ensure positive numbers', () => {
+  it('synchronizes input value and targetReps state correctly', () => {
     render(
       <RoutineBuilderProvider value={mockContextValue}>
         <WidowmakerEditor {...defaultProps} />
@@ -216,15 +296,16 @@ describe('WidowmakerEditor', () => {
 
     const input = screen.getByDisplayValue('20') as HTMLInputElement;
 
-    // Set valid values
-    fireEvent.change(input, { target: { value: '15' } });
-    expect(input.value).toBe('15');
+    // Change input value
+    fireEvent.change(input, { target: { value: '35' } });
+    expect(input.value).toBe('35');
 
-    fireEvent.change(input, { target: { value: '30' } });
-    expect(input.value).toBe('30');
+    // Blur to validate and update state
+    fireEvent.blur(input);
 
-    // Test that the input accepts reasonable values
-    fireEvent.change(input, { target: { value: '1' } });
-    expect(input.value).toBe('1');
+    // The display should now show the updated target reps
+    expect(
+      screen.getByText('Widowmaker: Single high-rep set targeting 35 reps')
+    ).toBeDefined();
   });
 });
