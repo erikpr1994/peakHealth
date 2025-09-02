@@ -3,6 +3,11 @@
 import React, { useState, useEffect } from 'react';
 import { useExercise } from '../../../hooks/useExercise';
 import type { WidowmakerEditorProps } from './WidowmakerEditor.types';
+import type {
+  WorkoutSet,
+  StrengthExercise,
+  BodyweightExercise,
+} from '@peakhealth/routines-types';
 import './WidowmakerEditor.css';
 
 export const WidowmakerEditor: React.FC<WidowmakerEditorProps> = ({
@@ -22,8 +27,10 @@ export const WidowmakerEditor: React.FC<WidowmakerEditorProps> = ({
   useEffect(() => {
     if (setIds && setIds.length > 0) {
       // For widowmaker, we expect only one set
-      const existingSet = exercise?.sets?.find(
-        set => set.setType === 'working'
+      // Cast to StrengthExercise or BodyweightExercise to access sets
+      const typedExercise = exercise as StrengthExercise | BodyweightExercise;
+      const existingSet = typedExercise?.sets?.find(
+        (set: WorkoutSet) => set.setType === 'working'
       );
       if (existingSet && existingSet.reps) {
         setTargetReps(existingSet.reps);
@@ -49,11 +56,11 @@ export const WidowmakerEditor: React.FC<WidowmakerEditorProps> = ({
     }
 
     // Add the widowmaker set
-    const widowmakerSet = {
+    const widowmakerSet: WorkoutSet = {
       _id: `temp-${Date.now()}`,
       setNumber: 1,
-      setType: 'working',
-      repType: 'fixed',
+      setType: 'working' as const,
+      repType: 'fixed' as const,
       reps: targetReps,
       notes: 'Widowmaker set',
       restAfter: '0s',

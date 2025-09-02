@@ -37,10 +37,11 @@ describe('WidowmakerEditor', () => {
               {
                 _id: 'exercise-1',
                 exerciseId: 'exercise-1',
-                name: 'Test Exercise',
+                exerciseVariantId: 'variant-1',
+                orderIndex: 0,
                 type: 'strength',
                 progressionMethod: 'widowmaker',
-                unilateralMode: 'none',
+                unilateralMode: undefined,
                 sets: [
                   {
                     _id: 'set-1',
@@ -58,6 +59,14 @@ describe('WidowmakerEditor', () => {
         ],
       },
     ],
+    schemaVersion: '1.0.0',
+    userId: 'user-1',
+    createdBy: 'user-1',
+    routineType: 'user-created',
+    isActive: true,
+    isFavorite: false,
+    completedWorkouts: 0,
+    totalWorkouts: 1,
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
   };
