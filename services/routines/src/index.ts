@@ -5,6 +5,7 @@ import { verifySupabaseJWT } from './middleware/auth';
 import { globalLimiter, authLimiter } from './middleware/rateLimit';
 import userRoutinesRoutes from './routes/v1/userRoutines';
 import { errorHandler, notFoundHandler } from './utils/error-handler';
+import { initializeHypertune, shutdownHypertune } from './config/hypertune';
 
 // Load environment variables from .env file
 // Required variables:
@@ -72,6 +73,28 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   errorHandler(err, req, res);
 });
 
-app.listen(port, () => {
-  console.log(`Routines service is running on port ${port}`);
-});
+// Initialize Hypertune before starting the server
+initializeHypertune()
+  .then(() => {
+    const server = app.listen(port, () => {
+      console.log(`Routines service is running on port ${port}`);
+    });
+
+    // Handle graceful shutdown
+    const gracefulShutdown = async () => {
+      console.log('Shutting down gracefully...');
+      await shutdownHypertune();
+      server.close(() => {
+        console.log('Server closed');
+        process.exit(0);
+      });
+    };
+
+    // Listen for termination signals
+    process.on('SIGTERM', gracefulShutdown);
+    process.on('SIGINT', gracefulShutdown);
+  })
+  .catch(err => {
+    console.error('Failed to start the server:', err);
+    process.exit(1);
+  });

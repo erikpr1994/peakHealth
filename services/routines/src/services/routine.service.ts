@@ -1,6 +1,10 @@
 import { Types } from 'mongoose';
 import UserCreatedRoutineModel from '../domain/models/user-created-routine';
 import { ApiError } from '../utils/error-handler';
+import {
+  getMaxRoutinesPerUser,
+  isAdvancedFilteringEnabled,
+} from '../features/feature-flags';
 
 export class RoutineService {
   /**
@@ -11,6 +15,19 @@ export class RoutineService {
    */
   async createRoutine(userId: string, routineData: any) {
     try {
+      // Check if the user has reached their routine limit
+      const maxRoutines = getMaxRoutinesPerUser({ userId });
+      const userRoutineCount = await UserCreatedRoutineModel.countDocuments({
+        userId,
+      });
+
+      if (userRoutineCount >= maxRoutines) {
+        throw new ApiError(
+          `You have reached the maximum limit of ${maxRoutines} routines. Please delete some routines before creating new ones.`,
+          403
+        );
+      }
+
       // Ensure the userId is set to the authenticated user
       const routineWithUserId = {
         ...routineData,
@@ -47,7 +64,8 @@ export class RoutineService {
     userId: string,
     type?: 'active' | 'user' | 'assigned',
     page: number = 1,
-    limit: number = 20
+    limit: number = 20,
+    filters?: Record<string, any>
   ) {
     try {
       let query: any = { userId };
@@ -62,6 +80,43 @@ export class RoutineService {
       } else if (type === 'active') {
         // Only active routine (implementation would depend on how active status is tracked)
         // This is a placeholder for future implementation
+      }
+
+      // Check if advanced filtering is enabled and apply additional filters
+      const advancedFilteringEnabled = isAdvancedFilteringEnabled({ userId });
+
+      if (advancedFilteringEnabled && filters) {
+        console.log(
+          'Advanced filtering is enabled, applying additional filters'
+        );
+
+        // Apply additional filters if they exist
+        if (filters.name) {
+          query.name = { $regex: filters.name, $options: 'i' }; // Case-insensitive search
+        }
+
+        if (filters.difficulty) {
+          query.difficulty = filters.difficulty;
+        }
+
+        if (
+          filters.tags &&
+          Array.isArray(filters.tags) &&
+          filters.tags.length > 0
+        ) {
+          query.tags = { $in: filters.tags };
+        }
+
+        if (filters.createdAfter) {
+          query.createdAt = { $gte: new Date(filters.createdAfter) };
+        }
+
+        if (filters.createdBefore) {
+          query.createdAt = {
+            ...query.createdAt,
+            $lte: new Date(filters.createdBefore),
+          };
+        }
       }
 
       // Calculate skip value for pagination
@@ -81,6 +136,7 @@ export class RoutineService {
         totalItems,
         page,
         limit,
+        advancedFilteringEnabled, // Include flag status in response
       };
     } catch (error) {
       throw error;
@@ -210,4 +266,3 @@ export class RoutineService {
 
 // Export a singleton instance
 export const routineService = new RoutineService();
-

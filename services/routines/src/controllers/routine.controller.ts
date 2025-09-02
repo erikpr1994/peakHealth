@@ -59,13 +59,31 @@ export class RoutineController {
       // Parse pagination parameters
       const { page, limit } = parsePaginationParams(req.query);
 
-      // Get routines using the service with pagination
-      const { routines, totalItems } = await routineService.getRoutinesByUser(
-        userId,
-        type,
-        page,
-        limit
-      );
+      // Extract filter parameters from query
+      const filters: Record<string, any> = {};
+
+      // Add filters if they exist in the query
+      if (req.query.name) filters.name = req.query.name;
+      if (req.query.difficulty) filters.difficulty = req.query.difficulty;
+      if (req.query.tags) {
+        // Handle tags as comma-separated string
+        filters.tags = (req.query.tags as string)
+          .split(',')
+          .map(tag => tag.trim());
+      }
+      if (req.query.createdAfter) filters.createdAfter = req.query.createdAfter;
+      if (req.query.createdBefore)
+        filters.createdBefore = req.query.createdBefore;
+
+      // Get routines using the service with pagination and filters
+      const { routines, totalItems, advancedFilteringEnabled } =
+        await routineService.getRoutinesByUser(
+          userId,
+          type,
+          page,
+          limit,
+          Object.keys(filters).length > 0 ? filters : undefined
+        );
 
       // Create pagination metadata
       const paginationMetadata = createPaginationMetadata(
@@ -74,10 +92,16 @@ export class RoutineController {
         totalItems
       );
 
-      // Return success response with the routines and pagination metadata
+      // Return success response with the routines, pagination metadata, and feature flag status
       return res.status(200).json({
         data: routines,
         pagination: paginationMetadata,
+        features: {
+          advancedFiltering: {
+            enabled: advancedFilteringEnabled,
+            appliedFilters: Object.keys(filters).length > 0 ? filters : null,
+          },
+        },
       });
     } catch (error) {
       next(error);
