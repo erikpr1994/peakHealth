@@ -83,7 +83,7 @@ export const InversePyramidEditor: React.FC<InversePyramidEditorProps> = ({
 
       {/* Configure Pyramid Button */}
       <button
-        className="configure-pyramid-btn"
+        className="configure-pyramid-button"
         onClick={handleOpenModal}
         type="button"
       >
