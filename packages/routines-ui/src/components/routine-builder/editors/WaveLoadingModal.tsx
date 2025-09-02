@@ -21,6 +21,12 @@ export const WaveLoadingModal: React.FC<WaveLoadingModalProps> = ({
 
   const [errors, setErrors] = useState<string[]>([]);
 
+  // Helper function to calculate maximum allowed repsDecrement
+  const getMaxRepsDecrement = () => {
+    if (formData.numberOfWaves <= 1) return formData.baseReps - 1;
+    return Math.floor((formData.baseReps - 1) / (formData.numberOfWaves - 1));
+  };
+
   if (!isOpen) {
     return null;
   }
@@ -60,8 +66,12 @@ export const WaveLoadingModal: React.FC<WaveLoadingModalProps> = ({
       newErrors.push('Reps decrement must be 0 or greater');
     }
 
-    if (formData.repsDecrement >= formData.baseReps) {
-      newErrors.push('Reps decrement must be less than base reps');
+    // Check that repsDecrement doesn't exceed the maximum allowed value
+    const maxRepsDecrement = getMaxRepsDecrement();
+    if (formData.repsDecrement > maxRepsDecrement) {
+      newErrors.push(
+        `Reps decrement too high: maximum allowed is ${maxRepsDecrement} to ensure last wave has at least 1 rep`
+      );
     }
 
     setErrors(newErrors);
@@ -200,7 +210,7 @@ export const WaveLoadingModal: React.FC<WaveLoadingModalProps> = ({
                 value={formData.repsDecrement}
                 onChange={handleInputChange}
                 min="0"
-                max={formData.baseReps - 1}
+                max={getMaxRepsDecrement()}
               />
             </div>
 

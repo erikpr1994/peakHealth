@@ -96,21 +96,72 @@ describe('WaveLoadingModal', () => {
   });
 
   it('validates form inputs and shows errors for invalid values', () => {
-    render(<WaveLoadingModal {...defaultProps} />);
+    render(
+      <WaveLoadingModal
+        isOpen={true}
+        onClose={vi.fn()}
+        onGenerateSets={vi.fn()}
+      />
+    );
 
-    // Set invalid values
-    const numberOfWavesInput = screen.getByDisplayValue(
-      '3'
-    ) as HTMLInputElement;
-    const setsPerWaveInput = screen.getByDisplayValue('2') as HTMLInputElement;
-
+    // Test invalid numberOfWaves
+    const numberOfWavesInput = screen.getByLabelText('Number of Waves');
     fireEvent.change(numberOfWavesInput, { target: { value: '0' } });
+    fireEvent.click(screen.getByText('Generate Sets'));
+    expect(
+      screen.getByText('Number of waves must be at least 1')
+    ).toBeDefined();
+
+    // Test invalid setsPerWave
+    fireEvent.change(numberOfWavesInput, { target: { value: '3' } });
+    const setsPerWaveInput = screen.getByLabelText('Sets per Wave');
     fireEvent.change(setsPerWaveInput, { target: { value: '0' } });
+    fireEvent.click(screen.getByText('Generate Sets'));
+    expect(screen.getByText('Sets per wave must be at least 1')).toBeDefined();
 
-    const generateButton = screen.getByText('Generate Sets');
-    fireEvent.click(generateButton);
+    // Test invalid baseWeight
+    fireEvent.change(setsPerWaveInput, { target: { value: '2' } });
+    const baseWeightInput = screen.getByLabelText('Base Weight (lbs)');
+    fireEvent.change(baseWeightInput, { target: { value: '0' } });
+    fireEvent.click(screen.getByText('Generate Sets'));
+    expect(
+      screen.getByText('Base weight must be greater than 0')
+    ).toBeDefined();
 
-    // Should not call onGenerateSets with invalid values
-    expect(defaultProps.onGenerateSets).not.toHaveBeenCalled();
+    // Test invalid weightIncrement
+    fireEvent.change(baseWeightInput, { target: { value: '100' } });
+    const weightIncrementInput = screen.getByLabelText(
+      'Weight Increment (lbs)'
+    );
+    fireEvent.change(weightIncrementInput, { target: { value: '-5' } });
+    fireEvent.click(screen.getByText('Generate Sets'));
+    expect(
+      screen.getByText('Weight increment must be 0 or greater')
+    ).toBeDefined();
+
+    // Test invalid baseReps
+    fireEvent.change(weightIncrementInput, { target: { value: '10' } });
+    const baseRepsInput = screen.getByLabelText('Base Reps');
+    fireEvent.change(baseRepsInput, { target: { value: '0' } });
+    fireEvent.click(screen.getByText('Generate Sets'));
+    expect(screen.getByText('Base reps must be greater than 0')).toBeDefined();
+
+    // Test invalid repsDecrement
+    fireEvent.change(baseRepsInput, { target: { value: '8' } });
+    const repsDecrementInput = screen.getByLabelText('Reps Decrement');
+    fireEvent.change(repsDecrementInput, { target: { value: '-1' } });
+    fireEvent.click(screen.getByText('Generate Sets'));
+    expect(
+      screen.getByText('Reps decrement must be 0 or greater')
+    ).toBeDefined();
+
+    // Test repsDecrement that would result in zero/negative reps in later waves
+    fireEvent.change(repsDecrementInput, { target: { value: '4' } });
+    fireEvent.click(screen.getByText('Generate Sets'));
+    expect(
+      screen.getByText(
+        /Reps decrement too high: maximum allowed is \d+ to ensure last wave has at least 1 rep/
+      )
+    ).toBeDefined();
   });
 });
