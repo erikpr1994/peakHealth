@@ -115,11 +115,19 @@ export function generateWaveLoadingSets(
   }
 
   if (weightIncrement < 0) {
-    throw new Error('Weight increment must be positive');
+    throw new Error('Weight increment must be non-negative');
   }
 
   if (repsDecrement < 0) {
-    throw new Error('Reps decrement must be positive');
+    throw new Error('Reps decrement must be non-negative');
+  }
+
+  // Validate that reps won't become negative across all waves
+  const maxRepsDecrement = (numberOfWaves - 1) * repsDecrement;
+  if (baseReps <= maxRepsDecrement) {
+    throw new Error(
+      `Base reps (${baseReps}) must be greater than total reps decrement (${maxRepsDecrement}) to ensure all sets have positive rep counts`
+    );
   }
 
   const sets: Omit<

@@ -132,13 +132,26 @@ describe('Progression Generators', () => {
     it('throws error for negative weight increment', () => {
       expect(() =>
         generateWaveLoadingSets({ ...validConfig, weightIncrement: -5 })
-      ).toThrow('Weight increment must be positive');
+      ).toThrow('Weight increment must be non-negative');
     });
 
     it('throws error for negative reps decrement', () => {
       expect(() =>
         generateWaveLoadingSets({ ...validConfig, repsDecrement: -1 })
-      ).toThrow('Reps decrement must be positive');
+      ).toThrow('Reps decrement must be non-negative');
+    });
+
+    it('throws error when reps would become negative', () => {
+      expect(() =>
+        generateWaveLoadingSets({
+          ...validConfig,
+          numberOfWaves: 5,
+          baseReps: 3,
+          repsDecrement: 1,
+        })
+      ).toThrow(
+        'Base reps (3) must be greater than total reps decrement (4) to ensure all sets have positive rep counts'
+      );
     });
   });
 });
