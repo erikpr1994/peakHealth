@@ -2,8 +2,8 @@ import { Types } from 'mongoose';
 import {
   RoutineAssignmentModel,
   RoutineAssignmentDocument,
-} from '../models/RoutineAssignment';
-import { TemplateRoutineModel } from '../models/Routine';
+} from '../models/routine-assignment';
+import { TemplateRoutineModel } from '../models/routine';
 import { createApiError } from '../utils/error-handler';
 import { logger } from '../utils/logger';
 

@@ -22,3 +22,6 @@ export {
   type AssignmentQueryFilters,
   type ProgressUpdateData,
 } from './RoutineAssignmentService';
+
+// Workout Service
+export { WorkoutService } from './WorkoutService';

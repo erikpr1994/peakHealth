@@ -16,18 +16,30 @@ export {
   RoutineModel as Routine,
   UserCreatedRoutineModel as UserCreatedRoutine,
   TemplateRoutineModel as TemplateRoutine,
-} from './Routine';
+} from './routine';
 
-export type { RoutineDocument } from './Routine';
+export type { RoutineDocument } from './routine';
 
 // Routine Assignment Models
 export {
   RoutineAssignmentModel,
   // Alias for easier imports
   RoutineAssignmentModel as RoutineAssignment,
-} from './RoutineAssignment';
+} from './routine-assignment';
 
-export type { RoutineAssignmentDocument } from './RoutineAssignment';
+export type { RoutineAssignmentDocument } from './routine-assignment';
+
+// Workout Models
+export {
+  WorkoutModel,
+  StrengthWorkoutModel,
+  isStrengthWorkout,
+  // Aliases for easier imports
+  WorkoutModel as Workout,
+  StrengthWorkoutModel as StrengthWorkout,
+} from './workout';
+
+export type { WorkoutDocument } from './workout';
 
 // Database connection utilities
 export {

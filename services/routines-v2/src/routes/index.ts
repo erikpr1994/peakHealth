@@ -7,11 +7,13 @@
 import { Router } from 'express';
 import routinesRouter from './routines';
 import assignmentsRouter from './assignments';
+import workoutsRouter from './workouts';
 
 const router: Router = Router();
 
 // Mount route modules
 router.use('/routines', routinesRouter);
 router.use('/assignments', assignmentsRouter);
+router.use('/workouts', workoutsRouter);
 
 export default router;

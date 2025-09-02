@@ -6,7 +6,7 @@ import {
   RoutineDocument,
   isUserCreatedRoutine,
   isTemplateRoutine,
-} from '../models/Routine';
+} from '../models/routine';
 import { createApiError } from '../utils/error-handler';
 import { logger } from '../utils/logger';
 import type {
