@@ -6,7 +6,10 @@ import { useExercise } from '../../hooks/useExercise';
 import { SetsTable } from '../SetsTable';
 import { UnilateralExerciseModal } from '../UnilateralExerciseModal';
 import { ApproachSetGeneratorModal } from '../ApproachSetGeneratorModal';
-import { InversePyramidEditor } from '../routine-builder/editors';
+import {
+  InversePyramidEditor,
+  WaveLoadingEditor,
+} from '../routine-builder/editors';
 import type { StrengthExerciseProps } from './StrengthExercise.types';
 import type {
   ProgressionMethod,
@@ -36,7 +39,9 @@ export const StrengthExercise: React.FC<StrengthExerciseProps> = ({
   useEffect(() => {
     const isUnilateral =
       exercise?.type === 'strength' || exercise?.type === 'bodyweight';
-    const hasUnilateralConfig = (exercise as any)?.unilateralMode;
+    const hasUnilateralConfig = (
+      exercise as StrengthExerciseType | BodyweightExercise
+    )?.unilateralMode;
     if (isUnilateral && !hasUnilateralConfig) {
       // Only auto-open for new exercises without unilateral config
       // setIsUnilateralModalOpen(true);
@@ -141,6 +146,7 @@ export const StrengthExercise: React.FC<StrengthExerciseProps> = ({
                     <option value="myo-reps">Myo-Reps</option>
                     <option value="widowmaker">Widowmaker</option>
                     <option value="amrap">AMRAP</option>
+                    <option value="wave-loading">Wave Loading</option>
                   </select>
                 </div>
               )}
@@ -182,6 +188,13 @@ export const StrengthExercise: React.FC<StrengthExerciseProps> = ({
             {(exercise as StrengthExerciseType | BodyweightExercise)
               .progressionMethod === 'inverse-pyramid' ? (
               <InversePyramidEditor
+                exerciseId={exerciseId}
+                workoutId={workoutId}
+                sectionId={sectionId}
+              />
+            ) : (exercise as StrengthExerciseType | BodyweightExercise)
+                .progressionMethod === 'wave-loading' ? (
+              <WaveLoadingEditor
                 exerciseId={exerciseId}
                 workoutId={workoutId}
                 sectionId={sectionId}

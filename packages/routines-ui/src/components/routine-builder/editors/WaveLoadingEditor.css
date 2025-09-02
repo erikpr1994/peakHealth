@@ -1,0 +1,46 @@
+.wave-loading-editor {
+  margin-top: 16px;
+}
+
+.wave-loading-editor-actions {
+  margin-top: 16px;
+  display: flex;
+  justify-content: center;
+}
+
+.configure-wave-loading-button {
+  background-color: #3b82f6;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 10px 20px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.configure-wave-loading-button:hover {
+  background-color: #2563eb;
+}
+
+.configure-wave-loading-button:active {
+  background-color: #1d4ed8;
+}
+
+.configure-wave-loading-button:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+/* Responsive design */
+@media (max-width: 640px) {
+  .wave-loading-editor-actions {
+    margin-top: 12px;
+  }
+
+  .configure-wave-loading-button {
+    width: 100%;
+    padding: 12px 20px;
+  }
+}
