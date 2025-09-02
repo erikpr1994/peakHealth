@@ -28,6 +28,7 @@ export type ProgressionMethod =
   | 'myo-reps'
   | 'amrap'
   | 'pyramid'
+  | 'inverse-pyramid'
   | 'wave-loading'
   | 'cluster-sets'
   | 'rest-pause';

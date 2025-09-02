@@ -1,0 +1,44 @@
+.inverse-pyramid-editor {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.inverse-pyramid-editor-controls {
+  display: flex;
+  justify-content: center;
+  padding: 16px 0;
+}
+
+.configure-pyramid-button {
+  background-color: #3b82f6;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 12px 24px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.configure-pyramid-button:hover {
+  background-color: #2563eb;
+}
+
+.configure-pyramid-button:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+/* Responsive design */
+@media (max-width: 640px) {
+  .inverse-pyramid-editor-controls {
+    padding: 12px 0;
+  }
+
+  .configure-pyramid-button {
+    width: 100%;
+    padding: 14px 24px;
+  }
+}

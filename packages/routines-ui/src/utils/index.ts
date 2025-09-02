@@ -2,3 +2,4 @@
 export * from './routine-selectors';
 export * from './idGenerator';
 export * from './workoutCreation';
+export * from './progressionGenerators';

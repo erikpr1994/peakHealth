@@ -10,6 +10,7 @@ export { WarmupSection } from './WarmupSection';
 export { MainStrengthSection } from './MainStrengthSection';
 export { WorkoutAccordion } from './WorkoutAccordion';
 export { WorkoutBuilder } from './WorkoutBuilder';
+export * from './routine-builder';
 
 // Temporary export to make TypeScript happy
 export const ComponentsPlaceholder = 'ComponentsPlaceholder';
