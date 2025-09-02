@@ -1,0 +1,67 @@
+.widowmaker-editor {
+  padding: 16px;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background-color: var(--color-background);
+  margin-top: 16px;
+}
+
+.widowmaker-config {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.widowmaker-label {
+  font-weight: 500;
+  color: var(--color-text);
+  min-width: 100px;
+}
+
+.widowmaker-input {
+  padding: 8px 12px;
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  font-size: 14px;
+  width: 80px;
+  text-align: center;
+}
+
+.widowmaker-input:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 2px var(--color-primary-alpha);
+}
+
+.widowmaker-info {
+  padding: 12px;
+  background-color: var(--color-muted);
+  border-radius: 4px;
+  border-left: 4px solid var(--color-primary);
+}
+
+.widowmaker-info p {
+  margin: 0;
+  font-size: 14px;
+  color: var(--color-text-muted);
+  font-style: italic;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .widowmaker-config {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .widowmaker-label {
+    min-width: auto;
+  }
+
+  .widowmaker-input {
+    width: 100%;
+    max-width: 120px;
+  }
+}
