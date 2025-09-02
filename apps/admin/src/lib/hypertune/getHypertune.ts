@@ -47,9 +47,11 @@ export default async function getHypertune(
       context: {
         environment: getEnvironment(),
         user: {
-          anonymousId: '0',
           id: '0', // This will be replaced with the actual user ID in a real implementation
           email: 'admin@example.com', // This will be replaced with the actual user email
+        },
+        anonymousUser: {
+          id: '0', // This will be replaced with the actual anonymous user ID in a real implementation
         },
       },
     },

@@ -64,6 +64,134 @@ function getVercelFlagValuesEntries(
   });
 }
 
+export const routinesV2Flag = flag<boolean>({
+  key: 'routinesV2',
+  defaultValue: false,
+  origin:
+    'https://app.hypertune.com/projects/6203/main/draft/logic?selected_field_path=root%3EroutinesV2',
+  options: [
+    { label: 'Off', value: false },
+    { label: 'On', value: true },
+  ],
+
+  async decide(params) {
+    const hypertune = await getHypertune(params);
+    return hypertune.routinesV2({ fallback: false });
+  },
+});
+
+export const trainerAndClubsFlag = flag<boolean>({
+  key: 'trainerAndClubs',
+  defaultValue: false,
+  origin:
+    'https://app.hypertune.com/projects/6203/main/draft/logic?selected_field_path=root%3EtrainerAndClubs',
+  options: [
+    { label: 'Off', value: false },
+    { label: 'On', value: true },
+  ],
+
+  async decide(params) {
+    const hypertune = await getHypertune(params);
+    return hypertune.trainerAndClubs({ fallback: false });
+  },
+});
+
+export const suggestionsFlag = flag<boolean>({
+  key: 'suggestions',
+  defaultValue: false,
+  origin:
+    'https://app.hypertune.com/projects/6203/main/draft/logic?selected_field_path=root%3Esuggestions',
+  options: [
+    { label: 'Off', value: false },
+    { label: 'On', value: true },
+  ],
+
+  async decide(params) {
+    const hypertune = await getHypertune(params);
+    return hypertune.suggestions({ fallback: false });
+  },
+});
+
+export const performanceFlag = flag<boolean>({
+  key: 'performance',
+  defaultValue: false,
+  origin:
+    'https://app.hypertune.com/projects/6203/main/draft/logic?selected_field_path=root%3Eperformance',
+  options: [
+    { label: 'Off', value: false },
+    { label: 'On', value: true },
+  ],
+
+  async decide(params) {
+    const hypertune = await getHypertune(params);
+    return hypertune.performance({ fallback: false });
+  },
+});
+
+export const healthFlag = flag<boolean>({
+  key: 'health',
+  defaultValue: false,
+  origin:
+    'https://app.hypertune.com/projects/6203/main/draft/logic?selected_field_path=root%3Ehealth',
+  options: [
+    { label: 'Off', value: false },
+    { label: 'On', value: true },
+  ],
+
+  async decide(params) {
+    const hypertune = await getHypertune(params);
+    return hypertune.health({ fallback: false });
+  },
+});
+
+export const gymsFlag = flag<boolean>({
+  key: 'gyms',
+  defaultValue: false,
+  origin:
+    'https://app.hypertune.com/projects/6203/main/draft/logic?selected_field_path=root%3Egyms',
+  options: [
+    { label: 'Off', value: false },
+    { label: 'On', value: true },
+  ],
+
+  async decide(params) {
+    const hypertune = await getHypertune(params);
+    return hypertune.gyms({ fallback: false });
+  },
+});
+
+export const equipmentFlag = flag<boolean>({
+  key: 'equipment',
+  defaultValue: false,
+  origin:
+    'https://app.hypertune.com/projects/6203/main/draft/logic?selected_field_path=root%3Eequipment',
+  options: [
+    { label: 'Off', value: false },
+    { label: 'On', value: true },
+  ],
+
+  async decide(params) {
+    const hypertune = await getHypertune(params);
+    return hypertune.equipment({ fallback: false });
+  },
+});
+
+export const calendarFlag = flag<boolean>({
+  key: 'calendar',
+  defaultValue: false,
+  origin:
+    'https://app.hypertune.com/projects/6203/main/draft/logic?selected_field_path=root%3Ecalendar',
+  options: [
+    { label: 'Off', value: false },
+    { label: 'On', value: true },
+  ],
+
+  async decide(params) {
+    const hypertune = await getHypertune(params);
+    return hypertune.calendar({ fallback: false });
+  },
+});
+
 export const runningFlag = flag<boolean>({
   key: 'running',
   defaultValue: false,
