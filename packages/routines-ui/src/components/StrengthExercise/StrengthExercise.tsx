@@ -9,6 +9,7 @@ import { ApproachSetGeneratorModal } from '../ApproachSetGeneratorModal';
 import {
   InversePyramidEditor,
   WaveLoadingEditor,
+  WidowmakerEditor,
 } from '../routine-builder/editors';
 import type { StrengthExerciseProps } from './StrengthExercise.types';
 import type {
@@ -195,6 +196,13 @@ export const StrengthExercise: React.FC<StrengthExerciseProps> = ({
             ) : (exercise as StrengthExerciseType | BodyweightExercise)
                 .progressionMethod === 'wave-loading' ? (
               <WaveLoadingEditor
+                exerciseId={exerciseId}
+                workoutId={workoutId}
+                sectionId={sectionId}
+              />
+            ) : (exercise as StrengthExerciseType | BodyweightExercise)
+                .progressionMethod === 'widowmaker' ? (
+              <WidowmakerEditor
                 exerciseId={exerciseId}
                 workoutId={workoutId}
                 sectionId={sectionId}

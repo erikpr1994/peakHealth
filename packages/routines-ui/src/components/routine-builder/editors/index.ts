@@ -10,4 +10,7 @@ export { WaveLoadingModal } from './WaveLoadingModal';
 export type {
   WaveLoadingEditorProps,
   WaveLoadingModalProps,
-} from './WaveLoadingEditor.types';
+} from './WaveLoadingModal.types';
+
+export { WidowmakerEditor } from './WidowmakerEditor';
+export type { WidowmakerEditorProps } from './WidowmakerEditor.types';
