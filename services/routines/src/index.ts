@@ -3,7 +3,7 @@ import cors from 'cors';
 import helmet from 'helmet';
 import morgan from 'morgan';
 import dotenv from 'dotenv';
-import { connectToDatabase } from './config/database';
+import { connectToDatabase, closeDatabase } from './config/database';
 import { healthRouter } from './api/health';
 import { errorHandler } from './middleware/errorHandler';
 
@@ -31,6 +31,49 @@ app.use('/api/health', healthRouter);
 // Error handling middleware (must be last)
 app.use(errorHandler);
 
+// Store server instance for graceful shutdown
+let server: any;
+
+// Graceful shutdown function
+async function gracefulShutdown(signal: string) {
+  console.log(`\n${signal} received, shutting down gracefully...`);
+
+  if (server) {
+    // Close the server first (stops accepting new connections)
+    server.close((err: any) => {
+      if (err) {
+        console.error('Error during server close:', err);
+        process.exit(1);
+      }
+
+      console.log('✅ HTTP server closed');
+
+      // Close database connection after server is closed
+      closeDatabase()
+        .then(() => {
+          console.log('✅ Graceful shutdown completed');
+          process.exit(0);
+        })
+        .catch(error => {
+          console.error('❌ Error during database close:', error);
+          process.exit(1);
+        });
+    });
+
+    // Force close after 30 seconds if graceful shutdown fails
+    setTimeout(() => {
+      console.error(
+        '❌ Could not close connections in time, forcefully shutting down'
+      );
+      process.exit(1);
+    }, 30000);
+  } else {
+    // If server hasn't started yet, just close database and exit
+    await closeDatabase();
+    process.exit(0);
+  }
+}
+
 // Start server
 async function startServer() {
   try {
@@ -38,8 +81,8 @@ async function startServer() {
     await connectToDatabase();
     console.log('✅ Connected to MongoDB');
 
-    // Start Express server
-    app.listen(PORT, () => {
+    // Start Express server and store the instance
+    server = app.listen(PORT, () => {
       console.log(`🚀 Routines service running on port ${PORT}`);
       console.log(
         `📊 Health check available at http://localhost:${PORT}/api/health`
@@ -51,15 +94,8 @@ async function startServer() {
   }
 }
 
-// Handle graceful shutdown
-process.on('SIGTERM', () => {
-  console.log('SIGTERM received, shutting down gracefully');
-  process.exit(0);
-});
-
-process.on('SIGINT', () => {
-  console.log('SIGINT received, shutting down gracefully');
-  process.exit(0);
-});
+// Handle graceful shutdown signals
+process.on('SIGTERM', () => gracefulShutdown('SIGTERM'));
+process.on('SIGINT', () => gracefulShutdown('SIGINT'));
 
 startServer();
