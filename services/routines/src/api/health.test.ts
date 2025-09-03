@@ -1,4 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
+import request from 'supertest';
+import express from 'express';
 import { healthRouter } from './health';
 
 // Mock the database module
@@ -7,11 +9,17 @@ vi.mock('../config/database', () => ({
 }));
 
 describe('Health API', () => {
+  let app: express.Application;
+
   beforeEach(() => {
     vi.clearAllMocks();
+
+    // Create a fresh Express app for each test
+    app = express();
+    app.use('/health', healthRouter);
   });
 
-  describe('GET /api/health', () => {
+  describe('GET /health', () => {
     it('should return health status when database is available', async () => {
       const mockDb = {
         command: vi.fn().mockResolvedValue({ ok: 1 }),
@@ -20,28 +28,22 @@ describe('Health API', () => {
       const { getDatabase } = await import('../config/database');
       vi.mocked(getDatabase).mockReturnValue(mockDb as any);
 
-      const req = {} as any;
-      const res = {
-        json: vi.fn().mockReturnThis(),
-        status: vi.fn().mockReturnThis(),
-      } as any;
+      const response = await request(app).get('/health').expect(200);
 
-      // Simulate the health endpoint logic
-      const healthData = {
+      expect(response.body).toMatchObject({
         status: 'healthy',
-        timestamp: new Date().toISOString(),
         service: 'routines-service',
-        version: '1.0.0',
-        environment: 'test',
         database: 'connected',
-        uptime: process.uptime(),
-      };
+      });
 
-      res.json(healthData);
+      expect(response.body).toHaveProperty('timestamp');
+      expect(response.body).toHaveProperty('version');
+      expect(response.body).toHaveProperty('environment');
+      expect(response.body).toHaveProperty('uptime');
 
-      expect(res.json).toHaveBeenCalledWith(healthData);
-      expect(healthData.status).toBe('healthy');
-      expect(healthData.database).toBe('connected');
+      // Verify database was actually called
+      expect(getDatabase).toHaveBeenCalled();
+      expect(mockDb.command).toHaveBeenCalledWith({ ping: 1 });
     });
 
     it('should return unhealthy status when database is not available', async () => {
@@ -50,31 +52,54 @@ describe('Health API', () => {
         throw new Error('Database not connected');
       });
 
-      // Simulate the health endpoint logic for database failure
-      const healthData = {
-        status: 'unhealthy',
-        timestamp: new Date().toISOString(),
-        service: 'routines-service',
-        version: '1.0.0',
-        environment: 'test',
-        database: 'disconnected',
-        uptime: process.uptime(),
-      };
+      const response = await request(app).get('/health').expect(503);
 
-      expect(healthData.status).toBe('unhealthy');
-      expect(healthData.database).toBe('disconnected');
+      expect(response.body).toMatchObject({
+        status: 'unhealthy',
+        service: 'routines-service',
+        error: 'Database connection failed',
+        details: 'Database not connected',
+      });
+
+      expect(response.body).toHaveProperty('timestamp');
+
+      // Verify database was actually called
+      expect(getDatabase).toHaveBeenCalled();
     });
 
-    it('should include all required health check fields', () => {
-      const healthData = {
-        status: 'healthy',
-        timestamp: new Date().toISOString(),
-        service: 'routines-service',
-        version: '1.0.0',
-        environment: 'test',
-        database: 'connected',
-        uptime: process.uptime(),
+    it('should return unhealthy status when database ping fails', async () => {
+      const mockDb = {
+        command: vi.fn().mockRejectedValue(new Error('Connection timeout')),
       };
+
+      const { getDatabase } = await import('../config/database');
+      vi.mocked(getDatabase).mockReturnValue(mockDb as any);
+
+      const response = await request(app).get('/health').expect(503);
+
+      expect(response.body).toMatchObject({
+        status: 'unhealthy',
+        service: 'routines-service',
+        error: 'Database connection failed',
+        details: 'Connection timeout',
+      });
+
+      expect(response.body).toHaveProperty('timestamp');
+
+      // Verify database was actually called
+      expect(getDatabase).toHaveBeenCalled();
+      expect(mockDb.command).toHaveBeenCalledWith({ ping: 1 });
+    });
+
+    it('should include all required health check fields when healthy', async () => {
+      const mockDb = {
+        command: vi.fn().mockResolvedValue({ ok: 1 }),
+      };
+
+      const { getDatabase } = await import('../config/database');
+      vi.mocked(getDatabase).mockReturnValue(mockDb as any);
+
+      const response = await request(app).get('/health').expect(200);
 
       const requiredFields = [
         'status',
@@ -87,7 +112,7 @@ describe('Health API', () => {
       ];
 
       requiredFields.forEach(field => {
-        expect(healthData).toHaveProperty(field);
+        expect(response.body).toHaveProperty(field);
       });
     });
   });
