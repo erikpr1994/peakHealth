@@ -4,6 +4,20 @@ let client: MongoClient | undefined;
 let db: Db | undefined;
 
 export async function connectToDatabase(): Promise<void> {
+  // Check if already connected
+  if (client && db) {
+    try {
+      // Test the existing connection
+      await db.command({ ping: 1 });
+      console.log('✅ MongoDB connection already established');
+      return;
+    } catch {
+      console.log('⚠️ Existing connection failed, reconnecting...');
+      // Close the failed connection before creating a new one
+      await closeDatabase();
+    }
+  }
+
   const uri = process.env.MONGODB_URI;
   const databaseName = process.env.MONGODB_DATABASE;
 
@@ -30,6 +44,9 @@ export async function connectToDatabase(): Promise<void> {
     console.log('✅ MongoDB connection established successfully');
   } catch (error) {
     console.error('❌ Failed to connect to MongoDB:', error);
+    // Clean up on failure
+    client = undefined;
+    db = undefined;
     throw error;
   }
 }
