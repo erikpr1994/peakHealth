@@ -224,7 +224,7 @@ jobs:
           echo "::endgroup::"
 
   test:
-    name: Unit Tests
+    name: Tests
     needs: [determine-affected, setup-environment]
     runs-on: ubuntu-latest
     if: ${{ needs.determine-affected.outputs.affected != '' }}
@@ -241,14 +241,14 @@ jobs:
 
       - name: Run unit tests
         run: |
-          echo "::group::Testing Affected Packages"
+          echo "::group::Running Unit Tests"
           AFFECTED="${{ needs.determine-affected.outputs.affected }}"
 
           if [[ "$AFFECTED" == "all" ]]; then
-            echo "Testing all packages"
-            pnpm turbo run test --concurrency=3 --cache-dir=.turbo
+            echo "Running unit tests on all packages"
+            pnpm turbo run test:unit --concurrency=3 --cache-dir=.turbo
           else
-            echo "Testing affected packages: $AFFECTED"
+            echo "Running unit tests on affected packages: $AFFECTED"
             # Create filter string for affected packages
             FILTER_STRING=""
             IFS=',' read -ra PACKAGES <<< "$AFFECTED"
@@ -259,8 +259,36 @@ jobs:
             done
 
             if [[ -n "$FILTER_STRING" ]]; then
-              echo "Running: pnpm turbo run test $FILTER_STRING --concurrency=3 --cache-dir=.turbo"
-              pnpm turbo run test $FILTER_STRING --concurrency=3 --cache-dir=.turbo
+              echo "Running: pnpm turbo run test:unit $FILTER_STRING --concurrency=3 --cache-dir=.turbo"
+              pnpm turbo run test:unit $FILTER_STRING --concurrency=3 --cache-dir=.turbo
+            else
+              echo "No packages to test"
+            fi
+          fi
+          echo "::endgroup::"
+
+      - name: Run integration tests
+        run: |
+          echo "::group::Running Integration Tests"
+          AFFECTED="${{ needs.determine-affected.outputs.affected }}"
+
+          if [[ "$AFFECTED" == "all" ]]; then
+            echo "Running integration tests on all packages"
+            pnpm turbo run test:integration --concurrency=3 --cache-dir=.turbo
+          else
+            echo "Running integration tests on affected packages: $AFFECTED"
+            # Create filter string for affected packages
+            FILTER_STRING=""
+            IFS=',' read -ra PACKAGES <<< "$AFFECTED"
+            for PKG in "${PACKAGES[@]}"; do
+              if [[ -n "$PKG" ]]; then
+                FILTER_STRING="${FILTER_STRING} --filter=${PKG}"
+              fi
+            done
+
+            if [[ -n "$FILTER_STRING" ]]; then
+              echo "Running: pnpm turbo run test:integration $FILTER_STRING --concurrency=3 --cache-dir=.turbo"
+              pnpm turbo run test:integration $FILTER_STRING --concurrency=3 --cache-dir=.turbo
             else
               echo "No packages to test"
             fi
