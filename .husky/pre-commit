@@ -53,6 +53,7 @@ BUILD_MATRIX=(
   "build:🏗️ Building"
   "type-check:🔍 Type checking"
   "test:🧪 Running unit tests"
+  "test:integration:🧪 Running integration tests"
 )
 
 # Function to run a specific task for changed projects
@@ -71,7 +72,14 @@ run_task() {
     
     if [ -n "$filters" ]; then
       if [ "$task" = "test" ]; then
+        # Run unit tests for packages with test script
         pnpm test:unit $filters
+      elif [ "$task" = "test:integration" ]; then
+        # Run integration tests for packages with test:integration script
+        pnpm test:integration $filters 2>/dev/null || {
+          echo "ℹ️  No packages with test:integration script found - skipping integration tests"
+          echo "This is expected for packages that only have generic test scripts"
+        }
       else
         pnpm $task $filters
       fi

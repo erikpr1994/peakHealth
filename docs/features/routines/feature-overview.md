@@ -72,7 +72,7 @@ For the deeply nested Routine Builder UI, a dedicated, feature-scoped React Cont
 
 This section outlines the scope of the features that have been designed for the MVP. The design phase is complete, and this represents the blueprint for implementation.
 
-#### **Backend & Database**
+### **Backend & Database**
 
 - **Database Schema**: A complete MongoDB schema has been designed for all 5 core collections (`sections`, `workouts`, `routines`, `routine_assignments`, `workout_sessions`).
 - **API Endpoints**: A full API contract has been defined for all CRUD operations, including library versioning and user-facing endpoints.
