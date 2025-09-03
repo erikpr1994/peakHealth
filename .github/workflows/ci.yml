@@ -390,8 +390,8 @@ jobs:
         setup-environment,
         lint,
         type-check,
-        test-unit,
-        test-integration,
+        unit-test,
+        integration-test,
       ]
     runs-on: ubuntu-latest
     if: ${{ needs.determine-affected.outputs.affected != '' }}
