@@ -9,7 +9,10 @@
     "build": "tsc",
     "test": "vitest run",
     "test:watch": "vitest",
-    "test:coverage": "vitest run --coverage"
+    "test:coverage": "vitest run --coverage",
+    "test:unit": "vitest run --exclude='src/tests/integration/**' --exclude='src/models/**'",
+    "test:integration": "vitest run src/tests/integration",
+    "test:models": "vitest run src/models"
   },
   "keywords": [
     "routines",
