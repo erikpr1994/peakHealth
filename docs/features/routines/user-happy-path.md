@@ -2,11 +2,15 @@
 
 This document outlines the ideal, step-by-step user journey for a new user interacting with the Routines feature. It serves as a narrative guide for understanding the intended user flow and as a script for end-to-end (E2E) and manual testing.
 
-**Persona**: A user who is new to the platform and is looking for a structured workout plan.
-
 ---
 
-### **Step 1: Discovery on the Dashboard (`/routines`)**
+## Happy Path #1: The new user
+
+**Persona**: A user who is new to the platform and is looking for a structured workout plan.
+
+--
+
+## **Step 1: Discovery on the Dashboard (`/routines`)**
 
 1.  **Action**: The user logs in and lands on the Routines Dashboard.
 2.  **Observation**:
@@ -14,7 +18,7 @@ This document outlines the ideal, step-by-step user journey for a new user inter
     - They see a prominent call-to-action to either **`[Create a Routine]`** or **`[Explore Templates]`**.
     - They see a carousel of "Recommended For You" routines, showcasing high-quality `TemplateRoutine`s.
 
-### **Step 2: Exploring the Library (`/routines/explore`)**
+## **Step 2: Exploring the Library (`/routines/explore`)**
 
 1.  **Action**: The user clicks the **`[Explore Templates]`** button.
 2.  **Observation**:
@@ -23,7 +27,7 @@ This document outlines the ideal, step-by-step user journey for a new user inter
     - They use the `RoutineFilterControls` to narrow the selection, filtering by `Goal: Strength` and `Difficulty: Beginner`.
     - They find a routine that looks interesting: "Beginner Strength Foundation."
 
-### **Step 3: Viewing the Routine Details (`/routines/:id`)**
+## **Step 3: Viewing the Routine Details (`/routines/:id`)**
 
 1.  **Action**: The user clicks the **`[View]`** button on the "Beginner Strength Foundation" `RoutineCard`.
 2.  **Observation**:
@@ -32,7 +36,7 @@ This document outlines the ideal, step-by-step user journey for a new user inter
     - They click the **Workouts Tab** to see the full breakdown of exercises and sets for each day.
     - They are happy with the plan.
 
-### **Step 4: Starting the Routine**
+## **Step 4: Starting the Routine**
 
 1.  **Action**: The user clicks the primary call-to-action button in the header, **`[Start This Routine]`**.
 2.  **Observation**:
@@ -40,7 +44,7 @@ This document outlines the ideal, step-by-step user journey for a new user inter
     - The system generates the `workout_sessions` for the entire duration of the plan.
     - The user is navigated back to their dashboard (`/routines`).
 
-### **Step 5: The Updated Dashboard (`/routines`)**
+## **Step 5: The Updated Dashboard (`/routines`)**
 
 1.  **Action**: The user lands back on their dashboard.
 2.  **Observation**:
@@ -48,14 +52,14 @@ This document outlines the ideal, step-by-step user journey for a new user inter
     - The card shows their progress (e.g., "Workout 0 of 24 completed").
     - The primary action button on the card reads **`[Start Today's Workout]`**, as the first workout is scheduled for today.
 
-### **Step 6: Starting a Workout (`/workout/:sessionId`)**
+## **Step 6: Starting a Workout (`/workout/:sessionId`)**
 
 1.  **Action**: The user clicks **`[Start Today's Workout]`**.
 2.  **Observation**:
     - They are navigated to the Workout Player page. The player loads the data for the first workout session.
     - The UI is in "focus mode," showing the first set of the first exercise (e.g., "Warm-up: Jumping Jacks, Set 1 of 1").
 
-### **Step 7: Executing and Logging a Workout**
+## **Step 7: Executing and Logging a Workout**
 
 1.  **Action**: The user performs the set of Jumping Jacks. They tap the **`[Complete Set]`** button.
 2.  **Observation**:
@@ -70,7 +74,7 @@ This document outlines the ideal, step-by-step user journey for a new user inter
     - The `WorkoutSummaryModal` appears, showing their stats for the session.
     - The user closes the modal and is navigated back to the dashboard.
 
-### **Step 8: Final State on the Dashboard**
+## **Step 8: Final State on the Dashboard**
 
 1.  **Action**: The user is back on the dashboard.
 2.  **Observation**:

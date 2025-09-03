@@ -4,7 +4,7 @@ This document outlines recommended future enhancements for the Routines feature,
 
 ## 🏗️ Recommended Future Components
 
-#### **Progressive Overload Tracking**
+### **Progressive Overload Tracking**
 
 - **ProgressiveOverloadTracker**: Visual tracking of strength progression over time
 - **PerformanceInsights**: Analysis of routine effectiveness and suggestions
@@ -34,7 +34,7 @@ This document outlines recommended future enhancements for the Routines feature,
 
 ## 📊 Recommended Data Model Extensions
 
-#### **Enhanced Routine Model**
+### **Enhanced Routine Model**
 
 ```typescript
 interface EnhancedRoutine {
@@ -171,7 +171,7 @@ interface WearableData {
 
 ## 🔧 Recommended Future Hooks
 
-#### **useProgressiveOverload**
+### **useProgressiveOverload**
 
 Advanced hook for tracking strength progression:
 
@@ -202,7 +202,7 @@ Hook for AI-powered recommendations:
 
 ## 🚀 Future Enhancements (Industry Trends)
 
-#### **Progressive Overload Tracking**
+### **Progressive Overload Tracking**
 
 - [ ] **Weight Progression**: Track weight increases over time
 - [ ] **Volume Tracking**: Calculate and visualize workout volume

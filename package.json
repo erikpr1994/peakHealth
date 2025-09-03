@@ -14,7 +14,7 @@
     "type-check:watch": "turbo type-check -- --watch",
     "test:unit": "turbo test",
     "test:coverage": "turbo test:coverage",
-    "test:e2e": "turbo run test:e2e --filter @peakhealth/e2e --concurrency=12",
+    "test:e2e": "turbo run test:e2e --filter @peakhealth/e2e",
     "test:e2e:update-snapshots": "turbo run test:update-snapshots --filter @peakhealth/e2e",
     "prepare": "husky",
     "supabase:start": "supabase start",
