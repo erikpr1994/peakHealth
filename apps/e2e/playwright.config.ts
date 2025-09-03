@@ -35,7 +35,7 @@ export default defineConfig({
       cwd: '../..',
     },
     {
-      command: 'pnpm dev',
+      command: 'pnpm dev --concurrency=12',
       url: 'http://localhost:3024',
       reuseExistingServer: true,
       timeout: 120_000,
